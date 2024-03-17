@@ -281,7 +281,7 @@ def train(
         tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
 ):
-    torch.set_float32_matmul_precision('high')
+    torch.set_float32_matmul_precision('medium')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     # logging.getLogger("c10d-NullHandler").setLevel(logging.WARNING)
 
