@@ -1,0 +1,148 @@
+[03.17 23:07:21] ┇ INFO     ┇          lightning.fabric.utilities.seed ┇ Seed set to 7
+[03.17 23:07:21] ┇ INFO     ┇   lightning.fabric.utilities.distributed ┇ Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+[03.17 23:07:21] ┇ DEBUG    ┇                         c10d-NullHandler ┇ {'func_name': 'init_process_group', 'args': "('nccl',), {'rank': 0, 'world_size': 1, 'timeout': datetime.timedelta(seconds=1800)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '1', 'group_size': '1', 'global_rank': '0', 'local_rank': '0', 'nccl_version': '2.19.3', 'time_spent': '2054651ns'}
+[03.17 23:07:21] ┇ INFO     ┇    lightning.pytorch.utilities.rank_zero ┇ ----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+[03.17 23:07:21] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.17 23:07:21] ┇ INFO     ┇                           chrisbase.data ┇ [INIT] python /home/chris/proj/DeepKNLP-24.03/1-doc-cls-train.py 
+[03.17 23:07:21] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    # | TrainerArguments                | value
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    1 | tag                             | train
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    2 | env.project                     | DeepKNLP
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    3 | env.job_name                    | KPF-BERT
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    4 | env.hostname                    | chris137
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    5 | env.hostaddr                    | 129.254.164.137
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    6 | env.time_stamp                  | 0317.230720
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    7 | env.python_path                 | /home/chris/miniforge3/envs/DeepKNLP-24.03/bin/python
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    8 | env.current_dir                 | /dat/proj/DeepKNLP-24.03
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇    9 | env.current_file                | /home/chris/proj/DeepKNLP-24.03/1-doc-cls-train.py
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   10 | env.working_dir                 | /dat/proj/DeepKNLP-24.03
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   11 | env.command_args                | []
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   12 | env.num_ip_addrs                | 1
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   13 | env.max_workers                 | 1
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   14 | env.debugging                   | False
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   15 | env.msg_level                   | 20
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   16 | env.msg_format                  | %(asctime)s ┇ %(levelname)-8s ┇ %(name)40s ┇ %(message)s
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   17 | env.date_format                 | [%m.%d %H:%M:%S]
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   18 | env.output_home                 | /dat/proj/DeepKNLP-24.03/finetuning/nsmc-mini/train=KPF-BERT/0317.230720
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   19 | env.logging_file                | arguments.json
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   20 | env.argument_file               |
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   21 | time.started                    | [03.17 23:07:22]
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   22 | time.settled                    |
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   23 | time.elapsed                    |
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   24 | prog.result                     | {}
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   25 | prog.tb_logger                  | <lightning.fabric.loggers.tensorboard.TensorBoardLogger object at 0x7fd802702e90>
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   26 | prog.csv_logger                 | <lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7fd8021591d0>
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   27 | prog.world_size                 | 1
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   28 | prog.node_rank                  | 0
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   29 | prog.local_rank                 | 0
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   30 | prog.global_rank                | 0
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   31 | prog.global_step                | 0
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   32 | prog.global_epoch               | 0.0
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   33 | data.name                       | nsmc-mini
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   34 | data.home                       | /dat/proj/DeepKNLP-24.03/data
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   35 | data.files                      | {'train': 'ratings_train.txt', 'valid': 'ratings_test.txt', 'test': None}
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   36 | data.caching                    | False
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   37 | data.redownload                 | False
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   38 | data.num_check                  | 0
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   39 | model.pretrained                | pretrained/KPF-BERT
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   40 | model.finetuning                | /dat/proj/DeepKNLP-24.03/finetuning
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   41 | model.seq_len                   | 64
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   42 | model.config                    |
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   43 | model.name                      |
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   44 | hardware.cpu_workers            | 32
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   45 | hardware.train_batch            | 10
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   46 | hardware.infer_batch            | 10
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   47 | hardware.accelerator            | gpu
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   48 | hardware.precision              | 32-true
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   49 | hardware.strategy               | ddp
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   50 | hardware.devices                | [0]
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   51 | learning.random_seed            | 7
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   52 | learning.optimizer_cls          | Adam
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   53 | learning.learning_rate          | 5e-05
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   54 | learning.saving_mode            | max val_acc
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   55 | learning.num_saving             | 2
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   56 | learning.num_epochs             | 1
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   57 | learning.log_text               | False
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   58 | learning.check_rate_on_training | 0.2
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   59 | learning.print_rate_on_training | 0.05
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   60 | learning.print_rate_on_validate | 0.3333333333333333
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   61 | learning.print_rate_on_evaluate | 0.3333333333333333
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   62 | learning.print_step_on_training | -1
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   63 | learning.print_step_on_validate | -1
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   64 | learning.print_step_on_evaluate | -1
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   65 | learning.tag_format_on_training | st={step:d}, ep={epoch:.2f}, loss={loss:06.4f}, acc={acc:06.4f}
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   66 | learning.tag_format_on_validate | st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   67 | learning.tag_format_on_evaluate | st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇   68 | learning.name_format_on_saving  | ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}
+[03.17 23:07:22] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------
+[03.17 23:07:22] ┇ WARNING  ┇              transformers.modeling_utils ┇ Some weights of BertForSequenceClassification were not initialized from the model checkpoint at pretrained/KPF-BERT and are newly initialized: ['bert.pooler.dense.bias', 'bert.pooler.dense.weight', 'classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+[03.17 23:07:23] ┇ INFO     ┇                                 __main__ ┇ === [after-model] =======================================================================================================================
+[03.17 23:07:23] ┇ INFO     ┇                             DeepKNLP.cls ┇ Creating features from /dat/proj/DeepKNLP-24.03/data/nsmc-mini/ratings_train.txt
+[03.17 23:07:23] ┇ INFO     ┇                             DeepKNLP.cls ┇ Loaded 5000 examples from /dat/proj/DeepKNLP-24.03/data/nsmc-mini/ratings_train.txt
+[03.17 23:07:24] ┇ INFO     ┇                             DeepKNLP.cls ┇ Converted 5000 raw examples to 5000 encoded examples
+[03.17 23:07:24] ┇ INFO     ┇                                 __main__ ┇ Created train_dataset providing 5000 examples
+[03.17 23:07:24] ┇ INFO     ┇                                 __main__ ┇ Created train_dataloader providing 500 batches
+[03.17 23:07:24] ┇ INFO     ┇                                 __main__ ┇ === [after-train_dataloader] ============================================================================================================
+[03.17 23:07:24] ┇ INFO     ┇                             DeepKNLP.cls ┇ Creating features from /dat/proj/DeepKNLP-24.03/data/nsmc-mini/ratings_test.txt
+[03.17 23:07:24] ┇ INFO     ┇                             DeepKNLP.cls ┇ Loaded 100 examples from /dat/proj/DeepKNLP-24.03/data/nsmc-mini/ratings_test.txt
+[03.17 23:07:24] ┇ INFO     ┇                             DeepKNLP.cls ┇ Converted 100 raw examples to 100 encoded examples
+[03.17 23:07:24] ┇ INFO     ┇                                 __main__ ┇ Created val_dataset providing 100 examples
+[03.17 23:07:24] ┇ INFO     ┇                                 __main__ ┇ Created val_dataloader providing 10 batches
+[03.17 23:07:24] ┇ INFO     ┇                                 __main__ ┇ === [after-val_dataloader] ==============================================================================================================
+[03.17 23:07:26] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.05) training:   5%|█▌                            | 25/500 [00:02<00:28, 16.55x10b/s] | st=25, ep=0.05, loss=0.5939, acc=0.7000
+[03.17 23:07:28] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.10) training:  10%|███                           | 50/500 [00:03<00:25, 17.59x10b/s] | st=50, ep=0.10, loss=0.1841, acc=1.0000
+[03.17 23:07:29] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.15) training:  15%|████▌                         | 75/500 [00:05<00:26, 15.80x10b/s] | st=75, ep=0.15, loss=0.9511, acc=0.7000
+[03.17 23:07:30] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) training:  20%|██████                        | 100/500 [00:06<00:23, 17.05x10b/s] | st=100, ep=0.20, loss=0.2577, acc=1.0000
+[03.17 23:07:31] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) checking:  40%|████████            | 4/10 [00:00<00:04,  1.29x10b/s]
+[03.17 23:07:31] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) checking:  70%|██████████████      | 7/10 [00:00<00:02,  1.29x10b/s]
+[03.17 23:07:31] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) checking: 100%|████████████████████| 10/10 [00:00<00:00, 11.76x10b/s] | st=100, ep=0.20, val_loss=0.4005, val_acc=0.8100
+[03.17 23:07:32] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.17 23:07:34] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.25) training:  25%|███████▌                      | 125/500 [00:10<00:24, 15.50x10b/s] | st=125, ep=0.25, loss=1.2671, acc=0.4000
+[03.17 23:07:35] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.30) training:  30%|█████████                     | 150/500 [00:11<00:21, 16.28x10b/s] | st=150, ep=0.30, loss=0.4094, acc=0.7000
+[03.17 23:07:37] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.35) training:  35%|██████████▌                   | 175/500 [00:13<00:19, 16.44x10b/s] | st=175, ep=0.35, loss=0.3218, acc=0.9000
+[03.17 23:07:39] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) training:  40%|████████████                  | 200/500 [00:14<00:17, 16.75x10b/s] | st=200, ep=0.40, loss=0.4790, acc=0.7000
+[03.17 23:07:39] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) checking:  40%|████████            | 4/10 [00:00<00:04,  1.42x10b/s]
+[03.17 23:07:39] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) checking:  70%|██████████████      | 7/10 [00:00<00:02,  1.42x10b/s]
+[03.17 23:07:39] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) checking: 100%|████████████████████| 10/10 [00:00<00:00, 12.88x10b/s] | st=200, ep=0.40, val_loss=0.3772, val_acc=0.8100
+[03.17 23:07:40] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.17 23:07:42] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.45) training:  45%|█████████████▌                | 225/500 [00:18<00:17, 16.02x10b/s] | st=225, ep=0.45, loss=0.1851, acc=1.0000
+[03.17 23:07:43] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.50) training:  50%|███████████████               | 250/500 [00:19<00:14, 16.86x10b/s] | st=250, ep=0.50, loss=0.4481, acc=0.8000
+[03.17 23:07:45] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.55) training:  55%|████████████████▌             | 275/500 [00:21<00:13, 16.82x10b/s] | st=275, ep=0.55, loss=0.4117, acc=0.9000
+[03.17 23:07:46] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) training:  60%|██████████████████            | 300/500 [00:22<00:12, 16.57x10b/s] | st=300, ep=0.60, loss=0.5364, acc=0.8000
+[03.17 23:07:47] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) checking:  40%|████████            | 4/10 [00:00<00:04,  1.40x10b/s]
+[03.17 23:07:47] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) checking:  70%|██████████████      | 7/10 [00:00<00:02,  1.40x10b/s]
+[03.17 23:07:47] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) checking: 100%|████████████████████| 10/10 [00:00<00:00, 12.79x10b/s] | st=300, ep=0.60, val_loss=0.5088, val_acc=0.7600
+[03.17 23:07:47] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.17 23:07:49] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.65) training:  65%|███████████████████▌          | 325/500 [00:25<00:11, 15.81x10b/s] | st=325, ep=0.65, loss=0.2166, acc=0.9000
+[03.17 23:07:51] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.70) training:  70%|█████████████████████         | 350/500 [00:26<00:09, 15.82x10b/s] | st=350, ep=0.70, loss=0.5520, acc=0.8000
+[03.17 23:07:52] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.75) training:  75%|██████████████████████▌       | 375/500 [00:28<00:06, 18.29x10b/s] | st=375, ep=0.75, loss=0.2110, acc=0.9000
+[03.17 23:07:53] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) training:  80%|████████████████████████      | 400/500 [00:29<00:05, 18.43x10b/s] | st=400, ep=0.80, loss=0.2283, acc=1.0000
+[03.17 23:07:54] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) checking:  40%|████████            | 4/10 [00:00<00:04,  1.29x10b/s]
+[03.17 23:07:54] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) checking:  70%|██████████████      | 7/10 [00:00<00:02,  1.29x10b/s]
+[03.17 23:07:54] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) checking: 100%|████████████████████| 10/10 [00:00<00:00, 13.39x10b/s] | st=400, ep=0.80, val_loss=0.3437, val_acc=0.8700
+[03.17 23:07:55] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.17 23:07:57] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.85) training:  85%|█████████████████████████▌    | 425/500 [00:33<00:05, 13.22x10b/s] | st=425, ep=0.85, loss=0.4256, acc=0.9000
+[03.17 23:07:59] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90) training:  90%|███████████████████████████   | 450/500 [00:35<00:03, 13.72x10b/s] | st=450, ep=0.90, loss=0.2601, acc=0.8000
+[03.17 23:08:01] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.95) training:  95%|████████████████████████████▌ | 475/500 [00:36<00:01, 17.50x10b/s] | st=475, ep=0.95, loss=0.5559, acc=0.7000
+[03.17 23:08:02] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) training: 100%|██████████████████████████████| 500/500 [00:38<00:00, 16.93x10b/s] | st=500, ep=1.00, loss=0.4267, acc=0.9000
+[03.17 23:08:03] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) checking:  40%|████████            | 4/10 [00:00<00:04,  1.44x10b/s]
+[03.17 23:08:03] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) checking:  70%|██████████████      | 7/10 [00:00<00:02,  1.44x10b/s]
+[03.17 23:08:03] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) checking: 100%|████████████████████| 10/10 [00:00<00:00, 14.57x10b/s] | st=500, ep=1.00, val_loss=0.3527, val_acc=0.8500
+[03.17 23:08:04] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.17 23:08:04] ┇ INFO     ┇                                 __main__ ┇ === [after-epoch] =======================================================================================================================
+[03.17 23:08:05] ┇ INFO     ┇                                 __main__ ┇ Loading best model from /dat/proj/DeepKNLP-24.03/finetuning/nsmc-mini/train=KPF-BERT/0317.230720/ep=0.8, loss=0.3437, acc=0.8700.ckpt
+[03.17 23:08:05] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80)  testing:  40%|████████            | 4/10 [00:01<00:06,  1.08s/x10b]
+[03.17 23:08:05] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80)  testing:  70%|██████████████      | 7/10 [00:01<00:00,  6.64x10b/s]
+[03.17 23:08:05] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80)  testing: 100%|████████████████████| 10/10 [00:01<00:00,  6.64x10b/s] | st=400, ep=0.80, test_loss=0.3437, test_acc=0.8700
+[03.17 23:08:05] ┇ INFO     ┇                                 __main__ ┇ --- [after-test] ------------------------------------------------------------------------------------------------------------------------
+[03.17 23:08:05] ┇ INFO     ┇                                 __main__ ┇ === [after-train_loop] ==================================================================================================================
+[03.17 23:08:06] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.17 23:08:06] ┇ INFO     ┇                           chrisbase.data ┇ [EXIT] python /home/chris/proj/DeepKNLP-24.03/1-doc-cls-train.py  ($=00:00:43.636)
+[03.17 23:08:06] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
