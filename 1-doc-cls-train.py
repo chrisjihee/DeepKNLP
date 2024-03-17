@@ -155,6 +155,7 @@ def train_loop(
             if model.args.prog.global_step % check_interval < 1:
                 val_loop(fabric, model, val_dataloader, ckpt_saver)
         fabric_barrier(fabric, "[after-epoch]", c='=')
+    fabric_barrier(fabric, "[after-train]")
     if test_dataloader:
         test_loop(fabric, model, test_dataloader, ckpt_saver)
 
@@ -336,11 +337,12 @@ def train(
             name_format_on_saving=name_format_on_saving,
         ),
     )
-    output_home = f"{finetuning}/{data_name}"
-    output_name = f"{args.tag}={args.env.job_name}"
-    args.prog.tb_logger = TensorBoardLogger(output_home, output_name, args.env.time_stamp)  # tensorboard --logdir output --bind_all
-    args.prog.csv_logger = CSVLogger(output_home, output_name, args.env.time_stamp, flush_logs_every_n_steps=1)
-    args.env.set_output_home(f"{output_home}/{output_name}/{args.env.time_stamp}")
+    output_home = Path(f"{finetuning}/{data_name}")
+    output_main = f"{args.tag}={args.env.job_name}"
+    output_sect = f"{args.env.hostname}={args.env.time_stamp}"
+    args.prog.tb_logger = TensorBoardLogger(output_home, output_main, output_sect)  # tensorboard --logdir finetuning --bind_all
+    args.prog.csv_logger = CSVLogger(output_home, output_main, output_sect, flush_logs_every_n_steps=1)
+    args.env.set_output_home(output_home / output_main / output_sect)
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
     fabric = Fabric(
@@ -380,7 +382,6 @@ def train(
                    dataloader=train_dataloader,
                    val_dataloader=val_dataloader,
                    test_dataloader=val_dataloader)
-        fabric_barrier(fabric, "[after-train_loop]", c='=')
 
 
 if __name__ == "__main__":
