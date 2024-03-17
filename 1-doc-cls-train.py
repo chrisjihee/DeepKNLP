@@ -276,7 +276,7 @@ def train(
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_acc"),
         num_saving: int = typer.Option(default=2),
-        num_epochs: int = typer.Option(default=3),  # TODO: -> 3
+        num_epochs: int = typer.Option(default=2),  # TODO: -> 3
         check_rate_on_training: float = typer.Option(default=1 / 5),
         print_rate_on_training: float = typer.Option(default=1 / 20),
         print_rate_on_validate: float = typer.Option(default=1 / 3),
