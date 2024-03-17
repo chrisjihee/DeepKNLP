@@ -255,7 +255,7 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc-mini"),  # TODO: -> nsmc
+        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_test.txt"),
         test_file: str = typer.Option(default=None),
@@ -265,8 +265,8 @@ def train(
         finetuning: str = typer.Option(default="finetuning"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
-        train_batch: int = typer.Option(default=10),  # TODO: -> 64
-        infer_batch: int = typer.Option(default=10),  # TODO: -> 64
+        train_batch: int = typer.Option(default=50),  # TODO: -> 64
+        infer_batch: int = typer.Option(default=50),  # TODO: -> 64
         accelerator: str = typer.Option(default="cuda"),
         precision: str = typer.Option(default="32-true"),
         strategy: str = typer.Option(default="ddp"),
@@ -276,7 +276,7 @@ def train(
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_acc"),
         num_saving: int = typer.Option(default=2),
-        num_epochs: int = typer.Option(default=1),  # TODO: -> 3
+        num_epochs: int = typer.Option(default=3),  # TODO: -> 3
         check_rate_on_training: float = typer.Option(default=1 / 5),
         print_rate_on_training: float = typer.Option(default=1 / 20),
         print_rate_on_validate: float = typer.Option(default=1 / 3),
