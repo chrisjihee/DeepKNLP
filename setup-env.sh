@@ -8,7 +8,7 @@ pip list
 # chrislab (for public user)
 rm -rf chrisbase* chrislab*
 pip download --no-binary :all: --no-deps chrisbase==0.5.0; tar zxf chrisbase-*.tar.gz; rm chrisbase-*.tar.gz;
-pip download --no-binary :all: --no-deps chrislab==0.7.0; tar zxf chrislab-*.tar.gz; rm chrislab-*.tar.gz;
+pip download --no-binary :all: --no-deps chrislab==0.7.1; tar zxf chrislab-*.tar.gz; rm chrislab-*.tar.gz;
 pip install --editable chrisbase*
 pip install --editable chrislab*
 
