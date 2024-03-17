@@ -74,15 +74,15 @@ class NsmcModel(LightningModule):
 
     def test_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        val_dataset = ClassificationDataset("test", data=self.data, tokenizer=self.tokenizer)
-        val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
-                                    num_workers=self.args.hardware.cpu_workers,
-                                    batch_size=self.args.hardware.infer_batch,
-                                    collate_fn=data_collator,
-                                    drop_last=False)
-        self.fabric.print(f"Created test_dataset providing {len(val_dataset)} examples")
-        self.fabric.print(f"Created test_dataloader providing {len(val_dataloader)} batches")
-        return val_dataloader
+        test_dataset = ClassificationDataset("test", data=self.data, tokenizer=self.tokenizer)
+        test_dataloader = DataLoader(test_dataset, sampler=SequentialSampler(test_dataset),
+                                     num_workers=self.args.hardware.cpu_workers,
+                                     batch_size=self.args.hardware.infer_batch,
+                                     collate_fn=data_collator,
+                                     drop_last=False)
+        self.fabric.print(f"Created test_dataset providing {len(test_dataset)} examples")
+        self.fabric.print(f"Created test_dataloader providing {len(test_dataloader)} batches")
+        return test_dataloader
 
     def training_step(self, inputs, batch_idx):
         outputs: SequenceClassifierOutput = self.model(**inputs)
@@ -257,8 +257,8 @@ def train(
         data_home: str = typer.Option(default="data"),
         data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
         train_file: str = typer.Option(default="ratings_train.txt"),
-        valid_file: str = typer.Option(default="ratings_test.txt"),
-        test_file: str = typer.Option(default=None),
+        valid_file: str = typer.Option(default="ratings_valid.txt"),
+        test_file: str = typer.Option(default="ratings_test.txt"),
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
@@ -289,7 +289,7 @@ def train(
         tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
 ):
-    torch.set_float32_matmul_precision('medium')
+    torch.set_float32_matmul_precision('high')  # TODO: -> high
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
 
@@ -390,10 +390,14 @@ def train(
         val_dataloader = fabric.setup_dataloaders(val_dataloader)
         fabric_barrier(fabric, "[after-val_dataloader]", c='=')
 
+        test_dataloader = model.test_dataloader()
+        test_dataloader = fabric.setup_dataloaders(test_dataloader)
+        fabric_barrier(fabric, "[after-test_dataloader]", c='=')
+
         train_loop(fabric, model, optimizer,
                    dataloader=train_dataloader,
                    val_dataloader=val_dataloader,
-                   test_dataloader=val_dataloader)
+                   test_dataloader=test_dataloader)
 
 
 if __name__ == "__main__":
