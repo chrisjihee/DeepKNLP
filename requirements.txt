@@ -12,6 +12,6 @@ scikit-learn==1.4.1.post1
 seqeval==1.2.2
 
 # Utils
-importlib-metadata==7.0.1
+importlib-metadata==7.0.2
 chrisbase==0.4.7
 chrislab==0.6.2
