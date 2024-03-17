@@ -21,7 +21,7 @@ from DeepKNLP.cls import NsmcCorpus, ClassificationDataset
 from DeepKNLP.helper import CheckpointSaver, fabric_barrier, epsilon, data_collator
 from DeepKNLP.metrics import accuracy
 from chrisbase.data import AppTyper, JobTimer, ProjectEnv
-from chrisbase.io import LoggingFormat
+from chrisbase.io import LoggingFormat, make_dir
 from chrisbase.util import mute_tqdm_cls
 
 logger = logging.getLogger(__name__)
@@ -291,7 +291,7 @@ def train(
 ):
     torch.set_float32_matmul_precision('medium')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
-    # logging.getLogger("c10d-NullHandler").setLevel(logging.WARNING)
+    logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
 
     pretrained = Path(pretrained)
     args = TrainerArguments(
@@ -345,8 +345,9 @@ def train(
             name_format_on_saving=name_format_on_saving,
         ),
     )
-    output_home = f"{finetuning}/{data_name}"
+    output_home = Path(f"{finetuning}/{data_name}")
     output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}"
+    make_dir(output_home / output_name)
     output_version = args.env.job_version if args.env.job_version else CSVLogger(output_home, output_name).version
     args.prog.tb_logger = TensorBoardLogger(output_home, output_name, output_version)  # tensorboard --logdir finetuning --bind_all
     args.prog.csv_logger = CSVLogger(output_home, output_name, output_version, flush_logs_every_n_steps=1)
