@@ -15,16 +15,13 @@ rm -rf chrisbase*
 git clone https://github.com/chrisjihee/chrisbase.git
 pip install --editable chrisbase*
 
-# pretrained LM (for public user)
+# pretrained LM (for previleged user)
+rm -rf pretrained*
+git clone guest@129.254.164.137:git/pretrained
+
+# pretrained LM (for git lfs installed environment)
 rm -rf pretrained*
 git lfs install
 git clone https://github.com/KPFBERT/kpfbert pretrained/KPF-BERT
 git clone https://huggingface.co/klue/roberta-base pretrained/KLUE-RoBERTa
-git clone https://huggingface.co/KETI-AIR/ke-t5-base-ko pretrained/KETI-KeT5
-git clone https://huggingface.co/etri-lirs/kebyt5-base-preview pretrained/ETRI-KeByT5
 git lfs uninstall
-
-# pretrained LM (for previleged user)
-rm -rf pretrained*
-ln -s ../pretrained-com pretrained  # git clone guest@129.254.164.137:git/pretrained-com pretrained
-ln -s ../pretrained-pro .
