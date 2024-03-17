@@ -268,7 +268,7 @@ def train(
         train_batch: int = typer.Option(default=50),  # TODO: -> 64
         infer_batch: int = typer.Option(default=50),  # TODO: -> 64
         accelerator: str = typer.Option(default="cuda"),
-        precision: str = typer.Option(default="32-true"),
+        precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true
         strategy: str = typer.Option(default="ddp"),
         device: List[int] = typer.Option(default=[0, 1]),
         # learning
