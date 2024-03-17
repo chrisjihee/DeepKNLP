@@ -255,18 +255,18 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc-mini"),
+        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_test.txt"),
         test_file: str = typer.Option(default=None),
-        num_check: int = typer.Option(default=0),  # TODO: -> 2
+        num_check: int = typer.Option(default=2),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
         seq_len: int = typer.Option(default=64),
         # hardware
-        train_batch: int = typer.Option(default=10),  # TODO: -> 64
-        infer_batch: int = typer.Option(default=10),  # TODO: -> 64
+        train_batch: int = typer.Option(default=50),  # TODO: -> 64
+        infer_batch: int = typer.Option(default=50),  # TODO: -> 64
         accelerator: str = typer.Option(default="cuda"),
         precision: str = typer.Option(default="32-true"),
         strategy: str = typer.Option(default="ddp"),
