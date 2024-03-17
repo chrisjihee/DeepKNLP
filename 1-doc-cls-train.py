@@ -251,14 +251,14 @@ def train(
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_test.txt"),
         test_file: str = typer.Option(default=None),
-        num_check: int = typer.Option(default=2),
+        num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
         seq_len: int = typer.Option(default=64),
         # hardware
-        train_batch: int = typer.Option(default=64),
-        infer_batch: int = typer.Option(default=64),
+        train_batch: int = typer.Option(default=10),  # TODO: -> 64
+        infer_batch: int = typer.Option(default=10),  # TODO: -> 64
         accelerator: str = typer.Option(default="gpu"),
         precision: str = typer.Option(default="32-true"),
         strategy: str = typer.Option(default="ddp"),
@@ -270,7 +270,7 @@ def train(
         num_saving: int = typer.Option(default=2),
         num_epochs: int = typer.Option(default=1),
         check_rate_on_training: float = typer.Option(default=1 / 5),
-        print_rate_on_training: float = typer.Option(default=1 / 30),
+        print_rate_on_training: float = typer.Option(default=1 / 20),
         print_rate_on_validate: float = typer.Option(default=1 / 3),
         print_rate_on_evaluate: float = typer.Option(default=1 / 3),
         print_step_on_training: int = typer.Option(default=-1),
@@ -283,8 +283,7 @@ def train(
 ):
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
-    logging.getLogger("c10d-NullHandler").setLevel(logging.WARNING)
-    logging.getLogger("pytorch_lightning.utilities.rank_zero").setLevel(logging.WARNING)
+    # logging.getLogger("c10d-NullHandler").setLevel(logging.WARNING)
 
     pretrained = Path(pretrained)
     args = TrainerArguments(
@@ -293,7 +292,7 @@ def train(
             job_name=job_name if job_name else pretrained.name,
             debugging=debugging,
             msg_level=logging.DEBUG if debugging else logging.INFO,
-            msg_format=LoggingFormat.DEBUG_32 if debugging else LoggingFormat.CHECK_32,
+            msg_format=LoggingFormat.DEBUG_40 if debugging else LoggingFormat.CHECK_40,
         ),
         data=DataOption(
             home=data_home,
