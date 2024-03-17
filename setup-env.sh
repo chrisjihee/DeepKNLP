@@ -5,19 +5,15 @@ mamba activate DeepKNLP-24.03
 pip install -r requirements.txt
 pip list
 
-# chrislab (for public user)
-rm -rf chrisbase* chrislab*
+# chrisbase (for public user)
+rm -rf chrisbase*
 pip download --no-binary :all: --no-deps chrisbase==0.5.0; tar zxf chrisbase-*.tar.gz; rm chrisbase-*.tar.gz;
-pip download --no-binary :all: --no-deps chrislab==0.7.1; tar zxf chrislab-*.tar.gz; rm chrislab-*.tar.gz;
 pip install --editable chrisbase*
-pip install --editable chrislab*
 
-# chrislab (for previleged user)
-rm -rf chrisbase* chrislab*
+# chrisbase (for previleged user)
+rm -rf chrisbase*
 git clone https://github.com/chrisjihee/chrisbase.git
-git clone https://github.com/chrisjihee/chrislab.git
 pip install --editable chrisbase*
-pip install --editable chrislab*
 
 # pretrained LM (for public user)
 rm -rf pretrained*

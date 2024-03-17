@@ -15,14 +15,13 @@ from transformers import AutoTokenizer, AutoConfig, AutoModelForSequenceClassifi
 from transformers import PreTrainedModel, PreTrainedTokenizer
 from transformers.modeling_outputs import SequenceClassifierOutput
 
-import nlpbook
+from DeepKNLP.arguments import TrainerArguments, TesterArguments, DataOption, DataFiles, ModelOption, HardwareOption, LearningOption
+from DeepKNLP.cls import NsmcCorpus, ClassificationDataset
+from DeepKNLP.helper import CheckpointSaver, fabric_barrier, epsilon, data_collator
+from DeepKNLP.metrics import accuracy
 from chrisbase.data import AppTyper, JobTimer, ProjectEnv
 from chrisbase.io import LoggingFormat
 from chrisbase.util import mute_tqdm_cls
-from nlpbook.arguments import TrainerArguments, TesterArguments, DataOption, DataFiles, ModelOption, HardwareOption, LearningOption
-from nlpbook.cls import NsmcCorpus, ClassificationDataset
-from nlpbook.metrics import accuracy
-from common import CheckpointSaver, fabric_barrier, epsilon
 
 logger = logging.getLogger(__name__)
 main = AppTyper()
@@ -54,7 +53,7 @@ class NsmcModel(LightningModule):
         train_dataloader = DataLoader(train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
                                       num_workers=self.args.hardware.cpu_workers,
                                       batch_size=self.args.hardware.train_batch,
-                                      collate_fn=nlpbook.data_collator,
+                                      collate_fn=data_collator,
                                       drop_last=False)
         self.fabric.print(f"Created train_dataset providing {len(train_dataset)} examples")
         self.fabric.print(f"Created train_dataloader providing {len(train_dataloader)} batches")
@@ -66,7 +65,7 @@ class NsmcModel(LightningModule):
         val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
                                     num_workers=self.args.hardware.cpu_workers,
                                     batch_size=self.args.hardware.infer_batch,
-                                    collate_fn=nlpbook.data_collator,
+                                    collate_fn=data_collator,
                                     drop_last=False)
         self.fabric.print(f"Created val_dataset providing {len(val_dataset)} examples")
         self.fabric.print(f"Created val_dataloader providing {len(val_dataloader)} batches")
@@ -78,7 +77,7 @@ class NsmcModel(LightningModule):
         val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
                                     num_workers=self.args.hardware.cpu_workers,
                                     batch_size=self.args.hardware.infer_batch,
-                                    collate_fn=nlpbook.data_collator,
+                                    collate_fn=data_collator,
                                     drop_last=False)
         self.fabric.print(f"Created test_dataset providing {len(val_dataset)} examples")
         self.fabric.print(f"Created test_dataloader providing {len(val_dataloader)} batches")
