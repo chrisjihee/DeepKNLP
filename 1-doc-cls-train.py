@@ -2,7 +2,7 @@ import logging
 import os
 from pathlib import Path
 from time import sleep
-from typing import List
+from typing import List, Dict
 
 import torch
 import typer
@@ -118,6 +118,7 @@ def train_loop(
         val_dataloader: DataLoader,
         test_dataloader: DataLoader | None = None,
 ):
+    fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
     print_interval = model.args.learning.print_rate_on_training * num_batch - epsilon if model.args.learning.print_step_on_training < 1 else model.args.learning.print_step_on_training
@@ -132,6 +133,7 @@ def train_loop(
         num_saving=model.args.learning.num_saving,
     )
     for epoch in range(model.args.learning.num_epochs):
+        metrics: Dict[str, float | int] = {}
         progress = mute_tqdm_cls(bar_size=30, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="training")
         for i, batch in enumerate(dataloader, start=1):
             model.train()
@@ -139,18 +141,16 @@ def train_loop(
             model.args.prog.global_epoch = model.args.prog.global_step / num_batch
             optimizer.zero_grad()
             outputs = model.training_step(batch, i)
-            fabric.barrier()
-            metrics = {
-                "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
-                "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
-                "loss": fabric.all_gather(outputs["loss"]).mean(),
-                "acc": fabric.all_gather(outputs["acc"]).mean(),
-            }
-            fabric.log_dict(metrics=metrics, step=model.args.prog.global_step)
             fabric.backward(outputs["loss"])
             optimizer.step()
             progress.update()
             model.eval()
+            fabric.barrier()
+            metrics["step"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item())
+            metrics["epoch"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4)
+            metrics["loss"] = fabric.all_gather(outputs["loss"]).mean().item()
+            metrics["acc"] = fabric.all_gather(outputs["acc"]).mean().item()
+            fabric.log_dict(metrics=metrics, step=metrics["step"])
             if i % print_interval < 1:
                 fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
                              f" | {model.args.learning.tag_format_on_training.format(**metrics)}")
@@ -169,12 +169,14 @@ def val_loop(
         dataloader: DataLoader,
         ckpt_saver: CheckpointSaver,
 ):
+    fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
     print_interval = model.args.learning.print_rate_on_validate * num_batch - epsilon if model.args.learning.print_step_on_validate < 1 else model.args.learning.print_step_on_validate
     preds: List[int] = []
     labels: List[int] = []
     losses: List[torch.Tensor] = []
+    metrics: Dict[str, float | int] = {}
     progress = mute_tqdm_cls(bar_size=20, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="checking")
     for i, batch in enumerate(dataloader, start=1):
         outputs = model.validation_step(batch, i)
@@ -184,21 +186,19 @@ def val_loop(
         progress.update()
         if i >= num_batch:
             fabric.barrier()
-            metrics = {
-                "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
-                "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
-                "val_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
-                "val_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
-                                    fabric.all_gather(torch.tensor(labels)).flatten()).item(),
-            }
+            metrics["step"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item())
+            metrics["epoch"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4)
+            metrics["val_loss"] = fabric.all_gather(torch.stack(losses)).mean().item()
+            metrics["val_acc"] = accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
+                                          fabric.all_gather(torch.tensor(labels)).flatten()).item()
             fabric.log_dict(metrics=metrics, step=metrics["step"])
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
                          f" | {model.args.learning.tag_format_on_validate.format(**metrics)}")
-            ckpt_saver.save_checkpoint(metrics=metrics, state={'model': model,
-                                                               'args': model.args})
         elif i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
     fabric_barrier(fabric, "[after-check]")
+    ckpt_saver.save_checkpoint(metrics=metrics, state={'model': model,
+                                                       'args': model.args})
 
 
 @torch.no_grad()
@@ -208,12 +208,14 @@ def test_loop(
         dataloader: DataLoader,
         ckpt_saver: CheckpointSaver | None = None,
 ):
+    fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
     print_interval = model.args.learning.print_rate_on_evaluate * num_batch - epsilon if model.args.learning.print_step_on_evaluate < 1 else model.args.learning.print_step_on_evaluate
     preds: List[int] = []
     labels: List[int] = []
     losses: List[torch.Tensor] = []
+    metrics: Dict[str, float | int] = {}
     progress = mute_tqdm_cls(bar_size=20, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="testing")
     for i, batch in enumerate(dataloader, start=1):
         if i == 1 and ckpt_saver is not None:
@@ -228,13 +230,11 @@ def test_loop(
         progress.update()
         if i >= num_batch:
             fabric.barrier()
-            metrics = {
-                "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
-                "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
-                "test_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
-                "test_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
-                                     fabric.all_gather(torch.tensor(labels)).flatten()).item(),
-            }
+            metrics["step"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item())
+            metrics["epoch"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4)
+            metrics["test_loss"] = fabric.all_gather(torch.stack(losses)).mean().item()
+            metrics["test_acc"] = accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
+                                           fabric.all_gather(torch.tensor(labels)).flatten()).item()
             fabric.log_dict(metrics=metrics, step=metrics["step"])
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
                          f" | {model.args.learning.tag_format_on_evaluate.format(**metrics)}")
@@ -255,18 +255,18 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
+        data_name: str = typer.Option(default="nsmc-mini"),  # TODO: -> nsmc
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_test.txt"),
         test_file: str = typer.Option(default=None),
-        num_check: int = typer.Option(default=2),  # TODO: -> 2
+        num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
-        seq_len: int = typer.Option(default=64),
+        seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
-        train_batch: int = typer.Option(default=50),  # TODO: -> 64
-        infer_batch: int = typer.Option(default=50),  # TODO: -> 64
+        train_batch: int = typer.Option(default=10),  # TODO: -> 64
+        infer_batch: int = typer.Option(default=10),  # TODO: -> 64
         accelerator: str = typer.Option(default="cuda"),
         precision: str = typer.Option(default="32-true"),
         strategy: str = typer.Option(default="ddp"),
@@ -276,7 +276,7 @@ def train(
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_acc"),
         num_saving: int = typer.Option(default=2),
-        num_epochs: int = typer.Option(default=1),
+        num_epochs: int = typer.Option(default=1),  # TODO: -> 3
         check_rate_on_training: float = typer.Option(default=1 / 5),
         print_rate_on_training: float = typer.Option(default=1 / 20),
         print_rate_on_validate: float = typer.Option(default=1 / 3),
