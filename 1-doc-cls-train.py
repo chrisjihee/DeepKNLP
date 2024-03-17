@@ -1,6 +1,7 @@
 import logging
 import os
 from pathlib import Path
+from time import sleep
 from typing import List
 
 import torch
@@ -138,11 +139,12 @@ def train_loop(
             model.args.prog.global_epoch = model.args.prog.global_step / num_batch
             optimizer.zero_grad()
             outputs = model.training_step(batch, i)
+            fabric.barrier()
             metrics = {
-                "step": model.args.prog.global_step,
-                "epoch": round(model.args.prog.global_epoch, 4),
-                "loss": outputs["loss"].item(),
-                "acc": outputs["acc"].item(),
+                "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
+                "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
+                "loss": fabric.all_gather(outputs["loss"]).mean(),
+                "acc": fabric.all_gather(outputs["acc"]).mean(),
             }
             fabric.log_dict(metrics=metrics, step=model.args.prog.global_step)
             fabric.backward(outputs["loss"])
@@ -181,13 +183,15 @@ def val_loop(
         losses.append(outputs["loss"])
         progress.update()
         if i >= num_batch:
+            fabric.barrier()
             metrics = {
-                "step": model.args.prog.global_step,
-                "epoch": round(model.args.prog.global_epoch, 4),
-                "val_loss": torch.stack(losses).mean().item(),
-                "val_acc": accuracy(torch.tensor(preds), torch.tensor(labels)).item(),
+                "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
+                "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
+                "val_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
+                "val_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
+                                    fabric.all_gather(torch.tensor(labels)).flatten()).item(),
             }
-            fabric.log_dict(metrics=metrics, step=model.args.prog.global_step)
+            fabric.log_dict(metrics=metrics, step=metrics["step"])
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
                          f" | {model.args.learning.tag_format_on_validate.format(**metrics)}")
             ckpt_saver.save_checkpoint(metrics=metrics, state={'model': model,
@@ -217,19 +221,21 @@ def test_loop(
             if ckpt_state is not None:
                 model.load_state_dict(ckpt_state['model'])
                 model.args = ckpt_state['args']
-        outputs = model.test_step(batch, i)
+        outputs = model.validation_step(batch, i)
         preds.extend(outputs["preds"])
         labels.extend(outputs["labels"])
         losses.append(outputs["loss"])
         progress.update()
         if i >= num_batch:
+            fabric.barrier()
             metrics = {
-                "step": model.args.prog.global_step,
-                "epoch": round(model.args.prog.global_epoch, 4),
-                "test_loss": torch.stack(losses).mean().item(),
-                "test_acc": accuracy(torch.tensor(preds), torch.tensor(labels)).item(),
+                "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
+                "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
+                "test_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
+                "test_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
+                                     fabric.all_gather(torch.tensor(labels)).flatten()).item(),
             }
-            fabric.log_dict(metrics=metrics, step=model.args.prog.global_step)
+            fabric.log_dict(metrics=metrics, step=metrics["step"])
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
                          f" | {model.args.learning.tag_format_on_evaluate.format(**metrics)}")
         elif i % print_interval < 1:
@@ -243,6 +249,7 @@ def train(
         # env
         project: str = typer.Option(default="DeepKNLP"),
         job_name: str = typer.Option(default=None),
+        job_version: int = typer.Option(default=None),
         debugging: bool = typer.Option(default=False),
         logging_file: str = typer.Option(default="logging.out"),
         argument_file: str = typer.Option(default="arguments.json"),
@@ -260,10 +267,10 @@ def train(
         # hardware
         train_batch: int = typer.Option(default=10),  # TODO: -> 64
         infer_batch: int = typer.Option(default=10),  # TODO: -> 64
-        accelerator: str = typer.Option(default="gpu"),
+        accelerator: str = typer.Option(default="cuda"),
         precision: str = typer.Option(default="32-true"),
         strategy: str = typer.Option(default="ddp"),
-        device: List[int] = typer.Option(default=[0]),
+        device: List[int] = typer.Option(default=[0, 1]),
         # learning
         learning_rate: float = typer.Option(default=5e-5),
         random_seed: int = typer.Option(default=7),
@@ -291,6 +298,7 @@ def train(
         env=ProjectEnv(
             project=project,
             job_name=job_name if job_name else pretrained.name,
+            job_version=job_version,
             debugging=debugging,
             msg_level=logging.DEBUG if debugging else logging.INFO,
             msg_format=LoggingFormat.DEBUG_40 if debugging else LoggingFormat.CHECK_40,
@@ -337,12 +345,12 @@ def train(
             name_format_on_saving=name_format_on_saving,
         ),
     )
-    output_home = Path(f"{finetuning}/{data_name}")
-    output_main = f"{args.tag}={args.env.job_name}"
-    output_sect = f"{args.env.hostname}={args.env.time_stamp}"
-    args.prog.tb_logger = TensorBoardLogger(output_home, output_main, output_sect)  # tensorboard --logdir finetuning --bind_all
-    args.prog.csv_logger = CSVLogger(output_home, output_main, output_sect, flush_logs_every_n_steps=1)
-    args.env.set_output_home(output_home / output_main / output_sect)
+    output_home = f"{finetuning}/{data_name}"
+    output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}"
+    output_version = args.env.job_version if args.env.job_version else CSVLogger(output_home, output_name).version
+    args.prog.tb_logger = TensorBoardLogger(output_home, output_name, output_version)  # tensorboard --logdir finetuning --bind_all
+    args.prog.csv_logger = CSVLogger(output_home, output_name, output_version, flush_logs_every_n_steps=1)
+    args.env.job_version = output_version
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
     fabric = Fabric(
@@ -352,13 +360,16 @@ def train(
         precision=args.hardware.precision,
         accelerator=args.hardware.accelerator,
     )
-    fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
-    fabric.seed_everything(args.learning.random_seed)
     fabric.launch()
+    fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
+    sleep(fabric.global_rank * 0.1)
+    fabric.seed_everything(args.learning.random_seed)
     args.prog.world_size = fabric.world_size
     args.prog.node_rank = fabric.node_rank
     args.prog.local_rank = fabric.local_rank
     args.prog.global_rank = fabric.global_rank
+    args.env.set_output_home(args.prog.csv_logger.log_dir)
+    fabric.barrier()
 
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}",
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,

@@ -12,7 +12,6 @@
     - https://lightning.ai/docs/fabric/stable/api/fabric_methods.html
     - https://lightning.ai/docs/fabric/stable/api/generated/lightning.fabric.fabric.Fabric.html#lightning.fabric.fabric.Fabric
     - https://github.com/Lightning-AI/pytorch-lightning/blob/master/examples/fabric/language_model/train.py
-    - https://github.com/huggingface/transformers/blob/main/examples/pytorch/text-classification/run_glue_no_trainer.py
 
 # 4장. 문서에 꼬리표 달기 (Document Classification)
   = [완료] 문서 분류 모델 학습하기
