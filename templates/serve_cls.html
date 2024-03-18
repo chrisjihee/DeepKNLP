@@ -42,7 +42,7 @@
                 $('#negative').html(data.negative_data);
                 $('#positive').css('width', data.positive_width);
                 $('#negative').css('width', data.negative_width);
-                $("#input").val("");
+                $("#input").val(data.sentence);
             },
             error: function (jqXhr, textStatus, errorThrown) {
                 $('#api_output').html("There was an error");

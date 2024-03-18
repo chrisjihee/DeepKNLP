@@ -17,4 +17,4 @@ chrisbase==0.5.0
 
 # Web
 Flask
-Flask-Cors
+Flask-Classful

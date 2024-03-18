@@ -7,7 +7,7 @@ from typing import List, Dict, Mapping, Any
 import torch
 import typer
 from flask import Flask, request, jsonify, render_template
-from flask_cors import CORS
+from flask_classful import FlaskView, route
 from lightning import LightningModule
 from lightning.fabric import Fabric
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
@@ -25,7 +25,7 @@ from DeepKNLP.helper import CheckpointSaver, epsilon, data_collator, fabric_barr
 from DeepKNLP.metrics import accuracy
 from chrisbase.data import AppTyper, JobTimer, ProjectEnv
 from chrisbase.io import LoggingFormat, make_dir, files
-from chrisbase.util import mute_tqdm_cls
+from chrisbase.util import mute_tqdm_cls, tupled
 
 logger = logging.getLogger(__name__)
 main = AppTyper()
@@ -123,6 +123,44 @@ class NsmcModel(LightningModule):
     def test_step(self, inputs, batch_idx):
         return self.validation_step(inputs, batch_idx)
 
+    @torch.no_grad()
+    def inference_fn(self, text: str):
+        inputs = self.tokenizer(
+            tupled(text),
+            max_length=self.args.model.seq_len,
+            padding="max_length",
+            truncation=True,
+            return_tensors="pt",
+        )
+        outputs: SequenceClassifierOutput = self.lang_model(**inputs)
+        prob = outputs.logits.softmax(dim=1)
+        pred = "긍정 (positive)" if torch.argmax(prob) == 1 else "부정 (negative)"
+        positive_prob = round(prob[0][1].item(), 4)
+        negative_prob = round(prob[0][0].item(), 4)
+        response = {
+            'sentence': text,
+            'prediction': pred,
+            'positive_data': f"긍정 {positive_prob * 100:.1f}%",
+            'negative_data': f"부정 {negative_prob * 100:.1f}%",
+            'positive_width': f"{positive_prob * 100:.2f}%",
+            'negative_width': f"{negative_prob * 100:.2f}%",
+        }
+        return response
+
+    class WebAPI(FlaskView):
+        def __init__(self, model: "NsmcModel"):
+            self.model = model
+
+        @route('/')
+        def index(self):
+            return render_template("serve_cls.html")
+
+        @route('/api', methods=['POST'])
+        def api(self):
+            query_sentence = request.json
+            output_data = self.model.inference_fn(query_sentence)
+            return jsonify(output_data)
+
 
 def train_loop(
         fabric: Fabric,
@@ -218,8 +256,7 @@ def test_loop(
     if checkpoint_path:
         assert Path(checkpoint_path).exists(), f"Model file not found: {checkpoint_path}"
         fabric.print(f"Loading model from {checkpoint_path}")
-        ckpt_state = fabric.load(checkpoint_path)
-        model.from_checkpoint(ckpt_state)
+        model.from_checkpoint(fabric.load(checkpoint_path))
 
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
@@ -622,48 +659,12 @@ def serve(
         assert checkpoint_files, f"No model file found: {finetuning_home / args.model.name / '**/*.ckpt'}"
         checkpoint_path = checkpoint_files[-1]
         fabric.print(f"Loading model from {checkpoint_path}")
-        ckpt_state = fabric.load(checkpoint_path)
-        model.from_checkpoint(ckpt_state)
+        model.from_checkpoint(fabric.load(checkpoint_path))
 
-        def inference_fn(sentence):
-            inputs = model.tokenizer(
-                [sentence],
-                max_length=args.model.seq_len,
-                padding="max_length",
-                truncation=True,
-            )
-            with torch.no_grad():
-                outputs: SequenceClassifierOutput = model(**{k: torch.tensor(v) for k, v in inputs.items()})
-                prob = outputs.logits.softmax(dim=1)
-                positive_prob = round(prob[0][1].item(), 4)
-                negative_prob = round(prob[0][0].item(), 4)
-                pred = "긍정 (positive)" if torch.argmax(prob) == 1 else "부정 (negative)"
-            return {
-                'sentence': sentence,
-                'prediction': pred,
-                'positive_data': f"긍정 {positive_prob:.4f}",
-                'negative_data': f"부정 {negative_prob:.4f}",
-                'positive_width': f"{positive_prob * 100}%",
-                'negative_width': f"{negative_prob * 100}%",
-            }
-
-        template_file = "serve_cls.html"
-        app = Flask(__name__, template_folder='')
-        CORS(app)
-
-        @app.route('/')
-        def index():
-            return render_template(template_file)
-
-        @app.route('/api', methods=['POST'])
-        def api():
-            query_sentence = request.json
-            output_data = inference_fn(query_sentence)
-            response = jsonify(output_data)
-            return response
-
-        server: Flask = app
-        server.run()
+        if fabric.local_rank == 0:
+            server = Flask(f"NsmcModel-{args.env.hostaddr}", template_folder='templates')
+            NsmcModel.WebAPI.register(init_argument=model, app=server, route_base='/')
+            server.run(host="0.0.0.0", port=7321, debug=debugging)
 
 
 if __name__ == "__main__":
