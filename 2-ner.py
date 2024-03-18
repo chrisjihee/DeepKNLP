@@ -313,7 +313,7 @@ def train(
         data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> klue-ner, kmou-ner
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
-        test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl", None
+        test_file: str = typer.Option(default=None),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=2),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
@@ -336,16 +336,16 @@ def train(
         print_step_on_validate: int = typer.Option(default=-1),
         print_step_on_evaluate: int = typer.Option(default=-1),
         tag_format_on_training: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, loss={loss:06.4f}, acc={acc:06.4f}"),
-        tag_format_on_validate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}"),
-        tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
+        tag_format_on_validate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_F1c={val_F1c:05.2f}, val_F1e={val_F1e:05.2f}"),
+        tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_F1c={test_F1c:05.2f}, test_F1e={test_F1e:05.2f}"),
         # learning
         learning_rate: float = typer.Option(default=5e-5),
         random_seed: int = typer.Option(default=7),
-        saving_mode: str = typer.Option(default="max val_acc"),
+        saving_mode: str = typer.Option(default="max val_F1c"),
         num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
         num_epochs: int = typer.Option(default=2),  # TODO: -> 2, 3
         check_rate_on_training: float = typer.Option(default=1 / 10),  # TODO: -> 1/5
-        name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
+        name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}"),
 ):
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
