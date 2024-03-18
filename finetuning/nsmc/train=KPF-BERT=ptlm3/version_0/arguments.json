@@ -2,10 +2,10 @@
   "env": {
     "project": "DeepKNLP",
     "job_name": "KPF-BERT",
-    "job_version": 2,
+    "job_version": 0,
     "hostname": "ptlm3",
     "hostaddr": "129.254.121.74",
-    "time_stamp": "0318.163829",
+    "time_stamp": "0318.172637",
     "python_path": "/home/chrisjihee/mambaforge/envs/DeepKNLP-24.03/bin/python",
     "current_dir": "/home/chrisjihee/proj/DeepKNLP-24.03",
     "current_file": "/home/chrisjihee/proj/DeepKNLP-24.03/1-nsmc.py",
@@ -19,13 +19,13 @@
     "msg_level": 20,
     "msg_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)40s ┇ %(message)s",
     "date_format": "[%m.%d %H:%M:%S]",
-    "output_home": "finetuning/nsmc/train=KPF-BERT=ptlm3/version_2",
+    "output_home": "finetuning/nsmc/train=KPF-BERT=ptlm3/version_0",
     "logging_file": "logging.out",
     "argument_file": "arguments.json"
   },
   "prog": {
-    "tb_logger": "<lightning.fabric.loggers.tensorboard.TensorBoardLogger object at 0x7fae392d3010>",
-    "csv_logger": "<lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7fae29eb8310>",
+    "tb_logger": "<lightning.fabric.loggers.tensorboard.TensorBoardLogger object at 0x7f044bd78150>",
+    "csv_logger": "<lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f044bd78ed0>",
     "world_size": 2,
     "local_rank": 0,
     "global_rank": 0,
@@ -51,7 +51,7 @@
     "seq_len": 64
   },
   "hardware": {
-    "cpu_workers": 32,
+    "cpu_workers": 16,
     "train_batch": 50,
     "infer_batch": 50,
     "accelerator": "cuda",

@@ -48,7 +48,7 @@ class ModelOption(OptionData):
 
 @dataclass
 class HardwareOption(OptionData):
-    cpu_workers: int = field(default=os.cpu_count())
+    cpu_workers: int = field(default=os.cpu_count() / 2)
     train_batch: int = field(default=32)
     infer_batch: int = field(default=32)
     accelerator: str = field(default="auto")  # possible value: "cpu", "gpu", "tpu", "ipu", "hpu", "mps", "auto".
@@ -85,7 +85,7 @@ class PrintingOption(OptionData):
 @dataclass
 class LearningOption(OptionData):
     random_seed: int | None = field(default=None)
-    optimizer_cls: str = field(default="Adam")
+    optimizer_cls: str = field(default="AdamW")
     learning_rate: float = field(default=5e-5)
     saving_mode: str = field(default="min val_loss")
     num_saving: int = field(default=3)

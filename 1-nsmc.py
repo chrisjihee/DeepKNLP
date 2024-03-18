@@ -34,7 +34,7 @@ class NsmcModel(LightningModule):
         super().__init__()
         self.args: TesterArguments | TrainerArguments = args
         self.data: NsmcCorpus = NsmcCorpus(args)
-        self.model: PreTrainedModel = AutoModelForSequenceClassification.from_pretrained(
+        self.lang_model: PreTrainedModel = AutoModelForSequenceClassification.from_pretrained(
             args.model.pretrained,
             config=AutoConfig.from_pretrained(
                 args.model.pretrained,
@@ -47,17 +47,13 @@ class NsmcModel(LightningModule):
         )
 
     def to_checkpoint(self) -> Dict[str, Any]:
-        return {
-            "model": self,
-            "args": self.args,
-        }
+        return self.lang_model.state_dict()
 
     def from_checkpoint(self, ckpt_state: Dict[str, Any]):
-        self.load_state_dict(ckpt_state['model'])
-        self.args = ckpt_state['args']
+        self.lang_model.load_state_dict(ckpt_state)
 
     def configure_optimizers(self):
-        return AdamW(self.model.parameters(), lr=self.args.learning.learning_rate)
+        return AdamW(self.lang_model.parameters(), lr=self.args.learning.learning_rate)
 
     def train_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
@@ -96,7 +92,7 @@ class NsmcModel(LightningModule):
         return test_dataloader
 
     def training_step(self, inputs, batch_idx):
-        outputs: SequenceClassifierOutput = self.model(**inputs)
+        outputs: SequenceClassifierOutput = self.lang_model(**inputs)
         labels: torch.Tensor = inputs["labels"]
         preds: torch.Tensor = outputs.logits.argmax(dim=-1)
         acc: torch.Tensor = accuracy(preds, labels)
@@ -107,7 +103,7 @@ class NsmcModel(LightningModule):
 
     @torch.no_grad()
     def validation_step(self, inputs, batch_idx):
-        outputs: SequenceClassifierOutput = self.model(**inputs)
+        outputs: SequenceClassifierOutput = self.lang_model(**inputs)
         labels: List[int] = inputs["labels"].tolist()
         preds: List[int] = outputs.logits.argmax(dim=-1).tolist()
         return {
@@ -271,6 +267,7 @@ def train(
         model_name: str = typer.Option(default=None),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
+        cpu_workers: int = typer.Option(default=os.cpu_count() / 2),
         train_batch: int = typer.Option(default=50),
         infer_batch: int = typer.Option(default=50),
         accelerator: str = typer.Option(default="cuda"),
@@ -299,6 +296,7 @@ def train(
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("transformers.modeling_utils").setLevel(logging.ERROR)
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
 
     pretrained = Path(pretrained)
@@ -328,6 +326,7 @@ def train(
             seq_len=seq_len,
         ),
         hardware=HardwareOption(
+            cpu_workers=cpu_workers,
             train_batch=train_batch,
             infer_batch=infer_batch,
             accelerator=accelerator,
@@ -364,9 +363,9 @@ def train(
     args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
     fabric = Fabric(
         loggers=[args.prog.tb_logger, args.prog.csv_logger],
-        devices=args.hardware.devices,
-        strategy=args.hardware.strategy,
-        precision=args.hardware.precision,
+        devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers,
+        strategy=args.hardware.strategy if args.hardware.accelerator in ["cuda", "gpu"] else "auto",
+        precision=args.hardware.precision if args.hardware.accelerator in ["cuda", "gpu"] else None,
         accelerator=args.hardware.accelerator,
     )
     fabric.launch()
@@ -448,16 +447,17 @@ def test(
         model_name: str = typer.Option(default="train=KPF-BERT=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
+        cpu_workers: int = typer.Option(default=os.cpu_count() / 2),
         train_batch: int = typer.Option(default=50),
         infer_batch: int = typer.Option(default=50),
-        accelerator: str = typer.Option(default="cuda"),
-        precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: str = typer.Option(default="ddp"),
+        accelerator: str = typer.Option(default="cpu"),  # TODO: -> cuda, cpu, mpu
+        precision: str = typer.Option(default=None),  # TODO: -> 32-true, bf16-mixed, 16-mixed
+        strategy: str = typer.Option(default="auto"),
         device: List[int] = typer.Option(default=[0]),
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),
         print_rate_on_validate: float = typer.Option(default=1 / 3),
-        print_rate_on_evaluate: float = typer.Option(default=1 / 3),
+        print_rate_on_evaluate: float = typer.Option(default=1 / 100),
         print_step_on_training: int = typer.Option(default=-1),
         print_step_on_validate: int = typer.Option(default=-1),
         print_step_on_evaluate: int = typer.Option(default=-1),
@@ -468,6 +468,7 @@ def test(
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("transformers.modeling_utils").setLevel(logging.ERROR)
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
 
     pretrained = Path(pretrained)
@@ -497,6 +498,7 @@ def test(
             seq_len=seq_len,
         ),
         hardware=HardwareOption(
+            cpu_workers=cpu_workers,
             train_batch=train_batch,
             infer_batch=infer_batch,
             accelerator=accelerator,
@@ -522,9 +524,9 @@ def test(
     args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(finetuning_home, output_name).version
     args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
     fabric = Fabric(
-        devices=args.hardware.devices,
-        strategy=args.hardware.strategy,
-        precision=args.hardware.precision,
+        devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers,
+        strategy=args.hardware.strategy if args.hardware.accelerator in ["cuda", "gpu"] else "auto",
+        precision=args.hardware.precision if args.hardware.accelerator in ["cuda", "gpu"] else None,
         accelerator=args.hardware.accelerator,
     )
     fabric.launch()
@@ -555,7 +557,7 @@ def test(
                 fabric=fabric,
                 model=model,
                 dataloader=test_dataloader,
-                checkpoint_path=checkpoint_path,  # TODO: -> checkpoint_path
+                checkpoint_path=checkpoint_path,
             )
 
 
