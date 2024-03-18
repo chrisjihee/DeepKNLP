@@ -100,12 +100,9 @@ class LearningOption(OptionData):
 
 @dataclass
 class ProgressChecker(ResultData):
-    result: dict = field(init=False, default_factory=dict)
     tb_logger: TensorBoardLogger = field(init=False, default=None)
     csv_logger: CSVLogger = field(init=False, default=None)
     world_size: int = field(init=False, default=1)
-    node_rank: int = field(init=False, default=0)
-    local_rank: int = field(init=False, default=0)
     global_rank: int = field(init=False, default=0)
     global_step: int = field(init=False, default=0)
     global_epoch: float = field(init=False, default=0.0)
@@ -141,8 +138,8 @@ class ServerArguments(MLArguments):
 @dataclass
 class TesterArguments(ServerArguments):
     tag = "test"
-    printing: PrintingOption = field(default_factory=PrintingOption)
     hardware: HardwareOption = field(default_factory=HardwareOption)
+    printing: PrintingOption = field(default_factory=PrintingOption)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
         if not columns:
@@ -150,6 +147,7 @@ class TesterArguments(ServerArguments):
         df = pd.concat([
             super().dataframe(columns=columns),
             to_dataframe(columns=columns, raw=self.hardware, data_prefix="hardware"),
+            to_dataframe(columns=columns, raw=self.printing, data_prefix="printing"),
         ]).reset_index(drop=True)
         return df
 

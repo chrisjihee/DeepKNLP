@@ -376,8 +376,6 @@ def train(
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
     args.prog.world_size = fabric.world_size
-    args.prog.node_rank = fabric.node_rank
-    args.prog.local_rank = fabric.local_rank
     args.prog.global_rank = fabric.global_rank
     fabric.seed_everything(args.learning.random_seed)
     fabric.barrier()
@@ -535,8 +533,6 @@ def test(
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
     args.prog.world_size = fabric.world_size
-    args.prog.node_rank = fabric.node_rank
-    args.prog.local_rank = fabric.local_rank
     args.prog.global_rank = fabric.global_rank
     fabric.barrier()
 
