@@ -1,0 +1,75 @@
+{
+  "env": {
+    "project": "DeepKNLP",
+    "job_name": "KPF-BERT",
+    "job_version": 1,
+    "hostname": "ptlm3",
+    "hostaddr": "129.254.121.74",
+    "time_stamp": "0318.175914",
+    "python_path": "/home/chrisjihee/mambaforge/envs/DeepKNLP-24.03/bin/python",
+    "current_dir": "/home/chrisjihee/proj/DeepKNLP-24.03",
+    "current_file": "/home/chrisjihee/proj/DeepKNLP-24.03/1-nsmc.py",
+    "working_dir": "/home/chrisjihee/proj/DeepKNLP-24.03",
+    "command_args": [
+      "test"
+    ],
+    "num_ip_addrs": 1,
+    "max_workers": 1,
+    "debugging": false,
+    "msg_level": 20,
+    "msg_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)40s ┇ %(message)s",
+    "date_format": "[%m.%d %H:%M:%S]",
+    "output_home": "finetuning/nsmc/test=KPF-BERT=ptlm3/version_1",
+    "logging_file": "logging.out",
+    "argument_file": "arguments.json"
+  },
+  "prog": {
+    "tb_logger": "<lightning.fabric.loggers.tensorboard.TensorBoardLogger object at 0x7f291b3e6c50>",
+    "csv_logger": "<lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f292826c150>",
+    "world_size": 2,
+    "local_rank": 0,
+    "global_rank": 0,
+    "global_step": 1350,
+    "global_epoch": 0.9
+  },
+  "data": {
+    "name": "nsmc",
+    "home": "/home/chrisjihee/proj/DeepKNLP-24.03/data",
+    "files": {
+      "train": "ratings_train.txt",
+      "valid": "ratings_valid.txt",
+      "test": "ratings_valid.txt"
+    },
+    "caching": false,
+    "redownload": false,
+    "num_check": 0
+  },
+  "model": {
+    "pretrained": "pretrained/KPF-BERT",
+    "finetuning": "/home/chrisjihee/proj/DeepKNLP-24.03/finetuning",
+    "name": "train=KPF-BERT=*",
+    "seq_len": 64
+  },
+  "hardware": {
+    "cpu_workers": 10,
+    "train_batch": 32,
+    "infer_batch": 10,
+    "accelerator": "cpu",
+    "precision": null,
+    "strategy": "auto",
+    "devices": [
+      0
+    ]
+  },
+  "printing": {
+    "print_rate_on_training": 0.1,
+    "print_rate_on_validate": 0.1,
+    "print_rate_on_evaluate": 0.01,
+    "print_step_on_training": -1,
+    "print_step_on_validate": -1,
+    "print_step_on_evaluate": -1,
+    "tag_format_on_training": "",
+    "tag_format_on_validate": "",
+    "tag_format_on_evaluate": "st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"
+  }
+}

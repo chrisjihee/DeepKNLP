@@ -1,0 +1,176 @@
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇ [INIT] python /home/chrisjihee/proj/DeepKNLP-24.03/1-nsmc.py test
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------------
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    # | TesterArguments                 | value
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------------
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    1 | tag                             | test
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    2 | env.project                     | DeepKNLP
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    3 | env.job_name                    | KPF-BERT
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    4 | env.job_version                 | 1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    5 | env.hostname                    | ptlm3
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    6 | env.hostaddr                    | 129.254.121.74
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    7 | env.time_stamp                  | 0318.175914
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    8 | env.python_path                 | /home/chrisjihee/mambaforge/envs/DeepKNLP-24.03/bin/python
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇    9 | env.current_dir                 | /home/chrisjihee/proj/DeepKNLP-24.03
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   10 | env.current_file                | /home/chrisjihee/proj/DeepKNLP-24.03/1-nsmc.py
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   11 | env.working_dir                 | /home/chrisjihee/proj/DeepKNLP-24.03
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   12 | env.command_args                | ['test']
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   13 | env.num_ip_addrs                | 1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   14 | env.max_workers                 | 1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   15 | env.debugging                   | False
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   16 | env.msg_level                   | 20
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   17 | env.msg_format                  | %(asctime)s ┇ %(levelname)-8s ┇ %(name)40s ┇ %(message)s
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   18 | env.date_format                 | [%m.%d %H:%M:%S]
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   19 | env.output_home                 | finetuning/nsmc/test=KPF-BERT=ptlm3/version_1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   20 | env.logging_file                | logging.out
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   21 | env.argument_file               | arguments.json
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   22 | time.started                    | [03.18 17:59:20]
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   23 | time.settled                    |
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   24 | time.elapsed                    |
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   25 | prog.tb_logger                  |
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   26 | prog.csv_logger                 | <lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f2929656150>
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   27 | prog.world_size                 | 10
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   28 | prog.local_rank                 | 0
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   29 | prog.global_rank                | 0
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   30 | prog.global_step                | 0
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   31 | prog.global_epoch               | 0.0
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   32 | data.name                       | nsmc
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   33 | data.home                       | /home/chrisjihee/proj/DeepKNLP-24.03/data
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   34 | data.files                      | {'train': 'ratings_train.txt', 'valid': 'ratings_valid.txt', 'test': 'ratings_valid.txt'}
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   35 | data.caching                    | False
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   36 | data.redownload                 | False
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   37 | data.num_check                  | 0
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   38 | model.pretrained                | pretrained/KPF-BERT
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   39 | model.finetuning                | /home/chrisjihee/proj/DeepKNLP-24.03/finetuning
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   40 | model.name                      | train=KPF-BERT=*
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   41 | model.seq_len                   | 64
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   42 | hardware.cpu_workers            | 10
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   43 | hardware.train_batch            | 32
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   44 | hardware.infer_batch            | 10
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   45 | hardware.accelerator            | cpu
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   46 | hardware.precision              |
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   47 | hardware.strategy               | auto
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   48 | hardware.devices                | [0]
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   49 | printing.print_rate_on_training | 0.1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   50 | printing.print_rate_on_validate | 0.1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   51 | printing.print_rate_on_evaluate | 0.01
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   52 | printing.print_step_on_training | -1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   53 | printing.print_step_on_validate | -1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   54 | printing.print_step_on_evaluate | -1
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   55 | printing.tag_format_on_training |
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   56 | printing.tag_format_on_validate |
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇   57 | printing.tag_format_on_evaluate | st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}
+[03.18 17:59:20] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------------
+[03.18 17:59:22] ┇ INFO     ┇                                 __main__ ┇ === [after-model] =======================================================================================================================
+[03.18 17:59:22] ┇ INFO     ┇                             DeepKNLP.cls ┇ Creating features from /home/chrisjihee/proj/DeepKNLP-24.03/data/nsmc/ratings_valid.txt
+[03.18 17:59:23] ┇ INFO     ┇                             DeepKNLP.cls ┇ Loaded 50000 examples from /home/chrisjihee/proj/DeepKNLP-24.03/data/nsmc/ratings_valid.txt
+[03.18 17:59:26] ┇ INFO     ┇                             DeepKNLP.cls ┇ Converted 50000 raw examples to 50000 encoded examples
+[03.18 17:59:26] ┇ INFO     ┇                                 __main__ ┇ Created test_dataset providing 50000 examples
+[03.18 17:59:26] ┇ INFO     ┇                                 __main__ ┇ Created test_dataloader providing 5000 batches
+[03.18 17:59:26] ┇ INFO     ┇                                 __main__ ┇ === [after-test_dataloader] =============================================================================================================
+[03.18 17:59:26] ┇ INFO     ┇                                 __main__ ┇ Loading model from finetuning/nsmc/train=KPF-BERT=ptlm3/version_1/ep=0.9, loss=0.2338, acc=0.9046.ckpt
+[03.18 17:59:33] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   1%|▏                   | 5/500 [00:06<10:51,  1.32s/x10b]
+[03.18 17:59:40] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   2%|▍                   | 10/500 [00:13<10:17,  1.26s/x10b]
+[03.18 17:59:45] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   3%|▌                   | 15/500 [00:18<08:41,  1.07s/x10b]
+[03.18 17:59:51] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   4%|▊                   | 20/500 [00:24<09:19,  1.17s/x10b]
+[03.18 17:59:56] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   5%|█                   | 25/500 [00:29<09:13,  1.16s/x10b]
+[03.18 18:00:02] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   6%|█▏                  | 30/500 [00:35<08:52,  1.13s/x10b]
+[03.18 18:00:06] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   7%|█▍                  | 35/500 [00:39<07:25,  1.04x10b/s]
+[03.18 18:00:13] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   8%|█▌                  | 40/500 [00:46<09:04,  1.18s/x10b]
+[03.18 18:00:18] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:   9%|█▊                  | 45/500 [00:51<08:22,  1.10s/x10b]
+[03.18 18:00:24] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  10%|██                  | 50/500 [00:57<08:59,  1.20s/x10b]
+[03.18 18:00:29] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  11%|██▏                 | 55/500 [01:02<07:25,  1.00s/x10b]
+[03.18 18:00:34] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  12%|██▍                 | 60/500 [01:07<07:08,  1.03x10b/s]
+[03.18 18:00:40] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  13%|██▌                 | 65/500 [01:13<08:45,  1.21s/x10b]
+[03.18 18:00:45] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  14%|██▊                 | 70/500 [01:18<08:20,  1.16s/x10b]
+[03.18 18:00:51] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  15%|███                 | 75/500 [01:24<07:55,  1.12s/x10b]
+[03.18 18:00:57] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  16%|███▏                | 80/500 [01:30<07:39,  1.09s/x10b]
+[03.18 18:01:02] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  17%|███▍                | 85/500 [01:35<07:32,  1.09s/x10b]
+[03.18 18:01:08] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  18%|███▌                | 90/500 [01:41<07:24,  1.08s/x10b]
+[03.18 18:01:13] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  19%|███▊                | 95/500 [01:46<07:28,  1.11s/x10b]
+[03.18 18:01:19] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  20%|████                | 100/500 [01:52<07:34,  1.14s/x10b]
+[03.18 18:01:25] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  21%|████▏               | 105/500 [01:58<07:59,  1.21s/x10b]
+[03.18 18:01:30] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  22%|████▍               | 110/500 [02:03<06:36,  1.02s/x10b]
+[03.18 18:01:35] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  23%|████▌               | 115/500 [02:08<06:37,  1.03s/x10b]
+[03.18 18:01:41] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  24%|████▊               | 120/500 [02:14<07:20,  1.16s/x10b]
+[03.18 18:01:46] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  25%|█████               | 125/500 [02:19<07:12,  1.15s/x10b]
+[03.18 18:01:52] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  26%|█████▏              | 130/500 [02:25<06:53,  1.12s/x10b]
+[03.18 18:01:58] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  27%|█████▍              | 135/500 [02:31<07:39,  1.26s/x10b]
+[03.18 18:02:04] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  28%|█████▌              | 140/500 [02:37<07:02,  1.17s/x10b]
+[03.18 18:02:10] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  29%|█████▊              | 145/500 [02:43<06:16,  1.06s/x10b]
+[03.18 18:02:15] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  30%|██████              | 150/500 [02:48<06:24,  1.10s/x10b]
+[03.18 18:02:21] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  31%|██████▏             | 155/500 [02:54<06:12,  1.08s/x10b]
+[03.18 18:02:25] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  32%|██████▍             | 160/500 [02:58<05:30,  1.03x10b/s]
+[03.18 18:02:30] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  33%|██████▌             | 165/500 [03:03<05:30,  1.01x10b/s]
+[03.18 18:02:36] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  34%|██████▊             | 170/500 [03:09<05:45,  1.05s/x10b]
+[03.18 18:02:41] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  35%|███████             | 175/500 [03:14<05:49,  1.08s/x10b]
+[03.18 18:02:46] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  36%|███████▏            | 180/500 [03:19<05:23,  1.01s/x10b]
+[03.18 18:02:52] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  37%|███████▍            | 185/500 [03:25<06:17,  1.20s/x10b]
+[03.18 18:02:58] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  38%|███████▌            | 190/500 [03:31<06:11,  1.20s/x10b]
+[03.18 18:03:03] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  39%|███████▊            | 195/500 [03:36<05:07,  1.01s/x10b]
+[03.18 18:03:09] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  40%|████████            | 200/500 [03:42<06:06,  1.22s/x10b]
+[03.18 18:03:14] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  41%|████████▏           | 205/500 [03:47<04:51,  1.01x10b/s]
+[03.18 18:03:19] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  42%|████████▍           | 210/500 [03:52<04:47,  1.01x10b/s]
+[03.18 18:03:25] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  43%|████████▌           | 215/500 [03:58<05:15,  1.11s/x10b]
+[03.18 18:03:29] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  44%|████████▊           | 220/500 [04:02<04:53,  1.05s/x10b]
+[03.18 18:03:35] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  45%|█████████           | 225/500 [04:08<04:53,  1.07s/x10b]
+[03.18 18:03:41] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  46%|█████████▏          | 230/500 [04:14<05:26,  1.21s/x10b]
+[03.18 18:03:47] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  47%|█████████▍          | 235/500 [04:20<05:29,  1.24s/x10b]
+[03.18 18:03:52] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  48%|█████████▌          | 240/500 [04:25<04:29,  1.04s/x10b]
+[03.18 18:03:59] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  49%|█████████▊          | 245/500 [04:32<05:18,  1.25s/x10b]
+[03.18 18:04:05] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  50%|██████████          | 250/500 [04:38<05:14,  1.26s/x10b]
+[03.18 18:04:10] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  51%|██████████▏         | 255/500 [04:43<04:35,  1.13s/x10b]
+[03.18 18:04:17] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  52%|██████████▍         | 260/500 [04:50<05:03,  1.27s/x10b]
+[03.18 18:04:23] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  53%|██████████▌         | 265/500 [04:56<04:57,  1.27s/x10b]
+[03.18 18:04:28] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  54%|██████████▊         | 270/500 [05:01<04:30,  1.17s/x10b]
+[03.18 18:04:35] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  55%|███████████         | 275/500 [05:08<04:41,  1.25s/x10b]
+[03.18 18:04:40] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  56%|███████████▏        | 280/500 [05:13<04:03,  1.11s/x10b]
+[03.18 18:04:46] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  57%|███████████▍        | 285/500 [05:19<04:03,  1.13s/x10b]
+[03.18 18:04:51] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  58%|███████████▌        | 290/500 [05:24<04:03,  1.16s/x10b]
+[03.18 18:04:57] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  59%|███████████▊        | 295/500 [05:30<03:56,  1.15s/x10b]
+[03.18 18:05:03] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  60%|████████████        | 300/500 [05:36<04:04,  1.22s/x10b]
+[03.18 18:05:09] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  61%|████████████▏       | 305/500 [05:42<03:36,  1.11s/x10b]
+[03.18 18:05:15] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  62%|████████████▍       | 310/500 [05:48<03:48,  1.20s/x10b]
+[03.18 18:05:21] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  63%|████████████▌       | 315/500 [05:54<03:27,  1.12s/x10b]
+[03.18 18:05:27] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  64%|████████████▊       | 320/500 [06:00<03:39,  1.22s/x10b]
+[03.18 18:05:32] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  65%|█████████████       | 325/500 [06:05<02:54,  1.00x10b/s]
+[03.18 18:05:37] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  66%|█████████████▏      | 330/500 [06:10<03:00,  1.06s/x10b]
+[03.18 18:05:42] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  67%|█████████████▍      | 335/500 [06:15<03:01,  1.10s/x10b]
+[03.18 18:05:48] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  68%|█████████████▌      | 340/500 [06:21<03:10,  1.19s/x10b]
+[03.18 18:05:53] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  69%|█████████████▊      | 345/500 [06:26<02:35,  1.00s/x10b]
+[03.18 18:05:59] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  70%|██████████████      | 350/500 [06:32<02:31,  1.01s/x10b]
+[03.18 18:06:05] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  71%|██████████████▏     | 355/500 [06:38<02:56,  1.22s/x10b]
+[03.18 18:06:11] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  72%|██████████████▍     | 360/500 [06:44<02:51,  1.23s/x10b]
+[03.18 18:06:17] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  73%|██████████████▌     | 365/500 [06:50<02:53,  1.28s/x10b]
+[03.18 18:06:23] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  74%|██████████████▊     | 370/500 [06:56<02:21,  1.09s/x10b]
+[03.18 18:06:29] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  75%|███████████████     | 375/500 [07:02<02:20,  1.12s/x10b]
+[03.18 18:06:35] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  76%|███████████████▏    | 380/500 [07:08<02:28,  1.24s/x10b]
+[03.18 18:06:40] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  77%|███████████████▍    | 385/500 [07:13<02:12,  1.15s/x10b]
+[03.18 18:06:45] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  78%|███████████████▌    | 390/500 [07:18<01:44,  1.05x10b/s]
+[03.18 18:06:50] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  79%|███████████████▊    | 395/500 [07:23<01:49,  1.04s/x10b]
+[03.18 18:06:55] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  80%|████████████████    | 400/500 [07:28<01:40,  1.00s/x10b]
+[03.18 18:07:00] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  81%|████████████████▏   | 405/500 [07:33<01:36,  1.01s/x10b]
+[03.18 18:07:06] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  82%|████████████████▍   | 410/500 [07:39<01:49,  1.21s/x10b]
+[03.18 18:07:12] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  83%|████████████████▌   | 415/500 [07:45<01:41,  1.20s/x10b]
+[03.18 18:07:19] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  84%|████████████████▊   | 420/500 [07:52<01:39,  1.24s/x10b]
+[03.18 18:07:24] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  85%|█████████████████   | 425/500 [07:57<01:27,  1.17s/x10b]
+[03.18 18:07:31] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  86%|█████████████████▏  | 430/500 [08:04<01:29,  1.28s/x10b]
+[03.18 18:07:37] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  87%|█████████████████▍  | 435/500 [08:10<01:17,  1.19s/x10b]
+[03.18 18:07:43] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  88%|█████████████████▌  | 440/500 [08:16<01:12,  1.21s/x10b]
+[03.18 18:07:49] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  89%|█████████████████▊  | 445/500 [08:22<01:06,  1.21s/x10b]
+[03.18 18:07:55] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  90%|██████████████████  | 450/500 [08:28<00:59,  1.18s/x10b]
+[03.18 18:08:01] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  91%|██████████████████▏ | 455/500 [08:34<00:49,  1.10s/x10b]
+[03.18 18:08:06] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  92%|██████████████████▍ | 460/500 [08:39<00:47,  1.19s/x10b]
+[03.18 18:08:13] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  93%|██████████████████▌ | 465/500 [08:46<00:44,  1.26s/x10b]
+[03.18 18:08:19] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  94%|██████████████████▊ | 470/500 [08:52<00:37,  1.24s/x10b]
+[03.18 18:08:24] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  95%|███████████████████ | 475/500 [08:57<00:24,  1.01x10b/s]
+[03.18 18:08:29] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  96%|███████████████████▏| 480/500 [09:02<00:21,  1.05s/x10b]
+[03.18 18:08:35] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  97%|███████████████████▍| 485/500 [09:08<00:16,  1.08s/x10b]
+[03.18 18:08:40] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  98%|███████████████████▌| 490/500 [09:13<00:09,  1.02x10b/s]
+[03.18 18:08:46] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing:  99%|███████████████████▊| 495/500 [09:19<00:05,  1.18s/x10b]
+[03.18 18:09:01] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90)  testing: 100%|████████████████████| 500/500 [09:34<00:00,  1.01s/x10b] | st=1350, ep=0.90, test_loss=0.2338, test_acc=0.9047
+[03.18 18:09:01] ┇ INFO     ┇                                 __main__ ┇ --- [after-test] ------------------------------------------------------------------------------------------------------------------------
+[03.18 18:09:01] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.18 18:09:01] ┇ INFO     ┇                           chrisbase.data ┇ [EXIT] python /home/chrisjihee/proj/DeepKNLP-24.03/1-nsmc.py test ($=00:09:40.609)
+[03.18 18:09:01] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================

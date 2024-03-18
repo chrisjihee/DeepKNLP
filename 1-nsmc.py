@@ -271,7 +271,7 @@ def train(
         model_name: str = typer.Option(default=None),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
-        cpu_workers: int = typer.Option(default=os.cpu_count() / 2),
+        cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         train_batch: int = typer.Option(default=50),
         infer_batch: int = typer.Option(default=50),
         accelerator: str = typer.Option(default="cuda"),
@@ -451,14 +451,14 @@ def test(
         model_name: str = typer.Option(default="train=KPF-BERT=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
-        cpu_workers: int = typer.Option(default=os.cpu_count() / 2),
-        infer_batch: int = typer.Option(default=50),
-        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mpu
+        cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
+        infer_batch: int = typer.Option(default=10),
+        accelerator: str = typer.Option(default="cpu"),  # TODO: -> cuda, cpu, mpu
         precision: str = typer.Option(default=None),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="auto"),
         device: List[int] = typer.Option(default=[0]),
         # printing
-        print_rate_on_evaluate: float = typer.Option(default=1 / 10),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/100
+        print_rate_on_evaluate: float = typer.Option(default=1 / 100),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
         print_step_on_evaluate: int = typer.Option(default=-1),
         tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
 ):
