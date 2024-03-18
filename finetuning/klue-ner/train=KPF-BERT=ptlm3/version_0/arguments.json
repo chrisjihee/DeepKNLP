@@ -1,0 +1,86 @@
+{
+  "env": {
+    "project": "DeepKNLP",
+    "job_name": "KPF-BERT",
+    "job_version": 0,
+    "hostname": "ptlm3",
+    "hostaddr": "129.254.121.74",
+    "time_stamp": "0319.065421",
+    "python_path": "/home/chrisjihee/mambaforge/envs/DeepKNLP-24.03/bin/python",
+    "current_dir": "/home/chrisjihee/proj/DeepKNLP-24.03",
+    "current_file": "/home/chrisjihee/proj/DeepKNLP-24.03/2-ner.py",
+    "working_dir": "/home/chrisjihee/proj/DeepKNLP-24.03",
+    "command_args": [
+      "train"
+    ],
+    "num_ip_addrs": 1,
+    "max_workers": 1,
+    "debugging": false,
+    "msg_level": 20,
+    "msg_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)40s ┇ %(message)s",
+    "date_format": "[%m.%d %H:%M:%S]",
+    "output_home": "finetuning/klue-ner/train=KPF-BERT=ptlm3/version_0",
+    "logging_file": "logging.out",
+    "argument_file": "arguments.json"
+  },
+  "prog": {
+    "tb_logger": "<lightning.fabric.loggers.tensorboard.TensorBoardLogger object at 0x7fb788feaa90>",
+    "csv_logger": "<lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7fb9d117c2d0>",
+    "world_size": 1,
+    "local_rank": 0,
+    "global_rank": 0,
+    "global_step": 714,
+    "global_epoch": 1.7
+  },
+  "data": {
+    "name": "klue-ner",
+    "home": "/home/chrisjihee/proj/DeepKNLP-24.03/data",
+    "files": {
+      "train": "train.jsonl",
+      "valid": "valid.jsonl",
+      "test": "valid.jsonl"
+    },
+    "caching": false,
+    "redownload": false,
+    "num_check": 0
+  },
+  "model": {
+    "pretrained": "pretrained/KPF-BERT",
+    "finetuning": "/home/chrisjihee/proj/DeepKNLP-24.03/finetuning",
+    "name": null,
+    "seq_len": 64
+  },
+  "hardware": {
+    "cpu_workers": 10,
+    "train_batch": 50,
+    "infer_batch": 50,
+    "accelerator": "cuda",
+    "precision": "16-mixed",
+    "strategy": "ddp",
+    "devices": [
+      0
+    ]
+  },
+  "printing": {
+    "print_rate_on_training": 0.05,
+    "print_rate_on_validate": 0.5,
+    "print_rate_on_evaluate": 0.5,
+    "print_step_on_training": -1,
+    "print_step_on_validate": -1,
+    "print_step_on_evaluate": -1,
+    "tag_format_on_training": "st={step:d}, ep={epoch:.2f}, loss={loss:06.4f}, acc={acc:06.4f}",
+    "tag_format_on_validate": "st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}, val_F1c={val_F1c:05.2f}, val_F1e={val_F1e:05.2f}",
+    "tag_format_on_evaluate": "st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1c={test_F1c:05.2f}, test_F1e={test_F1e:05.2f}"
+  },
+  "learning": {
+    "random_seed": 7,
+    "optimizer_cls": "AdamW",
+    "learning_rate": 5e-05,
+    "saving_mode": "max val_F1c",
+    "num_saving": 1,
+    "num_epochs": 3,
+    "log_text": false,
+    "check_rate_on_training": 0.1,
+    "name_format_on_saving": "ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}"
+  }
+}
