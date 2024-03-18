@@ -402,7 +402,7 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
@@ -585,7 +585,7 @@ def test(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
@@ -707,7 +707,7 @@ def serve(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         test_file: str = typer.Option(default="valid.jsonl"),
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
