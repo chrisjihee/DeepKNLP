@@ -51,9 +51,9 @@ class HardwareOption(OptionData):
     cpu_workers: int = field(default=os.cpu_count())
     train_batch: int = field(default=32)
     infer_batch: int = field(default=32)
-    accelerator: str = field(default="auto")  # possbile value: "cpu", "gpu", "tpu", "ipu", "hpu", "mps", "auto"
-    precision: int | str = field(default=32)  # floating-point precision type
-    strategy: str = field(default="auto")  # multi-device strategies
+    accelerator: str = field(default="auto")  # possible value: "cpu", "gpu", "tpu", "ipu", "hpu", "mps", "auto".
+    precision: int | str = field(default="32-true")  # possible value: "16-true", "16-mixed", "bf16-true", "bf16-mixed", "32-true", "64-true"
+    strategy: str = field(default="auto")  # possbile value: "dp", "ddp", "ddp_spawn", "deepspeed", "fsdp".
     devices: List[int] | int | str = field(default="auto")  # devices to use
 
     def __post_init__(self):
