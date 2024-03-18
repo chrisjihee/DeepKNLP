@@ -116,7 +116,7 @@ def train_loop(
         optimizer: OptimizerLRScheduler,
         dataloader: DataLoader,
         val_dataloader: DataLoader,
-        test_dataloader: DataLoader | None = None,
+        checkpoint_saver: CheckpointSaver | None = None,
 ):
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
@@ -125,15 +125,7 @@ def train_loop(
     check_interval = model.args.learning.check_rate_on_training * num_batch - epsilon
     model.args.prog.global_step = 0
     model.args.prog.global_epoch = 0.0
-    ckpt_saver = CheckpointSaver(
-        fabric=fabric,
-        output_home=model.args.env.output_home,
-        name_format=model.args.learning.name_format_on_saving,
-        saving_mode=model.args.learning.saving_mode,
-        num_saving=model.args.learning.num_saving,
-    )
     for epoch in range(model.args.learning.num_epochs):
-        metrics: Dict[str, float | int] = {}
         progress = mute_tqdm_cls(bar_size=30, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="training")
         for i, batch in enumerate(dataloader, start=1):
             model.train()
@@ -144,22 +136,23 @@ def train_loop(
             fabric.backward(outputs["loss"])
             optimizer.step()
             progress.update()
-            model.eval()
-            fabric.barrier()
-            metrics["step"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item())
-            metrics["epoch"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4)
-            metrics["loss"] = fabric.all_gather(outputs["loss"]).mean().item()
-            metrics["acc"] = fabric.all_gather(outputs["acc"]).mean().item()
-            fabric.log_dict(metrics=metrics, step=metrics["step"])
-            if i % print_interval < 1:
-                fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
-                             f" | {model.args.learning.tag_format_on_training.format(**metrics)}")
-            if model.args.prog.global_step % check_interval < 1:
-                val_loop(fabric, model, val_dataloader, ckpt_saver)
+            with torch.no_grad():
+                model.eval()
+                fabric.barrier()
+                metrics: Dict[str, float | int] = {
+                    "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
+                    "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
+                    "loss": fabric.all_gather(outputs["loss"]).mean().item(),
+                    "acc": fabric.all_gather(outputs["acc"]).mean().item(),
+                }
+                fabric.log_dict(metrics=metrics, step=metrics["step"])
+                if i % print_interval < 1:
+                    fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
+                                 f" | {model.args.learning.tag_format_on_training.format(**metrics)}")
+                if model.args.prog.global_step % check_interval < 1:
+                    val_loop(fabric, model, val_dataloader, checkpoint_saver)
         fabric_barrier(fabric, "[after-epoch]", c='=')
     fabric_barrier(fabric, "[after-train]")
-    if test_dataloader:
-        test_loop(fabric, model, test_dataloader, ckpt_saver)
 
 
 @torch.no_grad()
@@ -167,7 +160,7 @@ def val_loop(
         fabric: Fabric,
         model: NsmcModel,
         dataloader: DataLoader,
-        ckpt_saver: CheckpointSaver,
+        checkpoint_saver: CheckpointSaver | None = None,
 ):
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
@@ -176,7 +169,6 @@ def val_loop(
     preds: List[int] = []
     labels: List[int] = []
     losses: List[torch.Tensor] = []
-    metrics: Dict[str, float | int] = {}
     progress = mute_tqdm_cls(bar_size=20, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="checking")
     for i, batch in enumerate(dataloader, start=1):
         outputs = model.validation_step(batch, i)
@@ -184,21 +176,23 @@ def val_loop(
         labels.extend(outputs["labels"])
         losses.append(outputs["loss"])
         progress.update()
-        if i >= num_batch:
-            fabric.barrier()
-            metrics["step"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item())
-            metrics["epoch"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4)
-            metrics["val_loss"] = fabric.all_gather(torch.stack(losses)).mean().item()
-            metrics["val_acc"] = accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
-                                          fabric.all_gather(torch.tensor(labels)).flatten()).item()
-            fabric.log_dict(metrics=metrics, step=metrics["step"])
-            fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
-                         f" | {model.args.learning.tag_format_on_validate.format(**metrics)}")
-        elif i % print_interval < 1:
+        if i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
+    fabric.barrier()
+    metrics: Dict[str, float | int] = {
+        "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
+        "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
+        "val_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
+        "val_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
+                            fabric.all_gather(torch.tensor(labels)).flatten()).item(),
+    }
+    fabric.log_dict(metrics=metrics, step=metrics["step"])
+    fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
+                 f" | {model.args.learning.tag_format_on_validate.format(**metrics)}")
     fabric_barrier(fabric, "[after-check]")
-    ckpt_saver.save_checkpoint(metrics=metrics, state={'model': model,
-                                                       'args': model.args})
+    if checkpoint_saver:
+        checkpoint_saver.save_checkpoint(metrics=metrics, ckpt_state={'model': model,
+                                                                      'args': model.args})
 
 
 @torch.no_grad()
@@ -206,8 +200,15 @@ def test_loop(
         fabric: Fabric,
         model: NsmcModel,
         dataloader: DataLoader,
-        ckpt_saver: CheckpointSaver | None = None,
+        model_path: str | Path | None = None,
 ):
+    if model_path:
+        assert Path(model_path).exists(), f"Model file not found: {model_path}"
+        fabric.print(f"Loading best model from {model_path}")
+        ckpt_state = fabric.load(model_path)
+        model.load_state_dict(ckpt_state['model'])
+        model.args = ckpt_state['args']
+
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
@@ -215,31 +216,26 @@ def test_loop(
     preds: List[int] = []
     labels: List[int] = []
     losses: List[torch.Tensor] = []
-    metrics: Dict[str, float | int] = {}
     progress = mute_tqdm_cls(bar_size=20, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="testing")
     for i, batch in enumerate(dataloader, start=1):
-        if i == 1 and ckpt_saver is not None:
-            ckpt_state = ckpt_saver.load_checkpoint()
-            if ckpt_state is not None:
-                model.load_state_dict(ckpt_state['model'])
-                model.args = ckpt_state['args']
         outputs = model.validation_step(batch, i)
         preds.extend(outputs["preds"])
         labels.extend(outputs["labels"])
         losses.append(outputs["loss"])
         progress.update()
-        if i >= num_batch:
-            fabric.barrier()
-            metrics["step"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item())
-            metrics["epoch"] = round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4)
-            metrics["test_loss"] = fabric.all_gather(torch.stack(losses)).mean().item()
-            metrics["test_acc"] = accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
-                                           fabric.all_gather(torch.tensor(labels)).flatten()).item()
-            fabric.log_dict(metrics=metrics, step=metrics["step"])
-            fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
-                         f" | {model.args.learning.tag_format_on_evaluate.format(**metrics)}")
-        elif i % print_interval < 1:
+        if i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
+    fabric.barrier()
+    metrics: Dict[str, float | int] = {
+        "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
+        "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
+        "test_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
+        "test_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
+                             fabric.all_gather(torch.tensor(labels)).flatten()).item(),
+    }
+    fabric.log_dict(metrics=metrics, step=metrics["step"])
+    fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
+                 f" | {model.args.learning.tag_format_on_evaluate.format(**metrics)}")
     fabric_barrier(fabric, "[after-test]")
 
 
@@ -255,7 +251,7 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
+        data_name: str = typer.Option(default="nsmc-mini"),  # TODO: -> nsmc
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_valid.txt"),
         test_file: str = typer.Option(default="ratings_test.txt"),
@@ -292,6 +288,7 @@ def train(
     torch.set_float32_matmul_precision('high')  # TODO: -> high
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
 
     pretrained = Path(pretrained)
     args = TrainerArguments(
@@ -348,12 +345,9 @@ def train(
     output_home = Path(f"{finetuning}/{data_name}")
     output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}"
     make_dir(output_home / output_name)
-    output_version = args.env.job_version if args.env.job_version else CSVLogger(output_home, output_name).version
-    args.prog.tb_logger = TensorBoardLogger(output_home, output_name, output_version)  # tensorboard --logdir finetuning --bind_all
-    args.prog.csv_logger = CSVLogger(output_home, output_name, output_version, flush_logs_every_n_steps=1)
-    args.env.job_version = output_version
-    args.env.set_logging_file(logging_file)
-    args.env.set_argument_file(argument_file)
+    args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(output_home, output_name).version
+    args.prog.tb_logger = TensorBoardLogger(output_home, output_name, args.env.job_version)  # tensorboard --logdir finetuning --bind_all
+    args.prog.csv_logger = CSVLogger(output_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
     fabric = Fabric(
         loggers=[args.prog.tb_logger, args.prog.csv_logger],
         devices=args.hardware.devices,
@@ -362,14 +356,16 @@ def train(
         accelerator=args.hardware.accelerator,
     )
     fabric.launch()
+    sleep(fabric.global_rank * 0.3)
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
-    sleep(fabric.global_rank * 0.1)
-    fabric.seed_everything(args.learning.random_seed)
+    args.env.set_output_home(args.prog.csv_logger.log_dir)
+    args.env.set_logging_file(logging_file)
+    args.env.set_argument_file(argument_file)
     args.prog.world_size = fabric.world_size
     args.prog.node_rank = fabric.node_rank
     args.prog.local_rank = fabric.local_rank
     args.prog.global_rank = fabric.global_rank
-    args.env.set_output_home(args.prog.csv_logger.log_dir)
+    fabric.seed_everything(args.learning.random_seed)
     fabric.barrier()
 
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}",
@@ -394,10 +390,27 @@ def train(
         test_dataloader = fabric.setup_dataloaders(test_dataloader)
         fabric_barrier(fabric, "[after-test_dataloader]", c='=')
 
-        train_loop(fabric, model, optimizer,
-                   dataloader=train_dataloader,
-                   val_dataloader=val_dataloader,
-                   test_dataloader=test_dataloader)
+        checkpoint_saver = CheckpointSaver(
+            fabric=fabric,
+            output_home=model.args.env.output_home,
+            name_format=model.args.learning.name_format_on_saving,
+            saving_mode=model.args.learning.saving_mode,
+            num_saving=model.args.learning.num_saving,
+        )
+        train_loop(
+            fabric=fabric,
+            model=model,
+            optimizer=optimizer,
+            dataloader=train_dataloader,
+            val_dataloader=val_dataloader,
+            checkpoint_saver=checkpoint_saver,
+        )
+        test_loop(
+            fabric=fabric,
+            model=model,
+            dataloader=test_dataloader,
+            model_path=checkpoint_saver.best_model_path,
+        )
 
 
 if __name__ == "__main__":
