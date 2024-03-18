@@ -7,10 +7,8 @@ from typing import List
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from transformers import PretrainedConfig
 
 from chrisbase.data import OptionData, ResultData, CommonArguments
-from chrisbase.io import files
 from chrisbase.util import to_dataframe
 
 logger = logging.getLogger(__name__)
@@ -41,9 +39,8 @@ class DataOption(OptionData):
 class ModelOption(OptionData):
     pretrained: str | Path = field()
     finetuning: str | Path = field()
-    seq_len: int = field(default=128)  # maximum total input sequence length after tokenization
-    config: PretrainedConfig | None = field(default=None)
     name: str | Path | None = field(default=None)
+    seq_len: int = field(default=128)  # maximum total input sequence length after tokenization
 
     def __post_init__(self):
         self.finetuning = Path(self.finetuning).absolute()

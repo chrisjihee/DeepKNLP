@@ -200,12 +200,12 @@ def test_loop(
         fabric: Fabric,
         model: NsmcModel,
         dataloader: DataLoader,
-        model_path: str | Path | None = None,
+        checkpoint_path: str | Path | None = None,
 ):
-    if model_path:
-        assert Path(model_path).exists(), f"Model file not found: {model_path}"
-        fabric.print(f"Loading best model from {model_path}")
-        ckpt_state = fabric.load(model_path)
+    if checkpoint_path:
+        assert Path(checkpoint_path).exists(), f"Model file not found: {checkpoint_path}"
+        fabric.print(f"Loading model from {checkpoint_path}")
+        ckpt_state = fabric.load(checkpoint_path)
         model.load_state_dict(ckpt_state['model'])
         model.args = ckpt_state['args']
 
@@ -254,11 +254,12 @@ def train(
         data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_valid.txt"),
-        test_file: str = typer.Option(default="ratings_test.txt"),
+        test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
+        model_name: str = typer.Option(default=None),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
         train_batch: int = typer.Option(default=50),  # TODO: -> 64
@@ -313,6 +314,7 @@ def train(
         model=ModelOption(
             pretrained=pretrained,
             finetuning=finetuning,
+            name=model_name,
             seq_len=seq_len,
         ),
         hardware=HardwareOption(
@@ -343,7 +345,7 @@ def train(
         ),
     )
     finetuning_home = Path(f"{finetuning}/{data_name}")
-    output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}"
+    output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}" if not args.model.name else args.model.name
     make_dir(finetuning_home / output_name)
     args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(finetuning_home, output_name).version
     args.prog.tb_logger = TensorBoardLogger(finetuning_home, output_name, args.env.job_version)  # tensorboard --logdir finetuning --bind_all
@@ -409,7 +411,7 @@ def train(
             fabric=fabric,
             model=model,
             dataloader=test_dataloader,
-            model_path=checkpoint_saver.best_model_path,
+            checkpoint_path=checkpoint_saver.best_model_path,
         )
 
 

@@ -8,7 +8,7 @@ import torch
 import typer
 from lightning import LightningModule
 from lightning.fabric import Fabric
-from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
+from lightning.fabric.loggers import CSVLogger
 from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
@@ -16,7 +16,7 @@ from transformers import AutoTokenizer, AutoConfig, AutoModelForSequenceClassifi
 from transformers import PreTrainedModel, PreTrainedTokenizer
 from transformers.modeling_outputs import SequenceClassifierOutput
 
-from DeepKNLP.arguments import TrainerArguments, TesterArguments, DataOption, DataFiles, ModelOption, HardwareOption, LearningOption
+from DeepKNLP.arguments import TrainerArguments, TesterArguments, DataOption, DataFiles, ModelOption, HardwareOption
 from DeepKNLP.cls import NsmcCorpus, ClassificationDataset
 from DeepKNLP.helper import CheckpointSaver, fabric_barrier, epsilon, data_collator
 from DeepKNLP.metrics import accuracy
@@ -200,12 +200,12 @@ def test_loop(
         fabric: Fabric,
         model: NsmcModel,
         dataloader: DataLoader,
-        model_path: str | Path | None = None,
+        checkpoint_path: str | Path | None = None,
 ):
-    if model_path:
-        assert Path(model_path).exists(), f"Model file not found: {model_path}"
-        fabric.print(f"Loading best model from {model_path}")
-        ckpt_state = fabric.load(model_path)
+    if checkpoint_path:
+        assert Path(checkpoint_path).exists(), f"Model file not found: {checkpoint_path}"
+        fabric.print(f"Loading model from {checkpoint_path}")
+        ckpt_state = fabric.load(checkpoint_path)
         model.load_state_dict(ckpt_state['model'])
         model.args = ckpt_state['args']
 
@@ -254,12 +254,12 @@ def test(
         data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_valid.txt"),
-        test_file: str = typer.Option(default="ratings_test.txt"),
+        test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
-        model_name: str = typer.Option(default="train=KPF-BERT=ptlm3"),
+        model_name: str = typer.Option(default="train=KPF-BERT=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
         train_batch: int = typer.Option(default=50),  # TODO: -> 64
@@ -337,28 +337,6 @@ def test(
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs",
                   rt=1, rb=1, rc='='):
-        fabric.barrier()
-
-        ckpt_files = files(finetuning_home / args.model.name / "**/*.ckpt")
-        for ckpt_file in ckpt_files:
-            print(f"ckpt_file={ckpt_file}")
-        exit(1)
-        # if self.tag in ("serve", "test"):
-        #     assert self.model.finetuning.exists() and self.model.finetuning.is_dir(), \
-        #         f"No finetuning home: {self.model.finetuning}"
-        #     if not self.model.ckpt_name:
-        #         ckpt_files: List[Path] = files(self.env.output_home / "**/*.ckpt")
-        #         assert ckpt_files, f"No checkpoint file in {self.env.output_home}"
-        #         ckpt_files = sorted([x for x in ckpt_files if "temp" not in str(x) and "tmp" not in str(x)], key=str)
-        #         self.model.ckpt_name = ckpt_files[-1].relative_to(self.env.output_home)
-        #     elif (self.env.output_home / self.model.ckpt_name).exists() and (self.env.output_home / self.model.ckpt_name).is_dir():
-        #         ckpt_files: List[Path] = files(self.env.output_home / self.model.ckpt_name / "**/*.ckpt")
-        #         assert ckpt_files, f"No checkpoint file in {self.env.output_home / self.model.ckpt_name}"
-        #         ckpt_files = sorted([x for x in ckpt_files if "temp" not in str(x) and "tmp" not in str(x)], key=str)
-        #         self.model.ckpt_name = ckpt_files[-1].relative_to(self.env.output_home)
-        #     assert (self.env.output_home / self.model.ckpt_name).exists() and (self.env.output_home / self.model.ckpt_name).is_file(), \
-        #         f"No checkpoint file: {self.env.output_home / self.model.ckpt_name}"
-
         model = NsmcModel(args=args)
         model = fabric.setup(model)
         fabric_barrier(fabric, "[after-model]", c='=')
@@ -367,12 +345,13 @@ def test(
         test_dataloader = fabric.setup_dataloaders(test_dataloader)
         fabric_barrier(fabric, "[after-test_dataloader]", c='=')
 
-        test_loop(
-            fabric=fabric,
-            model=model,
-            dataloader=test_dataloader,
-            model_path=checkpoint_saver.best_model_path,
-        )
+        for checkpoint_path in files(finetuning_home / args.model.name / "**/*.ckpt"):
+            test_loop(
+                fabric=fabric,
+                model=model,
+                dataloader=test_dataloader,
+                checkpoint_path=checkpoint_path,
+            )
 
 
 if __name__ == "__main__":
