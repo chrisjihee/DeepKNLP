@@ -2,7 +2,7 @@ import logging
 import os
 from pathlib import Path
 from time import sleep
-from typing import List, Dict, Mapping, Any
+from typing import List, Tuple, Dict, Mapping, Any
 
 import torch
 import typer
@@ -14,24 +14,24 @@ from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification
+from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan
 from transformers import PreTrainedModel, PreTrainedTokenizerFast
-from transformers.modeling_outputs import SequenceClassifierOutput
+from transformers.modeling_outputs import TokenClassifierOutput
 
 from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption
 from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
 from DeepKNLP.helper import CheckpointSaver, epsilon, fabric_barrier
-from DeepKNLP.metrics import accuracy
-from DeepKNLP.ner import NERCorpus, NERDataset
+from DeepKNLP.metrics import accuracy, NER_Char_MacroF1, NER_Entity_MacroF1
+from DeepKNLP.ner import NERCorpus, NERDataset, NEREncodedExample
 from chrisbase.data import AppTyper, JobTimer, ProjectEnv
-from chrisbase.io import LoggingFormat, make_dir, files
+from chrisbase.io import LoggingFormat, make_dir, files, hr
 from chrisbase.util import mute_tqdm_cls, tupled
 
 logger = logging.getLogger(__name__)
 main = AppTyper()
 
 
-class NerModel(LightningModule):
+class NERModel(LightningModule):
     def __init__(self, args: TrainerArguments | TesterArguments | ServerArguments):
         super().__init__()
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
@@ -48,6 +48,30 @@ class NerModel(LightningModule):
             use_fast=True,
         )
         assert isinstance(self.tokenizer, PreTrainedTokenizerFast), f"Our code support only PreTrainedTokenizerFast, not {type(self.tokenizer)}"
+        self.val_dataset: NERDataset | None = None
+        self._labels: List[str] | None = None
+        self._label_to_id: Dict[str, int] | None = None
+        self._id_to_label: Dict[int, str] | None = None
+
+    @staticmethod
+    def label_to_char_labels(label, num_char):
+        for i in range(num_char):
+            if i > 0 and ("-" in label):
+                yield "I-" + label.split("-", maxsplit=1)[-1]
+            else:
+                yield label
+
+    def labels(self):
+        assert self._labels, "_labels is not initialized"
+        return self._labels
+
+    def label_to_id(self, x):
+        assert self._label_to_id, "_label_to_id is not initialized"
+        return self._label_to_id[x]
+
+    def id_to_label(self, x):
+        assert self._id_to_label, "_id_to_label is not initialized"
+        return self._id_to_label[x]
 
     def to_checkpoint(self) -> Dict[str, Any]:
         return {
@@ -95,6 +119,10 @@ class NerModel(LightningModule):
                                     drop_last=False)
         self.fabric.print(f"Created val_dataset providing {len(val_dataset)} examples")
         self.fabric.print(f"Created val_dataloader providing {len(val_dataloader)} batches")
+        self.val_dataset = val_dataset
+        self._labels: List[str] = self.val_dataset.get_labels()
+        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self._labels)}
+        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self._labels)}
         return val_dataloader
 
     def test_dataloader(self):
@@ -107,13 +135,18 @@ class NerModel(LightningModule):
                                      drop_last=False)
         self.fabric.print(f"Created test_dataset providing {len(test_dataset)} examples")
         self.fabric.print(f"Created test_dataloader providing {len(test_dataloader)} batches")
+        self.val_dataset = test_dataset
+        self._labels: List[str] = self.val_dataset.get_labels()
+        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self._labels)}
+        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self._labels)}
         return test_dataloader
 
     def training_step(self, inputs, batch_idx):
-        outputs: SequenceClassifierOutput = self.lang_model(**inputs)
+        inputs.pop("example_ids")
+        outputs: TokenClassifierOutput = self.lang_model(**inputs)
         labels: torch.Tensor = inputs["labels"]
         preds: torch.Tensor = outputs.logits.argmax(dim=-1)
-        acc: torch.Tensor = accuracy(preds, labels)
+        acc: torch.Tensor = accuracy(preds=preds, labels=labels, ignore_index=0)
         return {
             "loss": outputs.loss,
             "acc": acc,
@@ -121,13 +154,69 @@ class NerModel(LightningModule):
 
     @torch.no_grad()
     def validation_step(self, inputs, batch_idx):
-        outputs: SequenceClassifierOutput = self.lang_model(**inputs)
-        labels: List[int] = inputs["labels"].tolist()
-        preds: List[int] = outputs.logits.argmax(dim=-1).tolist()
+        example_ids: List[int] = inputs.pop("example_ids").tolist()
+        outputs: TokenClassifierOutput = self.lang_model(**inputs)
+        preds: torch.Tensor = outputs.logits.argmax(dim=-1)
+
+        dict_of_token_pred_ids: Dict[int, List[int]] = {}
+        dict_of_char_label_ids: Dict[int, List[int]] = {}
+        dict_of_char_pred_ids: Dict[int, List[int]] = {}
+        for token_pred_ids, example_id in zip(preds.tolist(), example_ids):
+            token_pred_tags: List[str] = [self.id_to_label(x) for x in token_pred_ids]
+            encoded_example: NEREncodedExample = self.val_dataset[example_id]
+            offset_to_label: Dict[int, str] = encoded_example.raw.get_offset_label_dict()
+            all_char_pair_tags: List[Tuple[str | None, str | None]] = [(None, None)] * len(encoded_example.raw.character_list)
+            for token_id in range(self.args.model.seq_len):
+                token_span: CharSpan = encoded_example.encoded.token_to_chars(token_id)
+                if token_span:
+                    char_pred_tags = NERModel.label_to_char_labels(token_pred_tags[token_id], token_span.end - token_span.start)
+                    for offset, char_pred_tag in zip(range(token_span.start, token_span.end), char_pred_tags):
+                        all_char_pair_tags[offset] = (offset_to_label[offset], char_pred_tag)
+            valid_char_pair_tags = [(a, b) for a, b in all_char_pair_tags if a and b]
+            valid_char_label_ids = [self.label_to_id(a) for a, b in valid_char_pair_tags]
+            valid_char_pred_ids = [self.label_to_id(b) for a, b in valid_char_pair_tags]
+            dict_of_token_pred_ids[example_id] = token_pred_ids
+            dict_of_char_label_ids[example_id] = valid_char_label_ids
+            dict_of_char_pred_ids[example_id] = valid_char_pred_ids
+
+        if self.args.env.debugging:
+            logger.debug(hr())
+        list_of_char_pred_ids: List[int] = []
+        list_of_char_label_ids: List[int] = []
+        for encoded_example in [self.val_dataset[i] for i in example_ids]:
+            char_label_ids = dict_of_char_label_ids[encoded_example.idx]
+            char_pred_ids = dict_of_char_pred_ids[encoded_example.idx]
+            assert len(char_pred_ids) == len(char_label_ids)
+            list_of_char_pred_ids.extend(char_pred_ids)
+            list_of_char_label_ids.extend(char_label_ids)
+            if self.args.env.debugging:
+                token_pred_ids = dict_of_token_pred_ids[encoded_example.idx]
+                logger.debug(f"  - encoded_example.idx                = {encoded_example.idx}")
+                logger.debug(f"  - encoded_example.raw.entity_list    = ({len(encoded_example.raw.entity_list)}) {encoded_example.raw.entity_list}")
+                logger.debug(f"  - encoded_example.raw.origin         = ({len(encoded_example.raw.origin)}) {encoded_example.raw.origin}")
+                logger.debug(f"  - encoded_example.raw.character_list = ({len(encoded_example.raw.character_list)}) {' | '.join(f'{x}/{y}' for x, y in encoded_example.raw.character_list)}")
+                logger.debug(f"  - encoded_example.encoded.tokens()   = ({len(encoded_example.encoded.tokens())}) {' '.join(encoded_example.encoded.tokens())}")
+
+                def id_label(x):
+                    return f"{self.id_to_label(x):5s}"
+
+                logger.debug(f"  - encoded_example.label_ids          = ({len(encoded_example.label_ids)}) {' '.join(map(str, map(id_label, encoded_example.label_ids)))}")
+                logger.debug(f"  - encoded_example.token_pred_ids     = ({len(token_pred_ids)}) {' '.join(map(str, map(id_label, token_pred_ids)))}")
+                logger.debug(f"  - encoded_example.char_label_ids     = ({len(char_label_ids)}) {' '.join(map(str, map(id_label, char_label_ids)))}")
+                logger.debug(f"  - encoded_example.char_pred_ids      = ({len(char_pred_ids)}) {' '.join(map(str, map(id_label, char_pred_ids)))}")
+                logger.debug(hr('-'))
+        assert len(list_of_char_pred_ids) == len(list_of_char_label_ids)
+
+        if self.args.env.debugging:
+            def id_str(x):
+                return f"{x:02d}"
+
+            logger.debug(f"  - list_of_char_label_ids = ({len(list_of_char_label_ids)}) {' '.join(map(str, map(id_str, list_of_char_label_ids)))}")
+            logger.debug(f"  - list_of_char_pred_ids  = ({len(list_of_char_pred_ids)}) {' '.join(map(str, map(id_str, list_of_char_pred_ids)))}")
         return {
             "loss": outputs.loss,
-            "preds": preds,
-            "labels": labels
+            "preds": list_of_char_pred_ids,
+            "labels": list_of_char_label_ids
         }
 
     @torch.no_grad()
@@ -143,7 +232,7 @@ class NerModel(LightningModule):
             truncation=True,
             return_tensors="pt",
         )
-        outputs: SequenceClassifierOutput = self.lang_model(**inputs)
+        outputs: TokenClassifierOutput = self.lang_model(**inputs)
         prob = outputs.logits.softmax(dim=1)
         pred = "긍정 (positive)" if torch.argmax(prob) == 1 else "부정 (negative)"
         positive_prob = round(prob[0][1].item(), 4)
@@ -158,11 +247,11 @@ class NerModel(LightningModule):
         }
 
     def run_server(self, server: Flask, *args, **kwargs):
-        NerModel.WebAPI.register(route_base='/', app=server, init_argument=self)
+        NERModel.WebAPI.register(route_base='/', app=server, init_argument=self)
         server.run(*args, **kwargs)
 
     class WebAPI(FlaskView):
-        def __init__(self, model: "NerModel"):
+        def __init__(self, model: "NERModel"):
             self.model = model
 
         @route('/')
@@ -176,7 +265,7 @@ class NerModel(LightningModule):
 
 
 def train_loop(
-        model: NerModel,
+        model: NERModel,
         optimizer: OptimizerLRScheduler,
         dataloader: DataLoader,
         val_dataloader: DataLoader,
@@ -222,7 +311,7 @@ def train_loop(
 
 @torch.no_grad()
 def val_loop(
-        model: NerModel,
+        model: NERModel,
         dataloader: DataLoader,
         checkpoint_saver: CheckpointSaver | None = None,
 ):
@@ -244,12 +333,15 @@ def val_loop(
         if i < num_batch and i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
     fabric.barrier()
+    all_preds: torch.Tensor = fabric.all_gather(torch.tensor(preds)).flatten()
+    all_labels: torch.Tensor = fabric.all_gather(torch.tensor(labels)).flatten()
     metrics: Mapping[str, Any] = {
         "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
         "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
         "val_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
-        "val_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
-                            fabric.all_gather(torch.tensor(labels)).flatten()).item(),
+        "val_acc": accuracy(all_preds, all_labels, ignore_index=0).item(),
+        "val_F1c": NER_Char_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels()),
+        "val_F1e": NER_Entity_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels()),
     }
     fabric.log_dict(metrics=metrics, step=metrics["step"])
     fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
@@ -261,13 +353,13 @@ def val_loop(
 
 @torch.no_grad()
 def test_loop(
-        model: NerModel,
+        model: NERModel,
         dataloader: DataLoader,
         checkpoint_path: str | Path | None = None,
 ):
-    fabric = model.fabric
     if checkpoint_path:
         model.load_checkpoint_file(checkpoint_path)
+    fabric = model.fabric
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
@@ -285,12 +377,15 @@ def test_loop(
         if i < num_batch and i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
     fabric.barrier()
+    all_preds: torch.Tensor = fabric.all_gather(torch.tensor(preds)).flatten()
+    all_labels: torch.Tensor = fabric.all_gather(torch.tensor(labels)).flatten()
     metrics: Mapping[str, Any] = {
         "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
         "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
         "test_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
-        "test_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
-                             fabric.all_gather(torch.tensor(labels)).flatten()).item(),
+        "test_acc": accuracy(all_preds, all_labels, ignore_index=0).item(),
+        "test_F1c": NER_Char_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels()),
+        "test_F1e": NER_Entity_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels()),
     }
     fabric.log_dict(metrics=metrics, step=metrics["step"])
     fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
@@ -310,10 +405,10 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> klue-ner, kmou-ner
+        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
-        test_file: str = typer.Option(default=None),  # TODO: -> "valid.jsonl"
+        test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=2),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
@@ -327,7 +422,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),
-        device: List[int] = typer.Option(default=[0, 1, 2, 3]),
+        device: List[int] = typer.Option(default=[0]),
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
         print_rate_on_validate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
@@ -336,8 +431,8 @@ def train(
         print_step_on_validate: int = typer.Option(default=-1),
         print_step_on_evaluate: int = typer.Option(default=-1),
         tag_format_on_training: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, loss={loss:06.4f}, acc={acc:06.4f}"),
-        tag_format_on_validate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_F1c={val_F1c:05.2f}, val_F1e={val_F1e:05.2f}"),
-        tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_F1c={test_F1c:05.2f}, test_F1e={test_F1e:05.2f}"),
+        tag_format_on_validate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}, val_F1c={val_F1c:05.2f}, val_F1e={val_F1e:05.2f}"),
+        tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1c={test_F1c:05.2f}, test_F1e={test_F1e:05.2f}"),
         # learning
         learning_rate: float = typer.Option(default=5e-5),
         random_seed: int = typer.Option(default=7),
@@ -345,7 +440,7 @@ def train(
         num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
         num_epochs: int = typer.Option(default=2),  # TODO: -> 2, 3
         check_rate_on_training: float = typer.Option(default=1 / 10),  # TODO: -> 1/5
-        name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}"),
+        name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}"),
 ):
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -442,23 +537,19 @@ def train(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = NerModel(args=args)
+        model = NERModel(args=args, )
         optimizer = model.configure_optimizers()
         model, optimizer = fabric.setup(model, optimizer)
         fabric_barrier(fabric, "[after-model]", c='=')
 
+        assert args.data.files.train, "No training file found"
         train_dataloader = model.train_dataloader()
         train_dataloader = fabric.setup_dataloaders(train_dataloader)
         fabric_barrier(fabric, "[after-train_dataloader]", c='=')
-
+        assert args.data.files.valid, "No validation file found"
         val_dataloader = model.val_dataloader()
         val_dataloader = fabric.setup_dataloaders(val_dataloader)
         fabric_barrier(fabric, "[after-val_dataloader]", c='=')
-
-        test_dataloader = model.test_dataloader()
-        test_dataloader = fabric.setup_dataloaders(test_dataloader)
-        fabric_barrier(fabric, "[after-test_dataloader]", c='=')
-
         checkpoint_saver = CheckpointSaver(
             fabric=fabric,
             output_home=model.args.env.output_home,
@@ -473,11 +564,16 @@ def train(
             val_dataloader=val_dataloader,
             checkpoint_saver=checkpoint_saver,
         )
-        test_loop(
-            model=model,
-            dataloader=test_dataloader,
-            checkpoint_path=checkpoint_saver.best_model_path,
-        )
+
+        if args.data.files.test:
+            test_dataloader = model.test_dataloader()
+            test_dataloader = fabric.setup_dataloaders(test_dataloader)
+            fabric_barrier(fabric, "[after-test_dataloader]", c='=')
+            test_loop(
+                model=model,
+                dataloader=test_dataloader,
+                checkpoint_path=checkpoint_saver.best_model_path,
+            )
 
 
 @main.command()
@@ -586,9 +682,10 @@ def test(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = fabric.setup(NerModel(args=args))
+        model = fabric.setup(NERModel(args=args))
         fabric_barrier(fabric, "[after-model]", c='=')
 
+        assert args.data.files.test, "No test file found"
         test_dataloader = model.test_dataloader()
         test_dataloader = fabric.setup_dataloaders(test_dataloader)
         fabric_barrier(fabric, "[after-test_dataloader]", c='=')
@@ -668,7 +765,7 @@ def serve(
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
                   args=args if (debugging or verbose > 1) else None, verbose=verbose > 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = fabric.setup(NerModel(args=args))
+        model = fabric.setup(NERModel(args=args))
         model.load_last_checkpoint_file(finetuning_home / args.model.name / "**/*.ckpt")
         fabric_barrier(fabric, "[after-model]", c='=')
 

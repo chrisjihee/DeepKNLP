@@ -55,6 +55,11 @@ class BasicMetricTool(torch.nn.Module):
         score = self.metric_fn(preds, targets)
         return score
 
+    def all_in_one(self, preds, targets) -> torch.Tensor | float | int:
+        self.reset()
+        self.update(preds, targets)
+        return self.compute()
+
 
 class LabelMetricTool(BasicMetricTool):
     """Metrics requiring label information."""
@@ -84,6 +89,11 @@ class LabelMetricTool(BasicMetricTool):
 
         score = self.metric_fn(preds, targets, self.label_info)
         return score
+
+    def all_in_one(self, preds, targets, label_info: Optional[Any] = None) -> torch.Tensor | float | int:
+        self.reset()
+        self.update(preds, targets, label_info)
+        return self.compute()
 
 
 @dataclass

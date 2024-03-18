@@ -112,7 +112,7 @@ class NsmcModel(LightningModule):
         outputs: SequenceClassifierOutput = self.lang_model(**inputs)
         labels: torch.Tensor = inputs["labels"]
         preds: torch.Tensor = outputs.logits.argmax(dim=-1)
-        acc: torch.Tensor = accuracy(preds, labels)
+        acc: torch.Tensor = accuracy(preds=preds, labels=labels)
         return {
             "loss": outputs.loss,
             "acc": acc,
@@ -243,12 +243,13 @@ def val_loop(
         if i < num_batch and i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
     fabric.barrier()
+    all_preds: torch.Tensor = fabric.all_gather(torch.tensor(preds)).flatten()
+    all_labels: torch.Tensor = fabric.all_gather(torch.tensor(labels)).flatten()
     metrics: Mapping[str, Any] = {
         "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
         "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
         "val_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
-        "val_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
-                            fabric.all_gather(torch.tensor(labels)).flatten()).item(),
+        "val_acc": accuracy(all_preds, all_labels).item(),
     }
     fabric.log_dict(metrics=metrics, step=metrics["step"])
     fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
@@ -264,9 +265,9 @@ def test_loop(
         dataloader: DataLoader,
         checkpoint_path: str | Path | None = None,
 ):
-    fabric = model.fabric
     if checkpoint_path:
         model.load_checkpoint_file(checkpoint_path)
+    fabric = model.fabric
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
@@ -284,12 +285,13 @@ def test_loop(
         if i < num_batch and i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
     fabric.barrier()
+    all_preds: torch.Tensor = fabric.all_gather(torch.tensor(preds)).flatten()
+    all_labels: torch.Tensor = fabric.all_gather(torch.tensor(labels)).flatten()
     metrics: Mapping[str, Any] = {
         "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
         "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
         "test_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
-        "test_acc": accuracy(fabric.all_gather(torch.tensor(preds)).flatten(),
-                             fabric.all_gather(torch.tensor(labels)).flatten()).item(),
+        "test_acc": accuracy(all_preds, all_labels).item(),
     }
     fabric.log_dict(metrics=metrics, step=metrics["step"])
     fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
@@ -446,18 +448,14 @@ def train(
         model, optimizer = fabric.setup(model, optimizer)
         fabric_barrier(fabric, "[after-model]", c='=')
 
+        assert args.data.files.train, "No training file found"
         train_dataloader = model.train_dataloader()
         train_dataloader = fabric.setup_dataloaders(train_dataloader)
         fabric_barrier(fabric, "[after-train_dataloader]", c='=')
-
+        assert args.data.files.valid, "No validation file found"
         val_dataloader = model.val_dataloader()
         val_dataloader = fabric.setup_dataloaders(val_dataloader)
         fabric_barrier(fabric, "[after-val_dataloader]", c='=')
-
-        test_dataloader = model.test_dataloader()
-        test_dataloader = fabric.setup_dataloaders(test_dataloader)
-        fabric_barrier(fabric, "[after-test_dataloader]", c='=')
-
         checkpoint_saver = CheckpointSaver(
             fabric=fabric,
             output_home=model.args.env.output_home,
@@ -472,11 +470,16 @@ def train(
             val_dataloader=val_dataloader,
             checkpoint_saver=checkpoint_saver,
         )
-        test_loop(
-            model=model,
-            dataloader=test_dataloader,
-            checkpoint_path=checkpoint_saver.best_model_path,
-        )
+
+        if args.data.files.test:
+            test_dataloader = model.test_dataloader()
+            test_dataloader = fabric.setup_dataloaders(test_dataloader)
+            fabric_barrier(fabric, "[after-test_dataloader]", c='=')
+            test_loop(
+                model=model,
+                dataloader=test_dataloader,
+                checkpoint_path=checkpoint_saver.best_model_path,
+            )
 
 
 @main.command()
@@ -588,6 +591,7 @@ def test(
         model = fabric.setup(NsmcModel(args=args))
         fabric_barrier(fabric, "[after-model]", c='=')
 
+        assert args.data.files.test, "No test file found"
         test_dataloader = model.test_dataloader()
         test_dataloader = fabric.setup_dataloaders(test_dataloader)
         fabric_barrier(fabric, "[after-test_dataloader]", c='=')
