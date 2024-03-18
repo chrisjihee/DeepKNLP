@@ -136,9 +136,9 @@ def train_loop(
             fabric.backward(outputs["loss"])
             optimizer.step()
             progress.update()
+            fabric.barrier()
             with torch.no_grad():
                 model.eval()
-                fabric.barrier()
                 metrics: Dict[str, float | int] = {
                     "step": round(fabric.all_gather(torch.tensor(model.args.prog.global_step * 1.0)).mean().item()),
                     "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
