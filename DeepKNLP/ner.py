@@ -160,14 +160,14 @@ class NERCorpus:
         return labels
 
     def get_labels(self) -> List[str]:
-        label_path = make_parent_dir(self.args.env.output_home.parent / f"label_map-for-{self.args.data.name}.txt")
+        label_path = make_parent_dir(self.args.env.output_home.parent / f"label_map={self.args.data.name}.txt")
         train_data_path = self.args.data.home / self.args.data.name / self.args.data.files.train if self.args.data.files.train else None
         valid_data_path = self.args.data.home / self.args.data.name / self.args.data.files.valid if self.args.data.files.valid else None
         test_data_path = self.args.data.home / self.args.data.name / self.args.data.files.test if self.args.data.files.test else None
         train_data_path = train_data_path if train_data_path and train_data_path.exists() else None
         valid_data_path = valid_data_path if valid_data_path and valid_data_path.exists() else None
         test_data_path = test_data_path if test_data_path and test_data_path.exists() else None
-        data_path = train_data_path or valid_data_path or test_data_path
+        data_path = test_data_path or valid_data_path or train_data_path
         return self.get_labels_from_data(data_path=data_path, label_path=label_path, args=self.args)
 
     def read_raw_examples(self, split: str) -> List[NERParsedExample]:

@@ -15,7 +15,7 @@ from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSequenceClassification
-from transformers import PreTrainedModel, PreTrainedTokenizer
+from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizer
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption
@@ -31,21 +31,23 @@ logger = logging.getLogger(__name__)
 main = AppTyper()
 
 
-class NsmcModel(LightningModule):
+class NSMCModel(LightningModule):
     def __init__(self, args: TrainerArguments | TesterArguments | ServerArguments):
         super().__init__()
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
         self.data: NsmcCorpus = NsmcCorpus(args)
-        self.lang_model: PreTrainedModel = AutoModelForSequenceClassification.from_pretrained(
+
+        self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
             args.model.pretrained,
-            config=AutoConfig.from_pretrained(
-                args.model.pretrained,
-                num_labels=self.data.num_labels
-            ),
+            num_labels=self.data.num_labels
         )
-        self.tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(
+        self.lm_tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(
             args.model.pretrained,
             use_fast=True,
+        )
+        self.lang_model: PreTrainedModel = AutoModelForSequenceClassification.from_pretrained(
+            args.model.pretrained,
+            config=self.lm_config,
         )
 
     def to_checkpoint(self) -> Dict[str, Any]:
@@ -74,7 +76,7 @@ class NsmcModel(LightningModule):
 
     def train_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        train_dataset = ClassificationDataset("train", data=self.data, tokenizer=self.tokenizer)
+        train_dataset = ClassificationDataset("train", data=self.data, tokenizer=self.lm_tokenizer)
         train_dataloader = DataLoader(train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
                                       num_workers=self.args.hardware.cpu_workers,
                                       batch_size=self.args.hardware.train_batch,
@@ -86,7 +88,7 @@ class NsmcModel(LightningModule):
 
     def val_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        val_dataset = ClassificationDataset("valid", data=self.data, tokenizer=self.tokenizer)
+        val_dataset = ClassificationDataset("valid", data=self.data, tokenizer=self.lm_tokenizer)
         val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
                                     num_workers=self.args.hardware.cpu_workers,
                                     batch_size=self.args.hardware.infer_batch,
@@ -98,7 +100,7 @@ class NsmcModel(LightningModule):
 
     def test_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        test_dataset = ClassificationDataset("test", data=self.data, tokenizer=self.tokenizer)
+        test_dataset = ClassificationDataset("test", data=self.data, tokenizer=self.lm_tokenizer)
         test_dataloader = DataLoader(test_dataset, sampler=SequentialSampler(test_dataset),
                                      num_workers=self.args.hardware.cpu_workers,
                                      batch_size=self.args.hardware.infer_batch,
@@ -135,7 +137,7 @@ class NsmcModel(LightningModule):
 
     @torch.no_grad()
     def infer_one(self, text: str):
-        inputs = self.tokenizer(
+        inputs = self.lm_tokenizer(
             tupled(text),
             max_length=self.args.model.seq_len,
             padding="max_length",
@@ -157,11 +159,11 @@ class NsmcModel(LightningModule):
         }
 
     def run_server(self, server: Flask, *args, **kwargs):
-        NsmcModel.WebAPI.register(route_base='/', app=server, init_argument=self)
+        NSMCModel.WebAPI.register(route_base='/', app=server, init_argument=self)
         server.run(*args, **kwargs)
 
     class WebAPI(FlaskView):
-        def __init__(self, model: "NsmcModel"):
+        def __init__(self, model: "NSMCModel"):
             self.model = model
 
         @route('/')
@@ -175,7 +177,7 @@ class NsmcModel(LightningModule):
 
 
 def train_loop(
-        model: NsmcModel,
+        model: NSMCModel,
         optimizer: OptimizerLRScheduler,
         dataloader: DataLoader,
         val_dataloader: DataLoader,
@@ -221,7 +223,7 @@ def train_loop(
 
 @torch.no_grad()
 def val_loop(
-        model: NsmcModel,
+        model: NSMCModel,
         dataloader: DataLoader,
         checkpoint_saver: CheckpointSaver | None = None,
 ):
@@ -261,7 +263,7 @@ def val_loop(
 
 @torch.no_grad()
 def test_loop(
-        model: NsmcModel,
+        model: NSMCModel,
         dataloader: DataLoader,
         checkpoint_path: str | Path | None = None,
 ):
@@ -443,7 +445,7 @@ def train(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = NsmcModel(args=args)
+        model = NSMCModel(args=args)
         optimizer = model.configure_optimizers()
         model, optimizer = fabric.setup(model, optimizer)
         fabric_barrier(fabric, "[after-model]", c='=')
@@ -588,7 +590,7 @@ def test(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = fabric.setup(NsmcModel(args=args))
+        model = fabric.setup(NSMCModel(args=args))
         fabric_barrier(fabric, "[after-model]", c='=')
 
         assert args.data.files.test, "No test file found"
@@ -671,7 +673,7 @@ def serve(
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
                   args=args if (debugging or verbose > 1) else None, verbose=verbose > 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = fabric.setup(NsmcModel(args=args))
+        model = fabric.setup(NSMCModel(args=args))
         model.load_last_checkpoint_file(finetuning_home / args.model.name / "**/*.ckpt")
         fabric_barrier(fabric, "[after-model]", c='=')
 

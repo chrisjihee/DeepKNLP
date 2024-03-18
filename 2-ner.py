@@ -15,7 +15,7 @@ from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan
-from transformers import PreTrainedModel, PreTrainedTokenizerFast
+from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import TokenClassifierOutput
 
 from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption
@@ -36,22 +36,24 @@ class NERModel(LightningModule):
         super().__init__()
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
         self.data: NERCorpus = NERCorpus(args)
-        self.lang_model: PreTrainedModel = AutoModelForTokenClassification.from_pretrained(
+        self._labels: List[str] = self.data.get_labels()
+        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self._labels)}
+        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self._labels)}
+        self._infer_dataset: NERDataset | None = None
+
+        self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
             args.model.pretrained,
-            config=AutoConfig.from_pretrained(
-                args.model.pretrained,
-                num_labels=self.data.num_labels
-            ),
+            num_labels=self.data.num_labels
         )
-        self.tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(
+        self.lm_tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(
             args.model.pretrained,
             use_fast=True,
         )
-        assert isinstance(self.tokenizer, PreTrainedTokenizerFast), f"Our code support only PreTrainedTokenizerFast, not {type(self.tokenizer)}"
-        self.infer_dataset: NERDataset | None = None
-        self._labels: List[str] | None = None
-        self._label_to_id: Dict[str, int] | None = None
-        self._id_to_label: Dict[int, str] | None = None
+        assert isinstance(self.lm_tokenizer, PreTrainedTokenizerFast), f"Our code support only PreTrainedTokenizerFast, not {type(self.lm_tokenizer)}"
+        self.lang_model: PreTrainedModel = AutoModelForTokenClassification.from_pretrained(
+            args.model.pretrained,
+            config=self.lm_config,
+        )
 
     @staticmethod
     def label_to_char_labels(label, num_char):
@@ -61,16 +63,14 @@ class NERModel(LightningModule):
             else:
                 yield label
 
+    @property
     def labels(self):
-        assert self._labels, "_labels is not initialized"
         return self._labels
 
     def label_to_id(self, x):
-        assert self._label_to_id, "_label_to_id is not initialized"
         return self._label_to_id[x]
 
     def id_to_label(self, x):
-        assert self._id_to_label, "_id_to_label is not initialized"
         return self._id_to_label[x]
 
     def to_checkpoint(self) -> Dict[str, Any]:
@@ -99,7 +99,7 @@ class NERModel(LightningModule):
 
     def train_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        train_dataset = NERDataset("train", data=self.data, tokenizer=self.tokenizer)
+        train_dataset = NERDataset("train", data=self.data, tokenizer=self.lm_tokenizer)
         train_dataloader = DataLoader(train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
                                       num_workers=self.args.hardware.cpu_workers,
                                       batch_size=self.args.hardware.train_batch,
@@ -111,7 +111,7 @@ class NERModel(LightningModule):
 
     def val_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        val_dataset = NERDataset("valid", data=self.data, tokenizer=self.tokenizer)
+        val_dataset = NERDataset("valid", data=self.data, tokenizer=self.lm_tokenizer)
         val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
                                     num_workers=self.args.hardware.cpu_workers,
                                     batch_size=self.args.hardware.infer_batch,
@@ -119,15 +119,12 @@ class NERModel(LightningModule):
                                     drop_last=False)
         self.fabric.print(f"Created val_dataset providing {len(val_dataset)} examples")
         self.fabric.print(f"Created val_dataloader providing {len(val_dataloader)} batches")
-        self.infer_dataset = val_dataset
-        self._labels: List[str] = self.infer_dataset.get_labels()
-        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self._labels)}
-        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self._labels)}
+        self._infer_dataset = val_dataset
         return val_dataloader
 
     def test_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        test_dataset = NERDataset("test", data=self.data, tokenizer=self.tokenizer)
+        test_dataset = NERDataset("test", data=self.data, tokenizer=self.lm_tokenizer)
         test_dataloader = DataLoader(test_dataset, sampler=SequentialSampler(test_dataset),
                                      num_workers=self.args.hardware.cpu_workers,
                                      batch_size=self.args.hardware.infer_batch,
@@ -135,10 +132,7 @@ class NERModel(LightningModule):
                                      drop_last=False)
         self.fabric.print(f"Created test_dataset providing {len(test_dataset)} examples")
         self.fabric.print(f"Created test_dataloader providing {len(test_dataloader)} batches")
-        self.infer_dataset = test_dataset
-        self._labels: List[str] = self.infer_dataset.get_labels()
-        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self._labels)}
-        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self._labels)}
+        self._infer_dataset = test_dataset
         return test_dataloader
 
     def training_step(self, inputs, batch_idx):
@@ -163,7 +157,7 @@ class NERModel(LightningModule):
         dict_of_char_pred_ids: Dict[int, List[int]] = {}
         for token_pred_ids, example_id in zip(preds.tolist(), example_ids):
             token_pred_tags: List[str] = [self.id_to_label(x) for x in token_pred_ids]
-            encoded_example: NEREncodedExample = self.infer_dataset[example_id]
+            encoded_example: NEREncodedExample = self._infer_dataset[example_id]
             offset_to_label: Dict[int, str] = encoded_example.raw.get_offset_label_dict()
             all_char_pair_tags: List[Tuple[str | None, str | None]] = [(None, None)] * len(encoded_example.raw.character_list)
             for token_id in range(self.args.model.seq_len):
@@ -183,7 +177,7 @@ class NERModel(LightningModule):
             logger.debug(hr())
         list_of_char_pred_ids: List[int] = []
         list_of_char_label_ids: List[int] = []
-        for encoded_example in [self.infer_dataset[i] for i in example_ids]:
+        for encoded_example in [self._infer_dataset[i] for i in example_ids]:
             char_label_ids = dict_of_char_label_ids[encoded_example.idx]
             char_pred_ids = dict_of_char_pred_ids[encoded_example.idx]
             assert len(char_pred_ids) == len(char_label_ids)
@@ -225,7 +219,7 @@ class NERModel(LightningModule):
 
     @torch.no_grad()
     def infer_one(self, text: str):
-        inputs = self.tokenizer(
+        inputs = self.lm_tokenizer(
             tupled(text),
             max_length=self.args.model.seq_len,
             padding="max_length",
@@ -340,8 +334,8 @@ def val_loop(
         "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
         "val_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
         "val_acc": accuracy(all_preds, all_labels, ignore_index=0).item(),
-        "val_F1c": NER_Char_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels()),
-        "val_F1e": NER_Entity_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels()),
+        "val_F1c": NER_Char_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels),
+        "val_F1e": NER_Entity_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels),
     }
     fabric.log_dict(metrics=metrics, step=metrics["step"])
     fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
@@ -384,8 +378,8 @@ def test_loop(
         "epoch": round(fabric.all_gather(torch.tensor(model.args.prog.global_epoch)).mean().item(), 4),
         "test_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
         "test_acc": accuracy(all_preds, all_labels, ignore_index=0).item(),
-        "test_F1c": NER_Char_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels()),
-        "test_F1e": NER_Entity_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels()),
+        "test_F1c": NER_Char_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels),
+        "test_F1e": NER_Entity_MacroF1.all_in_one(all_preds, all_labels, label_info=model.labels),
     }
     fabric.log_dict(metrics=metrics, step=metrics["step"])
     fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
