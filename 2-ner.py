@@ -14,15 +14,15 @@ from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForSequenceClassification
-from transformers import PreTrainedModel, PreTrainedTokenizer
+from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification
+from transformers import PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption
 from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
-from DeepKNLP.cls import ClassificationDataset, NsmcCorpus
-from DeepKNLP.helper import CheckpointSaver, epsilon, data_collator, fabric_barrier
+from DeepKNLP.helper import CheckpointSaver, epsilon, fabric_barrier
 from DeepKNLP.metrics import accuracy
+from DeepKNLP.ner import NERCorpus, NERDataset
 from chrisbase.data import AppTyper, JobTimer, ProjectEnv
 from chrisbase.io import LoggingFormat, make_dir, files
 from chrisbase.util import mute_tqdm_cls, tupled
@@ -31,22 +31,23 @@ logger = logging.getLogger(__name__)
 main = AppTyper()
 
 
-class NsmcModel(LightningModule):
+class NerModel(LightningModule):
     def __init__(self, args: TrainerArguments | TesterArguments | ServerArguments):
         super().__init__()
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
-        self.data: NsmcCorpus = NsmcCorpus(args)
-        self.lang_model: PreTrainedModel = AutoModelForSequenceClassification.from_pretrained(
+        self.data: NERCorpus = NERCorpus(args)
+        self.lang_model: PreTrainedModel = AutoModelForTokenClassification.from_pretrained(
             args.model.pretrained,
             config=AutoConfig.from_pretrained(
                 args.model.pretrained,
                 num_labels=self.data.num_labels
             ),
         )
-        self.tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(
+        self.tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(
             args.model.pretrained,
             use_fast=True,
         )
+        assert isinstance(self.tokenizer, PreTrainedTokenizerFast), f"Our code support only PreTrainedTokenizerFast, not {type(self.tokenizer)}"
 
     def to_checkpoint(self) -> Dict[str, Any]:
         return {
@@ -74,11 +75,11 @@ class NsmcModel(LightningModule):
 
     def train_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        train_dataset = ClassificationDataset("train", data=self.data, tokenizer=self.tokenizer)
+        train_dataset = NERDataset("train", data=self.data, tokenizer=self.tokenizer)
         train_dataloader = DataLoader(train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
                                       num_workers=self.args.hardware.cpu_workers,
                                       batch_size=self.args.hardware.train_batch,
-                                      collate_fn=data_collator,
+                                      collate_fn=self.data.encoded_examples_to_batch,
                                       drop_last=False)
         self.fabric.print(f"Created train_dataset providing {len(train_dataset)} examples")
         self.fabric.print(f"Created train_dataloader providing {len(train_dataloader)} batches")
@@ -86,11 +87,11 @@ class NsmcModel(LightningModule):
 
     def val_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        val_dataset = ClassificationDataset("valid", data=self.data, tokenizer=self.tokenizer)
+        val_dataset = NERDataset("valid", data=self.data, tokenizer=self.tokenizer)
         val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
                                     num_workers=self.args.hardware.cpu_workers,
                                     batch_size=self.args.hardware.infer_batch,
-                                    collate_fn=data_collator,
+                                    collate_fn=self.data.encoded_examples_to_batch,
                                     drop_last=False)
         self.fabric.print(f"Created val_dataset providing {len(val_dataset)} examples")
         self.fabric.print(f"Created val_dataloader providing {len(val_dataloader)} batches")
@@ -98,11 +99,11 @@ class NsmcModel(LightningModule):
 
     def test_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        test_dataset = ClassificationDataset("test", data=self.data, tokenizer=self.tokenizer)
+        test_dataset = NERDataset("test", data=self.data, tokenizer=self.tokenizer)
         test_dataloader = DataLoader(test_dataset, sampler=SequentialSampler(test_dataset),
                                      num_workers=self.args.hardware.cpu_workers,
                                      batch_size=self.args.hardware.infer_batch,
-                                     collate_fn=data_collator,
+                                     collate_fn=self.data.encoded_examples_to_batch,
                                      drop_last=False)
         self.fabric.print(f"Created test_dataset providing {len(test_dataset)} examples")
         self.fabric.print(f"Created test_dataloader providing {len(test_dataloader)} batches")
@@ -157,11 +158,11 @@ class NsmcModel(LightningModule):
         }
 
     def run_server(self, server: Flask, *args, **kwargs):
-        NsmcModel.WebAPI.register(route_base='/', app=server, init_argument=self)
+        NerModel.WebAPI.register(route_base='/', app=server, init_argument=self)
         server.run(*args, **kwargs)
 
     class WebAPI(FlaskView):
-        def __init__(self, model: "NsmcModel"):
+        def __init__(self, model: "NerModel"):
             self.model = model
 
         @route('/')
@@ -175,7 +176,7 @@ class NsmcModel(LightningModule):
 
 
 def train_loop(
-        model: NsmcModel,
+        model: NerModel,
         optimizer: OptimizerLRScheduler,
         dataloader: DataLoader,
         val_dataloader: DataLoader,
@@ -221,7 +222,7 @@ def train_loop(
 
 @torch.no_grad()
 def val_loop(
-        model: NsmcModel,
+        model: NerModel,
         dataloader: DataLoader,
         checkpoint_saver: CheckpointSaver | None = None,
 ):
@@ -260,7 +261,7 @@ def val_loop(
 
 @torch.no_grad()
 def test_loop(
-        model: NsmcModel,
+        model: NerModel,
         dataloader: DataLoader,
         checkpoint_path: str | Path | None = None,
 ):
@@ -441,7 +442,7 @@ def train(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = NsmcModel(args=args)
+        model = NerModel(args=args)
         optimizer = model.configure_optimizers()
         model, optimizer = fabric.setup(model, optimizer)
         fabric_barrier(fabric, "[after-model]", c='=')
@@ -585,7 +586,7 @@ def test(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = fabric.setup(NsmcModel(args=args))
+        model = fabric.setup(NerModel(args=args))
         fabric_barrier(fabric, "[after-model]", c='=')
 
         test_dataloader = model.test_dataloader()
@@ -667,7 +668,7 @@ def serve(
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
                   args=args if (debugging or verbose > 1) else None, verbose=verbose > 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = fabric.setup(NsmcModel(args=args))
+        model = fabric.setup(NerModel(args=args))
         model.load_last_checkpoint_file(finetuning_home / args.model.name / "**/*.ckpt")
         fabric_barrier(fabric, "[after-model]", c='=')
 
