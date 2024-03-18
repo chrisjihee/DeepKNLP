@@ -1,0 +1,201 @@
+[03.18 12:57:48] ┇ INFO     ┇          lightning.fabric.utilities.seed ┇ [rank: 0] Seed set to 7
+[03.18 12:57:48] ┇ INFO     ┇          lightning.fabric.utilities.seed ┇ [rank: 1] Seed set to 7
+[03.18 12:57:48] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.18 12:57:48] ┇ INFO     ┇                           chrisbase.data ┇ [INIT] python /home/chrisjihee/proj/DeepKNLP-24.03/1-doc-cls-train.py 
+[03.18 12:57:48] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+------------------------------------------------------------------------------------------
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    # | TrainerArguments                | value
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+------------------------------------------------------------------------------------------
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    1 | tag                             | train
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    2 | env.project                     | DeepKNLP
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    3 | env.job_name                    | KPF-BERT
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    4 | env.job_version                 | 0
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    5 | env.hostname                    | ptlm3
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    6 | env.hostaddr                    | 129.254.121.74
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    7 | env.time_stamp                  | 0318.125743
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    8 | env.python_path                 | /home/chrisjihee/mambaforge/envs/DeepKNLP-24.03/bin/python
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇    9 | env.current_dir                 | /home/chrisjihee/proj/DeepKNLP-24.03
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   10 | env.current_file                | /home/chrisjihee/proj/DeepKNLP-24.03/1-doc-cls-train.py
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   11 | env.working_dir                 | /home/chrisjihee/proj/DeepKNLP-24.03
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   12 | env.command_args                | []
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   13 | env.num_ip_addrs                | 1
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   14 | env.max_workers                 | 1
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   15 | env.debugging                   | False
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   16 | env.msg_level                   | 20
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   17 | env.msg_format                  | %(asctime)s ┇ %(levelname)-8s ┇ %(name)40s ┇ %(message)s
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   18 | env.date_format                 | [%m.%d %H:%M:%S]
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   19 | env.output_home                 | finetuning/nsmc/train=KPF-BERT=ptlm3/version_0
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   20 | env.logging_file                | logging.out
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   21 | env.argument_file               | arguments.json
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   22 | time.started                    | [03.18 12:57:48]
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   23 | time.settled                    |
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   24 | time.elapsed                    |
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   25 | prog.result                     | {}
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   26 | prog.tb_logger                  | <lightning.fabric.loggers.tensorboard.TensorBoardLogger object at 0x7f16a0c0c4d0>
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   27 | prog.csv_logger                 | <lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f169ef19c90>
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   28 | prog.world_size                 | 2
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   29 | prog.node_rank                  | 0
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   30 | prog.local_rank                 | 0
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   31 | prog.global_rank                | 0
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   32 | prog.global_step                | 0
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   33 | prog.global_epoch               | 0.0
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   34 | data.name                       | nsmc
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   35 | data.home                       | /home/chrisjihee/proj/DeepKNLP-24.03/data
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   36 | data.files                      | {'train': 'ratings_train.txt', 'valid': 'ratings_valid.txt', 'test': 'ratings_test.txt'}
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   37 | data.caching                    | False
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   38 | data.redownload                 | False
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   39 | data.num_check                  | 0
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   40 | model.pretrained                | pretrained/KPF-BERT
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   41 | model.finetuning                | /home/chrisjihee/proj/DeepKNLP-24.03/finetuning
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   42 | model.seq_len                   | 64
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   43 | model.config                    |
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   44 | model.name                      |
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   45 | hardware.cpu_workers            | 32
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   46 | hardware.train_batch            | 50
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   47 | hardware.infer_batch            | 50
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   48 | hardware.accelerator            | cuda
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   49 | hardware.precision              | bf16-mixed
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   50 | hardware.strategy               | ddp
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   51 | hardware.devices                | [0, 1]
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   52 | learning.random_seed            | 7
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   53 | learning.optimizer_cls          | Adam
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   54 | learning.learning_rate          | 5e-05
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   55 | learning.saving_mode            | max val_acc
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   56 | learning.num_saving             | 2
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   57 | learning.num_epochs             | 2
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   58 | learning.log_text               | False
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   59 | learning.check_rate_on_training | 0.2
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   60 | learning.print_rate_on_training | 0.05
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   61 | learning.print_rate_on_validate | 0.3333333333333333
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   62 | learning.print_rate_on_evaluate | 0.3333333333333333
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   63 | learning.print_step_on_training | -1
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   64 | learning.print_step_on_validate | -1
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   65 | learning.print_step_on_evaluate | -1
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   66 | learning.tag_format_on_training | st={step:d}, ep={epoch:.2f}, loss={loss:06.4f}, acc={acc:06.4f}
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   67 | learning.tag_format_on_validate | st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   68 | learning.tag_format_on_evaluate | st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇   69 | learning.name_format_on_saving  | ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}
+[03.18 12:57:49] ┇ INFO     ┇                           chrisbase.data ┇ -----+---------------------------------+------------------------------------------------------------------------------------------
+[03.18 12:57:49] ┇ WARNING  ┇              transformers.modeling_utils ┇ Some weights of BertForSequenceClassification were not initialized from the model checkpoint at pretrained/KPF-BERT and are newly initialized: ['bert.pooler.dense.bias', 'bert.pooler.dense.weight', 'classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+[03.18 12:57:49] ┇ WARNING  ┇              transformers.modeling_utils ┇ Some weights of BertForSequenceClassification were not initialized from the model checkpoint at pretrained/KPF-BERT and are newly initialized: ['bert.pooler.dense.bias', 'bert.pooler.dense.weight', 'classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+[03.18 12:57:51] ┇ INFO     ┇                                 __main__ ┇ === [after-model] =======================================================================================================================
+[03.18 12:57:51] ┇ INFO     ┇                             DeepKNLP.cls ┇ Creating features from /home/chrisjihee/proj/DeepKNLP-24.03/data/nsmc/ratings_train.txt
+[03.18 12:57:52] ┇ INFO     ┇                             DeepKNLP.cls ┇ Loaded 150000 examples from /home/chrisjihee/proj/DeepKNLP-24.03/data/nsmc/ratings_train.txt
+[03.18 12:58:03] ┇ INFO     ┇                             DeepKNLP.cls ┇ Converted 150000 raw examples to 150000 encoded examples
+[03.18 12:58:04] ┇ INFO     ┇                                 __main__ ┇ Created train_dataset providing 150000 examples
+[03.18 12:58:04] ┇ INFO     ┇                                 __main__ ┇ Created train_dataloader providing 3000 batches
+[03.18 12:58:06] ┇ INFO     ┇                                 __main__ ┇ === [after-train_dataloader] ============================================================================================================
+[03.18 12:58:06] ┇ INFO     ┇                             DeepKNLP.cls ┇ Creating features from /home/chrisjihee/proj/DeepKNLP-24.03/data/nsmc/ratings_valid.txt
+[03.18 12:58:07] ┇ INFO     ┇                             DeepKNLP.cls ┇ Loaded 50000 examples from /home/chrisjihee/proj/DeepKNLP-24.03/data/nsmc/ratings_valid.txt
+[03.18 12:58:10] ┇ INFO     ┇                             DeepKNLP.cls ┇ Converted 50000 raw examples to 50000 encoded examples
+[03.18 12:58:10] ┇ INFO     ┇                                 __main__ ┇ Created val_dataset providing 50000 examples
+[03.18 12:58:10] ┇ INFO     ┇                                 __main__ ┇ Created val_dataloader providing 1000 batches
+[03.18 12:58:10] ┇ INFO     ┇                                 __main__ ┇ === [after-val_dataloader] ==============================================================================================================
+[03.18 12:58:10] ┇ INFO     ┇                             DeepKNLP.cls ┇ Creating features from /home/chrisjihee/proj/DeepKNLP-24.03/data/nsmc/ratings_test.txt
+[03.18 12:58:10] ┇ INFO     ┇                             DeepKNLP.cls ┇ Loaded 10 examples from /home/chrisjihee/proj/DeepKNLP-24.03/data/nsmc/ratings_test.txt
+[03.18 12:58:10] ┇ INFO     ┇                             DeepKNLP.cls ┇ Converted 10 raw examples to 10 encoded examples
+[03.18 12:58:10] ┇ INFO     ┇                                 __main__ ┇ Created test_dataset providing 10 examples
+[03.18 12:58:10] ┇ INFO     ┇                                 __main__ ┇ Created test_dataloader providing 1 batches
+[03.18 12:58:10] ┇ INFO     ┇                                 __main__ ┇ === [after-test_dataloader] =============================================================================================================
+[03.18 12:58:19] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.05) training:   5%|█▌                            | 75/1500 [00:08<01:58, 12.01x50b/s] | st=75, ep=0.05, loss=0.5707, acc=0.7800
+[03.18 12:58:25] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.10) training:  10%|███                           | 150/1500 [00:14<01:56, 11.59x50b/s] | st=150, ep=0.10, loss=0.3732, acc=0.8600
+[03.18 12:58:32] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.15) training:  15%|████▌                         | 225/1500 [00:21<02:18,  9.18x50b/s] | st=225, ep=0.15, loss=0.3300, acc=0.8600
+[03.18 12:58:40] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) training:  20%|██████                        | 300/1500 [00:29<02:19,  8.63x50b/s] | st=300, ep=0.20, loss=0.2931, acc=0.8500
+[03.18 12:58:48] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) checking:  33%|██████▋             | 167/500 [00:07<00:10, 32.11x50b/s]
+[03.18 12:58:52] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) checking:  67%|█████████████▎      | 334/500 [00:11<00:07, 22.10x50b/s]
+[03.18 12:58:54] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) checking: 100%|████████████████████| 500/500 [00:13<00:00, 68.96x50b/s]
+[03.18 12:58:54] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.20) checking: 100%|████████████████████| 500/500 [00:13<00:00, 68.96x50b/s] | st=300, ep=0.20, val_loss=0.3092, val_acc=0.8659
+[03.18 12:58:54] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 12:59:01] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.25) training:  25%|███████▌                      | 375/1500 [00:50<01:35, 11.83x50b/s] | st=375, ep=0.25, loss=0.2945, acc=0.8700
+[03.18 12:59:08] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.30) training:  30%|█████████                     | 450/1500 [00:57<01:28, 11.86x50b/s] | st=450, ep=0.30, loss=0.2692, acc=0.8700
+[03.18 12:59:15] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.35) training:  35%|██████████▌                   | 525/1500 [01:04<01:51,  8.74x50b/s] | st=525, ep=0.35, loss=0.2882, acc=0.8700
+[03.18 12:59:23] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) training:  40%|████████████                  | 600/1500 [01:12<01:38,  9.11x50b/s] | st=600, ep=0.40, loss=0.3132, acc=0.8800
+[03.18 12:59:33] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) checking:  33%|██████▋             | 167/500 [00:09<00:16, 20.72x50b/s]
+[03.18 12:59:37] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) checking:  67%|█████████████▎      | 334/500 [00:13<00:02, 67.95x50b/s]
+[03.18 12:59:39] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) checking: 100%|████████████████████| 500/500 [00:15<00:00, 68.64x50b/s]
+[03.18 12:59:40] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.40) checking: 100%|████████████████████| 500/500 [00:16<00:00, 68.64x50b/s] | st=600, ep=0.40, val_loss=0.2589, val_acc=0.8968
+[03.18 12:59:40] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 12:59:47] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.45) training:  45%|█████████████▌                | 675/1500 [01:36<01:11, 11.55x50b/s] | st=675, ep=0.45, loss=0.3592, acc=0.8500
+[03.18 12:59:53] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.50) training:  50%|███████████████               | 750/1500 [01:42<01:04, 11.71x50b/s] | st=750, ep=0.50, loss=0.2887, acc=0.8600
+[03.18 13:00:00] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.55) training:  55%|████████████████▌             | 825/1500 [01:49<01:07, 10.07x50b/s] | st=825, ep=0.55, loss=0.2703, acc=0.9000
+[03.18 13:00:09] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) training:  60%|██████████████████            | 900/1500 [01:58<01:03,  9.51x50b/s] | st=900, ep=0.60, loss=0.2964, acc=0.8300
+[03.18 13:00:14] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) checking:  33%|██████▋             | 167/500 [00:04<00:05, 62.20x50b/s]
+[03.18 13:00:22] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) checking:  67%|█████████████▎      | 334/500 [00:13<00:03, 43.17x50b/s]
+[03.18 13:00:25] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) checking: 100%|████████████████████| 500/500 [00:16<00:00, 68.06x50b/s]
+[03.18 13:00:25] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.60) checking: 100%|████████████████████| 500/500 [00:16<00:00, 68.06x50b/s] | st=900, ep=0.60, val_loss=0.2535, val_acc=0.9004
+[03.18 13:00:25] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:00:32] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.65) training:  65%|███████████████████▌          | 975/1500 [02:21<00:45, 11.56x50b/s] | st=975, ep=0.65, loss=0.3596, acc=0.8200
+[03.18 13:00:38] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.70) training:  70%|█████████████████████         | 1050/1500 [02:27<00:38, 11.81x50b/s] | st=1050, ep=0.70, loss=0.2159, acc=0.9200
+[03.18 13:00:45] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.75) training:  75%|██████████████████████▌       | 1125/1500 [02:34<00:32, 11.59x50b/s] | st=1125, ep=0.75, loss=0.1992, acc=0.9000
+[03.18 13:00:53] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) training:  80%|████████████████████████      | 1200/1500 [02:42<00:34,  8.74x50b/s] | st=1200, ep=0.80, loss=0.1378, acc=0.9500
+[03.18 13:00:58] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) checking:  33%|██████▋             | 167/500 [00:04<00:05, 55.51x50b/s]
+[03.18 13:01:01] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) checking:  67%|█████████████▎      | 334/500 [00:07<00:02, 64.03x50b/s]
+[03.18 13:01:05] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) checking: 100%|████████████████████| 500/500 [00:11<00:00, 56.90x50b/s]
+[03.18 13:01:05] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.80) checking: 100%|████████████████████| 500/500 [00:11<00:00, 56.90x50b/s] | st=1200, ep=0.80, val_loss=0.2428, val_acc=0.9010
+[03.18 13:01:05] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:01:15] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.85) training:  85%|█████████████████████████▌    | 1275/1500 [03:04<00:19, 11.73x50b/s] | st=1275, ep=0.85, loss=0.2440, acc=0.9100
+[03.18 13:01:22] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.90) training:  90%|███████████████████████████   | 1350/1500 [03:11<00:12, 11.87x50b/s] | st=1350, ep=0.90, loss=0.2082, acc=0.9200
+[03.18 13:01:28] ┇ INFO     ┇                                 __main__ ┇ (Ep 0.95) training:  95%|████████████████████████████▌ | 1425/1500 [03:17<00:08,  8.47x50b/s] | st=1425, ep=0.95, loss=0.1927, acc=0.8900
+[03.18 13:01:36] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) training: 100%|██████████████████████████████| 1500/1500 [03:25<00:00,  8.87x50b/s] | st=1500, ep=1.00, loss=0.2200, acc=0.8900
+[03.18 13:01:40] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) checking:  33%|██████▋             | 167/500 [00:04<00:05, 56.37x50b/s]
+[03.18 13:01:43] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) checking:  67%|█████████████▎      | 334/500 [00:07<00:03, 47.62x50b/s]
+[03.18 13:01:46] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) checking: 100%|████████████████████| 500/500 [00:10<00:00, 64.50x50b/s]
+[03.18 13:01:46] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.00) checking: 100%|████████████████████| 500/500 [00:10<00:00, 64.50x50b/s] | st=1500, ep=1.00, val_loss=0.2451, val_acc=0.9013
+[03.18 13:01:46] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:01:48] ┇ INFO     ┇                                 __main__ ┇ === [after-epoch] =======================================================================================================================
+[03.18 13:01:59] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.05) training:   5%|█▌                            | 75/1500 [00:11<02:03, 11.54x50b/s] | st=1575, ep=1.05, loss=0.1659, acc=0.9400
+[03.18 13:02:06] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.10) training:  10%|███                           | 150/1500 [00:17<01:55, 11.65x50b/s] | st=1650, ep=1.10, loss=0.1036, acc=0.9700
+[03.18 13:02:13] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.15) training:  15%|████▌                         | 225/1500 [00:24<01:57, 10.84x50b/s] | st=1725, ep=1.15, loss=0.2469, acc=0.9100
+[03.18 13:02:19] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.20) training:  20%|██████                        | 300/1500 [00:31<01:41, 11.85x50b/s] | st=1800, ep=1.20, loss=0.2737, acc=0.9000
+[03.18 13:02:23] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.20) checking:  33%|██████▋             | 167/500 [00:04<00:07, 45.95x50b/s]
+[03.18 13:02:26] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.20) checking:  67%|█████████████▎      | 334/500 [00:07<00:03, 53.30x50b/s]
+[03.18 13:02:29] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.20) checking: 100%|████████████████████| 500/500 [00:10<00:00, 55.11x50b/s]
+[03.18 13:02:30] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.20) checking: 100%|████████████████████| 500/500 [00:11<00:00, 55.11x50b/s] | st=1800, ep=1.20, val_loss=0.2816, val_acc=0.9001
+[03.18 13:02:30] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:02:38] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.25) training:  25%|███████▌                      | 375/1500 [00:49<01:38, 11.45x50b/s] | st=1875, ep=1.25, loss=0.2218, acc=0.9000
+[03.18 13:02:47] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.30) training:  30%|█████████                     | 450/1500 [00:59<01:30, 11.64x50b/s] | st=1950, ep=1.30, loss=0.2888, acc=0.9000
+[03.18 13:02:54] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.35) training:  35%|██████████▌                   | 525/1500 [01:06<01:22, 11.80x50b/s] | st=2025, ep=1.35, loss=0.2117, acc=0.9300
+[03.18 13:03:00] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.40) training:  40%|████████████                  | 600/1500 [01:12<01:15, 11.85x50b/s] | st=2100, ep=1.40, loss=0.2607, acc=0.9300
+[03.18 13:03:04] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.40) checking:  33%|██████▋             | 167/500 [00:03<00:04, 67.61x50b/s]
+[03.18 13:03:06] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.40) checking:  67%|█████████████▎      | 334/500 [00:05<00:02, 67.85x50b/s]
+[03.18 13:03:09] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.40) checking: 100%|████████████████████| 500/500 [00:08<00:00, 67.83x50b/s]
+[03.18 13:03:09] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.40) checking: 100%|████████████████████| 500/500 [00:08<00:00, 67.83x50b/s] | st=2100, ep=1.40, val_loss=0.2647, val_acc=0.9052
+[03.18 13:03:09] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:03:18] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.45) training:  45%|█████████████▌                | 675/1500 [01:30<01:26,  9.49x50b/s] | st=2175, ep=1.45, loss=0.1804, acc=0.9200
+[03.18 13:03:28] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.50) training:  50%|███████████████               | 750/1500 [01:39<01:50,  6.77x50b/s] | st=2250, ep=1.50, loss=0.1081, acc=0.9400
+[03.18 13:03:36] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.55) training:  55%|████████████████▌             | 825/1500 [01:48<00:56, 11.90x50b/s] | st=2325, ep=1.55, loss=0.1449, acc=0.9600
+[03.18 13:03:42] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.60) training:  60%|██████████████████            | 900/1500 [01:54<00:53, 11.31x50b/s] | st=2400, ep=1.60, loss=0.1321, acc=0.9300
+[03.18 13:03:46] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.60) checking:  33%|██████▋             | 167/500 [00:03<00:04, 67.74x50b/s]
+[03.18 13:03:48] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.60) checking:  67%|█████████████▎      | 334/500 [00:06<00:02, 67.94x50b/s]
+[03.18 13:03:51] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.60) checking: 100%|████████████████████| 500/500 [00:08<00:00, 67.88x50b/s]
+[03.18 13:03:51] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.60) checking: 100%|████████████████████| 500/500 [00:08<00:00, 67.88x50b/s] | st=2400, ep=1.60, val_loss=0.2363, val_acc=0.9075
+[03.18 13:03:51] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:03:59] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.65) training:  65%|███████████████████▌          | 975/1500 [02:11<00:50, 10.39x50b/s] | st=2475, ep=1.65, loss=0.1941, acc=0.9200
+[03.18 13:04:07] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.70) training:  70%|█████████████████████         | 1050/1500 [02:19<01:01,  7.28x50b/s] | st=2550, ep=1.70, loss=0.2646, acc=0.9300
+[03.18 13:04:16] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.75) training:  75%|██████████████████████▌       | 1125/1500 [02:28<00:50,  7.49x50b/s] | st=2625, ep=1.75, loss=0.1690, acc=0.9400
+[03.18 13:04:24] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.80) training:  80%|████████████████████████      | 1200/1500 [02:36<00:25, 11.78x50b/s] | st=2700, ep=1.80, loss=0.2161, acc=0.9100
+[03.18 13:04:28] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.80) checking:  33%|██████▋             | 167/500 [00:03<00:04, 67.11x50b/s]
+[03.18 13:04:30] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.80) checking:  67%|█████████████▎      | 334/500 [00:05<00:02, 67.56x50b/s]
+[03.18 13:04:33] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.80) checking: 100%|████████████████████| 500/500 [00:08<00:00, 67.33x50b/s]
+[03.18 13:04:34] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.80) checking: 100%|████████████████████| 500/500 [00:09<00:00, 67.33x50b/s] | st=2700, ep=1.80, val_loss=0.2423, val_acc=0.9058
+[03.18 13:04:34] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:04:41] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.85) training:  85%|█████████████████████████▌    | 1275/1500 [02:53<00:19, 11.75x50b/s] | st=2775, ep=1.85, loss=0.1948, acc=0.9300
+[03.18 13:04:48] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.90) training:  90%|███████████████████████████   | 1350/1500 [03:00<00:16,  8.96x50b/s] | st=2850, ep=1.90, loss=0.1825, acc=0.9300
+[03.18 13:04:57] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.95) training:  95%|████████████████████████████▌ | 1425/1500 [03:08<00:08,  8.55x50b/s] | st=2925, ep=1.95, loss=0.0920, acc=0.9700
+[03.18 13:05:06] ┇ INFO     ┇                                 __main__ ┇ (Ep 2.00) training: 100%|██████████████████████████████| 1500/1500 [03:18<00:00,  7.01x50b/s] | st=3000, ep=2.00, loss=0.3504, acc=0.8500
+[03.18 13:05:10] ┇ INFO     ┇                                 __main__ ┇ (Ep 2.00) checking:  33%|██████▋             | 167/500 [00:04<00:04, 68.07x50b/s]
+[03.18 13:05:13] ┇ INFO     ┇                                 __main__ ┇ (Ep 2.00) checking:  67%|█████████████▎      | 334/500 [00:06<00:02, 68.16x50b/s]
+[03.18 13:05:15] ┇ INFO     ┇                                 __main__ ┇ (Ep 2.00) checking: 100%|████████████████████| 500/500 [00:08<00:00, 68.07x50b/s]
+[03.18 13:05:16] ┇ INFO     ┇                                 __main__ ┇ (Ep 2.00) checking: 100%|████████████████████| 500/500 [00:09<00:00, 68.07x50b/s] | st=3000, ep=2.00, val_loss=0.2552, val_acc=0.8986
+[03.18 13:05:16] ┇ INFO     ┇                                 __main__ ┇ --- [after-check] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:05:16] ┇ INFO     ┇                                 __main__ ┇ === [after-epoch] =======================================================================================================================
+[03.18 13:05:16] ┇ INFO     ┇                                 __main__ ┇ --- [after-train] -----------------------------------------------------------------------------------------------------------------------
+[03.18 13:05:16] ┇ INFO     ┇                                 __main__ ┇ Loading best model from finetuning/nsmc/train=KPF-BERT=ptlm3/version_0/ep=1.6, loss=0.2363, acc=0.9075.ckpt
+[03.18 13:05:18] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.60)  testing: 100%|████████████████████| 1/1 [00:01<00:00,  1.11s/x50b]
+[03.18 13:05:18] ┇ INFO     ┇                                 __main__ ┇ (Ep 1.60)  testing: 100%|████████████████████| 1/1 [00:01<00:00,  1.11s/x50b] | st=2400, ep=1.60, test_loss=0.0392, test_acc=1.0000
+[03.18 13:05:18] ┇ INFO     ┇                                 __main__ ┇ --- [after-test] ------------------------------------------------------------------------------------------------------------------------
+[03.18 13:05:18] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.18 13:05:18] ┇ INFO     ┇                           chrisbase.data ┇ [EXIT] python /home/chrisjihee/proj/DeepKNLP-24.03/1-doc-cls-train.py  ($=00:07:29.278)
+[03.18 13:05:18] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
