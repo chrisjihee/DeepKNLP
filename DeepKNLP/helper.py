@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from operator import attrgetter
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Mapping, Any
 
 import torch
 from lightning.fabric import Fabric
@@ -28,7 +28,7 @@ class CheckpointSaver:
         self.best_model_path: str | Path | None = None
         self.saving_checkpoints: List[ScorePath] = []
 
-    def save_checkpoint(self, metrics: Dict[str, Any], ckpt_state: Dict[str, Any]):
+    def save_checkpoint(self, metrics: Mapping[str, Any], ckpt_state: Dict[str, Any]):
         ckpt_item = ScorePath(
             score=metrics[self.score_key],
             path=self.output_home / f"{self.name_format.format(**metrics)}.ckpt",

@@ -65,15 +65,7 @@ class HardwareOption(OptionData):
 
 
 @dataclass
-class LearningOption(OptionData):
-    random_seed: int | None = field(default=None)
-    optimizer_cls: str = field(default="Adam")
-    learning_rate: float = field(default=5e-5)
-    saving_mode: str = field(default="min val_loss")
-    num_saving: int = field(default=3)
-    num_epochs: int = field(default=1)
-    log_text: bool = field(default=False)
-    check_rate_on_training: float = field(default=1.0)
+class PrintingOption(OptionData):
     print_rate_on_training: float = field(default=0.0333)
     print_rate_on_validate: float = field(default=0.334)
     print_rate_on_evaluate: float = field(default=0.334)
@@ -83,13 +75,27 @@ class LearningOption(OptionData):
     tag_format_on_training: str = field(default="")
     tag_format_on_validate: str = field(default="")
     tag_format_on_evaluate: str = field(default="")
+
+    def __post_init__(self):
+        self.print_rate_on_training = abs(self.print_rate_on_training)
+        self.print_rate_on_validate = abs(self.print_rate_on_validate)
+        self.print_rate_on_evaluate = abs(self.print_rate_on_evaluate)
+
+
+@dataclass
+class LearningOption(OptionData):
+    random_seed: int | None = field(default=None)
+    optimizer_cls: str = field(default="Adam")
+    learning_rate: float = field(default=5e-5)
+    saving_mode: str = field(default="min val_loss")
+    num_saving: int = field(default=3)
+    num_epochs: int = field(default=1)
+    log_text: bool = field(default=False)
+    check_rate_on_training: float = field(default=1.0)
     name_format_on_saving: str = field(default="")
 
     def __post_init__(self):
         self.check_rate_on_training = abs(self.check_rate_on_training)
-        self.print_rate_on_training = abs(self.print_rate_on_training)
-        self.print_rate_on_validate = abs(self.print_rate_on_validate)
-        self.print_rate_on_evaluate = abs(self.print_rate_on_evaluate)
 
 
 @dataclass
@@ -135,7 +141,8 @@ class ServerArguments(MLArguments):
 @dataclass
 class TesterArguments(ServerArguments):
     tag = "test"
-    hardware: HardwareOption = field(default_factory=HardwareOption, metadata={"help": "device information"})
+    printing: PrintingOption = field(default_factory=PrintingOption)
+    hardware: HardwareOption = field(default_factory=HardwareOption)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
         if not columns:
