@@ -370,12 +370,13 @@ def train(
         accelerator=args.hardware.accelerator,
     )
     fabric.launch()
-    sleep(fabric.global_rank * 0.3)
+    sleep(fabric.global_rank * 0.2)
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     args.env.set_output_home(args.prog.csv_logger.log_dir)
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
     args.prog.world_size = fabric.world_size
+    args.prog.local_rank = fabric.local_rank
     args.prog.global_rank = fabric.global_rank
     fabric.seed_everything(args.learning.random_seed)
     fabric.barrier()
@@ -527,12 +528,13 @@ def test(
         accelerator=args.hardware.accelerator,
     )
     fabric.launch()
-    sleep(fabric.global_rank * 0.3)
+    sleep(fabric.global_rank * 0.2)
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     args.env.set_output_home(args.prog.csv_logger.log_dir)
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
     args.prog.world_size = fabric.world_size
+    args.prog.local_rank = fabric.local_rank
     args.prog.global_rank = fabric.global_rank
     fabric.barrier()
 
