@@ -510,7 +510,7 @@ def test(
         strategy: str = typer.Option(default="auto"),
         device: List[int] = typer.Option(default=[0]),
         # printing
-        print_rate_on_evaluate: float = typer.Option(default=1 / 50),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
+        print_rate_on_evaluate: float = typer.Option(default=1 / 10),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
         print_step_on_evaluate: int = typer.Option(default=-1),
         tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
 ):

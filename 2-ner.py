@@ -48,7 +48,7 @@ class NERModel(LightningModule):
             use_fast=True,
         )
         assert isinstance(self.tokenizer, PreTrainedTokenizerFast), f"Our code support only PreTrainedTokenizerFast, not {type(self.tokenizer)}"
-        self.val_dataset: NERDataset | None = None
+        self.infer_dataset: NERDataset | None = None
         self._labels: List[str] | None = None
         self._label_to_id: Dict[str, int] | None = None
         self._id_to_label: Dict[int, str] | None = None
@@ -119,8 +119,8 @@ class NERModel(LightningModule):
                                     drop_last=False)
         self.fabric.print(f"Created val_dataset providing {len(val_dataset)} examples")
         self.fabric.print(f"Created val_dataloader providing {len(val_dataloader)} batches")
-        self.val_dataset = val_dataset
-        self._labels: List[str] = self.val_dataset.get_labels()
+        self.infer_dataset = val_dataset
+        self._labels: List[str] = self.infer_dataset.get_labels()
         self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self._labels)}
         self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self._labels)}
         return val_dataloader
@@ -135,8 +135,8 @@ class NERModel(LightningModule):
                                      drop_last=False)
         self.fabric.print(f"Created test_dataset providing {len(test_dataset)} examples")
         self.fabric.print(f"Created test_dataloader providing {len(test_dataloader)} batches")
-        self.val_dataset = test_dataset
-        self._labels: List[str] = self.val_dataset.get_labels()
+        self.infer_dataset = test_dataset
+        self._labels: List[str] = self.infer_dataset.get_labels()
         self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self._labels)}
         self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self._labels)}
         return test_dataloader
@@ -163,7 +163,7 @@ class NERModel(LightningModule):
         dict_of_char_pred_ids: Dict[int, List[int]] = {}
         for token_pred_ids, example_id in zip(preds.tolist(), example_ids):
             token_pred_tags: List[str] = [self.id_to_label(x) for x in token_pred_ids]
-            encoded_example: NEREncodedExample = self.val_dataset[example_id]
+            encoded_example: NEREncodedExample = self.infer_dataset[example_id]
             offset_to_label: Dict[int, str] = encoded_example.raw.get_offset_label_dict()
             all_char_pair_tags: List[Tuple[str | None, str | None]] = [(None, None)] * len(encoded_example.raw.character_list)
             for token_id in range(self.args.model.seq_len):
@@ -183,7 +183,7 @@ class NERModel(LightningModule):
             logger.debug(hr())
         list_of_char_pred_ids: List[int] = []
         list_of_char_label_ids: List[int] = []
-        for encoded_example in [self.val_dataset[i] for i in example_ids]:
+        for encoded_example in [self.infer_dataset[i] for i in example_ids]:
             char_label_ids = dict_of_char_label_ids[encoded_example.idx]
             char_pred_ids = dict_of_char_pred_ids[encoded_example.idx]
             assert len(char_pred_ids) == len(char_label_ids)
@@ -537,7 +537,7 @@ def train(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = NERModel(args=args, )
+        model = NERModel(args=args)
         optimizer = model.configure_optimizers()
         model, optimizer = fabric.setup(model, optimizer)
         fabric_barrier(fabric, "[after-model]", c='=')
@@ -588,8 +588,8 @@ def test(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
-        test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
+        test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
@@ -604,9 +604,9 @@ def test(
         strategy: str = typer.Option(default="auto"),
         device: List[int] = typer.Option(default=[0]),
         # printing
-        print_rate_on_evaluate: float = typer.Option(default=1 / 50),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
+        print_rate_on_evaluate: float = typer.Option(default=1 / 10),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
         print_step_on_evaluate: int = typer.Option(default=-1),
-        tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
+        tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1c={test_F1c:05.2f}, test_F1e={test_F1e:05.2f}"),
 ):
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
