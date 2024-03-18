@@ -271,10 +271,10 @@ def train(
         model_name: str = typer.Option(default=None),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
-        train_batch: int = typer.Option(default=50),  # TODO: -> 64
-        infer_batch: int = typer.Option(default=50),  # TODO: -> 64
+        train_batch: int = typer.Option(default=50),
+        infer_batch: int = typer.Option(default=50),
         accelerator: str = typer.Option(default="cuda"),
-        precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
+        precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),
         device: List[int] = typer.Option(default=[0, 1]),
         # printing
@@ -382,11 +382,10 @@ def train(
     fabric.seed_everything(args.learning.random_seed)
     fabric.barrier()
 
-    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}",
+    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
-                  mute_warning="lightning.fabric.loggers.csv_logs",
-                  rt=1, rb=1, rc='='):
+                  mute_warning="lightning.fabric.loggers.csv_logs"):
         model = NsmcModel(args=args)
         optimizer = model.configure_optimizers()
         model, optimizer = fabric.setup(model, optimizer)
@@ -450,10 +449,10 @@ def test(
         model_name: str = typer.Option(default="train=KPF-BERT=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
-        train_batch: int = typer.Option(default=50),  # TODO: -> 64
-        infer_batch: int = typer.Option(default=50),  # TODO: -> 64
+        train_batch: int = typer.Option(default=50),
+        infer_batch: int = typer.Option(default=50),
         accelerator: str = typer.Option(default="cuda"),
-        precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
+        precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),
         device: List[int] = typer.Option(default=[0]),
         # printing
@@ -541,11 +540,10 @@ def test(
     args.prog.global_rank = fabric.global_rank
     fabric.barrier()
 
-    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}",
+    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
-                  mute_warning="lightning.fabric.loggers.csv_logs",
-                  rt=1, rb=1, rc='='):
+                  mute_warning="lightning.fabric.loggers.csv_logs"):
         model = NsmcModel(args=args)
         model = fabric.setup(model)
         fabric_barrier(fabric, "[after-model]", c='=')
@@ -559,7 +557,7 @@ def test(
                 fabric=fabric,
                 model=model,
                 dataloader=test_dataloader,
-                checkpoint_path=None,  # TODO: -> checkpoint_path
+                checkpoint_path=checkpoint_path,  # TODO: -> checkpoint_path
             )
 
 
