@@ -251,7 +251,7 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc-mini"),  # TODO: -> nsmc
+        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_valid.txt"),
         test_file: str = typer.Option(default="ratings_test.txt"),
@@ -264,7 +264,7 @@ def train(
         train_batch: int = typer.Option(default=50),  # TODO: -> 64
         infer_batch: int = typer.Option(default=50),  # TODO: -> 64
         accelerator: str = typer.Option(default="cuda"),
-        precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
+        precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),
         device: List[int] = typer.Option(default=[0, 1]),
         # learning
@@ -285,7 +285,7 @@ def train(
         tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
 ):
-    torch.set_float32_matmul_precision('high')  # TODO: -> high
+    torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
