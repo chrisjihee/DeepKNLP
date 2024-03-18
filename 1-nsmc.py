@@ -365,6 +365,7 @@ def train(
     args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(finetuning_home, output_name).version
     args.prog.tb_logger = TensorBoardLogger(finetuning_home, output_name, args.env.job_version)  # tensorboard --logdir finetuning --bind_all
     args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
+    sleep(0.3)
     fabric = Fabric(
         loggers=[args.prog.tb_logger, args.prog.csv_logger],
         devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers,
@@ -373,7 +374,10 @@ def train(
         accelerator=args.hardware.accelerator,
     )
     fabric.launch()
-    sleep(fabric.global_rank * 0.2)
+    fabric.barrier()
+    job_versions = fabric.all_gather(torch.tensor(args.env.job_version))
+    assert job_versions.min() == job_versions.max(), f"Job version must be same across all processes: {job_versions.tolist()}"
+    sleep(fabric.global_rank * 0.3)
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     args.env.set_output_home(args.prog.csv_logger.log_dir)
     args.env.set_logging_file(logging_file)
@@ -509,6 +513,7 @@ def test(
     make_dir(finetuning_home / output_name)
     args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(finetuning_home, output_name).version
     args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
+    sleep(0.3)
     fabric = Fabric(
         devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers,
         strategy=args.hardware.strategy if args.hardware.accelerator in ["cuda", "gpu"] else "auto",
@@ -516,7 +521,10 @@ def test(
         accelerator=args.hardware.accelerator,
     )
     fabric.launch()
-    sleep(fabric.global_rank * 0.2)
+    fabric.barrier()
+    job_versions = fabric.all_gather(torch.tensor(args.env.job_version))
+    assert job_versions.min() == job_versions.max(), f"Job version must be same across all processes: {job_versions.tolist()}"
+    sleep(fabric.global_rank * 0.3)
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     args.env.set_output_home(args.prog.csv_logger.log_dir)
     args.env.set_logging_file(logging_file)
