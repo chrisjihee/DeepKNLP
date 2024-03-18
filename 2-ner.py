@@ -310,11 +310,11 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
-        train_file: str = typer.Option(default="ratings_train.txt"),
-        valid_file: str = typer.Option(default="ratings_valid.txt"),
-        test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
-        num_check: int = typer.Option(default=0),  # TODO: -> 2
+        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> klue-ner, kmou-ner
+        train_file: str = typer.Option(default="train.jsonl"),
+        valid_file: str = typer.Option(default="valid.jsonl"),
+        test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl", None
+        num_check: int = typer.Option(default=2),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
