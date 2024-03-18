@@ -47,6 +47,16 @@ class ModelOption(OptionData):
 
 
 @dataclass
+class ServerOption(OptionData):
+    port: int = field(default=7000)
+    host: str = field(default="localhost")
+    temp: str | Path = field(default="templates")
+
+    def __post_init__(self):
+        self.temp = Path(self.temp)
+
+
+@dataclass
 class HardwareOption(OptionData):
     cpu_workers: int = field(default=os.cpu_count() / 2)
     train_batch: int = field(default=32)
@@ -134,10 +144,20 @@ class MLArguments(CommonArguments):
 @dataclass
 class ServerArguments(MLArguments):
     tag = "serve"
+    server: ServerOption | None = field(default=None)
+
+    def dataframe(self, columns=None) -> pd.DataFrame:
+        if not columns:
+            columns = [self.data_type, "value"]
+        df = pd.concat([
+            super().dataframe(columns=columns),
+            to_dataframe(columns=columns, raw=self.server, data_prefix="server"),
+        ]).reset_index(drop=True)
+        return df
 
 
 @dataclass
-class TesterArguments(ServerArguments):
+class TesterArguments(MLArguments):
     tag = "test"
     hardware: HardwareOption = field(default_factory=HardwareOption)
     printing: PrintingOption = field(default_factory=PrintingOption)

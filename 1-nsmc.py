@@ -18,7 +18,7 @@ from transformers import AutoTokenizer, AutoConfig, AutoModelForSequenceClassifi
 from transformers import PreTrainedModel, PreTrainedTokenizer
 from transformers.modeling_outputs import SequenceClassifierOutput
 
-from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, HardwareOption, PrintingOption, LearningOption
+from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption
 from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
 from DeepKNLP.cls import ClassificationDataset, NsmcCorpus
 from DeepKNLP.helper import CheckpointSaver, epsilon, data_collator, fabric_barrier
@@ -58,6 +58,16 @@ class NsmcModel(LightningModule):
         self.lang_model.load_state_dict(ckpt_state["lang_model"])
         self.args.prog = ckpt_state["args_prog"]
         self.eval()
+
+    def load_checkpoint_file(self, checkpoint_file):
+        assert Path(checkpoint_file).exists(), f"Model file not found: {checkpoint_file}"
+        self.fabric.print(f"Loading model from {checkpoint_file}")
+        self.from_checkpoint(self.fabric.load(checkpoint_file))
+
+    def load_last_checkpoint_file(self, checkpoints_glob):
+        checkpoint_files = files(checkpoints_glob)
+        assert checkpoint_files, f"No model file found: {checkpoints_glob}"
+        self.load_checkpoint_file(checkpoint_files[-1])
 
     def configure_optimizers(self):
         return AdamW(self.lang_model.parameters(), lr=self.args.learning.learning_rate)
@@ -124,7 +134,7 @@ class NsmcModel(LightningModule):
         return self.validation_step(inputs, batch_idx)
 
     @torch.no_grad()
-    def inference_fn(self, text: str):
+    def infer_one(self, text: str):
         inputs = self.tokenizer(
             tupled(text),
             max_length=self.args.model.seq_len,
@@ -137,7 +147,7 @@ class NsmcModel(LightningModule):
         pred = "긍정 (positive)" if torch.argmax(prob) == 1 else "부정 (negative)"
         positive_prob = round(prob[0][1].item(), 4)
         negative_prob = round(prob[0][0].item(), 4)
-        response = {
+        return {
             'sentence': text,
             'prediction': pred,
             'positive_data': f"긍정 {positive_prob * 100:.1f}%",
@@ -145,7 +155,10 @@ class NsmcModel(LightningModule):
             'positive_width': f"{positive_prob * 100:.2f}%",
             'negative_width': f"{negative_prob * 100:.2f}%",
         }
-        return response
+
+    def run_server(self, server: Flask, *args, **kwargs):
+        NsmcModel.WebAPI.register(route_base='/', app=server, init_argument=self)
+        server.run(*args, **kwargs)
 
     class WebAPI(FlaskView):
         def __init__(self, model: "NsmcModel"):
@@ -157,19 +170,18 @@ class NsmcModel(LightningModule):
 
         @route('/api', methods=['POST'])
         def api(self):
-            query_sentence = request.json
-            output_data = self.model.inference_fn(query_sentence)
-            return jsonify(output_data)
+            response = self.model.infer_one(text=request.json)
+            return jsonify(response)
 
 
 def train_loop(
-        fabric: Fabric,
         model: NsmcModel,
         optimizer: OptimizerLRScheduler,
         dataloader: DataLoader,
         val_dataloader: DataLoader,
         checkpoint_saver: CheckpointSaver | None = None,
 ):
+    fabric = model.fabric
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
@@ -202,18 +214,18 @@ def train_loop(
                     fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}"
                                  f" | {model.args.printing.tag_format_on_training.format(**metrics)}")
                 if model.args.prog.global_step % check_interval < 1:
-                    val_loop(fabric, model, val_dataloader, checkpoint_saver)
+                    val_loop(model, val_dataloader, checkpoint_saver)
         fabric_barrier(fabric, "[after-epoch]", c='=')
     fabric_barrier(fabric, "[after-train]")
 
 
 @torch.no_grad()
 def val_loop(
-        fabric: Fabric,
         model: NsmcModel,
         dataloader: DataLoader,
         checkpoint_saver: CheckpointSaver | None = None,
 ):
+    fabric = model.fabric
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
@@ -248,16 +260,13 @@ def val_loop(
 
 @torch.no_grad()
 def test_loop(
-        fabric: Fabric,
         model: NsmcModel,
         dataloader: DataLoader,
         checkpoint_path: str | Path | None = None,
 ):
+    fabric = model.fabric
     if checkpoint_path:
-        assert Path(checkpoint_path).exists(), f"Model file not found: {checkpoint_path}"
-        fabric.print(f"Loading model from {checkpoint_path}")
-        model.from_checkpoint(fabric.load(checkpoint_path))
-
+        model.load_checkpoint_file(checkpoint_path)
     fabric.barrier()
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     num_batch = len(dataloader)
@@ -457,7 +466,6 @@ def train(
             num_saving=model.args.learning.num_saving,
         )
         train_loop(
-            fabric=fabric,
             model=model,
             optimizer=optimizer,
             dataloader=train_dataloader,
@@ -465,7 +473,6 @@ def train(
             checkpoint_saver=checkpoint_saver,
         )
         test_loop(
-            fabric=fabric,
             model=model,
             dataloader=test_dataloader,
             checkpoint_path=checkpoint_saver.best_model_path,
@@ -495,7 +502,7 @@ def test(
         # hardware
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         infer_batch: int = typer.Option(default=10),
-        accelerator: str = typer.Option(default="cpu"),  # TODO: -> cuda, cpu, mpu
+        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mpu
         precision: str = typer.Option(default=None),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="auto"),
         device: List[int] = typer.Option(default=[0]),
@@ -578,8 +585,7 @@ def test(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = NsmcModel(args=args)
-        model = fabric.setup(model)
+        model = fabric.setup(NsmcModel(args=args))
         fabric_barrier(fabric, "[after-model]", c='=')
 
         test_dataloader = model.test_dataloader()
@@ -588,7 +594,6 @@ def test(
 
         for checkpoint_path in files(finetuning_home / args.model.name / "**/*.ckpt"):
             test_loop(
-                fabric=fabric,
                 model=model,
                 dataloader=test_dataloader,
                 checkpoint_path=checkpoint_path,
@@ -612,6 +617,10 @@ def serve(
         finetuning: str = typer.Option(default="finetuning"),
         model_name: str = typer.Option(default="train=KPF-BERT=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
+        # server
+        server_port: int = typer.Option(default=7321),
+        server_host: str = typer.Option(default="localhost"),
+        server_temp: str = typer.Option(default="templates"),
 ):
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -638,14 +647,18 @@ def serve(
             name=model_name,
             seq_len=seq_len,
         ),
+        server=ServerOption(
+            port=server_port,
+            host=server_host,
+            temp=server_temp,
+        )
     )
     finetuning_home = Path(f"{finetuning}/{data_name}")
     output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}"
     make_dir(finetuning_home / output_name)
     args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(finetuning_home, output_name).version
     args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
-    sleep(0.3)
-    fabric = Fabric(devices=1)
+    fabric = Fabric(devices=1, accelerator="cpu")
     fabric.print = logger.info
     args.env.set_output_home(args.prog.csv_logger.log_dir)
     args.env.set_logging_file(logging_file)
@@ -654,17 +667,12 @@ def serve(
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
                   args=args if (debugging or verbose > 1) else None, verbose=verbose > 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = NsmcModel(args=args)
-        checkpoint_files = files(finetuning_home / args.model.name / "**/*.ckpt")
-        assert checkpoint_files, f"No model file found: {finetuning_home / args.model.name / '**/*.ckpt'}"
-        checkpoint_path = checkpoint_files[-1]
-        fabric.print(f"Loading model from {checkpoint_path}")
-        model.from_checkpoint(fabric.load(checkpoint_path))
+        model = fabric.setup(NsmcModel(args=args))
+        model.load_last_checkpoint_file(finetuning_home / args.model.name / "**/*.ckpt")
+        fabric_barrier(fabric, "[after-model]", c='=')
 
-        if fabric.local_rank == 0:
-            server = Flask(f"NsmcModel-{args.env.hostaddr}", template_folder='templates')
-            NsmcModel.WebAPI.register(init_argument=model, app=server, route_base='/')
-            server.run(host="0.0.0.0", port=7321, debug=debugging)
+        model.run_server(server=Flask(output_name, template_folder=args.server.temp),
+                         host=args.server.host, port=args.server.port, debug=debugging)
 
 
 if __name__ == "__main__":
