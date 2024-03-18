@@ -441,8 +441,6 @@ def test(
         # data
         data_home: str = typer.Option(default="data"),
         data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
-        train_file: str = typer.Option(default="ratings_train.txt"),
-        valid_file: str = typer.Option(default="ratings_valid.txt"),
         test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
@@ -458,7 +456,7 @@ def test(
         strategy: str = typer.Option(default="auto"),
         device: List[int] = typer.Option(default=[0]),
         # printing
-        print_rate_on_evaluate: float = typer.Option(default=1 / 100),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
+        print_rate_on_evaluate: float = typer.Option(default=1 / 50),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
         print_step_on_evaluate: int = typer.Option(default=-1),
         tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
 ):
@@ -482,8 +480,6 @@ def test(
             home=data_home,
             name=data_name,
             files=DataFiles(
-                train=train_file,
-                valid=valid_file,
                 test=test_file,
             ),
             num_check=num_check,
