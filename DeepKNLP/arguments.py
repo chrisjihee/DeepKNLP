@@ -28,7 +28,7 @@ class DataOption(OptionData):
     files: DataFiles | None = field(default=None)
     caching: bool = field(default=False)
     redownload: bool = field(default=False)
-    num_check: int = field(default=3)
+    num_check: int = field(default=0)
 
     def __post_init__(self):
         if self.home:

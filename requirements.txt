@@ -14,3 +14,7 @@ seqeval==1.2.2
 # Utils
 importlib-metadata==7.0.2
 chrisbase==0.5.0
+
+# Web
+Flask
+Flask-Cors

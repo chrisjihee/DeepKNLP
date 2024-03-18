@@ -6,6 +6,8 @@ from typing import List, Dict, Mapping, Any
 
 import torch
 import typer
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 from lightning import LightningModule
 from lightning.fabric import Fabric
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
@@ -17,7 +19,7 @@ from transformers import PreTrainedModel, PreTrainedTokenizer
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, HardwareOption, PrintingOption, LearningOption
-from DeepKNLP.arguments import TrainerArguments, TesterArguments
+from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
 from DeepKNLP.cls import ClassificationDataset, NsmcCorpus
 from DeepKNLP.helper import CheckpointSaver, epsilon, data_collator, fabric_barrier
 from DeepKNLP.metrics import accuracy
@@ -30,7 +32,7 @@ main = AppTyper()
 
 
 class NsmcModel(LightningModule):
-    def __init__(self, args: TrainerArguments | TesterArguments):
+    def __init__(self, args: TrainerArguments | TesterArguments | ServerArguments):
         super().__init__()
         self.args: TesterArguments | TrainerArguments = args
         self.data: NsmcCorpus = NsmcCorpus(args)
@@ -55,6 +57,7 @@ class NsmcModel(LightningModule):
     def from_checkpoint(self, ckpt_state: Dict[str, Any]):
         self.lang_model.load_state_dict(ckpt_state["lang_model"])
         self.args.prog = ckpt_state["args_prog"]
+        self.eval()
 
     def configure_optimizers(self):
         return AdamW(self.lang_model.parameters(), lr=self.args.learning.learning_rate)
@@ -227,7 +230,7 @@ def test_loop(
     losses: List[torch.Tensor] = []
     progress = mute_tqdm_cls(bar_size=20, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="testing")
     for i, batch in enumerate(dataloader, start=1):
-        outputs = model.validation_step(batch, i)
+        outputs = model.test_step(batch, i)
         preds.extend(outputs["preds"])
         labels.extend(outputs["labels"])
         losses.append(outputs["loss"])
@@ -553,6 +556,114 @@ def test(
                 dataloader=test_dataloader,
                 checkpoint_path=checkpoint_path,
             )
+
+
+@main.command()
+def serve(
+        verbose: int = typer.Option(default=2),
+        # env
+        project: str = typer.Option(default="DeepKNLP"),
+        job_name: str = typer.Option(default=None),
+        job_version: int = typer.Option(default=None),
+        debugging: bool = typer.Option(default=False),
+        logging_file: str = typer.Option(default="logging.out"),
+        argument_file: str = typer.Option(default="arguments.json"),
+        # data
+        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
+        # model
+        pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
+        finetuning: str = typer.Option(default="finetuning"),
+        model_name: str = typer.Option(default="train=KPF-BERT=*"),
+        seq_len: int = typer.Option(default=64),  # TODO: -> 512
+):
+    torch.set_float32_matmul_precision('high')
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("transformers.modeling_utils").setLevel(logging.ERROR)
+    logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
+
+    pretrained = Path(pretrained)
+    args = ServerArguments(
+        env=ProjectEnv(
+            project=project,
+            job_name=job_name if job_name else pretrained.name,
+            job_version=job_version,
+            debugging=debugging,
+            msg_level=logging.DEBUG if debugging else logging.INFO,
+            msg_format=LoggingFormat.DEBUG_40 if debugging else LoggingFormat.CHECK_40,
+        ),
+        data=DataOption(
+            name=data_name,
+        ),
+        model=ModelOption(
+            pretrained=pretrained,
+            finetuning=finetuning,
+            name=model_name,
+            seq_len=seq_len,
+        ),
+    )
+    finetuning_home = Path(f"{finetuning}/{data_name}")
+    output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}"
+    make_dir(finetuning_home / output_name)
+    args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(finetuning_home, output_name).version
+    args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
+    sleep(0.3)
+    fabric = Fabric(devices=1)
+    fabric.print = logger.info
+    args.env.set_output_home(args.prog.csv_logger.log_dir)
+    args.env.set_logging_file(logging_file)
+    args.env.set_argument_file(argument_file)
+
+    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
+                  args=args if (debugging or verbose > 1) else None, verbose=verbose > 0,
+                  mute_warning="lightning.fabric.loggers.csv_logs"):
+        model = NsmcModel(args=args)
+        checkpoint_files = files(finetuning_home / args.model.name / "**/*.ckpt")
+        assert checkpoint_files, f"No model file found: {finetuning_home / args.model.name / '**/*.ckpt'}"
+        checkpoint_path = checkpoint_files[-1]
+        fabric.print(f"Loading model from {checkpoint_path}")
+        ckpt_state = fabric.load(checkpoint_path)
+        model.from_checkpoint(ckpt_state)
+
+        def inference_fn(sentence):
+            inputs = model.tokenizer(
+                [sentence],
+                max_length=args.model.seq_len,
+                padding="max_length",
+                truncation=True,
+            )
+            with torch.no_grad():
+                outputs: SequenceClassifierOutput = model(**{k: torch.tensor(v) for k, v in inputs.items()})
+                prob = outputs.logits.softmax(dim=1)
+                positive_prob = round(prob[0][1].item(), 4)
+                negative_prob = round(prob[0][0].item(), 4)
+                pred = "긍정 (positive)" if torch.argmax(prob) == 1 else "부정 (negative)"
+            return {
+                'sentence': sentence,
+                'prediction': pred,
+                'positive_data': f"긍정 {positive_prob:.4f}",
+                'negative_data': f"부정 {negative_prob:.4f}",
+                'positive_width': f"{positive_prob * 100}%",
+                'negative_width': f"{negative_prob * 100}%",
+            }
+
+        template_file = "serve_cls.html"
+        app = Flask(__name__, template_folder='')
+        CORS(app)
+
+        @app.route('/')
+        def index():
+            return render_template(template_file)
+
+        @app.route('/api', methods=['POST'])
+        def api():
+            query_sentence = request.json
+            output_data = inference_fn(query_sentence)
+            response = jsonify(output_data)
+            return response
+
+        server: Flask = app
+        server.run()
 
 
 if __name__ == "__main__":
