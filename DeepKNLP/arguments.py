@@ -66,9 +66,9 @@ class HardwareOption(OptionData):
 
 @dataclass
 class PrintingOption(OptionData):
-    print_rate_on_training: float = field(default=0.0333)
-    print_rate_on_validate: float = field(default=0.334)
-    print_rate_on_evaluate: float = field(default=0.334)
+    print_rate_on_training: float = field(default=1 / 10)
+    print_rate_on_validate: float = field(default=1 / 10)
+    print_rate_on_evaluate: float = field(default=1 / 10)
     print_step_on_training: int = field(default=-1)
     print_step_on_validate: int = field(default=-1)
     print_step_on_evaluate: int = field(default=-1)

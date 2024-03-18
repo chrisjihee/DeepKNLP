@@ -47,10 +47,14 @@ class NsmcModel(LightningModule):
         )
 
     def to_checkpoint(self) -> Dict[str, Any]:
-        return self.lang_model.state_dict()
+        return {
+            "lang_model": self.lang_model.state_dict(),
+            "args_prog": self.args.prog,
+        }
 
     def from_checkpoint(self, ckpt_state: Dict[str, Any]):
-        self.lang_model.load_state_dict(ckpt_state)
+        self.lang_model.load_state_dict(ckpt_state["lang_model"])
+        self.args.prog = ckpt_state["args_prog"]
 
     def configure_optimizers(self):
         return AdamW(self.lang_model.parameters(), lr=self.args.learning.learning_rate)
@@ -275,9 +279,9 @@ def train(
         strategy: str = typer.Option(default="ddp"),
         device: List[int] = typer.Option(default=[0, 1]),
         # printing
-        print_rate_on_training: float = typer.Option(default=1 / 20),
-        print_rate_on_validate: float = typer.Option(default=1 / 3),
-        print_rate_on_evaluate: float = typer.Option(default=1 / 3),
+        print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
+        print_rate_on_validate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
+        print_rate_on_evaluate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
         print_step_on_training: int = typer.Option(default=-1),
         print_step_on_validate: int = typer.Option(default=-1),
         print_step_on_evaluate: int = typer.Option(default=-1),
@@ -288,9 +292,9 @@ def train(
         learning_rate: float = typer.Option(default=5e-5),
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_acc"),
-        num_saving: int = typer.Option(default=2),
-        num_epochs: int = typer.Option(default=2),  # TODO: -> 3
-        check_rate_on_training: float = typer.Option(default=1 / 5),
+        num_saving: int = typer.Option(default=1),  # TODO: -> 2
+        num_epochs: int = typer.Option(default=1),  # TODO: -> 3
+        check_rate_on_training: float = typer.Option(default=1 / 10),  # TODO: -> 1/5
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
 ):
     torch.set_float32_matmul_precision('high')
@@ -448,21 +452,14 @@ def test(
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
         cpu_workers: int = typer.Option(default=os.cpu_count() / 2),
-        train_batch: int = typer.Option(default=50),
         infer_batch: int = typer.Option(default=50),
-        accelerator: str = typer.Option(default="cpu"),  # TODO: -> cuda, cpu, mpu
+        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mpu
         precision: str = typer.Option(default=None),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="auto"),
         device: List[int] = typer.Option(default=[0]),
         # printing
-        print_rate_on_training: float = typer.Option(default=1 / 20),
-        print_rate_on_validate: float = typer.Option(default=1 / 3),
-        print_rate_on_evaluate: float = typer.Option(default=1 / 100),
-        print_step_on_training: int = typer.Option(default=-1),
-        print_step_on_validate: int = typer.Option(default=-1),
+        print_rate_on_evaluate: float = typer.Option(default=1 / 10),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/100
         print_step_on_evaluate: int = typer.Option(default=-1),
-        tag_format_on_training: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, loss={loss:06.4f}, acc={acc:06.4f}"),
-        tag_format_on_validate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}"),
         tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
 ):
     torch.set_float32_matmul_precision('high')
@@ -499,7 +496,6 @@ def test(
         ),
         hardware=HardwareOption(
             cpu_workers=cpu_workers,
-            train_batch=train_batch,
             infer_batch=infer_batch,
             accelerator=accelerator,
             precision=precision,
@@ -507,14 +503,8 @@ def test(
             devices=device,
         ),
         printing=PrintingOption(
-            print_rate_on_training=print_rate_on_training,
-            print_rate_on_validate=print_rate_on_validate,
             print_rate_on_evaluate=print_rate_on_evaluate,
-            print_step_on_training=print_step_on_training,
-            print_step_on_validate=print_step_on_validate,
             print_step_on_evaluate=print_step_on_evaluate,
-            tag_format_on_training=tag_format_on_training,
-            tag_format_on_validate=tag_format_on_validate,
             tag_format_on_evaluate=tag_format_on_evaluate,
         ),
     )
