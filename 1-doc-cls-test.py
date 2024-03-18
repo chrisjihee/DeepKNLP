@@ -21,7 +21,7 @@ from DeepKNLP.cls import NsmcCorpus, ClassificationDataset
 from DeepKNLP.helper import CheckpointSaver, fabric_barrier, epsilon, data_collator
 from DeepKNLP.metrics import accuracy
 from chrisbase.data import AppTyper, JobTimer, ProjectEnv
-from chrisbase.io import LoggingFormat, make_dir
+from chrisbase.io import LoggingFormat, make_dir, files
 from chrisbase.util import mute_tqdm_cls
 
 logger = logging.getLogger(__name__)
@@ -240,7 +240,7 @@ def test_loop(
 
 
 @main.command()
-def train(
+def test(
         verbose: int = typer.Option(default=2),
         # env
         project: str = typer.Option(default="DeepKNLP"),
@@ -259,6 +259,7 @@ def train(
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
+        model_name: str = typer.Option(default="train=KPF-BERT=ptlm3"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
         train_batch: int = typer.Option(default=50),  # TODO: -> 64
@@ -266,24 +267,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),
-        device: List[int] = typer.Option(default=[0, 1]),
-        # learning
-        learning_rate: float = typer.Option(default=5e-5),
-        random_seed: int = typer.Option(default=7),
-        saving_mode: str = typer.Option(default="max val_acc"),
-        num_saving: int = typer.Option(default=2),
-        num_epochs: int = typer.Option(default=2),  # TODO: -> 3
-        check_rate_on_training: float = typer.Option(default=1 / 5),
-        print_rate_on_training: float = typer.Option(default=1 / 20),
-        print_rate_on_validate: float = typer.Option(default=1 / 3),
-        print_rate_on_evaluate: float = typer.Option(default=1 / 3),
-        print_step_on_training: int = typer.Option(default=-1),
-        print_step_on_validate: int = typer.Option(default=-1),
-        print_step_on_evaluate: int = typer.Option(default=-1),
-        tag_format_on_training: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, loss={loss:06.4f}, acc={acc:06.4f}"),
-        tag_format_on_validate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}"),
-        tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
-        name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
+        device: List[int] = typer.Option(default=[0]),
 ):
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -291,7 +275,7 @@ def train(
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
 
     pretrained = Path(pretrained)
-    args = TrainerArguments(
+    args = TesterArguments(
         env=ProjectEnv(
             project=project,
             job_name=job_name if job_name else pretrained.name,
@@ -313,6 +297,7 @@ def train(
         model=ModelOption(
             pretrained=pretrained,
             finetuning=finetuning,
+            name=model_name,
             seq_len=seq_len,
         ),
         hardware=HardwareOption(
@@ -323,33 +308,13 @@ def train(
             strategy=strategy,
             devices=device,
         ),
-        learning=LearningOption(
-            learning_rate=learning_rate,
-            random_seed=random_seed,
-            saving_mode=saving_mode,
-            num_saving=num_saving,
-            num_epochs=num_epochs,
-            check_rate_on_training=check_rate_on_training,
-            print_rate_on_training=print_rate_on_training,
-            print_rate_on_validate=print_rate_on_validate,
-            print_rate_on_evaluate=print_rate_on_evaluate,
-            print_step_on_training=print_step_on_training,
-            print_step_on_validate=print_step_on_validate,
-            print_step_on_evaluate=print_step_on_evaluate,
-            tag_format_on_training=tag_format_on_training,
-            tag_format_on_validate=tag_format_on_validate,
-            tag_format_on_evaluate=tag_format_on_evaluate,
-            name_format_on_saving=name_format_on_saving,
-        ),
     )
     finetuning_home = Path(f"{finetuning}/{data_name}")
     output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}"
     make_dir(finetuning_home / output_name)
     args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(finetuning_home, output_name).version
-    args.prog.tb_logger = TensorBoardLogger(finetuning_home, output_name, args.env.job_version)  # tensorboard --logdir finetuning --bind_all
     args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
     fabric = Fabric(
-        loggers=[args.prog.tb_logger, args.prog.csv_logger],
         devices=args.hardware.devices,
         strategy=args.hardware.strategy,
         precision=args.hardware.precision,
@@ -365,7 +330,6 @@ def train(
     args.prog.node_rank = fabric.node_rank
     args.prog.local_rank = fabric.local_rank
     args.prog.global_rank = fabric.global_rank
-    fabric.seed_everything(args.learning.random_seed)
     fabric.barrier()
 
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}",
@@ -373,38 +337,36 @@ def train(
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs",
                   rt=1, rb=1, rc='='):
+        fabric.barrier()
+
+        ckpt_files = files(finetuning_home / args.model.name / "**/*.ckpt")
+        for ckpt_file in ckpt_files:
+            print(f"ckpt_file={ckpt_file}")
+        exit(1)
+        # if self.tag in ("serve", "test"):
+        #     assert self.model.finetuning.exists() and self.model.finetuning.is_dir(), \
+        #         f"No finetuning home: {self.model.finetuning}"
+        #     if not self.model.ckpt_name:
+        #         ckpt_files: List[Path] = files(self.env.output_home / "**/*.ckpt")
+        #         assert ckpt_files, f"No checkpoint file in {self.env.output_home}"
+        #         ckpt_files = sorted([x for x in ckpt_files if "temp" not in str(x) and "tmp" not in str(x)], key=str)
+        #         self.model.ckpt_name = ckpt_files[-1].relative_to(self.env.output_home)
+        #     elif (self.env.output_home / self.model.ckpt_name).exists() and (self.env.output_home / self.model.ckpt_name).is_dir():
+        #         ckpt_files: List[Path] = files(self.env.output_home / self.model.ckpt_name / "**/*.ckpt")
+        #         assert ckpt_files, f"No checkpoint file in {self.env.output_home / self.model.ckpt_name}"
+        #         ckpt_files = sorted([x for x in ckpt_files if "temp" not in str(x) and "tmp" not in str(x)], key=str)
+        #         self.model.ckpt_name = ckpt_files[-1].relative_to(self.env.output_home)
+        #     assert (self.env.output_home / self.model.ckpt_name).exists() and (self.env.output_home / self.model.ckpt_name).is_file(), \
+        #         f"No checkpoint file: {self.env.output_home / self.model.ckpt_name}"
+
         model = NsmcModel(args=args)
-        optimizer = model.configure_optimizers()
-        model, optimizer = fabric.setup(model, optimizer)
+        model = fabric.setup(model)
         fabric_barrier(fabric, "[after-model]", c='=')
-
-        train_dataloader = model.train_dataloader()
-        train_dataloader = fabric.setup_dataloaders(train_dataloader)
-        fabric_barrier(fabric, "[after-train_dataloader]", c='=')
-
-        val_dataloader = model.val_dataloader()
-        val_dataloader = fabric.setup_dataloaders(val_dataloader)
-        fabric_barrier(fabric, "[after-val_dataloader]", c='=')
 
         test_dataloader = model.test_dataloader()
         test_dataloader = fabric.setup_dataloaders(test_dataloader)
         fabric_barrier(fabric, "[after-test_dataloader]", c='=')
 
-        checkpoint_saver = CheckpointSaver(
-            fabric=fabric,
-            output_home=model.args.env.output_home,
-            name_format=model.args.learning.name_format_on_saving,
-            saving_mode=model.args.learning.saving_mode,
-            num_saving=model.args.learning.num_saving,
-        )
-        train_loop(
-            fabric=fabric,
-            model=model,
-            optimizer=optimizer,
-            dataloader=train_dataloader,
-            val_dataloader=val_dataloader,
-            checkpoint_saver=checkpoint_saver,
-        )
         test_loop(
             fabric=fabric,
             model=model,
