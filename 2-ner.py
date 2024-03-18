@@ -323,7 +323,7 @@ def val_loop(
     preds: List[int] = []
     labels: List[int] = []
     losses: List[torch.Tensor] = []
-    progress = mute_tqdm_cls(bar_size=20, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="checking")
+    progress = mute_tqdm_cls(bar_size=10, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="checking")
     for i, batch in enumerate(dataloader, start=1):
         outputs = model.validation_step(batch, i)
         preds.extend(outputs["preds"])
@@ -367,7 +367,7 @@ def test_loop(
     preds: List[int] = []
     labels: List[int] = []
     losses: List[torch.Tensor] = []
-    progress = mute_tqdm_cls(bar_size=20, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="testing")
+    progress = mute_tqdm_cls(bar_size=10, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="testing")
     for i, batch in enumerate(dataloader, start=1):
         outputs = model.test_step(batch, i)
         preds.extend(outputs["preds"])
@@ -405,11 +405,11 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
-        num_check: int = typer.Option(default=2),  # TODO: -> 2
+        num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
