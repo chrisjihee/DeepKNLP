@@ -7,7 +7,7 @@ pip list
 
 # chrisbase (for public user)
 rm -rf chrisbase*
-pip download --no-binary :all: --no-deps chrisbase==0.5.0; tar zxf chrisbase-*.tar.gz; rm chrisbase-*.tar.gz;
+pip download --no-binary :all: --no-deps chrisbase==0.5.1; tar zxf chrisbase-*.tar.gz; rm chrisbase-*.tar.gz;
 pip install --editable chrisbase*
 
 # chrisbase (for previleged user)
