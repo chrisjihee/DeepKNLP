@@ -277,7 +277,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),
-        device: List[int] = typer.Option(default=[0, 1]),
+        device: List[int] = typer.Option(default=[0, 1, 2, 3]),
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
         print_rate_on_validate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
@@ -292,8 +292,8 @@ def train(
         learning_rate: float = typer.Option(default=5e-5),
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_acc"),
-        num_saving: int = typer.Option(default=1),  # TODO: -> 2
-        num_epochs: int = typer.Option(default=1),  # TODO: -> 3
+        num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
+        num_epochs: int = typer.Option(default=2),  # TODO: -> 2, 3
         check_rate_on_training: float = typer.Option(default=1 / 10),  # TODO: -> 1/5
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
 ):
