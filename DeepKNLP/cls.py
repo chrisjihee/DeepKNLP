@@ -33,13 +33,11 @@ class NsmcCorpus:
 
     def __init__(self, args: MLArguments):
         self.args = args
+        self.labels = ["0", "1"]
 
     @property
     def num_labels(self):
-        return len(self.get_labels())
-
-    def get_labels(self):
-        return ["0", "1"]
+        return len(self.labels)
 
     def read_raw_examples(self, split: str) -> List[ClassificationExample]:
         assert self.args.data.home, f"No data_home: {self.args.data.home}"
@@ -108,15 +106,12 @@ class ClassificationDataset(Dataset):
     def __init__(self, split: str, tokenizer: PreTrainedTokenizer, data: NsmcCorpus):
         self.data: NsmcCorpus = data
         examples: List[ClassificationExample] = self.data.read_raw_examples(split)
-        self.label_list: List[str] = self.data.get_labels()
+        self.labels: List[str] = self.data.labels
         self.features: List[ClassificationFeatures] = self.data.raw_examples_to_encoded_examples(
-            examples, tokenizer, label_list=self.label_list)
+            examples, tokenizer, label_list=self.labels)
 
     def __len__(self):
         return len(self.features)
 
     def __getitem__(self, i):
         return self.features[i]
-
-    def get_labels(self) -> List[str]:
-        return self.label_list

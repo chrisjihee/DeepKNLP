@@ -37,6 +37,7 @@ class NSMCModel(LightningModule):
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
         self.data: NsmcCorpus = NsmcCorpus(args)
 
+        assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
         self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
             args.model.pretrained,
             num_labels=self.data.num_labels
@@ -617,7 +618,9 @@ def serve(
         logging_file: str = typer.Option(default="logging.out"),
         argument_file: str = typer.Option(default="arguments.json"),
         # data
+        data_home: str = typer.Option(default="data"),
         data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
+        test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
@@ -646,7 +649,11 @@ def serve(
             msg_format=LoggingFormat.DEBUG_40 if debugging else LoggingFormat.CHECK_40,
         ),
         data=DataOption(
+            home=data_home,
             name=data_name,
+            files=DataFiles(
+                test=test_file,
+            ),
         ),
         model=ModelOption(
             pretrained=pretrained,

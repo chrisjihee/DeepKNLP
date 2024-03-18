@@ -123,16 +123,17 @@ class NEREncodedExample:
 class NERCorpus:
     def __init__(self, args: MLArguments):
         self.args = args
+        self.labels: List[str] = self.extract_labels()
 
     @property
     def num_labels(self) -> int:
-        return len(self.get_labels())
+        return len(self.labels)
 
     @classmethod
-    def get_labels_from_data(cls,
-                             data_path: str | Path,
-                             label_path: str | Path,
-                             args: MLArguments = None) -> List[str]:
+    def extract_labels_from_data(cls,
+                                 data_path: str | Path,
+                                 label_path: str | Path,
+                                 args: MLArguments = None) -> List[str]:
         label_path = make_parent_dir(label_path).absolute()
         data_path = Path(data_path).absolute()
         assert data_path.exists() and data_path.is_file() or label_path.exists() and label_path.is_file(), f"No data_path or label_path: {data_path}, {label_path}"
@@ -159,8 +160,10 @@ class NERCorpus:
                 f.writelines([x + "\n" for x in labels])
         return labels
 
-    def get_labels(self) -> List[str]:
+    def extract_labels(self) -> List[str]:
         if not self.args.data or not self.args.data.files:
+            if self.args and self.args.prog.local_rank == 0:
+                logger.warning(f"Empty label_list (no data or data_files)")
             return []
         label_path = make_parent_dir(self.args.env.output_home.parent / f"label_map={self.args.data.name}.txt")
         train_data_path = self.args.data.home / self.args.data.name / self.args.data.files.train if self.args.data.files.train else None
@@ -170,7 +173,7 @@ class NERCorpus:
         valid_data_path = valid_data_path if valid_data_path and valid_data_path.exists() else None
         test_data_path = test_data_path if test_data_path and test_data_path.exists() else None
         data_path = test_data_path or valid_data_path or train_data_path
-        return self.get_labels_from_data(data_path=data_path, label_path=label_path, args=self.args)
+        return self.extract_labels_from_data(data_path=data_path, label_path=label_path, args=self.args)
 
     def read_raw_examples(self, split: str) -> List[NERParsedExample]:
         assert self.args.data.home, f"No data_home: {self.args.data.home}"
@@ -287,20 +290,17 @@ class NERDataset(Dataset):
     def __init__(self, split: str, tokenizer: PreTrainedTokenizerFast, data: NERCorpus):
         self.data: NERCorpus = data
         examples: List[NERParsedExample] = self.data.read_raw_examples(split)
-        self.label_list: List[str] = self.data.get_labels()
-        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self.label_list)}
-        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self.label_list)}
+        self.labels: List[str] = self.data.labels
+        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self.labels)}
+        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self.labels)}
         self.features: List[NEREncodedExample] = self.data.raw_examples_to_encoded_examples(
-            examples, tokenizer, label_list=self.label_list)
+            examples, tokenizer, label_list=self.labels)
 
     def __len__(self) -> int:
         return len(self.features)
 
     def __getitem__(self, i) -> NEREncodedExample:
         return self.features[i]
-
-    def get_labels(self) -> List[str]:
-        return self.label_list
 
     def label_to_id(self, label: str) -> int:
         return self._label_to_id[label]

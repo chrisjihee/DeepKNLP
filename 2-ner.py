@@ -12,6 +12,7 @@ from lightning import LightningModule
 from lightning.fabric import Fabric
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from lightning.pytorch.utilities.types import OptimizerLRScheduler
+from torch import Tensor
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan
@@ -36,11 +37,12 @@ class NERModel(LightningModule):
         super().__init__()
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
         self.data: NERCorpus = NERCorpus(args)
-        self._labels: List[str] = self.data.get_labels()
-        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self._labels)}
-        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self._labels)}
+        self.labels: List[str] = self.data.labels
+        self._label_to_id: Dict[str, int] = {label: i for i, label in enumerate(self.labels)}
+        self._id_to_label: Dict[int, str] = {i: label for i, label in enumerate(self.labels)}
         self._infer_dataset: NERDataset | None = None
 
+        assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
         self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
             args.model.pretrained,
             num_labels=self.data.num_labels
@@ -62,10 +64,6 @@ class NERModel(LightningModule):
                 yield "I-" + label.split("-", maxsplit=1)[-1]
             else:
                 yield label
-
-    @property
-    def labels(self):
-        return self._labels
 
     def label_to_id(self, x):
         return self._label_to_id[x]
@@ -227,17 +225,22 @@ class NERModel(LightningModule):
             return_tensors="pt",
         )
         outputs: TokenClassifierOutput = self.lang_model(**inputs)
-        prob = outputs.logits.softmax(dim=1)
-        pred = "긍정 (positive)" if torch.argmax(prob) == 1 else "부정 (negative)"
-        positive_prob = round(prob[0][1].item(), 4)
-        negative_prob = round(prob[0][0].item(), 4)
+        all_probs: Tensor = outputs.logits[0].softmax(dim=1)
+        top_probs, top_preds = torch.topk(all_probs, dim=1, k=1)
+        tokens = self.lm_tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
+        top_labels = [self.id_to_label(pred[0].item()) for pred in top_preds]
+        result = []
+        for token, label, top_prob in zip(tokens, top_labels, top_probs):
+            if token in self.lm_tokenizer.all_special_tokens:
+                continue
+            result.append({
+                "token": token,
+                "label": label,
+                "prob": f"{round(top_prob[0].item(), 4):.4f}",
+            })
         return {
             'sentence': text,
-            'prediction': pred,
-            'positive_data': f"긍정 {positive_prob * 100:.1f}%",
-            'negative_data': f"부정 {negative_prob * 100:.1f}%",
-            'positive_width': f"{positive_prob * 100:.2f}%",
-            'negative_width': f"{negative_prob * 100:.2f}%",
+            'result': result,
         }
 
     def run_server(self, server: Flask, *args, **kwargs):
@@ -399,7 +402,7 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
@@ -582,7 +585,7 @@ def test(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
@@ -703,7 +706,9 @@ def serve(
         logging_file: str = typer.Option(default="logging.out"),
         argument_file: str = typer.Option(default="arguments.json"),
         # data
-        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
+        data_home: str = typer.Option(default="data"),
+        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
+        test_file: str = typer.Option(default="valid.jsonl"),
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
@@ -732,7 +737,11 @@ def serve(
             msg_format=LoggingFormat.DEBUG_40 if debugging else LoggingFormat.CHECK_40,
         ),
         data=DataOption(
+            home=data_home,
             name=data_name,
+            files=DataFiles(
+                test=test_file,
+            ),
         ),
         model=ModelOption(
             pretrained=pretrained,
