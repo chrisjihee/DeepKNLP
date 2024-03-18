@@ -250,7 +250,7 @@ class NERModel(LightningModule):
 
         @route('/')
         def index(self):
-            return render_template("serve_cls.html")
+            return render_template(self.model.args.server.page)
 
         @route('/api', methods=['POST'])
         def api(self):
@@ -703,7 +703,7 @@ def serve(
         logging_file: str = typer.Option(default="logging.out"),
         argument_file: str = typer.Option(default="arguments.json"),
         # data
-        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         # model
         pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
         finetuning: str = typer.Option(default="finetuning"),
@@ -713,6 +713,7 @@ def serve(
         server_port: int = typer.Option(default=7321),
         server_host: str = typer.Option(default="localhost"),
         server_temp: str = typer.Option(default="templates"),
+        server_page: str = typer.Option(default="serve_ner.html"),
 ):
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -743,6 +744,7 @@ def serve(
             port=server_port,
             host=server_host,
             temp=server_temp,
+            page=server_page,
         )
     )
     finetuning_home = Path(f"{finetuning}/{data_name}")

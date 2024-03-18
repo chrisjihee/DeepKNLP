@@ -51,6 +51,7 @@ class ServerOption(OptionData):
     port: int = field(default=7000)
     host: str = field(default="localhost")
     temp: str | Path = field(default="templates")
+    page: str | Path = field(default=None)
 
     def __post_init__(self):
         self.temp = Path(self.temp)

@@ -168,7 +168,7 @@ class NSMCModel(LightningModule):
 
         @route('/')
         def index(self):
-            return render_template("serve_cls.html")
+            return render_template(self.model.args.server.page)
 
         @route('/api', methods=['POST'])
         def api(self):
@@ -627,6 +627,7 @@ def serve(
         server_port: int = typer.Option(default=7321),
         server_host: str = typer.Option(default="localhost"),
         server_temp: str = typer.Option(default="templates"),
+        server_page: str = typer.Option(default="serve_cls.html"),
 ):
     torch.set_float32_matmul_precision('high')
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -657,6 +658,7 @@ def serve(
             port=server_port,
             host=server_host,
             temp=server_temp,
+            page=server_page,
         )
     )
     finetuning_home = Path(f"{finetuning}/{data_name}")
