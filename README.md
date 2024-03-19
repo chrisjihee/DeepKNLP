@@ -4,10 +4,10 @@ Transformer-based Korean Natural Language Processing
 ## Main Reference
   * ratsnlp: https://github.com/ratsgo/ratsnlp
   * nlpbook: https://ratsgo.github.io/nlpbook/
-    <img alt="nlpbook" src="https://image.yes24.com/goods/105294979/XL" width="400"/>
   * transformers: https://github.com/huggingface/transformers
-    <img alt="transformers" src="https://theaisummer.com/static/385447122c9c6ce73e449fe3a7ecf46a/40ffe/hugging-face-vit.png" width="500"/>
   * fabric(docs): https://lightning.ai/docs/fabric/stable/
+    <img alt="nlpbook" src="https://image.yes24.com/goods/105294979/XL" width="400"/>
+    <img alt="transformers" src="https://theaisummer.com/static/385447122c9c6ce73e449fe3a7ecf46a/40ffe/hugging-face-vit.png" width="500"/>
     <img alt="fabric" src="https://lightning.ai/docs/fabric/stable/_images/PyTorch-to-Fabric-Spectrum-2.svg" width="700"/>
 
 ## Target Task
