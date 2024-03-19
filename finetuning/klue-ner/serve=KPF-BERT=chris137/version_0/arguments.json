@@ -1,0 +1,59 @@
+{
+  "env": {
+    "project": "DeepKNLP",
+    "job_name": "KPF-BERT",
+    "job_version": 0,
+    "hostname": "chris137",
+    "hostaddr": "129.254.164.137",
+    "time_stamp": "0319.094622",
+    "python_path": "/home/chris/miniforge3/envs/DeepKNLP-24.03/bin/python",
+    "current_dir": "/dat/proj/DeepKNLP-24.03",
+    "current_file": "/home/chris/proj/DeepKNLP-24.03/2-ner.py",
+    "working_dir": "/dat/proj/DeepKNLP-24.03",
+    "command_args": [
+      "serve"
+    ],
+    "num_ip_addrs": 1,
+    "max_workers": 1,
+    "debugging": false,
+    "msg_level": 20,
+    "msg_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)40s ┇ %(message)s",
+    "date_format": "[%m.%d %H:%M:%S]",
+    "output_home": "finetuning/klue-ner/serve=KPF-BERT=chris137/version_0",
+    "logging_file": "logging.out",
+    "argument_file": "arguments.json"
+  },
+  "prog": {
+    "tb_logger": "<lightning.fabric.loggers.tensorboard.TensorBoardLogger object at 0x7f7b65e94f50>",
+    "csv_logger": "<lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f7b5dbf9a10>",
+    "world_size": 1,
+    "local_rank": 0,
+    "global_rank": 0,
+    "global_step": 882,
+    "global_epoch": 2.1
+  },
+  "data": {
+    "name": "klue-ner",
+    "home": "/dat/proj/DeepKNLP-24.03/data",
+    "files": {
+      "train": null,
+      "valid": null,
+      "test": "valid.jsonl"
+    },
+    "caching": false,
+    "redownload": false,
+    "num_check": 0
+  },
+  "model": {
+    "pretrained": "pretrained/KPF-BERT",
+    "finetuning": "/dat/proj/DeepKNLP-24.03/finetuning",
+    "name": "train=KPF-BERT=*",
+    "seq_len": 64
+  },
+  "server": {
+    "port": 7321,
+    "host": "localhost",
+    "temp": "templates",
+    "page": "serve_ner.html"
+  }
+}

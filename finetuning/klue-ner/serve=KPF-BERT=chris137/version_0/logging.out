@@ -1,0 +1,64 @@
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇ [INIT] python /home/chris/proj/DeepKNLP-24.03/2-ner.py serve
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇ -----+-------------------+------------------------------------------------------------------------
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    # | ServerArguments   | value
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇ -----+-------------------+------------------------------------------------------------------------
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    1 | tag               | serve
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    2 | env.project       | DeepKNLP
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    3 | env.job_name      | KPF-BERT
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    4 | env.job_version   | 0
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    5 | env.hostname      | chris137
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    6 | env.hostaddr      | 129.254.164.137
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    7 | env.time_stamp    | 0319.094622
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    8 | env.python_path   | /home/chris/miniforge3/envs/DeepKNLP-24.03/bin/python
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇    9 | env.current_dir   | /dat/proj/DeepKNLP-24.03
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   10 | env.current_file  | /home/chris/proj/DeepKNLP-24.03/2-ner.py
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   11 | env.working_dir   | /dat/proj/DeepKNLP-24.03
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   12 | env.command_args  | ['serve']
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   13 | env.num_ip_addrs  | 1
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   14 | env.max_workers   | 1
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   15 | env.debugging     | False
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   16 | env.msg_level     | 20
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   17 | env.msg_format    | %(asctime)s ┇ %(levelname)-8s ┇ %(name)40s ┇ %(message)s
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   18 | env.date_format   | [%m.%d %H:%M:%S]
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   19 | env.output_home   | finetuning/klue-ner/serve=KPF-BERT=chris137/version_0
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   20 | env.logging_file  | logging.out
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   21 | env.argument_file | arguments.json
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   22 | time.started      | [03.19 09:46:23]
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   23 | time.settled      |
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   24 | time.elapsed      |
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   25 | prog.tb_logger    |
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   26 | prog.csv_logger   | <lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f7b66593cd0>
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   27 | prog.world_size   | 1
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   28 | prog.local_rank   | 0
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   29 | prog.global_rank  | 0
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   30 | prog.global_step  | 0
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   31 | prog.global_epoch | 0.0
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   32 | data.name         | klue-ner
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   33 | data.home         | /dat/proj/DeepKNLP-24.03/data
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   34 | data.files        | {'train': None, 'valid': None, 'test': 'valid.jsonl'}
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   35 | data.caching      | False
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   36 | data.redownload   | False
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   37 | data.num_check    | 0
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   38 | model.pretrained  | pretrained/KPF-BERT
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   39 | model.finetuning  | /dat/proj/DeepKNLP-24.03/finetuning
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   40 | model.name        | train=KPF-BERT=*
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   41 | model.seq_len     | 64
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   42 | server.port       | 7321
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   43 | server.host       | localhost
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   44 | server.temp       | templates
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇   45 | server.page       | serve_ner.html
+[03.19 09:46:23] ┇ INFO     ┇                           chrisbase.data ┇ -----+-------------------+------------------------------------------------------------------------
+[03.19 09:46:23] ┇ INFO     ┇                             DeepKNLP.ner ┇ Extracting labels from /dat/proj/DeepKNLP-24.03/data/klue-ner/valid.jsonl
+[03.19 09:46:28] ┇ INFO     ┇                             DeepKNLP.ner ┇ Saved 13 labels to /dat/proj/DeepKNLP-24.03/finetuning/klue-ner/serve=KPF-BERT=chris137/label_map=klue-ner.txt
+[03.19 09:46:30] ┇ INFO     ┇                                 __main__ ┇ Loading model from finetuning/klue-ner/train=KPF-BERT=chris137/version_1/ep=2.1, loss=0.0366, acc=0.9382, F1c=93.48, F1e=87.18.ckpt
+[03.19 09:46:30] ┇ INFO     ┇                                 __main__ ┇ === [after-model] =======================================================================================================================
+[03.19 09:46:30] ┇ INFO     ┇                                 werkzeug ┇ [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://localhost:7321
+[03.19 09:46:30] ┇ INFO     ┇                                 werkzeug ┇ [33mPress CTRL+C to quit[0m
+[03.19 09:46:36] ┇ INFO     ┇                                 werkzeug ┇ 127.0.0.1 - - [19/Mar/2024 09:46:36] "GET / HTTP/1.1" 200 -
+[03.19 09:46:39] ┇ INFO     ┇                                 werkzeug ┇ 127.0.0.1 - - [19/Mar/2024 09:46:39] "POST /api HTTP/1.1" 200 -
+[03.19 09:46:43] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
+[03.19 09:46:43] ┇ INFO     ┇                           chrisbase.data ┇ [EXIT] python /home/chris/proj/DeepKNLP-24.03/2-ner.py serve ($=00:00:19.925)
+[03.19 09:46:43] ┇ INFO     ┇                           chrisbase.data ┇ =========================================================================================================================================
