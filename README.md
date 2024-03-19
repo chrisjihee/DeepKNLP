@@ -6,9 +6,9 @@ Transformer-based Korean Natural Language Processing
   * nlpbook: https://ratsgo.github.io/nlpbook/
   * transformers: https://github.com/huggingface/transformers
   * fabric(docs): https://lightning.ai/docs/fabric/stable/
-    <img alt="nlpbook" src="https://image.yes24.com/goods/105294979/XL" width="400"/>
-    <img alt="transformers" src="https://theaisummer.com/static/385447122c9c6ce73e449fe3a7ecf46a/40ffe/hugging-face-vit.png" width="500"/>
-    <img alt="fabric" src="https://lightning.ai/docs/fabric/stable/_images/PyTorch-to-Fabric-Spectrum-2.svg" width="700"/>
+    <img width="400" border="5px solid green" src="https://image.yes24.com/goods/105294979/XL"/>
+    <img width="500" border="5px solid blue" src="https://theaisummer.com/static/385447122c9c6ce73e449fe3a7ecf46a/40ffe/hugging-face-vit.png"/>
+    <img width="700" border="5px solid red" src="https://lightning.ai/docs/fabric/stable/_images/PyTorch-to-Fabric-Spectrum-2.svg"/>
 
 ## Target Task
   * Document Classification: https://ratsgo.github.io/nlpbook/docs/doc_cls/overview/
