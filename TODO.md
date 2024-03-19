@@ -2,7 +2,7 @@
   * `sudo apt install git git-lfs wget curl`
 
 ## 적용
-  * [완료] Lightning Fabric: https://lightning.ai/docs/fabric/stable/
+  * [완료] Lightning Fabric
     - https://lightning.ai/docs/fabric/stable/fundamentals/code_structure.html
     - https://lightning.ai/docs/fabric/stable/guide/lightning_module.html
     - https://lightning.ai/docs/pytorch/stable/common/lightning_module.html#hooks
