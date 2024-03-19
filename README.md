@@ -4,7 +4,7 @@ Transformer-based Korean Natural Language Processing
 ## Main Reference
   * ratsnlp: https://github.com/ratsgo/ratsnlp
   * nlpbook: https://ratsgo.github.io/nlpbook/
-    ![nlpbook](https://image.yes24.com/goods/105294979/XL)
+    ![nlpbook](https://image.yes24.com/goods/105294979/XL | width=100)
   * transformers: https://github.com/huggingface/transformers
     ![transformers](https://theaisummer.com/static/385447122c9c6ce73e449fe3a7ecf46a/40ffe/hugging-face-vit.png)
   * fabric(docs): https://lightning.ai/docs/fabric/stable/
