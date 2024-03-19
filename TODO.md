@@ -1,8 +1,8 @@
 ## 관리자 설치 요청사항
   - sudo apt install git git-lfs wget curl
 
-# 적용
-  = [완료] Lightning Fabric: https://lightning.ai/docs/fabric/stable/
+## 적용
+  - [완료] Lightning Fabric: https://lightning.ai/docs/fabric/stable/
     - https://lightning.ai/docs/fabric/stable/fundamentals/code_structure.html
     - https://lightning.ai/docs/fabric/stable/guide/lightning_module.html
     - https://lightning.ai/docs/pytorch/stable/common/lightning_module.html#hooks
