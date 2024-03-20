@@ -2,11 +2,11 @@
 Transformer-based Korean Natural Language Processing
 
 ## Main Reference
+![overview](images/overview.png?raw=true)
 * ratsgo ratsnlp: https://github.com/ratsgo/ratsnlp
 * ratsgo nlpbook: https://ratsgo.github.io/nlpbook/
 * HF Transformers: https://github.com/huggingface/transformers
 * Lightning Fabric: https://lightning.ai/docs/fabric/stable/
-  ![overview](images/overview.png?raw=true)
 
 ## Core Implentation
 
