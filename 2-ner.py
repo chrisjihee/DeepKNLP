@@ -408,7 +408,7 @@ def train(
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
-        pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
+        pretrained: str = typer.Option(default="klue/roberta-base"),
         finetuning: str = typer.Option(default="finetuning"),
         model_name: str = typer.Option(default=None),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
@@ -589,9 +589,9 @@ def test(
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
-        pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
+        pretrained: str = typer.Option(default="klue/roberta-base"),
         finetuning: str = typer.Option(default="finetuning"),
-        model_name: str = typer.Option(default="train=KPF-BERT=*"),
+        model_name: str = typer.Option(default="train=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # hardware
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
@@ -710,9 +710,9 @@ def serve(
         data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         test_file: str = typer.Option(default="valid.jsonl"),
         # model
-        pretrained: str = typer.Option(default="pretrained/KPF-BERT"),
+        pretrained: str = typer.Option(default="klue/roberta-base"),
         finetuning: str = typer.Option(default="finetuning"),
-        model_name: str = typer.Option(default="train=KPF-BERT=*"),
+        model_name: str = typer.Option(default="train=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # server
         server_port: int = typer.Option(default=7321),
