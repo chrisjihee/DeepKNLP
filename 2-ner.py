@@ -416,10 +416,10 @@ def train(
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         train_batch: int = typer.Option(default=50),
         infer_batch: int = typer.Option(default=50),
-        accelerator: str = typer.Option(default="cuda"),
+        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: str = typer.Option(default="ddp"),
-        device: List[int] = typer.Option(default=[0]),
+        strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
+        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0,1], [0,1,2,3]
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
         print_rate_on_validate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
@@ -453,7 +453,7 @@ def train(
             job_version=job_version,
             debugging=debugging,
             msg_level=logging.DEBUG if debugging else logging.INFO,
-            msg_format=LoggingFormat.DEBUG_40 if debugging else LoggingFormat.CHECK_40,
+            msg_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
         ),
         data=DataOption(
             home=data_home,
@@ -510,7 +510,7 @@ def train(
     sleep(0.3)
     fabric = Fabric(
         loggers=[args.prog.tb_logger, args.prog.csv_logger],
-        devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers,
+        devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers if args.hardware.accelerator == "cpu" else "auto",
         strategy=args.hardware.strategy if args.hardware.accelerator in ["cuda", "gpu"] else "auto",
         precision=args.hardware.precision if args.hardware.accelerator in ["cuda", "gpu"] else None,
         accelerator=args.hardware.accelerator,
@@ -596,7 +596,7 @@ def test(
         # hardware
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         infer_batch: int = typer.Option(default=10),
-        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mpu
+        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default=None),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="auto"),
         device: List[int] = typer.Option(default=[0]),
@@ -619,7 +619,7 @@ def test(
             job_version=job_version,
             debugging=debugging,
             msg_level=logging.DEBUG if debugging else logging.INFO,
-            msg_format=LoggingFormat.DEBUG_40 if debugging else LoggingFormat.CHECK_40,
+            msg_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
         ),
         data=DataOption(
             home=data_home,
@@ -656,7 +656,7 @@ def test(
     args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
     sleep(0.3)
     fabric = Fabric(
-        devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers,
+        devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers if args.hardware.accelerator == "cpu" else "auto",
         strategy=args.hardware.strategy if args.hardware.accelerator in ["cuda", "gpu"] else "auto",
         precision=args.hardware.precision if args.hardware.accelerator in ["cuda", "gpu"] else None,
         accelerator=args.hardware.accelerator,
@@ -734,7 +734,7 @@ def serve(
             job_version=job_version,
             debugging=debugging,
             msg_level=logging.DEBUG if debugging else logging.INFO,
-            msg_format=LoggingFormat.DEBUG_40 if debugging else LoggingFormat.CHECK_40,
+            msg_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
         ),
         data=DataOption(
             home=data_home,
