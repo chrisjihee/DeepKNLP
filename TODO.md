@@ -25,7 +25,7 @@
     - https://ratsgo.github.io/nlpbook/docs/doc_cls/detail/
   * [계획] KLUE YNAT 태스크 적용하기
 
-# 5장. 문장 쌍 분류하기 (Sentence Pair Classification)
+## 5장. 문장 쌍 분류하기 (Sentence Pair Classification)
   * [계획] 문장 쌍 분류 모델 학습하기
     - https://ratsgo.github.io/nlpbook/docs/pair_cls/train/
   * [계획] 학습 마친 모델을 실전 투입하기
@@ -34,7 +34,7 @@
     - https://ratsgo.github.io/nlpbook/docs/pair_cls/detail/
   * [계획] KLUE NLI, STS 태스크 적용하기
 
-# 6장. 단어에 꼬리표 달기 (Word Sequence Classification)
+## 6장. 단어에 꼬리표 달기 (Word Sequence Classification)
   * [완료] 개체명 인식 모델 학습하기
     - https://ratsgo.github.io/nlpbook/docs/ner/train/
   * [완료] 학습 마친 모델을 실전 투입하기
@@ -43,7 +43,7 @@
     - https://ratsgo.github.io/nlpbook/docs/ner/detail/
   * [완료] KLUE NER 태스크 적용하기
 
-# 7장. 질문에 답하기 (Question Answering)
+## 7장. 질문에 답하기 (Question Answering)
   * [계획] 질의 응답 모델 학습하기
     - https://ratsgo.github.io/nlpbook/docs/qa/train/
   * [계획] 학습 마친 모델을 실전 투입하기
