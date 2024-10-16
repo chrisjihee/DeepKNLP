@@ -31,6 +31,10 @@ Transformer-based Korean Natural Language Processing
     pip install -U -r requirements.txt
     pip list | grep -E "torch|lightning|transformers|chris"
     ```
+5. Link huggingface cache
+    ```bash
+    ln -s ~/.cache/huggingface/hub ./.cache_hf_hub
+    ```
 
 ## Core Implentation
 

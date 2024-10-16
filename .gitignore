@@ -129,6 +129,7 @@ chrisbase*
 chrislab*
 
 # custom
+.cache*
 pretrained*
 finetuning*
 output*
