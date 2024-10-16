@@ -1,0 +1,68 @@
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇ [INIT] python /home/chrisjihee/proj/DeepKNLP-24.10/2-ner.py serve
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇ -----+--------------------+------------------------------------------------------------------------
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    # | ServerArguments    | value
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇ -----+--------------------+------------------------------------------------------------------------
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    1 | tag                | serve
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    2 | env.project        | DeepKNLP
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    3 | env.job_name       | kpfbert
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    4 | env.job_version    | 0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    5 | env.hostname       | ptlm3
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    6 | env.hostaddr       | 129.254.121.74
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    7 | env.time_stamp     | 1017.003840
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    8 | env.python_path    | /home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇    9 | env.current_dir    | /home/chrisjihee/proj/DeepKNLP-24.10
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   10 | env.current_file   | /home/chrisjihee/proj/DeepKNLP-24.10/2-ner.py
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   11 | env.working_dir    | /home/chrisjihee/proj/DeepKNLP-24.10
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   12 | env.command_args   | ['serve']
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   13 | env.num_ip_addrs   | 1
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   14 | env.max_workers    | 1
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   15 | env.calling_sec    | 0.001
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   16 | env.waiting_sec    | 300.0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   17 | env.debugging      | False
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   18 | env.logging_home   | finetuning/klue-ner/serve=kpfbert=ptlm3/version_0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   19 | env.logging_file   | logging.out
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   20 | env.argument_file  | arguments.json
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   21 | env.date_format    | [%m.%d %H:%M:%S]
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   22 | env.message_level  | 20
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   23 | env.message_format | %(asctime)s ┇ %(levelname)-8s ┇ %(name)20s ┇ %(message)s
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   24 | time.started       | [10.17 00:38:42]
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   25 | time.settled       |
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   26 | time.elapsed       |
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   27 | prog.tb_logger     |
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   28 | prog.csv_logger    | <lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f5b38024790>
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   29 | prog.world_size    | 1
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   30 | prog.local_rank    | 0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   31 | prog.global_rank   | 0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   32 | prog.global_step   | 0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   33 | prog.global_epoch  | 0.0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   34 | data.name          | klue-ner
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   35 | data.home          | /home/chrisjihee/proj/DeepKNLP-24.10/data
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   36 | data.files         | {'train': None, 'valid': None, 'test': 'valid.jsonl'}
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   37 | data.caching       | False
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   38 | data.redownload    | False
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   39 | data.num_check     | 0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   40 | model.pretrained   | jinmang2/kpfbert
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   41 | model.finetuning   | /home/chrisjihee/proj/DeepKNLP-24.10/finetuning
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   42 | model.name         | train=*
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   43 | model.seq_len      | 64
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   44 | server.port        | 7321
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   45 | server.host        | 0.0.0.0
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   46 | server.temp        | templates
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇   47 | server.page        | serve_ner.html
+[10.17 00:38:42] ┇ INFO     ┇       chrisbase.data ┇ -----+--------------------+------------------------------------------------------------------------
+[10.17 00:38:42] ┇ INFO     ┇         DeepKNLP.ner ┇ Extracting labels from /home/chrisjihee/proj/DeepKNLP-24.10/data/klue-ner/valid.jsonl
+[10.17 00:38:49] ┇ INFO     ┇         DeepKNLP.ner ┇ Saved 13 labels to /home/chrisjihee/proj/DeepKNLP-24.10/finetuning/klue-ner/serve=kpfbert=ptlm3/label_map=klue-ner.txt
+[10.17 00:38:49] ┇ INFO     ┇             __main__ ┇ Loading model from finetuning/klue-ner/train=kpfbert=ptlm3/version_0/ep=1.0, loss=0.0359, acc=0.9234, F1c=92.85, F1e=85.75.ckpt
+[10.17 00:38:49] ┇ INFO     ┇             __main__ ┇ === [after-model] =======================================================================================================================
+[10.17 00:38:49] ┇ INFO     ┇             werkzeug ┇ [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:7321
+ * Running on http://129.254.121.74:7321
+[10.17 00:38:49] ┇ INFO     ┇             werkzeug ┇ [33mPress CTRL+C to quit[0m
+[10.17 00:38:57] ┇ INFO     ┇             werkzeug ┇ 129.254.181.36 - - [17/Oct/2024 00:38:57] "GET / HTTP/1.1" 200 -
+[10.17 00:39:00] ┇ INFO     ┇             werkzeug ┇ 129.254.181.36 - - [17/Oct/2024 00:39:00] "POST /api HTTP/1.1" 200 -
+[10.17 00:39:11] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[10.17 00:39:11] ┇ INFO     ┇       chrisbase.data ┇ [EXIT] python /home/chrisjihee/proj/DeepKNLP-24.10/2-ner.py serve ($=00:00:28.986)
+[10.17 00:39:11] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================

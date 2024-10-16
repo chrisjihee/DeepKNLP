@@ -1,0 +1,61 @@
+{
+  "env": {
+    "project": "DeepKNLP",
+    "job_name": "kpfbert",
+    "job_version": 0,
+    "hostname": "ptlm3",
+    "hostaddr": "129.254.121.74",
+    "time_stamp": "1017.003750",
+    "python_path": "/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python",
+    "current_dir": "/home/chrisjihee/proj/DeepKNLP-24.10",
+    "current_file": "/home/chrisjihee/proj/DeepKNLP-24.10/1-cls.py",
+    "working_dir": "/home/chrisjihee/proj/DeepKNLP-24.10",
+    "command_args": [
+      "serve"
+    ],
+    "num_ip_addrs": 1,
+    "max_workers": 1,
+    "calling_sec": 0.001,
+    "waiting_sec": 300.0,
+    "debugging": false,
+    "logging_home": "finetuning/nsmc/serve=kpfbert=ptlm3/version_0",
+    "logging_file": "logging.out",
+    "argument_file": "arguments.json",
+    "date_format": "[%m.%d %H:%M:%S]",
+    "message_level": 20,
+    "message_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)20s ┇ %(message)s"
+  },
+  "prog": {
+    "tb_logger": "<lightning.fabric.loggers.tensorboard.TensorBoardLogger object at 0x7f597f1ff850>",
+    "csv_logger": "<lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f597f222c90>",
+    "world_size": 1,
+    "local_rank": 0,
+    "global_rank": 0,
+    "global_step": 1200,
+    "global_epoch": 0.4
+  },
+  "data": {
+    "name": "nsmc",
+    "home": "/home/chrisjihee/proj/DeepKNLP-24.10/data",
+    "files": {
+      "train": null,
+      "valid": null,
+      "test": "ratings_valid.txt"
+    },
+    "caching": false,
+    "redownload": false,
+    "num_check": 0
+  },
+  "model": {
+    "pretrained": "jinmang2/kpfbert",
+    "finetuning": "/home/chrisjihee/proj/DeepKNLP-24.10/finetuning",
+    "name": "train=*",
+    "seq_len": 64
+  },
+  "server": {
+    "port": 7321,
+    "host": "0.0.0.0",
+    "temp": "templates",
+    "page": "serve_cls.html"
+  }
+}
