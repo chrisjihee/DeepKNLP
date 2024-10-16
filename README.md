@@ -112,12 +112,12 @@ class LitModel(L.LightningModule):
 * Document Classification: https://ratsgo.github.io/nlpbook/docs/doc_cls/overview/
   - `python 1-cls.py --help`
   - `python 1-cls.py train --help`
+  - `python 1-cls.py test --help`
   - `python 1-cls.py serve --help`
-  - [Not Yet Provided] `python 1-cls.py predict --help`
 * Word Sequence Labelling: https://ratsgo.github.io/nlpbook/docs/ner/overview/
   - `python 2-ner.py --help`
   - `python 2-ner.py train --help`
+  - `python 2-ner.py test --help`
   - `python 2-ner.py serve --help`
-  - [Not Yet Provided] `python 2-ner.py predict --help`
 * [Not Yet Provided] Sentence Pair Classification: https://ratsgo.github.io/nlpbook/docs/pair_cls/overview/
 * [Not Yet Provided] Extractive Question Answering: https://ratsgo.github.io/nlpbook/docs/qa/overview/
