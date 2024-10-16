@@ -501,7 +501,7 @@ def test(
         test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
-        pretrained: str = typer.Option(default="klue/roberta-base"),
+        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
         finetuning: str = typer.Option(default="finetuning"),
         model_name: str = typer.Option(default="train=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
@@ -622,7 +622,7 @@ def serve(
         data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
         test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
         # model
-        pretrained: str = typer.Option(default="klue/roberta-base"),
+        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
         finetuning: str = typer.Option(default="finetuning"),
         model_name: str = typer.Option(default="train=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512

@@ -589,7 +589,7 @@ def test(
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=0),  # TODO: -> 2
         # model
-        pretrained: str = typer.Option(default="klue/roberta-base"),
+        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
         finetuning: str = typer.Option(default="finetuning"),
         model_name: str = typer.Option(default="train=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
@@ -710,7 +710,7 @@ def serve(
         data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         test_file: str = typer.Option(default="valid.jsonl"),
         # model
-        pretrained: str = typer.Option(default="klue/roberta-base"),
+        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
         finetuning: str = typer.Option(default="finetuning"),
         model_name: str = typer.Option(default="train=*"),
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
