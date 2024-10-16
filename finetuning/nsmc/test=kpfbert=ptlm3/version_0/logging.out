@@ -1,0 +1,88 @@
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇ [INIT] python /home/chrisjihee/proj/DeepKNLP-24.10/1-cls.py test --device 1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    # | TesterArguments                 | value
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    1 | tag                             | test
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    2 | env.project                     | DeepKNLP
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    3 | env.job_name                    | kpfbert
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    4 | env.job_version                 | 0
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    5 | env.hostname                    | ptlm3
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    6 | env.hostaddr                    | 129.254.121.74
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    7 | env.time_stamp                  | 1017.001812
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    8 | env.python_path                 | /home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇    9 | env.current_dir                 | /home/chrisjihee/proj/DeepKNLP-24.10
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   10 | env.current_file                | /home/chrisjihee/proj/DeepKNLP-24.10/1-cls.py
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   11 | env.working_dir                 | /home/chrisjihee/proj/DeepKNLP-24.10
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   12 | env.command_args                | ['test', '--device', '1']
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   13 | env.num_ip_addrs                | 1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   14 | env.max_workers                 | 1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   15 | env.calling_sec                 | 0.001
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   16 | env.waiting_sec                 | 300.0
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   17 | env.debugging                   | False
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   18 | env.logging_home                | finetuning/nsmc/test=kpfbert=ptlm3/version_0
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   19 | env.logging_file                | logging.out
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   20 | env.argument_file               | arguments.json
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   21 | env.date_format                 | [%m.%d %H:%M:%S]
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   22 | env.message_level               | 20
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   23 | env.message_format              | %(asctime)s ┇ %(levelname)-8s ┇ %(name)20s ┇ %(message)s
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   24 | time.started                    | [10.17 00:18:15]
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   25 | time.settled                    |
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   26 | time.elapsed                    |
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   27 | prog.tb_logger                  |
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   28 | prog.csv_logger                 | <lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f078ca62b90>
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   29 | prog.world_size                 | 1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   30 | prog.local_rank                 | 0
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   31 | prog.global_rank                | 0
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   32 | prog.global_step                | 0
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   33 | prog.global_epoch               | 0.0
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   34 | data.name                       | nsmc
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   35 | data.home                       | /home/chrisjihee/proj/DeepKNLP-24.10/data
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   36 | data.files                      | {'train': None, 'valid': None, 'test': 'ratings_valid.txt'}
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   37 | data.caching                    | False
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   38 | data.redownload                 | False
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   39 | data.num_check                  | 0
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   40 | model.pretrained                | jinmang2/kpfbert
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   41 | model.finetuning                | /home/chrisjihee/proj/DeepKNLP-24.10/finetuning
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   42 | model.name                      | train=*
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   43 | model.seq_len                   | 64
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   44 | hardware.cpu_workers            | 10
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   45 | hardware.train_batch            | 32
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   46 | hardware.infer_batch            | 10
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   47 | hardware.accelerator            | cuda
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   48 | hardware.precision              |
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   49 | hardware.strategy               | auto
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   50 | hardware.devices                | [1]
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   51 | printing.print_rate_on_training | 0.1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   52 | printing.print_rate_on_validate | 0.1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   53 | printing.print_rate_on_evaluate | 0.1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   54 | printing.print_step_on_training | -1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   55 | printing.print_step_on_validate | -1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   56 | printing.print_step_on_evaluate | -1
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   57 | printing.tag_format_on_training |
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   58 | printing.tag_format_on_validate |
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇   59 | printing.tag_format_on_evaluate | st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}
+[10.17 00:18:15] ┇ INFO     ┇       chrisbase.data ┇ -----+---------------------------------+-------------------------------------------------------------------------------------
+[10.17 00:18:16] ┇ INFO     ┇             __main__ ┇ === [after-model] =======================================================================================================================
+[10.17 00:18:16] ┇ INFO     ┇         DeepKNLP.cls ┇ Creating features from /home/chrisjihee/proj/DeepKNLP-24.10/data/nsmc/ratings_valid.txt
+[10.17 00:18:16] ┇ INFO     ┇         DeepKNLP.cls ┇ Loaded 50000 examples from /home/chrisjihee/proj/DeepKNLP-24.10/data/nsmc/ratings_valid.txt
+[10.17 00:18:20] ┇ INFO     ┇         DeepKNLP.cls ┇ Converted 50000 raw examples to 50000 encoded examples
+[10.17 00:18:20] ┇ INFO     ┇             __main__ ┇ Created test_dataset providing 50000 examples
+[10.17 00:18:20] ┇ INFO     ┇             __main__ ┇ Created test_dataloader providing 5000 batches
+[10.17 00:18:20] ┇ INFO     ┇             __main__ ┇ === [after-test_dataloader] =============================================================================================================
+[10.17 00:18:20] ┇ INFO     ┇             __main__ ┇ Loading model from finetuning/nsmc/train=kpfbert=ptlm3/version_0/ep=0.4, loss=0.2707, acc=0.8889.ckpt
+[10.17 00:18:24] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  10%|██                  | 500/5000 [00:04<00:33, 135.93x10b/s]
+[10.17 00:18:28] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  20%|████                | 1000/5000 [00:07<00:28, 139.06x10b/s]
+[10.17 00:18:32] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  30%|██████              | 1500/5000 [00:11<00:25, 136.40x10b/s]
+[10.17 00:18:35] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  40%|████████            | 2000/5000 [00:15<00:22, 135.56x10b/s]
+[10.17 00:18:39] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  50%|██████████          | 2500/5000 [00:18<00:18, 135.50x10b/s]
+[10.17 00:18:43] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  60%|████████████        | 3000/5000 [00:22<00:14, 136.85x10b/s]
+[10.17 00:18:46] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  70%|██████████████      | 3500/5000 [00:26<00:10, 140.95x10b/s]
+[10.17 00:18:50] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  80%|████████████████    | 4000/5000 [00:29<00:07, 137.26x10b/s]
+[10.17 00:18:54] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing:  90%|██████████████████  | 4500/5000 [00:33<00:03, 144.30x10b/s]
+[10.17 00:18:57] ┇ INFO     ┇             __main__ ┇ (Ep 0.40)  testing: 100%|████████████████████| 5000/5000 [00:37<00:00, 139.23x10b/s] | st=1200, ep=0.40, test_loss=0.2707, test_acc=0.8889
+[10.17 00:18:57] ┇ INFO     ┇             __main__ ┇ --- [after-test] ------------------------------------------------------------------------------------------------------------------------
+[10.17 00:18:57] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[10.17 00:18:57] ┇ INFO     ┇       chrisbase.data ┇ [EXIT] python /home/chrisjihee/proj/DeepKNLP-24.10/1-cls.py test --device 1 ($=00:00:42.400)
+[10.17 00:18:57] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
