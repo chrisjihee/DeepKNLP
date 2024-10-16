@@ -628,7 +628,7 @@ def serve(
         seq_len: int = typer.Option(default=64),  # TODO: -> 512
         # server
         server_port: int = typer.Option(default=7321),
-        server_host: str = typer.Option(default="localhost"),
+        server_host: str = typer.Option(default="0.0.0.0"),
         server_temp: str = typer.Option(default="templates"),
         server_page: str = typer.Option(default="serve_cls.html"),
 ):
