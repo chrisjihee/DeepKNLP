@@ -17,4 +17,4 @@ Flask-Classful==0.16.0
 
 # Utils
 importlib-metadata==8.5.0
-chrisbase==0.5.1
+chrisbase==0.5.6

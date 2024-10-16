@@ -165,7 +165,7 @@ class NERCorpus:
             if self.args and self.args.prog.local_rank == 0:
                 logger.warning(f"Empty label_list (no data or data_files)")
             return []
-        label_path = make_parent_dir(self.args.env.output_home.parent / f"label_map={self.args.data.name}.txt")
+        label_path = make_parent_dir(self.args.env.logging_home.parent / f"label_map={self.args.data.name}.txt")
         train_data_path = self.args.data.home / self.args.data.name / self.args.data.files.train if self.args.data.files.train else None
         valid_data_path = self.args.data.home / self.args.data.name / self.args.data.files.valid if self.args.data.files.valid else None
         test_data_path = self.args.data.home / self.args.data.name / self.args.data.files.test if self.args.data.files.test else None

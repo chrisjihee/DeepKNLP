@@ -323,7 +323,7 @@ def train(
         pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
         finetuning: str = typer.Option(default="finetuning"),
         model_name: str = typer.Option(default=None),
-        seq_len: int = typer.Option(default=32),  # TODO: -> 512
+        seq_len: int = typer.Option(default=64),  # TODO: -> 64, 128, 256, 512
         # hardware
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         train_batch: int = typer.Option(default=50),
@@ -331,7 +331,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
-        device: List[int] = typer.Option(default=[0, 1]),  # TODO: -> [0,1], [0,1,2,3]
+        device: List[int] = typer.Option(default=[0, 1]),  # TODO: -> [0], [0,1], [0,1,2,3]
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
         print_rate_on_validate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
@@ -348,7 +348,7 @@ def train(
         saving_mode: str = typer.Option(default="max val_acc"),
         num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
         num_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
-        check_rate_on_training: float = typer.Option(default=1 / 5),  # TODO: -> 1/5
+        check_rate_on_training: float = typer.Option(default=1 / 5),  # TODO: -> 1/5, 1/10
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
 ):
     torch.set_float32_matmul_precision('high')
@@ -364,8 +364,8 @@ def train(
             job_name=job_name if job_name else pretrained.name,
             job_version=job_version,
             debugging=debugging,
-            msg_level=logging.DEBUG if debugging else logging.INFO,
-            msg_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
+            message_level=logging.DEBUG if debugging else logging.INFO,
+            message_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
         ),
         data=DataOption(
             home=data_home,
@@ -433,7 +433,7 @@ def train(
     assert job_versions.min() == job_versions.max(), f"Job version must be same across all processes: {job_versions.tolist()}"
     sleep(fabric.global_rank * 0.3)
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
-    args.env.set_output_home(args.prog.csv_logger.log_dir)
+    args.env.set_logging_home(args.prog.csv_logger.log_dir)
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
     args.prog.world_size = fabric.world_size
@@ -461,7 +461,7 @@ def train(
         fabric_barrier(fabric, "[after-val_dataloader]", c='=')
         checkpoint_saver = CheckpointSaver(
             fabric=fabric,
-            output_home=model.args.env.output_home,
+            output_home=model.args.env.logging_home,
             name_format=model.args.learning.name_format_on_saving,
             saving_mode=model.args.learning.saving_mode,
             num_saving=model.args.learning.num_saving,
@@ -530,8 +530,8 @@ def test(
             job_name=job_name if job_name else pretrained.name,
             job_version=job_version,
             debugging=debugging,
-            msg_level=logging.DEBUG if debugging else logging.INFO,
-            msg_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
+            message_level=logging.DEBUG if debugging else logging.INFO,
+            message_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
         ),
         data=DataOption(
             home=data_home,
@@ -579,7 +579,7 @@ def test(
     assert job_versions.min() == job_versions.max(), f"Job version must be same across all processes: {job_versions.tolist()}"
     sleep(fabric.global_rank * 0.3)
     fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
-    args.env.set_output_home(args.prog.csv_logger.log_dir)
+    args.env.set_logging_home(args.prog.csv_logger.log_dir)
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
     args.prog.world_size = fabric.world_size
@@ -645,8 +645,8 @@ def serve(
             job_name=job_name if job_name else pretrained.name,
             job_version=job_version,
             debugging=debugging,
-            msg_level=logging.DEBUG if debugging else logging.INFO,
-            msg_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
+            message_level=logging.DEBUG if debugging else logging.INFO,
+            message_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
         ),
         data=DataOption(
             home=data_home,
@@ -675,7 +675,7 @@ def serve(
     args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
     fabric = Fabric(devices=1, accelerator="cpu")
     fabric.print = logger.info
-    args.env.set_output_home(args.prog.csv_logger.log_dir)
+    args.env.set_logging_home(args.prog.csv_logger.log_dir)
     args.env.set_logging_file(logging_file)
     args.env.set_argument_file(argument_file)
 
