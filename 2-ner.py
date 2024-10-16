@@ -6,6 +6,9 @@ from typing import List, Tuple, Dict, Mapping, Any
 
 import torch
 import typer
+from chrisbase.data import AppTyper, JobTimer, ProjectEnv
+from chrisbase.io import LoggingFormat, make_dir, files, hr
+from chrisbase.util import mute_tqdm_cls, tupled
 from flask import Flask, request, jsonify, render_template
 from flask_classful import FlaskView, route
 from lightning import LightningModule
@@ -24,9 +27,6 @@ from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArgument
 from DeepKNLP.helper import CheckpointSaver, epsilon, fabric_barrier
 from DeepKNLP.metrics import accuracy, NER_Char_MacroF1, NER_Entity_MacroF1
 from DeepKNLP.ner import NERCorpus, NERDataset, NEREncodedExample
-from chrisbase.data import AppTyper, JobTimer, ProjectEnv
-from chrisbase.io import LoggingFormat, make_dir, files, hr
-from chrisbase.util import mute_tqdm_cls, tupled
 
 logger = logging.getLogger(__name__)
 main = AppTyper()
@@ -406,12 +406,12 @@ def train(
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
-        num_check: int = typer.Option(default=0),  # TODO: -> 2
+        num_check: int = typer.Option(default=2),  # TODO: -> 2
         # model
-        pretrained: str = typer.Option(default="klue/roberta-base"),
+        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
         finetuning: str = typer.Option(default="finetuning"),
         model_name: str = typer.Option(default=None),
-        seq_len: int = typer.Option(default=64),  # TODO: -> 512
+        seq_len: int = typer.Option(default=32),  # TODO: -> 512
         # hardware
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         train_batch: int = typer.Option(default=50),
@@ -419,7 +419,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
-        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0,1], [0,1,2,3]
+        device: List[int] = typer.Option(default=[2, 3]),  # TODO: -> [0,1], [0,1,2,3]
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
         print_rate_on_validate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
@@ -435,8 +435,8 @@ def train(
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_F1c"),
         num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
-        num_epochs: int = typer.Option(default=3),  # TODO: -> 2, 3
-        check_rate_on_training: float = typer.Option(default=1 / 10),  # TODO: -> 1/5
+        num_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
+        check_rate_on_training: float = typer.Option(default=1 / 5),  # TODO: -> 1/5
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}"),
 ):
     torch.set_float32_matmul_precision('high')
