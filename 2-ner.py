@@ -419,7 +419,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
-        device: List[int] = typer.Option(default=[0, 1]),  # TODO: -> [0], [0,1], [0,1,2,3]
+        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
         print_rate_on_validate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
