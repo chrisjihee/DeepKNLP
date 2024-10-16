@@ -4,8 +4,8 @@ wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforg
 bash Miniforge3-$(uname)-$(uname -m).sh
 
 # project
-mamba create -n DeepKNLP-24.03 python=3.11 -y
-mamba activate DeepKNLP-24.03
+mamba create -n DeepKNLP python=3.11 -y
+mamba activate DeepKNLP
 pip install -r requirements.txt
 pip list | grep -E "torch|lightning|transformers|chris"
 

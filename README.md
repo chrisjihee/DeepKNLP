@@ -1,4 +1,4 @@
-# DeepKNLP-24.03
+# DeepKNLP-24.10
 Transformer-based Korean Natural Language Processing
 
 ## Main Reference
@@ -7,6 +7,30 @@ Transformer-based Korean Natural Language Processing
 * ratsgo nlpbook: https://ratsgo.github.io/nlpbook/
 * HF Transformers: https://github.com/huggingface/transformers
 * Lightning Fabric: https://lightning.ai/docs/fabric/stable/
+
+## Installation
+
+1. Install Miniforge
+    ```bash
+    wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+    bash Miniforge3-$(uname)-$(uname -m).sh
+    ```
+2. Clone the repository
+    ```bash
+    rm -rf DeepKNLP*
+    git clone git@github.com:chrisjihee/DeepKNLP-24.10.git
+    cd DeepKNLP*
+    ```
+3. Create a new environment
+    ```bash
+    mamba create -n DeepKNLP python=3.11 -y
+    mamba activate DeepKNLP
+    ```
+4. Install the required packages
+    ```bash
+    pip install -U -r requirements.txt
+    pip list | grep -E "torch|lightning|transformers|chris"
+    ```
 
 ## Core Implentation
 
