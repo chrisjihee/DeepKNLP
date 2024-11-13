@@ -1,4 +1,4 @@
-# DeepKNLP-24.10
+# DeepKNLP
 Transformer-based Korean Natural Language Processing
 
 ## Main Reference
@@ -110,14 +110,14 @@ class LitModel(L.LightningModule):
 
 ## Target Task
 * Document Classification: https://ratsgo.github.io/nlpbook/docs/doc_cls/overview/
-  - `python 1-cls.py --help`
-  - `python 1-cls.py train --help`
-  - `python 1-cls.py test --help`
-  - `python 1-cls.py serve --help`
+  - `python task1-cls.py --help`
+  - `python task1-cls.py train --help`
+  - `python task1-cls.py test --help`
+  - `python task1-cls.py serve --help`
 * Word Sequence Labelling: https://ratsgo.github.io/nlpbook/docs/ner/overview/
-  - `python 2-ner.py --help`
-  - `python 2-ner.py train --help`
-  - `python 2-ner.py test --help`
-  - `python 2-ner.py serve --help`
+  - `python task2-ner.py --help`
+  - `python task2-ner.py train --help`
+  - `python task2-ner.py test --help`
+  - `python task2-ner.py serve --help`
 * [Not Yet Provided] Sentence Pair Classification: https://ratsgo.github.io/nlpbook/docs/pair_cls/overview/
 * [Not Yet Provided] Extractive Question Answering: https://ratsgo.github.io/nlpbook/docs/qa/overview/
