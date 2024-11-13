@@ -119,5 +119,3 @@ class LitModel(L.LightningModule):
   - `python task2-ner.py train --help`
   - `python task2-ner.py test --help`
   - `python task2-ner.py serve --help`
-* [Not Yet Provided] Sentence Pair Classification: https://ratsgo.github.io/nlpbook/docs/pair_cls/overview/
-* [Not Yet Provided] Extractive Question Answering: https://ratsgo.github.io/nlpbook/docs/qa/overview/
