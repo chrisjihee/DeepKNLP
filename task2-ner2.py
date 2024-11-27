@@ -5,14 +5,15 @@ from datetime import datetime
 from pathlib import Path
 from time import sleep
 from typing import List, Tuple, Dict, Mapping, Any, ClassVar
+import pandas as pd
 
 import torch
 import typer
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field
 
 from chrisbase.data import AppTyper, JobTimer, ProjectEnv, TypedData
-from chrisbase.io import LoggingFormat, make_dir, files, hr
-from chrisbase.util import mute_tqdm_cls, tupled
+from chrisbase.io import LoggingFormat, make_dir, files, hr, to_table_lines
+from chrisbase.util import mute_tqdm_cls, tupled, to_dataframe
 from flask import Flask, request, jsonify, render_template
 from flask_classful import FlaskView, route
 from lightning import LightningModule
@@ -36,8 +37,25 @@ logger = logging.getLogger(__name__)
 main = AppTyper()
 
 
-class MyArguments(BaseModel):
-    arg1: str
+class NewLearningOption(BaseModel):
+    random_seed: int | None = Field(default=None)
+
+
+class NewTrainerArguments(BaseModel):
+    learning: NewLearningOption = Field(default_factory=NewLearningOption)
+
+    def dataframe(self, columns=None) -> pd.DataFrame:
+        if not columns:
+            columns = [self.__class__.__name__, "value"]
+        df = pd.concat([
+            to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
+        ]).reset_index(drop=True)
+        return df
+
+    def log_table(self):
+        for line in to_table_lines(self.dataframe()):
+            logger.info(line)
+        return self
 
 
 @main.command()
@@ -45,8 +63,16 @@ def train(
         # learning
         random_seed: int = typer.Option(default=7),
 ):
-    my_args = MyArguments(arg1="Hello")
+    my_args = NewTrainerArguments(learning=NewLearningOption(random_seed=random_seed))
+    print("=" * 100)
     print(my_args)
+    print("=" * 100)
+    print(to_dataframe(my_args))
+    print("=" * 100)
+    print(my_args.dataframe())
+    print("=" * 100)
+    my_args.log_table()
+    print("=" * 100)
 
 
 if __name__ == "__main__":
