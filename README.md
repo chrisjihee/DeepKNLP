@@ -31,7 +31,13 @@ Transformer-based Korean Natural Language Processing
     pip install -U -r requirements.txt
     pip list | grep -E "torch|lightning|transformers|chris"
     ```
-5. Link huggingface cache
+5. Install chrisbase for development (optional)
+    ```bash
+    rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git
+    pip install -U -e chrisbase*
+    pip list | grep -E "torch|lightning|transformers|chris"
+    ```
+6. Link huggingface cache (optional)
     ```bash
     ln -s ~/.cache/huggingface ./.cache_hf
     ```
