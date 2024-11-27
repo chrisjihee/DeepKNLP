@@ -33,7 +33,7 @@ Transformer-based Korean Natural Language Processing
     ```
 5. Link huggingface cache
     ```bash
-    ln -s ~/.cache/huggingface/hub ./.cache_hf_hub
+    ln -s ~/.cache/huggingface ./.cache_hf
     ```
 
 ## Core Implentation
