@@ -63,16 +63,31 @@ def train(
         # learning
         random_seed: int = typer.Option(default=7),
 ):
-    my_args = NewTrainerArguments(learning=NewLearningOption(random_seed=random_seed))
-    print("=" * 100)
-    print(my_args)
-    print("=" * 100)
-    print(to_dataframe(my_args))
-    print("=" * 100)
-    print(my_args.dataframe())
-    print("=" * 100)
-    my_args.log_table()
-    print("=" * 100)
+    torch.set_float32_matmul_precision('high')
+    logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
+    logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
+    # logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+
+    args = NewTrainerArguments(
+        learning=NewLearningOption(
+            random_seed=random_seed,
+        ),
+    )
+
+    fabric = Fabric()
+    fabric.launch()
+    fabric.barrier()
+
+    fabric.seed_everything(args.learning.random_seed)
+    fabric.barrier()
+
+    if fabric.local_rank == 0:
+        logger.info("=" * 100)
+        args.log_table()
+        logger.info("=" * 100)
+        logger.info(args)
+        logger.info("=" * 100)
+    fabric.barrier()
 
 
 if __name__ == "__main__":
