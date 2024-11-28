@@ -141,7 +141,7 @@ def train(
             logging_file=logging_file,
             argument_file=argument_file,
             message_level=logging.INFO,
-            message_format=LoggingFormat.CHECK_40,
+            message_format=LoggingFormat.CHECK_32,
         ),
         learning=NewLearningOption(
             random_seed=random_seed,
