@@ -17,7 +17,7 @@ import torch
 import typer
 from pydantic import BaseModel, Field
 
-from chrisbase.data import AppTyper, JobTimer, ProjectEnv, TypedData
+from chrisbase.data import AppTyper, JobTimer, ProjectEnv, TypedData, TimeChecker
 from chrisbase.io import LoggingFormat, make_dir, files, hr, to_table_lines
 from chrisbase.io import get_hostname, get_hostaddr, current_file, first_or, cwd, hr, flush_or, make_parent_dir, setup_unit_logger, setup_dual_logger, open_file, file_lines, to_table_lines, new_path, get_http_clients
 from chrisbase.time import now
@@ -52,6 +52,7 @@ class NewProjectEnv(BaseModel):
     node_rank: int = Field(default=-1)
     local_rank: int = Field(default=-1)
     global_rank: int = Field(default=-1)
+    world_size: int = Field(default=-1)
     time_stamp: str = Field(default=now('%m%d.%H%M%S'))
     python_path: Path = Path(sys.executable).absolute()
     current_dir: Path = Path().absolute()
@@ -87,22 +88,45 @@ class NewLearningOption(BaseModel):
     random_seed: int | None = Field(default=None)
 
 
-class NewTrainerArguments(BaseModel):
+class NewCommonArguments(BaseModel):
     env: NewProjectEnv = Field(default_factory=NewProjectEnv)
+    time: TimeChecker = Field(default_factory=TimeChecker)
+
+    def dataframe(self, columns=None) -> pd.DataFrame:
+        if not columns:
+            columns = [self.__class__.__name__, "value"]
+        df = pd.concat([
+            to_dataframe(columns=columns, raw=self.env, data_prefix="env"),
+            to_dataframe(columns=columns, raw=self.time, data_prefix="time"),
+        ]).reset_index(drop=True)
+        return df
+
+    def info_args(self):
+        for line in to_table_lines(self.dataframe()):
+            logger.info(line)
+        return self
+
+    def save_args(self, to: Path | str = None) -> Path | None:
+        if self.env.logging_home and self.env.argument_file:
+            args_file = to if to else self.env.logging_home / new_path(self.env.argument_file, post=self.env.time_stamp)
+            args_json = self.model_dump_json(indent=2)
+            make_parent_dir(args_file).write_text(args_json, encoding="utf-8")
+            return args_file
+        else:
+            return None
+
+
+class NewTrainerArguments(NewCommonArguments):
     learning: NewLearningOption = Field(default_factory=NewLearningOption)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
         if not columns:
             columns = [self.__class__.__name__, "value"]
         df = pd.concat([
+            super().dataframe(columns=columns),
             to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
         ]).reset_index(drop=True)
         return df
-
-    def log_table(self):
-        for line in to_table_lines(self.dataframe()):
-            logger.info(line)
-        return self
 
 
 @main.command()
@@ -112,11 +136,11 @@ def train(
         job_name: str = typer.Option(default=None),
         job_version: int = typer.Option(default=None),
         debugging: bool = typer.Option(default=False),
-        logging_home: str = typer.Option(default="output/train"),
-        logging_file: str = typer.Option(default="logging.out"),
+        logging_home: str = typer.Option(default="output/task2-nerG"),
+        logging_file: str = typer.Option(default="train.out"),
         argument_file: str = typer.Option(default="arguments.json"),
         # model
-        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
+        pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
         # learning
         random_seed: int = typer.Option(default=7),
 ):
@@ -127,6 +151,7 @@ def train(
 
     fabric = Fabric()
     time_stamp: str = now('%m%d.%H%M%S') if fabric.is_global_zero else None
+    fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
     fabric.launch()
     fabric.barrier()
 
@@ -137,6 +162,7 @@ def train(
             node_rank=fabric.node_rank,
             local_rank=fabric.local_rank,
             global_rank=fabric.global_rank,
+            world_size=fabric.world_size,
             logging_home=logging_home,
             logging_file=logging_file,
             argument_file=argument_file,
@@ -148,17 +174,15 @@ def train(
         ),
     )
     fabric.barrier()
-    logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
-    fabric.barrier()
+    # logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
+    # fabric.barrier()
     fabric.seed_everything(args.learning.random_seed)
     fabric.barrier()
-    if fabric.local_rank == 0:
-        logger.info("=" * 100)
-        args.log_table()
-        logger.info("=" * 100)
-        logger.info(args)
-        logger.info("=" * 100)
-    fabric.barrier()
+    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
+                  args=args,  # if debugging and fabric.local_rank == 0 else None,
+                  verbose=fabric.local_rank == 0,
+                  mute_warning="lightning.fabric.loggers.csv_logs"):
+        fabric.print("Start training...")
 
 
 if __name__ == "__main__":
