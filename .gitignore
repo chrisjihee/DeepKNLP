@@ -133,3 +133,4 @@ chrislab*
 pretrained*
 finetuning*
 output*
+data/**/pile-ner*
