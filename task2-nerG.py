@@ -31,7 +31,7 @@ from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch import Tensor
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan
+from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan, AutoModelForSeq2SeqLM, AutoModelForCausalLM
 from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import TokenClassifierOutput
 
@@ -84,8 +84,12 @@ class NewProjectEnv(BaseModel):
         return self
 
 
+class NewModelOption(BaseModel):
+    pretrained: str | Path = Field(default=None)
+
+
 class NewLearningOption(BaseModel):
-    random_seed: int | None = Field(default=None)
+    random_seed: int = Field(default=None)
 
 
 class NewCommonArguments(BaseModel):
@@ -117,6 +121,7 @@ class NewCommonArguments(BaseModel):
 
 
 class NewTrainerArguments(NewCommonArguments):
+    model: NewModelOption = Field(default_factory=NewModelOption)
     learning: NewLearningOption = Field(default_factory=NewLearningOption)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
@@ -124,6 +129,7 @@ class NewTrainerArguments(NewCommonArguments):
             columns = [self.__class__.__name__, "value"]
         df = pd.concat([
             super().dataframe(columns=columns),
+            to_dataframe(columns=columns, raw=self.model, data_prefix="model"),
             to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
         ]).reset_index(drop=True)
         return df
@@ -137,10 +143,14 @@ def train(
         job_version: int = typer.Option(default=None),
         debugging: bool = typer.Option(default=False),
         logging_home: str = typer.Option(default="output/task2-nerG"),
-        logging_file: str = typer.Option(default="train.out"),
-        argument_file: str = typer.Option(default="arguments.json"),
+        logging_file: str = typer.Option(default="train-messages.out"),
+        argument_file: str = typer.Option(default="train-arguments.json"),
         # model
-        pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
+        # pretrained: str = typer.Option(default="google/flan-t5-small"),
+        # pretrained: str = typer.Option(default="meta-llama/Llama-2-7b-hf"),
+        pretrained: str = typer.Option(default="meta-llama/Llama-3.2-1B"),
+        # pretrained: str = typer.Option(default="etri-lirs/kebyt5-small-preview"),
+        # pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
         # learning
         random_seed: int = typer.Option(default=7),
 ):
@@ -169,6 +179,9 @@ def train(
             message_level=logging.INFO,
             message_format=LoggingFormat.CHECK_32,
         ),
+        model=NewModelOption(
+            pretrained=pretrained,
+        ),
         learning=NewLearningOption(
             random_seed=random_seed,
         ),
@@ -182,7 +195,16 @@ def train(
                   args=args,  # if debugging and fabric.local_rank == 0 else None,
                   verbose=fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        fabric.print("Start training...")
+        raw_datasets = {}
+        config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
+        tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(pretrained)
+        if config.is_encoder_decoder:
+            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
+        else:
+            model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained)
+        fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
+        fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
+        fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}")
 
 
 if __name__ == "__main__":
