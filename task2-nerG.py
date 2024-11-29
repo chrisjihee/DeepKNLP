@@ -1,3 +1,5 @@
+import datasets
+from datasets import load_dataset, Dataset
 from pydantic_core import ArgsKwargs
 from typing_extensions import Self
 
@@ -84,6 +86,12 @@ class NewProjectEnv(BaseModel):
         return self
 
 
+class NewDataOption(BaseModel):
+    train_path: str | Path = Field(default=None)
+    eval_path: str | Path = Field(default=None)
+    test_path: str | Path = Field(default=None)
+
+
 class NewModelOption(BaseModel):
     pretrained: str | Path = Field(default=None)
 
@@ -121,14 +129,16 @@ class NewCommonArguments(BaseModel):
 
 
 class NewTrainerArguments(NewCommonArguments):
-    model: NewModelOption = Field(default_factory=NewModelOption)
-    learning: NewLearningOption = Field(default_factory=NewLearningOption)
+    data: NewDataOption = Field(default=None)
+    model: NewModelOption = Field(default=None)
+    learning: NewLearningOption = Field(default=None)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
         if not columns:
             columns = [self.__class__.__name__, "value"]
         df = pd.concat([
             super().dataframe(columns=columns),
+            to_dataframe(columns=columns, raw=self.data, data_prefix="data"),
             to_dataframe(columns=columns, raw=self.model, data_prefix="model"),
             to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
         ]).reset_index(drop=True)
@@ -145,6 +155,10 @@ def train(
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
+        # data
+        train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
+        eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
+        test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
         # model
         # pretrained: str = typer.Option(default="google/flan-t5-small"),
         # pretrained: str = typer.Option(default="meta-llama/Llama-2-7b-hf"),
@@ -179,6 +193,11 @@ def train(
             message_level=logging.INFO,
             message_format=LoggingFormat.CHECK_32,
         ),
+        data=NewDataOption(
+            train_path=train_data,
+            eval_path=eval_data,
+            test_path=test_data,
+        ),
         model=NewModelOption(
             pretrained=pretrained,
         ),
@@ -195,7 +214,8 @@ def train(
                   args=args,  # if debugging and fabric.local_rank == 0 else None,
                   verbose=fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        raw_datasets = {}
+
+        # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
         tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(pretrained)
         if config.is_encoder_decoder:
@@ -205,6 +225,27 @@ def train(
         fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
         fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
         fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}")
+        fabric.print("-" * 100)
+        fabric.barrier()
+
+        # Load dataset
+        train_dataset: Dataset | None = None
+        eval_dataset: Dataset | None = None
+        test_dataset: Dataset | None = None
+        if args.data.train_path:
+            train_dataset = load_dataset("json", data_files=args.data.train_path, split=datasets.Split.TRAIN)
+            fabric.print(f"Use {args.data.train_path} as train dataset: {len(train_dataset):,} samples")
+        if args.data.eval_path:
+            eval_dataset = load_dataset("json", data_files=args.data.eval_path, split=datasets.Split.TRAIN)
+            fabric.print(f"Use {args.data.eval_path} as eval dataset: {len(eval_dataset):,} samples")
+        if args.data.test_path:
+            test_dataset = load_dataset("json", data_files=args.data.test_path, split=datasets.Split.TRAIN)
+            fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
+        fabric.print(f"train_dataset: type=({type(train_dataset)} - {isinstance(train_dataset, Dataset)})")
+        fabric.print(f"valid_dataset: type=({type(eval_dataset)} - {isinstance(eval_dataset, Dataset)})")
+        fabric.print(f"test_dataset: type=({type(test_dataset)} - {isinstance(test_dataset, Dataset)})")
+        fabric.print("-" * 100)
+        fabric.barrier()
 
 
 if __name__ == "__main__":
