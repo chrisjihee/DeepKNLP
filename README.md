@@ -36,10 +36,10 @@ Transformer-based Korean Natural Language Processing
     huggingface-cli whoami
     huggingface-cli login
     ```
-6. Install chrisbase for development (optional)
+6. Install some packages as editable (optional)
     ```bash
-    rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git
-    pip install -U -e chrisbase*
+    rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git; pip install -U -e chrisbase*
+    rm -rf chrisdata*; git clone git@github.com:chrisjihee/chrisdata.git; pip install -U -e chrisdata*   
     pip list | grep -E "torch|lightning|transformers|chris"
     ```
 7. Link huggingface cache (optional)
