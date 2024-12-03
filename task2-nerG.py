@@ -39,7 +39,7 @@ from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassificat
 from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import TokenClassifierOutput
 
-from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption
+from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption, NewTrainerArguments, NewProjectEnv, NewDataOption, NewModelOption, NewLearningOption, NewHardwareOption
 from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
 from DeepKNLP.helper import CheckpointSaver, epsilon, fabric_barrier
 from DeepKNLP.metrics import accuracy, NER_Char_MacroF1, NER_Entity_MacroF1
