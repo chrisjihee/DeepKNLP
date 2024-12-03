@@ -1,17 +1,140 @@
 import logging
 import os
-from dataclasses import dataclass, field
+import sys
+from dataclasses import dataclass
+from dataclasses import field
 from pathlib import Path
 from typing import List
 
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
+from pydantic import BaseModel, Field, model_validator
+from typing_extensions import Self
 
-from chrisbase.data import OptionData, ResultData, CommonArguments
+from chrisbase.data import OptionData, TimeChecker, ResultData, CommonArguments
+from chrisbase.io import get_hostname, get_hostaddr, current_file, make_parent_dir, setup_unit_logger, setup_dual_logger, to_table_lines, new_path
+from chrisbase.time import now
 from chrisbase.util import to_dataframe
 
 logger = logging.getLogger(__name__)
+
+
+class NewProjectEnv(BaseModel):
+    hostname: str = get_hostname()
+    hostaddr: str = get_hostaddr()
+    global_rank: int = Field(default=-1)
+    local_rank: int = Field(default=-1)
+    node_rank: int = Field(default=-1)
+    world_size: int = Field(default=-1)
+    time_stamp: str = Field(default=now('%m%d.%H%M%S'))
+    python_path: Path = Path(sys.executable).absolute()
+    current_dir: Path = Path().absolute()
+    current_file: Path = current_file().absolute()
+    command_args: list[str] = sys.argv[1:]
+    logging_home: str | Path = Field(default=None)
+    logging_file: str | Path = Field(default=None)
+    argument_file: str | Path = Field(default=None)
+    max_workers: int = Field(default=1)
+    debugging: bool = Field(default=False)
+    date_format: str = Field(default="[%m.%d %H:%M:%S]")
+    message_level: int = Field(default=logging.INFO)
+    message_format: str = Field(default=logging.BASIC_FORMAT)
+
+    @model_validator(mode='after')
+    def after(self) -> Self:
+        self.logging_home = Path(self.logging_home).absolute() if self.logging_home else None
+        return self
+
+    def setup_logger(self):
+        if self.logging_home and self.logging_file:
+            setup_dual_logger(
+                level=self.message_level, fmt=self.message_format, datefmt=self.date_format, stream=sys.stdout,
+                filename=self.logging_home / new_path(self.logging_file, post=self.time_stamp),
+            )
+        else:
+            setup_unit_logger(
+                level=self.message_level, fmt=self.message_format, datefmt=self.date_format, stream=sys.stdout,
+            )
+        return self
+
+
+class NewCommonArguments(BaseModel):
+    env: NewProjectEnv = Field(default_factory=NewProjectEnv)
+    time: TimeChecker = Field(default_factory=TimeChecker)
+
+    def dataframe(self, columns=None) -> pd.DataFrame:
+        if not columns:
+            columns = [self.__class__.__name__, "value"]
+        df = pd.concat([
+            to_dataframe(columns=columns, raw=self.env, data_prefix="env"),
+            to_dataframe(columns=columns, raw=self.time, data_prefix="time"),
+        ]).reset_index(drop=True)
+        return df
+
+    def info_args(self):
+        for line in to_table_lines(self.dataframe()):
+            logger.info(line)
+        return self
+
+    def save_args(self, to: Path | str = None) -> Path | None:
+        if self.env.logging_home and self.env.argument_file:
+            args_file = to if to else self.env.logging_home / new_path(self.env.argument_file, post=self.env.time_stamp)
+            args_json = self.model_dump_json(indent=2)
+            make_parent_dir(args_file).write_text(args_json, encoding="utf-8")
+            return args_file
+        else:
+            return None
+
+
+class NewDataOption(BaseModel):
+    train_path: str | Path = Field(default=None)
+    eval_path: str | Path = Field(default=None)
+    test_path: str | Path = Field(default=None)
+    max_train_samples: int = Field(default=-1)
+    max_eval_samples: int = Field(default=-1)
+    max_test_samples: int = Field(default=-1)
+    num_prog_samples: int = Field(default=100)
+    max_source_length: int = Field(default=512)
+    max_target_length: int = Field(default=512)
+    load_cache: bool = Field(default=True)
+
+
+class NewModelOption(BaseModel):
+    pretrained: str | Path = Field(default=None)
+
+
+class NewLearningOption(BaseModel):
+    random_seed: int = Field(default=None)
+
+
+class NewHardwareOption(BaseModel):
+    grad_acc_steps: int = Field(default=1)
+    train_batch: int = Field(default=1)
+    infer_batch: int = Field(default=1)
+    accelerator: str = Field(default="cuda")
+    precision: str = Field(default="32")
+    strategy: str = Field(default="ddp")
+    devices: List[int] = Field(default=[0])
+
+
+class NewTrainerArguments(NewCommonArguments):
+    data: NewDataOption = Field(default=None)
+    model: NewModelOption = Field(default=None)
+    learning: NewLearningOption = Field(default=None)
+    hardware: NewHardwareOption = Field(default=None)
+
+    def dataframe(self, columns=None) -> pd.DataFrame:
+        if not columns:
+            columns = [self.__class__.__name__, "value"]
+        df = pd.concat([
+            super().dataframe(columns=columns),
+            to_dataframe(columns=columns, raw=self.data, data_prefix="data"),
+            to_dataframe(columns=columns, raw=self.model, data_prefix="model"),
+            to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
+            to_dataframe(columns=columns, raw=self.hardware, data_prefix="hardware"),
+        ]).reset_index(drop=True)
+        return df
 
 
 @dataclass
