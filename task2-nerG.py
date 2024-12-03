@@ -65,7 +65,7 @@ def train(
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
-        max_workers: int = typer.Option(default=10),
+        max_workers: int = typer.Option(default=4),
         debugging: bool = typer.Option(default=False),
         # data
         # train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
@@ -74,13 +74,14 @@ def train(
         # eval_data: str = typer.Option(default=None),
         test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
         # test_data: str = typer.Option(default=None),
+        # max_train_samples: int = typer.Option(default=20000),
         max_train_samples: int = typer.Option(default=-1),
         max_eval_samples: int = typer.Option(default=-1),
         max_test_samples: int = typer.Option(default=-1),
         num_prog_samples: int = typer.Option(default=5000),
         max_source_length: int = typer.Option(default=512),
         max_target_length: int = typer.Option(default=512),
-        load_cache: bool = typer.Option(default=True),
+        use_cache_data: bool = typer.Option(default=True),
         # model
         # pretrained: str = typer.Option(default="google/flan-t5-small"),
         # pretrained: str = typer.Option(default="meta-llama/Llama-2-7b-hf"),
@@ -96,7 +97,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
-        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
+        device: List[int] = typer.Option(default=[0, 1]),  # TODO: -> [0], [0,1], [0,1,2,3]
 ):
     torch.set_float32_matmul_precision('high')
     datasets.utils.logging.disable_progress_bar()
@@ -124,7 +125,7 @@ def train(
             num_prog_samples=num_prog_samples,
             max_source_length=max_source_length,
             max_target_length=max_target_length,
-            load_cache=load_cache,
+            use_cache_data=use_cache_data,
         ),
         model=NewModelOption(
             pretrained=pretrained,
@@ -348,7 +349,8 @@ def train(
             pre, cnt = counter.val(), counter.inc()
             if (cnt >= pbar.total or any(i % num_prog_samples == 0 for i in range(pre + 1, cnt + 1))) and rank == 0:
                 pbar.step(inc=min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx))
-                fabric.print(pbar.format_message().rstrip())
+                # fabric.print(pbar.format_message().rstrip())
+                logger.info(pbar.format_message().rstrip())
             return res
 
         # Preprocess dataset
@@ -358,8 +360,8 @@ def train(
                     train_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers,
-                        load_from_cache_file=args.data.load_cache,
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
+                        cache_file_name=args.data.train_path.replace(".jsonl", f"={len(train_dataset)}.tmp") if args.data.use_cache_data else None,
                     )
             fabric.print("-" * 100)
         if eval_dataset:
@@ -368,8 +370,8 @@ def train(
                     eval_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers,
-                        load_from_cache_file=args.data.load_cache,
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
+                        cache_file_name=args.data.eval_path.replace(".jsonl", f"={len(eval_dataset)}.tmp") if args.data.use_cache_data else None,
                     )
             fabric.print("-" * 100)
         if test_dataset:
@@ -378,8 +380,8 @@ def train(
                     test_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers,
-                        load_from_cache_file=args.data.load_cache,
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
+                        cache_file_name=args.data.test_path.replace(".jsonl", f"={len(test_dataset)}.tmp") if args.data.use_cache_data else None,
                     )
             fabric.print("-" * 100)
 

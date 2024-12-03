@@ -130,6 +130,8 @@ chrislab*
 
 # custom
 .cache*
+*.cache
+*.tmp
 pretrained*
 finetuning*
 output*

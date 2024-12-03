@@ -97,7 +97,7 @@ class NewDataOption(BaseModel):
     num_prog_samples: int = Field(default=1)
     max_source_length: int = Field(default=512)
     max_target_length: int = Field(default=512)
-    load_cache: bool = Field(default=True)
+    use_cache_data: bool = Field(default=True)
 
 
 class NewModelOption(BaseModel):
