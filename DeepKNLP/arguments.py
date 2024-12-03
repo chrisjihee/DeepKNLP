@@ -88,9 +88,9 @@ class NewCommonArguments(BaseModel):
 
 
 class NewDataOption(BaseModel):
-    train_path: str | Path = Field(default=None)
-    eval_path: str | Path = Field(default=None)
-    test_path: str | Path = Field(default=None)
+    train_path: str | Path | None = Field(default=None)
+    eval_path: str | Path | None = Field(default=None)
+    test_path: str | Path | None = Field(default=None)
     max_train_samples: int = Field(default=-1)
     max_eval_samples: int = Field(default=-1)
     max_test_samples: int = Field(default=-1)
