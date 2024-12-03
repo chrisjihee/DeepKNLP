@@ -1,6 +1,7 @@
 import tqdm
 import datasets
 from datasets import load_dataset, Dataset
+from datasets.formatting.formatting import LazyRow
 from pydantic_core import ArgsKwargs
 from typing_extensions import Self
 
@@ -43,6 +44,7 @@ from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArgument
 from DeepKNLP.helper import CheckpointSaver, epsilon, fabric_barrier
 from DeepKNLP.metrics import accuracy, NER_Char_MacroF1, NER_Entity_MacroF1
 from DeepKNLP.ner import NERCorpus, NERDataset, NEREncodedExample
+from chrisdata.ner import GenNERSampleWrapper
 
 main = AppTyper()
 logger = logging.getLogger(__name__)
@@ -123,6 +125,7 @@ class NewDataOption(BaseModel):
     max_train_samples: int = Field(default=-1)
     max_eval_samples: int = Field(default=-1)
     max_test_samples: int = Field(default=-1)
+    num_prog_samples: int = Field(default=100)
     load_cache: bool = Field(default=True)
 
 
@@ -181,6 +184,7 @@ def train(
         max_train_samples: int = typer.Option(default=3),
         max_eval_samples: int = typer.Option(default=3),
         max_test_samples: int = typer.Option(default=3),
+        num_prog_samples: int = typer.Option(default=100),
         load_cache: bool = typer.Option(default=True),
         # model
         # pretrained: str = typer.Option(default="google/flan-t5-small"),
@@ -221,6 +225,7 @@ def train(
             max_train_samples=max_train_samples,
             max_eval_samples=max_eval_samples,
             max_test_samples=max_test_samples,
+            num_prog_samples=num_prog_samples,
             load_cache=load_cache,
         ),
         model=NewModelOption(
@@ -307,56 +312,60 @@ def train(
                 if args.data.max_test_samples > 0:
                     test_dataset = test_dataset.select(range(min(len(test_dataset), args.data.max_test_samples)))
                 fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
+        fabric.barrier()
         fabric.print("-" * 100)
 
         # Define preprocess function
-        datasets.utils.logging.disable_progress_bar()
+        def preprocess_sample(sample: LazyRow, pbar: tqdm.std.tqdm = None):
+            inference: bool = sample['split'] != "train"
+            sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(sample.data)
+            fabric.print(sample)
 
-        manual_tqdm = mute_tqdm_cls()
-        fabric.print(f"mute_tqdm: {manual_tqdm} - {isinstance(manual_tqdm, mute_tqdm_cls)}")
-
-        # pbar: tqdm.std.tqdm = mute_tqdm(total=len(train_dataset), desc="Tokenize train dataset")
-        # fabric.print(f"pbar: {type(pbar)} - {isinstance(pbar, tqdm.std.tqdm)}")
-
-        def preprocess_sample(sample: Mapping[str, Any], pbar: tqdm.std.tqdm = None):
-            fabric.print(f"pbar: {type(pbar)} - {isinstance(pbar, tqdm.std.tqdm)}")
-            fabric.print(f"samples: {sample.keys()}")
-            pass
+            pbar.update()
+            if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
+                fabric.print(pbar)
 
         # Preprocess dataset
+        datasets.utils.logging.disable_progress_bar()
+        manual_tqdm: mute_tqdm_cls = mute_tqdm_cls()
         if train_dataset:
             with fabric.rank_zero_first():
                 fabric.print(f"train_dataset: type=({type(train_dataset)} - {isinstance(train_dataset, Dataset)})")
-                with manual_tqdm(total=len(train_dataset), desc="Tokenize train dataset") as pbar:
+                with manual_tqdm(total=len(train_dataset), desc="Tokenize train dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     train_dataset.map(
                         preprocess_sample,
                         batched=False,
                         num_proc=args.env.max_workers,
                         load_from_cache_file=args.data.load_cache,
-                        # desc="Tokenize train dataset",
-                        fn_kwargs={"pbar": pbar},
+                        fn_kwargs={"pbar": manual_pbar},
                     )
+            fabric.print("-" * 100)
         if eval_dataset:
             with fabric.rank_zero_first():
                 fabric.print(f"valid_dataset: type=({type(eval_dataset)} - {isinstance(eval_dataset, Dataset)})")
-                eval_dataset.map(
-                    preprocess_sample,
-                    batched=False,
-                    num_proc=args.env.max_workers,
-                    load_from_cache_file=args.data.load_cache,
-                    desc="Tokenize eval dataset",
-                )
+                with manual_tqdm(total=len(eval_dataset), desc="Tokenize eval dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
+                    eval_dataset.map(
+                        preprocess_sample,
+                        batched=False,
+                        num_proc=args.env.max_workers,
+                        load_from_cache_file=args.data.load_cache,
+                        fn_kwargs={"pbar": manual_pbar},
+                    )
+            fabric.print("-" * 100)
         if test_dataset:
             with fabric.rank_zero_first():
                 fabric.print(f"test_dataset: type=({type(test_dataset)} - {isinstance(test_dataset, Dataset)})")
-                test_dataset.map(
-                    preprocess_sample,
-                    batched=False,
-                    num_proc=args.env.max_workers,
-                    load_from_cache_file=args.data.load_cache,
-                    desc="Tokenize test dataset",
-                )
-        fabric.print("-" * 100)
+                with manual_tqdm(total=len(test_dataset), desc="Tokenize test dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
+                    test_dataset.map(
+                        preprocess_sample,
+                        batched=False,
+                        num_proc=args.env.max_workers,
+                        load_from_cache_file=args.data.load_cache,
+                        fn_kwargs={"pbar": manual_pbar},
+                    )
+            fabric.print("-" * 100)
+
+        fabric.print("*" * 100)
         fabric.barrier()
 
 
