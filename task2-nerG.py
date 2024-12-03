@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from time import sleep
-from typing import List, Tuple, Dict, Mapping, Any, ClassVar
+from typing import List, Tuple, Dict, Mapping, Any, ClassVar, Union
 import pandas as pd
 
 import torch
@@ -51,9 +51,9 @@ setup_unit_logger(fmt=LoggingFormat.CHECK_24)
 class NewProjectEnv(BaseModel):
     hostname: str = get_hostname()
     hostaddr: str = get_hostaddr()
-    node_rank: int = Field(default=-1)
-    local_rank: int = Field(default=-1)
     global_rank: int = Field(default=-1)
+    local_rank: int = Field(default=-1)
+    node_rank: int = Field(default=-1)
     world_size: int = Field(default=-1)
     time_stamp: str = Field(default=now('%m%d.%H%M%S'))
     python_path: Path = Path(sys.executable).absolute()
@@ -63,6 +63,8 @@ class NewProjectEnv(BaseModel):
     logging_home: str | Path = Field(default=None)
     logging_file: str | Path = Field(default=None)
     argument_file: str | Path = Field(default=None)
+    max_workers: int = Field(default=1)
+    debugging: bool = Field(default=False)
     date_format: str = Field(default="[%m.%d %H:%M:%S]")
     message_level: int = Field(default=logging.INFO)
     message_format: str = Field(default=logging.BASIC_FORMAT)
@@ -70,10 +72,9 @@ class NewProjectEnv(BaseModel):
     @model_validator(mode='after')
     def after(self) -> Self:
         self.logging_home = Path(self.logging_home).absolute() if self.logging_home else None
-        self._setup_logger()
         return self
 
-    def _setup_logger(self):
+    def setup_logger(self):
         if self.logging_home and self.logging_file:
             setup_dual_logger(
                 level=self.message_level, fmt=self.message_format, datefmt=self.date_format, stream=sys.stdout,
@@ -84,20 +85,6 @@ class NewProjectEnv(BaseModel):
                 level=self.message_level, fmt=self.message_format, datefmt=self.date_format, stream=sys.stdout,
             )
         return self
-
-
-class NewDataOption(BaseModel):
-    train_path: str | Path = Field(default=None)
-    eval_path: str | Path = Field(default=None)
-    test_path: str | Path = Field(default=None)
-
-
-class NewModelOption(BaseModel):
-    pretrained: str | Path = Field(default=None)
-
-
-class NewLearningOption(BaseModel):
-    random_seed: int = Field(default=None)
 
 
 class NewCommonArguments(BaseModel):
@@ -128,10 +115,36 @@ class NewCommonArguments(BaseModel):
             return None
 
 
+class NewDataOption(BaseModel):
+    train_path: str | Path = Field(default=None)
+    eval_path: str | Path = Field(default=None)
+    test_path: str | Path = Field(default=None)
+    load_cache: bool = Field(default=True)
+
+
+class NewModelOption(BaseModel):
+    pretrained: str | Path = Field(default=None)
+
+
+class NewLearningOption(BaseModel):
+    random_seed: int = Field(default=None)
+
+
+class NewHardwareOption(BaseModel):
+    grad_acc_steps: int = Field(default=1)
+    train_batch: int = Field(default=1)
+    infer_batch: int = Field(default=1)
+    accelerator: str = Field(default="cuda")
+    precision: str = Field(default="32")
+    strategy: str = Field(default="ddp")
+    devices: List[int] = Field(default=[0])
+
+
 class NewTrainerArguments(NewCommonArguments):
     data: NewDataOption = Field(default=None)
     model: NewModelOption = Field(default=None)
     learning: NewLearningOption = Field(default=None)
+    hardware: NewHardwareOption = Field(default=None)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
         if not columns:
@@ -141,6 +154,7 @@ class NewTrainerArguments(NewCommonArguments):
             to_dataframe(columns=columns, raw=self.data, data_prefix="data"),
             to_dataframe(columns=columns, raw=self.model, data_prefix="model"),
             to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
+            to_dataframe(columns=columns, raw=self.hardware, data_prefix="hardware"),
         ]).reset_index(drop=True)
         return df
 
@@ -151,14 +165,16 @@ def train(
         project: str = typer.Option(default="DeepKNLP"),
         job_name: str = typer.Option(default=None),
         job_version: int = typer.Option(default=None),
-        debugging: bool = typer.Option(default=False),
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
+        max_workers: int = typer.Option(default=4),
+        debugging: bool = typer.Option(default=True),
         # data
         train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
         eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
         test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
+        load_cache: bool = typer.Option(default=True),
         # model
         # pretrained: str = typer.Option(default="google/flan-t5-small"),
         # pretrained: str = typer.Option(default="meta-llama/Llama-2-7b-hf"),
@@ -167,29 +183,27 @@ def train(
         # pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
         # learning
         random_seed: int = typer.Option(default=7),
+        # hardware
+        grad_acc_steps: int = typer.Option(default=4),
+        train_batch: int = typer.Option(default=8),
+        infer_batch: int = typer.Option(default=32),
+        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
+        precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
+        strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
+        device: List[int] = typer.Option(default=[0, 1]),  # TODO: -> [0], [0,1], [0,1,2,3]
 ):
     torch.set_float32_matmul_precision('high')
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
     logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
-
-    fabric = Fabric()
-    time_stamp: str = now('%m%d.%H%M%S') if fabric.is_global_zero else None
-    fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
-    fabric.launch()
-    fabric.barrier()
-
     pretrained = Path(pretrained)
     args = NewTrainerArguments(
         env=NewProjectEnv(
-            time_stamp=fabric.broadcast(time_stamp, src=0),
-            node_rank=fabric.node_rank,
-            local_rank=fabric.local_rank,
-            global_rank=fabric.global_rank,
-            world_size=fabric.world_size,
             logging_home=logging_home,
             logging_file=logging_file,
             argument_file=argument_file,
+            max_workers=1 if debugging else max(max_workers, 1),
+            debugging=debugging,
             message_level=logging.INFO,
             message_format=LoggingFormat.CHECK_32,
         ),
@@ -197,6 +211,7 @@ def train(
             train_path=train_data,
             eval_path=eval_data,
             test_path=test_data,
+            load_cache=load_cache,
         ),
         model=NewModelOption(
             pretrained=pretrained,
@@ -204,16 +219,48 @@ def train(
         learning=NewLearningOption(
             random_seed=random_seed,
         ),
+        hardware=NewHardwareOption(
+            grad_acc_steps=grad_acc_steps,
+            train_batch=train_batch,
+            infer_batch=infer_batch,
+            accelerator=accelerator,
+            precision=precision,
+            strategy=strategy,
+            devices=device,
+        ),
     )
-    fabric.barrier()
+    fabric = Fabric(
+        accelerator=args.hardware.accelerator,
+        precision=args.hardware.precision,
+        strategy=args.hardware.strategy,
+        devices=args.hardware.devices,
+    )
+
+    def info_or_debug(m, *a, **k):
+        if fabric.is_global_zero:  # or debugging:
+            logger.info(m, *a, **k)
+        else:
+            logger.debug(m, *a, **k)
+
+    fabric.print = info_or_debug
+    fabric.launch()
+    args.env.global_rank = fabric.global_rank
+    args.env.local_rank = fabric.local_rank
+    args.env.node_rank = fabric.node_rank
+    args.env.world_size = fabric.world_size
+    args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
+    args.env.setup_logger()
+    # for checking
     # logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
-    # fabric.barrier()
-    fabric.seed_everything(args.learning.random_seed)
-    fabric.barrier()
-    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
-                  args=args,  # if debugging and fabric.local_rank == 0 else None,
-                  verbose=fabric.local_rank == 0,
-                  mute_warning="lightning.fabric.loggers.csv_logs"):
+
+    with JobTimer(
+            name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
+            args=args if debugging and fabric.is_global_zero else None, verbose=fabric.is_global_zero,
+            # mute_warning="lightning.fabric.loggers.csv_logs",
+    ):
+        # Set random seed
+        fabric.barrier()
+        fabric.seed_everything(args.learning.random_seed)
 
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
@@ -233,17 +280,55 @@ def train(
         eval_dataset: Dataset | None = None
         test_dataset: Dataset | None = None
         if args.data.train_path:
-            train_dataset = load_dataset("json", data_files=args.data.train_path, split=datasets.Split.TRAIN)
-            fabric.print(f"Use {args.data.train_path} as train dataset: {len(train_dataset):,} samples")
+            with fabric.rank_zero_first():
+                train_dataset: Dataset = load_dataset("json", data_files=args.data.train_path, split=datasets.Split.TRAIN)
+                fabric.print(f"Use {args.data.train_path} as train dataset: {len(train_dataset):,} samples")
         if args.data.eval_path:
-            eval_dataset = load_dataset("json", data_files=args.data.eval_path, split=datasets.Split.TRAIN)
-            fabric.print(f"Use {args.data.eval_path} as eval dataset: {len(eval_dataset):,} samples")
+            with fabric.rank_zero_first():
+                eval_dataset: Dataset = load_dataset("json", data_files=args.data.eval_path, split=datasets.Split.TRAIN)
+                fabric.print(f"Use {args.data.eval_path} as eval dataset: {len(eval_dataset):,} samples")
         if args.data.test_path:
-            test_dataset = load_dataset("json", data_files=args.data.test_path, split=datasets.Split.TRAIN)
-            fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
-        fabric.print(f"train_dataset: type=({type(train_dataset)} - {isinstance(train_dataset, Dataset)})")
-        fabric.print(f"valid_dataset: type=({type(eval_dataset)} - {isinstance(eval_dataset, Dataset)})")
-        fabric.print(f"test_dataset: type=({type(test_dataset)} - {isinstance(test_dataset, Dataset)})")
+            with fabric.rank_zero_first():
+                test_dataset: Dataset = load_dataset("json", data_files=args.data.test_path, split=datasets.Split.TRAIN)
+                fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
+        fabric.print("-" * 100)
+
+        # Define preprocess function
+        def preprocess_sample(sample: Mapping[str, Any]):
+            # fabric.print(f"samples: {sample.keys()}")
+            pass
+
+        # Preprocess dataset
+        if train_dataset:
+            with fabric.rank_zero_first():
+                fabric.print(f"train_dataset: type=({type(train_dataset)} - {isinstance(train_dataset, Dataset)})")
+                train_dataset.map(
+                    preprocess_sample,
+                    batched=False,
+                    num_proc=args.env.max_workers,
+                    load_from_cache_file=args.data.load_cache,
+                    # desc="Tokenize train dataset",
+                )
+        if eval_dataset:
+            with fabric.rank_zero_first():
+                fabric.print(f"valid_dataset: type=({type(eval_dataset)} - {isinstance(eval_dataset, Dataset)})")
+                eval_dataset.map(
+                    preprocess_sample,
+                    batched=False,
+                    num_proc=args.env.max_workers,
+                    load_from_cache_file=args.data.load_cache,
+                    desc="Tokenize eval dataset",
+                )
+        if test_dataset:
+            with fabric.rank_zero_first():
+                fabric.print(f"test_dataset: type=({type(test_dataset)} - {isinstance(test_dataset, Dataset)})")
+                test_dataset.map(
+                    preprocess_sample,
+                    batched=False,
+                    num_proc=args.env.max_workers,
+                    load_from_cache_file=args.data.load_cache,
+                    desc="Tokenize test dataset",
+                )
         fabric.print("-" * 100)
         fabric.barrier()
 
