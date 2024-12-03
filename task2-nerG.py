@@ -327,11 +327,15 @@ def train(
             sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
             training: bool = sample.split == "train"
 
+            # 1. Tokenize in case of using a decoder-only model
             if using_decoder_only_model:
                 prompt = f"[INST] {sample.instance.instruction_inputs} [/INST]"
                 full_instruction = f"{prompt} {sample.instance.prompt_labels}"
                 max_length = max_source_length + max_target_length
+
+                # A. Tokenize in case of training
                 if training:
+
                     # Tokenize the full instruction
                     model_input = tokenizer(
                         text=full_instruction,
@@ -374,8 +378,26 @@ def train(
                     # Mask the prompt tokens
                     for i in range(len(prompt)):
                         model_input["labels"][i] = -100
+
+                # B. Tokenize in case of inference
                 else:
-                    raise NotImplementedError(f"Not implemented yet: using_decoder_only_model={using_decoder_only_model}, training={training}")
+
+                    # Tokenize the prompt
+                    model_inputs = tokenizer(
+                        text=prompt,
+                        max_length=max_length,
+                        truncation=True,
+                        padding=False,
+                        return_tensors=None,
+                        add_special_tokens=True,
+                    )
+
+                    # Remove the last token if it is an eos token
+                    if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
+                        model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
+                        model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
+
+            # 2. Tokenize in case of using an encoder-decoder model
             else:
                 raise NotImplementedError(f"Not implemented yet: using_decoder_only_model={using_decoder_only_model}, training={training}")
 
