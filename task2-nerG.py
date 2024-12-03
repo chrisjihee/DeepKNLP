@@ -205,88 +205,138 @@ def train(
         fabric.barrier()
         fabric.print("-" * 100)
 
-        # Define preprocess function
-        def preprocess_sample(row: LazyRow, max_source_length: int, max_target_length: int, pbar: tqdm.std.tqdm):
+        # Define tokenizer function for decoder-only model
+        def preprocess_for_decoder_only_model(row: LazyRow, data_opt: dict[str, Any], pbar: tqdm.std.tqdm):
+            # Fetch input data
             sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
-            training: bool = sample.split == "train"
+            data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
+            prompt_text = f"[INST] {sample.instance.instruction_inputs} [/INST]"
+            full_instruction = f"{prompt_text} {sample.instance.prompt_labels}"
 
-            # 1. Tokenize in case of using a decoder-only model
-            if using_decoder_only_model:
-                prompt = f"[INST] {sample.instance.instruction_inputs} [/INST]"
-                full_instruction = f"{prompt} {sample.instance.prompt_labels}"
-                max_length = max_source_length + max_target_length
+            def tokenize_train_sample():
+                # Tokenize the full instruction
+                model_inputs = tokenizer(
+                    text=full_instruction,
+                    max_length=data_opt.max_source_length + data_opt.max_target_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )
 
-                # A. Tokenize in case of training
-                if training:
+                # Add eos token if it is not the last token
+                if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
+                    model_inputs["input_ids"].append(tokenizer.eos_token_id)
+                    model_inputs["attention_mask"].append(1)
 
-                    # Tokenize the full instruction
-                    model_input = tokenizer(
-                        text=full_instruction,
-                        max_length=max_length,
-                        truncation=True,
-                        padding=False,
-                        return_tensors=None,
-                        add_special_tokens=True,
+                # Add labels
+                model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+                # Find the prompt length
+                prompt_tokens = tokenizer(
+                    text=prompt_text,
+                    max_length=data_opt.max_source_length + data_opt.max_target_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )["input_ids"]
+
+                # Remove the last token if it is an eos token
+                if prompt_tokens[-1] == tokenizer.eos_token_id:
+                    prompt_tokens = prompt_tokens[:-1]
+
+                # Check if the prompt is longer than the input
+                if len(prompt_tokens) > len(model_inputs["labels"]):
+                    raise ValueError(
+                        f"Prompt is longer than the input, something went wrong. Prompt: {prompt_tokens}, input:"
+                        f" {model_inputs['input_ids']}"
                     )
 
-                    # Add eos token if it is not the last token
-                    if model_input["input_ids"][-1] != tokenizer.eos_token_id:
-                        model_input["input_ids"].append(tokenizer.eos_token_id)
-                        model_input["attention_mask"].append(1)
+                # Mask the prompt tokens
+                for i in range(len(prompt_tokens)):
+                    model_inputs["labels"][i] = -100
 
-                    # Add labels
-                    model_input["labels"] = model_input["input_ids"].copy()
+                return model_inputs
 
-                    # Find the prompt length
-                    prompt = tokenizer(
-                        text=prompt,
-                        max_length=max_length,
-                        truncation=True,
-                        padding=False,
-                        return_tensors=None,
-                        add_special_tokens=True,
-                    )["input_ids"]
+            def tokenize_infer_sample():
+                # Tokenize the prompt
+                model_inputs = tokenizer(
+                    text=prompt_text,
+                    max_length=max_source_length + max_target_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )
 
-                    # Remove the last token if it is an eos token
-                    if prompt[-1] == tokenizer.eos_token_id:
-                        prompt = prompt[:-1]
+                # Remove the last token if it is an eos token
+                if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
+                    model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
+                    model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
 
-                    # Check if the prompt is longer than the input
-                    if len(prompt) > len(model_input["labels"]):
-                        raise ValueError(
-                            f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
-                            f" {model_input['input_ids']}"
-                        )
+                return model_inputs
 
-                    # Mask the prompt tokens
-                    for i in range(len(prompt)):
-                        model_input["labels"][i] = -100
+            # Tokenize the sample
+            tokenized_sample = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
 
-                # B. Tokenize in case of inference
-                else:
-
-                    # Tokenize the prompt
-                    model_inputs = tokenizer(
-                        text=prompt,
-                        max_length=max_length,
-                        truncation=True,
-                        padding=False,
-                        return_tensors=None,
-                        add_special_tokens=True,
-                    )
-
-                    # Remove the last token if it is an eos token
-                    if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
-                        model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
-                        model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
-
-            # 2. Tokenize in case of using an encoder-decoder model
-            else:
-                raise NotImplementedError(f"Not implemented yet: using_decoder_only_model={using_decoder_only_model}, training={training}")
-
+            # Update progress bar
             pbar.update()
             if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
                 fabric.print(pbar)
+
+            return tokenized_sample
+
+        # Define tokenizer function for encoder-decoder model
+        def preprocess_for_encoder_decoder_model(row: LazyRow, data_opt: dict[str, Any], pbar: tqdm.std.tqdm):
+            # Fetch input data
+            sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
+            data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
+
+            def tokenize_train_sample():
+                # Tokenize the instruction inputs
+                model_inputs = tokenizer(
+                    text=sample.instance.instruction_inputs,
+                    max_length=data_opt.max_source_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )
+
+                # Tokenize the prompt labels
+                model_inputs["labels"] = tokenizer(
+                    text=sample.instance.prompt_labels,
+                    max_length=data_opt.max_target_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )["input_ids"]
+
+                return model_inputs
+
+            def tokenize_infer_sample():
+                # Tokenize the instruction inputs
+                model_inputs = tokenizer(
+                    text=sample.instance.instruction_inputs,
+                    max_length=data_opt.max_source_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )
+                return model_inputs
+
+            # Tokenize the sample
+            tokenized_sample = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
+
+            # Update progress bar
+            pbar.update()
+            if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
+                fabric.print(pbar)
+
+            return tokenized_sample
 
         # Preprocess dataset
         datasets.utils.logging.disable_progress_bar()
@@ -296,15 +346,11 @@ def train(
                 fabric.print(f"train_dataset: type=({type(train_dataset)} - {isinstance(train_dataset, Dataset)})")
                 with manual_tqdm(total=len(train_dataset), desc="Tokenize train dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     train_dataset.map(
-                        preprocess_sample,
-                        fn_kwargs={
-                            "max_source_length": args.data.max_source_length,
-                            "max_target_length": args.data.max_target_length,
-                            "pbar": manual_pbar,
-                        },
-                        batched=False,
-                        num_proc=args.env.max_workers,
+                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                        fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
                         load_from_cache_file=args.data.load_cache,
+                        num_proc=args.env.max_workers,
+                        batched=False,
                     )
             fabric.print("-" * 100)
         if eval_dataset:
@@ -312,15 +358,11 @@ def train(
                 fabric.print(f"valid_dataset: type=({type(eval_dataset)} - {isinstance(eval_dataset, Dataset)})")
                 with manual_tqdm(total=len(eval_dataset), desc="Tokenize eval dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     eval_dataset.map(
-                        preprocess_sample,
-                        fn_kwargs={
-                            "max_source_length": args.data.max_source_length,
-                            "max_target_length": args.data.max_target_length,
-                            "pbar": manual_pbar,
-                        },
-                        batched=False,
-                        num_proc=args.env.max_workers,
+                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                        fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
                         load_from_cache_file=args.data.load_cache,
+                        num_proc=args.env.max_workers,
+                        batched=False,
                     )
             fabric.print("-" * 100)
         if test_dataset:
@@ -328,15 +370,11 @@ def train(
                 fabric.print(f"test_dataset: type=({type(test_dataset)} - {isinstance(test_dataset, Dataset)})")
                 with manual_tqdm(total=len(test_dataset), desc="Tokenize test dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     test_dataset.map(
-                        preprocess_sample,
-                        fn_kwargs={
-                            "max_source_length": args.data.max_source_length,
-                            "max_target_length": args.data.max_target_length,
-                            "pbar": manual_pbar,
-                        },
-                        batched=False,
-                        num_proc=args.env.max_workers,
+                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                        fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
                         load_from_cache_file=args.data.load_cache,
+                        num_proc=args.env.max_workers,
+                        batched=False,
                     )
             fabric.print("-" * 100)
 
