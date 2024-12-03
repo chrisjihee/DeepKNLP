@@ -60,15 +60,16 @@ def train(
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
-        max_workers: int = typer.Option(default=2),
+        max_workers: int = typer.Option(default=4),
         debugging: bool = typer.Option(default=False),
         # data
-        train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
+        # train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
+        train_data: str = typer.Option(default="data/gner/pile-ner.jsonl"),
         eval_data: str = typer.Option(default=None),
         test_data: str = typer.Option(default=None),
         # eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
         # test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
-        max_train_samples: int = typer.Option(default=10),
+        max_train_samples: int = typer.Option(default=10000),
         max_eval_samples: int = typer.Option(default=10),
         max_test_samples: int = typer.Option(default=10),
         num_prog_samples: int = typer.Option(default=1024 * 2),
@@ -208,7 +209,8 @@ def train(
         fabric.print("-" * 100)
 
         # Define tokenizer function for decoder-only model
-        def preprocess_for_decoder_only_model(row: LazyRow, data_opt: dict[str, Any], pbar: tqdm.std.tqdm):
+        # def preprocess_for_decoder_only_model(row: LazyRow, data_opt: dict[str, Any], pbar: tqdm.std.tqdm):
+        def preprocess_for_decoder_only_model(row: LazyRow, data_opt: dict[str, Any]):
             # Fetch input data
             sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
             data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
@@ -283,9 +285,9 @@ def train(
             tokenized_sample = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
 
             # Update progress bar
-            pbar.update()
-            if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
-                fabric.print(pbar)
+            # pbar.update()
+            # if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
+            #     fabric.print(pbar)
 
             return tokenized_sample
 
@@ -341,18 +343,20 @@ def train(
             return tokenized_sample
 
         # Preprocess dataset
-        datasets.utils.logging.disable_progress_bar()
+        # datasets.utils.logging.disable_progress_bar()
         manual_tqdm: mute_tqdm_cls = mute_tqdm_cls()
         if train_dataset:
             with fabric.rank_zero_first():
-                with manual_tqdm(total=len(train_dataset), desc="Preprocess train samples", unit_divisor=args.data.num_prog_samples) as manual_pbar:
-                    train_dataset.map(
-                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
-                        load_from_cache_file=args.data.load_cache,
-                        num_proc=args.env.max_workers,
-                        batched=False,
-                    )
+                # with manual_tqdm(total=len(train_dataset), desc="Preprocess train samples", unit_divisor=args.data.num_prog_samples) as manual_pbar:
+                train_dataset.map(
+                    preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                    # fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
+                    fn_kwargs={"data_opt": args.data.model_dump(), },
+                    load_from_cache_file=args.data.load_cache,
+                    num_proc=args.env.max_workers,
+                    batched=False,
+                    desc="Preprocess train samples",
+                )
             fabric.print("-" * 100)
         if eval_dataset:
             with fabric.rank_zero_first():
