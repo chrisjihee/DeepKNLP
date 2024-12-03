@@ -65,19 +65,19 @@ def train(
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
-        max_workers: int = typer.Option(default=8),
+        max_workers: int = typer.Option(default=10),
         debugging: bool = typer.Option(default=False),
         # data
         # train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
         train_data: str = typer.Option(default="data/gner/pile-ner.jsonl"),
-        # eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
-        eval_data: str = typer.Option(default=None),
-        # test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
-        test_data: str = typer.Option(default=None),
-        max_train_samples: int = typer.Option(default=80000),
-        max_eval_samples: int = typer.Option(default=10),
-        max_test_samples: int = typer.Option(default=10),
-        num_prog_samples: int = typer.Option(default=10000),
+        eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
+        # eval_data: str = typer.Option(default=None),
+        test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
+        # test_data: str = typer.Option(default=None),
+        max_train_samples: int = typer.Option(default=-1),
+        max_eval_samples: int = typer.Option(default=-1),
+        max_test_samples: int = typer.Option(default=-1),
+        num_prog_samples: int = typer.Option(default=5000),
         max_source_length: int = typer.Option(default=512),
         max_target_length: int = typer.Option(default=512),
         load_cache: bool = typer.Option(default=True),
@@ -215,7 +215,7 @@ def train(
         fabric.print("-" * 100)
 
         # Define tokenizer function for decoder-only model
-        def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], cnt=Counter(step=args.env.max_workers),
+        def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], counter=Counter(step=args.env.max_workers),
                                               update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
             # Fetch input data
             sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
@@ -290,7 +290,7 @@ def train(
             # Tokenize the sample
             tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
             if update:
-                return update(tokenized_sample, process_rank, cnt)
+                return update(tokenized_sample, process_rank, counter)
             else:
                 return tokenized_sample
 
@@ -344,9 +344,10 @@ def train(
                 return tokenized_sample
 
         # Define progress update function
-        def update_progress(res: BatchEncoding, rank: int, cnt: Counter, pbar: ProgIter):
-            if cnt.inc() % args.data.num_prog_samples == 0 and rank == 0:
-                pbar.step(inc=cnt.val() - pbar._iter_idx)
+        def update_progress(res: BatchEncoding, rank: int, counter: Counter, pbar: ProgIter):
+            pre, cnt = counter.val(), counter.inc()
+            if (cnt >= pbar.total or any(i % num_prog_samples == 0 for i in range(pre + 1, cnt + 1))) and rank == 0:
+                pbar.step(inc=min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx))
                 fabric.print(pbar.format_message().rstrip())
             return res
 
