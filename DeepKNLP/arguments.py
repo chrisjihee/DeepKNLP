@@ -94,7 +94,7 @@ class NewDataOption(BaseModel):
     max_train_samples: int = Field(default=-1)
     max_eval_samples: int = Field(default=-1)
     max_test_samples: int = Field(default=-1)
-    num_prog_samples: int = Field(default=100)
+    num_prog_samples: int = Field(default=1)
     max_source_length: int = Field(default=512)
     max_target_length: int = Field(default=512)
     load_cache: bool = Field(default=True)

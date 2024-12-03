@@ -1,8 +1,13 @@
+import math
+import threading
+
+from progiter import ProgIter
 import tqdm
 import datasets
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from pydantic_core import ArgsKwargs
+from tqdm.asyncio import tqdm_asyncio, trange
 from typing_extensions import Self
 
 from pydantic import model_validator
@@ -14,14 +19,14 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from time import sleep
-from typing import List, Tuple, Dict, Mapping, Any, ClassVar, Union
+from typing import List, Tuple, Dict, Mapping, Any, ClassVar, Union, Callable
 import pandas as pd
 
 import torch
 import typer
 from pydantic import BaseModel, Field
 
-from chrisbase.data import AppTyper, JobTimer, ProjectEnv, TypedData, TimeChecker
+from chrisbase.data import AppTyper, JobTimer, ProjectEnv, TypedData, TimeChecker, Counter
 from chrisbase.io import LoggingFormat, make_dir, files, hr, to_table_lines
 from chrisbase.io import get_hostname, get_hostaddr, current_file, first_or, cwd, hr, flush_or, make_parent_dir, setup_unit_logger, setup_dual_logger, open_file, file_lines, to_table_lines, new_path, get_http_clients
 from chrisbase.time import now
@@ -35,7 +40,7 @@ from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch import Tensor
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan, AutoModelForSeq2SeqLM, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding
 from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import TokenClassifierOutput
 
@@ -65,14 +70,14 @@ def train(
         # data
         # train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
         train_data: str = typer.Option(default="data/gner/pile-ner.jsonl"),
-        eval_data: str = typer.Option(default=None),
-        test_data: str = typer.Option(default=None),
         # eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
+        eval_data: str = typer.Option(default=None),
         # test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
-        max_train_samples: int = typer.Option(default=10000),
+        test_data: str = typer.Option(default=None),
+        max_train_samples: int = typer.Option(default=80000),
         max_eval_samples: int = typer.Option(default=10),
         max_test_samples: int = typer.Option(default=10),
-        num_prog_samples: int = typer.Option(default=1024 * 2),
+        num_prog_samples: int = typer.Option(default=10000),
         max_source_length: int = typer.Option(default=512),
         max_target_length: int = typer.Option(default=512),
         load_cache: bool = typer.Option(default=True),
@@ -94,6 +99,7 @@ def train(
         device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
 ):
     torch.set_float32_matmul_precision('high')
+    datasets.utils.logging.disable_progress_bar()
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
     logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
@@ -162,7 +168,7 @@ def train(
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
-            args=args if debugging and fabric.is_global_zero else None, verbose=fabric.is_global_zero,
+            args=args if fabric.is_global_zero else None, verbose=fabric.is_global_zero,
             # mute_warning="lightning.fabric.loggers.csv_logs",
     ):
         # Set random seed
@@ -209,8 +215,8 @@ def train(
         fabric.print("-" * 100)
 
         # Define tokenizer function for decoder-only model
-        # def preprocess_for_decoder_only_model(row: LazyRow, data_opt: dict[str, Any], pbar: tqdm.std.tqdm):
-        def preprocess_for_decoder_only_model(row: LazyRow, data_opt: dict[str, Any]):
+        def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], cnt=Counter(step=args.env.max_workers),
+                                              update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
             # Fetch input data
             sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
             data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
@@ -282,17 +288,15 @@ def train(
                 return model_inputs
 
             # Tokenize the sample
-            tokenized_sample = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
-
-            # Update progress bar
-            # pbar.update()
-            # if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
-            #     fabric.print(pbar)
-
-            return tokenized_sample
+            tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
+            if update:
+                return update(tokenized_sample, process_rank, cnt)
+            else:
+                return tokenized_sample
 
         # Define tokenizer function for encoder-decoder model
-        def preprocess_for_encoder_decoder_model(row: LazyRow, data_opt: dict[str, Any], pbar: tqdm.std.tqdm):
+        def preprocess_for_encoder_decoder_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], cnt=Counter(step=args.env.max_workers),
+                                                 update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
             # Fetch input data
             sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
             data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
@@ -333,51 +337,48 @@ def train(
                 return model_inputs
 
             # Tokenize the sample
-            tokenized_sample = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
+            tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
+            if update:
+                return update(tokenized_sample, process_rank, cnt)
+            else:
+                return tokenized_sample
 
-            # Update progress bar
-            pbar.update()
-            if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
-                fabric.print(pbar)
-
-            return tokenized_sample
+        # Define progress update function
+        def update_progress(res: BatchEncoding, rank: int, cnt: Counter, pbar: ProgIter):
+            if cnt.inc() % args.data.num_prog_samples == 0 and rank == 0:
+                pbar.step(inc=cnt.val() - pbar._iter_idx)
+                fabric.print(pbar.format_message().rstrip())
+            return res
 
         # Preprocess dataset
-        # datasets.utils.logging.disable_progress_bar()
-        manual_tqdm: mute_tqdm_cls = mute_tqdm_cls()
         if train_dataset:
             with fabric.rank_zero_first():
-                # with manual_tqdm(total=len(train_dataset), desc="Preprocess train samples", unit_divisor=args.data.num_prog_samples) as manual_pbar:
-                train_dataset.map(
-                    preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                    # fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
-                    fn_kwargs={"data_opt": args.data.model_dump(), },
-                    load_from_cache_file=args.data.load_cache,
-                    num_proc=args.env.max_workers,
-                    batched=False,
-                    desc="Preprocess train samples",
-                )
+                with ProgIter(total=len(train_dataset), desc='Preprocess train samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
+                    train_dataset.map(
+                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers,
+                        load_from_cache_file=args.data.load_cache,
+                    )
             fabric.print("-" * 100)
         if eval_dataset:
             with fabric.rank_zero_first():
-                with manual_tqdm(total=len(eval_dataset), desc="Preprocess eval samples", unit_divisor=args.data.num_prog_samples) as manual_pbar:
+                with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
                     eval_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
+                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers,
                         load_from_cache_file=args.data.load_cache,
-                        num_proc=args.env.max_workers,
-                        batched=False,
                     )
             fabric.print("-" * 100)
         if test_dataset:
             with fabric.rank_zero_first():
-                with manual_tqdm(total=len(test_dataset), desc="Preprocess test samples", unit_divisor=args.data.num_prog_samples) as manual_pbar:
+                with ProgIter(total=len(test_dataset), desc='Preprocess test samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
                     test_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
+                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers,
                         load_from_cache_file=args.data.load_cache,
-                        num_proc=args.env.max_workers,
-                        batched=False,
                     )
             fabric.print("-" * 100)
 
