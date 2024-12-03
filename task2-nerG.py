@@ -60,16 +60,16 @@ def train(
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
-        max_workers: int = typer.Option(default=4),
+        max_workers: int = typer.Option(default=os.cpu_count() / 2),
         debugging: bool = typer.Option(default=True),
         # data
         train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
         eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
         test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
-        max_train_samples: int = typer.Option(default=3),
-        max_eval_samples: int = typer.Option(default=3),
-        max_test_samples: int = typer.Option(default=3),
-        num_prog_samples: int = typer.Option(default=100),
+        max_train_samples: int = typer.Option(default=-1),
+        max_eval_samples: int = typer.Option(default=-1),
+        max_test_samples: int = typer.Option(default=-1),
+        num_prog_samples: int = typer.Option(default=1024 * 2),
         max_source_length: int = typer.Option(default=512),
         max_target_length: int = typer.Option(default=512),
         load_cache: bool = typer.Option(default=True),
@@ -343,8 +343,7 @@ def train(
         manual_tqdm: mute_tqdm_cls = mute_tqdm_cls()
         if train_dataset:
             with fabric.rank_zero_first():
-                fabric.print(f"train_dataset: type=({type(train_dataset)} - {isinstance(train_dataset, Dataset)})")
-                with manual_tqdm(total=len(train_dataset), desc="Tokenize train dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
+                with manual_tqdm(total=len(train_dataset), desc="Preprocess train samples", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     train_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
@@ -355,8 +354,7 @@ def train(
             fabric.print("-" * 100)
         if eval_dataset:
             with fabric.rank_zero_first():
-                fabric.print(f"valid_dataset: type=({type(eval_dataset)} - {isinstance(eval_dataset, Dataset)})")
-                with manual_tqdm(total=len(eval_dataset), desc="Tokenize eval dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
+                with manual_tqdm(total=len(eval_dataset), desc="Preprocess eval samples", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     eval_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },
@@ -367,8 +365,7 @@ def train(
             fabric.print("-" * 100)
         if test_dataset:
             with fabric.rank_zero_first():
-                fabric.print(f"test_dataset: type=({type(test_dataset)} - {isinstance(test_dataset, Dataset)})")
-                with manual_tqdm(total=len(test_dataset), desc="Tokenize test dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
+                with manual_tqdm(total=len(test_dataset), desc="Preprocess test samples", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     test_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "pbar": manual_pbar, },

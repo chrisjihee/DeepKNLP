@@ -1,0 +1,82 @@
+[12.03 23:47:21] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.03 23:47:21] ┇ INFO     ┇                   chrisbase.data ┇ [INIT] python /home/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py 
+[12.03 23:47:21] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    # | NewTrainerArguments     | value
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    1 | env.hostname            | ptlm2
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    2 | env.hostaddr            | 129.254.121.73
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    3 | env.global_rank         | 0
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    4 | env.local_rank          | 0
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    5 | env.node_rank           | 0
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    6 | env.world_size          | 1
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    7 | env.time_stamp          | 1203.234719
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    8 | env.python_path         | /home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇    9 | env.current_dir         | /home/chrisjihee/proj/DeepKNLP
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   10 | env.current_file        | /home/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   11 | env.command_args        | []
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   12 | env.logging_home        | /home/chrisjihee/proj/DeepKNLP/output/task2-nerG
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   13 | env.logging_file        | train-messages.out
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   14 | env.argument_file       | train-arguments.json
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   15 | env.max_workers         | 1
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   16 | env.debugging           | True
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   17 | env.date_format         | [%m.%d %H:%M:%S]
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   18 | env.message_level       | 20
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   19 | env.message_format      | %(asctime)s ┇ %(levelname)-8s ┇ %(name)32s ┇ %(message)s
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   20 | time.t1                 | 2024-12-03 23:47:21.842399
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   21 | time.t2                 | 2024-12-03 23:47:17.900565
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   22 | time.started            | [12.03 23:47:21]
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   23 | time.settled            |
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   24 | time.elapsed            |
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   25 | data.train_path         | data/gner/zero-shot-train.jsonl
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   26 | data.eval_path          | data/gner/zero-shot-dev.jsonl
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   27 | data.test_path          | data/gner/zero-shot-test.jsonl
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   28 | data.max_train_samples  | -1
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   29 | data.max_eval_samples   | -1
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   30 | data.max_test_samples   | -1
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   31 | data.num_prog_samples   | 2048
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   32 | data.max_source_length  | 512
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   33 | data.max_target_length  | 512
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   34 | data.load_cache         | True
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   35 | model.pretrained        | meta-llama/Llama-3.2-1B
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   36 | learning.random_seed    | 7
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   37 | hardware.grad_acc_steps | 4
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   38 | hardware.train_batch    | 8
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   39 | hardware.infer_batch    | 32
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   40 | hardware.accelerator    | cuda
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   41 | hardware.precision      | bf16-mixed
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   42 | hardware.strategy       | ddp
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇   43 | hardware.devices        | [0]
+[12.03 23:47:21] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------
+[12.03 23:47:21] ┇ INFO     ┇  lightning.fabric.utilities.seed ┇ [rank: 0] Seed set to 7
+[12.03 23:47:23] ┇ INFO     ┇                         __main__ ┇ type(model)=<class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'> - True
+[12.03 23:47:23] ┇ INFO     ┇                         __main__ ┇ type(config)=<class 'transformers.models.llama.configuration_llama.LlamaConfig'> - True
+[12.03 23:47:23] ┇ INFO     ┇                         __main__ ┇ type(tokenizer)=<class 'transformers.tokenization_utils_fast.PreTrainedTokenizerFast'> - True
+[12.03 23:47:23] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.03 23:47:24] ┇ INFO     ┇                         __main__ ┇ Use data/gner/zero-shot-train.jsonl as train dataset: 18,135 samples
+[12.03 23:47:24] ┇ INFO     ┇                         __main__ ┇ Use data/gner/zero-shot-dev.jsonl as eval dataset: 6,085 samples
+[12.03 23:47:24] ┇ INFO     ┇                         __main__ ┇ Use data/gner/zero-shot-dev.jsonl as test dataset: 6,470 samples
+[12.03 23:47:24] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.03 23:47:27] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  11%|█████▋                                            | 2048/18135 [00:02<00:17, 932.30it/s]
+[12.03 23:47:29] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  23%|███████████▎                                      | 4096/18135 [00:04<00:18, 779.44it/s]
+[12.03 23:47:31] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  34%|████████████████▉                                 | 6144/18135 [00:06<00:13, 910.32it/s]
+[12.03 23:47:33] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  45%|██████████████████████▌                           | 8192/18135 [00:08<00:10, 912.56it/s]
+[12.03 23:47:35] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  56%|████████████████████████████▏                     | 10240/18135 [00:10<00:07, 1001.53it/s]
+[12.03 23:47:37] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  68%|█████████████████████████████████▉                | 12288/18135 [00:12<00:05, 1058.44it/s]
+[12.03 23:47:39] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  79%|███████████████████████████████████████▌          | 14336/18135 [00:14<00:03, 1067.39it/s]
+[12.03 23:47:40] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  90%|█████████████████████████████████████████████▏    | 16384/18135 [00:15<00:01, 1104.95it/s]
+[12.03 23:47:42] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples: 100%|██████████████████████████████████████████████████| 18135/18135 [00:17<00:00, 1047.49it/s]
+[12.03 23:47:42] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.03 23:47:44] ┇ INFO     ┇                         __main__ ┇ Preprocess eval samples:  34%|████████████████▊                                 | 2048/6085 [00:01<00:02, 1520.11it/s]
+[12.03 23:47:45] ┇ INFO     ┇                         __main__ ┇ Preprocess eval samples:  67%|█████████████████████████████████▋                | 4096/6085 [00:02<00:01, 1792.10it/s]
+[12.03 23:47:46] ┇ INFO     ┇                         __main__ ┇ Preprocess eval samples: 100%|██████████████████████████████████████████████████| 6085/6085 [00:03<00:00, 2104.28it/s]
+[12.03 23:47:46] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.03 23:47:47] ┇ INFO     ┇                         __main__ ┇ Preprocess test samples:  32%|███████████████▊                                  | 2048/6470 [00:01<00:02, 1634.14it/s]
+[12.03 23:47:48] ┇ INFO     ┇                         __main__ ┇ Preprocess test samples:  63%|███████████████████████████████▋                  | 4096/6470 [00:02<00:01, 1793.47it/s]
+[12.03 23:47:49] ┇ INFO     ┇                         __main__ ┇ Preprocess test samples:  95%|███████████████████████████████████████████████▍  | 6144/6470 [00:03<00:00, 1884.72it/s]
+[12.03 23:47:50] ┇ INFO     ┇                         __main__ ┇ Preprocess test samples: 100%|██████████████████████████████████████████████████| 6470/6470 [00:03<00:00, 2064.78it/s]
+[12.03 23:47:50] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.03 23:47:50] ┇ INFO     ┇                         __main__ ┇ ****************************************************************************************************
+[12.03 23:47:50] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.03 23:47:50] ┇ INFO     ┇                   chrisbase.data ┇ [EXIT] python /home/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py  ($=00:00:28.300)
+[12.03 23:47:50] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
