@@ -126,6 +126,8 @@ class NewDataOption(BaseModel):
     max_eval_samples: int = Field(default=-1)
     max_test_samples: int = Field(default=-1)
     num_prog_samples: int = Field(default=100)
+    max_source_length: int = Field(default=512)
+    max_target_length: int = Field(default=512)
     load_cache: bool = Field(default=True)
 
 
@@ -185,6 +187,8 @@ def train(
         max_eval_samples: int = typer.Option(default=3),
         max_test_samples: int = typer.Option(default=3),
         num_prog_samples: int = typer.Option(default=100),
+        max_source_length: int = typer.Option(default=512),
+        max_target_length: int = typer.Option(default=512),
         load_cache: bool = typer.Option(default=True),
         # model
         # pretrained: str = typer.Option(default="google/flan-t5-small"),
@@ -226,6 +230,8 @@ def train(
             max_eval_samples=max_eval_samples,
             max_test_samples=max_test_samples,
             num_prog_samples=num_prog_samples,
+            max_source_length=max_source_length,
+            max_target_length=max_target_length,
             load_cache=load_cache,
         ),
         model=NewModelOption(
@@ -316,11 +322,33 @@ def train(
         fabric.print("-" * 100)
 
         # Define preprocess function
-        def preprocess_sample(row: LazyRow, pbar: tqdm.std.tqdm = None):
+        # data_args = args.data
+        max_length = args.data.max_source_length + args.data.max_target_length
+        def preprocess_sample(row: LazyRow, pbar: tqdm.std.tqdm = None, args2=None):
             sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
-            is_infer: bool = sample.split != "train"
+            training: bool = sample.split == "train"
 
-            fabric.print(f"sample: {sample}")
+            if not config.is_encoder_decoder:
+                prompt = f"[INST] {sample.instance.instruction_inputs} [/INST]"
+                full_instruction = f"{prompt} {sample.instance.prompt_labels}"
+                # max_length = args.data.max_source_length + args.data.max_target_length
+                if training:
+                    model_input = tokenizer(
+                        text=full_instruction,
+                        max_length=max_length,
+                        truncation=True,
+                        padding=False,
+                        return_tensors=None,
+                        add_special_tokens=True,
+                    )
+                    # model_input["labels"] = model_input["input_ids"].copy()
+                    # model_input["labels"] = model_input["input_ids"].clone()
+                    # exit(1)
+                else:
+                    pass
+            else:
+                raise NotImplementedError("Not implemented yet")
+
             pbar.update()
             if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
                 fabric.print(pbar)
