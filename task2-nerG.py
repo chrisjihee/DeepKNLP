@@ -201,7 +201,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
-        device: List[int] = typer.Option(default=[0, 1]),  # TODO: -> [0], [0,1], [0,1,2,3]
+        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
 ):
     torch.set_float32_matmul_precision('high')
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
@@ -316,11 +316,11 @@ def train(
         fabric.print("-" * 100)
 
         # Define preprocess function
-        def preprocess_sample(sample: LazyRow, pbar: tqdm.std.tqdm = None):
-            inference: bool = sample['split'] != "train"
-            sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(sample.data)
-            fabric.print(sample)
+        def preprocess_sample(row: LazyRow, pbar: tqdm.std.tqdm = None):
+            sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
+            is_infer: bool = sample.split != "train"
 
+            fabric.print(f"sample: {sample}")
             pbar.update()
             if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
                 fabric.print(pbar)
