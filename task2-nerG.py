@@ -65,7 +65,7 @@ def train(
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
-        max_workers: int = typer.Option(default=4),
+        max_workers: int = typer.Option(default=8),
         debugging: bool = typer.Option(default=False),
         # data
         # train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
