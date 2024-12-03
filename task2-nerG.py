@@ -286,10 +286,11 @@ def train(
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
         tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(pretrained)
-        if config.is_encoder_decoder:
-            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
-        else:
+        using_decoder_only_model = not config.is_encoder_decoder
+        if using_decoder_only_model:
             model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained)
+        else:
+            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
         fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
         fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
         fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}")
@@ -322,17 +323,16 @@ def train(
         fabric.print("-" * 100)
 
         # Define preprocess function
-        # data_args = args.data
-        max_length = args.data.max_source_length + args.data.max_target_length
-        def preprocess_sample(row: LazyRow, pbar: tqdm.std.tqdm = None, args2=None):
+        def preprocess_sample(row: LazyRow, max_source_length: int, max_target_length: int, pbar: tqdm.std.tqdm):
             sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
             training: bool = sample.split == "train"
 
-            if not config.is_encoder_decoder:
+            if using_decoder_only_model:
                 prompt = f"[INST] {sample.instance.instruction_inputs} [/INST]"
                 full_instruction = f"{prompt} {sample.instance.prompt_labels}"
-                # max_length = args.data.max_source_length + args.data.max_target_length
+                max_length = max_source_length + max_target_length
                 if training:
+                    # Tokenize the full instruction
                     model_input = tokenizer(
                         text=full_instruction,
                         max_length=max_length,
@@ -341,13 +341,43 @@ def train(
                         return_tensors=None,
                         add_special_tokens=True,
                     )
-                    # model_input["labels"] = model_input["input_ids"].copy()
-                    # model_input["labels"] = model_input["input_ids"].clone()
-                    # exit(1)
+
+                    # Add eos token if it is not the last token
+                    if model_input["input_ids"][-1] != tokenizer.eos_token_id:
+                        model_input["input_ids"].append(tokenizer.eos_token_id)
+                        model_input["attention_mask"].append(1)
+
+                    # Add labels
+                    model_input["labels"] = model_input["input_ids"].copy()
+
+                    # Find the prompt length
+                    prompt = tokenizer(
+                        text=prompt,
+                        max_length=max_length,
+                        truncation=True,
+                        padding=False,
+                        return_tensors=None,
+                        add_special_tokens=True,
+                    )["input_ids"]
+
+                    # Remove the last token if it is an eos token
+                    if prompt[-1] == tokenizer.eos_token_id:
+                        prompt = prompt[:-1]
+
+                    # Check if the prompt is longer than the input
+                    if len(prompt) > len(model_input["labels"]):
+                        raise ValueError(
+                            f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
+                            f" {model_input['input_ids']}"
+                        )
+
+                    # Mask the prompt tokens
+                    for i in range(len(prompt)):
+                        model_input["labels"][i] = -100
                 else:
-                    pass
+                    raise NotImplementedError(f"Not implemented yet: using_decoder_only_model={using_decoder_only_model}, training={training}")
             else:
-                raise NotImplementedError("Not implemented yet")
+                raise NotImplementedError(f"Not implemented yet: using_decoder_only_model={using_decoder_only_model}, training={training}")
 
             pbar.update()
             if pbar.n == pbar.total or pbar.n % pbar.unit_divisor == 0:
@@ -362,10 +392,14 @@ def train(
                 with manual_tqdm(total=len(train_dataset), desc="Tokenize train dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     train_dataset.map(
                         preprocess_sample,
+                        fn_kwargs={
+                            "max_source_length": args.data.max_source_length,
+                            "max_target_length": args.data.max_target_length,
+                            "pbar": manual_pbar,
+                        },
                         batched=False,
                         num_proc=args.env.max_workers,
                         load_from_cache_file=args.data.load_cache,
-                        fn_kwargs={"pbar": manual_pbar},
                     )
             fabric.print("-" * 100)
         if eval_dataset:
@@ -374,10 +408,14 @@ def train(
                 with manual_tqdm(total=len(eval_dataset), desc="Tokenize eval dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     eval_dataset.map(
                         preprocess_sample,
+                        fn_kwargs={
+                            "max_source_length": args.data.max_source_length,
+                            "max_target_length": args.data.max_target_length,
+                            "pbar": manual_pbar,
+                        },
                         batched=False,
                         num_proc=args.env.max_workers,
                         load_from_cache_file=args.data.load_cache,
-                        fn_kwargs={"pbar": manual_pbar},
                     )
             fabric.print("-" * 100)
         if test_dataset:
@@ -386,10 +424,14 @@ def train(
                 with manual_tqdm(total=len(test_dataset), desc="Tokenize test dataset", unit_divisor=args.data.num_prog_samples) as manual_pbar:
                     test_dataset.map(
                         preprocess_sample,
+                        fn_kwargs={
+                            "max_source_length": args.data.max_source_length,
+                            "max_target_length": args.data.max_target_length,
+                            "pbar": manual_pbar,
+                        },
                         batched=False,
                         num_proc=args.env.max_workers,
                         load_from_cache_file=args.data.load_cache,
-                        fn_kwargs={"pbar": manual_pbar},
                     )
             fabric.print("-" * 100)
 
