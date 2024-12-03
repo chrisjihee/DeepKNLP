@@ -1,3 +1,4 @@
+import tqdm
 import datasets
 from datasets import load_dataset, Dataset
 from pydantic_core import ArgsKwargs
@@ -119,6 +120,9 @@ class NewDataOption(BaseModel):
     train_path: str | Path = Field(default=None)
     eval_path: str | Path = Field(default=None)
     test_path: str | Path = Field(default=None)
+    max_train_samples: int = Field(default=-1)
+    max_eval_samples: int = Field(default=-1)
+    max_test_samples: int = Field(default=-1)
     load_cache: bool = Field(default=True)
 
 
@@ -174,6 +178,9 @@ def train(
         train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
         eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
         test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
+        max_train_samples: int = typer.Option(default=3),
+        max_eval_samples: int = typer.Option(default=3),
+        max_test_samples: int = typer.Option(default=3),
         load_cache: bool = typer.Option(default=True),
         # model
         # pretrained: str = typer.Option(default="google/flan-t5-small"),
@@ -211,6 +218,9 @@ def train(
             train_path=train_data,
             eval_path=eval_data,
             test_path=test_data,
+            max_train_samples=max_train_samples,
+            max_eval_samples=max_eval_samples,
+            max_test_samples=max_test_samples,
             load_cache=load_cache,
         ),
         model=NewModelOption(
@@ -282,33 +292,50 @@ def train(
         if args.data.train_path:
             with fabric.rank_zero_first():
                 train_dataset: Dataset = load_dataset("json", data_files=args.data.train_path, split=datasets.Split.TRAIN)
+                if args.data.max_train_samples > 0:
+                    train_dataset = train_dataset.select(range(min(len(train_dataset), args.data.max_train_samples)))
                 fabric.print(f"Use {args.data.train_path} as train dataset: {len(train_dataset):,} samples")
         if args.data.eval_path:
             with fabric.rank_zero_first():
                 eval_dataset: Dataset = load_dataset("json", data_files=args.data.eval_path, split=datasets.Split.TRAIN)
+                if args.data.max_eval_samples > 0:
+                    eval_dataset = eval_dataset.select(range(min(len(eval_dataset), args.data.max_eval_samples)))
                 fabric.print(f"Use {args.data.eval_path} as eval dataset: {len(eval_dataset):,} samples")
         if args.data.test_path:
             with fabric.rank_zero_first():
                 test_dataset: Dataset = load_dataset("json", data_files=args.data.test_path, split=datasets.Split.TRAIN)
+                if args.data.max_test_samples > 0:
+                    test_dataset = test_dataset.select(range(min(len(test_dataset), args.data.max_test_samples)))
                 fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
         fabric.print("-" * 100)
 
         # Define preprocess function
-        def preprocess_sample(sample: Mapping[str, Any]):
-            # fabric.print(f"samples: {sample.keys()}")
+        datasets.utils.logging.disable_progress_bar()
+
+        manual_tqdm = mute_tqdm_cls()
+        fabric.print(f"mute_tqdm: {manual_tqdm} - {isinstance(manual_tqdm, mute_tqdm_cls)}")
+
+        # pbar: tqdm.std.tqdm = mute_tqdm(total=len(train_dataset), desc="Tokenize train dataset")
+        # fabric.print(f"pbar: {type(pbar)} - {isinstance(pbar, tqdm.std.tqdm)}")
+
+        def preprocess_sample(sample: Mapping[str, Any], pbar: tqdm.std.tqdm = None):
+            fabric.print(f"pbar: {type(pbar)} - {isinstance(pbar, tqdm.std.tqdm)}")
+            fabric.print(f"samples: {sample.keys()}")
             pass
 
         # Preprocess dataset
         if train_dataset:
             with fabric.rank_zero_first():
                 fabric.print(f"train_dataset: type=({type(train_dataset)} - {isinstance(train_dataset, Dataset)})")
-                train_dataset.map(
-                    preprocess_sample,
-                    batched=False,
-                    num_proc=args.env.max_workers,
-                    load_from_cache_file=args.data.load_cache,
-                    # desc="Tokenize train dataset",
-                )
+                with manual_tqdm(total=len(train_dataset), desc="Tokenize train dataset") as pbar:
+                    train_dataset.map(
+                        preprocess_sample,
+                        batched=False,
+                        num_proc=args.env.max_workers,
+                        load_from_cache_file=args.data.load_cache,
+                        # desc="Tokenize train dataset",
+                        fn_kwargs={"pbar": pbar},
+                    )
         if eval_dataset:
             with fabric.rank_zero_first():
                 fabric.print(f"valid_dataset: type=({type(eval_dataset)} - {isinstance(eval_dataset, Dataset)})")
