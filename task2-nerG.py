@@ -1,12 +1,14 @@
 import math
 import threading
 
+import pydantic
 import transformers.utils.logging
 from progiter import ProgIter
 import tqdm
 import datasets
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
+from pydantic.v1.dataclasses import create_pydantic_model_from_dataclass
 from pydantic_core import ArgsKwargs
 from tqdm.asyncio import tqdm_asyncio, trange
 from typing_extensions import Self
@@ -20,7 +22,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from time import sleep
-from typing import List, Tuple, Dict, Mapping, Any, ClassVar, Union, Callable
+from typing import List, Tuple, Dict, Mapping, Any, ClassVar, Union, Callable, Type
 import pandas as pd
 
 import torch
@@ -267,6 +269,25 @@ def train(
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
     args.env.setup_logger()
     trainer_args: Seq2SeqTrainingArguments = HfArgumentParser(Seq2SeqTrainingArguments).parse_json_file(args.learning.trainer_args)[0]
+
+    @dataclass
+    class TrainerArguments:
+        output_dir: str = Field(default="output/task2-nerG")
+
+    bbb = TrainerArguments()
+
+    from pydantic import create_model
+    from typing import get_type_hints
+
+    def dataclass_to_basemodel(entity):
+        hints = get_type_hints(entity)
+        new_model = create_model("DynamicBaseModel", **{k: (v, ...) for k, v in hints.items()})
+        return new_model
+
+    ccc = dataclass_to_basemodel(bbb)
+    fabric.print(ccc(output_dir="test").model_dump())
+    exit(1)
+
     args.learning.trainer_args = trainer_args.to_dict()
 
     # for checking
