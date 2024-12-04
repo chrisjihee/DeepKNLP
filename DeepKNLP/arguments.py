@@ -4,7 +4,7 @@ import sys
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
@@ -98,6 +98,40 @@ class NewDataOption(BaseModel):
     max_source_length: int = Field(default=512)
     max_target_length: int = Field(default=512)
     use_cache_data: bool = Field(default=True)
+
+    @model_validator(mode='after')
+    def after(self) -> Self:
+        self.train_path = Path(self.train_path).absolute() if self.train_path else None
+        self.eval_path = Path(self.eval_path).absolute() if self.eval_path else None
+        self.test_path = Path(self.test_path).absolute() if self.test_path else None
+        return self
+
+    @property
+    def cache_train_dir(self) -> Optional[Path]:
+        if self.train_path:
+            return self.train_path.parent / ".cache"
+
+    @property
+    def cache_eval_dir(self) -> Optional[Path]:
+        if self.eval_path:
+            return self.eval_path.parent / ".cache"
+
+    @property
+    def cache_test_dir(self) -> Optional[Path]:
+        if self.test_path:
+            return self.test_path.parent / ".cache"
+
+    def cache_train_path(self, size: int) -> Optional[Path]:
+        if self.train_path:
+            return self.cache_train_dir / f"{self.train_path.stem}={size}.tmp"
+
+    def cache_eval_path(self, size: int) -> Optional[Path]:
+        if self.eval_path:
+            return self.cache_eval_dir / f"{self.eval_path.stem}={size}.tmp"
+
+    def cache_test_path(self, size: int) -> Optional[Path]:
+        if self.test_path:
+            return self.cache_test_dir / f"{self.test_path.stem}={size}.tmp"
 
 
 class NewModelOption(BaseModel):

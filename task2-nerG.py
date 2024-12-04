@@ -1,6 +1,7 @@
 import math
 import threading
 
+import transformers.utils.logging
 from progiter import ProgIter
 import tqdm
 import datasets
@@ -43,6 +44,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding
 from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import TokenClassifierOutput
+from transformers.data.data_collator import *
 
 from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption, NewTrainerArguments, NewProjectEnv, NewDataOption, NewModelOption, NewLearningOption, NewHardwareOption
 from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
@@ -54,6 +56,100 @@ from chrisdata.ner import GenNERSampleWrapper
 main = AppTyper()
 logger = logging.getLogger(__name__)
 setup_unit_logger(fmt=LoggingFormat.CHECK_24)
+
+
+@dataclass
+class DataCollatorForGNER:
+    """
+    Data collator that will dynamically pad the inputs received, as well as the labels.
+
+    Args:
+        tokenizer ([`PreTrainedTokenizer`] or [`PreTrainedTokenizerFast`]):
+            The tokenizer used for encoding the data.
+        model ([`PreTrainedModel`], *optional*):
+            The model that is being trained. If set and has the *prepare_decoder_input_ids_from_labels*, use it to
+            prepare the *decoder_input_ids*
+
+            This is useful when using *label_smoothing* to avoid calculating loss twice.
+        padding (`bool`, `str` or [`~utils.PaddingStrategy`], *optional*, defaults to `True`):
+            Select a strategy to pad the returned sequences (according to the model's padding side and padding index)
+            among:
+
+            - `True` or `'longest'` (default): Pad to the longest sequence in the batch (or no padding if only a single
+              sequence is provided).
+            - `'max_length'`: Pad to a maximum length specified with the argument `max_length` or to the maximum
+              acceptable input length for the model if that argument is not provided.
+            - `False` or `'do_not_pad'`: No padding (i.e., can output a batch with sequences of different lengths).
+        max_length (`int`, *optional*):
+            Maximum length of the returned list and optionally padding length (see above).
+        pad_to_multiple_of (`int`, *optional*):
+            If set will pad the sequence to a multiple of the provided value.
+
+            This is especially useful to enable the use of Tensor Cores on NVIDIA hardware with compute capability >=
+            7.5 (Volta).
+        label_pad_token_id (`int`, *optional*, defaults to -100):
+            The id to use when padding the labels (-100 will be automatically ignored by PyTorch loss functions).
+        return_tensors (`str`, *optional*, defaults to `"pt"`):
+            The type of Tensor to return. Allowable values are "np", "pt" and "tf".
+    """
+
+    tokenizer: PreTrainedTokenizerBase
+    model: Optional[Any] = None
+    padding: Union[bool, str, PaddingStrategy] = True
+    max_length: Optional[int] = None
+    pad_to_multiple_of: Optional[int] = None
+    label_pad_token_id: int = -100
+    return_tensors: str = "pt"
+
+    def __call__(self, features, return_tensors=None):
+        used_features_name = ["input_ids", "attention_mask", "labels"]
+        features = [dict([item for item in feature.items() if item[0] in used_features_name]) for feature in features]
+
+        if return_tensors is None:
+            return_tensors = self.return_tensors
+        labels = [feature["labels"] for feature in features] if "labels" in features[0].keys() else None
+        # We have to pad the labels before calling `tokenizer.pad` as this method won't pad them and needs them of the
+        # same length to return tensors.
+        if labels is not None:
+            max_label_length = max(len(l) for l in labels)
+            if self.pad_to_multiple_of is not None:
+                max_label_length = (
+                        (max_label_length + self.pad_to_multiple_of - 1)
+                        // self.pad_to_multiple_of
+                        * self.pad_to_multiple_of
+                )
+
+            padding_side = self.tokenizer.padding_side
+            for feature in features:
+                remainder = [self.label_pad_token_id] * (max_label_length - len(feature["labels"]))
+                if isinstance(feature["labels"], list):
+                    feature["labels"] = (
+                        feature["labels"] + remainder if padding_side == "right" else remainder + feature["labels"]
+                    )
+                elif padding_side == "right":
+                    feature["labels"] = np.concatenate([feature["labels"], remainder]).astype(np.int64)
+                else:
+                    feature["labels"] = np.concatenate([remainder, feature["labels"]]).astype(np.int64)
+
+        features = pad_without_fast_tokenizer_warning(
+            self.tokenizer,
+            features,
+            padding=self.padding,
+            max_length=self.max_length,
+            pad_to_multiple_of=self.pad_to_multiple_of,
+            return_tensors=return_tensors,
+        )
+
+        # prepare decoder_input_ids
+        if (
+                labels is not None
+                and self.model is not None
+                and hasattr(self.model, "prepare_decoder_input_ids_from_labels")
+        ):
+            decoder_input_ids = self.model.prepare_decoder_input_ids_from_labels(labels=features["labels"])
+            features["decoder_input_ids"] = decoder_input_ids
+
+        return features
 
 
 @main.command()
@@ -68,8 +164,8 @@ def train(
         max_workers: int = typer.Option(default=4),
         debugging: bool = typer.Option(default=False),
         # data
-        # train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
-        train_data: str = typer.Option(default="data/gner/pile-ner.jsonl"),
+        train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
+        # train_data: str = typer.Option(default="data/gner/pile-ner.jsonl"),
         eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
         # eval_data: str = typer.Option(default=None),
         test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
@@ -101,9 +197,16 @@ def train(
 ):
     torch.set_float32_matmul_precision('high')
     datasets.utils.logging.disable_progress_bar()
+    transformers.utils.logging.disable_progress_bar()
+    logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("lightning").setLevel(logging.INFO)
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
     logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
-    logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("datasets").setLevel(logging.INFO)
+    logging.getLogger("datasets.info").setLevel(logging.WARNING)
+    logging.getLogger("datasets.builder").setLevel(logging.WARNING)
+    logging.getLogger("datasets.arrow_dataset").setLevel(logging.WARNING)
+    logging.getLogger("datasets.download.download_manager").setLevel(logging.WARNING)
     pretrained = Path(pretrained)
     args = NewTrainerArguments(
         env=NewProjectEnv(
@@ -170,7 +273,6 @@ def train(
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
             args=args if fabric.is_global_zero else None, verbose=fabric.is_global_zero,
-            # mute_warning="lightning.fabric.loggers.csv_logs",
     ):
         # Set random seed
         fabric.barrier()
@@ -184,11 +286,11 @@ def train(
             model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained)
         else:
             model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
+        fabric.barrier()
         fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
         fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
         fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}")
         fabric.print("-" * 100)
-        fabric.barrier()
 
         # Load dataset
         train_dataset: Dataset | None = None
@@ -196,19 +298,25 @@ def train(
         test_dataset: Dataset | None = None
         if args.data.train_path:
             with fabric.rank_zero_first():
-                train_dataset: Dataset = load_dataset("json", data_files=args.data.train_path, split=datasets.Split.TRAIN)
+                train_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+                                                      data_files=str(args.data.train_path),
+                                                      cache_dir=str(args.data.cache_train_dir))
                 if args.data.max_train_samples > 0:
                     train_dataset = train_dataset.select(range(min(len(train_dataset), args.data.max_train_samples)))
                 fabric.print(f"Use {args.data.train_path} as train dataset: {len(train_dataset):,} samples")
         if args.data.eval_path:
             with fabric.rank_zero_first():
-                eval_dataset: Dataset = load_dataset("json", data_files=args.data.eval_path, split=datasets.Split.TRAIN)
+                eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+                                                     data_files=str(args.data.eval_path),
+                                                     cache_dir=str(args.data.cache_eval_dir))
                 if args.data.max_eval_samples > 0:
                     eval_dataset = eval_dataset.select(range(min(len(eval_dataset), args.data.max_eval_samples)))
                 fabric.print(f"Use {args.data.eval_path} as eval dataset: {len(eval_dataset):,} samples")
         if args.data.test_path:
             with fabric.rank_zero_first():
-                test_dataset: Dataset = load_dataset("json", data_files=args.data.test_path, split=datasets.Split.TRAIN)
+                test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+                                                     data_files=str(args.data.test_path),
+                                                     cache_dir=str(args.data.cache_test_dir))
                 if args.data.max_test_samples > 0:
                     test_dataset = test_dataset.select(range(min(len(test_dataset), args.data.max_test_samples)))
                 fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
@@ -361,9 +469,8 @@ def train(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=args.data.train_path.replace(".jsonl", f"={len(train_dataset)}.tmp") if args.data.use_cache_data else None,
+                        cache_file_name=str(args.data.cache_train_path(len(train_dataset))) if args.data.use_cache_data else None,
                     )
-            fabric.print("-" * 100)
         if eval_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
@@ -371,9 +478,8 @@ def train(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=args.data.eval_path.replace(".jsonl", f"={len(eval_dataset)}.tmp") if args.data.use_cache_data else None,
+                        cache_file_name=str(args.data.cache_eval_path(len(eval_dataset))) if args.data.use_cache_data else None,
                     )
-            fabric.print("-" * 100)
         if test_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(test_dataset), desc='Preprocess test samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
@@ -381,12 +487,22 @@ def train(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=args.data.test_path.replace(".jsonl", f"={len(test_dataset)}.tmp") if args.data.use_cache_data else None,
+                        cache_file_name=str(args.data.cache_test_path(len(test_dataset))) if args.data.use_cache_data else None,
                     )
-            fabric.print("-" * 100)
-
-        fabric.print("*" * 100)
         fabric.barrier()
+        fabric.print("-" * 100)
+
+        # Construct Data collator
+        label_pad_token_id = -100
+        data_collator: DataCollatorForGNER = DataCollatorForGNER(
+            tokenizer,
+            model=model,
+            padding=True,
+            label_pad_token_id=label_pad_token_id,
+            return_tensors="pt",
+        )
+        fabric.barrier()
+        fabric.print("*" * 100)
 
 
 if __name__ == "__main__":
