@@ -275,17 +275,22 @@ def train(
         output_dir: str = Field(default="output/task2-nerG")
 
     bbb = TrainerArguments()
+    exclude_fields = []
 
     from pydantic import create_model
     from typing import get_type_hints
 
-    def dataclass_to_basemodel(entity):
-        hints = get_type_hints(entity)
-        new_model = create_model("DynamicBaseModel", **{k: (v, ...) for k, v in hints.items()})
-        return new_model
+    hints = get_type_hints(bbb)
+    attributes = {}
+    for k, v in hints.items():
+        if k in exclude_fields:
+            attributes[k] = (v, Field(..., exclude=True))
+        else:
+            attributes[k] = (v, Field(..., include=True))
 
-    ccc = dataclass_to_basemodel(bbb)
-    fabric.print(ccc(output_dir="test").model_dump())
+    new_model = create_model("DynamicBaseModel", **attributes)
+
+    fabric.print(new_model(output_dir="test").model_dump())
     exit(1)
 
     args.learning.trainer_args = trainer_args.to_dict()
