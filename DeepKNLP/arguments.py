@@ -4,7 +4,7 @@ import sys
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Any
 
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
@@ -140,6 +140,16 @@ class NewModelOption(BaseModel):
 
 class NewLearningOption(BaseModel):
     random_seed: int = Field(default=None)
+    trainer_args: str | Path | None | dict[str, Any] = Field(default=None)
+
+    def dataframe(self, columns=None, data_prefix=None) -> pd.DataFrame:
+        if not columns:
+            columns = [self.__class__.__name__, "value"]
+        df = pd.concat([
+            to_dataframe(columns=columns, raw=self, data_prefix=data_prefix, data_exclude=("trainer_args",) if isinstance(self.trainer_args, dict) else None),
+            to_dataframe(columns=columns, raw=self.trainer_args, data_prefix=f"{data_prefix}.trainer_args") if isinstance(self.trainer_args, dict) else None,
+        ]).reset_index(drop=True)
+        return df
 
 
 class NewHardwareOption(BaseModel):
@@ -155,8 +165,8 @@ class NewHardwareOption(BaseModel):
 class NewTrainerArguments(NewCommonArguments):
     data: NewDataOption = Field(default=None)
     model: NewModelOption = Field(default=None)
-    learning: NewLearningOption = Field(default=None)
     hardware: NewHardwareOption = Field(default=None)
+    learning: NewLearningOption = Field(default=None)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
         if not columns:
@@ -165,8 +175,8 @@ class NewTrainerArguments(NewCommonArguments):
             super().dataframe(columns=columns),
             to_dataframe(columns=columns, raw=self.data, data_prefix="data"),
             to_dataframe(columns=columns, raw=self.model, data_prefix="model"),
-            to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
             to_dataframe(columns=columns, raw=self.hardware, data_prefix="hardware"),
+            self.learning.dataframe(columns=columns, data_prefix="learning"),
         ]).reset_index(drop=True)
         return df
 
