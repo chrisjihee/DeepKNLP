@@ -41,7 +41,7 @@ from lightning.pytorch.utilities.types import OptimizerLRScheduler
 from torch import Tensor
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding
+from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, HfArgumentParser, Seq2SeqTrainingArguments
 from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import TokenClassifierOutput
 from transformers.data.data_collator import *
@@ -155,9 +155,6 @@ class DataCollatorForGNER:
 @main.command()
 def train(
         # env
-        project: str = typer.Option(default="DeepKNLP"),
-        job_name: str = typer.Option(default=None),
-        job_version: int = typer.Option(default=None),
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
@@ -186,6 +183,7 @@ def train(
         # pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
         # learning
         random_seed: int = typer.Option(default=7),
+        trainer_args: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
         # hardware
         grad_acc_steps: int = typer.Option(default=4),
         train_batch: int = typer.Option(default=8),
@@ -235,6 +233,7 @@ def train(
         ),
         learning=NewLearningOption(
             random_seed=random_seed,
+            trainer_args=trainer_args,
         ),
         hardware=NewHardwareOption(
             grad_acc_steps=grad_acc_steps,
@@ -267,6 +266,9 @@ def train(
     args.env.world_size = fabric.world_size
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
     args.env.setup_logger()
+    trainer_args: Seq2SeqTrainingArguments = HfArgumentParser(Seq2SeqTrainingArguments).parse_json_file(args.learning.trainer_args)[0]
+    args.learning.trainer_args = trainer_args.to_dict()
+
     # for checking
     # logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
 
@@ -278,231 +280,231 @@ def train(
         fabric.barrier()
         fabric.seed_everything(args.learning.random_seed)
 
-        # Load model
-        config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
-        tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(pretrained)
-        using_decoder_only_model = not config.is_encoder_decoder
-        if using_decoder_only_model:
-            model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained)
-        else:
-            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
-        fabric.barrier()
-        fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
-        fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
-        fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}")
-        fabric.print("-" * 100)
-
-        # Load dataset
-        train_dataset: Dataset | None = None
-        eval_dataset: Dataset | None = None
-        test_dataset: Dataset | None = None
-        if args.data.train_path:
-            with fabric.rank_zero_first():
-                train_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                      data_files=str(args.data.train_path),
-                                                      cache_dir=str(args.data.cache_train_dir))
-                if args.data.max_train_samples > 0:
-                    train_dataset = train_dataset.select(range(min(len(train_dataset), args.data.max_train_samples)))
-                fabric.print(f"Use {args.data.train_path} as train dataset: {len(train_dataset):,} samples")
-        if args.data.eval_path:
-            with fabric.rank_zero_first():
-                eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                     data_files=str(args.data.eval_path),
-                                                     cache_dir=str(args.data.cache_eval_dir))
-                if args.data.max_eval_samples > 0:
-                    eval_dataset = eval_dataset.select(range(min(len(eval_dataset), args.data.max_eval_samples)))
-                fabric.print(f"Use {args.data.eval_path} as eval dataset: {len(eval_dataset):,} samples")
-        if args.data.test_path:
-            with fabric.rank_zero_first():
-                test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                     data_files=str(args.data.test_path),
-                                                     cache_dir=str(args.data.cache_test_dir))
-                if args.data.max_test_samples > 0:
-                    test_dataset = test_dataset.select(range(min(len(test_dataset), args.data.max_test_samples)))
-                fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
-        fabric.barrier()
-        fabric.print("-" * 100)
-
-        # Define tokenizer function for decoder-only model
-        def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], counter=Counter(step=args.env.max_workers),
-                                              update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
-            # Fetch input data
-            sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
-            data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
-            prompt_text = f"[INST] {sample.instance.instruction_inputs} [/INST]"
-            full_instruction = f"{prompt_text} {sample.instance.prompt_labels}"
-
-            def tokenize_train_sample():
-                # Tokenize the full instruction
-                model_inputs = tokenizer(
-                    text=full_instruction,
-                    max_length=data_opt.max_source_length + data_opt.max_target_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )
-
-                # Add eos token if it is not the last token
-                if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
-                    model_inputs["input_ids"].append(tokenizer.eos_token_id)
-                    model_inputs["attention_mask"].append(1)
-
-                # Add labels
-                model_inputs["labels"] = model_inputs["input_ids"].copy()
-
-                # Find the prompt length
-                prompt_tokens = tokenizer(
-                    text=prompt_text,
-                    max_length=data_opt.max_source_length + data_opt.max_target_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )["input_ids"]
-
-                # Remove the last token if it is an eos token
-                if prompt_tokens[-1] == tokenizer.eos_token_id:
-                    prompt_tokens = prompt_tokens[:-1]
-
-                # Check if the prompt is longer than the input
-                if len(prompt_tokens) > len(model_inputs["labels"]):
-                    raise ValueError(
-                        f"Prompt is longer than the input, something went wrong. Prompt: {prompt_tokens}, input:"
-                        f" {model_inputs['input_ids']}"
-                    )
-
-                # Mask the prompt tokens
-                for i in range(len(prompt_tokens)):
-                    model_inputs["labels"][i] = -100
-
-                return model_inputs
-
-            def tokenize_infer_sample():
-                # Tokenize the prompt
-                model_inputs = tokenizer(
-                    text=prompt_text,
-                    max_length=max_source_length + max_target_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )
-
-                # Remove the last token if it is an eos token
-                if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
-                    model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
-                    model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
-
-                return model_inputs
-
-            # Tokenize the sample
-            tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
-            if update:
-                return update(tokenized_sample, process_rank, counter)
-            else:
-                return tokenized_sample
-
-        # Define tokenizer function for encoder-decoder model
-        def preprocess_for_encoder_decoder_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], cnt=Counter(step=args.env.max_workers),
-                                                 update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
-            # Fetch input data
-            sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
-            data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
-
-            def tokenize_train_sample():
-                # Tokenize the instruction inputs
-                model_inputs = tokenizer(
-                    text=sample.instance.instruction_inputs,
-                    max_length=data_opt.max_source_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )
-
-                # Tokenize the prompt labels
-                model_inputs["labels"] = tokenizer(
-                    text=sample.instance.prompt_labels,
-                    max_length=data_opt.max_target_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )["input_ids"]
-
-                return model_inputs
-
-            def tokenize_infer_sample():
-                # Tokenize the instruction inputs
-                model_inputs = tokenizer(
-                    text=sample.instance.instruction_inputs,
-                    max_length=data_opt.max_source_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )
-                return model_inputs
-
-            # Tokenize the sample
-            tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
-            if update:
-                return update(tokenized_sample, process_rank, cnt)
-            else:
-                return tokenized_sample
-
-        # Define progress update function
-        def update_progress(res: BatchEncoding, rank: int, counter: Counter, pbar: ProgIter):
-            pre, cnt = counter.val(), counter.inc()
-            if (cnt >= pbar.total or any(i % num_prog_samples == 0 for i in range(pre + 1, cnt + 1))) and rank == 0:
-                pbar.step(inc=min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx))
-                # fabric.print(pbar.format_message().rstrip())
-                logger.info(pbar.format_message().rstrip())
-            return res
-
-        # Preprocess dataset
-        if train_dataset:
-            with fabric.rank_zero_first():
-                with ProgIter(total=len(train_dataset), desc='Preprocess train samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
-                    train_dataset.map(
-                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=str(args.data.cache_train_path(len(train_dataset))) if args.data.use_cache_data else None,
-                    )
-        if eval_dataset:
-            with fabric.rank_zero_first():
-                with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
-                    eval_dataset.map(
-                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=str(args.data.cache_eval_path(len(eval_dataset))) if args.data.use_cache_data else None,
-                    )
-        if test_dataset:
-            with fabric.rank_zero_first():
-                with ProgIter(total=len(test_dataset), desc='Preprocess test samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
-                    test_dataset.map(
-                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=str(args.data.cache_test_path(len(test_dataset))) if args.data.use_cache_data else None,
-                    )
-        fabric.barrier()
-        fabric.print("-" * 100)
-
-        # Construct Data collator
-        label_pad_token_id = -100
-        data_collator: DataCollatorForGNER = DataCollatorForGNER(
-            tokenizer,
-            model=model,
-            padding=True,
-            label_pad_token_id=label_pad_token_id,
-            return_tensors="pt",
-        )
-        fabric.barrier()
-        fabric.print("*" * 100)
+        # # Load model
+        # config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
+        # tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(pretrained)
+        # using_decoder_only_model = not config.is_encoder_decoder
+        # if using_decoder_only_model:
+        #     model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained)
+        # else:
+        #     model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
+        # fabric.barrier()
+        # fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
+        # fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
+        # fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}")
+        # fabric.print("-" * 100)
+        #
+        # # Load dataset
+        # train_dataset: Dataset | None = None
+        # eval_dataset: Dataset | None = None
+        # test_dataset: Dataset | None = None
+        # if args.data.train_path:
+        #     with fabric.rank_zero_first():
+        #         train_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+        #                                               data_files=str(args.data.train_path),
+        #                                               cache_dir=str(args.data.cache_train_dir))
+        #         if args.data.max_train_samples > 0:
+        #             train_dataset = train_dataset.select(range(min(len(train_dataset), args.data.max_train_samples)))
+        #         fabric.print(f"Use {args.data.train_path} as train dataset: {len(train_dataset):,} samples")
+        # if args.data.eval_path:
+        #     with fabric.rank_zero_first():
+        #         eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+        #                                              data_files=str(args.data.eval_path),
+        #                                              cache_dir=str(args.data.cache_eval_dir))
+        #         if args.data.max_eval_samples > 0:
+        #             eval_dataset = eval_dataset.select(range(min(len(eval_dataset), args.data.max_eval_samples)))
+        #         fabric.print(f"Use {args.data.eval_path} as eval dataset: {len(eval_dataset):,} samples")
+        # if args.data.test_path:
+        #     with fabric.rank_zero_first():
+        #         test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+        #                                              data_files=str(args.data.test_path),
+        #                                              cache_dir=str(args.data.cache_test_dir))
+        #         if args.data.max_test_samples > 0:
+        #             test_dataset = test_dataset.select(range(min(len(test_dataset), args.data.max_test_samples)))
+        #         fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
+        # fabric.barrier()
+        # fabric.print("-" * 100)
+        #
+        # # Define tokenizer function for decoder-only model
+        # def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], counter=Counter(step=args.env.max_workers),
+        #                                       update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
+        #     # Fetch input data
+        #     sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
+        #     data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
+        #     prompt_text = f"[INST] {sample.instance.instruction_inputs} [/INST]"
+        #     full_instruction = f"{prompt_text} {sample.instance.prompt_labels}"
+        #
+        #     def tokenize_train_sample():
+        #         # Tokenize the full instruction
+        #         model_inputs = tokenizer(
+        #             text=full_instruction,
+        #             max_length=data_opt.max_source_length + data_opt.max_target_length,
+        #             truncation=True,
+        #             padding=False,
+        #             return_tensors=None,
+        #             add_special_tokens=True,
+        #         )
+        #
+        #         # Add eos token if it is not the last token
+        #         if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
+        #             model_inputs["input_ids"].append(tokenizer.eos_token_id)
+        #             model_inputs["attention_mask"].append(1)
+        #
+        #         # Add labels
+        #         model_inputs["labels"] = model_inputs["input_ids"].copy()
+        #
+        #         # Find the prompt length
+        #         prompt_tokens = tokenizer(
+        #             text=prompt_text,
+        #             max_length=data_opt.max_source_length + data_opt.max_target_length,
+        #             truncation=True,
+        #             padding=False,
+        #             return_tensors=None,
+        #             add_special_tokens=True,
+        #         )["input_ids"]
+        #
+        #         # Remove the last token if it is an eos token
+        #         if prompt_tokens[-1] == tokenizer.eos_token_id:
+        #             prompt_tokens = prompt_tokens[:-1]
+        #
+        #         # Check if the prompt is longer than the input
+        #         if len(prompt_tokens) > len(model_inputs["labels"]):
+        #             raise ValueError(
+        #                 f"Prompt is longer than the input, something went wrong. Prompt: {prompt_tokens}, input:"
+        #                 f" {model_inputs['input_ids']}"
+        #             )
+        #
+        #         # Mask the prompt tokens
+        #         for i in range(len(prompt_tokens)):
+        #             model_inputs["labels"][i] = -100
+        #
+        #         return model_inputs
+        #
+        #     def tokenize_infer_sample():
+        #         # Tokenize the prompt
+        #         model_inputs = tokenizer(
+        #             text=prompt_text,
+        #             max_length=max_source_length + max_target_length,
+        #             truncation=True,
+        #             padding=False,
+        #             return_tensors=None,
+        #             add_special_tokens=True,
+        #         )
+        #
+        #         # Remove the last token if it is an eos token
+        #         if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
+        #             model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
+        #             model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
+        #
+        #         return model_inputs
+        #
+        #     # Tokenize the sample
+        #     tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
+        #     if update:
+        #         return update(tokenized_sample, process_rank, counter)
+        #     else:
+        #         return tokenized_sample
+        #
+        # # Define tokenizer function for encoder-decoder model
+        # def preprocess_for_encoder_decoder_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], cnt=Counter(step=args.env.max_workers),
+        #                                          update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
+        #     # Fetch input data
+        #     sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
+        #     data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
+        #
+        #     def tokenize_train_sample():
+        #         # Tokenize the instruction inputs
+        #         model_inputs = tokenizer(
+        #             text=sample.instance.instruction_inputs,
+        #             max_length=data_opt.max_source_length,
+        #             truncation=True,
+        #             padding=False,
+        #             return_tensors=None,
+        #             add_special_tokens=True,
+        #         )
+        #
+        #         # Tokenize the prompt labels
+        #         model_inputs["labels"] = tokenizer(
+        #             text=sample.instance.prompt_labels,
+        #             max_length=data_opt.max_target_length,
+        #             truncation=True,
+        #             padding=False,
+        #             return_tensors=None,
+        #             add_special_tokens=True,
+        #         )["input_ids"]
+        #
+        #         return model_inputs
+        #
+        #     def tokenize_infer_sample():
+        #         # Tokenize the instruction inputs
+        #         model_inputs = tokenizer(
+        #             text=sample.instance.instruction_inputs,
+        #             max_length=data_opt.max_source_length,
+        #             truncation=True,
+        #             padding=False,
+        #             return_tensors=None,
+        #             add_special_tokens=True,
+        #         )
+        #         return model_inputs
+        #
+        #     # Tokenize the sample
+        #     tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
+        #     if update:
+        #         return update(tokenized_sample, process_rank, cnt)
+        #     else:
+        #         return tokenized_sample
+        #
+        # # Define progress update function
+        # def update_progress(res: BatchEncoding, rank: int, counter: Counter, pbar: ProgIter):
+        #     pre, cnt = counter.val(), counter.inc()
+        #     if (cnt >= pbar.total or any(i % num_prog_samples == 0 for i in range(pre + 1, cnt + 1))) and rank == 0:
+        #         pbar.step(inc=min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx))
+        #         # fabric.print(pbar.format_message().rstrip())
+        #         logger.info(pbar.format_message().rstrip())
+        #     return res
+        #
+        # # Preprocess dataset
+        # if train_dataset:
+        #     with fabric.rank_zero_first():
+        #         with ProgIter(total=len(train_dataset), desc='Preprocess train samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
+        #             train_dataset.map(
+        #                 preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+        #                 fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+        #                 with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
+        #                 cache_file_name=str(args.data.cache_train_path(len(train_dataset))) if args.data.use_cache_data else None,
+        #             )
+        # if eval_dataset:
+        #     with fabric.rank_zero_first():
+        #         with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
+        #             eval_dataset.map(
+        #                 preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+        #                 fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+        #                 with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
+        #                 cache_file_name=str(args.data.cache_eval_path(len(eval_dataset))) if args.data.use_cache_data else None,
+        #             )
+        # if test_dataset:
+        #     with fabric.rank_zero_first():
+        #         with ProgIter(total=len(test_dataset), desc='Preprocess test samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
+        #             test_dataset.map(
+        #                 preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+        #                 fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+        #                 with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
+        #                 cache_file_name=str(args.data.cache_test_path(len(test_dataset))) if args.data.use_cache_data else None,
+        #             )
+        # fabric.barrier()
+        # fabric.print("-" * 100)
+        #
+        # # Construct Data collator
+        # label_pad_token_id = -100
+        # data_collator: DataCollatorForGNER = DataCollatorForGNER(
+        #     tokenizer,
+        #     model=model,
+        #     padding=True,
+        #     label_pad_token_id=label_pad_token_id,
+        #     return_tensors="pt",
+        # )
+        # fabric.barrier()
+        # fabric.print("*" * 100)
 
 
 if __name__ == "__main__":
