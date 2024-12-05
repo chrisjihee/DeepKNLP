@@ -9,6 +9,7 @@ from typing import List, Optional
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
+from lightning.fabric.strategies import DeepSpeedStrategy, Strategy
 from pydantic import BaseModel, Field, model_validator
 from typing_extensions import Self
 
@@ -161,9 +162,52 @@ class NewHardwareOption(BaseModel):
     @model_validator(mode='after')
     def after(self) -> Self:
         self.devices = self.num_device
-        if (self.accelerator == "gpu" or self.accelerator == "cuda") and self.gpu_index >= 0:
+        if self.strategy == "ddp" and (self.accelerator == "gpu" or self.accelerator == "cuda") and self.gpu_index >= 0:
             self.devices = list(range(self.gpu_index, self.gpu_index + self.num_device))
         return self
+
+    def to_strategy_obj(self) -> str | Strategy:
+        deepspeed_config = {
+            "bf16": {
+                "enabled": "auto"
+            },
+            "optimizer": {
+                "type": "AdamW",
+                "params": {
+                    "lr": "auto",
+                    "betas": "auto",
+                    "eps": "auto",
+                    "weight_decay": "auto"
+                }
+            },
+            "scheduler": {
+                "type": "WarmupDecayLR",
+                "params": {
+                    "warmup_min_lr": "auto",
+                    "warmup_max_lr": "auto",
+                    "warmup_num_steps": "auto",
+                    "total_num_steps": "auto"
+                }
+            },
+            "zero_optimization": {
+                "stage": 2,
+                "allgather_partitions": True,
+                "allgather_bucket_size": 2e8,
+                "overlap_comm": True,
+                "reduce_scatter": True,
+                "reduce_bucket_size": 2e8,
+                "contiguous_gradients": True
+            },
+            "train_batch_size": self.train_batch * self.grad_steps * self.num_device,
+            "train_micro_batch_size_per_gpu": self.train_batch,
+            "gradient_accumulation_steps": self.grad_steps,
+            "gradient_clipping": "auto",
+            "steps_per_print": 1e5
+        }
+        if self.strategy == "deepspeed":
+            return DeepSpeedStrategy(config=deepspeed_config)
+        else:
+            return self.strategy
 
 
 class NewTrainerArguments(NewCommonArguments):

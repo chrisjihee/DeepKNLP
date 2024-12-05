@@ -44,10 +44,10 @@ def train(
         # data
         train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
         # train_data: str = typer.Option(default="data/gner/pile-ner.jsonl"),
-        eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
-        # eval_data: str = typer.Option(default=None),
-        test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
-        # test_data: str = typer.Option(default=None),
+        # eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
+        eval_data: str = typer.Option(default=None),
+        # test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
+        test_data: str = typer.Option(default=None),
         # max_train_samples: int = typer.Option(default=20000),
         max_train_samples: int = typer.Option(default=256),
         # max_train_samples: int = typer.Option(default=-1),
@@ -70,13 +70,13 @@ def train(
         num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         # hardware
         gpu_index: int = typer.Option(default=4),
-        num_device: int = typer.Option(default=4),  # TODO: -> 1, 2, 4
+        num_device: int = typer.Option(default=2),  # TODO: -> 1, 2, 4
         grad_steps: int = typer.Option(default=8),
         train_batch: int = typer.Option(default=4),
         infer_batch: int = typer.Option(default=32),
         accelerator: str = typer.Option(default="gpu"),  # TODO: -> gpu, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
+        strategy: str = typer.Option(default="deepspeed"),  # TODO: -> deepspeed
 ):
     torch.set_float32_matmul_precision('high')
     datasets.utils.logging.disable_progress_bar()
@@ -85,6 +85,7 @@ def train(
     # transformers.utils.logging.disable_progress_bar()
 
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("c10d-NullHandler-default").setLevel(logging.INFO)
     logging.getLogger("lightning").setLevel(logging.INFO)
     # logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
     # logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
@@ -136,7 +137,8 @@ def train(
     fabric = Fabric(
         accelerator=args.hardware.accelerator,
         precision=args.hardware.precision,
-        strategy=args.hardware.strategy,
+        # strategy=args.hardware.strategy,
+        strategy=args.hardware.to_strategy_obj(),
         devices=args.hardware.devices,
     )
 
