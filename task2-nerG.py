@@ -29,6 +29,9 @@ logger = logging.getLogger(__name__)
 setup_unit_logger(fmt=LoggingFormat.CHECK_24)
 
 
+# Reference1: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py
+# Reference2: https://lightning.ai/docs/fabric/2.4.0/api/fabric_methods.html
+# Reference3: https://lightning.ai/docs/fabric/2.2.3/advanced/gradient_accumulation.html
 @main.command()
 def train(
         # env
