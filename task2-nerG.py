@@ -1,157 +1,32 @@
-import math
-import threading
-
-import pydantic
-import transformers.utils.logging
-from progiter import ProgIter
-import tqdm
-import datasets
-from datasets import load_dataset, Dataset
-from datasets.formatting.formatting import LazyRow
-from pydantic.v1.dataclasses import create_pydantic_model_from_dataclass
-from pydantic_core import ArgsKwargs
-from tqdm.asyncio import tqdm_asyncio, trange
-from typing_extensions import Self
-
-from pydantic import model_validator
-from pydantic.dataclasses import dataclass
-import sys
+import json
 import logging
 import os
-from dataclasses import dataclass
-from datetime import datetime
 from pathlib import Path
-from time import sleep
-from typing import List, Tuple, Dict, Mapping, Any, ClassVar, Union, Callable, Type
-import pandas as pd
 
+import datasets
 import torch
+import transformers.utils.logging
 import typer
-from pydantic import BaseModel, Field
-
-from chrisbase.data import AppTyper, JobTimer, ProjectEnv, TypedData, TimeChecker, Counter
-from chrisbase.io import LoggingFormat, make_dir, files, hr, to_table_lines
-from chrisbase.io import get_hostname, get_hostaddr, current_file, first_or, cwd, hr, flush_or, make_parent_dir, setup_unit_logger, setup_dual_logger, open_file, file_lines, to_table_lines, new_path, get_http_clients
-from chrisbase.time import now
-from chrisbase.util import mute_tqdm_cls, tupled, to_dataframe
-from flask import Flask, request, jsonify, render_template
-from flask_classful import FlaskView, route
-from lightning import LightningModule
+from datasets import load_dataset, Dataset
+from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
-from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from lightning.pytorch.utilities.types import OptimizerLRScheduler
-from torch import Tensor
-from torch.optim import AdamW
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForTokenClassification, CharSpan, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, HfArgumentParser, Seq2SeqTrainingArguments
+from progiter import ProgIter
+from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding
 from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
-from transformers.modeling_outputs import TokenClassifierOutput
 from transformers.data.data_collator import *
 
-from DeepKNLP.arguments import DataFiles, DataOption, ModelOption, ServerOption, HardwareOption, PrintingOption, LearningOption, NewTrainerArguments, NewProjectEnv, NewDataOption, NewModelOption, NewLearningOption, NewHardwareOption
-from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
-from DeepKNLP.helper import CheckpointSaver, epsilon, fabric_barrier
-from DeepKNLP.metrics import accuracy, NER_Char_MacroF1, NER_Entity_MacroF1
-from DeepKNLP.ner import NERCorpus, NERDataset, NEREncodedExample
+from DeepKNLP.arguments import NewTrainerArguments, NewProjectEnv, NewDataOption, NewModelOption, NewLearningOption, NewHardwareOption
+from DeepKNLP.gner_collator import DataCollatorForGNER
+from DeepKNLP.gner_evaluator import compute_metrics
+from DeepKNLP.gner_trainer import GNERTrainer
+from chrisbase.data import AppTyper, JobTimer, Counter
+from chrisbase.io import LoggingFormat
+from chrisbase.io import setup_unit_logger
 from chrisdata.ner import GenNERSampleWrapper
 
 main = AppTyper()
 logger = logging.getLogger(__name__)
 setup_unit_logger(fmt=LoggingFormat.CHECK_24)
-
-
-@dataclass
-class DataCollatorForGNER:
-    """
-    Data collator that will dynamically pad the inputs received, as well as the labels.
-
-    Args:
-        tokenizer ([`PreTrainedTokenizer`] or [`PreTrainedTokenizerFast`]):
-            The tokenizer used for encoding the data.
-        model ([`PreTrainedModel`], *optional*):
-            The model that is being trained. If set and has the *prepare_decoder_input_ids_from_labels*, use it to
-            prepare the *decoder_input_ids*
-
-            This is useful when using *label_smoothing* to avoid calculating loss twice.
-        padding (`bool`, `str` or [`~utils.PaddingStrategy`], *optional*, defaults to `True`):
-            Select a strategy to pad the returned sequences (according to the model's padding side and padding index)
-            among:
-
-            - `True` or `'longest'` (default): Pad to the longest sequence in the batch (or no padding if only a single
-              sequence is provided).
-            - `'max_length'`: Pad to a maximum length specified with the argument `max_length` or to the maximum
-              acceptable input length for the model if that argument is not provided.
-            - `False` or `'do_not_pad'`: No padding (i.e., can output a batch with sequences of different lengths).
-        max_length (`int`, *optional*):
-            Maximum length of the returned list and optionally padding length (see above).
-        pad_to_multiple_of (`int`, *optional*):
-            If set will pad the sequence to a multiple of the provided value.
-
-            This is especially useful to enable the use of Tensor Cores on NVIDIA hardware with compute capability >=
-            7.5 (Volta).
-        label_pad_token_id (`int`, *optional*, defaults to -100):
-            The id to use when padding the labels (-100 will be automatically ignored by PyTorch loss functions).
-        return_tensors (`str`, *optional*, defaults to `"pt"`):
-            The type of Tensor to return. Allowable values are "np", "pt" and "tf".
-    """
-
-    tokenizer: PreTrainedTokenizerBase
-    model: Optional[Any] = None
-    padding: Union[bool, str, PaddingStrategy] = True
-    max_length: Optional[int] = None
-    pad_to_multiple_of: Optional[int] = None
-    label_pad_token_id: int = -100
-    return_tensors: str = "pt"
-
-    def __call__(self, features, return_tensors=None):
-        used_features_name = ["input_ids", "attention_mask", "labels"]
-        features = [dict([item for item in feature.items() if item[0] in used_features_name]) for feature in features]
-
-        if return_tensors is None:
-            return_tensors = self.return_tensors
-        labels = [feature["labels"] for feature in features] if "labels" in features[0].keys() else None
-        # We have to pad the labels before calling `tokenizer.pad` as this method won't pad them and needs them of the
-        # same length to return tensors.
-        if labels is not None:
-            max_label_length = max(len(l) for l in labels)
-            if self.pad_to_multiple_of is not None:
-                max_label_length = (
-                        (max_label_length + self.pad_to_multiple_of - 1)
-                        // self.pad_to_multiple_of
-                        * self.pad_to_multiple_of
-                )
-
-            padding_side = self.tokenizer.padding_side
-            for feature in features:
-                remainder = [self.label_pad_token_id] * (max_label_length - len(feature["labels"]))
-                if isinstance(feature["labels"], list):
-                    feature["labels"] = (
-                        feature["labels"] + remainder if padding_side == "right" else remainder + feature["labels"]
-                    )
-                elif padding_side == "right":
-                    feature["labels"] = np.concatenate([feature["labels"], remainder]).astype(np.int64)
-                else:
-                    feature["labels"] = np.concatenate([remainder, feature["labels"]]).astype(np.int64)
-
-        features = pad_without_fast_tokenizer_warning(
-            self.tokenizer,
-            features,
-            padding=self.padding,
-            max_length=self.max_length,
-            pad_to_multiple_of=self.pad_to_multiple_of,
-            return_tensors=return_tensors,
-        )
-
-        # prepare decoder_input_ids
-        if (
-                labels is not None
-                and self.model is not None
-                and hasattr(self.model, "prepare_decoder_input_ids_from_labels")
-        ):
-            decoder_input_ids = self.model.prepare_decoder_input_ids_from_labels(labels=features["labels"])
-            features["decoder_input_ids"] = decoder_input_ids
-
-        return features
 
 
 @main.command()
@@ -507,6 +382,38 @@ def train(
         )
         fabric.barrier()
         fabric.print("*" * 100)
+
+        # Define compute metrics function
+        def compute_ner_metrics(dataset, preds, save_prefix=None):
+            preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
+            decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+            if using_decoder_only_model:
+                match_pattern = "[/INST]"
+                for i, preds in enumerate(decoded_preds):
+                    decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
+
+            all_examples = [example.copy() for example in dataset]
+            for idx, decoded_pred in enumerate(decoded_preds):
+                all_examples[idx]["prediction"] = decoded_pred
+
+            results = compute_metrics(all_examples, tokenizer=tokenizer)
+            if save_prefix is not None:
+                with open(os.path.join(args.learning.trainer_args.output_dir, f"{save_prefix}_text_generations.jsonl"), "w") as fout:
+                    for example in all_examples:
+                        fout.write(json.dumps(example) + "\n")
+            return results
+
+        # Initialize our Trainer
+        trainer = GNERTrainer(
+            model=model,
+            args=args.learning.trainer_args,
+            train_dataset=train_dataset if args.learning.trainer_args.do_train else None,
+            eval_dataset=eval_dataset if args.learning.trainer_args.do_eval else None,
+            processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
+            data_collator=data_collator,
+            compute_metrics=compute_ner_metrics if args.learning.trainer_args.predict_with_generate else None,
+        )
+
         fabric.print(f"seed={args.learning.trainer_args.seed}")
         fabric.print(f"data_seed={args.learning.trainer_args.data_seed}")
 
