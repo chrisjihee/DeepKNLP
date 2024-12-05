@@ -185,7 +185,7 @@ def train(
         # pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
         # learning
         random_seed: int = typer.Option(default=7),
-        trainer_args: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
+        trainer_args_path: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
         # hardware
         grad_acc_steps: int = typer.Option(default=4),
         train_batch: int = typer.Option(default=8),
@@ -193,12 +193,13 @@ def train(
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
-        device: List[int] = typer.Option(default=[0, 1]),  # TODO: -> [0], [0,1], [0,1,2,3]
+        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
 ):
     torch.set_float32_matmul_precision('high')
     datasets.utils.logging.disable_progress_bar()
     transformers.utils.logging.disable_progress_bar()
-    logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    # logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("c10d-NullHandler-default").setLevel(logging.INFO)
     logging.getLogger("lightning").setLevel(logging.INFO)
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
     logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
@@ -235,7 +236,7 @@ def train(
         ),
         learning=NewLearningOption(
             random_seed=random_seed,
-            trainer_args=trainer_args,
+            trainer_args_path=trainer_args_path,
         ),
         hardware=NewHardwareOption(
             grad_acc_steps=grad_acc_steps,
@@ -268,32 +269,6 @@ def train(
     args.env.world_size = fabric.world_size
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
     args.env.setup_logger()
-    trainer_args: Seq2SeqTrainingArguments = HfArgumentParser(Seq2SeqTrainingArguments).parse_json_file(args.learning.trainer_args)[0]
-
-    @dataclass
-    class TrainerArguments:
-        output_dir: str = Field(default="output/task2-nerG")
-
-    bbb = TrainerArguments()
-    exclude_fields = []
-
-    from pydantic import create_model
-    from typing import get_type_hints
-
-    hints = get_type_hints(bbb)
-    attributes = {}
-    for k, v in hints.items():
-        if k in exclude_fields:
-            attributes[k] = (v, Field(..., exclude=True))
-        else:
-            attributes[k] = (v, Field(..., include=True))
-
-    new_model = create_model("DynamicBaseModel", **attributes)
-
-    fabric.print(new_model(output_dir="test").model_dump())
-    exit(1)
-
-    args.learning.trainer_args = trainer_args.to_dict()
 
     # for checking
     # logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
