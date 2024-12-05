@@ -157,7 +157,23 @@ def train(
 
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
-        tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(pretrained)
+        # tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(pretrained)
+        tokenizer = AutoTokenizer.from_pretrained(
+            pretrained,
+            # cache_dir=model_args.cache_dir,
+            # use_fast=model_args.use_fast_tokenizer,
+            # revision=model_args.model_revision,
+            # token=model_args.token,
+            # trust_remote_code=model_args.trust_remote_code,
+            padding_side="left",
+            add_eos_token=True,
+            add_bos_token=True,
+        )
+        if tokenizer.pad_token is None:
+            # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
+            tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+            # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+
         using_decoder_only_model = not config.is_encoder_decoder
         if using_decoder_only_model:
             model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained)
