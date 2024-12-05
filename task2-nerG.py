@@ -5,14 +5,12 @@ from pathlib import Path
 
 import datasets
 import torch
-import transformers.utils.logging
 import typer
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
 from progiter import ProgIter
-from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding
-from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
+from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.data.data_collator import *
 
 from DeepKNLP.arguments import NewTrainerArguments, NewProjectEnv, NewDataOption, NewModelOption, NewLearningOption, NewHardwareOption
@@ -20,8 +18,7 @@ from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
 from chrisbase.data import AppTyper, JobTimer, Counter
-from chrisbase.io import LoggingFormat
-from chrisbase.io import setup_unit_logger
+from chrisbase.io import LoggingFormat, setup_unit_logger
 from chrisdata.ner import GenNERSampleWrapper
 
 main = AppTyper()
@@ -72,8 +69,7 @@ def train(
 ):
     torch.set_float32_matmul_precision('high')
     datasets.utils.logging.disable_progress_bar()
-    transformers.utils.logging.disable_progress_bar()
-    # logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    # transformers.utils.logging.disable_progress_bar()
     logging.getLogger("c10d-NullHandler-default").setLevel(logging.INFO)
     logging.getLogger("lightning").setLevel(logging.INFO)
     logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
@@ -371,7 +367,7 @@ def train(
         fabric.barrier()
         fabric.print("-" * 100)
 
-        # Construct Data collator
+        # Set data collator
         label_pad_token_id = -100
         data_collator: DataCollatorForGNER = DataCollatorForGNER(
             tokenizer,
@@ -380,8 +376,6 @@ def train(
             label_pad_token_id=label_pad_token_id,
             return_tensors="pt",
         )
-        fabric.barrier()
-        fabric.print("*" * 100)
 
         # Define compute metrics function
         def compute_ner_metrics(dataset, preds, save_prefix=None):
@@ -414,8 +408,28 @@ def train(
             compute_metrics=compute_ner_metrics if args.learning.trainer_args.predict_with_generate else None,
         )
 
+        # Training
+        fabric.barrier()
+        fabric.print("*" * 100)
         fabric.print(f"seed={args.learning.trainer_args.seed}")
         fabric.print(f"data_seed={args.learning.trainer_args.data_seed}")
+        all_metrics = {"run_name": args.learning.trainer_args.run_name}
+        if args.learning.trainer_args.do_train:
+            checkpoint = None
+            if args.learning.trainer_args.resume_from_checkpoint is not None:
+                checkpoint = args.learning.trainer_args.resume_from_checkpoint
+
+            train_result = trainer.train(resume_from_checkpoint=checkpoint)
+            trainer.save_model()  # Saves the tokenizer too for easy upload
+
+            metrics = train_result.metrics
+            metrics["train_samples"] = len(train_dataset)
+
+            trainer.log_metrics("train", metrics)
+            trainer.save_metrics("train", metrics)
+            trainer.save_state()
+            logger.info(f"Metrics {metrics}")
+            all_metrics.update(metrics)
 
 
 if __name__ == "__main__":
