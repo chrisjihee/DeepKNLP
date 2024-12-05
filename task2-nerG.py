@@ -440,6 +440,21 @@ def train(
         #                             collate_fn=self.data.encoded_examples_to_batch,
         #                             drop_last=False)
 
+        # Set optimizer
+        # Split weights in two groups, one with weight decay and the other not.
+        no_decay = ["bias", "layer_norm.weight"]
+        optimizer_grouped_parameters = [
+            {
+                "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
+                "weight_decay": args.weight_decay,
+            },
+            {
+                "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
+                "weight_decay": 0.0,
+            },
+        ]
+        optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=args.learning.trainer_args.learning_rate)
+
         # Define compute metrics function
         def compute_ner_metrics(dataset, preds, save_prefix=None):
             preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
