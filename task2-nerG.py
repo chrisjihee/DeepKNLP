@@ -26,7 +26,7 @@ from chrisdata.ner import GenNERSampleWrapper
 
 main = AppTyper()
 logger = logging.getLogger(__name__)
-setup_unit_logger(fmt=LoggingFormat.CHECK_24)
+setup_unit_logger(fmt=LoggingFormat.CHECK_48)
 
 
 # Reference1: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py
@@ -68,30 +68,24 @@ def train(
         num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         trainer_args_path: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
         # hardware
-        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
-        grad_acc_steps: int = typer.Option(default=8),
+        gpu_index: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
+        grad_steps: int = typer.Option(default=8),
         train_batch: int = typer.Option(default=4),
         infer_batch: int = typer.Option(default=32),
-        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
+        accelerator: str = typer.Option(default="gpu"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
 ):
     torch.set_float32_matmul_precision('high')
     datasets.utils.logging.disable_progress_bar()
     datasets.utils.logging.set_verbosity_warning()
-    transformers.logging.set_verbosity_info()
+    transformers.utils.logging.set_verbosity_info()
     # transformers.utils.logging.disable_progress_bar()
 
     logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
-    logging.getLogger("c10d-NullHandler-default").setLevel(logging.INFO)
     logging.getLogger("lightning").setLevel(logging.INFO)
-    logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
-    logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
-    logging.getLogger("datasets").setLevel(logging.INFO)
-    logging.getLogger("datasets.info").setLevel(logging.WARNING)
-    logging.getLogger("datasets.builder").setLevel(logging.WARNING)
-    logging.getLogger("datasets.arrow_dataset").setLevel(logging.WARNING)
-    logging.getLogger("datasets.download.download_manager").setLevel(logging.WARNING)
+    # logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
+    # logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
     pretrained = Path(pretrained)
     args = NewTrainerArguments(
         env=NewProjectEnv(
@@ -101,7 +95,7 @@ def train(
             max_workers=1 if debugging else max(max_workers, 1),
             debugging=debugging,
             message_level=logging.INFO,
-            message_format=LoggingFormat.CHECK_32,
+            message_format=LoggingFormat.CHECK_48,
         ),
         data=NewDataOption(
             train_path=train_data,
@@ -125,13 +119,13 @@ def train(
             trainer_args_path=trainer_args_path,
         ),
         hardware=NewHardwareOption(
+            gpu_index=gpu_index,
+            grad_steps=grad_steps,
+            train_batch=train_batch,
+            infer_batch=infer_batch,
             accelerator=accelerator,
             precision=precision,
             strategy=strategy,
-            devices=device,
-            grad_acc_steps=grad_acc_steps,
-            train_batch=train_batch,
-            infer_batch=infer_batch,
         ),
     )
     args.learning.trainer_args.data_seed = args.learning.trainer_args.seed = args.learning.random_seed
@@ -141,7 +135,7 @@ def train(
         accelerator=args.hardware.accelerator,
         precision=args.hardware.precision,
         strategy=args.hardware.strategy,
-        devices=args.hardware.devices,
+        devices=args.hardware.gpu_index if args.hardware.accelerator in ("cuda", "gpu") else "auto",
     )
 
     def info_or_debug(m, *a, **k):
@@ -518,7 +512,7 @@ def train(
                 model.train()
                 for i, batch in enumerate(train_dataloader, start=1):
                     fabric.print(f"i={i}")
-                    is_accumulating = i % args.hardware.grad_acc_steps != 0
+                    is_accumulating = i % args.hardware.grad_steps != 0
 
                     with fabric.no_backward_sync(model, enabled=is_accumulating):
                         outputs = model(**batch)

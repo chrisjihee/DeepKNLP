@@ -171,13 +171,13 @@ class NewLearningOption(BaseModel):
 
 
 class NewHardwareOption(BaseModel):
-    grad_acc_steps: int = Field(default=1)
+    gpu_index: List[int] = Field(default=[0])
+    grad_steps: int = Field(default=1)
     train_batch: int = Field(default=1)
     infer_batch: int = Field(default=1)
-    accelerator: str = Field(default="cuda")
+    accelerator: str = Field(default="gpu")
     precision: str = Field(default="32")
     strategy: str = Field(default="ddp")
-    devices: List[int] = Field(default=[0])
 
 
 class NewTrainerArguments(NewCommonArguments):
