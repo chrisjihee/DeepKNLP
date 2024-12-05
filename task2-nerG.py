@@ -377,6 +377,10 @@ def train(
             return_tensors="pt",
         )
 
+        # we don't want to remove unused columns because we will prepare each batch during training,
+        # and some of the information will also be used in evaluation.
+        args.learning.trainer_args.remove_unused_columns = False
+
         # Define compute metrics function
         def compute_ner_metrics(dataset, preds, save_prefix=None):
             preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
