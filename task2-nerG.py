@@ -68,13 +68,13 @@ def train(
         num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         trainer_args_path: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
         # hardware
-        grad_acc_steps: int = typer.Option(default=4),
+        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
+        grad_acc_steps: int = typer.Option(default=8),
         train_batch: int = typer.Option(default=4),
         infer_batch: int = typer.Option(default=32),
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
-        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
 ):
     torch.set_float32_matmul_precision('high')
     datasets.utils.logging.disable_progress_bar()
@@ -125,13 +125,13 @@ def train(
             trainer_args_path=trainer_args_path,
         ),
         hardware=NewHardwareOption(
-            grad_acc_steps=grad_acc_steps,
-            train_batch=train_batch,
-            infer_batch=infer_batch,
             accelerator=accelerator,
             precision=precision,
             strategy=strategy,
             devices=device,
+            grad_acc_steps=grad_acc_steps,
+            train_batch=train_batch,
+            infer_batch=infer_batch,
         ),
     )
     args.learning.trainer_args.data_seed = args.learning.trainer_args.seed = args.learning.random_seed
