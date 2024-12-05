@@ -76,7 +76,7 @@ def train(
         infer_batch: int = typer.Option(default=32),
         accelerator: str = typer.Option(default="gpu"),  # TODO: -> gpu, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: str = typer.Option(default="deepspeed"),  # TODO: -> deepspeed
+        strategy: str = typer.Option(default="deepspeed"),  # TODO: -> ddp, deepspeed
         ds_stage: int = typer.Option(default=2),  # TODO: -> 1, 2, 3
 ):
     torch.set_float32_matmul_precision('high')
