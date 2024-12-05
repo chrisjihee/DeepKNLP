@@ -393,6 +393,7 @@ def train(
             tokenizer,
             model=model,
             padding=True,
+            pad_to_multiple_of=8,  # if training_args.fp16 else None,
             label_pad_token_id=label_pad_token_id,
             return_tensors="pt",
         )
