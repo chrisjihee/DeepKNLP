@@ -25,27 +25,27 @@ Transformer-based Korean Natural Language Processing
     ```bash
     mamba create -n DeepKNLP python=3.11 -y
     mamba activate DeepKNLP
-    ```
-4. Install the required packages
-    ```bash
-    mamba install -n DeepKNLP cuda-libraries=11.8 cuda-libraries-dev=11.8 cuda-cudart=11.8 cuda-cudart-dev=11.8 \
+    mamba install cuda-libraries=11.8 cuda-libraries-dev=11.8 cuda-cudart=11.8 cuda-cudart-dev=11.8 \
                   cuda-nvrtc=11.8 cuda-nvrtc-dev=11.8 cuda-driver-dev=11.8 \
                   cuda-nvcc=11.8 cuda-cccl=11.8 cuda-runtime=11.8 cuda-version=12.4 \
                   libcusparse=11 libcusparse-dev=11 libcublas=11 libcublas-dev=11 \
                   -c nvidia -c pytorch -y
+    ```
+4. Install the required packages
+    ```bash
     pip install -U -r requirements.txt
     pip list | grep -E "torch|lightning|transformers|chris"
     ```
-5. Log in to Huggingface
-    ```bash
-    huggingface-cli whoami
-    huggingface-cli login
-    ```
-6. Install some packages as editable (optional)
+5. Install some packages as editable (optional)
     ```bash
     rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git; pip install -U -e chrisbase*
     rm -rf chrisdata*; git clone git@github.com:chrisjihee/chrisdata.git; pip install -U -e chrisdata*   
     pip list | grep -E "torch|lightning|transformers|chris"
+    ```
+6. Log in to Huggingface
+    ```bash
+    huggingface-cli whoami
+    huggingface-cli login
     ```
 7. Link huggingface cache (optional)
     ```bash
