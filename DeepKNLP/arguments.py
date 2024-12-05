@@ -148,13 +148,22 @@ class NewLearningOption(BaseModel):
 
 
 class NewHardwareOption(BaseModel):
-    gpu_index: List[int] = Field(default=[0])
+    gpu_index: int = Field(default=0)
+    num_device: int = Field(default=1)
     grad_steps: int = Field(default=1)
     train_batch: int = Field(default=1)
     infer_batch: int = Field(default=1)
     accelerator: str = Field(default="gpu")
     precision: str = Field(default="32")
     strategy: str = Field(default="ddp")
+    devices: int | List[int] = Field(default=1)
+
+    @model_validator(mode='after')
+    def after(self) -> Self:
+        self.devices = self.num_device
+        if (self.accelerator == "gpu" or self.accelerator == "cuda") and self.gpu_index >= 0:
+            self.devices = list(range(self.gpu_index, self.gpu_index + self.num_device))
+        return self
 
 
 class NewTrainerArguments(NewCommonArguments):

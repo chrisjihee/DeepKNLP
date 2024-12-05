@@ -69,11 +69,12 @@ def train(
         learning_rate: float = typer.Option(default=2e-5),
         num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         # hardware
-        gpu_index: List[int] = typer.Option(default=[0, 1, 2, 3, 4, 5, 6, 7]),  # TODO: -> [0], [0,1], [0,1,2,3]
+        gpu_index: int = typer.Option(default=0),
+        num_device: int = typer.Option(default=8),  # TODO: -> 1, 2, 4
         grad_steps: int = typer.Option(default=8),
         train_batch: int = typer.Option(default=4),
         infer_batch: int = typer.Option(default=32),
-        accelerator: str = typer.Option(default="gpu"),  # TODO: -> cuda, cpu, mps
+        accelerator: str = typer.Option(default="gpu"),  # TODO: -> gpu, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
 ):
@@ -122,6 +123,7 @@ def train(
         ),
         hardware=NewHardwareOption(
             gpu_index=gpu_index,
+            num_device=num_device,
             grad_steps=grad_steps,
             train_batch=train_batch,
             infer_batch=infer_batch,
@@ -135,7 +137,7 @@ def train(
         accelerator=args.hardware.accelerator,
         precision=args.hardware.precision,
         strategy=args.hardware.strategy,
-        devices=args.hardware.gpu_index if args.hardware.accelerator in ("cuda", "gpu") else "auto",
+        devices=args.hardware.devices,
     )
 
     def info_or_debug(m, *a, **k):
