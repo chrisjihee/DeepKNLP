@@ -45,7 +45,7 @@ def train(
         test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
         # test_data: str = typer.Option(default=None),
         # max_train_samples: int = typer.Option(default=20000),
-        max_train_samples: int = typer.Option(default=1024),
+        max_train_samples: int = typer.Option(default=256),
         # max_train_samples: int = typer.Option(default=-1),
         max_eval_samples: int = typer.Option(default=-1),
         max_test_samples: int = typer.Option(default=-1),

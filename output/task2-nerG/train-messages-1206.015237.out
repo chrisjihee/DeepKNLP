@@ -1,0 +1,1082 @@
+[12.06 01:52:48] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 01:52:48] ┇ INFO     ┇                   chrisbase.data ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py 
+[12.06 01:52:48] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    # | NewTrainerArguments                                           | value
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    1 | env.hostname                                                  | dgx-a100
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    2 | env.hostaddr                                                  | 129.254.23.12
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    3 | env.global_rank                                               | 0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    4 | env.local_rank                                                | 0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    5 | env.node_rank                                                 | 0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    6 | env.world_size                                                | 1
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    7 | env.time_stamp                                                | 1206.015237
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    8 | env.python_path                                               | /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇    9 | env.current_dir                                               | /raid/chrisjihee/proj/DeepKNLP
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   10 | env.current_file                                              | /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   11 | env.command_args                                              | []
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   12 | env.logging_home                                              | /raid/chrisjihee/proj/DeepKNLP/output/task2-nerG
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   13 | env.logging_file                                              | train-messages.out
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   14 | env.argument_file                                             | train-arguments.json
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   15 | env.max_workers                                               | 4
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   16 | env.debugging                                                 | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   17 | env.date_format                                               | [%m.%d %H:%M:%S]
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   18 | env.message_level                                             | 20
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   19 | env.message_format                                            | %(asctime)s ┇ %(levelname)-8s ┇ %(name)32s ┇ %(message)s
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   20 | time.t1                                                       | 2024-12-06 01:52:49.139614
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   21 | time.t2                                                       | 2024-12-06 01:52:37.400849
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   22 | time.started                                                  | [12.06 01:52:49]
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   23 | time.settled                                                  |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   24 | time.elapsed                                                  |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   25 | data.train_path                                               | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   26 | data.eval_path                                                | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   27 | data.test_path                                                | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-test.jsonl
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   28 | data.max_train_samples                                        | 256
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   29 | data.max_eval_samples                                         | -1
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   30 | data.max_test_samples                                         | -1
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   31 | data.num_prog_samples                                         | 5000
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   32 | data.max_source_length                                        | 512
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   33 | data.max_target_length                                        | 512
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   34 | data.use_cache_data                                           | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   35 | model.pretrained                                              | meta-llama/Llama-3.2-1B
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   36 | hardware.grad_acc_steps                                       | 1
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   37 | hardware.train_batch                                          | 1
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   38 | hardware.infer_batch                                          | 32
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   39 | hardware.accelerator                                          | cuda
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   40 | hardware.precision                                            | bf16-mixed
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   41 | hardware.strategy                                             | ddp
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   42 | hardware.devices                                              | [0]
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   43 | learning.random_seed                                          | 7.0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   44 | learning.learning_rate                                        | 2e-05
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   45 | learning.num_train_epochs                                     | 1.0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   46 | learning.trainer_args.output_dir                              | output/train_llama3_1b_supervised-base
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   47 | learning.trainer_args.overwrite_output_dir                    | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   48 | learning.trainer_args.do_train                                | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   49 | learning.trainer_args.do_eval                                 | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   50 | learning.trainer_args.do_predict                              | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   51 | learning.trainer_args.eval_strategy                           | epoch
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   52 | learning.trainer_args.prediction_loss_only                    | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   53 | learning.trainer_args.per_device_train_batch_size             | 8
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   54 | learning.trainer_args.per_device_eval_batch_size              | 32
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   55 | learning.trainer_args.per_gpu_train_batch_size                |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   56 | learning.trainer_args.per_gpu_eval_batch_size                 |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   57 | learning.trainer_args.gradient_accumulation_steps             | 4
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   58 | learning.trainer_args.eval_accumulation_steps                 |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   59 | learning.trainer_args.eval_delay                              | 0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   60 | learning.trainer_args.torch_empty_cache_steps                 |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   61 | learning.trainer_args.learning_rate                           | 2e-05
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   62 | learning.trainer_args.weight_decay                            | 0.0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   63 | learning.trainer_args.adam_beta1                              | 0.9
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   64 | learning.trainer_args.adam_beta2                              | 0.999
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   65 | learning.trainer_args.adam_epsilon                            | 1e-08
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   66 | learning.trainer_args.max_grad_norm                           | 1.0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   67 | learning.trainer_args.num_train_epochs                        | 6.0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   68 | learning.trainer_args.max_steps                               | -1
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   69 | learning.trainer_args.lr_scheduler_type                       | cosine
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   70 | learning.trainer_args.lr_scheduler_kwargs                     | {}
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   71 | learning.trainer_args.warmup_ratio                            | 0.04
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   72 | learning.trainer_args.warmup_steps                            | 0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   73 | learning.trainer_args.log_level                               | passive
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   74 | learning.trainer_args.log_level_replica                       | warning
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   75 | learning.trainer_args.log_on_each_node                        | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   76 | learning.trainer_args.logging_dir                             | output/train_llama3_1b_supervised-base/runs/20241204
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   77 | learning.trainer_args.logging_strategy                        | steps
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   78 | learning.trainer_args.logging_first_step                      | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   79 | learning.trainer_args.logging_steps                           | 10
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   80 | learning.trainer_args.logging_nan_inf_filter                  | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   81 | learning.trainer_args.save_strategy                           | no
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   82 | learning.trainer_args.save_steps                              | 500
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   83 | learning.trainer_args.save_total_limit                        |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   84 | learning.trainer_args.save_safetensors                        | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   85 | learning.trainer_args.save_on_each_node                       | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   86 | learning.trainer_args.save_only_model                         | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   87 | learning.trainer_args.restore_callback_states_from_checkpoint | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   88 | learning.trainer_args.no_cuda                                 | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   89 | learning.trainer_args.use_cpu                                 | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   90 | learning.trainer_args.use_mps_device                          | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   91 | learning.trainer_args.seed                                    | 7
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   92 | learning.trainer_args.data_seed                               | 7
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   93 | learning.trainer_args.jit_mode_eval                           | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   94 | learning.trainer_args.use_ipex                                | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   95 | learning.trainer_args.bf16                                    | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   96 | learning.trainer_args.fp16                                    | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   97 | learning.trainer_args.fp16_opt_level                          | O1
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   98 | learning.trainer_args.half_precision_backend                  | auto
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇   99 | learning.trainer_args.bf16_full_eval                          | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  100 | learning.trainer_args.fp16_full_eval                          | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  101 | learning.trainer_args.tf32                                    | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  102 | learning.trainer_args.local_rank                              | 0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  103 | learning.trainer_args.ddp_backend                             |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  104 | learning.trainer_args.tpu_num_cores                           |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  105 | learning.trainer_args.tpu_metrics_debug                       | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  106 | learning.trainer_args.debug                                   | []
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  107 | learning.trainer_args.dataloader_drop_last                    | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  108 | learning.trainer_args.eval_steps                              |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  109 | learning.trainer_args.dataloader_num_workers                  | 0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  110 | learning.trainer_args.dataloader_prefetch_factor              |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  111 | learning.trainer_args.past_index                              | -1
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  112 | learning.trainer_args.run_name                                | train_llama3_1b_supervised-base
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  113 | learning.trainer_args.disable_tqdm                            | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  114 | learning.trainer_args.remove_unused_columns                   | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  115 | learning.trainer_args.label_names                             |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  116 | learning.trainer_args.load_best_model_at_end                  | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  117 | learning.trainer_args.metric_for_best_model                   |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  118 | learning.trainer_args.greater_is_better                       |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  119 | learning.trainer_args.ignore_data_skip                        | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  120 | learning.trainer_args.fsdp                                    | []
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  121 | learning.trainer_args.fsdp_min_num_params                     | 0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  122 | learning.trainer_args.fsdp_config                             | {'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False}
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  123 | learning.trainer_args.fsdp_transformer_layer_cls_to_wrap      |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  124 | learning.trainer_args.accelerator_config                      | {'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None}
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  125 | learning.trainer_args.deepspeed                               |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  126 | learning.trainer_args.label_smoothing_factor                  | 0.0
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  127 | learning.trainer_args.optim                                   | adamw_torch
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  128 | learning.trainer_args.optim_args                              |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  129 | learning.trainer_args.adafactor                               | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  130 | learning.trainer_args.group_by_length                         | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  131 | learning.trainer_args.length_column_name                      | length
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  132 | learning.trainer_args.report_to                               | []
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  133 | learning.trainer_args.ddp_find_unused_parameters              |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  134 | learning.trainer_args.ddp_bucket_cap_mb                       |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  135 | learning.trainer_args.ddp_broadcast_buffers                   |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  136 | learning.trainer_args.dataloader_pin_memory                   | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  137 | learning.trainer_args.dataloader_persistent_workers           | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  138 | learning.trainer_args.skip_memory_metrics                     | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  139 | learning.trainer_args.use_legacy_prediction_loop              | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  140 | learning.trainer_args.push_to_hub                             | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  141 | learning.trainer_args.resume_from_checkpoint                  |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  142 | learning.trainer_args.hub_model_id                            |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  143 | learning.trainer_args.hub_strategy                            | every_save
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  144 | learning.trainer_args.hub_token                               | <HUB_TOKEN>
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  145 | learning.trainer_args.hub_private_repo                        | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  146 | learning.trainer_args.hub_always_push                         | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  147 | learning.trainer_args.gradient_checkpointing                  | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  148 | learning.trainer_args.gradient_checkpointing_kwargs           |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  149 | learning.trainer_args.include_inputs_for_metrics              | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  150 | learning.trainer_args.include_for_metrics                     | []
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  151 | learning.trainer_args.eval_do_concat_batches                  | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  152 | learning.trainer_args.fp16_backend                            | auto
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  153 | learning.trainer_args.evaluation_strategy                     |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  154 | learning.trainer_args.push_to_hub_model_id                    |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  155 | learning.trainer_args.push_to_hub_organization                |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  156 | learning.trainer_args.push_to_hub_token                       | <PUSH_TO_HUB_TOKEN>
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  157 | learning.trainer_args.mp_parameters                           |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  158 | learning.trainer_args.auto_find_batch_size                    | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  159 | learning.trainer_args.full_determinism                        | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  160 | learning.trainer_args.torchdynamo                             |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  161 | learning.trainer_args.ray_scope                               | last
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  162 | learning.trainer_args.ddp_timeout                             | 1800
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  163 | learning.trainer_args.torch_compile                           | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  164 | learning.trainer_args.torch_compile_backend                   |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  165 | learning.trainer_args.torch_compile_mode                      |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  166 | learning.trainer_args.dispatch_batches                        |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  167 | learning.trainer_args.split_batches                           |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  168 | learning.trainer_args.include_tokens_per_second               | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  169 | learning.trainer_args.include_num_input_tokens_seen           | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  170 | learning.trainer_args.neftune_noise_alpha                     |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  171 | learning.trainer_args.optim_target_modules                    |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  172 | learning.trainer_args.batch_eval_metrics                      | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  173 | learning.trainer_args.eval_on_start                           | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  174 | learning.trainer_args.use_liger_kernel                        | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  175 | learning.trainer_args.eval_use_gather_object                  | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  176 | learning.trainer_args.average_tokens_across_devices           | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  177 | learning.trainer_args.sortish_sampler                         | False
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  178 | learning.trainer_args.predict_with_generate                   | True
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  179 | learning.trainer_args.generation_max_length                   | 1280
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  180 | learning.trainer_args.generation_num_beams                    |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇  181 | learning.trainer_args.generation_config                       |
+[12.06 01:52:49] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+---------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[12.06 01:52:49] ┇ INFO     ┇  lightning.fabric.utilities.seed ┇ [rank: 0] Seed set to 7
+[12.06 01:52:49] ┇ INFO     ┇ transformers.configuration_utils ┇ loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/config.json
+[12.06 01:52:49] ┇ INFO     ┇ transformers.configuration_utils ┇ Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-3.2-1B",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 128000,
+  "eos_token_id": 128001,
+  "head_dim": 64,
+  "hidden_act": "silu",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 8192,
+  "max_position_embeddings": 131072,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 16,
+  "num_key_value_heads": 8,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": {
+    "factor": 32.0,
+    "high_freq_factor": 4.0,
+    "low_freq_factor": 1.0,
+    "original_max_position_embeddings": 8192,
+    "rope_type": "llama3"
+  },
+  "rope_theta": 500000.0,
+  "tie_word_embeddings": true,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.46.3",
+  "use_cache": true,
+  "vocab_size": 128256
+}
+
+[12.06 01:52:49] ┇ INFO     ┇ transformers.tokenization_utils_base ┇ loading file tokenizer.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/tokenizer.json
+[12.06 01:52:49] ┇ INFO     ┇ transformers.tokenization_utils_base ┇ loading file tokenizer.model from cache at None
+[12.06 01:52:49] ┇ INFO     ┇ transformers.tokenization_utils_base ┇ loading file added_tokens.json from cache at None
+[12.06 01:52:49] ┇ INFO     ┇ transformers.tokenization_utils_base ┇ loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/special_tokens_map.json
+[12.06 01:52:49] ┇ INFO     ┇ transformers.tokenization_utils_base ┇ loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/tokenizer_config.json
+[12.06 01:52:49] ┇ INFO     ┇ transformers.tokenization_utils_base ┇ Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[12.06 01:52:50] ┇ INFO     ┇ transformers.configuration_utils ┇ loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/config.json
+[12.06 01:52:50] ┇ INFO     ┇ transformers.configuration_utils ┇ Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-3.2-1B",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 128000,
+  "eos_token_id": 128001,
+  "head_dim": 64,
+  "hidden_act": "silu",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 8192,
+  "max_position_embeddings": 131072,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 16,
+  "num_key_value_heads": 8,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": {
+    "factor": 32.0,
+    "high_freq_factor": 4.0,
+    "low_freq_factor": 1.0,
+    "original_max_position_embeddings": 8192,
+    "rope_type": "llama3"
+  },
+  "rope_theta": 500000.0,
+  "tie_word_embeddings": true,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.46.3",
+  "use_cache": true,
+  "vocab_size": 128256
+}
+
+[12.06 01:52:50] ┇ INFO     ┇      transformers.modeling_utils ┇ loading weights file model.safetensors from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/model.safetensors
+[12.06 01:52:50] ┇ INFO     ┇ transformers.generation.configuration_utils ┇ Generate config GenerationConfig {
+  "bos_token_id": 128000,
+  "eos_token_id": 128001
+}
+
+[12.06 01:52:51] ┇ INFO     ┇      transformers.modeling_utils ┇ All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[12.06 01:52:51] ┇ INFO     ┇      transformers.modeling_utils ┇ All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-3.2-1B.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[12.06 01:52:52] ┇ INFO     ┇ transformers.generation.configuration_utils ┇ loading configuration file generation_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/generation_config.json
+[12.06 01:52:52] ┇ INFO     ┇ transformers.generation.configuration_utils ┇ Generate config GenerationConfig {
+  "bos_token_id": 128000,
+  "do_sample": true,
+  "eos_token_id": 128001,
+  "temperature": 0.6,
+  "top_p": 0.9
+}
+
+[12.06 01:52:52] ┇ INFO     ┇                         __main__ ┇ type(model)=<class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'> - True
+[12.06 01:52:52] ┇ INFO     ┇                         __main__ ┇ type(config)=<class 'transformers.models.llama.configuration_llama.LlamaConfig'> - True
+[12.06 01:52:52] ┇ INFO     ┇                         __main__ ┇ type(tokenizer)=<class 'transformers.tokenization_utils_fast.PreTrainedTokenizerFast'> - True
+[12.06 01:52:52] ┇ INFO     ┇                         __main__ ┇ len(tokenizer)=128256, embedding_size=128256
+[12.06 01:52:52] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 01:52:52] ┇ INFO     ┇                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl as train dataset: 256 samples
+[12.06 01:52:53] ┇ INFO     ┇                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl as eval dataset: 6,085 samples
+[12.06 01:52:53] ┇ INFO     ┇                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl as test dataset: 6,470 samples
+[12.06 01:52:53] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 01:52:54] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples 100.00% 256/256... rate=169.87 Hz, eta=0:00:00, total=0:00:01
+[12.06 01:52:57] ┇ INFO     ┇                         __main__ ┇ Preprocess eval samples 82.17% 5000/6085... rate=2154.29 Hz, eta=0:00:00, total=0:00:02
+[12.06 01:52:58] ┇ INFO     ┇                         __main__ ┇ Preprocess eval samples 100.00% 6085/6085... rate=2414.75 Hz, eta=0:00:00, total=0:00:02
+[12.06 01:53:01] ┇ INFO     ┇                         __main__ ┇ Preprocess test samples 77.28% 5000/6470... rate=2170.79 Hz, eta=0:00:00, total=0:00:02
+[12.06 01:53:01] ┇ INFO     ┇                         __main__ ┇ Preprocess test samples 100.00% 6470/6470... rate=2555.65 Hz, eta=0:00:00, total=0:00:02
+[12.06 01:53:01] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 01:53:01] ┇ INFO     ┇                         __main__ ┇ type(optimizer)=<class 'torch.optim.adamw.AdamW'> - True
+[12.06 01:53:11] ┇ INFO     ┇                         __main__ ┇ type(model)=<class 'lightning.fabric.wrappers._FabricModule'> - True
+[12.06 01:53:11] ┇ INFO     ┇                         __main__ ┇ type(optimizer)=<class 'lightning.fabric.wrappers.FabricAdamW'> - True
+[12.06 01:53:11] ┇ INFO     ┇                         __main__ ┇ ****************************************************************************************************
+[12.06 01:53:11] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 01:53:11] ┇ INFO     ┇                         __main__ ┇ Epoch: 0
+[12.06 01:53:11] ┇ INFO     ┇                         __main__ ┇ i=1
+[12.06 01:53:20] ┇ INFO     ┇                         __main__ ┇ loss=1.5261825323104858
+[12.06 01:53:23] ┇ INFO     ┇                         __main__ ┇ global_step=1
+[12.06 01:53:23] ┇ INFO     ┇                         __main__ ┇ i=2
+[12.06 01:53:23] ┇ INFO     ┇                         __main__ ┇ loss=0.6947198510169983
+[12.06 01:53:26] ┇ INFO     ┇                         __main__ ┇ global_step=2
+[12.06 01:53:26] ┇ INFO     ┇                         __main__ ┇ i=3
+[12.06 01:53:26] ┇ INFO     ┇                         __main__ ┇ loss=0.5845867991447449
+[12.06 01:53:26] ┇ INFO     ┇                         __main__ ┇ global_step=3
+[12.06 01:53:26] ┇ INFO     ┇                         __main__ ┇ i=4
+[12.06 01:53:27] ┇ INFO     ┇                         __main__ ┇ loss=0.5142602324485779
+[12.06 01:53:27] ┇ INFO     ┇                         __main__ ┇ global_step=4
+[12.06 01:53:27] ┇ INFO     ┇                         __main__ ┇ i=5
+[12.06 01:53:27] ┇ INFO     ┇                         __main__ ┇ loss=0.5646353363990784
+[12.06 01:53:27] ┇ INFO     ┇                         __main__ ┇ global_step=5
+[12.06 01:53:27] ┇ INFO     ┇                         __main__ ┇ i=6
+[12.06 01:53:27] ┇ INFO     ┇                         __main__ ┇ loss=0.33779269456863403
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ global_step=6
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ i=7
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ loss=0.36220598220825195
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ global_step=7
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ i=8
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ loss=0.5748053789138794
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ global_step=8
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ i=9
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ loss=0.20151956379413605
+[12.06 01:53:28] ┇ INFO     ┇                         __main__ ┇ global_step=9
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ i=10
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ loss=0.16985972225666046
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ global_step=10
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ i=11
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ loss=0.348577082157135
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ global_step=11
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ i=12
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ loss=0.47594496607780457
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ global_step=12
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ i=13
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ loss=0.27303409576416016
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ global_step=13
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ i=14
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ loss=0.23799996078014374
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ global_step=14
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ i=15
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ loss=0.14603278040885925
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ global_step=15
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ i=16
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ loss=0.4693076014518738
+[12.06 01:53:29] ┇ INFO     ┇                         __main__ ┇ global_step=16
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ i=17
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ loss=0.5735729336738586
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ global_step=17
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ i=18
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ loss=0.16526025533676147
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ global_step=18
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ i=19
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ loss=0.880540668964386
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ global_step=19
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ i=20
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ loss=0.15809647738933563
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ global_step=20
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ i=21
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ loss=0.12294027209281921
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ global_step=21
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ i=22
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ loss=0.23470690846443176
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ global_step=22
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ i=23
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ loss=0.25451529026031494
+[12.06 01:53:30] ┇ INFO     ┇                         __main__ ┇ global_step=23
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ i=24
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ loss=0.15011170506477356
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ global_step=24
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ i=25
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ loss=0.12389427423477173
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ global_step=25
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ i=26
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ loss=0.09673535078763962
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ global_step=26
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ i=27
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ loss=0.08720321208238602
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ global_step=27
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ i=28
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ loss=0.17674189805984497
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ global_step=28
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ i=29
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ loss=0.13300101459026337
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ global_step=29
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ i=30
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ loss=0.09983920305967331
+[12.06 01:53:31] ┇ INFO     ┇                         __main__ ┇ global_step=30
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ i=31
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ loss=0.12963327765464783
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ global_step=31
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ i=32
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ loss=0.28685685992240906
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ global_step=32
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ i=33
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ loss=0.13897940516471863
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ global_step=33
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ i=34
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ loss=0.42116671800613403
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ global_step=34
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ i=35
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ loss=0.057427383959293365
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ global_step=35
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ i=36
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ loss=0.17248056828975677
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ global_step=36
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ i=37
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ loss=0.048648566007614136
+[12.06 01:53:32] ┇ INFO     ┇                         __main__ ┇ global_step=37
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ i=38
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ loss=0.3115822672843933
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ global_step=38
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ i=39
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ loss=0.16566318273544312
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ global_step=39
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ i=40
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ loss=0.1296229511499405
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ global_step=40
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ i=41
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ loss=0.04272926598787308
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ global_step=41
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ i=42
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ loss=0.14972543716430664
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ global_step=42
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ i=43
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ loss=0.262974351644516
+[12.06 01:53:33] ┇ INFO     ┇                         __main__ ┇ global_step=43
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ i=44
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ loss=0.12455565482378006
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ global_step=44
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ i=45
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ loss=0.4360528290271759
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ global_step=45
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ i=46
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ loss=0.16524717211723328
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ global_step=46
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ i=47
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ loss=0.10349716246128082
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ global_step=47
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ i=48
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ loss=0.20835687220096588
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ global_step=48
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ i=49
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ loss=0.11770103871822357
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ global_step=49
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ i=50
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ loss=0.1234801635146141
+[12.06 01:53:34] ┇ INFO     ┇                         __main__ ┇ global_step=50
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ i=51
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ loss=0.07639829069375992
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ global_step=51
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ i=52
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ loss=0.3001288175582886
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ global_step=52
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ i=53
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ loss=0.17962263524532318
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ global_step=53
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ i=54
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ loss=0.24603605270385742
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ global_step=54
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ i=55
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ loss=0.20426705479621887
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ global_step=55
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ i=56
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ loss=0.3183673918247223
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ global_step=56
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ i=57
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ loss=0.1360776424407959
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ global_step=57
+[12.06 01:53:35] ┇ INFO     ┇                         __main__ ┇ i=58
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ loss=0.16423898935317993
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ global_step=58
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ i=59
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ loss=0.1830838918685913
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ global_step=59
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ i=60
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ loss=0.1875302493572235
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ global_step=60
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ i=61
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ loss=0.14407534897327423
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ global_step=61
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ i=62
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ loss=0.22296692430973053
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ global_step=62
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ i=63
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ loss=0.21925707161426544
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ global_step=63
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ i=64
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ loss=0.16700583696365356
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ global_step=64
+[12.06 01:53:36] ┇ INFO     ┇                         __main__ ┇ i=65
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ loss=0.07244078069925308
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ global_step=65
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ i=66
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ loss=0.13787342607975006
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ global_step=66
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ i=67
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ loss=0.15045040845870972
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ global_step=67
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ i=68
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ loss=0.07872632890939713
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ global_step=68
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ i=69
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ loss=0.11160597205162048
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ global_step=69
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ i=70
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ loss=0.17641755938529968
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ global_step=70
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ i=71
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ loss=0.12844473123550415
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ global_step=71
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ i=72
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ loss=0.0317554771900177
+[12.06 01:53:37] ┇ INFO     ┇                         __main__ ┇ global_step=72
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ i=73
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ loss=0.10138930380344391
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ global_step=73
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ i=74
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ loss=0.22325721383094788
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ global_step=74
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ i=75
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ loss=0.1554732769727707
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ global_step=75
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ i=76
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ loss=0.11400368064641953
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ global_step=76
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ i=77
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ loss=0.09508995711803436
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ global_step=77
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ i=78
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ loss=0.1897324174642563
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ global_step=78
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ i=79
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ loss=0.05242801085114479
+[12.06 01:53:38] ┇ INFO     ┇                         __main__ ┇ global_step=79
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ i=80
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ loss=0.09329479932785034
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ global_step=80
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ i=81
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ loss=0.09631340205669403
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ global_step=81
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ i=82
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ loss=0.10151480883359909
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ global_step=82
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ i=83
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ loss=0.1028745248913765
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ global_step=83
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ i=84
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ loss=0.15592721104621887
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ global_step=84
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ i=85
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ loss=0.045511726289987564
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ global_step=85
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ i=86
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ loss=0.07653797417879105
+[12.06 01:53:39] ┇ INFO     ┇                         __main__ ┇ global_step=86
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ i=87
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ loss=0.016768379136919975
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ global_step=87
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ i=88
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ loss=0.16125372052192688
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ global_step=88
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ i=89
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ loss=0.10637550801038742
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ global_step=89
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ i=90
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ loss=0.2006620317697525
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ global_step=90
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ i=91
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ loss=0.12603698670864105
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ global_step=91
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ i=92
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ loss=0.030354734510183334
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ global_step=92
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ i=93
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ loss=0.4740513563156128
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ global_step=93
+[12.06 01:53:40] ┇ INFO     ┇                         __main__ ┇ i=94
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ loss=0.21942763030529022
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ global_step=94
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ i=95
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ loss=0.23528476059436798
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ global_step=95
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ i=96
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ loss=0.04416388273239136
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ global_step=96
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ i=97
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ loss=0.1984226554632187
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ global_step=97
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ i=98
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ loss=0.05775466188788414
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ global_step=98
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ i=99
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ loss=0.05305362492799759
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ global_step=99
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ i=100
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ loss=0.11329129338264465
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ global_step=100
+[12.06 01:53:41] ┇ INFO     ┇                         __main__ ┇ i=101
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ loss=0.07464206963777542
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ global_step=101
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ i=102
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ loss=0.18821215629577637
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ global_step=102
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ i=103
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ loss=0.20259588956832886
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ global_step=103
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ i=104
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ loss=0.03589628264307976
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ global_step=104
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ i=105
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ loss=0.375467985868454
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ global_step=105
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ i=106
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ loss=0.1251247078180313
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ global_step=106
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ i=107
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ loss=0.11868579685688019
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ global_step=107
+[12.06 01:53:42] ┇ INFO     ┇                         __main__ ┇ i=108
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ loss=0.07129605859518051
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ global_step=108
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ i=109
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ loss=0.11821195483207703
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ global_step=109
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ i=110
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ loss=0.015916408970952034
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ global_step=110
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ i=111
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ loss=0.12338912487030029
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ global_step=111
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ i=112
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ loss=0.9505428671836853
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ global_step=112
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ i=113
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ loss=0.07319255918264389
+[12.06 01:53:43] ┇ INFO     ┇                         __main__ ┇ global_step=113
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ i=114
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ loss=0.1126076877117157
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ global_step=114
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ i=115
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ loss=0.16524426639080048
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ global_step=115
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ i=116
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ loss=0.06017625331878662
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ global_step=116
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ i=117
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ loss=0.0580587312579155
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ global_step=117
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ i=118
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ loss=0.08230308443307877
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ global_step=118
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ i=119
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ loss=0.17967817187309265
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ global_step=119
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ i=120
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ loss=0.05417729914188385
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ global_step=120
+[12.06 01:53:44] ┇ INFO     ┇                         __main__ ┇ i=121
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ loss=0.06931164860725403
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ global_step=121
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ i=122
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ loss=0.07107952982187271
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ global_step=122
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ i=123
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ loss=0.24907580018043518
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ global_step=123
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ i=124
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ loss=0.08000277727842331
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ global_step=124
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ i=125
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ loss=0.17972496151924133
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ global_step=125
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ i=126
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ loss=0.10171143710613251
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ global_step=126
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ i=127
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ loss=0.2831723093986511
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ global_step=127
+[12.06 01:53:45] ┇ INFO     ┇                         __main__ ┇ i=128
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ loss=0.03773653134703636
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ global_step=128
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ i=129
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ loss=0.064388208091259
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ global_step=129
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ i=130
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ loss=0.11514424532651901
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ global_step=130
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ i=131
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ loss=0.12575726211071014
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ global_step=131
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ i=132
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ loss=0.027896996587514877
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ global_step=132
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ i=133
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ loss=0.07523131370544434
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ global_step=133
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ i=134
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ loss=0.29974377155303955
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ global_step=134
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ i=135
+[12.06 01:53:46] ┇ INFO     ┇                         __main__ ┇ loss=0.04570205137133598
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ global_step=135
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ i=136
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ loss=0.06542651355266571
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ global_step=136
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ i=137
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ loss=0.1581614762544632
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ global_step=137
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ i=138
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ loss=0.08520904183387756
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ global_step=138
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ i=139
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ loss=0.08955595642328262
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ global_step=139
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ i=140
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ loss=0.013434300199151039
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ global_step=140
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ i=141
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ loss=0.027411645278334618
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ global_step=141
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ i=142
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ loss=0.13373444974422455
+[12.06 01:53:47] ┇ INFO     ┇                         __main__ ┇ global_step=142
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ i=143
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ loss=0.17213010787963867
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ global_step=143
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ i=144
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ loss=0.1644376814365387
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ global_step=144
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ i=145
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ loss=0.11024530231952667
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ global_step=145
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ i=146
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ loss=0.17172111570835114
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ global_step=146
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ i=147
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ loss=0.05665532499551773
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ global_step=147
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ i=148
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ loss=0.07357290387153625
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ global_step=148
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ i=149
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ loss=0.0802350640296936
+[12.06 01:53:48] ┇ INFO     ┇                         __main__ ┇ global_step=149
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ i=150
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ loss=0.024939998984336853
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ global_step=150
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ i=151
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ loss=0.12878912687301636
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ global_step=151
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ i=152
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ loss=0.09544084221124649
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ global_step=152
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ i=153
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ loss=0.016839809715747833
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ global_step=153
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ i=154
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ loss=0.16436903178691864
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ global_step=154
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ i=155
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ loss=0.0638129711151123
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ global_step=155
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ i=156
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ loss=0.06289142370223999
+[12.06 01:53:49] ┇ INFO     ┇                         __main__ ┇ global_step=156
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ i=157
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ loss=0.08250425010919571
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ global_step=157
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ i=158
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ loss=0.08127377927303314
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ global_step=158
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ i=159
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ loss=0.058109357953071594
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ global_step=159
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ i=160
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ loss=0.1502203792333603
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ global_step=160
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ i=161
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ loss=0.07011929899454117
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ global_step=161
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ i=162
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ loss=0.006919345818459988
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ global_step=162
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ i=163
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ loss=0.13153529167175293
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ global_step=163
+[12.06 01:53:50] ┇ INFO     ┇                         __main__ ┇ i=164
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ loss=0.15983393788337708
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ global_step=164
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ i=165
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ loss=0.04851908981800079
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ global_step=165
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ i=166
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ loss=0.04616928473114967
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ global_step=166
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ i=167
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ loss=0.07741896063089371
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ global_step=167
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ i=168
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ loss=0.038120005279779434
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ global_step=168
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ i=169
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ loss=0.11288301646709442
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ global_step=169
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ i=170
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ loss=0.07323719561100006
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ global_step=170
+[12.06 01:53:51] ┇ INFO     ┇                         __main__ ┇ i=171
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ loss=0.05962268263101578
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ global_step=171
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ i=172
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ loss=0.12556147575378418
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ global_step=172
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ i=173
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ loss=0.06758968532085419
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ global_step=173
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ i=174
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ loss=0.05907494202256203
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ global_step=174
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ i=175
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ loss=0.07022135704755783
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ global_step=175
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ i=176
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ loss=0.029568638652563095
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ global_step=176
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ i=177
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ loss=0.01603330485522747
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ global_step=177
+[12.06 01:53:52] ┇ INFO     ┇                         __main__ ┇ i=178
+[12.06 01:53:53] ┇ INFO     ┇                         __main__ ┇ loss=0.10966814309358597
+[12.06 01:53:53] ┇ INFO     ┇                         __main__ ┇ global_step=178
+[12.06 01:53:53] ┇ INFO     ┇                         __main__ ┇ i=179
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ loss=0.049576565623283386
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ global_step=179
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ i=180
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ loss=0.05084826424717903
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ global_step=180
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ i=181
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ loss=0.08062152564525604
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ global_step=181
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ i=182
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ loss=0.009962350130081177
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ global_step=182
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ i=183
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ loss=0.03312359377741814
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ global_step=183
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ i=184
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ loss=0.04761393368244171
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ global_step=184
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ i=185
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ loss=0.22810663282871246
+[12.06 01:53:54] ┇ INFO     ┇                         __main__ ┇ global_step=185
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ i=186
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ loss=0.02233600988984108
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ global_step=186
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ i=187
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ loss=0.19368520379066467
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ global_step=187
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ i=188
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ loss=0.15193161368370056
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ global_step=188
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ i=189
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ loss=0.11570151150226593
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ global_step=189
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ i=190
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ loss=0.03810718655586243
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ global_step=190
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ i=191
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ loss=0.05459917336702347
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ global_step=191
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ i=192
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ loss=0.05509665235877037
+[12.06 01:53:55] ┇ INFO     ┇                         __main__ ┇ global_step=192
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ i=193
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ loss=0.11237280815839767
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ global_step=193
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ i=194
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ loss=0.09119964390993118
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ global_step=194
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ i=195
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ loss=0.0434708371758461
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ global_step=195
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ i=196
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ loss=0.0370614267885685
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ global_step=196
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ i=197
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ loss=0.010841547511518002
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ global_step=197
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ i=198
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ loss=0.07378233969211578
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ global_step=198
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ i=199
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ loss=0.1397099643945694
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ global_step=199
+[12.06 01:53:56] ┇ INFO     ┇                         __main__ ┇ i=200
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ loss=0.041153471916913986
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ global_step=200
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ i=201
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ loss=0.013119555078446865
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ global_step=201
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ i=202
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ loss=0.05739052966237068
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ global_step=202
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ i=203
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ loss=0.011440979316830635
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ global_step=203
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ i=204
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ loss=0.10870545357465744
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ global_step=204
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ i=205
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ loss=0.24323099851608276
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ global_step=205
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ i=206
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ loss=0.03469403088092804
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ global_step=206
+[12.06 01:53:57] ┇ INFO     ┇                         __main__ ┇ i=207
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ loss=0.012158950790762901
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ global_step=207
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ i=208
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ loss=0.08142251521348953
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ global_step=208
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ i=209
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ loss=0.01695234142243862
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ global_step=209
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ i=210
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ loss=0.004132009111344814
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ global_step=210
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ i=211
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ loss=0.09393159300088882
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ global_step=211
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ i=212
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ loss=0.018038908019661903
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ global_step=212
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ i=213
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ loss=0.2500353753566742
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ global_step=213
+[12.06 01:53:58] ┇ INFO     ┇                         __main__ ┇ i=214
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ loss=0.014219999313354492
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ global_step=214
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ i=215
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ loss=0.10435657203197479
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ global_step=215
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ i=216
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ loss=0.09402244538068771
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ global_step=216
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ i=217
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ loss=0.08786871284246445
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ global_step=217
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ i=218
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ loss=0.10270083695650101
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ global_step=218
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ i=219
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ loss=0.2084486186504364
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ global_step=219
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ i=220
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ loss=0.08602326363325119
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ global_step=220
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ i=221
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ loss=0.03392598405480385
+[12.06 01:53:59] ┇ INFO     ┇                         __main__ ┇ global_step=221
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ i=222
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ loss=0.10921330004930496
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ global_step=222
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ i=223
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ loss=0.11855753511190414
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ global_step=223
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ i=224
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ loss=0.050964146852493286
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ global_step=224
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ i=225
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ loss=0.13290543854236603
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ global_step=225
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ i=226
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ loss=0.1639372706413269
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ global_step=226
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ i=227
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ loss=0.12873272597789764
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ global_step=227
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ i=228
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ loss=0.0515422597527504
+[12.06 01:54:00] ┇ INFO     ┇                         __main__ ┇ global_step=228
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ i=229
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ loss=0.022701537236571312
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ global_step=229
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ i=230
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ loss=0.08560112118721008
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ global_step=230
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ i=231
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ loss=0.01651168428361416
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ global_step=231
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ i=232
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ loss=0.038041144609451294
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ global_step=232
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ i=233
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ loss=0.2137049287557602
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ global_step=233
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ i=234
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ loss=0.01132180355489254
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ global_step=234
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ i=235
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ loss=0.11277551203966141
+[12.06 01:54:01] ┇ INFO     ┇                         __main__ ┇ global_step=235
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ i=236
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ loss=0.053219329565763474
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ global_step=236
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ i=237
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ loss=0.113814577460289
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ global_step=237
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ i=238
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ loss=0.023643074557185173
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ global_step=238
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ i=239
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ loss=0.09093411266803741
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ global_step=239
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ i=240
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ loss=0.050178997218608856
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ global_step=240
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ i=241
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ loss=0.03822111338376999
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ global_step=241
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ i=242
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ loss=0.08385356515645981
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ global_step=242
+[12.06 01:54:02] ┇ INFO     ┇                         __main__ ┇ i=243
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ loss=0.025485891848802567
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ global_step=243
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ i=244
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ loss=0.0498131662607193
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ global_step=244
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ i=245
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ loss=0.06280090659856796
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ global_step=245
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ i=246
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ loss=0.10104789584875107
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ global_step=246
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ i=247
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ loss=0.052265044301748276
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ global_step=247
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ i=248
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ loss=0.01844235695898533
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ global_step=248
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ i=249
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ loss=0.05800602585077286
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ global_step=249
+[12.06 01:54:03] ┇ INFO     ┇                         __main__ ┇ i=250
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ loss=0.055521368980407715
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ global_step=250
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ i=251
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ loss=0.016287382692098618
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ global_step=251
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ i=252
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ loss=0.045310892164707184
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ global_step=252
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ i=253
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ loss=0.024608463048934937
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ global_step=253
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ i=254
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ loss=0.06269171833992004
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ global_step=254
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ i=255
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ loss=0.09384261816740036
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ global_step=255
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ i=256
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ loss=0.027801837772130966
+[12.06 01:54:04] ┇ INFO     ┇                         __main__ ┇ global_step=256
+[12.06 01:54:05] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 01:54:05] ┇ INFO     ┇                   chrisbase.data ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py  ($=00:01:15.709)
+[12.06 01:54:05] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
