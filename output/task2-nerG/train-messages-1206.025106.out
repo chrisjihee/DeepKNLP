@@ -1,0 +1,355 @@
+[12.06 02:51:24] ┇ INFO     ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 02:51:24] ┇ INFO     ┇                                   chrisbase.data ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py 
+[12.06 02:51:24] ┇ INFO     ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇ -----+---------------------------+----------------------------------------------------------------
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    # | NewTrainerArguments       | value
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇ -----+---------------------------+----------------------------------------------------------------
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    1 | env.hostname              | dgx-a100
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    2 | env.hostaddr              | 129.254.23.12
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    3 | env.global_rank           | 0
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    4 | env.local_rank            | 0
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    5 | env.node_rank             | 0
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    6 | env.world_size            | 2
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    7 | env.time_stamp            | 1206.025106
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    8 | env.python_path           | /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇    9 | env.current_dir           | /raid/chrisjihee/proj/DeepKNLP
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   10 | env.current_file          | /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   11 | env.command_args          | []
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   12 | env.output_home           | /raid/chrisjihee/proj/DeepKNLP/output
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   13 | env.logging_home          | /raid/chrisjihee/proj/DeepKNLP/output/task2-nerG
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   14 | env.logging_file          | train-messages.out
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   15 | env.argument_file         | train-arguments.json
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   16 | env.max_workers           | 4
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   17 | env.debugging             | False
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   18 | env.date_format           | [%m.%d %H:%M:%S]
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   19 | env.message_level         | 20
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   20 | env.message_format        | %(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   21 | time.t1                   | 2024-12-06 02:51:24.678201
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   22 | time.t2                   | 2024-12-06 02:51:06.239938
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   23 | time.started              | [12.06 02:51:24]
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   24 | time.settled              |
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   25 | time.elapsed              |
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   26 | data.train_path           | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   27 | data.eval_path            | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   28 | data.test_path            | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-test.jsonl
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   29 | data.max_train_samples    | 256
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   30 | data.max_eval_samples     | -1
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   31 | data.max_test_samples     | -1
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   32 | data.num_prog_samples     | 5000
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   33 | data.max_source_length    | 512
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   34 | data.max_target_length    | 512
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   35 | data.use_cache_data       | False
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   36 | model.pretrained          | meta-llama/Llama-3.2-1B
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   37 | hardware.gpu_index        | [0, 1]
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   38 | hardware.grad_steps       | 8
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   39 | hardware.train_batch      | 4
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   40 | hardware.infer_batch      | 32
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   41 | hardware.accelerator      | gpu
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   42 | hardware.precision        | bf16-mixed
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   43 | hardware.strategy         | ddp
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   44 | learning.random_seed      | 7.0
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   45 | learning.weight_decay     | 0.0
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   46 | learning.learning_rate    | 2e-05
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇   47 | learning.num_train_epochs | 1.0
+[12.06 02:51:24] ┇ INFO     ┇                               DeepKNLP.arguments ┇ -----+---------------------------+----------------------------------------------------------------
+[12.06 02:51:24] ┇ INFO     ┇                  lightning.fabric.utilities.seed ┇ [rank: 0] Seed set to 7
+[12.06 02:51:24] ┇ INFO     ┇                  lightning.fabric.utilities.seed ┇ [rank: 1] Seed set to 7
+[12.06 02:51:24] ┇ INFO     ┇                 transformers.configuration_utils ┇ loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/config.json
+[12.06 02:51:24] ┇ INFO     ┇                 transformers.configuration_utils ┇ Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-3.2-1B",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 128000,
+  "eos_token_id": 128001,
+  "head_dim": 64,
+  "hidden_act": "silu",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 8192,
+  "max_position_embeddings": 131072,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 16,
+  "num_key_value_heads": 8,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": {
+    "factor": 32.0,
+    "high_freq_factor": 4.0,
+    "low_freq_factor": 1.0,
+    "original_max_position_embeddings": 8192,
+    "rope_type": "llama3"
+  },
+  "rope_theta": 500000.0,
+  "tie_word_embeddings": true,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.46.3",
+  "use_cache": true,
+  "vocab_size": 128256
+}
+
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file tokenizer.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/tokenizer.json
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file tokenizer.model from cache at None
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file added_tokens.json from cache at None
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/special_tokens_map.json
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/tokenizer_config.json
+[12.06 02:51:25] ┇ INFO     ┇                 transformers.configuration_utils ┇ loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/config.json
+[12.06 02:51:25] ┇ INFO     ┇                 transformers.configuration_utils ┇ Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-3.2-1B",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 128000,
+  "eos_token_id": 128001,
+  "head_dim": 64,
+  "hidden_act": "silu",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 8192,
+  "max_position_embeddings": 131072,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 16,
+  "num_key_value_heads": 8,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": {
+    "factor": 32.0,
+    "high_freq_factor": 4.0,
+    "low_freq_factor": 1.0,
+    "original_max_position_embeddings": 8192,
+    "rope_type": "llama3"
+  },
+  "rope_theta": 500000.0,
+  "tie_word_embeddings": true,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.46.3",
+  "use_cache": true,
+  "vocab_size": 128256
+}
+
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file tokenizer.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/tokenizer.json
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file tokenizer.model from cache at None
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file added_tokens.json from cache at None
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/special_tokens_map.json
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/tokenizer_config.json
+[12.06 02:51:25] ┇ INFO     ┇                 transformers.configuration_utils ┇ loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/config.json
+[12.06 02:51:25] ┇ INFO     ┇                 transformers.configuration_utils ┇ Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-3.2-1B",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 128000,
+  "eos_token_id": 128001,
+  "head_dim": 64,
+  "hidden_act": "silu",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 8192,
+  "max_position_embeddings": 131072,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 16,
+  "num_key_value_heads": 8,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": {
+    "factor": 32.0,
+    "high_freq_factor": 4.0,
+    "low_freq_factor": 1.0,
+    "original_max_position_embeddings": 8192,
+    "rope_type": "llama3"
+  },
+  "rope_theta": 500000.0,
+  "tie_word_embeddings": true,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.46.3",
+  "use_cache": true,
+  "vocab_size": 128256
+}
+
+[12.06 02:51:25] ┇ INFO     ┇                      transformers.modeling_utils ┇ loading weights file model.safetensors from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/model.safetensors
+[12.06 02:51:25] ┇ INFO     ┇      transformers.generation.configuration_utils ┇ Generate config GenerationConfig {
+  "bos_token_id": 128000,
+  "eos_token_id": 128001
+}
+
+[12.06 02:51:25] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[12.06 02:51:25] ┇ INFO     ┇                      transformers.modeling_utils ┇ All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[12.06 02:51:25] ┇ INFO     ┇                      transformers.modeling_utils ┇ All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-3.2-1B.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[12.06 02:51:26] ┇ INFO     ┇                 transformers.configuration_utils ┇ loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/config.json
+[12.06 02:51:26] ┇ INFO     ┇                 transformers.configuration_utils ┇ Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-3.2-1B",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 128000,
+  "eos_token_id": 128001,
+  "head_dim": 64,
+  "hidden_act": "silu",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 8192,
+  "max_position_embeddings": 131072,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 16,
+  "num_key_value_heads": 8,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": {
+    "factor": 32.0,
+    "high_freq_factor": 4.0,
+    "low_freq_factor": 1.0,
+    "original_max_position_embeddings": 8192,
+    "rope_type": "llama3"
+  },
+  "rope_theta": 500000.0,
+  "tie_word_embeddings": true,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.46.3",
+  "use_cache": true,
+  "vocab_size": 128256
+}
+
+[12.06 02:51:26] ┇ INFO     ┇                      transformers.modeling_utils ┇ loading weights file model.safetensors from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/model.safetensors
+[12.06 02:51:26] ┇ INFO     ┇      transformers.generation.configuration_utils ┇ Generate config GenerationConfig {
+  "bos_token_id": 128000,
+  "eos_token_id": 128001
+}
+
+[12.06 02:51:26] ┇ INFO     ┇      transformers.generation.configuration_utils ┇ loading configuration file generation_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/generation_config.json
+[12.06 02:51:26] ┇ INFO     ┇      transformers.generation.configuration_utils ┇ Generate config GenerationConfig {
+  "bos_token_id": 128000,
+  "do_sample": true,
+  "eos_token_id": 128001,
+  "temperature": 0.6,
+  "top_p": 0.9
+}
+
+[12.06 02:51:26] ┇ INFO     ┇                                         __main__ ┇ type(model)=<class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'> - True
+[12.06 02:51:26] ┇ INFO     ┇                                         __main__ ┇ type(config)=<class 'transformers.models.llama.configuration_llama.LlamaConfig'> - True
+[12.06 02:51:26] ┇ INFO     ┇                                         __main__ ┇ type(tokenizer)=<class 'transformers.tokenization_utils_fast.PreTrainedTokenizerFast'> - True
+[12.06 02:51:26] ┇ INFO     ┇                                         __main__ ┇ len(tokenizer)=128256, embedding_size=128256
+[12.06 02:51:26] ┇ INFO     ┇                      transformers.modeling_utils ┇ All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[12.06 02:51:26] ┇ INFO     ┇                      transformers.modeling_utils ┇ All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-3.2-1B.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[12.06 02:51:26] ┇ INFO     ┇      transformers.generation.configuration_utils ┇ loading configuration file generation_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--meta-llama--Llama-3.2-1B/snapshots/4e20de362430cd3b72f300e6b0f18e50e7166e08/generation_config.json
+[12.06 02:51:26] ┇ INFO     ┇      transformers.generation.configuration_utils ┇ Generate config GenerationConfig {
+  "bos_token_id": 128000,
+  "do_sample": true,
+  "eos_token_id": 128001,
+  "temperature": 0.6,
+  "top_p": 0.9
+}
+
+[12.06 02:51:26] ┇ INFO     ┇                                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 02:51:27] ┇ INFO     ┇                                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl as train dataset: 256 samples
+[12.06 02:51:28] ┇ INFO     ┇                                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl as eval dataset: 6,085 samples
+[12.06 02:51:28] ┇ INFO     ┇                                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl as test dataset: 6,470 samples
+[12.06 02:51:28] ┇ INFO     ┇                                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 02:51:30] ┇ INFO     ┇                                         __main__ ┇ Preprocess train samples 100.00% 256/256... rate=165.12 Hz, eta=0:00:00, total=0:00:01
+[12.06 02:51:32] ┇ INFO     ┇                                         __main__ ┇ Preprocess train samples 100.00% 256/256... rate=180.74 Hz, eta=0:00:00, total=0:00:01
+[12.06 02:51:35] ┇ INFO     ┇                                         __main__ ┇ Preprocess eval samples 82.17% 5000/6085... rate=2131.50 Hz, eta=0:00:00, total=0:00:02
+[12.06 02:51:36] ┇ INFO     ┇                                         __main__ ┇ Preprocess eval samples 100.00% 6085/6085... rate=2389.15 Hz, eta=0:00:00, total=0:00:02
+[12.06 02:51:39] ┇ INFO     ┇                                         __main__ ┇ Preprocess eval samples 82.17% 5000/6085... rate=1738.75 Hz, eta=0:00:00, total=0:00:02
+[12.06 02:51:40] ┇ INFO     ┇                                         __main__ ┇ Preprocess eval samples 100.00% 6085/6085... rate=1983.25 Hz, eta=0:00:00, total=0:00:03
+[12.06 02:51:43] ┇ INFO     ┇                                         __main__ ┇ Preprocess test samples 77.28% 5000/6470... rate=2088.02 Hz, eta=0:00:00, total=0:00:02
+[12.06 02:51:43] ┇ INFO     ┇                                         __main__ ┇ Preprocess test samples 100.00% 6470/6470... rate=2441.37 Hz, eta=0:00:00, total=0:00:02
+[12.06 02:51:46] ┇ INFO     ┇                                         __main__ ┇ Preprocess test samples 77.28% 5000/6470... rate=2246.63 Hz, eta=0:00:00, total=0:00:02
+[12.06 02:51:46] ┇ INFO     ┇                                         __main__ ┇ Preprocess test samples 100.00% 6470/6470... rate=2629.67 Hz, eta=0:00:00, total=0:00:02
+[12.06 02:51:47] ┇ INFO     ┇                                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 02:51:47] ┇ INFO     ┇                                         __main__ ┇ type(optimizer)=<class 'torch.optim.adamw.AdamW'> - True
+[12.06 02:51:55] ┇ INFO     ┇                                         __main__ ┇ type(model)=<class 'lightning.fabric.wrappers._FabricModule'> - True
+[12.06 02:51:55] ┇ INFO     ┇                                         __main__ ┇ type(optimizer)=<class 'lightning.fabric.wrappers.FabricAdamW'> - True
+[12.06 02:51:55] ┇ INFO     ┇                                         __main__ ┇ ****************************************************************************************************
+[12.06 02:51:55] ┇ INFO     ┇                                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 02:51:55] ┇ INFO     ┇                                         __main__ ┇ Epoch: 0
+[12.06 02:51:55] ┇ INFO     ┇                                         __main__ ┇ i=1
+[12.06 02:52:01] ┇ INFO     ┇                                         __main__ ┇ loss=0.8447116017341614
+[12.06 02:52:01] ┇ INFO     ┇                                         __main__ ┇ i=2
+[12.06 02:52:01] ┇ INFO     ┇                                         __main__ ┇ loss=0.9548536539077759
+[12.06 02:52:01] ┇ INFO     ┇                                         __main__ ┇ i=3
+[12.06 02:52:01] ┇ INFO     ┇                                         __main__ ┇ loss=1.1292028427124023
+[12.06 02:52:01] ┇ INFO     ┇                                         __main__ ┇ i=4
+[12.06 02:52:02] ┇ INFO     ┇                                         __main__ ┇ loss=1.0705430507659912
+[12.06 02:52:02] ┇ INFO     ┇                                         __main__ ┇ i=5
+[12.06 02:52:02] ┇ INFO     ┇                                         __main__ ┇ loss=0.8721911907196045
+[12.06 02:52:02] ┇ INFO     ┇                                         __main__ ┇ i=6
+[12.06 02:52:04] ┇ INFO     ┇                                         __main__ ┇ loss=1.4203213453292847
+[12.06 02:52:04] ┇ INFO     ┇                                         __main__ ┇ i=7
+[12.06 02:52:04] ┇ INFO     ┇                                         __main__ ┇ loss=0.7942478656768799
+[12.06 02:52:04] ┇ INFO     ┇                                         __main__ ┇ i=8
+[12.06 02:52:04] ┇ INFO     ┇                                         __main__ ┇ loss=1.029811978340149
+[12.06 02:52:07] ┇ INFO     ┇                                         __main__ ┇ global_step=1
+[12.06 02:52:07] ┇ INFO     ┇                                         __main__ ┇ i=9
+[12.06 02:52:07] ┇ INFO     ┇                                         __main__ ┇ loss=0.836961030960083
+[12.06 02:52:07] ┇ INFO     ┇                                         __main__ ┇ i=10
+[12.06 02:52:10] ┇ INFO     ┇                                         __main__ ┇ loss=0.767629086971283
+[12.06 02:52:10] ┇ INFO     ┇                                         __main__ ┇ i=11
+[12.06 02:52:10] ┇ INFO     ┇                                         __main__ ┇ loss=0.6124094724655151
+[12.06 02:52:10] ┇ INFO     ┇                                         __main__ ┇ i=12
+[12.06 02:52:10] ┇ INFO     ┇                                         __main__ ┇ loss=0.8049832582473755
+[12.06 02:52:10] ┇ INFO     ┇                                         __main__ ┇ i=13
+[12.06 02:52:10] ┇ INFO     ┇                                         __main__ ┇ loss=0.7929196953773499
+[12.06 02:52:10] ┇ INFO     ┇                                         __main__ ┇ i=14
+[12.06 02:52:13] ┇ INFO     ┇                                         __main__ ┇ loss=0.8025392889976501
+[12.06 02:52:13] ┇ INFO     ┇                                         __main__ ┇ i=15
+[12.06 02:52:13] ┇ INFO     ┇                                         __main__ ┇ loss=0.6641665101051331
+[12.06 02:52:13] ┇ INFO     ┇                                         __main__ ┇ i=16
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ loss=0.8141810297966003
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ global_step=2
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ i=17
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ loss=0.946273148059845
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ i=18
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ loss=0.9201934933662415
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ i=19
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ loss=1.0802141427993774
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ i=20
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ loss=0.829796552658081
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ i=21
+[12.06 02:52:17] ┇ INFO     ┇                                         __main__ ┇ loss=0.9570978879928589
+[12.06 02:52:18] ┇ INFO     ┇                                         __main__ ┇ i=22
+[12.06 02:52:18] ┇ INFO     ┇                                         __main__ ┇ loss=0.8617319464683533
+[12.06 02:52:18] ┇ INFO     ┇                                         __main__ ┇ i=23
+[12.06 02:52:18] ┇ INFO     ┇                                         __main__ ┇ loss=0.7468965649604797
+[12.06 02:52:18] ┇ INFO     ┇                                         __main__ ┇ i=24
+[12.06 02:52:22] ┇ INFO     ┇                                         __main__ ┇ loss=1.0547353029251099
+[12.06 02:52:22] ┇ INFO     ┇                                         __main__ ┇ global_step=3
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ i=25
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ loss=0.2608891427516937
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ i=26
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ loss=0.26722437143325806
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ i=27
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ loss=0.32930049300193787
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ i=28
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ loss=0.44832083582878113
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ i=29
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ loss=0.3513944149017334
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ i=30
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ loss=0.30842092633247375
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ i=31
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ loss=0.37505632638931274
+[12.06 02:52:23] ┇ INFO     ┇                                         __main__ ┇ i=32
+[12.06 02:52:24] ┇ INFO     ┇                                         __main__ ┇ loss=0.33401569724082947
+[12.06 02:52:24] ┇ INFO     ┇                                         __main__ ┇ global_step=4
+[12.06 02:52:24] ┇ INFO     ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 02:52:24] ┇ INFO     ┇                                   chrisbase.data ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py  ($=00:00:59.459)
+[12.06 02:52:24] ┇ INFO     ┇                                   chrisbase.data ┇ =========================================================================================================================================
