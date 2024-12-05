@@ -143,7 +143,7 @@ class NewLearningOption(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(arbitrary_types_allowed=True)
     random_seed: int = Field(default=None)
     trainer_args: Seq2SeqTrainingArguments | None = Field(default=None, exclude=True)
-    trainer_args_dict: dict | None = Field(default=None)
+    trainer_args_dict: dict | None = Field(default=None, exclude=False)
     trainer_args_path: str | Path | None = Field(default=None, exclude=True)
 
     @model_validator(mode='after')
@@ -157,6 +157,8 @@ class NewLearningOption(BaseModel):
         return self
 
     def dataframe(self, columns=None, data_prefix=None) -> pd.DataFrame:
+        if self.trainer_args:
+            self.trainer_args_dict = self.trainer_args.to_dict()
         if not columns:
             columns = [self.__class__.__name__, "value"]
         df = pd.concat([
