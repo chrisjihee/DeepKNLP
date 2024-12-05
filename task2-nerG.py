@@ -517,11 +517,18 @@ def train(
                     fabric.print(f"i={i}")
                     is_accumulating = i % args.hardware.grad_steps != 0
 
-                    # with fabric.no_backward_sync(model, enabled=is_accumulating):
-                    outputs = model(**batch)
-                    loss = outputs.loss
-                    fabric.backward(loss)
-                    fabric.print(f"loss={loss.item()}")
+                    if args.hardware.strategy == "deepspeed":
+                        outputs = model(**batch)
+                        loss = outputs.loss
+                        fabric.backward(loss)
+                        fabric.print(f"loss={loss.item()}")
+                    else:
+                        with fabric.no_backward_sync(model, enabled=is_accumulating):
+                            outputs = model(**batch)
+                            loss = outputs.loss
+                            fabric.backward(loss)
+                            fabric.print(f"loss={loss.item()}")
+
                     if not is_accumulating:
                         optimizer.step()
                         optimizer.zero_grad()
