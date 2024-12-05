@@ -120,6 +120,8 @@ def train(
         ),
     )
     args.learning.trainer_args.data_seed = args.learning.trainer_args.seed = args.learning.random_seed
+    args.learning.trainer_args.remove_unused_columns = False
+
     fabric = Fabric(
         accelerator=args.hardware.accelerator,
         precision=args.hardware.precision,
@@ -376,10 +378,6 @@ def train(
             label_pad_token_id=label_pad_token_id,
             return_tensors="pt",
         )
-
-        # we don't want to remove unused columns because we will prepare each batch during training,
-        # and some of the information will also be used in evaluation.
-        args.learning.trainer_args.remove_unused_columns = False
 
         # Define compute metrics function
         def compute_ner_metrics(dataset, preds, save_prefix=None):
