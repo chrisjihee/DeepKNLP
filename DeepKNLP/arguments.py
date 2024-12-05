@@ -168,7 +168,7 @@ class NewHardwareOption(BaseModel):
 
     def strategy_obj(self) -> str | Strategy:
         if self.strategy == "deepspeed":
-            return DeepSpeedStrategy(stage=1)
+            return DeepSpeedStrategy(stage=2)
         else:
             return self.strategy
 
