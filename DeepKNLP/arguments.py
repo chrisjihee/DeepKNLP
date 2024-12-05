@@ -4,12 +4,13 @@ import sys
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
-from typing import List, Optional, Any
+from typing import List, Optional, ClassVar
 
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, ConfigDict
+from transformers import Seq2SeqTrainingArguments, HfArgumentParser
 from typing_extensions import Self
 
 from chrisbase.data import OptionData, TimeChecker, ResultData, CommonArguments
@@ -139,15 +140,28 @@ class NewModelOption(BaseModel):
 
 
 class NewLearningOption(BaseModel):
+    model_config: ClassVar[ConfigDict] = ConfigDict(arbitrary_types_allowed=True)
     random_seed: int = Field(default=None)
-    trainer_args: str | Path | None | dict[str, Any] = Field(default=None)
+    trainer_args: Seq2SeqTrainingArguments | None = Field(default=None, exclude=True)
+    trainer_args_dict: dict | None = Field(default=None)
+    trainer_args_path: str | Path | None = Field(default=None, exclude=True)
+
+    @model_validator(mode='after')
+    def after(self) -> Self:
+        if self.trainer_args_path:
+            if Path(self.trainer_args_path).exists():
+                self.trainer_args = HfArgumentParser(Seq2SeqTrainingArguments).parse_json_file(self.trainer_args_path)[0]
+                self.trainer_args_dict = self.trainer_args.to_dict()
+            else:
+                self.trainer_args_path = None
+        return self
 
     def dataframe(self, columns=None, data_prefix=None) -> pd.DataFrame:
         if not columns:
             columns = [self.__class__.__name__, "value"]
         df = pd.concat([
-            to_dataframe(columns=columns, raw=self, data_prefix=data_prefix, data_exclude=("trainer_args",) if isinstance(self.trainer_args, dict) else None),
-            to_dataframe(columns=columns, raw=self.trainer_args, data_prefix=f"{data_prefix}.trainer_args") if isinstance(self.trainer_args, dict) else None,
+            to_dataframe(columns=columns, raw=self, data_prefix=data_prefix, data_exclude=("trainer_args_dict",) if self.trainer_args_dict else None),
+            to_dataframe(columns=columns, raw=self.trainer_args_dict, data_prefix=f"{data_prefix}.trainer_args") if self.trainer_args_dict else None,
         ]).reset_index(drop=True)
         return df
 
