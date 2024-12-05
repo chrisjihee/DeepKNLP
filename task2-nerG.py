@@ -11,6 +11,7 @@ import typer
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
+from lightning.fabric.strategies import DeepSpeedStrategy
 from progiter import ProgIter
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
@@ -134,11 +135,14 @@ def train(
         ),
     )
 
+    deepspeed = DeepSpeedStrategy(
+        stage=1,
+    )
     fabric = Fabric(
         accelerator=args.hardware.accelerator,
         precision=args.hardware.precision,
         # strategy=args.hardware.strategy,
-        strategy=args.hardware.to_strategy_obj(),
+        strategy=deepspeed,
         devices=args.hardware.devices,
     )
 
@@ -465,9 +469,7 @@ def train(
         ]
         optimizer: Optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=args.learning.learning_rate)
         fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, Optimizer)}")
-        model: lightning.fabric.wrappers._FabricModule = fabric.setup(model)
-        optimizer: lightning.fabric.wrappers._FabricOptimizer = fabric.setup_optimizers(optimizer)
-        # model, optimizer = fabric.setup(model, optimizer)
+        model, optimizer = fabric.setup(model, optimizer)
         fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
         fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, lightning.fabric.wrappers._FabricOptimizer)}")
 
