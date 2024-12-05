@@ -48,7 +48,7 @@ def train(
         num_prog_samples: int = typer.Option(default=5000),
         max_source_length: int = typer.Option(default=512),
         max_target_length: int = typer.Option(default=512),
-        use_cache_data: bool = typer.Option(default=True),
+        use_cache_data: bool = typer.Option(default=False),
         # model
         # pretrained: str = typer.Option(default="google/flan-t5-small"),
         # pretrained: str = typer.Option(default="meta-llama/Llama-2-7b-hf"),
@@ -339,19 +339,21 @@ def train(
             return res
 
         # Preprocess dataset
+        fabric.print(train_dataset)
         if train_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(train_dataset), desc='Preprocess train samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
-                    train_dataset.map(
+                    train_dataset = train_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
                         cache_file_name=str(args.data.cache_train_path(len(train_dataset))) if args.data.use_cache_data else None,
                     )
+        fabric.print(train_dataset)
         if eval_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
-                    eval_dataset.map(
+                    eval_dataset = eval_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
@@ -360,7 +362,7 @@ def train(
         if test_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(test_dataset), desc='Preprocess test samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
-                    test_dataset.map(
+                    test_dataset = test_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
