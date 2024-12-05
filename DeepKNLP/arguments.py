@@ -157,6 +157,7 @@ class NewHardwareOption(BaseModel):
     accelerator: str = Field(default="gpu")
     precision: str = Field(default="32")
     strategy: str = Field(default="ddp")
+    ds_stage: int = Field(default=2)
     devices: int | List[int] = Field(default=1)
 
     @model_validator(mode='after')
@@ -166,9 +167,10 @@ class NewHardwareOption(BaseModel):
             self.devices = list(range(self.gpu_index, self.gpu_index + self.num_device))
         return self
 
-    def strategy_obj(self) -> str | Strategy:
+    @property
+    def strategy_obj(self) -> Strategy | str:
         if self.strategy == "deepspeed":
-            return DeepSpeedStrategy(stage=3)
+            return DeepSpeedStrategy(stage=self.ds_stage)
         else:
             return self.strategy
 

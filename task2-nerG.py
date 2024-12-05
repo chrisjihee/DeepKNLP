@@ -77,6 +77,7 @@ def train(
         accelerator: str = typer.Option(default="gpu"),  # TODO: -> gpu, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="deepspeed"),  # TODO: -> deepspeed
+        ds_stage: int = typer.Option(default=2),  # TODO: -> 1, 2, 3
 ):
     torch.set_float32_matmul_precision('high')
     datasets.utils.logging.disable_progress_bar()
@@ -131,13 +132,14 @@ def train(
             accelerator=accelerator,
             precision=precision,
             strategy=strategy,
+            ds_stage=ds_stage,
         ),
     )
 
     fabric = Fabric(
         accelerator=args.hardware.accelerator,
         precision=args.hardware.precision,
-        strategy=args.hardware.strategy_obj(),
+        strategy=args.hardware.strategy_obj,
         devices=args.hardware.devices,
     )
 

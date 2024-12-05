@@ -6,7 +6,7 @@
     "local_rank": 0,
     "node_rank": 0,
     "world_size": 2,
-    "time_stamp": "1206.052606",
+    "time_stamp": "1206.054220",
     "python_path": "/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python",
     "current_dir": "/raid/chrisjihee/proj/DeepKNLP",
     "current_file": "/raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py",
@@ -22,11 +22,11 @@
     "message_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s"
   },
   "time": {
-    "t1": "2024-12-06T05:26:25.856471",
-    "t2": "2024-12-06T05:27:05.000211",
-    "started": "[12.06 05:26:25]",
-    "settled": "[12.06 05:27:05]",
-    "elapsed": "00:00:39.144"
+    "t1": "2024-12-06T05:42:38.732947",
+    "t2": "2024-12-06T05:43:16.752017",
+    "started": "[12.06 05:42:38]",
+    "settled": "[12.06 05:43:16]",
+    "elapsed": "00:00:38.019"
   },
   "data": {
     "train_path": "/raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl",
@@ -52,6 +52,7 @@
     "accelerator": "gpu",
     "precision": "bf16-mixed",
     "strategy": "deepspeed",
+    "ds_stage": 2,
     "devices": 2
   },
   "learning": {
