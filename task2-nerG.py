@@ -11,7 +11,6 @@ import typer
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
-from lightning.fabric.strategies import DeepSpeedStrategy
 from progiter import ProgIter
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
@@ -135,14 +134,10 @@ def train(
         ),
     )
 
-    deepspeed = DeepSpeedStrategy(
-        stage=1,
-    )
     fabric = Fabric(
         accelerator=args.hardware.accelerator,
         precision=args.hardware.precision,
-        # strategy=args.hardware.strategy,
-        strategy=deepspeed,
+        strategy=args.hardware.strategy_obj(),
         devices=args.hardware.devices,
     )
 
@@ -520,11 +515,11 @@ def train(
                     fabric.print(f"i={i}")
                     is_accumulating = i % args.hardware.grad_steps != 0
 
-                    with fabric.no_backward_sync(model, enabled=is_accumulating):
-                        outputs = model(**batch)
-                        loss = outputs.loss
-                        fabric.backward(loss)
-                        fabric.print(f"loss={loss.item()}")
+                    # with fabric.no_backward_sync(model, enabled=is_accumulating):
+                    outputs = model(**batch)
+                    loss = outputs.loss
+                    fabric.backward(loss)
+                    fabric.print(f"loss={loss.item()}")
                     if not is_accumulating:
                         optimizer.step()
                         optimizer.zero_grad()
