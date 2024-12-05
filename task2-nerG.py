@@ -11,6 +11,7 @@ from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
 from progiter import ProgIter
+from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.data.data_collator import *
 
@@ -367,7 +368,6 @@ def train(
             return res
 
         # Preprocess dataset
-        fabric.print(train_dataset)
         if train_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(train_dataset), desc='Preprocess train samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
@@ -377,7 +377,6 @@ def train(
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
                         cache_file_name=str(args.data.cache_train_path(len(train_dataset))) if args.data.use_cache_data else None,
                     )
-        fabric.print(train_dataset)
         if eval_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
@@ -409,6 +408,37 @@ def train(
             label_pad_token_id=label_pad_token_id,
             return_tensors="pt",
         )
+
+        # Set data loader
+        if train_dataset:
+            train_dataloader = DataLoader(
+                train_dataset,
+                shuffle=True,
+                collate_fn=data_collator,
+                batch_size=args.hardware.train_batch,
+            )
+        if eval_dataset:
+            eval_dataloader = DataLoader(
+                eval_dataset,
+                collate_fn=data_collator,
+                batch_size=args.hardware.infer_batch,
+            )
+        if test_dataset:
+            test_dataloader = DataLoader(
+                test_dataset,
+                collate_fn=data_collator,
+                batch_size=args.hardware.infer_batch,
+            )
+        # train_dataloader = DataLoader(train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
+        #                               num_workers=self.args.hardware.cpu_workers,
+        #                               batch_size=self.args.hardware.train_batch,
+        #                               collate_fn=self.data.encoded_examples_to_batch,
+        #                               drop_last=False)
+        # val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
+        #                             num_workers=self.args.hardware.cpu_workers,
+        #                             batch_size=self.args.hardware.infer_batch,
+        #                             collate_fn=self.data.encoded_examples_to_batch,
+        #                             drop_last=False)
 
         # Define compute metrics function
         def compute_ner_metrics(dataset, preds, save_prefix=None):
