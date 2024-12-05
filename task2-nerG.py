@@ -69,8 +69,8 @@ def train(
         learning_rate: float = typer.Option(default=2e-5),
         num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         # hardware
-        gpu_index: int = typer.Option(default=0),
-        num_device: int = typer.Option(default=8),  # TODO: -> 1, 2, 4
+        gpu_index: int = typer.Option(default=4),
+        num_device: int = typer.Option(default=4),  # TODO: -> 1, 2, 4
         grad_steps: int = typer.Option(default=8),
         train_batch: int = typer.Option(default=4),
         infer_batch: int = typer.Option(default=32),
