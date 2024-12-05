@@ -184,10 +184,17 @@ def train(
             model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained)
         else:
             model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
-        fabric.barrier()
         fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
         fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
         fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}")
+
+        # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
+        # on a small vocab and want a smaller embedding size, remove this test.
+        embedding_size = model.get_input_embeddings().weight.shape[0]
+        fabric.print(f"len(tokenizer)={len(tokenizer)}, embedding_size={embedding_size}")
+        if len(tokenizer) > embedding_size:
+            model.resize_token_embeddings(len(tokenizer))
+        fabric.barrier()
         fabric.print("-" * 100)
 
         # Load dataset
