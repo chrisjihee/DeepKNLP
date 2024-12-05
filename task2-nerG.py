@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 import datasets
+import lightning
 import torch
 import transformers
 import typer
@@ -11,6 +12,7 @@ from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
 from progiter import ProgIter
+from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.data.data_collator import *
@@ -18,7 +20,6 @@ from transformers.data.data_collator import *
 from DeepKNLP.arguments import NewTrainerArguments, NewProjectEnv, NewDataOption, NewModelOption, NewLearningOption, NewHardwareOption
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
-from DeepKNLP.gner_trainer import GNERTrainer
 from chrisbase.data import AppTyper, JobTimer, Counter
 from chrisbase.io import LoggingFormat, setup_unit_logger
 from chrisdata.ner import GenNERSampleWrapper
@@ -44,7 +45,8 @@ def train(
         test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
         # test_data: str = typer.Option(default=None),
         # max_train_samples: int = typer.Option(default=20000),
-        max_train_samples: int = typer.Option(default=-1),
+        max_train_samples: int = typer.Option(default=1024),
+        # max_train_samples: int = typer.Option(default=-1),
         max_eval_samples: int = typer.Option(default=-1),
         max_test_samples: int = typer.Option(default=-1),
         num_prog_samples: int = typer.Option(default=5000),
@@ -63,8 +65,8 @@ def train(
         num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         trainer_args_path: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
         # hardware
-        grad_acc_steps: int = typer.Option(default=4),
-        train_batch: int = typer.Option(default=8),
+        grad_acc_steps: int = typer.Option(default=1),
+        train_batch: int = typer.Option(default=1),
         infer_batch: int = typer.Option(default=32),
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
@@ -460,8 +462,13 @@ def train(
                 "weight_decay": 0.0,
             },
         ]
-        optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=args.learning.learning_rate)
-        model, optimizer = fabric.setup(model, optimizer)
+        optimizer: Optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=args.learning.learning_rate)
+        fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, Optimizer)}")
+        model: lightning.fabric.wrappers._FabricModule = fabric.setup(model)
+        optimizer: lightning.fabric.wrappers._FabricOptimizer = fabric.setup_optimizers(optimizer)
+        # model, optimizer = fabric.setup(model, optimizer)
+        fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
+        fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, lightning.fabric.wrappers._FabricOptimizer)}")
 
         # Define compute metrics function
         def compute_ner_metrics(dataset, preds, save_prefix=None):
@@ -505,6 +512,21 @@ def train(
             for epoch in range(args.learning.num_train_epochs):
                 fabric.print("-" * 100)
                 fabric.print(f"Epoch: {epoch}")
+                model.train()
+                for i, batch in enumerate(train_dataloader, start=1):
+                    fabric.print(f"i={i}")
+                    is_accumulating = i % args.hardware.grad_acc_steps != 0
+
+                    with fabric.no_backward_sync(model, enabled=is_accumulating):
+                        outputs = model(**batch)
+                        loss = outputs.loss
+                        fabric.backward(loss)
+                        fabric.print(f"loss={loss.item()}")
+                    if not is_accumulating:
+                        optimizer.step()
+                        optimizer.zero_grad()
+                        global_step += 1
+                        fabric.print(f"global_step={global_step}")
 
 
 if __name__ == "__main__":
