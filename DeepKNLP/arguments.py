@@ -142,6 +142,8 @@ class NewModelOption(BaseModel):
 class NewLearningOption(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(arbitrary_types_allowed=True)
     random_seed: int = Field(default=None)
+    learning_rate: float = Field(default=5e-5)
+    num_train_epochs: int = Field(default=1)
     trainer_args: Seq2SeqTrainingArguments | None = Field(default=None, exclude=True)
     trainer_args_dict: dict | None = Field(default=None, exclude=False)
     trainer_args_path: str | Path | None = Field(default=None, exclude=True)

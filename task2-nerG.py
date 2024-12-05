@@ -59,6 +59,8 @@ def train(
         # pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
         # learning
         random_seed: int = typer.Option(default=7),
+        learning_rate: float = typer.Option(default=2e-5),
+        num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         trainer_args_path: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
         # hardware
         grad_acc_steps: int = typer.Option(default=4),
@@ -113,6 +115,8 @@ def train(
         ),
         learning=NewLearningOption(
             random_seed=random_seed,
+            learning_rate=learning_rate,
+            num_train_epochs=num_train_epochs,
             trainer_args_path=trainer_args_path,
         ),
         hardware=NewHardwareOption(
@@ -417,18 +421,21 @@ def train(
                 collate_fn=data_collator,
                 batch_size=args.hardware.train_batch,
             )
+            train_dataloader = fabric.setup_dataloaders(train_dataloader)
         if eval_dataset:
             eval_dataloader = DataLoader(
                 eval_dataset,
                 collate_fn=data_collator,
                 batch_size=args.hardware.infer_batch,
             )
+            eval_dataloader = fabric.setup_dataloaders(eval_dataloader)
         if test_dataset:
             test_dataloader = DataLoader(
                 test_dataset,
                 collate_fn=data_collator,
                 batch_size=args.hardware.infer_batch,
             )
+            test_dataloader = fabric.setup_dataloaders(test_dataloader)
         # train_dataloader = DataLoader(train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
         #                               num_workers=self.args.hardware.cpu_workers,
         #                               batch_size=self.args.hardware.train_batch,
@@ -446,14 +453,15 @@ def train(
         optimizer_grouped_parameters = [
             {
                 "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-                "weight_decay": args.weight_decay,
+                "weight_decay": args.learning.trainer_args.weight_decay,
             },
             {
                 "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
                 "weight_decay": 0.0,
             },
         ]
-        optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=args.learning.trainer_args.learning_rate)
+        optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=args.learning.learning_rate)
+        model, optimizer = fabric.setup(model, optimizer)
 
         # Define compute metrics function
         def compute_ner_metrics(dataset, preds, save_prefix=None):
@@ -476,22 +484,27 @@ def train(
             return results
 
         # Initialize our Trainer
-        trainer = GNERTrainer(
-            model=model,
-            args=args.learning.trainer_args,
-            train_dataset=train_dataset if args.learning.trainer_args.do_train else None,
-            eval_dataset=eval_dataset if args.learning.trainer_args.do_eval else None,
-            processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
-            data_collator=data_collator,
-            compute_metrics=compute_ner_metrics if args.learning.trainer_args.predict_with_generate else None,
-        )
+        # trainer = GNERTrainer(
+        #     model=model,
+        #     args=args.learning.trainer_args,
+        #     train_dataset=train_dataset if args.learning.trainer_args.do_train else None,
+        #     eval_dataset=eval_dataset if args.learning.trainer_args.do_eval else None,
+        #     processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
+        #     data_collator=data_collator,
+        #     compute_metrics=compute_ner_metrics if args.learning.trainer_args.predict_with_generate else None,
+        # )
 
-        # Training
         fabric.barrier()
         fabric.print("*" * 100)
-        all_metrics = {"run_name": args.learning.trainer_args.run_name}
+        global_step = 0
+        global_epoch = 0.0
+        # all_metrics = {"run_name": args.learning.trainer_args.run_name}
+
+        # Train loop
         if args.learning.trainer_args.do_train:
-            pass
+            for epoch in range(args.learning.num_train_epochs):
+                fabric.print("-" * 100)
+                fabric.print(f"Epoch: {epoch}")
 
 
 if __name__ == "__main__":
