@@ -4,13 +4,12 @@ import sys
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
-from typing import List, Optional, ClassVar
+from typing import List, Optional
 
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from pydantic import BaseModel, Field, model_validator, ConfigDict
-from transformers import Seq2SeqTrainingArguments, HfArgumentParser
+from pydantic import BaseModel, Field, model_validator
 from typing_extensions import Self
 
 from chrisbase.data import OptionData, TimeChecker, ResultData, CommonArguments
@@ -33,6 +32,7 @@ class NewProjectEnv(BaseModel):
     current_dir: Path = Path().absolute()
     current_file: Path = current_file().absolute()
     command_args: list[str] = sys.argv[1:]
+    output_home: str | Path = Field(default=None)
     logging_home: str | Path = Field(default=None)
     logging_file: str | Path = Field(default=None)
     argument_file: str | Path = Field(default=None)
@@ -44,6 +44,7 @@ class NewProjectEnv(BaseModel):
 
     @model_validator(mode='after')
     def after(self) -> Self:
+        self.output_home = Path(self.output_home).absolute() if self.output_home else None
         self.logging_home = Path(self.logging_home).absolute() if self.logging_home else None
         return self
 
@@ -140,34 +141,10 @@ class NewModelOption(BaseModel):
 
 
 class NewLearningOption(BaseModel):
-    model_config: ClassVar[ConfigDict] = ConfigDict(arbitrary_types_allowed=True)
     random_seed: int = Field(default=None)
+    weight_decay: float = Field(default=0.0)
     learning_rate: float = Field(default=5e-5)
     num_train_epochs: int = Field(default=1)
-    trainer_args: Seq2SeqTrainingArguments | None = Field(default=None, exclude=True)
-    trainer_args_dict: dict | None = Field(default=None, exclude=False)
-    trainer_args_path: str | Path | None = Field(default=None, exclude=True)
-
-    @model_validator(mode='after')
-    def after(self) -> Self:
-        if self.trainer_args_path:
-            if Path(self.trainer_args_path).exists():
-                self.trainer_args = HfArgumentParser(Seq2SeqTrainingArguments).parse_json_file(self.trainer_args_path)[0]
-                self.trainer_args_dict = self.trainer_args.to_dict()
-            else:
-                self.trainer_args_path = None
-        return self
-
-    def dataframe(self, columns=None, data_prefix=None) -> pd.DataFrame:
-        if self.trainer_args:
-            self.trainer_args_dict = self.trainer_args.to_dict()
-        if not columns:
-            columns = [self.__class__.__name__, "value"]
-        df = pd.concat([
-            to_dataframe(columns=columns, raw=self, data_prefix=data_prefix, data_exclude=("trainer_args_dict",) if self.trainer_args_dict else None),
-            to_dataframe(columns=columns, raw=self.trainer_args_dict, data_prefix=f"{data_prefix}.trainer_args") if self.trainer_args_dict else None,
-        ]).reset_index(drop=True)
-        return df
 
 
 class NewHardwareOption(BaseModel):
@@ -194,7 +171,7 @@ class NewTrainerArguments(NewCommonArguments):
             to_dataframe(columns=columns, raw=self.data, data_prefix="data"),
             to_dataframe(columns=columns, raw=self.model, data_prefix="model"),
             to_dataframe(columns=columns, raw=self.hardware, data_prefix="hardware"),
-            self.learning.dataframe(columns=columns, data_prefix="learning"),
+            to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
         ]).reset_index(drop=True)
         return df
 

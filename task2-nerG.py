@@ -35,6 +35,7 @@ setup_unit_logger(fmt=LoggingFormat.CHECK_48)
 @main.command()
 def train(
         # env
+        output_home: str = typer.Option(default="output"),
         logging_home: str = typer.Option(default="output/task2-nerG"),
         logging_file: str = typer.Option(default="train-messages.out"),
         argument_file: str = typer.Option(default="train-arguments.json"),
@@ -64,9 +65,9 @@ def train(
         # pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
         # learning
         random_seed: int = typer.Option(default=7),
+        weight_decay: float = typer.Option(default=0.0),
         learning_rate: float = typer.Option(default=2e-5),
         num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
-        trainer_args_path: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
         # hardware
         gpu_index: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
         grad_steps: int = typer.Option(default=8),
@@ -89,6 +90,7 @@ def train(
     pretrained = Path(pretrained)
     args = NewTrainerArguments(
         env=NewProjectEnv(
+            output_home=output_home,
             logging_home=logging_home,
             logging_file=logging_file,
             argument_file=argument_file,
@@ -114,9 +116,9 @@ def train(
         ),
         learning=NewLearningOption(
             random_seed=random_seed,
+            weight_decay=weight_decay,
             learning_rate=learning_rate,
             num_train_epochs=num_train_epochs,
-            trainer_args_path=trainer_args_path,
         ),
         hardware=NewHardwareOption(
             gpu_index=gpu_index,
@@ -128,8 +130,6 @@ def train(
             strategy=strategy,
         ),
     )
-    args.learning.trainer_args.data_seed = args.learning.trainer_args.seed = args.learning.random_seed
-    args.learning.trainer_args.remove_unused_columns = False
 
     fabric = Fabric(
         accelerator=args.hardware.accelerator,
@@ -452,7 +452,7 @@ def train(
         optimizer_grouped_parameters = [
             {
                 "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-                "weight_decay": args.learning.trainer_args.weight_decay,
+                "weight_decay": args.learning.weight_decay,
             },
             {
                 "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
@@ -482,7 +482,7 @@ def train(
 
             results = compute_metrics(all_examples, tokenizer=tokenizer)
             if save_prefix is not None:
-                with open(os.path.join(args.learning.trainer_args.output_dir, f"{save_prefix}_text_generations.jsonl"), "w") as fout:
+                with open(os.path.join(args.env.output_home, f"{save_prefix}_text_generations.jsonl"), "w") as fout:
                     for example in all_examples:
                         fout.write(json.dumps(example) + "\n")
             return results
@@ -505,7 +505,7 @@ def train(
         # all_metrics = {"run_name": args.learning.trainer_args.run_name}
 
         # Train loop
-        if args.learning.trainer_args.do_train:
+        if train_dataloader:
             for epoch in range(args.learning.num_train_epochs):
                 fabric.print("-" * 100)
                 fabric.print(f"Epoch: {epoch}")
