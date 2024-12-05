@@ -65,7 +65,7 @@ def train(
         num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         trainer_args_path: str = typer.Option(default="configs/args/train_llama3_1b_supervised-base.json"),
         # hardware
-        grad_acc_steps: int = typer.Option(default=1),
+        grad_acc_steps: int = typer.Option(default=2),
         train_batch: int = typer.Option(default=1),
         infer_batch: int = typer.Option(default=32),
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
