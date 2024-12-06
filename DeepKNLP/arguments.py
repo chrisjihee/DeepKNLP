@@ -9,7 +9,7 @@ from typing import List, Optional
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from lightning.fabric.strategies import DeepSpeedStrategy, Strategy
+from lightning.fabric.strategies import Strategy, DeepSpeedStrategy
 from pydantic import BaseModel, Field, model_validator
 from typing_extensions import Self
 
@@ -33,10 +33,10 @@ class NewProjectEnv(BaseModel):
     current_dir: Path = Path().absolute()
     current_file: Path = current_file().absolute()
     command_args: list[str] = sys.argv[1:]
-    output_home: str | Path = Field(default=None)
     logging_home: str | Path = Field(default=None)
     logging_file: str | Path = Field(default=None)
     argument_file: str | Path = Field(default=None)
+    random_seed: int = Field(default=None)
     max_workers: int = Field(default=1)
     debugging: bool = Field(default=False)
     date_format: str = Field(default="[%m.%d %H:%M:%S]")
@@ -45,7 +45,6 @@ class NewProjectEnv(BaseModel):
 
     @model_validator(mode='after')
     def after(self) -> Self:
-        self.output_home = Path(self.output_home).absolute() if self.output_home else None
         self.logging_home = Path(self.logging_home).absolute() if self.logging_home else None
         return self
 
@@ -63,7 +62,7 @@ class NewProjectEnv(BaseModel):
 
 
 class NewCommonArguments(BaseModel):
-    env: NewProjectEnv = Field(default_factory=NewProjectEnv)
+    env: NewProjectEnv = Field(default=None)
     time: TimeChecker = Field(default_factory=TimeChecker)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
@@ -90,59 +89,7 @@ class NewCommonArguments(BaseModel):
             return None
 
 
-class NewDataOption(BaseModel):
-    train_path: str | Path | None = Field(default=None)
-    eval_path: str | Path | None = Field(default=None)
-    test_path: str | Path | None = Field(default=None)
-    max_train_samples: int = Field(default=-1)
-    max_eval_samples: int = Field(default=-1)
-    max_test_samples: int = Field(default=-1)
-    num_prog_samples: int = Field(default=1)
-    max_source_length: int = Field(default=512)
-    max_target_length: int = Field(default=512)
-    use_cache_data: bool = Field(default=True)
-
-    @model_validator(mode='after')
-    def after(self) -> Self:
-        self.train_path = Path(self.train_path).absolute() if self.train_path else None
-        self.eval_path = Path(self.eval_path).absolute() if self.eval_path else None
-        self.test_path = Path(self.test_path).absolute() if self.test_path else None
-        return self
-
-    @property
-    def cache_train_dir(self) -> Optional[Path]:
-        if self.train_path:
-            return self.train_path.parent / ".cache"
-
-    @property
-    def cache_eval_dir(self) -> Optional[Path]:
-        if self.eval_path:
-            return self.eval_path.parent / ".cache"
-
-    @property
-    def cache_test_dir(self) -> Optional[Path]:
-        if self.test_path:
-            return self.test_path.parent / ".cache"
-
-    def cache_train_path(self, size: int) -> Optional[Path]:
-        if self.train_path:
-            return self.cache_train_dir / f"{self.train_path.stem}={size}.tmp"
-
-    def cache_eval_path(self, size: int) -> Optional[Path]:
-        if self.eval_path:
-            return self.cache_eval_dir / f"{self.eval_path.stem}={size}.tmp"
-
-    def cache_test_path(self, size: int) -> Optional[Path]:
-        if self.test_path:
-            return self.cache_test_dir / f"{self.test_path.stem}={size}.tmp"
-
-
-class NewModelOption(BaseModel):
-    pretrained: str | Path = Field(default=None)
-
-
 class NewLearningOption(BaseModel):
-    random_seed: int = Field(default=None)
     weight_decay: float = Field(default=0.0)
     learning_rate: float = Field(default=5e-5)
     num_train_epochs: int = Field(default=1)
@@ -176,8 +123,7 @@ class NewHardwareOption(BaseModel):
 
 
 class NewTrainerArguments(NewCommonArguments):
-    data: NewDataOption = Field(default=None)
-    model: NewModelOption = Field(default=None)
+    input: "InputOption" = Field(default=None)
     hardware: NewHardwareOption = Field(default=None)
     learning: NewLearningOption = Field(default=None)
 
@@ -186,12 +132,61 @@ class NewTrainerArguments(NewCommonArguments):
             columns = [self.__class__.__name__, "value"]
         df = pd.concat([
             super().dataframe(columns=columns),
-            to_dataframe(columns=columns, raw=self.data, data_prefix="data"),
-            to_dataframe(columns=columns, raw=self.model, data_prefix="model"),
+            to_dataframe(columns=columns, raw=self.input, data_prefix="input"),
             to_dataframe(columns=columns, raw=self.hardware, data_prefix="hardware"),
             to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
         ]).reset_index(drop=True)
         return df
+
+    class InputOption(BaseModel):
+        output_home: str | Path | None = Field(default=None)
+        pretrained: str | Path = Field(default=None)
+        train_path: str | Path | None = Field(default=None)
+        eval_path: str | Path | None = Field(default=None)
+        test_path: str | Path | None = Field(default=None)
+        max_train_samples: int = Field(default=-1)
+        max_eval_samples: int = Field(default=-1)
+        max_test_samples: int = Field(default=-1)
+        num_prog_samples: int = Field(default=1)
+        max_source_length: int = Field(default=512)
+        max_target_length: int = Field(default=512)
+        use_cache_data: bool = Field(default=True)
+
+        @model_validator(mode='after')
+        def after(self) -> Self:
+            self.output_home = Path(self.output_home).absolute() if self.output_home else None
+            self.pretrained = Path(self.pretrained).absolute() if self.pretrained else None
+            self.train_path = Path(self.train_path).absolute() if self.train_path else None
+            self.eval_path = Path(self.eval_path).absolute() if self.eval_path else None
+            self.test_path = Path(self.test_path).absolute() if self.test_path else None
+            return self
+
+        @property
+        def cache_train_dir(self) -> Optional[Path]:
+            if self.train_path:
+                return self.train_path.parent / ".cache"
+
+        @property
+        def cache_eval_dir(self) -> Optional[Path]:
+            if self.eval_path:
+                return self.eval_path.parent / ".cache"
+
+        @property
+        def cache_test_dir(self) -> Optional[Path]:
+            if self.test_path:
+                return self.test_path.parent / ".cache"
+
+        def cache_train_path(self, size: int) -> Optional[Path]:
+            if self.train_path:
+                return self.cache_train_dir / f"{self.train_path.stem}={size}.tmp"
+
+        def cache_eval_path(self, size: int) -> Optional[Path]:
+            if self.eval_path:
+                return self.cache_eval_dir / f"{self.eval_path.stem}={size}.tmp"
+
+        def cache_test_path(self, size: int) -> Optional[Path]:
+            if self.test_path:
+                return self.cache_test_dir / f"{self.test_path.stem}={size}.tmp"
 
 
 @dataclass

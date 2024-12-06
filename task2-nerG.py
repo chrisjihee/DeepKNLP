@@ -1,10 +1,11 @@
 import json
 import logging
 import os
-from pathlib import Path
+from typing import Any, Callable
 
 import datasets
 import lightning
+import numpy as np
 import torch
 import transformers
 import typer
@@ -14,19 +15,60 @@ from lightning.fabric import Fabric
 from progiter import ProgIter
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
-from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
-from transformers.data.data_collator import *
+from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast, PreTrainedTokenizerBase
+from typing_extensions import Annotated
 
-from DeepKNLP.arguments import NewTrainerArguments, NewProjectEnv, NewDataOption, NewModelOption, NewLearningOption, NewHardwareOption
+from DeepKNLP.arguments import NewTrainerArguments, NewProjectEnv, NewLearningOption, NewHardwareOption
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from chrisbase.data import AppTyper, JobTimer, Counter
-from chrisbase.io import LoggingFormat, setup_unit_logger
+from chrisbase.io import LoggingFormat, setup_unit_logger, set_verbosity_warning, set_verbosity_info, set_verbosity_error
 from chrisdata.ner import GenNERSampleWrapper
 
-main = AppTyper()
+# Global settings
+env = None
+app = AppTyper(name="Generative NER",
+               help="Generative Named Entity Recognition (NER) using Hugging Face Transformers.")
 logger = logging.getLogger(__name__)
-setup_unit_logger(fmt=LoggingFormat.CHECK_48)
+
+
+def info_or_debug(fabric, m, *a, **k):
+    if fabric.is_global_zero:  # or debugging:
+        logger.info(m, *a, **k)
+    else:
+        logger.debug(m, *a, **k)
+
+
+@app.callback()
+def main(
+        # env
+        logging_home: Annotated[str, typer.Option("--logging_home")] = "output/task2-nerG",
+        logging_file: Annotated[str, typer.Option("--logging_file")] = "train-messages.out",
+        argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
+        random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
+        max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
+        debugging: Annotated[bool, typer.Option("--debugging")] = False,
+):
+    global env
+    env = NewProjectEnv(
+        logging_home=logging_home,
+        logging_file=logging_file,
+        argument_file=argument_file,
+        random_seed=random_seed,
+        max_workers=1 if debugging else max(max_workers, 1),
+        debugging=debugging,
+        message_level=logging.INFO,
+        message_format=LoggingFormat.CHECK_48,
+    )
+    setup_unit_logger(fmt=LoggingFormat.CHECK_48)
+    set_verbosity_warning(
+        "root",
+        "DeepSpeed",
+        "c10d-NullHandler-default",
+        "lightning.fabric.utilities.distributed",
+    )
+    torch.set_float32_matmul_precision('high')
+    # logger.info(f"Start running {app.info.name} with env={env}")
 
 
 # Reference
@@ -35,77 +77,42 @@ setup_unit_logger(fmt=LoggingFormat.CHECK_48)
 # [3]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_args.html
 # [4]: https://lightning.ai/docs/fabric/2.4.0/guide/
 # [5]: https://lightning.ai/docs/fabric/2.4.0/advanced/model_parallel/fsdp.html
-@main.command()
+@app.command()
 def train(
-        # env
-        output_home: str = typer.Option(default="output"),
-        logging_home: str = typer.Option(default="output/task2-nerG"),
-        logging_file: str = typer.Option(default="train-messages.out"),
-        argument_file: str = typer.Option(default="train-arguments.json"),
-        max_workers: int = typer.Option(default=4),
-        debugging: bool = typer.Option(default=False),
-        # data
-        train_data: str = typer.Option(default="data/gner/zero-shot-train.jsonl"),
-        # train_data: str = typer.Option(default="data/gner/pile-ner.jsonl"),
-        # eval_data: str = typer.Option(default="data/gner/zero-shot-dev.jsonl"),
-        eval_data: str = typer.Option(default=None),
-        # test_data: str = typer.Option(default="data/gner/zero-shot-test.jsonl"),
-        test_data: str = typer.Option(default=None),
-        # max_train_samples: int = typer.Option(default=20000),
-        max_train_samples: int = typer.Option(default=256),
-        # max_train_samples: int = typer.Option(default=-1),
-        max_eval_samples: int = typer.Option(default=-1),
-        max_test_samples: int = typer.Option(default=-1),
-        num_prog_samples: int = typer.Option(default=5000),
-        max_source_length: int = typer.Option(default=512),
-        max_target_length: int = typer.Option(default=512),
-        use_cache_data: bool = typer.Option(default=False),
-        # model
-        # pretrained: str = typer.Option(default="google/flan-t5-small"),
-        # pretrained: str = typer.Option(default="meta-llama/Llama-2-7b-hf"),
-        pretrained: str = typer.Option(default="meta-llama/Llama-3.2-1B"),
-        # pretrained: str = typer.Option(default="etri-lirs/kebyt5-small-preview"),
-        # pretrained: str = typer.Option(default="etri-lirs/egpt-1.3b-preview"),
+        # input
+        output_home: Annotated[str, typer.Option("--output_home", "-o")] = "output",
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # TODO: "google/flan-t5-small", "etri-lirs/egpt-1.3b-preview",
+        train_data: Annotated[str, typer.Option("--train_data")] = "data/gner/zero-shot-train.jsonl",  # TODO: "data/gner/pile-ner.jsonl"
+        eval_data: Annotated[str, typer.Option("--eval_data")] = None,  # TODO: "data/gner/zero-shot-dev.jsonl"
+        test_data: Annotated[str, typer.Option("--test_data")] = None,  # TODO: "data/gner/zero-shot-test.jsonl"
+        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = 256,  # TODO: -1
+        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,
+        max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
+        num_prog_samples: Annotated[int, typer.Option("--num_prog_samples")] = 5000,
+        max_source_length: Annotated[int, typer.Option("--max_source_length")] = 512,
+        max_target_length: Annotated[int, typer.Option("--max_target_length")] = 512,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data")] = False,
         # learning
-        random_seed: int = typer.Option(default=7),
-        weight_decay: float = typer.Option(default=0.0),
-        learning_rate: float = typer.Option(default=2e-5),
-        num_train_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
+        weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,
+        learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
+        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 1,  # TODO: -> 2, 3
         # hardware
-        gpu_index: int = typer.Option(default=4),
-        num_device: int = typer.Option(default=2),  # TODO: -> 1, 2, 4
-        grad_steps: int = typer.Option(default=8),
-        train_batch: int = typer.Option(default=4),
-        infer_batch: int = typer.Option(default=32),
-        accelerator: str = typer.Option(default="gpu"),  # TODO: -> gpu, cpu, mps
-        precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: str = typer.Option(default="deepspeed"),  # TODO: -> ddp, deepspeed
-        ds_stage: int = typer.Option(default=2),  # TODO: -> 1, 2, 3
+        gpu_index: Annotated[int, typer.Option("--gpu_index")] = 4,
+        num_device: Annotated[int, typer.Option("--num_device")] = 2,  # TODO: -> 1, 2, 4
+        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
+        train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,
+        accelerator: Annotated[str, typer.Option("--accelerator")] = "gpu",  # TODO: -> gpu, cpu, mps
+        precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
+        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, deepspeed
+        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 2,  # TODO: -> 1, 2, 3
 ):
-    torch.set_float32_matmul_precision('high')
-    datasets.utils.logging.disable_progress_bar()
-    datasets.utils.logging.set_verbosity_warning()
-    transformers.utils.logging.set_verbosity_info()
-    # transformers.utils.logging.disable_progress_bar()
-
-    logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
-    logging.getLogger("c10d-NullHandler-default").setLevel(logging.INFO)
-    logging.getLogger("lightning").setLevel(logging.INFO)
-    # logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
-    # logging.getLogger("lightning.fabric.utilities.distributed").setLevel(logging.WARNING)
-    pretrained = Path(pretrained)
+    # Setup arguments
     args = NewTrainerArguments(
-        env=NewProjectEnv(
+        env=env,
+        input=NewTrainerArguments.InputOption(
             output_home=output_home,
-            logging_home=logging_home,
-            logging_file=logging_file,
-            argument_file=argument_file,
-            max_workers=1 if debugging else max(max_workers, 1),
-            debugging=debugging,
-            message_level=logging.INFO,
-            message_format=LoggingFormat.CHECK_48,
-        ),
-        data=NewDataOption(
+            pretrained=pretrained,
             train_path=train_data,
             eval_path=eval_data,
             test_path=test_data,
@@ -117,11 +124,7 @@ def train(
             max_target_length=max_target_length,
             use_cache_data=use_cache_data,
         ),
-        model=NewModelOption(
-            pretrained=pretrained,
-        ),
         learning=NewLearningOption(
-            random_seed=random_seed,
             weight_decay=weight_decay,
             learning_rate=learning_rate,
             num_train_epochs=num_train_epochs,
@@ -139,29 +142,46 @@ def train(
         ),
     )
 
+    # Setup fabric
     fabric = Fabric(
         accelerator=args.hardware.accelerator,
         precision=args.hardware.precision,
         strategy=args.hardware.strategy_obj,
         devices=args.hardware.devices,
     )
-
-    def info_or_debug(m, *a, **k):
-        if fabric.is_global_zero:  # or debugging:
-            logger.info(m, *a, **k)
-        else:
-            logger.debug(m, *a, **k)
-
-    fabric.print = info_or_debug
     fabric.launch()
+    fabric.barrier()
+    fabric.print = lambda *xs, **zs: info_or_debug(fabric, *xs, **zs)
     args.env.global_rank = fabric.global_rank
     args.env.local_rank = fabric.local_rank
     args.env.node_rank = fabric.node_rank
     args.env.world_size = fabric.world_size
+
+    # Setup logger
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
     args.env.setup_logger()
-
-    # for checking
+    if fabric.is_global_zero:
+        transformers.logging.set_verbosity_info()
+        datasets.utils.logging.set_verbosity_warning()
+        set_verbosity_info(
+            "lightning",
+        )
+        set_verbosity_warning(
+            "transformers.generation.configuration_utils",
+            "transformers.tokenization_utils_base",
+            "transformers.configuration_utils",
+            "transformers.modeling_utils",
+            "DeepSpeed",
+        )
+    else:
+        transformers.logging.set_verbosity_error()
+        datasets.utils.logging.set_verbosity_error()
+        set_verbosity_error(
+            "lightning",
+            "DeepSpeed",
+        )
+    transformers.logging.disable_progress_bar()
+    datasets.utils.logging.disable_progress_bar()
     # logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
 
     with JobTimer(
@@ -170,73 +190,73 @@ def train(
     ):
         # Set random seed
         fabric.barrier()
-        fabric.seed_everything(args.learning.random_seed)
+        fabric.seed_everything(args.env.random_seed)
 
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
-        # tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(pretrained)
-        tokenizer = AutoTokenizer.from_pretrained(
-            pretrained,
-            # cache_dir=model_args.cache_dir,
-            # use_fast=model_args.use_fast_tokenizer,
-            # revision=model_args.model_revision,
-            # token=model_args.token,
-            # trust_remote_code=model_args.trust_remote_code,
-            padding_side="left",
-            add_eos_token=True,
-            add_bos_token=True,
-        )
+        using_decoder_only_model = not config.is_encoder_decoder
+        fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
+
+        if using_decoder_only_model:
+            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
+                pretrained,
+                # cache_dir=model_args.cache_dir,
+                # use_fast=model_args.use_fast_tokenizer,
+                # revision=model_args.model_revision,
+                # token=model_args.token,
+                # trust_remote_code=model_args.trust_remote_code,
+                padding_side="left",
+                add_eos_token=True,
+                add_bos_token=True,
+            )
+        else:
+            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained)
         if tokenizer.pad_token is None:
             # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
             tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
             # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+        fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}, len(tokenizer)={len(tokenizer)}")
 
-        using_decoder_only_model = not config.is_encoder_decoder
         if using_decoder_only_model:
-            model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained)
+            model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained, config=config)
         else:
-            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
-        fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
-        fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
-        fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}")
-
-        # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
-        # on a small vocab and want a smaller embedding size, remove this test.
+            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained, config=config)
         embedding_size = model.get_input_embeddings().weight.shape[0]
-        fabric.print(f"len(tokenizer)={len(tokenizer)}, embedding_size={embedding_size}")
         if len(tokenizer) > embedding_size:
             model.resize_token_embeddings(len(tokenizer))
         fabric.barrier()
+        fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
+        fabric.print(f"embedding_size={model.get_input_embeddings().weight.shape[0]}")
         fabric.print("-" * 100)
 
         # Load dataset
         train_dataset: Dataset | None = None
         eval_dataset: Dataset | None = None
         test_dataset: Dataset | None = None
-        if args.data.train_path:
+        if args.input.train_path:
             with fabric.rank_zero_first():
                 train_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                      data_files=str(args.data.train_path),
-                                                      cache_dir=str(args.data.cache_train_dir))
-                if args.data.max_train_samples > 0:
-                    train_dataset = train_dataset.select(range(min(len(train_dataset), args.data.max_train_samples)))
-                fabric.print(f"Use {args.data.train_path} as train dataset: {len(train_dataset):,} samples")
-        if args.data.eval_path:
+                                                      data_files=str(args.input.train_path),
+                                                      cache_dir=str(args.input.cache_train_dir))
+                if args.input.max_train_samples > 0:
+                    train_dataset = train_dataset.select(range(min(len(train_dataset), args.input.max_train_samples)))
+                fabric.print(f"Use {args.input.train_path} as train dataset: {len(train_dataset):,} samples")
+        if args.input.eval_path:
             with fabric.rank_zero_first():
                 eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                     data_files=str(args.data.eval_path),
-                                                     cache_dir=str(args.data.cache_eval_dir))
-                if args.data.max_eval_samples > 0:
-                    eval_dataset = eval_dataset.select(range(min(len(eval_dataset), args.data.max_eval_samples)))
-                fabric.print(f"Use {args.data.eval_path} as eval dataset: {len(eval_dataset):,} samples")
-        if args.data.test_path:
+                                                     data_files=str(args.input.eval_path),
+                                                     cache_dir=str(args.input.cache_eval_dir))
+                if args.input.max_eval_samples > 0:
+                    eval_dataset = eval_dataset.select(range(min(len(eval_dataset), args.input.max_eval_samples)))
+                fabric.print(f"Use {args.input.eval_path} as eval dataset: {len(eval_dataset):,} samples")
+        if args.input.test_path:
             with fabric.rank_zero_first():
                 test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                     data_files=str(args.data.test_path),
-                                                     cache_dir=str(args.data.cache_test_dir))
-                if args.data.max_test_samples > 0:
-                    test_dataset = test_dataset.select(range(min(len(test_dataset), args.data.max_test_samples)))
-                fabric.print(f"Use {args.data.eval_path} as test dataset: {len(test_dataset):,} samples")
+                                                     data_files=str(args.input.test_path),
+                                                     cache_dir=str(args.input.cache_test_dir))
+                if args.input.max_test_samples > 0:
+                    test_dataset = test_dataset.select(range(min(len(test_dataset), args.input.max_test_samples)))
+                fabric.print(f"Use {args.input.eval_path} as test dataset: {len(test_dataset):,} samples")
         fabric.barrier()
         fabric.print("-" * 100)
 
@@ -244,8 +264,8 @@ def train(
         def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], counter=Counter(step=args.env.max_workers),
                                               update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
             # Fetch input data
-            sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
-            data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
+            sample = GenNERSampleWrapper.model_validate(row)
+            data_opt = NewTrainerArguments.InputOption.model_validate(data_opt)
             prompt_text = f"[INST] {sample.instance.instruction_inputs} [/INST]"
             full_instruction = f"{prompt_text} {sample.instance.prompt_labels}"
 
@@ -324,8 +344,8 @@ def train(
         def preprocess_for_encoder_decoder_model(row: LazyRow, process_rank: int, data_opt: dict[str, Any], cnt=Counter(step=args.env.max_workers),
                                                  update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
             # Fetch input data
-            sample: GenNERSampleWrapper = GenNERSampleWrapper.model_validate(row)
-            data_opt: NewDataOption = NewDataOption.model_validate(data_opt)
+            sample = GenNERSampleWrapper.model_validate(row)
+            data_opt = NewTrainerArguments.InputOption.model_validate(data_opt)
 
             def tokenize_train_sample():
                 # Tokenize the instruction inputs
@@ -374,8 +394,7 @@ def train(
             pre, cnt = counter.val(), counter.inc()
             if (cnt >= pbar.total or any(i % num_prog_samples == 0 for i in range(pre + 1, cnt + 1))) and rank == 0:
                 pbar.step(inc=min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx))
-                # fabric.print(pbar.format_message().rstrip())
-                logger.info(pbar.format_message().rstrip())
+                fabric.print(pbar.format_message().rstrip())
             return res
 
         # Preprocess dataset
@@ -384,27 +403,27 @@ def train(
                 with ProgIter(total=len(train_dataset), desc='Preprocess train samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
                     train_dataset = train_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=str(args.data.cache_train_path(len(train_dataset))) if args.data.use_cache_data else None,
+                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+                        cache_file_name=str(args.input.cache_train_path(len(train_dataset))) if args.input.use_cache_data else None,
                     )
         if eval_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
                     eval_dataset = eval_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=str(args.data.cache_eval_path(len(eval_dataset))) if args.data.use_cache_data else None,
+                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+                        cache_file_name=str(args.input.cache_eval_path(len(eval_dataset))) if args.input.use_cache_data else None,
                     )
         if test_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(test_dataset), desc='Preprocess test samples', file=open(os.devnull, 'w'), verbose=2) as manual_pbar:
                     test_dataset = test_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.data.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.data.use_cache_data,
-                        cache_file_name=str(args.data.cache_test_path(len(test_dataset))) if args.data.use_cache_data else None,
+                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+                        cache_file_name=str(args.input.cache_test_path(len(test_dataset))) if args.input.use_cache_data else None,
                     )
         fabric.barrier()
         fabric.print("-" * 100)
@@ -443,35 +462,26 @@ def train(
                 batch_size=args.hardware.infer_batch,
             )
             test_dataloader = fabric.setup_dataloaders(test_dataloader)
-        # train_dataloader = DataLoader(train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
-        #                               num_workers=self.args.hardware.cpu_workers,
-        #                               batch_size=self.args.hardware.train_batch,
-        #                               collate_fn=self.data.encoded_examples_to_batch,
-        #                               drop_last=False)
-        # val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
-        #                             num_workers=self.args.hardware.cpu_workers,
-        #                             batch_size=self.args.hardware.infer_batch,
-        #                             collate_fn=self.data.encoded_examples_to_batch,
-        #                             drop_last=False)
 
         # Set optimizer
-        # Split weights in two groups, one with weight decay and the other not.
-        no_decay = ["bias", "layer_norm.weight"]
-        optimizer_grouped_parameters = [
-            {
-                "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-                "weight_decay": args.learning.weight_decay,
-            },
-            {
-                "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
-                "weight_decay": 0.0,
-            },
-        ]
-        optimizer: Optimizer = torch.optim.AdamW(optimizer_grouped_parameters, lr=args.learning.learning_rate)
+        no_decay = ("bias", "layer_norm.weight",)
+        optimizer: Optimizer = torch.optim.AdamW(
+            lr=args.learning.learning_rate,
+            params=[
+                {
+                    "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
+                    "weight_decay": args.learning.weight_decay,
+                },
+                {
+                    "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
+                    "weight_decay": 0.0,
+                },
+            ],
+        )
         fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, Optimizer)}")
         model, optimizer = fabric.setup(model, optimizer)
-        fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
         fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, lightning.fabric.wrappers._FabricOptimizer)}")
+        fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
 
         # Define compute metrics function
         def compute_ner_metrics(dataset, preds, save_prefix=None):
@@ -493,24 +503,11 @@ def train(
                         fout.write(json.dumps(example) + "\n")
             return results
 
-        # Initialize our Trainer
-        # trainer = GNERTrainer(
-        #     model=model,
-        #     args=args.learning.trainer_args,
-        #     train_dataset=train_dataset if args.learning.trainer_args.do_train else None,
-        #     eval_dataset=eval_dataset if args.learning.trainer_args.do_eval else None,
-        #     processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
-        #     data_collator=data_collator,
-        #     compute_metrics=compute_ner_metrics if args.learning.trainer_args.predict_with_generate else None,
-        # )
-
+        # Train loop
         fabric.barrier()
         fabric.print("*" * 100)
         global_step = 0
         global_epoch = 0.0
-        # all_metrics = {"run_name": args.learning.trainer_args.run_name}
-
-        # Train loop
         if train_dataloader:
             for epoch in range(args.learning.num_train_epochs):
                 fabric.print("-" * 100)
@@ -534,4 +531,4 @@ def train(
 
 
 if __name__ == "__main__":
-    main()
+    app()

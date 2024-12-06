@@ -1,0 +1,64 @@
+{
+  "env": {
+    "hostname": "dgx-a100",
+    "hostaddr": "129.254.23.12",
+    "global_rank": 0,
+    "local_rank": 0,
+    "node_rank": 0,
+    "world_size": 2,
+    "time_stamp": "1206.160633",
+    "python_path": "/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python",
+    "current_dir": "/raid/chrisjihee/proj/DeepKNLP",
+    "current_file": "/raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py",
+    "command_args": [
+      "train"
+    ],
+    "logging_home": "/raid/chrisjihee/proj/DeepKNLP/output/task2-nerG",
+    "logging_file": "train-messages.out",
+    "argument_file": "train-arguments.json",
+    "random_seed": 7,
+    "max_workers": 4,
+    "debugging": false,
+    "date_format": "[%m.%d %H:%M:%S]",
+    "message_level": 20,
+    "message_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s"
+  },
+  "time": {
+    "t1": "2024-12-06T16:06:51.875043",
+    "t2": "2024-12-06T16:07:27.819189",
+    "started": "[12.06 16:06:51]",
+    "settled": "[12.06 16:07:27]",
+    "elapsed": "00:00:35.944"
+  },
+  "input": {
+    "output_home": "/raid/chrisjihee/proj/DeepKNLP/output",
+    "pretrained": "/raid/chrisjihee/proj/DeepKNLP/meta-llama/Llama-3.2-1B",
+    "train_path": "/raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl",
+    "eval_path": null,
+    "test_path": null,
+    "max_train_samples": 256,
+    "max_eval_samples": -1,
+    "max_test_samples": -1,
+    "num_prog_samples": 5000,
+    "max_source_length": 512,
+    "max_target_length": 512,
+    "use_cache_data": false
+  },
+  "hardware": {
+    "gpu_index": 4,
+    "num_device": 2,
+    "grad_steps": 8,
+    "train_batch": 4,
+    "infer_batch": 32,
+    "accelerator": "gpu",
+    "precision": "bf16-mixed",
+    "strategy": "deepspeed",
+    "ds_stage": 2,
+    "devices": 2
+  },
+  "learning": {
+    "weight_decay": 0.0,
+    "learning_rate": 0.00002,
+    "num_train_epochs": 1
+  }
+}
