@@ -1,0 +1,343 @@
+[12.06 19:01:36] ┇ INFO     ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 19:01:36] ┇ INFO     ┇                                   chrisbase.data ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py train
+[12.06 19:01:36] ┇ INFO     ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------------
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    # | TrainingArguments       | value
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------------
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    1 | env.hostname            | dgx-a100
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    2 | env.hostaddr            | 129.254.23.12
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    3 | env.global_rank         | 0
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    4 | env.local_rank          | 0
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    5 | env.node_rank           | 0
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    6 | env.world_size          | 2
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    7 | env.time_stamp          | 1206.190129
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    8 | env.python_path         | /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇    9 | env.current_dir         | /raid/chrisjihee/proj/DeepKNLP
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   10 | env.current_file        | /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   11 | env.command_args        | ['train']
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   12 | env.logging_home        | /raid/chrisjihee/proj/DeepKNLP/output/task2-nerG
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   13 | env.logging_file        | train-messages.out
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   14 | env.argument_file       | train-arguments.json
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   15 | env.random_seed         | 7
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   16 | env.max_workers         | 4
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   17 | env.debugging           | False
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   18 | env.date_format         | [%m.%d %H:%M:%S]
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   19 | env.message_level       | 20
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   20 | env.message_format      | %(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   21 | time.t1                 | 2024-12-06 19:01:36.896045
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   22 | time.t2                 | 2024-12-06 19:01:29.176121
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   23 | time.started            | [12.06 19:01:36]
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   24 | time.settled            |
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   25 | time.elapsed            |
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   26 | input.pretrained        | /raid/chrisjihee/proj/DeepKNLP/meta-llama/Llama-3.2-1B
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   27 | input.train_path        | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   28 | input.eval_path         |
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   29 | input.test_path         |
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   30 | input.max_train_samples | 256
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   31 | input.max_eval_samples  | -1
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   32 | input.max_test_samples  | -1
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   33 | input.num_prog_samples  | 5000
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   34 | input.max_source_length | 512
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   35 | input.max_target_length | 512
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   36 | input.use_cache_data    | False
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   37 | learn.output_home       | /raid/chrisjihee/proj/DeepKNLP/output
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   38 | learn.num_train_epochs  | 1
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   39 | learn.learning_rate     | 2e-05
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   40 | learn.weight_decay      | 0.0
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   41 | learn.accelerator       | gpu
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   42 | learn.precision         | bf16-mixed
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   43 | learn.gpu_index         | 4
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   44 | learn.num_device        | 2
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   45 | learn.grad_steps        | 8
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   46 | learn.train_batch       | 4
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   47 | learn.infer_batch       | 32
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   48 | learn.strategy          | fsdp
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   49 | learn.ds_stage          | 2
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   50 | learn.fsdp_shard        | FULL_SHARD
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   51 | learn.fsdp_offload      | False
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇   52 | learn.devices           | 2
+[12.06 19:01:36] ┇ INFO     ┇                               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------------
+[12.06 19:01:36] ┇ INFO     ┇                  lightning.fabric.utilities.seed ┇ [rank: 0] Seed set to 7
+[12.06 19:01:36] ┇ INFO     ┇                  lightning.fabric.utilities.seed ┇ [rank: 1] Seed set to 7
+[12.06 19:01:37] ┇ INFO     ┇                                         __main__ ┇ type(config)=<class 'transformers.models.llama.configuration_llama.LlamaConfig'> - True
+[12.06 19:01:37] ┇ INFO     ┇                                         __main__ ┇ type(tokenizer)=<class 'transformers.tokenization_utils_fast.PreTrainedTokenizerFast'> - True, len(tokenizer)=128256
+[12.06 19:01:38] ┇ INFO     ┇                                         __main__ ┇ type(model)=<class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'> - True
+[12.06 19:01:38] ┇ INFO     ┇                                         __main__ ┇ embedding_size=128256
+[12.06 19:01:38] ┇ INFO     ┇                                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 19:01:39] ┇ INFO     ┇                                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl as train dataset: 256 samples
+[12.06 19:01:39] ┇ INFO     ┇                                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 19:01:41] ┇ INFO     ┇                                         __main__ ┇ Preprocess train samples 100.00% 256/256... rate=125.82 Hz, eta=0:00:00, total=0:00:02
+[12.06 19:01:45] ┇ INFO     ┇                                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 19:01:45] ┇ INFO     ┇                                         __main__ ┇ type(optimizer)=<class 'torch.optim.adamw.AdamW'> - True
+[12.06 19:01:47] ┇ INFO     ┇                                         __main__ ┇ type(optimizer)=<class 'lightning.fabric.wrappers.FabricAdamW'> - True
+[12.06 19:01:47] ┇ INFO     ┇                                         __main__ ┇ type(model)=<class 'lightning.fabric.wrappers._FabricModule'> - True
+[12.06 19:01:48] ┇ INFO     ┇                                         __main__ ┇ ****************************************************************************************************
+[12.06 19:01:48] ┇ INFO     ┇                                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.06 19:01:48] ┇ INFO     ┇                                         __main__ ┇ Epoch: 0
+[12.06 19:01:48] ┇ INFO     ┇                                         __main__ ┇ i=1
+[12.06 19:01:48] ┇ INFO     ┇                                         __main__ ┇ loss=0.843297004699707
+[12.06 19:01:48] ┇ INFO     ┇                                         __main__ ┇ i=2
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ loss=0.9557297825813293
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ i=3
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ loss=1.1311445236206055
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ i=4
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ loss=1.0684045553207397
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ i=5
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ loss=0.8751585483551025
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ i=6
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ loss=1.4188460111618042
+[12.06 19:01:49] ┇ INFO     ┇                                         __main__ ┇ i=7
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ loss=0.7940883040428162
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ i=8
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ loss=1.0297919511795044
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ global_step=1
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ torch.cuda.memory_summary()=
+|===========================================================================|
+|                  PyTorch CUDA memory summary, device ID 0                 |
+|---------------------------------------------------------------------------|
+|            CUDA OOMs: 0            |        cudaMalloc retries: 0         |
+|===========================================================================|
+|        Metric         | Cur Usage  | Peak Usage | Tot Alloc  | Tot Freed  |
+|---------------------------------------------------------------------------|
+| Allocated memory      |  10242 MiB |  20148 MiB | 423595 MiB | 413352 MiB |
+|       from large pool |  10242 MiB |  20144 MiB | 423265 MiB | 413022 MiB |
+|       from small pool |      0 MiB |     19 MiB |    330 MiB |    329 MiB |
+|---------------------------------------------------------------------------|
+| Active memory         |  10242 MiB |  22137 MiB | 423595 MiB | 413352 MiB |
+|       from large pool |  10242 MiB |  22137 MiB | 423265 MiB | 413022 MiB |
+|       from small pool |      0 MiB |     19 MiB |    330 MiB |    329 MiB |
+|---------------------------------------------------------------------------|
+| Requested memory      |  10239 MiB |  22113 MiB | 421968 MiB | 411729 MiB |
+|       from large pool |  10239 MiB |  22112 MiB | 421639 MiB | 411400 MiB |
+|       from small pool |      0 MiB |     19 MiB |    329 MiB |    329 MiB |
+|---------------------------------------------------------------------------|
+| GPU reserved memory   |  32416 MiB |  32416 MiB |  32416 MiB |      0 B   |
+|       from large pool |  32396 MiB |  32396 MiB |  32396 MiB |      0 B   |
+|       from small pool |     20 MiB |     20 MiB |     20 MiB |      0 B   |
+|---------------------------------------------------------------------------|
+| Non-releasable memory |   5873 MiB |   8582 MiB | 285438 MiB | 279565 MiB |
+|       from large pool |   5871 MiB |   8580 MiB | 285021 MiB | 279150 MiB |
+|       from small pool |      1 MiB |     15 MiB |    417 MiB |    415 MiB |
+|---------------------------------------------------------------------------|
+| Allocations           |     165    |     569    |   20047    |   19882    |
+|       from large pool |     123    |     493    |   16807    |   16684    |
+|       from small pool |      42    |      95    |    3240    |    3198    |
+|---------------------------------------------------------------------------|
+| Active allocs         |     165    |     569    |   20047    |   19882    |
+|       from large pool |     123    |     493    |   16807    |   16684    |
+|       from small pool |      42    |      95    |    3240    |    3198    |
+|---------------------------------------------------------------------------|
+| GPU reserved segments |     108    |     108    |     108    |       0    |
+|       from large pool |      98    |      98    |      98    |       0    |
+|       from small pool |      10    |      10    |      10    |       0    |
+|---------------------------------------------------------------------------|
+| Non-releasable allocs |      74    |     149    |   11453    |   11379    |
+|       from large pool |      68    |     120    |   10018    |    9950    |
+|       from small pool |       6    |      31    |    1435    |    1429    |
+|---------------------------------------------------------------------------|
+| Oversize allocations  |       0    |       0    |       0    |       0    |
+|---------------------------------------------------------------------------|
+| Oversize GPU segments |       0    |       0    |       0    |       0    |
+|===========================================================================|
+
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ i=9
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ loss=0.8382686376571655
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ i=10
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ loss=0.7647815346717834
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ i=11
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ loss=0.6120467185974121
+[12.06 19:01:50] ┇ INFO     ┇                                         __main__ ┇ i=12
+[12.06 19:01:51] ┇ INFO     ┇                                         __main__ ┇ loss=0.8022949695587158
+[12.06 19:01:51] ┇ INFO     ┇                                         __main__ ┇ i=13
+[12.06 19:01:51] ┇ INFO     ┇                                         __main__ ┇ loss=0.791619062423706
+[12.06 19:01:51] ┇ INFO     ┇                                         __main__ ┇ i=14
+[12.06 19:01:51] ┇ INFO     ┇                                         __main__ ┇ loss=0.8017228245735168
+[12.06 19:01:51] ┇ INFO     ┇                                         __main__ ┇ i=15
+[12.06 19:01:51] ┇ INFO     ┇                                         __main__ ┇ loss=0.6619020700454712
+[12.06 19:01:51] ┇ INFO     ┇                                         __main__ ┇ i=16
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ loss=0.811091959476471
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ global_step=2
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ torch.cuda.memory_summary()=
+|===========================================================================|
+|                  PyTorch CUDA memory summary, device ID 0                 |
+|---------------------------------------------------------------------------|
+|            CUDA OOMs: 0            |        cudaMalloc retries: 1         |
+|===========================================================================|
+|        Metric         | Cur Usage  | Peak Usage | Tot Alloc  | Tot Freed  |
+|---------------------------------------------------------------------------|
+| Allocated memory      |  10242 MiB |  25545 MiB |    815 GiB |    805 GiB |
+|       from large pool |  10242 MiB |  25540 MiB |    814 GiB |    804 GiB |
+|       from small pool |      0 MiB |     19 MiB |      0 GiB |      0 GiB |
+|---------------------------------------------------------------------------|
+| Active memory         |  10242 MiB |  26893 MiB |    815 GiB |    805 GiB |
+|       from large pool |  10242 MiB |  26892 MiB |    814 GiB |    804 GiB |
+|       from small pool |      0 MiB |     19 MiB |      0 GiB |      0 GiB |
+|---------------------------------------------------------------------------|
+| Requested memory      |  10239 MiB |  26880 MiB |    811 GiB |    801 GiB |
+|       from large pool |  10239 MiB |  26880 MiB |    811 GiB |    801 GiB |
+|       from small pool |      0 MiB |     19 MiB |      0 GiB |      0 GiB |
+|---------------------------------------------------------------------------|
+| GPU reserved memory   |  37768 MiB |  38770 MiB |  50430 MiB |  12662 MiB |
+|       from large pool |  37748 MiB |  38748 MiB |  50394 MiB |  12646 MiB |
+|       from small pool |     20 MiB |     22 MiB |     36 MiB |     16 MiB |
+|---------------------------------------------------------------------------|
+| Non-releasable memory |   8549 MiB |   9379 MiB | 546550 MiB | 538000 MiB |
+|       from large pool |   8547 MiB |   9373 MiB | 545743 MiB | 537196 MiB |
+|       from small pool |      1 MiB |     17 MiB |    806 MiB |    804 MiB |
+|---------------------------------------------------------------------------|
+| Allocations           |     165    |     675    |   39788    |   39623    |
+|       from large pool |     123    |     579    |   33446    |   33323    |
+|       from small pool |      42    |     115    |    6342    |    6300    |
+|---------------------------------------------------------------------------|
+| Active allocs         |     165    |     675    |   39788    |   39623    |
+|       from large pool |     123    |     579    |   33446    |   33323    |
+|       from small pool |      42    |     115    |    6342    |    6300    |
+|---------------------------------------------------------------------------|
+| GPU reserved segments |     114    |     116    |     128    |      14    |
+|       from large pool |     104    |     105    |     110    |       6    |
+|       from small pool |      10    |      11    |      18    |       8    |
+|---------------------------------------------------------------------------|
+| Non-releasable allocs |      53    |     149    |   21831    |   21778    |
+|       from large pool |      48    |     120    |   19133    |   19085    |
+|       from small pool |       5    |      39    |    2698    |    2693    |
+|---------------------------------------------------------------------------|
+| Oversize allocations  |       0    |       0    |       0    |       0    |
+|---------------------------------------------------------------------------|
+| Oversize GPU segments |       0    |       0    |       0    |       0    |
+|===========================================================================|
+
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ i=17
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ loss=0.9399145245552063
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ i=18
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ loss=0.9154255986213684
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ i=19
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ loss=1.0748683214187622
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ i=20
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ loss=0.8238282799720764
+[12.06 19:01:52] ┇ INFO     ┇                                         __main__ ┇ i=21
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ loss=0.9469641447067261
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ i=22
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ loss=0.8567720651626587
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ i=23
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ loss=0.74051433801651
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ i=24
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ loss=1.0463685989379883
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ global_step=3
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ torch.cuda.memory_summary()=
+|===========================================================================|
+|                  PyTorch CUDA memory summary, device ID 0                 |
+|---------------------------------------------------------------------------|
+|            CUDA OOMs: 0            |        cudaMalloc retries: 1         |
+|===========================================================================|
+|        Metric         | Cur Usage  | Peak Usage | Tot Alloc  | Tot Freed  |
+|---------------------------------------------------------------------------|
+| Allocated memory      |  10542 MiB |  25545 MiB |   1217 GiB |   1207 GiB |
+|       from large pool |  10542 MiB |  25540 MiB |   1216 GiB |   1206 GiB |
+|       from small pool |      0 MiB |     19 MiB |      0 GiB |      0 GiB |
+|---------------------------------------------------------------------------|
+| Active memory         |  10542 MiB |  26955 MiB |   1217 GiB |   1207 GiB |
+|       from large pool |  10542 MiB |  26954 MiB |   1216 GiB |   1206 GiB |
+|       from small pool |      0 MiB |     19 MiB |      0 GiB |      0 GiB |
+|---------------------------------------------------------------------------|
+| Requested memory      |  10539 MiB |  26933 MiB |   1212 GiB |   1202 GiB |
+|       from large pool |  10539 MiB |  26933 MiB |   1211 GiB |   1201 GiB |
+|       from small pool |      0 MiB |     19 MiB |      0 GiB |      0 GiB |
+|---------------------------------------------------------------------------|
+| GPU reserved memory   |  37768 MiB |  38770 MiB |  50430 MiB |  12662 MiB |
+|       from large pool |  37748 MiB |  38748 MiB |  50394 MiB |  12646 MiB |
+|       from small pool |     20 MiB |     22 MiB |     36 MiB |     16 MiB |
+|---------------------------------------------------------------------------|
+| Non-releasable memory |   8835 MiB |  10104 MiB |    795 GiB |    787 GiB |
+|       from large pool |   8833 MiB |  10101 MiB |    794 GiB |    786 GiB |
+|       from small pool |      1 MiB |     17 MiB |      1 GiB |      1 GiB |
+|---------------------------------------------------------------------------|
+| Allocations           |     165    |     675    |   59529    |   59364    |
+|       from large pool |     123    |     579    |   50085    |   49962    |
+|       from small pool |      42    |     115    |    9444    |    9402    |
+|---------------------------------------------------------------------------|
+| Active allocs         |     165    |     675    |   59529    |   59364    |
+|       from large pool |     123    |     579    |   50085    |   49962    |
+|       from small pool |      42    |     115    |    9444    |    9402    |
+|---------------------------------------------------------------------------|
+| GPU reserved segments |     114    |     116    |     128    |      14    |
+|       from large pool |     104    |     105    |     110    |       6    |
+|       from small pool |      10    |      11    |      18    |       8    |
+|---------------------------------------------------------------------------|
+| Non-releasable allocs |      44    |     149    |   32375    |   32331    |
+|       from large pool |      38    |     120    |   28240    |   28202    |
+|       from small pool |       6    |      40    |    4135    |    4129    |
+|---------------------------------------------------------------------------|
+| Oversize allocations  |       0    |       0    |       0    |       0    |
+|---------------------------------------------------------------------------|
+| Oversize GPU segments |       0    |       0    |       0    |       0    |
+|===========================================================================|
+
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ i=25
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ loss=0.2586967647075653
+[12.06 19:01:53] ┇ INFO     ┇                                         __main__ ┇ i=26
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ loss=0.2680533230304718
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ i=27
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ loss=0.32672038674354553
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ i=28
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ loss=0.4467804729938507
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ i=29
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ loss=0.3519132733345032
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ i=30
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ loss=0.3056294322013855
+[12.06 19:01:54] ┇ INFO     ┇                                         __main__ ┇ i=31
+[12.06 19:01:55] ┇ INFO     ┇                                         __main__ ┇ loss=0.37308943271636963
+[12.06 19:01:55] ┇ INFO     ┇                                         __main__ ┇ i=32
+[12.06 19:01:55] ┇ INFO     ┇                                         __main__ ┇ loss=0.3341138958930969
+[12.06 19:01:55] ┇ INFO     ┇                                         __main__ ┇ global_step=4
+[12.06 19:01:55] ┇ INFO     ┇                                         __main__ ┇ torch.cuda.memory_summary()=
+|===========================================================================|
+|                  PyTorch CUDA memory summary, device ID 0                 |
+|---------------------------------------------------------------------------|
+|            CUDA OOMs: 0            |        cudaMalloc retries: 1         |
+|===========================================================================|
+|        Metric         | Cur Usage  | Peak Usage | Tot Alloc  | Tot Freed  |
+|---------------------------------------------------------------------------|
+| Allocated memory      |  10508 MiB |  25545 MiB |   1603 GiB |   1593 GiB |
+|       from large pool |  10508 MiB |  25540 MiB |   1602 GiB |   1591 GiB |
+|       from small pool |      0 MiB |     19 MiB |      1 GiB |      1 GiB |
+|---------------------------------------------------------------------------|
+| Active memory         |  10508 MiB |  26955 MiB |   1603 GiB |   1593 GiB |
+|       from large pool |  10508 MiB |  26954 MiB |   1602 GiB |   1591 GiB |
+|       from small pool |      0 MiB |     19 MiB |      1 GiB |      1 GiB |
+|---------------------------------------------------------------------------|
+| Requested memory      |  10504 MiB |  26933 MiB |   1597 GiB |   1586 GiB |
+|       from large pool |  10503 MiB |  26933 MiB |   1595 GiB |   1585 GiB |
+|       from small pool |      0 MiB |     19 MiB |      1 GiB |      1 GiB |
+|---------------------------------------------------------------------------|
+| GPU reserved memory   |  37768 MiB |  38770 MiB |  50430 MiB |  12662 MiB |
+|       from large pool |  37748 MiB |  38748 MiB |  50394 MiB |  12646 MiB |
+|       from small pool |     20 MiB |     22 MiB |     36 MiB |     16 MiB |
+|---------------------------------------------------------------------------|
+| Non-releasable memory |  10063 MiB |  10293 MiB |   1050 GiB |   1041 GiB |
+|       from large pool |  10061 MiB |  10283 MiB |   1049 GiB |   1039 GiB |
+|       from small pool |      1 MiB |     17 MiB |      1 GiB |      1 GiB |
+|---------------------------------------------------------------------------|
+| Allocations           |     165    |     675    |   79270    |   79105    |
+|       from large pool |     123    |     579    |   66704    |   66581    |
+|       from small pool |      42    |     115    |   12566    |   12524    |
+|---------------------------------------------------------------------------|
+| Active allocs         |     165    |     675    |   79270    |   79105    |
+|       from large pool |     123    |     579    |   66704    |   66581    |
+|       from small pool |      42    |     115    |   12566    |   12524    |
+|---------------------------------------------------------------------------|
+| GPU reserved segments |     114    |     116    |     128    |      14    |
+|       from large pool |     104    |     105    |     110    |       6    |
+|       from small pool |      10    |      11    |      18    |       8    |
+|---------------------------------------------------------------------------|
+| Non-releasable allocs |      48    |     149    |   42859    |   42811    |
+|       from large pool |      41    |     120    |   37233    |   37192    |
+|       from small pool |       7    |      40    |    5626    |    5619    |
+|---------------------------------------------------------------------------|
+| Oversize allocations  |       0    |       0    |       0    |       0    |
+|---------------------------------------------------------------------------|
+| Oversize GPU segments |       0    |       0    |       0    |       0    |
+|===========================================================================|
+
+[12.06 19:01:55] ┇ INFO     ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[12.06 19:01:55] ┇ INFO     ┇                                   chrisbase.data ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py train ($=00:00:18.329)
+[12.06 19:01:55] ┇ INFO     ┇                                   chrisbase.data ┇ =========================================================================================================================================

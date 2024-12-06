@@ -4,12 +4,13 @@ import sys
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Literal
 
 import pandas as pd
+import torch.nn as nn
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from lightning.fabric.strategies import Strategy, DDPStrategy, DeepSpeedStrategy, FSDPStrategy
+from lightning.fabric.strategies import Strategy, DDPStrategy, DeepSpeedStrategy, FSDPStrategy, DataParallelStrategy
 from pydantic import BaseModel, Field, model_validator
 from typing_extensions import Self
 
@@ -165,6 +166,8 @@ class TrainingArguments(NewCommonArguments):
         infer_batch: int = Field(default=1)
         strategy: str = Field(default="ddp")
         ds_stage: int = Field(default=2)
+        fsdp_shard: Literal["FULL_SHARD", "SHARD_GRAD_OP"] = Field(default="FULL_SHARD")
+        fsdp_offload: bool = Field(default=False)
         devices: int | List[int] = Field(default=1)
 
         @model_validator(mode='after')
@@ -177,12 +180,24 @@ class TrainingArguments(NewCommonArguments):
 
         @property
         def strategy_obj(self) -> Strategy | str:
-            if self.strategy == "ddp":
+            if self.strategy == "dp":
+                return DataParallelStrategy()
+            elif self.strategy == "ddp":
                 return DDPStrategy()
             elif self.strategy == "deepspeed":
                 return DeepSpeedStrategy(stage=self.ds_stage)
             elif self.strategy == "fsdp":
-                return FSDPStrategy()
+                fsdp_policy = {
+                    nn.TransformerEncoderLayer,
+                    nn.TransformerDecoderLayer,
+                }
+                return FSDPStrategy(
+                    activation_checkpointing_policy=fsdp_policy,
+                    auto_wrap_policy=fsdp_policy,
+                    state_dict_type="full",
+                    sharding_strategy=self.fsdp_shard,
+                    cpu_offload=self.fsdp_offload,
+                )
             else:
                 return self.strategy
 
