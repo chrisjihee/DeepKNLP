@@ -103,10 +103,11 @@ def train(
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,
-        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, deepspeed, fsdp
+        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 2,  # TODO: -> 1, 2, 3
+        ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
-        fsdp_offload: Annotated[bool, typer.Option("--fsdp_offload")] = False,
+        fsdp_offload: Annotated[bool, typer.Option("--fsdp_offload")] = False,  # TODO: -> True, False
 ):
     # Setup arguments
     args = TrainingArguments(
@@ -138,6 +139,7 @@ def train(
             infer_batch=infer_batch,
             strategy=strategy,
             ds_stage=ds_stage,
+            ds_offload=ds_offload,
             fsdp_shard=fsdp_shard,
             fsdp_offload=fsdp_offload,
         ),
@@ -147,7 +149,7 @@ def train(
     fabric = Fabric(
         accelerator=args.learn.accelerator,
         precision=args.learn.precision,
-        strategy=args.learn.strategy_obj,
+        strategy=args.learn.strategy_inst,
         devices=args.learn.devices,
     )
     fabric.launch()

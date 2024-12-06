@@ -166,6 +166,7 @@ class TrainingArguments(NewCommonArguments):
         infer_batch: int = Field(default=1)
         strategy: str = Field(default="ddp")
         ds_stage: int = Field(default=2)
+        ds_offload: int = Field(default=0)
         fsdp_shard: Literal["FULL_SHARD", "SHARD_GRAD_OP"] = Field(default="FULL_SHARD")
         fsdp_offload: bool = Field(default=False)
         devices: int | List[int] = Field(default=1)
@@ -179,11 +180,9 @@ class TrainingArguments(NewCommonArguments):
             return self
 
         @property
-        def strategy_obj(self) -> Strategy | str:
+        def strategy_inst(self) -> Strategy | str:
             if self.strategy == "ddp":
                 return DDPStrategy()
-            elif self.strategy == "deepspeed":
-                return DeepSpeedStrategy(stage=self.ds_stage)
             elif self.strategy == "fsdp":
                 fsdp_policy = {
                     nn.TransformerEncoderLayer,
@@ -196,6 +195,23 @@ class TrainingArguments(NewCommonArguments):
                     sharding_strategy=self.fsdp_shard,
                     cpu_offload=self.fsdp_offload,
                 )
+            elif self.strategy == "deepspeed":
+                if self.ds_offload >= 3:
+                    return DeepSpeedStrategy(stage=self.ds_stage,
+                                             offload_optimizer=True,
+                                             offload_parameters=True)
+                elif self.ds_offload >= 2:
+                    return DeepSpeedStrategy(stage=self.ds_stage,
+                                             offload_optimizer=False,
+                                             offload_parameters=True)
+                elif self.ds_offload >= 1:
+                    return DeepSpeedStrategy(stage=self.ds_stage,
+                                             offload_optimizer=True,
+                                             offload_parameters=False)
+                else:
+                    return DeepSpeedStrategy(stage=self.ds_stage,
+                                             offload_optimizer=False,
+                                             offload_parameters=False)
             else:
                 return self.strategy
 
