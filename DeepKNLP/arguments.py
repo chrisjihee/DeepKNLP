@@ -10,7 +10,7 @@ import pandas as pd
 import torch.nn as nn
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from lightning.fabric.strategies import Strategy, DDPStrategy, DeepSpeedStrategy, FSDPStrategy, DataParallelStrategy
+from lightning.fabric.strategies import Strategy, DDPStrategy, DeepSpeedStrategy, FSDPStrategy
 from pydantic import BaseModel, Field, model_validator
 from typing_extensions import Self
 
@@ -180,9 +180,7 @@ class TrainingArguments(NewCommonArguments):
 
         @property
         def strategy_obj(self) -> Strategy | str:
-            if self.strategy == "dp":
-                return DataParallelStrategy()
-            elif self.strategy == "ddp":
+            if self.strategy == "ddp":
                 return DDPStrategy()
             elif self.strategy == "deepspeed":
                 return DeepSpeedStrategy(stage=self.ds_stage)
