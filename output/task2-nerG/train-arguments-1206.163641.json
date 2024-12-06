@@ -6,7 +6,7 @@
     "local_rank": 0,
     "node_rank": 0,
     "world_size": 2,
-    "time_stamp": "1206.160633",
+    "time_stamp": "1206.163641",
     "python_path": "/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python",
     "current_dir": "/raid/chrisjihee/proj/DeepKNLP",
     "current_file": "/raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py",
@@ -24,14 +24,13 @@
     "message_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s"
   },
   "time": {
-    "t1": "2024-12-06T16:06:51.875043",
-    "t2": "2024-12-06T16:07:27.819189",
-    "started": "[12.06 16:06:51]",
-    "settled": "[12.06 16:07:27]",
-    "elapsed": "00:00:35.944"
+    "t1": "2024-12-06T16:37:11.497425",
+    "t2": "2024-12-06T16:37:54.658150",
+    "started": "[12.06 16:37:11]",
+    "settled": "[12.06 16:37:54]",
+    "elapsed": "00:00:43.161"
   },
   "input": {
-    "output_home": "/raid/chrisjihee/proj/DeepKNLP/output",
     "pretrained": "/raid/chrisjihee/proj/DeepKNLP/meta-llama/Llama-3.2-1B",
     "train_path": "/raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl",
     "eval_path": null,
@@ -44,21 +43,20 @@
     "max_target_length": 512,
     "use_cache_data": false
   },
-  "hardware": {
+  "learn": {
+    "output_home": "/raid/chrisjihee/proj/DeepKNLP/output",
+    "num_train_epochs": 1,
+    "learning_rate": 0.00002,
+    "weight_decay": 0.0,
+    "accelerator": "gpu",
+    "precision": "bf16-mixed",
     "gpu_index": 4,
     "num_device": 2,
     "grad_steps": 8,
     "train_batch": 4,
     "infer_batch": 32,
-    "accelerator": "gpu",
-    "precision": "bf16-mixed",
     "strategy": "deepspeed",
     "ds_stage": 2,
     "devices": 2
-  },
-  "learning": {
-    "weight_decay": 0.0,
-    "learning_rate": 0.00002,
-    "num_train_epochs": 1
   }
 }

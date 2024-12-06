@@ -9,7 +9,7 @@ from typing import List, Optional
 import pandas as pd
 from dataclasses_json import DataClassJsonMixin
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from lightning.fabric.strategies import Strategy, DeepSpeedStrategy
+from lightning.fabric.strategies import Strategy, DDPStrategy, DeepSpeedStrategy, FSDPStrategy
 from pydantic import BaseModel, Field, model_validator
 from typing_extensions import Self
 
@@ -89,43 +89,9 @@ class NewCommonArguments(BaseModel):
             return None
 
 
-class NewLearningOption(BaseModel):
-    weight_decay: float = Field(default=0.0)
-    learning_rate: float = Field(default=5e-5)
-    num_train_epochs: int = Field(default=1)
-
-
-class NewHardwareOption(BaseModel):
-    gpu_index: int = Field(default=0)
-    num_device: int = Field(default=1)
-    grad_steps: int = Field(default=1)
-    train_batch: int = Field(default=1)
-    infer_batch: int = Field(default=1)
-    accelerator: str = Field(default="gpu")
-    precision: str = Field(default="32")
-    strategy: str = Field(default="ddp")
-    ds_stage: int = Field(default=2)
-    devices: int | List[int] = Field(default=1)
-
-    @model_validator(mode='after')
-    def after(self) -> Self:
-        self.devices = self.num_device
-        if self.strategy == "ddp" and (self.accelerator == "gpu" or self.accelerator == "cuda") and self.gpu_index >= 0:
-            self.devices = list(range(self.gpu_index, self.gpu_index + self.num_device))
-        return self
-
-    @property
-    def strategy_obj(self) -> Strategy | str:
-        if self.strategy == "deepspeed":
-            return DeepSpeedStrategy(stage=self.ds_stage)
-        else:
-            return self.strategy
-
-
-class NewTrainerArguments(NewCommonArguments):
+class TrainingArguments(NewCommonArguments):
     input: "InputOption" = Field(default=None)
-    hardware: NewHardwareOption = Field(default=None)
-    learning: NewLearningOption = Field(default=None)
+    learn: "LearnOption" = Field(default=None)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
         if not columns:
@@ -133,13 +99,11 @@ class NewTrainerArguments(NewCommonArguments):
         df = pd.concat([
             super().dataframe(columns=columns),
             to_dataframe(columns=columns, raw=self.input, data_prefix="input"),
-            to_dataframe(columns=columns, raw=self.hardware, data_prefix="hardware"),
-            to_dataframe(columns=columns, raw=self.learning, data_prefix="learning"),
+            to_dataframe(columns=columns, raw=self.learn, data_prefix="learn"),
         ]).reset_index(drop=True)
         return df
 
     class InputOption(BaseModel):
-        output_home: str | Path | None = Field(default=None)
         pretrained: str | Path = Field(default=None)
         train_path: str | Path | None = Field(default=None)
         eval_path: str | Path | None = Field(default=None)
@@ -154,7 +118,6 @@ class NewTrainerArguments(NewCommonArguments):
 
         @model_validator(mode='after')
         def after(self) -> Self:
-            self.output_home = Path(self.output_home).absolute() if self.output_home else None
             self.pretrained = Path(self.pretrained).absolute() if self.pretrained else None
             self.train_path = Path(self.train_path).absolute() if self.train_path else None
             self.eval_path = Path(self.eval_path).absolute() if self.eval_path else None
@@ -187,6 +150,41 @@ class NewTrainerArguments(NewCommonArguments):
         def cache_test_path(self, size: int) -> Optional[Path]:
             if self.test_path:
                 return self.cache_test_dir / f"{self.test_path.stem}={size}.tmp"
+
+    class LearnOption(BaseModel):
+        output_home: str | Path | None = Field(default=None)
+        num_train_epochs: int = Field(default=1)
+        learning_rate: float = Field(default=5e-5)
+        weight_decay: float = Field(default=0.0)
+        accelerator: str = Field(default="gpu")
+        precision: str = Field(default="32")
+        gpu_index: int = Field(default=0)
+        num_device: int = Field(default=1)
+        grad_steps: int = Field(default=1)
+        train_batch: int = Field(default=1)
+        infer_batch: int = Field(default=1)
+        strategy: str = Field(default="ddp")
+        ds_stage: int = Field(default=2)
+        devices: int | List[int] = Field(default=1)
+
+        @model_validator(mode='after')
+        def after(self) -> Self:
+            self.output_home = Path(self.output_home).absolute() if self.output_home else None
+            self.devices = self.num_device
+            if self.strategy == "ddp" and (self.accelerator == "gpu" or self.accelerator == "cuda") and self.gpu_index >= 0:
+                self.devices = list(range(self.gpu_index, self.gpu_index + self.num_device))
+            return self
+
+        @property
+        def strategy_obj(self) -> Strategy | str:
+            if self.strategy == "ddp":
+                return DDPStrategy()
+            elif self.strategy == "deepspeed":
+                return DeepSpeedStrategy(stage=self.ds_stage)
+            elif self.strategy == "fsdp":
+                return FSDPStrategy()
+            else:
+                return self.strategy
 
 
 @dataclass
