@@ -29,9 +29,12 @@ logger = logging.getLogger(__name__)
 setup_unit_logger(fmt=LoggingFormat.CHECK_48)
 
 
-# Reference1: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py
-# Reference2: https://lightning.ai/docs/fabric/2.4.0/api/fabric_methods.html
-# Reference3: https://lightning.ai/docs/fabric/2.2.3/advanced/gradient_accumulation.html
+# Reference
+# [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py
+# [2]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_methods.html
+# [3]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_args.html
+# [4]: https://lightning.ai/docs/fabric/2.4.0/guide/
+# [5]: https://lightning.ai/docs/fabric/2.4.0/advanced/model_parallel/fsdp.html
 @main.command()
 def train(
         # env
@@ -517,17 +520,11 @@ def train(
                     fabric.print(f"i={i}")
                     is_accumulating = i % args.hardware.grad_steps != 0
 
-                    if args.hardware.strategy == "deepspeed":
-                        outputs = model(**batch)
-                        loss = outputs.loss
-                        fabric.backward(loss)
-                        fabric.print(f"loss={loss.item()}")
-                    else:
-                        with fabric.no_backward_sync(model, enabled=is_accumulating):
-                            outputs = model(**batch)
-                            loss = outputs.loss
-                            fabric.backward(loss)
-                            fabric.print(f"loss={loss.item()}")
+                    # with fabric.no_backward_sync(model, enabled=is_accumulating):
+                    outputs = model(**batch)
+                    loss = outputs.loss
+                    fabric.backward(loss)
+                    fabric.print(f"loss={loss.item()}")
 
                     if not is_accumulating:
                         optimizer.step()
