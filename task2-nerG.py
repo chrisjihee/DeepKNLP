@@ -261,7 +261,7 @@ def train(
                 fabric.print(f"Use {args.input.train_path} as train dataset: {len(train_dataset):,} samples")
 
                 # TODO: Remove after testing
-                prog = ProgIter(train_dataset, total=len(train_dataset), desc='Preprocess train samples: ', verbose=2, stream=fabric)
+                prog = ProgIter(train_dataset, total=len(train_dataset), desc='Preprocess train samples:', verbose=2, stream=fabric)
                 _msg_fmtstr = prog._build_message_template()
                 fabric.print(f"_msg_fmtstr={_msg_fmtstr}")
                 for _ in prog:

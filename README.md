@@ -34,14 +34,14 @@ Transformer-based Korean Natural Language Processing
 4. Install the required packages
     ```bash
     pip install -U -r requirements.txt
-    pip list | grep -E "torch|lightning|transformers|chris"
+    pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
     ```
 5. Install some packages as editable (optional)
     ```bash
     rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git; pip install -U -e chrisbase*
     rm -rf chrisdata*; git clone git@github.com:chrisjihee/chrisdata.git; pip install -U -e chrisdata*
     rm -rf progiter*;  git clone git@github.com:chrisjihee/progiter.git;  pip install -U -e progiter*
-    pip list | grep -E "torch|lightning|transformers|chris|prog"
+    pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
     ```
 6. Log in to Huggingface
     ```bash
