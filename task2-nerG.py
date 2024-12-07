@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 from typing import Any, Callable
 
 import datasets
@@ -36,11 +37,19 @@ def do_nothing(*args, **kwargs):
     pass
 
 
-def info_or_debug(fabric, m, *a, **k):
+def info_or_debug(fabric, x, *y, **z):
     if fabric.is_global_zero:  # or debugging:
-        logger.info(m, *a, **k)
+        logger.info(x, *y, **z)
     else:
-        logger.debug(m, *a, **k)
+        logger.debug(x, *y, **z)
+
+
+def rstrip_info_or_debug(fabric, x, *y, **z):
+    x = str(x).rstrip()
+    if fabric.is_global_zero:  # or debugging:
+        logger.info(x, *y, **z)
+    else:
+        logger.debug(x, *y, **z)
 
 
 @app.callback()
@@ -90,7 +99,7 @@ def train(
         test_data: Annotated[str, typer.Option("--test_data")] = None,  # TODO: "data/gner/zero-shot-test.jsonl"
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 512,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 512,
-        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = 256,  # TODO: -1
+        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = 1000,  # TODO: -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         num_prog_samples: Annotated[int, typer.Option("--num_prog_samples")] = 5000,
@@ -103,7 +112,7 @@ def train(
         accelerator: Annotated[str, typer.Option("--accelerator")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         gpu_index: Annotated[int, typer.Option("--gpu_index")] = 4,
-        num_device: Annotated[int, typer.Option("--num_device")] = 2,  # TODO: -> 1, 2, 4
+        num_device: Annotated[int, typer.Option("--num_device")] = 1,  # TODO: -> 1, 2, 4
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,
@@ -158,8 +167,8 @@ def train(
     )
     fabric.launch()
     fabric.barrier()
-    fabric.print = lambda msg, *xs, **zs: info_or_debug(fabric, msg, *xs, **zs)
-    fabric.write = lambda msg, *xs, **zs: info_or_debug(fabric, str(msg).rstrip(), *xs, **zs)
+    fabric.print = lambda x, *y, **z: info_or_debug(fabric, x, *y, **z)
+    fabric.write = lambda x, *y, **z: rstrip_info_or_debug(fabric, x, *y, **z)
     fabric.flush = do_nothing
     args.env.global_rank = fabric.global_rank
     args.env.local_rank = fabric.local_rank
@@ -250,6 +259,15 @@ def train(
                 if args.input.max_train_samples > 0:
                     train_dataset = train_dataset.select(range(min(len(train_dataset), args.input.max_train_samples)))
                 fabric.print(f"Use {args.input.train_path} as train dataset: {len(train_dataset):,} samples")
+
+                # TODO: Remove after testing
+                prog = ProgIter(train_dataset, total=len(train_dataset), desc='Preprocess train samples: ', verbose=2, stream=fabric)
+                _msg_fmtstr = prog._build_message_template()
+                fabric.print(f"_msg_fmtstr={_msg_fmtstr}")
+                for _ in prog:
+                    prog.format_message_parts()
+                    time.sleep(0.01)
+
         if args.input.eval_path:
             with fabric.rank_zero_first():
                 eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -406,38 +424,37 @@ def train(
                 # fabric.print(pbar.format_message().rstrip())
             return res
 
-        # Preprocess dataset
-        if train_dataset:
-            with fabric.rank_zero_first():
-                with ProgIter(total=len(train_dataset), desc='Preprocess train samples: ', verbose=3,
-                              stream=fabric, freq=1, adjust=False, rel_adjust_limit=0.0) as manual_pbar:
-                    train_dataset = train_dataset.map(
-                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
-                        cache_file_name=str(args.input.cache_train_path(len(train_dataset))) if args.input.use_cache_data else None,
-                    )
-        if eval_dataset:
-            with fabric.rank_zero_first():
-                with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', verbose=0) as manual_pbar:
-                    eval_dataset = eval_dataset.map(
-                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
-                        cache_file_name=str(args.input.cache_eval_path(len(eval_dataset))) if args.input.use_cache_data else None,
-                    )
-        if test_dataset:
-            with fabric.rank_zero_first():
-                with ProgIter(total=len(test_dataset), desc='Preprocess test samples', verbose=0) as manual_pbar:
-                    test_dataset = test_dataset.map(
-                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
-                        cache_file_name=str(args.input.cache_test_path(len(test_dataset))) if args.input.use_cache_data else None,
-                    )
-        fabric.barrier()
-        fabric.print("-" * 100)
-        # exit(1)
+        # # Preprocess dataset
+        # if train_dataset:
+        #     with fabric.rank_zero_first():
+        #         with ProgIter(total=len(train_dataset), desc='Preprocess train samples: ', verbose=3,
+        #                       stream=fabric, freq=1, adjust=False, rel_adjust_limit=0.0) as manual_pbar:
+        #             train_dataset = train_dataset.map(
+        #                 preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+        #                 fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+        #                 with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+        #                 cache_file_name=str(args.input.cache_train_path(len(train_dataset))) if args.input.use_cache_data else None,
+        #             )
+        # if eval_dataset:
+        #     with fabric.rank_zero_first():
+        #         with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', verbose=0) as manual_pbar:
+        #             eval_dataset = eval_dataset.map(
+        #                 preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+        #                 fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+        #                 with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+        #                 cache_file_name=str(args.input.cache_eval_path(len(eval_dataset))) if args.input.use_cache_data else None,
+        #             )
+        # if test_dataset:
+        #     with fabric.rank_zero_first():
+        #         with ProgIter(total=len(test_dataset), desc='Preprocess test samples', verbose=0) as manual_pbar:
+        #             test_dataset = test_dataset.map(
+        #                 preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+        #                 fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+        #                 with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+        #                 cache_file_name=str(args.input.cache_test_path(len(test_dataset))) if args.input.use_cache_data else None,
+        #             )
+        # fabric.barrier()
+        # fabric.print("-" * 100)
         #
         # # Set data collator
         # label_pad_token_id = -100
