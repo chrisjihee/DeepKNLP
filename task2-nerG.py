@@ -44,7 +44,7 @@ def info_or_debug(fabric, x, *y, **z):
         logger.debug(x, *y, **z)
 
 
-def rstrip_info_or_debug(fabric, x, *y, **z):
+def info_or_debug_r(fabric, x, *y, **z):
     x = str(x).rstrip()
     if fabric.is_global_zero:  # or debugging:
         logger.info(x, *y, **z)
@@ -167,9 +167,9 @@ def train(
     )
     fabric.launch()
     fabric.barrier()
-    fabric.print = lambda x, *y, **z: info_or_debug(fabric, x, *y, **z)
-    fabric.write = lambda x, *y, **z: rstrip_info_or_debug(fabric, x, *y, **z)
     fabric.flush = do_nothing
+    fabric.write = lambda x, *y, **z: info_or_debug_r(fabric, x, *y, **z)
+    fabric.print = lambda x, *y, **z: info_or_debug(fabric, x, *y, **z)
     args.env.global_rank = fabric.global_rank
     args.env.local_rank = fabric.local_rank
     args.env.node_rank = fabric.node_rank
@@ -262,8 +262,6 @@ def train(
 
                 # TODO: Remove after testing
                 prog = ProgIter(train_dataset, total=len(train_dataset), desc='Preprocess train samples:', verbose=2, stream=fabric)
-                _msg_fmtstr = prog._build_message_template()
-                fabric.print(f"_msg_fmtstr={_msg_fmtstr}")
                 for _ in prog:
                     prog.format_message_parts()
                     time.sleep(0.01)
