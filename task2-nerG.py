@@ -94,12 +94,13 @@ def main(
 def train(
         # input
         pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # TODO: "google/flan-t5-small", "etri-lirs/egpt-1.3b-preview",
+        # train_data: Annotated[str, typer.Option("--train_data")] = "data/gner/pile-ner.jsonl",  # TODO: "data/gner/pile-ner.jsonl"
         train_data: Annotated[str, typer.Option("--train_data")] = "data/gner/zero-shot-train.jsonl",  # TODO: "data/gner/pile-ner.jsonl"
         eval_data: Annotated[str, typer.Option("--eval_data")] = None,  # TODO: "data/gner/zero-shot-dev.jsonl"
         test_data: Annotated[str, typer.Option("--test_data")] = None,  # TODO: "data/gner/zero-shot-test.jsonl"
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 512,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 512,
-        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = 10,  # TODO: -1
+        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         num_prog_samples: Annotated[int, typer.Option("--num_prog_samples")] = 5000,
@@ -409,55 +410,44 @@ def train(
 
         # Define progress update function
         def update_progress(res: BatchEncoding, rank: int, counter: Counter, pbar: ProgIter):
+            if rank > 0:
+                return res
             pre, cnt = counter.val(), counter.inc()
             # if (cnt >= pbar.total or any(i % num_prog_samples == 0 for i in range(pre + 1, cnt + 1))) and rank == 0:
-            if rank == 0:
-                # fabric.print("rank=%d, pre=%d, cnt=%d" % (rank, pre, cnt))
-                pbar.step(inc=min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
-                #pbar.display_message()
-                # fabric.print(pbar.format_message().rstrip())
+            pbar.step(inc=min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
             return res
 
         # Preprocess dataset
         if train_dataset:
             with fabric.rank_zero_first():
-                #
-                # # TODO: Remove after testing
-                # prog = ProgIter(train_dataset, total=len(train_dataset), desc='Preprocess train samples:', verbose=2, stream=fabric)
-                # for _ in prog:
-                #     time.sleep(0.01)
-                #
-                manual_pbar = ProgIter(total=len(train_dataset), desc='Preprocess train samples: ', stream=fabric, verbose=2, time_thresh=0.01, freq=1)
-                manual_pbar.begin()
-                # with ProgIter(total=len(train_dataset), desc='Preprocess train samples: ', verbose=2, stream=fabric) as manual_pbar:
-                train_dataset = train_dataset.map(
-                    preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-                    fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-                    with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
-                    cache_file_name=str(args.input.cache_train_path(len(train_dataset))) if args.input.use_cache_data else None,
-                )
-                manual_pbar.end()
-        # if eval_dataset:
-        #     with fabric.rank_zero_first():
-        #         with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', verbose=0) as manual_pbar:
-        #             eval_dataset = eval_dataset.map(
-        #                 preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-        #                 fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-        #                 with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
-        #                 cache_file_name=str(args.input.cache_eval_path(len(eval_dataset))) if args.input.use_cache_data else None,
-        #             )
-        # if test_dataset:
-        #     with fabric.rank_zero_first():
-        #         with ProgIter(total=len(test_dataset), desc='Preprocess test samples', verbose=0) as manual_pbar:
-        #             test_dataset = test_dataset.map(
-        #                 preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
-        #                 fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
-        #                 with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
-        #                 cache_file_name=str(args.input.cache_test_path(len(test_dataset))) if args.input.use_cache_data else None,
-        #             )
-        # fabric.barrier()
-        # fabric.print("-" * 100)
-        #
+                with ProgIter(total=len(train_dataset), desc='Preprocess train samples:', stream=fabric, verbose=2, time_thresh=1.0) as manual_pbar:
+                    train_dataset = train_dataset.map(
+                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+                        cache_file_name=str(args.input.cache_train_path(len(train_dataset))) if args.input.use_cache_data else None,
+                    )
+        if eval_dataset:
+            with fabric.rank_zero_first():
+                with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', verbose=0) as manual_pbar:
+                    eval_dataset = eval_dataset.map(
+                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+                        cache_file_name=str(args.input.cache_eval_path(len(eval_dataset))) if args.input.use_cache_data else None,
+                    )
+        if test_dataset:
+            with fabric.rank_zero_first():
+                with ProgIter(total=len(test_dataset), desc='Preprocess test samples', verbose=0) as manual_pbar:
+                    test_dataset = test_dataset.map(
+                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+                        cache_file_name=str(args.input.cache_test_path(len(test_dataset))) if args.input.use_cache_data else None,
+                    )
+        fabric.barrier()
+        fabric.print("-" * 100)
+
         # # Set data collator
         # label_pad_token_id = -100
         # data_collator: DataCollatorForGNER = DataCollatorForGNER(
