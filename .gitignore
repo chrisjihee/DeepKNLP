@@ -127,6 +127,7 @@ transformers*
 lightning*
 chrisbase*
 chrislab*
+progiter*
 
 # custom
 .cache*

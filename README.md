@@ -39,8 +39,9 @@ Transformer-based Korean Natural Language Processing
 5. Install some packages as editable (optional)
     ```bash
     rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git; pip install -U -e chrisbase*
-    rm -rf chrisdata*; git clone git@github.com:chrisjihee/chrisdata.git; pip install -U -e chrisdata*   
-    pip list | grep -E "torch|lightning|transformers|chris"
+    rm -rf chrisdata*; git clone git@github.com:chrisjihee/chrisdata.git; pip install -U -e chrisdata*
+    rm -rf progiter*;  git clone git@github.com:chrisjihee/progiter.git;  pip install -U -e progiter*
+    pip list | grep -E "torch|lightning|transformers|chris|prog"
     ```
 6. Log in to Huggingface
     ```bash
