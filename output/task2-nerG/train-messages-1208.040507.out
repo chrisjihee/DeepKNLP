@@ -1,0 +1,91 @@
+[12.08 04:05:25] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.08 04:05:25] ┇ INFO     ┇                   chrisbase.data ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py train
+[12.08 04:05:25] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------------
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    # | TrainingArguments       | value
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------------
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    1 | env.hostname            | dgx-a100
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    2 | env.hostaddr            | 129.254.23.12
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    3 | env.global_rank         | 0
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    4 | env.local_rank          | 0
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    5 | env.node_rank           | 0
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    6 | env.world_size          | 2
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    7 | env.time_stamp          | 1208.040507
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    8 | env.python_path         | /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇    9 | env.current_dir         | /raid/chrisjihee/proj/DeepKNLP
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   10 | env.current_file        | /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   11 | env.command_args        | ['train']
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   12 | env.logging_home        | /raid/chrisjihee/proj/DeepKNLP/output/task2-nerG
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   13 | env.logging_file        | train-messages.out
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   14 | env.argument_file       | train-arguments.json
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   15 | env.random_seed         | 7
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   16 | env.max_workers         | 4
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   17 | env.debugging           | False
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   18 | env.date_format         | [%m.%d %H:%M:%S]
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   19 | env.message_level       | 20
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   20 | env.message_format      | %(asctime)s ┇ %(levelname)-8s ┇ %(name)32s ┇ %(message)s
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   21 | time.t1                 | 2024-12-08 04:05:25.423173
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   22 | time.t2                 | 2024-12-08 04:05:07.891372
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   23 | time.started            | [12.08 04:05:25]
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   24 | time.settled            |
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   25 | time.elapsed            |
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   26 | input.pretrained        | /raid/chrisjihee/proj/DeepKNLP/meta-llama/Llama-3.2-1B
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   27 | input.train_path        | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   28 | input.eval_path         |
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   29 | input.test_path         |
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   30 | input.max_train_samples | 256
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   31 | input.max_eval_samples  | -1
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   32 | input.max_test_samples  | -1
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   33 | input.num_prog_samples  | 5000
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   34 | input.max_source_length | 512
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   35 | input.max_target_length | 512
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   36 | input.use_cache_data    | False
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   37 | learn.output_home       | /raid/chrisjihee/proj/DeepKNLP/output
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   38 | learn.num_train_epochs  | 1
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   39 | learn.learning_rate     | 2e-05
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   40 | learn.weight_decay      | 0.0
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   41 | learn.accelerator       | gpu
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   42 | learn.precision         | bf16-mixed
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   43 | learn.gpu_index         | 4
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   44 | learn.num_device        | 2
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   45 | learn.grad_steps        | 8
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   46 | learn.train_batch       | 4
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   47 | learn.infer_batch       | 32
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   48 | learn.strategy          | ddp
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   49 | learn.ds_stage          | 2
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   50 | learn.ds_offload        | 0
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   51 | learn.fsdp_shard        | FULL_SHARD
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   52 | learn.fsdp_offload      | False
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇   53 | learn.devices           | [4, 5]
+[12.08 04:05:25] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-------------------------+----------------------------------------------------------------
+[12.08 04:05:25] ┇ INFO     ┇  lightning.fabric.utilities.seed ┇ [rank: 0] Seed set to 7
+[12.08 04:05:25] ┇ INFO     ┇  lightning.fabric.utilities.seed ┇ [rank: 1] Seed set to 7
+[12.08 04:05:25] ┇ INFO     ┇                         __main__ ┇ type(config)=<class 'transformers.models.llama.configuration_llama.LlamaConfig'> - True
+[12.08 04:05:26] ┇ INFO     ┇                         __main__ ┇ type(tokenizer)=<class 'transformers.tokenization_utils_fast.PreTrainedTokenizerFast'> - True, len(tokenizer)=128256
+[12.08 04:05:27] ┇ INFO     ┇                         __main__ ┇ type(model)=<class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'> - True
+[12.08 04:05:27] ┇ INFO     ┇                         __main__ ┇ embedding_size=128256
+[12.08 04:05:27] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.08 04:05:27] ┇ INFO     ┇                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl as train dataset: 256 samples
+[12.08 04:05:28] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.08 04:05:30] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:   1.6%|▎                   |   4/256 [0:00:02<0:02:09,  1.9Hz]
+[12.08 04:05:30] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples: 100.0%|████████████████████| 256/256 [0:00:02<0:00:00, 3076.3Hz]
+[12.08 04:05:34] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.08 04:05:34] ┇ INFO     ┇                         __main__ ┇ type(optimizer)=<class 'torch.optim.adamw.AdamW'> - True
+[12.08 04:05:45] ┇ INFO     ┇                         __main__ ┇ type(optimizer)=<class 'lightning.fabric.wrappers.FabricAdamW'> - True
+[12.08 04:05:45] ┇ INFO     ┇                         __main__ ┇ type(model)=<class 'lightning.fabric.wrappers._FabricModule'> - True
+[12.08 04:05:45] ┇ INFO     ┇                         __main__ ┇ ****************************************************************************************************
+[12.08 04:05:45] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.08 04:05:52] ┇ INFO     ┇                         __main__ ┇ Training (ep=0):   3.1%|▋                   |  1/32 [0:00:06<0:03:18,  0.2Hz] | loss=0.8447
+[12.08 04:05:55] ┇ INFO     ┇                         __main__ ┇ Training (ep=0):   6.2%|█▎                  |  2/32 [0:00:09<0:02:18,  0.2Hz] | loss=0.9549
+[12.08 04:05:58] ┇ INFO     ┇                         __main__ ┇ Training (ep=0):  18.8%|███▊                |  6/32 [0:00:12<0:00:52,  0.5Hz] | loss=1.4203
+[12.08 04:06:01] ┇ INFO     ┇                         __main__ ┇ Training (ep=0):  25.0%|█████               |  8/32 [0:00:15<0:00:45,  0.5Hz] | loss=1.0298
+[12.08 04:06:04] ┇ INFO     ┇                         __main__ ┇ Training (ep=0):  31.2%|██████▎             | 10/32 [0:00:18<0:00:40,  0.5Hz] | loss=0.7674
+[12.08 04:06:07] ┇ INFO     ┇                         __main__ ┇ Training (ep=0):  43.8%|████████▊           | 14/32 [0:00:21<0:00:27,  0.6Hz] | loss=0.8037
+[12.08 04:06:10] ┇ INFO     ┇                         __main__ ┇ Training (ep=0):  53.1%|██████████▋         | 17/32 [0:00:24<0:00:21,  0.7Hz] | loss=0.9478
+[12.08 04:06:14] ┇ INFO     ┇                         __main__ ┇ Training (ep=0):  75.0%|███████████████     | 24/32 [0:00:28<0:00:09,  0.8Hz] | loss=1.0561
+[12.08 04:06:15] ┇ INFO     ┇                         __main__ ┇ Training (ep=0): 100.0%|████████████████████| 32/32 [0:00:29<0:00:00,  1.1Hz] | loss=0.3342
+[12.08 04:06:15] ┇ INFO     ┇                         __main__ ┇ Training (ep=0): max_memory=34.20MB, final_loss=0.334247
+[12.08 04:06:15] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.08 04:06:16] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.08 04:06:16] ┇ INFO     ┇                   chrisbase.data ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py train ($=00:00:50.458)
+[12.08 04:06:16] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================

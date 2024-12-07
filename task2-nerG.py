@@ -100,7 +100,7 @@ def train(
         test_data: Annotated[str, typer.Option("--test_data")] = None,  # TODO: "data/gner/zero-shot-test.jsonl"
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 512,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 512,
-        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: -1
+        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = 256,  # TODO: -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         num_prog_samples: Annotated[int, typer.Option("--num_prog_samples")] = 5000,
@@ -113,7 +113,7 @@ def train(
         accelerator: Annotated[str, typer.Option("--accelerator")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         gpu_index: Annotated[int, typer.Option("--gpu_index")] = 4,
-        num_device: Annotated[int, typer.Option("--num_device")] = 1,  # TODO: -> 1, 2, 4
+        num_device: Annotated[int, typer.Option("--num_device")] = 2,  # TODO: -> 1, 2, 4
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,
@@ -414,13 +414,13 @@ def train(
                 return res
             pre, cnt = counter.val(), counter.inc()
             # if (cnt >= pbar.total or any(i % num_prog_samples == 0 for i in range(pre + 1, cnt + 1))) and rank == 0:
-            pbar.step(inc=min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
+            pbar.step(min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
             return res
 
         # Preprocess dataset
         if train_dataset:
             with fabric.rank_zero_first():
-                with ProgIter(total=len(train_dataset), desc='Preprocess train samples:', stream=fabric, verbose=2, time_thresh=1.0) as manual_pbar:
+                with ProgIter(total=len(train_dataset), desc='Preprocess train samples:', stream=fabric, verbose=2) as manual_pbar:
                     train_dataset = train_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
@@ -429,7 +429,7 @@ def train(
                     )
         if eval_dataset:
             with fabric.rank_zero_first():
-                with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', verbose=0) as manual_pbar:
+                with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', stream=fabric, verbose=2) as manual_pbar:
                     eval_dataset = eval_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
@@ -438,7 +438,7 @@ def train(
                     )
         if test_dataset:
             with fabric.rank_zero_first():
-                with ProgIter(total=len(test_dataset), desc='Preprocess test samples', verbose=0) as manual_pbar:
+                with ProgIter(total=len(test_dataset), desc='Preprocess test samples', stream=fabric, verbose=2) as manual_pbar:
                     test_dataset = test_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
@@ -448,111 +448,109 @@ def train(
         fabric.barrier()
         fabric.print("-" * 100)
 
-        # # Set data collator
-        # label_pad_token_id = -100
-        # data_collator: DataCollatorForGNER = DataCollatorForGNER(
-        #     tokenizer,
-        #     model=model,
-        #     padding=True,
-        #     pad_to_multiple_of=8,  # if training_args.fp16 else None,
-        #     label_pad_token_id=label_pad_token_id,
-        #     return_tensors="pt",
-        # )
-        #
-        # # Set data loader
-        # if train_dataset:
-        #     train_dataloader = DataLoader(
-        #         train_dataset,
-        #         shuffle=True,
-        #         collate_fn=data_collator,
-        #         batch_size=args.learn.train_batch,
-        #     )
-        #     train_dataloader = fabric.setup_dataloaders(train_dataloader)
-        # if eval_dataset:
-        #     eval_dataloader = DataLoader(
-        #         eval_dataset,
-        #         collate_fn=data_collator,
-        #         batch_size=args.learn.infer_batch,
-        #     )
-        #     eval_dataloader = fabric.setup_dataloaders(eval_dataloader)
-        # if test_dataset:
-        #     test_dataloader = DataLoader(
-        #         test_dataset,
-        #         collate_fn=data_collator,
-        #         batch_size=args.learn.infer_batch,
-        #     )
-        #     test_dataloader = fabric.setup_dataloaders(test_dataloader)
-        #
-        # # Set optimizer
-        # no_decay = ("bias", "layer_norm.weight",)
-        # optimizer: Optimizer = torch.optim.AdamW(
-        #     lr=args.learn.learning_rate,
-        #     params=[
-        #         {
-        #             "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-        #             "weight_decay": args.learn.weight_decay,
-        #         },
-        #         {
-        #             "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
-        #             "weight_decay": 0.0,
-        #         },
-        #     ],
-        # )
-        # fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, Optimizer)}")
-        # model, optimizer = fabric.setup(model, optimizer)
-        # fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, lightning.fabric.wrappers._FabricOptimizer)}")
-        # fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
-        #
-        # # Define compute metrics function
-        # def compute_ner_metrics(dataset, preds, save_prefix=None):
-        #     preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
-        #     decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
-        #     if using_decoder_only_model:
-        #         match_pattern = "[/INST]"
-        #         for i, preds in enumerate(decoded_preds):
-        #             decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
-        #
-        #     all_examples = [example.copy() for example in dataset]
-        #     for idx, decoded_pred in enumerate(decoded_preds):
-        #         all_examples[idx]["prediction"] = decoded_pred
-        #
-        #     results = compute_metrics(all_examples, tokenizer=tokenizer)
-        #     if save_prefix is not None:
-        #         with open(os.path.join(args.env.output_home, f"{save_prefix}_text_generations.jsonl"), "w") as fout:
-        #             for example in all_examples:
-        #                 fout.write(json.dumps(example) + "\n")
-        #     return results
-        #
-        # # Train loop
-        # fabric.barrier()
-        # fabric.print("*" * 100)
-        # global_step = 0
-        # global_epoch = 0.0
-        # epoch_per_step = 1.0 / len(train_dataloader)
-        # torch.cuda.reset_peak_memory_stats()
-        # if train_dataloader:
-        #     for epoch in range(args.learn.num_train_epochs):
-        #         fabric.print("-" * 100)
-        #         with ProgIter(total=len(train_dataloader), desc=f'Training [epoch={epoch}]:',
-        #                       verbose=2, file=fabric,  # time_thresh=2.0,
-        #
-        #                       # file=open(os.devnull, 'w'),
-        #                       ) as pbar:
-        #             for i, batch in enumerate(train_dataloader, start=1):
-        #                 model.train()
-        #                 is_accumulating = i % args.learn.grad_steps != 0
-        #
-        #                 outputs = model(**batch)
-        #                 loss = outputs.loss
-        #                 fabric.backward(loss)
-        #                 pbar.set_extra(f" [loss={loss.item():.4f}] ")
-        #                 if not is_accumulating:
-        #                     optimizer.step()
-        #                     optimizer.zero_grad()
-        #                     global_step += 1
-        #                 pbar.step()
-        #                 global_epoch += epoch_per_step
-        #         fabric.print(f"max_memory={torch.cuda.max_memory_allocated() / 1024 / 1024 / 1024:.2f}MB, final_loss={loss.item():.6f}")
+        # Set data collator
+        label_pad_token_id = -100
+        data_collator: DataCollatorForGNER = DataCollatorForGNER(
+            tokenizer,
+            model=model,
+            padding=True,
+            pad_to_multiple_of=8,  # if training_args.fp16 else None,
+            label_pad_token_id=label_pad_token_id,
+            return_tensors="pt",
+        )
+
+        # Set data loader
+        if train_dataset:
+            train_dataloader = DataLoader(
+                train_dataset,
+                shuffle=True,
+                collate_fn=data_collator,
+                batch_size=args.learn.train_batch,
+            )
+            train_dataloader = fabric.setup_dataloaders(train_dataloader)
+        if eval_dataset:
+            eval_dataloader = DataLoader(
+                eval_dataset,
+                collate_fn=data_collator,
+                batch_size=args.learn.infer_batch,
+            )
+            eval_dataloader = fabric.setup_dataloaders(eval_dataloader)
+        if test_dataset:
+            test_dataloader = DataLoader(
+                test_dataset,
+                collate_fn=data_collator,
+                batch_size=args.learn.infer_batch,
+            )
+            test_dataloader = fabric.setup_dataloaders(test_dataloader)
+
+        # Set optimizer
+        no_decay = ("bias", "layer_norm.weight",)
+        optimizer: Optimizer = torch.optim.AdamW(
+            lr=args.learn.learning_rate,
+            params=[
+                {
+                    "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
+                    "weight_decay": args.learn.weight_decay,
+                },
+                {
+                    "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
+                    "weight_decay": 0.0,
+                },
+            ],
+        )
+        fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, Optimizer)}")
+        model, optimizer = fabric.setup(model, optimizer)
+        fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, lightning.fabric.wrappers._FabricOptimizer)}")
+        fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
+
+        # Define compute metrics function
+        def compute_ner_metrics(dataset, preds, save_prefix=None):
+            preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
+            decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+            if using_decoder_only_model:
+                match_pattern = "[/INST]"
+                for i, preds in enumerate(decoded_preds):
+                    decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
+
+            all_examples = [example.copy() for example in dataset]
+            for idx, decoded_pred in enumerate(decoded_preds):
+                all_examples[idx]["prediction"] = decoded_pred
+
+            results = compute_metrics(all_examples, tokenizer=tokenizer)
+            if save_prefix is not None:
+                with open(os.path.join(args.env.output_home, f"{save_prefix}_text_generations.jsonl"), "w") as fout:
+                    for example in all_examples:
+                        fout.write(json.dumps(example) + "\n")
+            return results
+
+        # Train loop
+        fabric.barrier()
+        fabric.print("*" * 100)
+        global_step = 0
+        global_epoch = 0.0
+        epoch_per_step = 1.0 / len(train_dataloader)
+        torch.cuda.reset_peak_memory_stats()
+        if train_dataloader:
+            for epoch in range(args.learn.num_train_epochs):
+                with ProgIter(total=len(train_dataloader), desc=f'Training (ep={epoch}):', stream=fabric, verbose=2) as pbar:
+                    fabric.print("-" * 100)
+                    for i, batch in enumerate(train_dataloader, start=1):
+                        model.train()
+                        is_accumulating = i % args.learn.grad_steps != 0
+
+                        outputs = model(**batch)
+                        loss = outputs.loss
+                        fabric.backward(loss)
+                        if not is_accumulating:
+                            optimizer.step()
+                            optimizer.zero_grad()
+                            global_step += 1
+                        global_epoch += epoch_per_step
+                        pbar.set_extra(f"| loss={loss.item():.4f}")
+                        pbar.step(force=i >= len(train_dataloader))
+                    fabric.print(f"{pbar.desc} max_memory={torch.cuda.max_memory_allocated() / 1024 / 1024 / 1024:.2f}MB, final_loss={loss.item():.6f}")
+                    fabric.barrier()
+                    fabric.print("-" * 100)
 
 
 if __name__ == "__main__":
