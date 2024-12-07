@@ -532,7 +532,7 @@ def train(
         torch.cuda.reset_peak_memory_stats()
         if train_dataloader:
             for epoch in range(args.learn.num_train_epochs):
-                with ProgIter(total=len(train_dataloader), desc=f'Training (ep={epoch}):', stream=fabric, verbose=2) as pbar:
+                with ProgIter(total=len(train_dataloader), desc=f'Training[{epoch}]:', stream=fabric, verbose=2) as pbar:
                     fabric.print("-" * 100)
                     for i, batch in enumerate(train_dataloader, start=1):
                         model.train()
@@ -545,8 +545,9 @@ def train(
                             optimizer.step()
                             optimizer.zero_grad()
                             global_step += 1
+
                         global_epoch += epoch_per_step
-                        pbar.set_extra(f"| loss={loss.item():.4f}")
+                        pbar.set_extra(f"| loss={loss.item():.4f}, step={global_step}, ep={global_epoch:.1f}")
                         pbar.step(force=i >= len(train_dataloader))
                     fabric.print(f"{pbar.desc} max_memory={torch.cuda.max_memory_allocated() / 1024 / 1024 / 1024:.2f}MB, final_loss={loss.item():.6f}")
                     fabric.barrier()
