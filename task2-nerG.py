@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import time
 from typing import Any, Callable
 
 import datasets
@@ -13,7 +12,6 @@ import typer
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
-from progiter import ProgIter
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast, PreTrainedTokenizerBase
@@ -23,8 +21,9 @@ from DeepKNLP.arguments import NewProjectEnv, TrainingArguments
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from chrisbase.data import AppTyper, JobTimer, Counter
-from chrisbase.io import LoggingFormat, setup_unit_logger, set_verbosity_warning, set_verbosity_info, set_verbosity_error
+from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error
 from chrisdata.ner import GenNERSampleWrapper
+from progiter import ProgIter
 
 # Global settings
 env = None
@@ -98,27 +97,27 @@ def train(
         train_data: Annotated[str, typer.Option("--train_data")] = "data/gner/zero-shot-train.jsonl",  # TODO: "data/gner/pile-ner.jsonl"
         eval_data: Annotated[str, typer.Option("--eval_data")] = None,  # TODO: "data/gner/zero-shot-dev.jsonl"
         test_data: Annotated[str, typer.Option("--test_data")] = None,  # TODO: "data/gner/zero-shot-test.jsonl"
-        max_source_length: Annotated[int, typer.Option("--max_source_length")] = 512,
-        max_target_length: Annotated[int, typer.Option("--max_target_length")] = 512,
-        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = 256,  # TODO: -1
+        max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
+        max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
+        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         num_prog_samples: Annotated[int, typer.Option("--num_prog_samples")] = 5000,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = False,
         # learn
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
-        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 1,  # TODO: -> 2, 3
+        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 6,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,
         accelerator: Annotated[str, typer.Option("--accelerator")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        gpu_index: Annotated[int, typer.Option("--gpu_index")] = 4,
-        num_device: Annotated[int, typer.Option("--num_device")] = 2,  # TODO: -> 1, 2, 4
+        gpu_index: Annotated[int, typer.Option("--gpu_index")] = 0,  # TODO: -> 0, 4
+        num_device: Annotated[int, typer.Option("--num_device")] = 8,  # TODO: -> 1, 2, 4, 8
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,
-        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
-        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 2,  # TODO: -> 1, 2, 3
+        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
+        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
         fsdp_offload: Annotated[bool, typer.Option("--fsdp_offload")] = False,  # TODO: -> True, False
