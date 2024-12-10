@@ -195,6 +195,9 @@ def train(
             "transformers.modeling_utils",
             "DeepSpeed",
         )
+        set_verbosity_error(
+            "transformers.generation.utils",
+        )
     else:
         transformers.logging.set_verbosity_error()
         datasets.utils.logging.set_verbosity_error()
@@ -559,22 +562,17 @@ def train(
                                 model.eval()
                                 with ProgIter(total=len(eval_dataloader), desc=f'Evaluating[{global_epoch:.1f}]:', stream=fabric, verbose=2) as pbar2:
                                     for j, batch in enumerate(eval_dataloader, start=1):
-                                        logits = model.generate(**batch.copy(), max_length=max_length, synced_gpus=False)
-                                        # logger.warning(f"(1) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
-
-                                        # Pad logits to the maximum length
-                                        padding_size = max_length - logits.size(1)
-                                        if padding_size > 0:
-                                            logits = torch.nn.functional.pad(logits, (0, padding_size), value=-100)  # https://hichoe95.tistory.com/116
-                                        # logger.warning(f"(2) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
+                                        logits = model.generate(**batch, max_length=max_length, synced_gpus=False)
+                                        # padding_size = max_length - logits.size(1)
+                                        # if padding_size > 0:
+                                        #     logits = torch.nn.functional.pad(logits, (0, padding_size), value=-100)  # https://hichoe95.tistory.com/116
 
                                         # Gather logits from all devices
-                                        fabric.barrier()
-                                        logits = fabric.all_gather(logits).view(-1, max_length)
-                                        # logger.warning(f"(3) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
+                                        # fabric.barrier()
+                                        # logits = fabric.all_gather(logits).view(-1, max_length)
 
                                         # Step progress bar
-                                        fabric.barrier()
+                                        # fabric.barrier()
                                         pbar2.step(force=j >= len(eval_dataloader))
                                 exit(1)
 
