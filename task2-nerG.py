@@ -101,6 +101,7 @@ def train(
         # test_data: Annotated[str, typer.Option("--test_data")] = "data/gner/zero-shot-test.jsonl"
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
+        max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
@@ -134,6 +135,7 @@ def train(
             test_path=test_data,
             max_source_length=max_source_length,
             max_target_length=max_target_length,
+            max_generation_length=max_generation_length,
             max_train_samples=max_train_samples,
             max_eval_samples=max_eval_samples,
             max_test_samples=max_test_samples,
@@ -430,7 +432,7 @@ def train(
                     )
         if eval_dataset:
             with fabric.rank_zero_first():
-                with ProgIter(total=len(eval_dataset), desc='Preprocess eval samples', stream=fabric, verbose=2) as manual_pbar:
+                with ProgIter(total=len(eval_dataset), desc='Preprocess  eval samples:', stream=fabric, verbose=2) as manual_pbar:
                     eval_dataset = eval_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
@@ -439,7 +441,7 @@ def train(
                     )
         if test_dataset:
             with fabric.rank_zero_first():
-                with ProgIter(total=len(test_dataset), desc='Preprocess test samples', stream=fabric, verbose=2) as manual_pbar:
+                with ProgIter(total=len(test_dataset), desc='Preprocess  test samples:', stream=fabric, verbose=2) as manual_pbar:
                     test_dataset = test_dataset.map(
                         preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
                         fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
@@ -548,22 +550,29 @@ def train(
                             optimizer.step()
                             optimizer.zero_grad()
                             global_step += 1
+
                             # Evaluate at every 10 steps
+                            preds_host = None
                             if eval_dataloader and global_step % 10 == 0:
-                                gen_kwargs = {'max_length': 1280, 'synced_gpus': False}
+                                max_length = args.input.max_generation_length
+                                # gen_kwargs = {'max_length': max_length, 'synced_gpus': False}
                                 model.eval()
                                 for i, batch in enumerate(eval_dataloader, start=1):
-                                    logits = model.generate(**batch.copy(), **gen_kwargs)
+                                    logits = model.generate(**batch.copy(), max_length=max_length, synced_gpus=False)
+                                    # logger.warning(f"(1) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
 
-                                    logger.warning(f"rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
-                                    all_logits = fabric.all_gather(logits)
-                                    logger.warning(f"rank={fabric.global_rank}, [all_logits] type={type(all_logits)}, shape={all_logits.shape}")
-                                    logger.warning(f"logits.size(-1)={logits.size(-1)}")
-                                    all_logits = all_logits.view(-1, logits.size(-1))
-                                    # all_logits = fabric.all_gather(logits).view(-1, logits.size(-1))
-                                    logger.warning(f"rank={fabric.global_rank}, [all_logits] type={type(all_logits)}, shape={all_logits.shape}")
+                                    # Pad logits to the maximum length
+                                    padding_size = max_length - logits.size(1)
+                                    if padding_size > 0:
+                                        logits = torch.nn.functional.pad(logits, (0, padding_size), value=-100)
+                                    # logger.warning(f"(2) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
+
+                                    # Gather logits from all devices
                                     fabric.barrier()
-                                    exit(1)
+                                    logits = fabric.all_gather(logits).view(-1, max_length)
+                                    logger.warning(f"(3) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
+                                    fabric.barrier()
+                                exit(1)
 
                         global_epoch += epoch_per_step
                         pbar.set_extra(f"| loss={loss.item():.4f}, step={global_step}, ep={global_epoch:.1f}")
