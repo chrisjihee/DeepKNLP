@@ -1,3 +1,4 @@
+import contextlib
 import json
 import logging
 import os
@@ -118,7 +119,7 @@ def train(
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 10,
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 500,
         strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
@@ -559,21 +560,23 @@ def train(
                             if eval_dataloader and global_step % 10 == 0:
                                 max_length = args.input.max_generation_length
                                 # gen_kwargs = {'max_length': max_length, 'synced_gpus': False}
-                                model.eval()
-                                with ProgIter(total=len(eval_dataloader), desc=f'Evaluating[{global_epoch:.1f}]:', stream=fabric, verbose=2) as pbar2:
-                                    for j, batch in enumerate(eval_dataloader, start=1):
-                                        logits = model.generate(**batch, max_length=max_length, synced_gpus=False)
-                                        # padding_size = max_length - logits.size(1)
-                                        # if padding_size > 0:
-                                        #     logits = torch.nn.functional.pad(logits, (0, padding_size), value=-100)  # https://hichoe95.tistory.com/116
+                                with contextlib.nullcontext():
+                                    with torch.no_grad():
+                                        model.eval()
+                                        with ProgIter(total=len(eval_dataloader), desc=f'Evaluating[{global_epoch:.1f}]:', stream=fabric, verbose=2) as pbar2:
+                                            for j, batch in enumerate(eval_dataloader, start=1):
+                                                logits = model.generate(**batch, max_length=max_length, synced_gpus=False)
+                                                # padding_size = max_length - logits.size(1)
+                                                # if padding_size > 0:
+                                                #     logits = torch.nn.functional.pad(logits, (0, padding_size), value=-100)  # https://hichoe95.tistory.com/116
 
-                                        # Gather logits from all devices
-                                        # fabric.barrier()
-                                        # logits = fabric.all_gather(logits).view(-1, max_length)
+                                                # Gather logits from all devices
+                                                # fabric.barrier()
+                                                # logits = fabric.all_gather(logits).view(-1, max_length)
 
-                                        # Step progress bar
-                                        # fabric.barrier()
-                                        pbar2.step(force=j >= len(eval_dataloader))
+                                                # Step progress bar
+                                                # fabric.barrier()
+                                                pbar2.step(force=j >= len(eval_dataloader))
                                 exit(1)
 
                         global_epoch += epoch_per_step
