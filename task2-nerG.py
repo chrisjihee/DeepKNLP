@@ -173,11 +173,10 @@ def train(
         devices=args.learn.devices,
     )
     fabric.launch()
+    fabric.barrier()
     accelerator = Accelerator(
         gradient_accumulation_steps=args.learn.grad_steps,
     )
-    accelerator.wait_for_everyone()
-    # fabric.barrier()
     fabric.flush = do_nothing
     fabric.write = lambda x, *y, **z: info_or_debug_r(fabric, x, *y, **z)
     fabric.print = lambda x, *y, **z: info_or_debug(fabric, x, *y, **z)
@@ -222,8 +221,7 @@ def train(
             args=args if fabric.is_global_zero else None, verbose=fabric.is_global_zero,
     ):
         # Set random seed
-        # fabric.barrier()
-        accelerator.wait_for_everyone()
+        fabric.barrier()
         fabric.seed_everything(args.env.random_seed)
 
         # Load model
