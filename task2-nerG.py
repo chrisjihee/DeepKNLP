@@ -557,21 +557,25 @@ def train(
                                 max_length = args.input.max_generation_length
                                 # gen_kwargs = {'max_length': max_length, 'synced_gpus': False}
                                 model.eval()
-                                for i, batch in enumerate(eval_dataloader, start=1):
-                                    logits = model.generate(**batch.copy(), max_length=max_length, synced_gpus=False)
-                                    # logger.warning(f"(1) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
+                                with ProgIter(total=len(eval_dataloader), desc=f'Evaluating[{global_epoch:.1f}]:', stream=fabric, verbose=2) as pbar2:
+                                    for j, batch in enumerate(eval_dataloader, start=1):
+                                        logits = model.generate(**batch.copy(), max_length=max_length, synced_gpus=False)
+                                        # logger.warning(f"(1) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
 
-                                    # Pad logits to the maximum length
-                                    padding_size = max_length - logits.size(1)
-                                    if padding_size > 0:
-                                        logits = torch.nn.functional.pad(logits, (0, padding_size), value=-100)
-                                    # logger.warning(f"(2) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
+                                        # Pad logits to the maximum length
+                                        padding_size = max_length - logits.size(1)
+                                        if padding_size > 0:
+                                            logits = torch.nn.functional.pad(logits, (0, padding_size), value=-100)  # https://hichoe95.tistory.com/116
+                                        # logger.warning(f"(2) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
 
-                                    # Gather logits from all devices
-                                    fabric.barrier()
-                                    logits = fabric.all_gather(logits).view(-1, max_length)
-                                    logger.warning(f"(3) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
-                                    fabric.barrier()
+                                        # Gather logits from all devices
+                                        fabric.barrier()
+                                        logits = fabric.all_gather(logits).view(-1, max_length)
+                                        # logger.warning(f"(3) rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
+
+                                        # Step progress bar
+                                        fabric.barrier()
+                                        pbar2.step(force=j >= len(eval_dataloader))
                                 exit(1)
 
                         global_epoch += epoch_per_step
