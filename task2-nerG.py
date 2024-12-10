@@ -1,8 +1,6 @@
-import contextlib
 import json
 import logging
 import os
-from time import sleep
 from typing import Any, Callable
 
 import datasets
@@ -117,11 +115,11 @@ def train(
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,
         accelerator: Annotated[str, typer.Option("--accelerator")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        gpu_index: Annotated[int, typer.Option("--gpu_index")] = 0,  # TODO: -> 0, 4
+        gpu_index: Annotated[int, typer.Option("--gpu_index")] = 4,  # TODO: -> 0, 4
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
-        train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 500,
+        train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 10,
         strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
@@ -564,25 +562,32 @@ def train(
                             # Evaluate at every 10 steps
                             preds_host = None
                             if eval_dataloader and global_step % 10 == 0:
+                                model.eval()
                                 max_length = args.input.max_generation_length
                                 # gen_kwargs = {'max_length': max_length, 'synced_gpus': False}
-                                with contextlib.nullcontext():
-                                    with torch.no_grad():
-                                        model.eval()
-                                        with ProgIter(total=len(eval_dataloader), desc=f'Evaluating[{global_epoch:.1f}]:', stream=fabric, verbose=2) as pbar2:
-                                            for j, batch in enumerate(eval_dataloader, start=1):
-                                                logits = model.generate(**batch, max_length=max_length, synced_gpus=False)
-                                                # padding_size = max_length - logits.size(1)
-                                                # if padding_size > 0:
-                                                #     logits = torch.nn.functional.pad(logits, (0, padding_size), value=-100)  # https://hichoe95.tistory.com/116
+                                with ProgIter(total=len(eval_dataloader), desc=f'Evaluating[{global_epoch:.1f}]:', stream=fabric, verbose=2) as pbar2:
+                                    gen_kwargs = {
+                                        "max_length": args.input.max_generation_length,
+                                        "num_beams": 1,
+                                    }
+                                    for j, batch in enumerate(eval_dataloader, start=1):
+                                        with torch.no_grad():
+                                            logits = accelerator.unwrap_model(model).generate(
+                                                batch["input_ids"],
+                                                attention_mask=batch["attention_mask"],
+                                                **gen_kwargs,
+                                            )
+                                            # logits = model.generate(**batch, **gen_kwargs)
+                                            # logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
+                                            # logits = accelerator.gather_for_metrics(logits)
 
-                                                # Gather logits from all devices
-                                                # fabric.barrier()
-                                                # logits = fabric.all_gather(logits).view(-1, max_length)
+                                            # Gather logits from all devices
+                                            # fabric.barrier()
+                                            # logits = fabric.all_gather(logits).view(-1, max_length)
 
-                                                # Step progress bar
-                                                # fabric.barrier()
-                                                pbar2.step(force=j >= len(eval_dataloader))
+                                            # Step progress bar
+                                            # fabric.barrier()
+                                            pbar2.step(force=j >= len(eval_dataloader))
                                 exit(1)
 
                         global_epoch += epoch_per_step
