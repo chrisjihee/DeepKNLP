@@ -165,7 +165,7 @@ def train(
         ),
     )
 
-    # Setup fabric
+    # Setup fabric and accelerator
     fabric = Fabric(
         accelerator=args.learn.accelerator,
         precision=args.learn.precision,
@@ -173,7 +173,11 @@ def train(
         devices=args.learn.devices,
     )
     fabric.launch()
-    fabric.barrier()
+    accelerator = Accelerator(
+        gradient_accumulation_steps=args.learn.grad_steps,
+    )
+    accelerator.wait_for_everyone()
+    # fabric.barrier()
     fabric.flush = do_nothing
     fabric.write = lambda x, *y, **z: info_or_debug_r(fabric, x, *y, **z)
     fabric.print = lambda x, *y, **z: info_or_debug(fabric, x, *y, **z)
@@ -181,9 +185,6 @@ def train(
     args.env.local_rank = fabric.local_rank
     args.env.node_rank = fabric.node_rank
     args.env.world_size = fabric.world_size
-
-    # Setup accelerator
-    accelerator = Accelerator(gradient_accumulation_steps=args.learn.grad_steps)
 
     # Setup logger
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
@@ -224,7 +225,6 @@ def train(
         # fabric.barrier()
         accelerator.wait_for_everyone()
         fabric.seed_everything(args.env.random_seed)
-        exit(1)
 
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
