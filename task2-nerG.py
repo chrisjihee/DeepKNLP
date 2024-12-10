@@ -2,6 +2,7 @@ import contextlib
 import json
 import logging
 import os
+from time import sleep
 from typing import Any, Callable
 
 import datasets
@@ -10,6 +11,7 @@ import numpy as np
 import torch
 import transformers
 import typer
+from accelerate import Accelerator
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
@@ -180,6 +182,9 @@ def train(
     args.env.node_rank = fabric.node_rank
     args.env.world_size = fabric.world_size
 
+    # Setup accelerator
+    accelerator = Accelerator(gradient_accumulation_steps=args.learn.grad_steps)
+
     # Setup logger
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
     args.env.setup_logger()
@@ -209,14 +214,17 @@ def train(
     transformers.logging.disable_progress_bar()
     datasets.utils.logging.disable_progress_bar()
     # logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
+    logger.info(f"[local_rank={fabric.local_rank}] accelerator={accelerator}, main=({fabric.is_global_zero}, {accelerator.is_main_process})")
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
             args=args if fabric.is_global_zero else None, verbose=fabric.is_global_zero,
     ):
         # Set random seed
-        fabric.barrier()
+        # fabric.barrier()
+        accelerator.wait_for_everyone()
         fabric.seed_everything(args.env.random_seed)
+        exit(1)
 
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
