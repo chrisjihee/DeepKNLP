@@ -501,6 +501,9 @@ def train(
         )
         fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, Optimizer)}")
         model, optimizer = fabric.setup(model, optimizer)
+        model: lightning.fabric.wrappers._FabricModule = model
+        optimizer: lightning.fabric.wrappers._FabricOptimizer = optimizer
+        model.mark_forward_method("generate")
         fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, lightning.fabric.wrappers._FabricOptimizer)}")
         fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
 
