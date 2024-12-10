@@ -117,7 +117,7 @@ def train(
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 10,
         strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
@@ -548,13 +548,22 @@ def train(
                             optimizer.step()
                             optimizer.zero_grad()
                             global_step += 1
-                            # Evaluate (for debug)
-                            if eval_dataloader:
+                            # Evaluate at every 10 steps
+                            if eval_dataloader and global_step % 10 == 0:
+                                gen_kwargs = {'max_length': 1280, 'synced_gpus': False}
                                 model.eval()
-                                for i, batch in enumerate(train_dataloader, start=1):
-                                    generation_inputs = batch.copy()
-                                    # outputs = model(**batch)
-                                    model.generate()
+                                for i, batch in enumerate(eval_dataloader, start=1):
+                                    logits = model.generate(**batch.copy(), **gen_kwargs)
+
+                                    logger.warning(f"rank={fabric.global_rank}, [logit] type={type(logits)}, shape={logits.shape}")
+                                    all_logits = fabric.all_gather(logits)
+                                    logger.warning(f"rank={fabric.global_rank}, [all_logits] type={type(all_logits)}, shape={all_logits.shape}")
+                                    logger.warning(f"logits.size(-1)={logits.size(-1)}")
+                                    all_logits = all_logits.view(-1, logits.size(-1))
+                                    # all_logits = fabric.all_gather(logits).view(-1, logits.size(-1))
+                                    logger.warning(f"rank={fabric.global_rank}, [all_logits] type={type(all_logits)}, shape={all_logits.shape}")
+                                    fabric.barrier()
+                                    exit(1)
 
                         global_epoch += epoch_per_step
                         pbar.set_extra(f"| loss={loss.item():.4f}, step={global_step}, ep={global_epoch:.1f}")
