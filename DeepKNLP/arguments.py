@@ -115,6 +115,7 @@ class TrainingArguments(NewCommonArguments):
         num_prog_samples: int = Field(default=1)
         max_source_length: int = Field(default=512)
         max_target_length: int = Field(default=512)
+        max_generation_length: int = Field(default=1024)
         use_cache_data: bool = Field(default=True)
 
         @model_validator(mode='after')
