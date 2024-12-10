@@ -114,7 +114,7 @@ def train(
         accelerator: Annotated[str, typer.Option("--accelerator")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         gpu_index: Annotated[int, typer.Option("--gpu_index")] = 0,  # TODO: -> 0, 4
-        num_device: Annotated[int, typer.Option("--num_device")] = 8,  # TODO: -> 1, 2, 4, 8
+        num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 4,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,
