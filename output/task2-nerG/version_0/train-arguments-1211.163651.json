@@ -1,0 +1,73 @@
+{
+  "env": {
+    "hostname": "dgx-a100",
+    "hostaddr": "129.254.23.12",
+    "global_rank": 0,
+    "local_rank": 0,
+    "node_rank": 0,
+    "world_size": 4,
+    "time_stamp": "1211.163651",
+    "python_path": "/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python",
+    "current_dir": "/raid/chrisjihee/proj/DeepKNLP",
+    "current_file": "/raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py",
+    "command_args": [
+      "train"
+    ],
+    "logging_home": "/raid/chrisjihee/proj/DeepKNLP/output/task2-nerG/version_0",
+    "logging_file": "train-messages.out",
+    "argument_file": "train-arguments.json",
+    "random_seed": 7,
+    "max_workers": 4,
+    "debugging": false,
+    "date_format": "[%m.%d %H:%M:%S]",
+    "message_level": 20,
+    "message_format": "%(asctime)s ┇ %(levelname)-8s ┇ %(name)32s ┇ %(message)s"
+  },
+  "time": {
+    "t1": "2024-12-11T16:37:12.957949",
+    "t2": "2024-12-11T16:38:39.007913",
+    "started": "[12.11 16:37:12]",
+    "settled": "[12.11 16:38:39]",
+    "elapsed": "00:01:26.050"
+  },
+  "input": {
+    "pretrained": "/raid/chrisjihee/proj/DeepKNLP/meta-llama/Llama-3.2-1B",
+    "train_path": "/raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl",
+    "eval_path": "/raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl",
+    "test_path": null,
+    "max_train_samples": -1,
+    "max_eval_samples": 128,
+    "max_test_samples": -1,
+    "num_prog_samples": 5000,
+    "max_source_length": 640,
+    "max_target_length": 640,
+    "max_generation_length": 1280,
+    "use_cache_data": false
+  },
+  "learn": {
+    "run_name": "task2-nerG",
+    "output_home": "/raid/chrisjihee/proj/DeepKNLP/output",
+    "num_train_epochs": 6,
+    "learning_rate": 0.00002,
+    "weight_decay": 0.0,
+    "device_type": "gpu",
+    "device_idx": 0,
+    "num_device": 4,
+    "precision": "bf16-mixed",
+    "grad_steps": 8,
+    "eval_steps": 8,
+    "train_batch": 2,
+    "infer_batch": 16,
+    "strategy": "ddp",
+    "ds_stage": 1,
+    "ds_offload": 0,
+    "fsdp_shard": "FULL_SHARD",
+    "fsdp_offload": false,
+    "devices": [
+      0,
+      1,
+      2,
+      3
+    ]
+  }
+}
