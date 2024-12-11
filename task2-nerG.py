@@ -112,7 +112,6 @@ def train(
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 128,  # TODO: 256, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
-        num_prog_samples: Annotated[int, typer.Option("--num_prog_samples")] = 5000,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = False,
         # learn
         run_name: Annotated[str, typer.Option("--run_name")] = "task2-nerG",
@@ -148,7 +147,6 @@ def train(
             max_train_samples=max_train_samples,
             max_eval_samples=max_eval_samples,
             max_test_samples=max_test_samples,
-            num_prog_samples=num_prog_samples,
             use_cache_data=use_cache_data,
         ),
         learn=TrainingArguments.LearnOption(
@@ -441,7 +439,6 @@ def train(
             if rank > 0:
                 return res
             pre, cnt = counter.val(), counter.inc()
-            # if (cnt >= pbar.total or any(i % num_prog_samples == 0 for i in range(pre + 1, cnt + 1))) and rank == 0:
             pbar.step(min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
             return res
 
@@ -618,27 +615,26 @@ def train(
                             train_pbar.refresh()
                             model.eval()
                             with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
-                                eval_preds = None
-                                for j, eval_batch in enumerate(eval_dataloader, start=1):
-                                    with torch.no_grad():
+                                with torch.no_grad():
+                                    eval_preds = None
+                                    for j, eval_batch in enumerate(eval_dataloader, start=1):
                                         logits = model.generate(**eval_batch, **gen_kwargs)
                                         logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
                                         logits = accelerator.gather_for_metrics(logits)
                                         eval_preds = logits if eval_preds is None else nested_concat(eval_preds, logits, padding_index=-100)
                                         eval_pbar.step(force=j == 1 or j >= len(eval_dataloader))
-                                eval_preds = nested_numpify(eval_preds)
-                                metrics.update(compute_ner_metrics(dataset=eval_dataset, preds=eval_preds, save_prefix="eval"))
+                                    eval_preds = nested_numpify(eval_preds)
+                                    metrics.update(compute_ner_metrics(dataset=eval_dataset, preds=eval_preds, save_prefix="eval"))
 
                         # Log metrics
                         metrics = denumpify_detensorize(metrics)
                         fabric.log_dict(metrics=metrics, step=metrics["step"])
                         if 'average_f1' in metrics:
-                            fabric.print(f"{train_pbar.desc} average_f1={metrics['average_f1']:.6f}")
+                            fabric.print(f"{train_pbar.desc} average_f1={metrics['average_f1']:.4f}")
 
                 max_memory = torch.cuda.max_memory_allocated() / math.pow(1024, 3)
                 fabric.print(f"{train_pbar.desc} max_memory={max_memory:.1f}GB")
                 fabric.barrier()
-                break
 
 
 if __name__ == "__main__":

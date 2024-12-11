@@ -114,7 +114,6 @@ class TrainingArguments(NewCommonArguments):
         max_train_samples: int = Field(default=-1)
         max_eval_samples: int = Field(default=-1)
         max_test_samples: int = Field(default=-1)
-        num_prog_samples: int = Field(default=1)
         max_source_length: int = Field(default=512)
         max_target_length: int = Field(default=512)
         max_generation_length: int = Field(default=1024)
