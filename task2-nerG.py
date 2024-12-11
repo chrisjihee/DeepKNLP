@@ -1,8 +1,7 @@
 import json
 import logging
 import math
-import os
-from typing import Any, Callable, Mapping
+from typing import Any, Callable
 
 import datasets
 import lightning
@@ -18,7 +17,7 @@ from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast, PreTrainedTokenizerBase
-from transformers.trainer_pt_utils import get_model_param_count, nested_concat, nested_numpify
+from transformers.trainer import get_model_param_count, nested_concat, nested_numpify, denumpify_detensorize
 from typing_extensions import Annotated
 
 from DeepKNLP.arguments import NewProjectEnv, TrainingArguments
@@ -118,7 +117,7 @@ def train(
         # learn
         run_name: Annotated[str, typer.Option("--run_name")] = "task2-nerG",
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
-        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 6,  # TODO: -> 1, 2, 3, 4, 5, 6
+        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 1,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
@@ -550,7 +549,7 @@ def train(
 
             results = compute_metrics(all_examples, tokenizer=tokenizer)
             if save_prefix is not None:
-                with open(os.path.join(args.env.output_home, f"{save_prefix}_text_generations.jsonl"), "w") as fout:
+                with (args.env.logging_home / f"{save_prefix}_text_generations.jsonl").open("w") as fout:
                     for example in all_examples:
                         fout.write(json.dumps(example) + "\n")
             return results
@@ -560,7 +559,7 @@ def train(
         if train_dataloader:
             epoch_optimization_steps = math.ceil(len(train_dataloader) / args.learn.grad_steps)
             epoch_per_step = 1.0 / epoch_optimization_steps
-            step_losses = []
+            train_losses = []
             global_step = 0
             global_epoch = 0.0
             total_epochs = args.learn.num_train_epochs
@@ -589,7 +588,7 @@ def train(
                         model.train()
                         outputs = model(**train_batch)
                         fabric.backward(outputs.loss)
-                        step_losses.append(outputs.loss.item())
+                        train_losses.append(outputs.loss.item())
                         if i % args.learn.grad_steps != 0 and i != len(train_dataloader):
                             continue
 
@@ -597,40 +596,47 @@ def train(
                         optimizer.step()
                         optimizer.zero_grad()
 
-                        # Log progress
+                        # Update train progress
                         global_step += 1
                         global_epoch += epoch_per_step
                         fabric.barrier()
-                        step_avg_loss = torch.cat(fabric.all_gather(step_losses)).mean().item()
-                        train_pbar.set_extra(f"| step_loss={step_avg_loss:.4f}")
+                        train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
+                        train_losses.clear()
+                        train_pbar.set_extra(f"| train_loss={train_loss:.4f}")
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=i == 1 or i >= len(train_dataloader))
-                        metrics: Mapping[str, Any] = {
+
+                        # Define metrics
+                        metrics: dict[str, Any] = {
                             "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
                             "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
-                            "loss": step_avg_loss,
+                            "train_loss": train_loss,
                         }
-                        fabric.log_dict(metrics=metrics, step=metrics["step"])
-                        step_losses.clear()
 
                         # Validation loop
                         if eval_dataloader and (args.learn.eval_steps > 0 and global_step % args.learn.eval_steps) == 0:
+                            train_pbar.refresh()
                             model.eval()
                             with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
-                                preds_host = None
+                                eval_preds = None
                                 for j, eval_batch in enumerate(eval_dataloader, start=1):
                                     with torch.no_grad():
                                         logits = model.generate(**eval_batch, **gen_kwargs)
                                         logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
                                         logits = accelerator.gather_for_metrics(logits)
-                                        preds_host = logits if preds_host is None else nested_concat(preds_host, logits, padding_index=-100)
+                                        eval_preds = logits if eval_preds is None else nested_concat(eval_preds, logits, padding_index=-100)
                                         eval_pbar.step(force=j == 1 or j >= len(eval_dataloader))
-                                fabric.print(f"[rank: {fabric.global_rank}] preds_host: {preds_host.shape}")
-                                logits = nested_numpify(preds_host)
-                                # all_preds = nested_concat(all_preds, logits, padding_index=-100)
-                            break
+                                eval_preds = nested_numpify(eval_preds)
+                                metrics.update(compute_ner_metrics(dataset=eval_dataset, preds=eval_preds, save_prefix="eval"))
 
-                fabric.print(f"{train_pbar.desc} max_memory={torch.cuda.max_memory_allocated() / 1024 / 1024 / 1024:.2f}MB, final_loss={outputs.loss.item():.6f}")
+                        # Log metrics
+                        metrics = denumpify_detensorize(metrics)
+                        fabric.log_dict(metrics=metrics, step=metrics["step"])
+                        if 'average_f1' in metrics:
+                            fabric.print(f"{train_pbar.desc} average_f1={metrics['average_f1']:.6f}")
+
+                max_memory = torch.cuda.max_memory_allocated() / math.pow(1024, 3)
+                fabric.print(f"{train_pbar.desc} max_memory={max_memory:.1f}GB")
                 fabric.barrier()
                 break
 
