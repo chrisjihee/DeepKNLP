@@ -1,7 +1,8 @@
 import json
 import logging
+import math
 import os
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 
 import datasets
 import lightning
@@ -13,10 +14,11 @@ from accelerate import Accelerator
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
+from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast, PreTrainedTokenizerBase
-from transformers.trainer_pt_utils import nested_concat
+from transformers.trainer_pt_utils import nested_concat, get_model_param_count
 from typing_extensions import Annotated
 
 from DeepKNLP.arguments import NewProjectEnv, TrainingArguments
@@ -88,10 +90,13 @@ def main(
 
 # Reference
 # [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py
-# [2]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_methods.html
-# [3]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_args.html
-# [4]: https://lightning.ai/docs/fabric/2.4.0/guide/
-# [5]: https://lightning.ai/docs/fabric/2.4.0/advanced/model_parallel/fsdp.html
+# [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/summarization/run_summarization_no_trainer.py
+# [3]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation_no_trainer.py
+# [4]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/question-answering/run_qa_no_trainer.py
+# [5]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_methods.html
+# [6]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_args.html
+# [7]: https://lightning.ai/docs/fabric/2.4.0/guide/
+# [8]: https://lightning.ai/docs/fabric/2.4.0/advanced/model_parallel/fsdp.html
 @app.command()
 def train(
         # input
@@ -106,23 +111,25 @@ def train(
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
-        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 100,
+        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 128,  # TODO: 256, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         num_prog_samples: Annotated[int, typer.Option("--num_prog_samples")] = 5000,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = False,
         # learn
+        run_name: Annotated[str, typer.Option("--run_name")] = "task2-nerG",
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 6,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,
-        accelerator: Annotated[str, typer.Option("--accelerator")] = "gpu",  # TODO: -> gpu, cpu, mps
-        precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        gpu_index: Annotated[int, typer.Option("--gpu_index")] = 4,  # TODO: -> 0, 4
+        device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
+        device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
+        precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 8,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 10,
-        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 16,
+        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
@@ -146,15 +153,17 @@ def train(
             use_cache_data=use_cache_data,
         ),
         learn=TrainingArguments.LearnOption(
+            run_name=run_name,
             output_home=output_home,
             num_train_epochs=num_train_epochs,
             learning_rate=learning_rate,
             weight_decay=weight_decay,
-            accelerator=accelerator,
-            precision=precision,
-            gpu_index=gpu_index,
+            device_type=device_type,
+            device_idx=device_idx,
             num_device=num_device,
+            precision=precision,
             grad_steps=grad_steps,
+            eval_steps=eval_steps,
             train_batch=train_batch,
             infer_batch=infer_batch,
             strategy=strategy,
@@ -166,11 +175,14 @@ def train(
     )
 
     # Setup fabric and accelerator
+    basic_logger = CSVLogger(args.learn.output_home, args.learn.run_name, flush_logs_every_n_steps=1)
+    visual_logger = TensorBoardLogger(args.learn.output_home, args.learn.run_name, basic_logger.version)  # tensorboard --logdir output --bind_all
     fabric = Fabric(
-        accelerator=args.learn.accelerator,
+        accelerator=args.learn.device_type,
         precision=args.learn.precision,
         strategy=args.learn.strategy_inst,
         devices=args.learn.devices,
+        loggers=[basic_logger, visual_logger],
     )
     fabric.launch()
     fabric.barrier()
@@ -187,7 +199,7 @@ def train(
 
     # Setup logger
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
-    args.env.setup_logger()
+    args.env.setup_logger(logging_home=basic_logger.log_dir)
     if fabric.is_global_zero:
         transformers.logging.set_verbosity_info()
         datasets.utils.logging.set_verbosity_warning()
@@ -219,6 +231,7 @@ def train(
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
             args=args if fabric.is_global_zero else None, verbose=fabric.is_global_zero,
+            mute_warning="lightning.fabric.loggers.csv_logs"
     ):
         # Set random seed
         fabric.barrier()
@@ -544,73 +557,80 @@ def train(
 
         # Train loop
         fabric.barrier()
-        fabric.print("*" * 100)
-        global_step = 0
-        global_epoch = 0.0
-        epoch_per_step = 1.0 / len(train_dataloader)
-        torch.cuda.reset_peak_memory_stats()
         if train_dataloader:
+            epoch_optimization_steps = math.ceil(len(train_dataloader) / args.learn.grad_steps)
+            epoch_per_step = 1.0 / epoch_optimization_steps
+            step_losses = []
+            global_step = 0
+            global_epoch = 0.0
+            total_epochs = args.learn.num_train_epochs
+            gen_kwargs = {
+                "num_beams": 1,
+                "max_length": args.input.max_generation_length,
+            }
+
+            fabric.print(f"===== Running training =====")
+            fabric.print(f"  Num Epochs = {args.learn.num_train_epochs:,}")
+            fabric.print(f"  Num Examples = {len(train_dataset):,}")
+            fabric.print(f"  Num Parameters = {get_model_param_count(model, trainable_only=True):,}")
+            fabric.print(f"  World size = {args.env.world_size:,}")
+            fabric.print(f"  Grad acc. steps = {args.learn.grad_steps:,}")
+            fabric.print(f"  Train batch size = {args.learn.train_batch:,}")
+            fabric.print(f"  Infer batch size = {args.learn.infer_batch:,}")
+            fabric.print(f"  Total batch size = {args.env.world_size * args.learn.train_batch * args.learn.grad_steps:,}")
+            fabric.print(f"  Epoch optim steps = {epoch_optimization_steps:,}")
+            torch.cuda.reset_peak_memory_stats()
+
             for epoch in range(args.learn.num_train_epochs):
-                with ProgIter(total=len(train_dataloader), desc=f'Training[{epoch}]:', stream=fabric, verbose=2) as pbar:
-                    for i, batch in enumerate(train_dataloader, start=1):
+                fabric.print("-" * 100)
+                with ProgIter(total=epoch_optimization_steps, desc=f'Training [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as train_pbar:
+                    for i, train_batch in enumerate(train_dataloader, start=1):
+                        # Forward pass
                         model.train()
-                        is_accumulating = i % args.learn.grad_steps != 0
+                        outputs = model(**train_batch)
+                        fabric.backward(outputs.loss)
+                        step_losses.append(outputs.loss.item())
+                        if i % args.learn.grad_steps != 0 and i != len(train_dataloader):
+                            continue
 
-                        outputs = model(**batch)
-                        loss = outputs.loss
-                        fabric.backward(loss)
-                        if not is_accumulating:
-                            optimizer.step()
-                            optimizer.zero_grad()
-                            global_step += 1
+                        # Backward pass
+                        optimizer.step()
+                        optimizer.zero_grad()
 
-                            # Evaluate at every 10 steps
-                            preds_host = None
-                            if eval_dataloader and global_step % 10 == 0:
-                                model.eval()
-                                max_length = args.input.max_generation_length
-                                # gen_kwargs = {'max_length': max_length, 'synced_gpus': False}
-                                with ProgIter(total=len(eval_dataloader), desc=f'Evaluating[{global_epoch:.1f}]:', stream=fabric, verbose=2) as pbar2:
-                                    gen_kwargs = {
-                                        "max_length": args.input.max_generation_length,
-                                        "num_beams": 1,
-                                    }
-                                    for j, batch in enumerate(eval_dataloader, start=1):
-                                        with torch.no_grad():
-                                            # logits = accelerator.unwrap_model(model).generate(
-                                            #     batch["input_ids"],
-                                            #     attention_mask=batch["attention_mask"],
-                                            #     **gen_kwargs,
-                                            # )
-                                            logits = model.generate(**batch, **gen_kwargs)
-                                            logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
-                                            logits = accelerator.gather_for_metrics(logits)
-                                            preds_host = logits if preds_host is None else nested_concat(preds_host, logits, padding_index=-100)
-
-                                            # Gather logits from all devices
-                                            # fabric.barrier()
-                                            # logits = fabric.all_gather(logits).view(-1, max_length)
-
-                                            # Step progress bar
-                                            # fabric.barrier()
-                                            pbar2.step(force=j >= len(eval_dataloader))
-                                break
-
+                        # Log progress
+                        global_step += 1
                         global_epoch += epoch_per_step
-                        pbar.set_extra(f"| loss={loss.item():.4f}, step={global_step}, ep={global_epoch:.1f}")
-                        pbar.step(force=i >= len(train_dataloader))
-                    fabric.print(f"{pbar.desc} max_memory={torch.cuda.max_memory_allocated() / 1024 / 1024 / 1024:.2f}MB, final_loss={loss.item():.6f}")
-                    fabric.barrier()
-                    # # Evaluate
-                    # if eval_dataloader:
-                    #     model.eval()
-                    #     for i, batch in enumerate(train_dataloader, start=1):
-                    #         generation_inputs = batch.copy()
-                    #         # outputs = model(**batch)
-                    #         model.generate()
+                        fabric.barrier()
+                        step_avg_loss = torch.cat(fabric.all_gather(step_losses)).mean().item()
+                        train_pbar.set_extra(f"| step_loss={step_avg_loss:.4f}")
+                        train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
+                        train_pbar.step(force=i == 1 or i >= len(train_dataloader))
+                        metrics: Mapping[str, Any] = {
+                            "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
+                            "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
+                            "loss": step_avg_loss,
+                        }
+                        fabric.log_dict(metrics=metrics, step=metrics["step"])
+                        step_losses.clear()
 
-                    fabric.print("-" * 100)
-                    break
+                        # Validation loop
+                        if eval_dataloader and (args.learn.eval_steps > 0 and global_step % args.learn.eval_steps) == 0:
+                            model.eval()
+                            with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
+                                preds_host = None
+                                for j, eval_batch in enumerate(eval_dataloader, start=1):
+                                    with torch.no_grad():
+                                        logits = model.generate(**eval_batch, **gen_kwargs)
+                                        logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
+                                        logits = accelerator.gather_for_metrics(logits)
+                                        preds_host = logits if preds_host is None else nested_concat(preds_host, logits, padding_index=-100)
+                                        eval_pbar.step(force=j == 1 or j >= len(eval_dataloader))
+                            fabric.print(f"[rank: {fabric.global_rank}] preds_host: {preds_host.shape}")
+                            break
+
+                fabric.print(f"{train_pbar.desc} max_memory={torch.cuda.max_memory_allocated() / 1024 / 1024 / 1024:.2f}MB, final_loss={outputs.loss.item():.6f}")
+                fabric.barrier()
+                break
 
 
 if __name__ == "__main__":
