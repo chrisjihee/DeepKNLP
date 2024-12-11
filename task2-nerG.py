@@ -16,6 +16,7 @@ from lightning.fabric import Fabric
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast, PreTrainedTokenizerBase
+from transformers.trainer_pt_utils import nested_concat
 from typing_extensions import Annotated
 
 from DeepKNLP.arguments import NewProjectEnv, TrainingArguments
@@ -23,6 +24,7 @@ from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from chrisbase.data import AppTyper, JobTimer, Counter
 from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error
+from chrisbase.util import shuffled
 from chrisdata.ner import GenNERSampleWrapper
 from progiter import ProgIter
 
@@ -104,7 +106,7 @@ def train(
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
-        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,
+        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 100,
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         num_prog_samples: Annotated[int, typer.Option("--num_prog_samples")] = 5000,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = False,
@@ -269,7 +271,8 @@ def train(
                                                       data_files=str(args.input.train_path),
                                                       cache_dir=str(args.input.cache_train_dir))
                 if args.input.max_train_samples > 0:
-                    train_dataset = train_dataset.select(range(min(len(train_dataset), args.input.max_train_samples)))
+                    whole_indices = shuffled(range(len(train_dataset)), seed=args.env.random_seed)
+                    train_dataset = train_dataset.select(whole_indices[:args.input.max_train_samples])
                 fabric.print(f"Use {args.input.train_path} as train dataset: {len(train_dataset):,} samples")
         if args.input.eval_path:
             with fabric.rank_zero_first():
@@ -277,7 +280,8 @@ def train(
                                                      data_files=str(args.input.eval_path),
                                                      cache_dir=str(args.input.cache_eval_dir))
                 if args.input.max_eval_samples > 0:
-                    eval_dataset = eval_dataset.select(range(min(len(eval_dataset), args.input.max_eval_samples)))
+                    whole_indices = shuffled(range(len(eval_dataset)), seed=args.env.random_seed)
+                    eval_dataset = eval_dataset.select(whole_indices[:args.input.max_eval_samples])
                 fabric.print(f"Use {args.input.eval_path} as eval dataset: {len(eval_dataset):,} samples")
         if args.input.test_path:
             with fabric.rank_zero_first():
@@ -285,8 +289,9 @@ def train(
                                                      data_files=str(args.input.test_path),
                                                      cache_dir=str(args.input.cache_test_dir))
                 if args.input.max_test_samples > 0:
-                    test_dataset = test_dataset.select(range(min(len(test_dataset), args.input.max_test_samples)))
-                fabric.print(f"Use {args.input.eval_path} as test dataset: {len(test_dataset):,} samples")
+                    whole_indices = shuffled(range(len(test_dataset)), seed=args.env.random_seed)
+                    test_dataset = test_dataset.select(whole_indices[:args.input.max_test_samples])
+                fabric.print(f"Use {args.input.test_path} as test dataset: {len(test_dataset):,} samples")
         fabric.barrier()
         fabric.print("-" * 100)
 
@@ -572,14 +577,15 @@ def train(
                                     }
                                     for j, batch in enumerate(eval_dataloader, start=1):
                                         with torch.no_grad():
-                                            logits = accelerator.unwrap_model(model).generate(
-                                                batch["input_ids"],
-                                                attention_mask=batch["attention_mask"],
-                                                **gen_kwargs,
-                                            )
-                                            # logits = model.generate(**batch, **gen_kwargs)
-                                            # logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
-                                            # logits = accelerator.gather_for_metrics(logits)
+                                            # logits = accelerator.unwrap_model(model).generate(
+                                            #     batch["input_ids"],
+                                            #     attention_mask=batch["attention_mask"],
+                                            #     **gen_kwargs,
+                                            # )
+                                            logits = model.generate(**batch, **gen_kwargs)
+                                            logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
+                                            logits = accelerator.gather_for_metrics(logits)
+                                            preds_host = logits if preds_host is None else nested_concat(preds_host, logits, padding_index=-100)
 
                                             # Gather logits from all devices
                                             # fabric.barrier()
@@ -588,7 +594,7 @@ def train(
                                             # Step progress bar
                                             # fabric.barrier()
                                             pbar2.step(force=j >= len(eval_dataloader))
-                                exit(1)
+                                break
 
                         global_epoch += epoch_per_step
                         pbar.set_extra(f"| loss={loss.item():.4f}, step={global_step}, ep={global_epoch:.1f}")
@@ -604,6 +610,7 @@ def train(
                     #         model.generate()
 
                     fabric.print("-" * 100)
+                    break
 
 
 if __name__ == "__main__":
