@@ -49,7 +49,9 @@ class NewProjectEnv(BaseModel):
         self.logging_home = Path(self.logging_home).absolute() if self.logging_home else None
         return self
 
-    def setup_logger(self):
+    def setup_logger(self, logging_home: str | Path | None = None):
+        if logging_home:
+            self.logging_home = Path(logging_home).absolute()
         if self.logging_home and self.logging_file:
             setup_dual_logger(
                 level=self.message_level, fmt=self.message_format, datefmt=self.date_format, stream=sys.stdout,
@@ -154,15 +156,17 @@ class TrainingArguments(NewCommonArguments):
                 return self.cache_test_dir / f"{self.test_path.stem}={size}.tmp"
 
     class LearnOption(BaseModel):
+        run_name: str = Field(default="run")
         output_home: str | Path | None = Field(default=None)
         num_train_epochs: int = Field(default=1)
         learning_rate: float = Field(default=5e-5)
         weight_decay: float = Field(default=0.0)
-        accelerator: str = Field(default="gpu")
-        precision: str = Field(default="32")
-        gpu_index: int = Field(default=0)
+        device_type: str = Field(default="gpu")
+        device_idx: int = Field(default=0)
         num_device: int = Field(default=1)
+        precision: str = Field(default="32")
         grad_steps: int = Field(default=1)
+        eval_steps: int = Field(default=1)
         train_batch: int = Field(default=1)
         infer_batch: int = Field(default=1)
         strategy: str = Field(default="ddp")
@@ -176,8 +180,9 @@ class TrainingArguments(NewCommonArguments):
         def after(self) -> Self:
             self.output_home = Path(self.output_home).absolute() if self.output_home else None
             self.devices = self.num_device
-            if self.strategy == "ddp" and (self.accelerator == "gpu" or self.accelerator == "cuda") and self.gpu_index >= 0:
-                self.devices = list(range(self.gpu_index, self.gpu_index + self.num_device))
+            if self.strategy == "ddp" and (self.device_type == "gpu" or self.device_type == "cuda") and self.device_idx >= 0:
+                self.devices = list(range(self.device_idx, self.device_idx + self.num_device))
+            self.grad_steps = max(1, self.grad_steps)
             return self
 
         @property
