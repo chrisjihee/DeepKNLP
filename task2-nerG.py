@@ -18,7 +18,7 @@ from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast, PreTrainedTokenizerBase
-from transformers.trainer_pt_utils import nested_concat, get_model_param_count
+from transformers.trainer_pt_utils import get_model_param_count, nested_concat, nested_numpify
 from typing_extensions import Annotated
 
 from DeepKNLP.arguments import NewProjectEnv, TrainingArguments
@@ -625,7 +625,9 @@ def train(
                                         logits = accelerator.gather_for_metrics(logits)
                                         preds_host = logits if preds_host is None else nested_concat(preds_host, logits, padding_index=-100)
                                         eval_pbar.step(force=j == 1 or j >= len(eval_dataloader))
-                            fabric.print(f"[rank: {fabric.global_rank}] preds_host: {preds_host.shape}")
+                                fabric.print(f"[rank: {fabric.global_rank}] preds_host: {preds_host.shape}")
+                                logits = nested_numpify(preds_host)
+                                # all_preds = nested_concat(all_preds, logits, padding_index=-100)
                             break
 
                 fabric.print(f"{train_pbar.desc} max_memory={torch.cuda.max_memory_allocated() / 1024 / 1024 / 1024:.2f}MB, final_loss={outputs.loss.item():.6f}")
