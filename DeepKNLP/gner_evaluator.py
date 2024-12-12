@@ -201,7 +201,7 @@ def parser(words, labels):
 # compute F1 score
 # modified from https://github.com/universal-ner/universal-ner/blob/main/src/eval/evaluate.py
 class NEREvaluator:
-    def evaluate(self, examples: list, tokenizer):
+    def evaluate(self, examples: list, tokenizer) -> dict[str, float]:
         n_correct, n_pos_gold, n_pos_pred = 0, 0, 0
         for example in examples:
             words = example['instance']['words']
@@ -224,22 +224,23 @@ class NEREvaluator:
         }
 
 
-def compute_metrics(examples, tokenizer=None):
+def compute_metrics(examples, tokenizer=None, average_key="AVERAGE") -> dict[str, float]:
     all_examples = defaultdict(list)
     for example in examples:
         all_examples[example['dataset']].append(example)
 
     # evaluate
+    evaluator = NEREvaluator()
     all_results = {}
     tot_f1, tot_dataset = 0, 0
     for dataset in all_examples:
-        eval_result = NEREvaluator().evaluate(all_examples[dataset], tokenizer=tokenizer)
+        eval_result = evaluator.evaluate(all_examples[dataset], tokenizer=tokenizer)
         all_results[f"{dataset}_prec"] = eval_result["prec"]
         all_results[f"{dataset}_rec"] = eval_result["rec"]
         all_results[f"{dataset}_f1"] = eval_result["f1"]
         tot_f1 += eval_result["f1"]
         tot_dataset += 1
-    all_results["average_f1"] = tot_f1 / tot_dataset
+    all_results[f"{average_key}_f1"] = tot_f1 / tot_dataset
     return all_results
 
 
