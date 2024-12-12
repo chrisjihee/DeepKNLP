@@ -103,14 +103,15 @@ def train(
         # train_data: Annotated[str, typer.Option("--train_data")] = "data/gner/pile-ner.jsonl",
         train_data: Annotated[str, typer.Option("--train_data")] = "data/gner/zero-shot-train.jsonl",
         # eval_data: Annotated[str, typer.Option("--eval_data")] = None,
-        eval_data: Annotated[str, typer.Option("--eval_data")] = "data/gner/zero-shot-dev.jsonl",
+        # eval_data: Annotated[str, typer.Option("--eval_data")] = "data/gner/zero-shot-dev.jsonl",
+        eval_data: Annotated[str, typer.Option("--eval_data")] = "data/gner/zero-shot-debug.jsonl",
         test_data: Annotated[str, typer.Option("--test_data")] = None,
         # test_data: Annotated[str, typer.Option("--test_data")] = "data/gner/zero-shot-test.jsonl"
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
-        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 128,  # TODO: 256, -1
+        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,  # TODO: 256, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = False,
         # learn
