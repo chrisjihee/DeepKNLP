@@ -5,6 +5,7 @@ import re
 from typing import Any, Callable, Iterable
 
 import datasets
+import lightning
 import numpy as np
 import torch
 import transformers
@@ -82,6 +83,7 @@ def main(
         "c10d-NullHandler-default",
         "lightning.pytorch.utilities.rank_zero",
         "lightning.fabric.utilities.distributed",
+        "lightning.fabric.utilities.seed"
     )
     torch.set_float32_matmul_precision('high')
     # logger.info(f"Start running {app.info.name} with env={env}")
@@ -172,7 +174,7 @@ def train(
         ),
     )
 
-    # Setup fabric and accelerator
+    # Setup fabric
     basic_logger = CSVLogger(args.learn.output_home, args.learn.run_name, flush_logs_every_n_steps=1)
     visual_logger = TensorBoardLogger(args.learn.output_home, args.learn.run_name, basic_logger.version)  # tensorboard --logdir output --bind_all
     fabric = Fabric(
@@ -184,9 +186,6 @@ def train(
     )
     fabric.launch()
     fabric.barrier()
-    accelerator = Accelerator(
-        gradient_accumulation_steps=args.learn.grad_steps,
-    )
     fabric.flush = do_nothing
     fabric.write = lambda x, *y, **z: info_or_debug_r(fabric, x, *y, **z)
     fabric.print = lambda x, *y, **z: info_or_debug(fabric, x, *y, **z)
@@ -266,7 +265,8 @@ def train(
         if len(tokenizer) > embedding_size:
             model.resize_token_embeddings(len(tokenizer))
         fabric.barrier()
-        fabric.print(f"Num tokens: {len(tokenizer):,}, Size embedding={model.get_input_embeddings().weight.shape[0]:,}")
+        fabric.print(f"Size tokenizer: {len(tokenizer):,}")
+        fabric.print(f"Size embedding: {model.get_input_embeddings().weight.shape[0]:,}")
 
         # Load dataset
         train_dataset: Dataset | None = None
@@ -526,9 +526,9 @@ def train(
                 },
             ],
         )
-        model, optimizer = fabric.setup(model, optimizer)
-        # model: lightning.fabric.wrappers._FabricModule = model
-        # optimizer: lightning.fabric.wrappers._FabricOptimizer = optimizer
+        fabric_setup_ret = fabric.setup(model, optimizer)
+        model: lightning.fabric.wrappers._FabricModule = fabric_setup_ret[0]
+        optimizer: lightning.fabric.wrappers._FabricOptimizer = fabric_setup_ret[1]
         model.mark_forward_method("generate")
 
         # Define compute metrics function
@@ -569,7 +569,6 @@ def train(
             return origin
 
         # Train loop
-        fabric.barrier()
         if train_dataloader:
             epoch_optimization_steps = math.ceil(len(train_dataloader) / args.learn.grad_steps)
             epoch_per_step = 1.0 / epoch_optimization_steps
@@ -583,38 +582,42 @@ def train(
             }
 
             fabric.print(f"===== Running training =====")
-            fabric.print(f"  Num Epochs = {args.learn.num_train_epochs:,}")
+            fabric.print(f"  Num Epochs = {total_epochs}")
             fabric.print(f"  Num Examples = {len(train_dataset):,}")
             fabric.print(f"  Num Parameters = {get_model_param_count(model, trainable_only=True):,}")
-            fabric.print(f"  World size = {args.env.world_size:,}")
-            fabric.print(f"  Grad acc. steps = {args.learn.grad_steps:,}")
-            fabric.print(f"  Evaluation steps = {args.learn.eval_steps:,}")
-            fabric.print(f"  Train batch size = {args.learn.train_batch:,}")
-            fabric.print(f"  Infer batch size = {args.learn.infer_batch:,}")
-            fabric.print(f"  Total batch size = {args.env.world_size * args.learn.train_batch * args.learn.grad_steps:,}")
+            fabric.print(f"  Train batch size"
+                         f" = {args.learn.train_batch} * {args.learn.grad_steps} * {args.env.world_size}"
+                         f" = {args.env.world_size * args.learn.train_batch * args.learn.grad_steps}")
+            fabric.print(f"  Infer batch size"
+                         f" = {args.learn.infer_batch} * {args.env.world_size}"
+                         f" = {args.learn.infer_batch * args.env.world_size}")
+            fabric.print(f"  Evaluation steps = {args.learn.eval_steps}")
             fabric.print(f"  Epoch optim steps = {epoch_optimization_steps:,}")
             torch.cuda.reset_peak_memory_stats()
 
             for epoch in range(args.learn.num_train_epochs):
+                fabric.barrier()
                 fabric.print("-" * 100)
+                model.train()
                 with ProgIter(total=epoch_optimization_steps, desc=f'Training [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as train_pbar:
                     for train_loop_i, train_batch in enumerate(train_dataloader, start=1):
-                        # Forward pass
-                        model.train()
-                        outputs = model(**train_batch)
-                        fabric.backward(outputs.loss)
-                        train_losses.append(outputs.loss.item())
-                        if train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader):
+                        is_accumulating = train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader)
+                        with fabric.no_backward_sync(model, enabled=is_accumulating):
+                            # Forward & Backward pass
+                            outputs = model(**train_batch)
+                            train_losses.append(outputs.loss.item())
+                            fabric.backward(outputs.loss)
+                        if is_accumulating:
                             continue
 
-                        # Backward pass
+                        # Optimize parameters
                         optimizer.step()
                         optimizer.zero_grad()
 
                         # Update train progress
+                        fabric.barrier()
                         global_step += 1
                         global_epoch += epoch_per_step
-                        fabric.barrier()
                         train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
                         train_losses.clear()
                         train_pbar.set_extra(f"| train_loss={train_loss:.4f}")
@@ -635,6 +638,7 @@ def train(
                         ):
                             train_pbar.refresh()
                             model.eval()
+                            accelerator = Accelerator()
                             with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
                                 with torch.no_grad():
                                     eval_logits = None
@@ -653,11 +657,13 @@ def train(
                                     eval_indexs = nested_numpify(eval_indexs).tolist()
                                     metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.1f}",
                                                                        save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
+                            model.train()
 
                         # Print and save metrics
                         metrics = print_metrics(denumpify_detensorize(metrics))
                         fabric.log_dict(metrics=metrics, step=metrics["step"])
 
+                model.eval()
                 max_memory = torch.cuda.max_memory_allocated() / math.pow(1024, 3)
                 fabric.print(f"{train_pbar.desc} max_memory={max_memory:.1f}GB")
                 fabric.barrier()

@@ -1,0 +1,343 @@
+[12.12 20:54:40] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[12.12 20:54:40] ┇ INFO     ┇       chrisbase.data ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py train
+[12.12 20:54:40] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    # | TrainingArguments           | value
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    1 | env.hostname                | dgx-a100
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    2 | env.hostaddr                | 129.254.23.12
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    3 | env.global_rank             | 0
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    4 | env.local_rank              | 0
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    5 | env.node_rank               | 0
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    6 | env.world_size              | 4
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    7 | env.time_stamp              | 1212.205418
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    8 | env.python_path             | /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇    9 | env.current_dir             | /raid/chrisjihee/proj/DeepKNLP
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   10 | env.current_file            | /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   11 | env.command_args            | ['train']
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   12 | env.logging_home            | /raid/chrisjihee/proj/DeepKNLP/output/task2-nerG/version_11
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   13 | env.logging_file            | train-messages.out
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   14 | env.argument_file           | train-arguments.json
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   15 | env.random_seed             | 1234
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   16 | env.max_workers             | 4
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   17 | env.debugging               | False
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   18 | env.date_format             | [%m.%d %H:%M:%S]
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   19 | env.message_level           | 20
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   20 | env.message_format          | %(asctime)s ┇ %(levelname)-8s ┇ %(name)20s ┇ %(message)s
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   21 | time.t1                     | 2024-12-12 20:54:40.445751
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   22 | time.t2                     | 2024-12-12 20:54:18.717465
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   23 | time.started                | [12.12 20:54:40]
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   24 | time.settled                |
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   25 | time.elapsed                |
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   26 | input.pretrained            | /raid/chrisjihee/proj/DeepKNLP/meta-llama/Llama-3.2-1B
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   27 | input.train_file            | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   28 | input.eval_file             | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   29 | input.test_file             |
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   30 | input.max_train_samples     | -1
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   31 | input.max_eval_samples      | 128
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   32 | input.max_test_samples      | -1
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   33 | input.max_source_length     | 640
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   34 | input.max_target_length     | 640
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   35 | input.max_generation_length | 1280
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   36 | input.use_cache_data        | False
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   37 | learn.run_name              | task2-nerG
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   38 | learn.output_home           | /raid/chrisjihee/proj/DeepKNLP/output
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   39 | learn.num_train_epochs      | 1
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   40 | learn.learning_rate         | 2e-05
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   41 | learn.weight_decay          | 0.0
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   42 | learn.device_type           | gpu
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   43 | learn.device_idx            | 0
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   44 | learn.num_device            | 4
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   45 | learn.precision             | bf16-mixed
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   46 | learn.grad_steps            | 8
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   47 | learn.eval_steps            | 24
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   48 | learn.train_batch           | 2
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   49 | learn.infer_batch           | 16
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   50 | learn.strategy              | fsdp
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   51 | learn.ds_stage              | 1
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   52 | learn.ds_offload            | 0
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   53 | learn.fsdp_shard            | FULL_SHARD
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   54 | learn.fsdp_offload          | False
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇   55 | learn.devices               | 4
+[12.12 20:54:40] ┇ INFO     ┇   DeepKNLP.arguments ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.12 20:54:44] ┇ INFO     ┇             __main__ ┇ Size tokenizer: 128,256
+[12.12 20:54:44] ┇ INFO     ┇             __main__ ┇ Size embedding: 128,256
+[12.12 20:54:45] ┇ INFO     ┇             __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl as train dataset: 18,135 samples
+[12.12 20:54:46] ┇ INFO     ┇             __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl as eval dataset: 128 samples
+[12.12 20:54:46] ┇ INFO     ┇             __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.12 20:54:48] ┇ INFO     ┇             __main__ ┇ Preprocess train samples:   0%|                    |     4/18135 [0:00:01<1:52:42, 2.7Hz]
+[12.12 20:54:50] ┇ INFO     ┇             __main__ ┇ Preprocess train samples:  24%|████▊               |  4348/18135 [0:00:03<0:00:03, 4331.1Hz]
+[12.12 20:54:52] ┇ INFO     ┇             __main__ ┇ Preprocess train samples:  68%|█████████████▌      | 12308/18135 [0:00:05<0:00:01, 4226.9Hz]
+[12.12 20:54:53] ┇ INFO     ┇             __main__ ┇ Preprocess train samples: 100%|████████████████████| 18135/18135 [0:00:06<0:00:00, 4310.6Hz]
+[12.12 20:55:03] ┇ INFO     ┇             __main__ ┇ Preprocess  eval samples:   3%|▋                   |   4/128 [0:00:01<0:00:53, 2.3Hz]
+[12.12 20:55:03] ┇ INFO     ┇             __main__ ┇ Preprocess  eval samples: 100%|████████████████████| 128/128 [0:00:01<0:00:00, 73.8Hz]
+[12.12 20:55:07] ┇ INFO     ┇             __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇ ===== Running training =====
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇   Num Epochs = 1
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇   Num Examples = 18,135
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇   Num Parameters = 308,953,600
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇   Train batch size = 2 * 8 * 4 = 64
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇   Infer batch size = 16 * 4 = 64
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇   Evaluation steps = 24
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇   Epoch optim steps = 284
+[12.12 20:55:19] ┇ INFO     ┇             __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.12 20:55:25] ┇ INFO     ┇             __main__ ┇ Training [0.00/1]:   0%|                    |   1/284 [0:00:05<0:27:00, 0.2Hz] | train_loss=1.8743
+[12.12 20:55:30] ┇ INFO     ┇             __main__ ┇ Training [0.01/1]:   1%|▏                   |   3/284 [0:00:11<0:17:38, 0.3Hz] | train_loss=0.6544
+[12.12 20:55:34] ┇ INFO     ┇             __main__ ┇ Training [0.02/1]:   2%|▍                   |   6/284 [0:00:14<0:11:23, 0.4Hz] | train_loss=0.3199
+[12.12 20:55:37] ┇ INFO     ┇             __main__ ┇ Training [0.04/1]:   4%|▋                   |  10/284 [0:00:18<0:08:16, 0.6Hz] | train_loss=0.1989
+[12.12 20:55:41] ┇ INFO     ┇             __main__ ┇ Training [0.05/1]:   5%|▉                   |  14/284 [0:00:21<0:06:55, 0.6Hz] | train_loss=0.1528
+[12.12 20:55:44] ┇ INFO     ┇             __main__ ┇ Training [0.06/1]:   6%|█▏                  |  17/284 [0:00:24<0:06:31, 0.7Hz] | train_loss=0.1113
+[12.12 20:55:47] ┇ INFO     ┇             __main__ ┇ Training [0.07/1]:   7%|█▍                  |  20/284 [0:00:28<0:06:12, 0.7Hz] | train_loss=0.1103
+[12.12 20:55:51] ┇ INFO     ┇             __main__ ┇ Training [0.08/1]:   8%|█▋                  |  24/284 [0:00:31<0:05:42, 0.8Hz] | train_loss=0.0870
+[12.12 20:55:51] ┇ INFO     ┇             __main__ ┇ Training [0.08/1]:   8%|█▋                  |  24/284 [0:00:31<0:05:42, 0.8Hz] | train_loss=0.0870
+[12.12 20:56:19] ┇ INFO     ┇             __main__ ┇  Testing [0.08/1]:  50%|██████████          | 1/2 [0:00:25<0:00:25, 0.0Hz]
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇  Testing [0.08/1]: 100%|████████████████████| 2/2 [0:00:52<0:00:00, 0.0Hz]
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    30.6
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    31.7
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    10.3
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    17.9
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |     8.7
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    24.6
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    60.9
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    59.9
+[12.12 20:56:45] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:56:46] ┇ INFO     ┇             __main__ ┇ Training [0.09/1]:   9%|█▊                  |  25/284 [0:01:27<0:15:02, 0.3Hz] | train_loss=0.0688
+[12.12 20:56:49] ┇ INFO     ┇             __main__ ┇ Training [0.10/1]:  10%|█▉                  |  27/284 [0:01:30<0:14:19, 0.3Hz] | train_loss=0.0735
+[12.12 20:56:54] ┇ INFO     ┇             __main__ ┇ Training [0.11/1]:  11%|██                  |  30/284 [0:01:34<0:13:23, 0.3Hz] | train_loss=0.0580
+[12.12 20:56:57] ┇ INFO     ┇             __main__ ┇ Training [0.12/1]:  12%|██▍                 |  34/284 [0:01:38<0:12:02, 0.3Hz] | train_loss=0.0596
+[12.12 20:57:01] ┇ INFO     ┇             __main__ ┇ Training [0.13/1]:  13%|██▋                 |  38/284 [0:01:41<0:10:58, 0.4Hz] | train_loss=0.0628
+[12.12 20:57:04] ┇ INFO     ┇             __main__ ┇ Training [0.15/1]:  15%|██▉                 |  42/284 [0:01:45<0:10:05, 0.4Hz] | train_loss=0.0555
+[12.12 20:57:08] ┇ INFO     ┇             __main__ ┇ Training [0.16/1]:  16%|███▏                |  46/284 [0:01:48<0:09:21, 0.4Hz] | train_loss=0.0489
+[12.12 20:57:09] ┇ INFO     ┇             __main__ ┇ Training [0.17/1]:  17%|███▍                |  48/284 [0:01:50<0:09:01, 0.4Hz] | train_loss=0.0476
+[12.12 20:57:15] ┇ INFO     ┇             __main__ ┇  Testing [0.17/1]:  50%|██████████          | 1/2 [0:00:05<0:00:05, 0.2Hz]
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇  Testing [0.17/1]: 100%|████████████████████| 2/2 [0:00:11<0:00:00, 0.2Hz]
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    56.9
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    43.1
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    66.7
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    54.4
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    46.8
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    49.1
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    71.1
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    67.2
+[12.12 20:57:21] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:57:22] ┇ INFO     ┇             __main__ ┇ Training [0.17/1]:  17%|███▍                |  49/284 [0:02:02<0:09:47, 0.4Hz] | train_loss=0.0438
+[12.12 20:57:25] ┇ INFO     ┇             __main__ ┇ Training [0.19/1]:  19%|███▋                |  53/284 [0:02:05<0:09:08, 0.4Hz] | train_loss=0.0371
+[12.12 20:57:28] ┇ INFO     ┇             __main__ ┇ Training [0.20/1]:  20%|████                |  57/284 [0:02:09<0:08:34, 0.4Hz] | train_loss=0.0610
+[12.12 20:57:32] ┇ INFO     ┇             __main__ ┇ Training [0.21/1]:  21%|████▎               |  61/284 [0:02:12<0:08:04, 0.5Hz] | train_loss=0.0594
+[12.12 20:57:35] ┇ INFO     ┇             __main__ ┇ Training [0.23/1]:  23%|████▌               |  65/284 [0:02:16<0:07:22, 0.5Hz] | train_loss=0.0558
+[12.12 20:57:39] ┇ INFO     ┇             __main__ ┇ Training [0.24/1]:  24%|████▊               |  69/284 [0:02:19<0:07:05, 0.5Hz] | train_loss=0.0565
+[12.12 20:57:41] ┇ INFO     ┇             __main__ ┇ Training [0.25/1]:  25%|█████               |  72/284 [0:02:21<0:06:59, 0.5Hz] | train_loss=0.0459
+[12.12 20:57:47] ┇ INFO     ┇             __main__ ┇  Testing [0.25/1]:  50%|██████████          | 1/2 [0:00:06<0:00:06, 0.2Hz]
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇  Testing [0.25/1]: 100%|████████████████████| 2/2 [0:00:11<0:00:00, 0.2Hz]
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    56.2
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    58.7
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    61.4
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    50.3
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    51.9
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    27.7
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    71.8
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    71.5
+[12.12 20:57:53] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:57:54] ┇ INFO     ┇             __main__ ┇ Training [0.26/1]:  26%|█████▏              |  73/284 [0:02:34<0:07:37, 0.5Hz] | train_loss=0.0495
+[12.12 20:57:57] ┇ INFO     ┇             __main__ ┇ Training [0.27/1]:  27%|█████▍              |  77/284 [0:02:38<0:07:28, 0.5Hz] | train_loss=0.0412
+[12.12 20:58:01] ┇ INFO     ┇             __main__ ┇ Training [0.29/1]:  29%|█████▋              |  81/284 [0:02:41<0:07:16, 0.5Hz] | train_loss=0.0393
+[12.12 20:58:04] ┇ INFO     ┇             __main__ ┇ Training [0.30/1]:  30%|█████▉              |  85/284 [0:02:44<0:07:06, 0.5Hz] | train_loss=0.0480
+[12.12 20:58:08] ┇ INFO     ┇             __main__ ┇ Training [0.31/1]:  31%|██████▎             |  89/284 [0:02:48<0:04:05, 0.8Hz] | train_loss=0.0458
+[12.12 20:58:11] ┇ INFO     ┇             __main__ ┇ Training [0.33/1]:  33%|██████▌             |  93/284 [0:02:51<0:03:53, 0.8Hz] | train_loss=0.0318
+[12.12 20:58:13] ┇ INFO     ┇             __main__ ┇ Training [0.34/1]:  34%|██████▊             |  96/284 [0:02:54<0:03:49, 0.8Hz] | train_loss=0.0378
+[12.12 20:58:20] ┇ INFO     ┇             __main__ ┇  Testing [0.34/1]:  50%|██████████          | 1/2 [0:00:06<0:00:06, 0.2Hz]
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇  Testing [0.34/1]: 100%|████████████████████| 2/2 [0:00:11<0:00:00, 0.2Hz]
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    64.3
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    37.3
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    71.7
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    71.4
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    59.5
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    64.5
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    73.2
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    72.6
+[12.12 20:58:25] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:58:26] ┇ INFO     ┇             __main__ ┇ Training [0.34/1]:  34%|██████▊             |  97/284 [0:03:06<0:04:22, 0.7Hz] | train_loss=0.0395
+[12.12 20:58:29] ┇ INFO     ┇             __main__ ┇ Training [0.36/1]:  36%|███████             | 101/284 [0:03:10<0:04:17, 0.7Hz] | train_loss=0.0377
+[12.12 20:58:33] ┇ INFO     ┇             __main__ ┇ Training [0.37/1]:  37%|███████▍            | 105/284 [0:03:13<0:04:11, 0.7Hz] | train_loss=0.0622
+[12.12 20:58:36] ┇ INFO     ┇             __main__ ┇ Training [0.38/1]:  38%|███████▋            | 109/284 [0:03:17<0:04:06, 0.7Hz] | train_loss=0.0312
+[12.12 20:58:40] ┇ INFO     ┇             __main__ ┇ Training [0.40/1]:  40%|███████▉            | 113/284 [0:03:20<0:03:29, 0.8Hz] | train_loss=0.0449
+[12.12 20:58:43] ┇ INFO     ┇             __main__ ┇ Training [0.41/1]:  41%|████████▏           | 117/284 [0:03:23<0:03:24, 0.8Hz] | train_loss=0.0526
+[12.12 20:58:46] ┇ INFO     ┇             __main__ ┇ Training [0.42/1]:  42%|████████▍           | 120/284 [0:03:26<0:03:21, 0.8Hz] | train_loss=0.0412
+[12.12 20:58:52] ┇ INFO     ┇             __main__ ┇  Testing [0.42/1]:  50%|██████████          | 1/2 [0:00:05<0:00:05, 0.2Hz]
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇  Testing [0.42/1]: 100%|████████████████████| 2/2 [0:00:11<0:00:00, 0.2Hz]
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    68.8
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    66.7
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    78.3
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    60.5
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    67.2
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    57.6
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    75.6
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    75.6
+[12.12 20:58:57] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:58:58] ┇ INFO     ┇             __main__ ┇ Training [0.43/1]:  43%|████████▌           | 121/284 [0:03:39<0:03:50, 0.7Hz] | train_loss=0.0542
+[12.12 20:59:02] ┇ INFO     ┇             __main__ ┇ Training [0.44/1]:  44%|████████▊           | 125/284 [0:03:42<0:03:44, 0.7Hz] | train_loss=0.0251
+[12.12 20:59:05] ┇ INFO     ┇             __main__ ┇ Training [0.45/1]:  45%|█████████           | 129/284 [0:03:45<0:03:39, 0.7Hz] | train_loss=0.0349
+[12.12 20:59:08] ┇ INFO     ┇             __main__ ┇ Training [0.47/1]:  47%|█████████▎          | 133/284 [0:03:49<0:03:33, 0.7Hz] | train_loss=0.0397
+[12.12 20:59:12] ┇ INFO     ┇             __main__ ┇ Training [0.48/1]:  48%|█████████▋          | 137/284 [0:03:52<0:03:00, 0.8Hz] | train_loss=0.0341
+[12.12 20:59:15] ┇ INFO     ┇             __main__ ┇ Training [0.50/1]:  50%|█████████▉          | 141/284 [0:03:56<0:02:55, 0.8Hz] | train_loss=0.0277
+[12.12 20:59:18] ┇ INFO     ┇             __main__ ┇ Training [0.51/1]:  51%|██████████▏         | 144/284 [0:03:58<0:02:51, 0.8Hz] | train_loss=0.0411
+[12.12 20:59:24] ┇ INFO     ┇             __main__ ┇  Testing [0.51/1]:  50%|██████████          | 1/2 [0:00:06<0:00:06, 0.2Hz]
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇  Testing [0.51/1]: 100%|████████████████████| 2/2 [0:00:12<0:00:00, 0.2Hz]
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    67.1
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    71.6
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    63.2
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    56.3
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    65.4
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    64.5
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    76.7
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    72.1
+[12.12 20:59:30] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 20:59:31] ┇ INFO     ┇             __main__ ┇ Training [0.51/1]:  51%|██████████▏         | 145/284 [0:04:11<0:03:17, 0.7Hz] | train_loss=0.0566
+[12.12 20:59:35] ┇ INFO     ┇             __main__ ┇ Training [0.52/1]:  52%|██████████▍         | 149/284 [0:04:15<0:03:12, 0.7Hz] | train_loss=0.0377
+[12.12 20:59:38] ┇ INFO     ┇             __main__ ┇ Training [0.54/1]:  54%|██████████▊         | 153/284 [0:04:18<0:03:06, 0.7Hz] | train_loss=0.0258
+[12.12 20:59:41] ┇ INFO     ┇             __main__ ┇ Training [0.55/1]:  55%|███████████         | 157/284 [0:04:22<0:03:00, 0.7Hz] | train_loss=0.0373
+[12.12 20:59:45] ┇ INFO     ┇             __main__ ┇ Training [0.57/1]:  57%|███████████▎        | 161/284 [0:04:25<0:02:32, 0.8Hz] | train_loss=0.0265
+[12.12 20:59:49] ┇ INFO     ┇             __main__ ┇ Training [0.58/1]:  58%|███████████▌        | 165/284 [0:04:29<0:02:27, 0.8Hz] | train_loss=0.0338
+[12.12 20:59:51] ┇ INFO     ┇             __main__ ┇ Training [0.59/1]:  59%|███████████▊        | 168/284 [0:04:31<0:02:23, 0.8Hz] | train_loss=0.0401
+[12.12 20:59:57] ┇ INFO     ┇             __main__ ┇  Testing [0.59/1]:  50%|██████████          | 1/2 [0:00:06<0:00:06, 0.2Hz]
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇  Testing [0.59/1]: 100%|████████████████████| 2/2 [0:00:11<0:00:00, 0.2Hz]
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    71.9
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    61.8
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    75.2
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    72.5
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    73.0
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    68.9
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    79.1
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    72.5
+[12.12 21:00:03] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:00:04] ┇ INFO     ┇             __main__ ┇ Training [0.60/1]:  60%|███████████▉        | 169/284 [0:04:44<0:02:44, 0.7Hz] | train_loss=0.0288
+[12.12 21:00:08] ┇ INFO     ┇             __main__ ┇ Training [0.61/1]:  61%|████████████▏       | 173/284 [0:04:48<0:02:39, 0.7Hz] | train_loss=0.0430
+[12.12 21:00:11] ┇ INFO     ┇             __main__ ┇ Training [0.62/1]:  62%|████████████▍       | 177/284 [0:04:51<0:02:33, 0.7Hz] | train_loss=0.0312
+[12.12 21:00:14] ┇ INFO     ┇             __main__ ┇ Training [0.64/1]:  64%|████████████▋       | 181/284 [0:04:55<0:02:27, 0.7Hz] | train_loss=0.0312
+[12.12 21:00:18] ┇ INFO     ┇             __main__ ┇ Training [0.65/1]:  65%|█████████████       | 185/284 [0:04:58<0:02:03, 0.8Hz] | train_loss=0.0307
+[12.12 21:00:21] ┇ INFO     ┇             __main__ ┇ Training [0.67/1]:  67%|█████████████▎      | 189/284 [0:05:02<0:01:58, 0.8Hz] | train_loss=0.0312
+[12.12 21:00:24] ┇ INFO     ┇             __main__ ┇ Training [0.68/1]:  68%|█████████████▌      | 192/284 [0:05:04<0:01:54, 0.8Hz] | train_loss=0.0319
+[12.12 21:00:30] ┇ INFO     ┇             __main__ ┇  Testing [0.68/1]:  50%|██████████          | 1/2 [0:00:06<0:00:06, 0.2Hz]
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇  Testing [0.68/1]: 100%|████████████████████| 2/2 [0:00:12<0:00:00, 0.2Hz]
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    73.7
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    64.9
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    65.1
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    77.4
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    78.4
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    75.8
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    75.0
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    79.1
+[12.12 21:00:36] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:00:37] ┇ INFO     ┇             __main__ ┇ Training [0.68/1]:  68%|█████████████▌      | 193/284 [0:05:17<0:02:11, 0.7Hz] | train_loss=0.0497
+[12.12 21:00:41] ┇ INFO     ┇             __main__ ┇ Training [0.69/1]:  69%|█████████████▊      | 197/284 [0:05:21<0:02:05, 0.7Hz] | train_loss=0.0499
+[12.12 21:00:44] ┇ INFO     ┇             __main__ ┇ Training [0.71/1]:  71%|██████████████▏     | 201/284 [0:05:24<0:02:00, 0.7Hz] | train_loss=0.0408
+[12.12 21:00:47] ┇ INFO     ┇             __main__ ┇ Training [0.72/1]:  72%|██████████████▍     | 205/284 [0:05:28<0:01:54, 0.7Hz] | train_loss=0.0435
+[12.12 21:00:51] ┇ INFO     ┇             __main__ ┇ Training [0.74/1]:  74%|██████████████▋     | 209/284 [0:05:31<0:01:33, 0.8Hz] | train_loss=0.0334
+[12.12 21:00:54] ┇ INFO     ┇             __main__ ┇ Training [0.75/1]:  75%|███████████████     | 213/284 [0:05:35<0:01:28, 0.8Hz] | train_loss=0.0368
+[12.12 21:00:57] ┇ INFO     ┇             __main__ ┇ Training [0.76/1]:  76%|███████████████▏    | 216/284 [0:05:37<0:01:25, 0.8Hz] | train_loss=0.0362
+[12.12 21:01:04] ┇ INFO     ┇             __main__ ┇  Testing [0.76/1]:  50%|██████████          | 1/2 [0:00:06<0:00:06, 0.2Hz]
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇  Testing [0.76/1]: 100%|████████████████████| 2/2 [0:00:32<0:00:00, 0.1Hz]
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    75.5
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    84.9
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    69.5
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    67.4
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    73.9
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    78.1
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    78.9
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    75.4
+[12.12 21:01:30] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:01:31] ┇ INFO     ┇             __main__ ┇ Training [0.76/1]:  76%|███████████████▎    | 217/284 [0:06:11<0:01:59, 0.6Hz] | train_loss=0.0443
+[12.12 21:01:34] ┇ INFO     ┇             __main__ ┇ Training [0.78/1]:  78%|███████████████▌    | 221/284 [0:06:14<0:01:51, 0.6Hz] | train_loss=0.0419
+[12.12 21:01:37] ┇ INFO     ┇             __main__ ┇ Training [0.79/1]:  79%|███████████████▊    | 224/284 [0:06:18<0:01:46, 0.6Hz] | train_loss=0.0356
+[12.12 21:01:41] ┇ INFO     ┇             __main__ ┇ Training [0.80/1]:  80%|████████████████    | 228/284 [0:06:21<0:01:39, 0.6Hz] | train_loss=0.0216
+[12.12 21:01:44] ┇ INFO     ┇             __main__ ┇ Training [0.82/1]:  82%|████████████████▎   | 232/284 [0:06:24<0:01:22, 0.6Hz] | train_loss=0.0414
+[12.12 21:01:47] ┇ INFO     ┇             __main__ ┇ Training [0.83/1]:  83%|████████████████▌   | 236/284 [0:06:28<0:01:16, 0.6Hz] | train_loss=0.0308
+[12.12 21:01:51] ┇ INFO     ┇             __main__ ┇ Training [0.85/1]:  85%|████████████████▉   | 240/284 [0:06:31<0:01:09, 0.6Hz] | train_loss=0.0415
+[12.12 21:01:51] ┇ INFO     ┇             __main__ ┇ Training [0.85/1]:  85%|████████████████▉   | 240/284 [0:06:31<0:01:09, 0.6Hz] | train_loss=0.0415
+[12.12 21:01:57] ┇ INFO     ┇             __main__ ┇  Testing [0.85/1]:  50%|██████████          | 1/2 [0:00:06<0:00:06, 0.2Hz]
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇  Testing [0.85/1]: 100%|████████████████████| 2/2 [0:00:11<0:00:00, 0.2Hz]
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    74.4
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    71.6
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    75.4
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    71.3
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    74.8
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    74.2
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    74.3
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    78.8
+[12.12 21:02:03] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:02:04] ┇ INFO     ┇             __main__ ┇ Training [0.85/1]:  85%|████████████████▉   | 241/284 [0:06:44<0:01:16, 0.6Hz] | train_loss=0.0339
+[12.12 21:02:07] ┇ INFO     ┇             __main__ ┇ Training [0.86/1]:  86%|█████████████████▎  | 245/284 [0:06:47<0:01:09, 0.6Hz] | train_loss=0.0350
+[12.12 21:02:10] ┇ INFO     ┇             __main__ ┇ Training [0.88/1]:  88%|█████████████████▌  | 249/284 [0:06:51<0:01:02, 0.6Hz] | train_loss=0.0375
+[12.12 21:02:14] ┇ INFO     ┇             __main__ ┇ Training [0.89/1]:  89%|█████████████████▊  | 253/284 [0:06:54<0:00:55, 0.6Hz] | train_loss=0.0349
+[12.12 21:02:17] ┇ INFO     ┇             __main__ ┇ Training [0.90/1]:  90%|██████████████████  | 257/284 [0:06:58<0:00:42, 0.6Hz] | train_loss=0.0391
+[12.12 21:02:21] ┇ INFO     ┇             __main__ ┇ Training [0.92/1]:  92%|██████████████████▍ | 261/284 [0:07:01<0:00:36, 0.6Hz] | train_loss=0.0363
+[12.12 21:02:23] ┇ INFO     ┇             __main__ ┇ Training [0.93/1]:  93%|██████████████████▌ | 264/284 [0:07:03<0:00:31, 0.6Hz] | train_loss=0.0335
+[12.12 21:02:30] ┇ INFO     ┇             __main__ ┇  Testing [0.93/1]:  50%|██████████          | 1/2 [0:00:06<0:00:06, 0.2Hz]
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇  Testing [0.93/1]: 100%|████████████████████| 2/2 [0:00:12<0:00:00, 0.2Hz]
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    76.5
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    63.3
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    78.7
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    79.4
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    79.1
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    76.5
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    80.2
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    78.5
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:02:36] ┇ INFO     ┇             __main__ ┇ Training [0.93/1]:  93%|██████████████████▋ | 265/284 [0:07:17<0:00:33, 0.6Hz] | train_loss=0.0392
+[12.12 21:02:40] ┇ INFO     ┇             __main__ ┇ Training [0.95/1]:  95%|██████████████████▉ | 269/284 [0:07:20<0:00:26, 0.6Hz] | train_loss=0.0387
+[12.12 21:02:43] ┇ INFO     ┇             __main__ ┇ Training [0.96/1]:  96%|███████████████████▏| 273/284 [0:07:24<0:00:19, 0.6Hz] | train_loss=0.0470
+[12.12 21:02:47] ┇ INFO     ┇             __main__ ┇ Training [0.98/1]:  98%|███████████████████▌| 277/284 [0:07:27<0:00:12, 0.6Hz] | train_loss=0.0384
+[12.12 21:02:50] ┇ INFO     ┇             __main__ ┇ Training [0.99/1]:  99%|███████████████████▊| 281/284 [0:07:30<0:00:03, 0.8Hz] | train_loss=0.0510
+[12.12 21:02:52] ┇ INFO     ┇             __main__ ┇ Training [1.00/1]: 100%|████████████████████| 284/284 [0:07:32<0:00:00, 0.8Hz] | train_loss=0.0325
+[12.12 21:02:52] ┇ INFO     ┇             __main__ ┇ Training [1.00/1]: 100%|████████████████████| 284/284 [0:07:32<0:00:00, 0.8Hz] | train_loss=0.0325
+[12.12 21:03:18] ┇ INFO     ┇             __main__ ┇  Testing [1.00/1]:  50%|██████████          | 1/2 [0:00:25<0:00:25, 0.0Hz]
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇  Testing [1.00/1]: 100%|████████████████████| 2/2 [0:00:31<0:00:00, 0.1Hz]
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    # | dataset             |   score
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    1 | [Average]           |    79.5
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    2 | crossner/ai         |    86.1
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    3 | crossner/literature |    71.3
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    4 | crossner/music      |    83.4
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    5 | crossner/politics   |    76.4
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    6 | crossner/science    |    78.8
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    7 | mit/movie           |    78.7
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇    8 | mit/restaurant      |    81.4
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇ -----+---------------------+---------
+[12.12 21:03:23] ┇ INFO     ┇             __main__ ┇ Training [1.00/1]: max_memory=22.5GB
+[12.12 21:03:24] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
+[12.12 21:03:24] ┇ INFO     ┇       chrisbase.data ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py train ($=00:08:43.475)
+[12.12 21:03:24] ┇ INFO     ┇       chrisbase.data ┇ =========================================================================================================================================
