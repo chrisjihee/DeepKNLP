@@ -1,11 +1,10 @@
-import re
 import json
 import logging
 import math
+import re
 from typing import Any, Callable, Iterable
 
 import datasets
-import lightning
 import numpy as np
 import torch
 import transformers
@@ -17,7 +16,7 @@ from lightning.fabric import Fabric
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast, PreTrainedTokenizerBase
+from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerBase
 from transformers.trainer import get_model_param_count, nested_concat, nested_numpify, denumpify_detensorize
 from typing_extensions import Annotated
 
@@ -75,7 +74,7 @@ def main(
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
         message_level=logging.INFO,
-        message_format=LoggingFormat.CHECK_32,
+        message_format=LoggingFormat.CHECK_20,
     )
     set_verbosity_warning(
         "root",
@@ -128,8 +127,8 @@ def train(
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 24,  # TODO: -> 12, 16, 24, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 8,
-        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 16,
+        strategy: Annotated[str, typer.Option("--strategy")] = "fsdp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
@@ -210,6 +209,7 @@ def train(
             "transformers.tokenization_utils_base",
             "transformers.configuration_utils",
             "transformers.modeling_utils",
+            "lightning.fabric.utilities.seed",
             "DeepSpeed",
         )
         set_verbosity_error(
@@ -225,7 +225,6 @@ def train(
     transformers.logging.disable_progress_bar()
     datasets.utils.logging.disable_progress_bar()
     # logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
-    logger.info(f"[local_rank={fabric.local_rank}] accelerator={accelerator}, main=({fabric.is_global_zero}, {accelerator.is_main_process})")
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
@@ -239,7 +238,6 @@ def train(
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
         using_decoder_only_model = not config.is_encoder_decoder
-        fabric.print(f"type(config)={type(config)} - {isinstance(config, PretrainedConfig)}")
 
         if using_decoder_only_model:
             tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
@@ -259,7 +257,6 @@ def train(
             # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
             tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
             # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
-        fabric.print(f"type(tokenizer)={type(tokenizer)} - {isinstance(tokenizer, PreTrainedTokenizerFast)}, len(tokenizer)={len(tokenizer)}")
 
         if using_decoder_only_model:
             model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained, config=config)
@@ -269,9 +266,7 @@ def train(
         if len(tokenizer) > embedding_size:
             model.resize_token_embeddings(len(tokenizer))
         fabric.barrier()
-        fabric.print(f"type(model)={type(model)} - {isinstance(model, PreTrainedModel)}")
-        fabric.print(f"embedding_size={model.get_input_embeddings().weight.shape[0]}")
-        fabric.print("-" * 100)
+        fabric.print(f"Num tokens: {len(tokenizer):,}, Size embedding={model.get_input_embeddings().weight.shape[0]:,}")
 
         # Load dataset
         train_dataset: Dataset | None = None
@@ -531,13 +526,10 @@ def train(
                 },
             ],
         )
-        fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, Optimizer)}")
         model, optimizer = fabric.setup(model, optimizer)
-        model: lightning.fabric.wrappers._FabricModule = model
-        optimizer: lightning.fabric.wrappers._FabricOptimizer = optimizer
+        # model: lightning.fabric.wrappers._FabricModule = model
+        # optimizer: lightning.fabric.wrappers._FabricOptimizer = optimizer
         model.mark_forward_method("generate")
-        fabric.print(f"type(optimizer)={type(optimizer)} - {isinstance(optimizer, lightning.fabric.wrappers._FabricOptimizer)}")
-        fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
 
         # Define compute metrics function
         def compute_ner_metrics(pred_logits: np.ndarray, pred_indexs: list[int], dataset: Dataset,
@@ -596,6 +588,7 @@ def train(
             fabric.print(f"  Num Parameters = {get_model_param_count(model, trainable_only=True):,}")
             fabric.print(f"  World size = {args.env.world_size:,}")
             fabric.print(f"  Grad acc. steps = {args.learn.grad_steps:,}")
+            fabric.print(f"  Evaluation steps = {args.learn.eval_steps:,}")
             fabric.print(f"  Train batch size = {args.learn.train_batch:,}")
             fabric.print(f"  Infer batch size = {args.learn.infer_batch:,}")
             fabric.print(f"  Total batch size = {args.env.world_size * args.learn.train_batch * args.learn.grad_steps:,}")
@@ -658,7 +651,7 @@ def train(
                                         eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
                                     eval_logits = nested_numpify(eval_logits)
                                     eval_indexs = nested_numpify(eval_indexs).tolist()
-                                    metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_step}",
+                                    metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.1f}",
                                                                        save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
 
                         # Print and save metrics
