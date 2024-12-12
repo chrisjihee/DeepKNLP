@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 class TestCases(unittest.TestCase):
     def test_dataframe(self):
         score_dict = {
-            "[Average]": 0.7621,
+            "[avg]": 0.7621,
             "ai": 0.8461,
             "literature": 0.7302,
             "music": 0.7533,
@@ -51,21 +51,24 @@ class TestCases(unittest.TestCase):
             "movie": 0.7744,
             "restaurant": 0.7742
         }
-        # data_key = "dataset"
-        # score_key = "score"
         score_factor = 100.0
         floatfmt = ".1f"
-        data = pd.DataFrame(score_dict.values()) * score_factor
-        data.set_index(pd.Index(score_dict.keys()), inplace=True)
-        print(data)
+        width = 5
 
+        score_headers = [
+            (width - len(k[:width])) * ' ' + k[:width]
+            for k in score_dict.keys()
+        ]
+        score_values = score_dict.values()
+
+        data = pd.DataFrame(score_values) * score_factor
+        data.set_index(pd.Index(score_headers), inplace=True)
         data = data.transpose()
-        data["step"] = 250
         data["epoch"] = 2.4
-        data["max_memory_alloc"] = 20.0
-        data["max_memory_reser"] = 21.0
+        data["step"] = 250
+        data["[mem1]"] = 20.0
+        data["[mem2]"] = 21.0
         data = data.set_index(["epoch", "step"])
-        print("-" * 100)
         print(data)
         for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
             print(x)
@@ -74,14 +77,12 @@ class TestCases(unittest.TestCase):
         data2["step"] = 500
         data2["epoch"] = 4.8
         data2 = data2.set_index(["epoch", "step"])
-        print("-" * 100)
         print(data2)
 
         data3 = pd.concat([data, data2])
-        print("-" * 100)
-        print(data3)
-
         data3.to_excel("data3.xlsx")
+        print("=" * 100)
+        print(data3)
 
 
 def do_nothing(*args, **kwargs):
