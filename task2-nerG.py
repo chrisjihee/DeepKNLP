@@ -2,11 +2,13 @@ import json
 import logging
 import math
 import re
+import unittest
 from typing import Any, Callable, Iterable
 
 import datasets
 import lightning
 import numpy as np
+import pandas as pd
 import torch
 import transformers
 import typer
@@ -26,7 +28,7 @@ from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from chrisbase.data import AppTyper, JobTimer, Counter
 from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error, to_table_lines
-from chrisbase.util import shuffled, to_dataframe
+from chrisbase.util import shuffled, to_dataframe, tupled
 from chrisdata.ner import GenNERSampleWrapper
 from progiter import ProgIter
 
@@ -35,6 +37,51 @@ env = None
 app = AppTyper(name="Generative NER",
                help="Generative Named Entity Recognition (NER) using Hugging Face Transformers.")
 logger = logging.getLogger(__name__)
+
+
+class TestCases(unittest.TestCase):
+    def test_dataframe(self):
+        score_dict = {
+            "[Average]": 0.7621,
+            "ai": 0.8461,
+            "literature": 0.7302,
+            "music": 0.7533,
+            "politics": 0.7884,
+            "science": 0.6673,
+            "movie": 0.7744,
+            "restaurant": 0.7742
+        }
+        # data_key = "dataset"
+        # score_key = "score"
+        score_factor = 100.0
+        floatfmt = ".1f"
+        data = pd.DataFrame(score_dict.values()) * score_factor
+        data.set_index(pd.Index(score_dict.keys()), inplace=True)
+        print(data)
+
+        data = data.transpose()
+        data["step"] = 250
+        data["epoch"] = 2.4
+        data["max_memory_alloc"] = 20.0
+        data["max_memory_reser"] = 21.0
+        data = data.set_index(["epoch", "step"])
+        print("-" * 100)
+        print(data)
+        for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
+            print(x)
+
+        data2 = data.copy()
+        data2["step"] = 500
+        data2["epoch"] = 4.8
+        data2 = data2.set_index(["epoch", "step"])
+        print("-" * 100)
+        print(data2)
+
+        data3 = pd.concat([data, data2])
+        print("-" * 100)
+        print(data3)
+
+        data3.to_excel("data3.xlsx")
 
 
 def do_nothing(*args, **kwargs):
@@ -89,15 +136,21 @@ def main(
     # logger.info(f"Start running {app.info.name} with env={env}")
 
 
+@app.command()
+def testcases():
+    tester = TestCases()
+    tester.test_dataframe()
+
+
 # Reference
 # [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py
-# [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/summarization/run_summarization_no_trainer.py
-# [3]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation_no_trainer.py
-# [4]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/question-answering/run_qa_no_trainer.py
-# [5]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_methods.html
-# [6]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_args.html
-# [7]: https://lightning.ai/docs/fabric/2.4.0/guide/
-# [8]: https://lightning.ai/docs/fabric/2.4.0/advanced/model_parallel/fsdp.html
+# [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation_no_trainer.py
+# [3]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/summarization/run_summarization_no_trainer.py
+# [4]: https://lightning.ai/docs/fabric/2.4.0/guide/
+# [5]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_args.html
+# [6]: https://lightning.ai/docs/fabric/2.4.0/api/fabric_methods.html
+# [7]: https://lightning.ai/docs/fabric/2.4.0/advanced/model_parallel/fsdp.html
+# [8]: https://lightning.ai/docs/fabric/2.4.0/advanced/gradient_accumulation.html
 @app.command()
 def train(
         # input
@@ -130,7 +183,7 @@ def train(
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 24,  # TODO: -> 12, 16, 24, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 16,
-        strategy: Annotated[str, typer.Option("--strategy")] = "fsdp",  # TODO: -> ddp, fsdp, deepspeed
+        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
@@ -555,14 +608,56 @@ def train(
                         fout.write(json.dumps(example) + "\n")
             return results
 
-        def print_metrics(origin: dict[str, float], filter_key="f1", data_key="dataset", score_key="score", score_factor: float = 100.0, floatfmt=".1f") -> dict[str, float]:
-            filtered = {
-                re.sub("[-_]", "/", key.removesuffix(f'_{filter_key}')): origin[key]
+        def print_metrics(origin: dict[str, float], score_keys="f1", index_keys="epoch", env_keys=("max_memory_reser", "max_memory_alloc"),
+                          data_key="dataset", score_key="score", score_factor: float = 100.0, floatfmt=".1f") -> dict[str, float]:
+            """
+                score_dict = {
+                    "[Average]": 0.7621,
+                    "ai": 0.8461,
+                    "literature": 0.7302,
+                    "music": 0.7533,
+                    "politics": 0.7884,
+                    "science": 0.6673,
+                    "movie": 0.7744,
+                    "restaurant": 0.7742
+                }
+                # data_key = "dataset"
+                # score_key = "score"
+                score_factor = 100.0
+                floatfmt = ".1f"
+                data = pd.DataFrame(score_dict.values()) * score_factor
+                data.set_index(pd.Index(score_dict.keys()), inplace=True)
+                print(data)
+                data = data.transpose()
+                print("-" * 100)
+                data["global_step"] = 2.4
+                data["max_memory_alloc"] = 20.0
+                data["max_memory_reser"] = 21.0
+                data.set_index("global_step", inplace=True)
+                print(data)
+                for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
+                    print(x)
+
+                data2 = pd.concat([data, data])
+                print(data2)
+                exit(1)
+            """
+            score_keys = tupled(score_keys)
+            score_dict = {
+                re.sub('[^-_]+[-_]', '', re.sub('_' + '|'.join(score_keys) + '$', '', key)): origin[key]
                 for key in sorted(origin.keys())
-                if filter_key in key
+                if any(score_key in key for score_key in score_keys)
             }
-            if filtered:
-                data = to_dataframe(filtered, columns=[data_key, score_key])
+            if score_dict:
+                data = pd.DataFrame(score_dict.values()) * score_factor
+                data.set_index(pd.Index(score_dict.keys()), inplace=True)
+                data = data.transpose()
+                # tupled(index_key)
+                # data[index_key] = origin[index_key]
+                for env_key in tupled(env_keys):
+                    data[env_key] = origin[env_key]
+
+                data = to_dataframe(score_dict, columns=[data_key, score_key])
                 data[score_key] = data[score_key] * score_factor
                 for x in to_table_lines(data, floatfmt=floatfmt):
                     fabric.print(x)
@@ -628,7 +723,9 @@ def train(
                         metrics: dict[str, Any] = {
                             "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
                             "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
-                            "train_loss": train_loss,
+                            "loss": train_loss,
+                            "max_memory_reser": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
+                            "max_memory_alloc": torch.cuda.max_memory_allocated() / math.pow(1024, 3),
                         }
 
                         # Validation loop
