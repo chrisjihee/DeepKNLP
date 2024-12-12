@@ -58,10 +58,10 @@ def info_or_debug_r(fabric, x, *y, **z):
 @app.callback()
 def main(
         # env
-        logging_home: Annotated[str, typer.Option("--logging_home")] = "output/task2-nerG",
+        logging_home: Annotated[str, typer.Option("--logging_home")] = "output",
         logging_file: Annotated[str, typer.Option("--logging_file")] = "train-messages.out",
         argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
-        random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
+        random_seed: Annotated[int, typer.Option("--random_seed")] = 1234,
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
         debugging: Annotated[bool, typer.Option("--debugging")] = False,
 ):
@@ -124,7 +124,7 @@ def train(
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 8,
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 24,
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 8,
         strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
