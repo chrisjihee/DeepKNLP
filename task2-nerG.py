@@ -3,7 +3,7 @@ import logging
 import math
 import re
 import unittest
-from typing import Any, Callable, Iterable
+from typing import Any, Callable, Iterable, Tuple, Optional
 
 import datasets
 import lightning
@@ -167,7 +167,7 @@ def train(
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
-        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 128,  # TODO: 128, 256, -1
+        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 256,  # TODO: 128, 256, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = False,
         # learn
@@ -181,9 +181,9 @@ def train(
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 4,  # TODO: -> 12, 16, 24, 32
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 16,  # TODO: -> 16, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 16,  # TODO: -> 8, 16, 32
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,  # TODO: -> 16, 32
         strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
@@ -611,59 +611,15 @@ def train(
 
         def print_metrics(origin: dict[str, float], column_name_width=5,
                           score_keys="f1", index_keys="epoch", env_keys=("[mem1]", "[mem2]"),
-                          score_factor: float = 100.0, floatfmt=".2f") -> dict[str, float]:
-            """
-            score_dict = {
-                "[avg]": 0.7621,
-                "ai": 0.8461,
-                "literature": 0.7302,
-                "music": 0.7533,
-                "politics": 0.7884,
-                "science": 0.6673,
-                "movie": 0.7744,
-                "restaurant": 0.7742
-            }
-            score_factor = 100.0
-            floatfmt = ".1f"
-            width = 5
-
-            score_headers = [
-                (width - len(k[:width])) * ' ' + k[:width]
-                for k in score_dict.keys()
-            ]
-            score_values = score_dict.values()
-
-            data = pd.DataFrame(score_values) * score_factor
-            data.set_index(pd.Index(score_headers), inplace=True)
-            data = data.transpose()
-            data["epoch"] = 2.4
-            data["step"] = 250
-            data["[mem1]"] = 20.0
-            data["[mem2]"] = 21.0
-            data = data.set_index(["epoch", "step"])
-            print(data)
-            for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
-                print(x)
-
-            data2 = data.copy()
-            data2["step"] = 500
-            data2["epoch"] = 4.8
-            data2 = data2.set_index(["epoch", "step"])
-            print(data2)
-
-            data3 = pd.concat([data, data2])
-            data3.to_excel("data3.xlsx")
-            print("=" * 100)
-            print(data3)
-            """
+                          score_factor: float = 100.0, floatfmt=".2f") -> Tuple[dict[str, float], Optional[pd.DataFrame]]:
             score_keys = tupled(score_keys)
             score_dict = {
                 re.sub(f'_{"|".join(score_keys)}$', '', key): origin[key]
                 for key in sorted(origin.keys())
                 if any(score_key in key for score_key in score_keys)
             }
-            # re.sub('[^-_]+[-_]', '', key): origin[key]
 
+            data = None
             if score_dict:
                 score_headers = [
                     (column_name_width - len(k2)) * ' ' + k2
@@ -684,13 +640,14 @@ def train(
                 data = data.set_index(index_keys)
                 for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
                     fabric.print(x)
-            return origin
+            return origin, data
 
         # Train loop
         if train_dataloader:
             epoch_optimization_steps = math.ceil(len(train_dataloader) / args.learn.grad_steps)
             epoch_per_step = 1.0 / epoch_optimization_steps
             train_losses = []
+            metrics_dfs = []
             global_step = 0
             global_epoch = 0.0
             total_epochs = args.learn.num_train_epochs
@@ -701,19 +658,19 @@ def train(
 
             fabric.print(f"===== Running training =====")
             fabric.print(f"  Num Epochs = {total_epochs}")
+            fabric.print(f"  Num Parameters = {get_model_param_count(model, trainable_only=True):,}")
             fabric.print(f"  Num Train Examples = {len(train_dataset):,}")
             if eval_dataset:
                 fabric.print(f"  Num Infer Examples = {len(eval_dataset):,}")
-            fabric.print(f"  Num Parameters = {get_model_param_count(model, trainable_only=True):,}")
-            fabric.print(f"  Size Train batch"
+            fabric.print(f"  Size Train Batch"
                          f" = {args.learn.train_batch} * {args.learn.grad_steps} * {args.env.world_size}"
                          f" = {args.env.world_size * args.learn.train_batch * args.learn.grad_steps}")
             if eval_dataset:
-                fabric.print(f"  Size Infer batch"
+                fabric.print(f"  Size Infer Batch"
                              f" = {args.learn.infer_batch} * {args.env.world_size}"
                              f" = {args.learn.infer_batch * args.env.world_size}")
-            fabric.print(f"  Evaluation steps = {args.learn.eval_steps}")
-            fabric.print(f"  Epoch optim steps = {epoch_optimization_steps:,}")
+            fabric.print(f"  Evaluation Steps = {args.learn.eval_steps}")
+            fabric.print(f"  Epoch Optim Steps = {epoch_optimization_steps:,}")
 
             for epoch in range(args.learn.num_train_epochs):
                 fabric.barrier()
@@ -784,12 +741,14 @@ def train(
                             torch.cuda.reset_peak_memory_stats()
 
                         # Print and save metrics
-                        metrics = print_metrics(denumpify_detensorize(metrics))
-                        fabric.log_dict(metrics=metrics, step=metrics["step"])
+                        metrics_dict, metrics_df = print_metrics(denumpify_detensorize(metrics))
+                        fabric.log_dict(metrics=metrics_dict, step=metrics["step"])
+                        if metrics_df is not None:
+                            metrics_dfs.append(metrics_df)
 
                 model.eval()
-                max_memory = torch.cuda.max_memory_allocated() / math.pow(1024, 3)
-                fabric.print(f"{train_pbar.desc} max_memory={max_memory:.1f}GB")
+                for x in to_table_lines(pd.concat(metrics_dfs), transposed_df=True, floatfmt=".2f"):
+                    fabric.print(x)
                 fabric.barrier()
 
 
