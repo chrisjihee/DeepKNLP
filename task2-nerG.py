@@ -532,7 +532,7 @@ def train(
         fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
 
         # Define compute metrics function
-        def compute_ner_metrics(dataset, preds, save_prefix=None):
+        def compute_ner_metrics(dataset, preds, save_prefix=None, save_suffix=None):
             preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
             decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
             if using_decoder_only_model:
@@ -546,7 +546,7 @@ def train(
 
             results = compute_metrics(all_examples, tokenizer=tokenizer)
             if save_prefix is not None:
-                with (args.env.logging_home / f"{save_prefix}_text_generations.jsonl").open("w") as fout:
+                with (args.env.logging_home / f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl").open("w") as fout:
                     for example in all_examples:
                         fout.write(json.dumps(example) + "\n")
             return results
@@ -624,13 +624,14 @@ def train(
                                         eval_preds = logits if eval_preds is None else nested_concat(eval_preds, logits, padding_index=-100)
                                         eval_pbar.step(force=j == 1 or j >= len(eval_dataloader))
                                     eval_preds = nested_numpify(eval_preds)
-                                    metrics.update(compute_ner_metrics(dataset=eval_dataset, preds=eval_preds, save_prefix="eval"))
+                                    metrics.update(compute_ner_metrics(dataset=eval_dataset, preds=eval_preds, save_prefix="eval", save_suffix=f"{global_step}"))
 
                         # Log metrics
                         metrics = denumpify_detensorize(metrics)
                         fabric.log_dict(metrics=metrics, step=metrics["step"])
                         if 'average_f1' in metrics:
                             fabric.print(f"{train_pbar.desc} average_f1={metrics['average_f1']:.4f}")
+                            break
 
                 max_memory = torch.cuda.max_memory_allocated() / math.pow(1024, 3)
                 fabric.print(f"{train_pbar.desc} max_memory={max_memory:.1f}GB")
