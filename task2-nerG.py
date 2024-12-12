@@ -1,7 +1,8 @@
+import re
 import json
 import logging
 import math
-from typing import Any, Callable
+from typing import Any, Callable, Iterable
 
 import datasets
 import lightning
@@ -15,7 +16,7 @@ from datasets.formatting.formatting import LazyRow
 from lightning.fabric import Fabric
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from torch.optim import Optimizer
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast, PreTrainedTokenizerBase
 from transformers.trainer import get_model_param_count, nested_concat, nested_numpify, denumpify_detensorize
 from typing_extensions import Annotated
@@ -24,8 +25,8 @@ from DeepKNLP.arguments import NewProjectEnv, TrainingArguments
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from chrisbase.data import AppTyper, JobTimer, Counter
-from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error
-from chrisbase.util import shuffled
+from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error, to_table_lines
+from chrisbase.util import shuffled, to_dataframe
 from chrisdata.ner import GenNERSampleWrapper
 from progiter import ProgIter
 
@@ -100,18 +101,18 @@ def main(
 def train(
         # input
         pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # TODO: "google/flan-t5-small", "etri-lirs/egpt-1.3b-preview",
-        # train_data: Annotated[str, typer.Option("--train_data")] = "data/gner/pile-ner.jsonl",
-        train_data: Annotated[str, typer.Option("--train_data")] = "data/gner/zero-shot-train.jsonl",
-        # eval_data: Annotated[str, typer.Option("--eval_data")] = None,
-        # eval_data: Annotated[str, typer.Option("--eval_data")] = "data/gner/zero-shot-dev.jsonl",
-        eval_data: Annotated[str, typer.Option("--eval_data")] = "data/gner/zero-shot-debug.jsonl",
-        test_data: Annotated[str, typer.Option("--test_data")] = None,
-        # test_data: Annotated[str, typer.Option("--test_data")] = "data/gner/zero-shot-test.jsonl"
+        # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
+        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
+        # eval_file: Annotated[str, typer.Option("--eval_file")] = None,
+        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-debug.jsonl",
+        test_file: Annotated[str, typer.Option("--test_file")] = None,
+        # test_file: Annotated[str, typer.Option("--test_file")] = "data/gner/zero-shot-test.jsonl"
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
-        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,  # TODO: 256, -1
+        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 128,  # TODO: 128, 256, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = False,
         # learn
@@ -125,7 +126,7 @@ def train(
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 24,
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 24,  # TODO: -> 12, 16, 24, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 8,
         strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
@@ -139,9 +140,9 @@ def train(
         env=env,
         input=TrainingArguments.InputOption(
             pretrained=pretrained,
-            train_path=train_data,
-            eval_path=eval_data,
-            test_path=test_data,
+            train_file=train_file,
+            eval_file=eval_file,
+            test_file=test_file,
             max_source_length=max_source_length,
             max_target_length=max_target_length,
             max_generation_length=max_generation_length,
@@ -276,33 +277,36 @@ def train(
         train_dataset: Dataset | None = None
         eval_dataset: Dataset | None = None
         test_dataset: Dataset | None = None
-        if args.input.train_path:
+        if args.input.train_file:
             with fabric.rank_zero_first():
                 train_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                      data_files=str(args.input.train_path),
+                                                      data_files=str(args.input.train_file),
                                                       cache_dir=str(args.input.cache_train_dir))
                 if args.input.max_train_samples > 0:
                     whole_indices = shuffled(range(len(train_dataset)), seed=args.env.random_seed)
                     train_dataset = train_dataset.select(whole_indices[:args.input.max_train_samples])
-                fabric.print(f"Use {args.input.train_path} as train dataset: {len(train_dataset):,} samples")
-        if args.input.eval_path:
+                train_dataset = train_dataset.add_column("idx", range(len(train_dataset)))
+                fabric.print(f"Use {args.input.train_file} as train dataset: {len(train_dataset):,} samples")
+        if args.input.eval_file:
             with fabric.rank_zero_first():
                 eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                     data_files=str(args.input.eval_path),
+                                                     data_files=str(args.input.eval_file),
                                                      cache_dir=str(args.input.cache_eval_dir))
                 if args.input.max_eval_samples > 0:
                     whole_indices = shuffled(range(len(eval_dataset)), seed=args.env.random_seed)
                     eval_dataset = eval_dataset.select(whole_indices[:args.input.max_eval_samples])
-                fabric.print(f"Use {args.input.eval_path} as eval dataset: {len(eval_dataset):,} samples")
-        if args.input.test_path:
+                eval_dataset = eval_dataset.add_column("idx", range(len(eval_dataset)))
+                fabric.print(f"Use {args.input.eval_file} as eval dataset: {len(eval_dataset):,} samples")
+        if args.input.test_file:
             with fabric.rank_zero_first():
                 test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
-                                                     data_files=str(args.input.test_path),
+                                                     data_files=str(args.input.test_file),
                                                      cache_dir=str(args.input.cache_test_dir))
                 if args.input.max_test_samples > 0:
                     whole_indices = shuffled(range(len(test_dataset)), seed=args.env.random_seed)
                     test_dataset = test_dataset.select(whole_indices[:args.input.max_test_samples])
-                fabric.print(f"Use {args.input.test_path} as test dataset: {len(test_dataset):,} samples")
+                test_dataset = test_dataset.add_column("idx", range(len(test_dataset)))
+                fabric.print(f"Use {args.input.test_file} as test dataset: {len(test_dataset):,} samples")
         fabric.barrier()
         fabric.print("-" * 100)
 
@@ -483,29 +487,32 @@ def train(
             pad_to_multiple_of=8,  # if training_args.fp16 else None,
             label_pad_token_id=label_pad_token_id,
             return_tensors="pt",
+            feature_names=("input_ids", "attention_mask", "labels", "idx"),
         )
 
         # Set data loader
         if train_dataset:
             train_dataloader = DataLoader(
-                train_dataset,
-                shuffle=True,
-                collate_fn=data_collator,
+                train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
                 batch_size=args.learn.train_batch,
+                collate_fn=data_collator,
+                drop_last=False,
             )
             train_dataloader = fabric.setup_dataloaders(train_dataloader)
         if eval_dataset:
             eval_dataloader = DataLoader(
-                eval_dataset,
-                collate_fn=data_collator,
+                eval_dataset, sampler=SequentialSampler(eval_dataset),
                 batch_size=args.learn.infer_batch,
+                collate_fn=data_collator,
+                drop_last=False,
             )
             eval_dataloader = fabric.setup_dataloaders(eval_dataloader)
         if test_dataset:
             test_dataloader = DataLoader(
-                test_dataset,
-                collate_fn=data_collator,
+                test_dataset, sampler=SequentialSampler(eval_dataset),
                 batch_size=args.learn.infer_batch,
+                collate_fn=data_collator,
+                drop_last=False,
             )
             test_dataloader = fabric.setup_dataloaders(test_dataloader)
 
@@ -533,24 +540,41 @@ def train(
         fabric.print(f"type(model)={type(model)} - {isinstance(model, lightning.fabric.wrappers._FabricModule)}")
 
         # Define compute metrics function
-        def compute_ner_metrics(dataset, preds, save_prefix=None, save_suffix=None):
-            preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
-            decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+        def compute_ner_metrics(pred_logits: np.ndarray, pred_indexs: list[int], dataset: Dataset,
+                                save_prefix: str | None = None, save_suffix: str | None = None, save_keys: Iterable[str] | None = None) -> dict[str, float]:
+            pred_logits = np.where(pred_logits != -100, pred_logits, tokenizer.pad_token_id)
+            decoded_preds: list[str] = tokenizer.batch_decode(pred_logits, skip_special_tokens=True)
             if using_decoder_only_model:
                 match_pattern = "[/INST]"
-                for i, preds in enumerate(decoded_preds):
-                    decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
+                for i, decoded_pred in enumerate(decoded_preds):
+                    decoded_preds[i] = decoded_pred[decoded_pred.find(match_pattern) + len(match_pattern):].strip()
 
             all_examples = [example.copy() for example in dataset]
-            for idx, decoded_pred in enumerate(decoded_preds):
-                all_examples[idx]["prediction"] = decoded_pred
+            for i, decoded_pred in zip(pred_indexs, decoded_preds):
+                all_examples[i]["prediction"] = decoded_pred
 
-            results = compute_metrics(all_examples, tokenizer=tokenizer)
+            results = compute_metrics(all_examples, tokenizer=tokenizer, average_key="[Average]")
             if save_prefix is not None:
-                with (args.env.logging_home / f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl").open("w") as fout:
+                outfile_path = args.env.logging_home / f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl"
+                with outfile_path.open("w") as fout:
                     for example in all_examples:
+                        if save_keys:
+                            example = {key: example[key] for key in save_keys if key in example}
                         fout.write(json.dumps(example) + "\n")
             return results
+
+        def print_metrics(origin: dict[str, float], filter_key="f1", data_key="dataset", score_key="score", score_factor: float = 100.0, floatfmt=".1f") -> dict[str, float]:
+            filtered = {
+                re.sub("[-_]", "/", key.removesuffix(f'_{filter_key}')): origin[key]
+                for key in sorted(origin.keys())
+                if filter_key in key
+            }
+            if filtered:
+                data = to_dataframe(filtered, columns=[data_key, score_key])
+                data[score_key] = data[score_key] * score_factor
+                for x in to_table_lines(data, floatfmt=floatfmt):
+                    fabric.print(x)
+            return origin
 
         # Train loop
         fabric.barrier()
@@ -581,13 +605,13 @@ def train(
             for epoch in range(args.learn.num_train_epochs):
                 fabric.print("-" * 100)
                 with ProgIter(total=epoch_optimization_steps, desc=f'Training [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as train_pbar:
-                    for i, train_batch in enumerate(train_dataloader, start=1):
+                    for train_loop_i, train_batch in enumerate(train_dataloader, start=1):
                         # Forward pass
                         model.train()
                         outputs = model(**train_batch)
                         fabric.backward(outputs.loss)
                         train_losses.append(outputs.loss.item())
-                        if i % args.learn.grad_steps != 0 and i != len(train_dataloader):
+                        if train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader):
                             continue
 
                         # Backward pass
@@ -602,7 +626,7 @@ def train(
                         train_losses.clear()
                         train_pbar.set_extra(f"| train_loss={train_loss:.4f}")
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
-                        train_pbar.step(force=i == 1 or i >= len(train_dataloader))
+                        train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
                         # Define metrics
                         metrics: dict[str, Any] = {
@@ -612,27 +636,34 @@ def train(
                         }
 
                         # Validation loop
-                        if eval_dataloader and (args.learn.eval_steps > 0 and global_step % args.learn.eval_steps) == 0:
+                        if eval_dataloader and (
+                                train_loop_i == len(train_dataloader) or
+                                (args.learn.eval_steps > 0 and global_step % args.learn.eval_steps) == 0
+                        ):
                             train_pbar.refresh()
                             model.eval()
                             with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
                                 with torch.no_grad():
-                                    eval_preds = None
-                                    for j, eval_batch in enumerate(eval_dataloader, start=1):
-                                        logits = model.generate(**eval_batch, **gen_kwargs)
+                                    eval_logits = None
+                                    eval_indexs = None
+                                    for eval_loop_i, eval_batch in enumerate(eval_dataloader, start=1):
+                                        eval_batch: BatchEncoding = eval_batch
+                                        indexs: torch.Tensor = eval_batch.pop("idx")
+                                        logits: torch.Tensor = model.generate(**eval_batch, **gen_kwargs)
                                         logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
                                         logits = accelerator.gather_for_metrics(logits)
-                                        eval_preds = logits if eval_preds is None else nested_concat(eval_preds, logits, padding_index=-100)
-                                        eval_pbar.step(force=j == 1 or j >= len(eval_dataloader))
-                                    eval_preds = nested_numpify(eval_preds)
-                                    metrics.update(compute_ner_metrics(dataset=eval_dataset, preds=eval_preds, save_prefix="eval", save_suffix=f"{global_step}"))
+                                        indexs = accelerator.gather_for_metrics(indexs)
+                                        eval_logits = logits if eval_logits is None else nested_concat(eval_logits, logits, padding_index=-100)
+                                        eval_indexs = indexs if eval_indexs is None else nested_concat(eval_indexs, indexs, padding_index=-100)
+                                        eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
+                                    eval_logits = nested_numpify(eval_logits)
+                                    eval_indexs = nested_numpify(eval_indexs).tolist()
+                                    metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_step}",
+                                                                       save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
 
-                        # Log metrics
-                        metrics = denumpify_detensorize(metrics)
+                        # Print and save metrics
+                        metrics = print_metrics(denumpify_detensorize(metrics))
                         fabric.log_dict(metrics=metrics, step=metrics["step"])
-                        if 'average_f1' in metrics:
-                            fabric.print(f"{train_pbar.desc} average_f1={metrics['average_f1']:.4f}")
-                            break
 
                 max_memory = torch.cuda.max_memory_allocated() / math.pow(1024, 3)
                 fabric.print(f"{train_pbar.desc} max_memory={max_memory:.1f}GB")
