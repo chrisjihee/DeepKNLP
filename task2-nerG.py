@@ -28,7 +28,7 @@ from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from chrisbase.data import AppTyper, JobTimer, Counter
 from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error, to_table_lines
-from chrisbase.util import shuffled, to_dataframe, tupled
+from chrisbase.util import shuffled, tupled
 from chrisdata.ner import GenNERSampleWrapper
 from progiter import ProgIter
 
@@ -181,9 +181,9 @@ def train(
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 24,  # TODO: -> 12, 16, 24, 32
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 4,  # TODO: -> 12, 16, 24, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 16,
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 16,  # TODO: -> 8, 16, 32
         strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
@@ -599,7 +599,7 @@ def train(
             for i, decoded_pred in zip(pred_indexs, decoded_preds):
                 all_examples[i]["prediction"] = decoded_pred
 
-            results = compute_metrics(all_examples, tokenizer=tokenizer, average_key="[Average]")
+            results = compute_metrics(all_examples, tokenizer=tokenizer, average_key="[avg]")
             if save_prefix is not None:
                 outfile_path = args.env.logging_home / f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl"
                 with outfile_path.open("w") as fout:
@@ -609,58 +609,80 @@ def train(
                         fout.write(json.dumps(example) + "\n")
             return results
 
-        def print_metrics(origin: dict[str, float], score_keys="f1", index_keys="epoch", env_keys=("max_memory_reser", "max_memory_alloc"),
-                          data_key="dataset", score_key="score", score_factor: float = 100.0, floatfmt=".1f") -> dict[str, float]:
+        def print_metrics(origin: dict[str, float], column_name_width=5,
+                          score_keys="f1", index_keys="epoch", env_keys=("[mem1]", "[mem2]"),
+                          score_factor: float = 100.0, floatfmt=".2f") -> dict[str, float]:
             """
-                score_dict = {
-                    "[Average]": 0.7621,
-                    "ai": 0.8461,
-                    "literature": 0.7302,
-                    "music": 0.7533,
-                    "politics": 0.7884,
-                    "science": 0.6673,
-                    "movie": 0.7744,
-                    "restaurant": 0.7742
-                }
-                # data_key = "dataset"
-                # score_key = "score"
-                score_factor = 100.0
-                floatfmt = ".1f"
-                data = pd.DataFrame(score_dict.values()) * score_factor
-                data.set_index(pd.Index(score_dict.keys()), inplace=True)
-                print(data)
-                data = data.transpose()
-                print("-" * 100)
-                data["global_step"] = 2.4
-                data["max_memory_alloc"] = 20.0
-                data["max_memory_reser"] = 21.0
-                data.set_index("global_step", inplace=True)
-                print(data)
-                for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
-                    print(x)
+            score_dict = {
+                "[avg]": 0.7621,
+                "ai": 0.8461,
+                "literature": 0.7302,
+                "music": 0.7533,
+                "politics": 0.7884,
+                "science": 0.6673,
+                "movie": 0.7744,
+                "restaurant": 0.7742
+            }
+            score_factor = 100.0
+            floatfmt = ".1f"
+            width = 5
 
-                data2 = pd.concat([data, data])
-                print(data2)
-                exit(1)
+            score_headers = [
+                (width - len(k[:width])) * ' ' + k[:width]
+                for k in score_dict.keys()
+            ]
+            score_values = score_dict.values()
+
+            data = pd.DataFrame(score_values) * score_factor
+            data.set_index(pd.Index(score_headers), inplace=True)
+            data = data.transpose()
+            data["epoch"] = 2.4
+            data["step"] = 250
+            data["[mem1]"] = 20.0
+            data["[mem2]"] = 21.0
+            data = data.set_index(["epoch", "step"])
+            print(data)
+            for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
+                print(x)
+
+            data2 = data.copy()
+            data2["step"] = 500
+            data2["epoch"] = 4.8
+            data2 = data2.set_index(["epoch", "step"])
+            print(data2)
+
+            data3 = pd.concat([data, data2])
+            data3.to_excel("data3.xlsx")
+            print("=" * 100)
+            print(data3)
             """
             score_keys = tupled(score_keys)
             score_dict = {
-                re.sub('[^-_]+[-_]', '', re.sub('_' + '|'.join(score_keys) + '$', '', key)): origin[key]
+                re.sub(f'_{"|".join(score_keys)}$', '', key): origin[key]
                 for key in sorted(origin.keys())
                 if any(score_key in key for score_key in score_keys)
             }
+            # re.sub('[^-_]+[-_]', '', key): origin[key]
+
             if score_dict:
-                data = pd.DataFrame(score_dict.values()) * score_factor
-                data.set_index(pd.Index(score_dict.keys()), inplace=True)
+                score_headers = [
+                    (column_name_width - len(k2)) * ' ' + k2
+                    for k2 in [
+                        re.sub('[^-_]+[-_]', '', k1)[:column_name_width]
+                        for k1 in score_dict.keys()
+                    ]
+                ]
+                score_values = score_dict.values()
+
+                data = pd.DataFrame(score_values) * score_factor
+                data = data.set_index(pd.Index(score_headers))
                 data = data.transpose()
-                # tupled(index_key)
-                # data[index_key] = origin[index_key]
+                for idx_key in tupled(index_keys):
+                    data[idx_key] = origin[idx_key]
                 for env_key in tupled(env_keys):
                     data[env_key] = origin[env_key]
-
-                data = to_dataframe(score_dict, columns=[data_key, score_key])
-                data[score_key] = data[score_key] * score_factor
-                for x in to_table_lines(data, floatfmt=floatfmt):
+                data = data.set_index(index_keys)
+                for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
                     fabric.print(x)
             return origin
 
@@ -679,22 +701,25 @@ def train(
 
             fabric.print(f"===== Running training =====")
             fabric.print(f"  Num Epochs = {total_epochs}")
-            fabric.print(f"  Num Examples = {len(train_dataset):,}")
+            fabric.print(f"  Num Train Examples = {len(train_dataset):,}")
+            if eval_dataset:
+                fabric.print(f"  Num Infer Examples = {len(eval_dataset):,}")
             fabric.print(f"  Num Parameters = {get_model_param_count(model, trainable_only=True):,}")
-            fabric.print(f"  Train batch size"
+            fabric.print(f"  Size Train batch"
                          f" = {args.learn.train_batch} * {args.learn.grad_steps} * {args.env.world_size}"
                          f" = {args.env.world_size * args.learn.train_batch * args.learn.grad_steps}")
-            fabric.print(f"  Infer batch size"
-                         f" = {args.learn.infer_batch} * {args.env.world_size}"
-                         f" = {args.learn.infer_batch * args.env.world_size}")
+            if eval_dataset:
+                fabric.print(f"  Size Infer batch"
+                             f" = {args.learn.infer_batch} * {args.env.world_size}"
+                             f" = {args.learn.infer_batch * args.env.world_size}")
             fabric.print(f"  Evaluation steps = {args.learn.eval_steps}")
             fabric.print(f"  Epoch optim steps = {epoch_optimization_steps:,}")
-            torch.cuda.reset_peak_memory_stats()
 
             for epoch in range(args.learn.num_train_epochs):
                 fabric.barrier()
                 fabric.print("-" * 100)
                 model.train()
+                torch.cuda.reset_peak_memory_stats()
                 with ProgIter(total=epoch_optimization_steps, desc=f'Training [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as train_pbar:
                     for train_loop_i, train_batch in enumerate(train_dataloader, start=1):
                         is_accumulating = train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader)
@@ -725,8 +750,8 @@ def train(
                             "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
                             "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
                             "loss": train_loss,
-                            "max_memory_reser": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
-                            "max_memory_alloc": torch.cuda.max_memory_allocated() / math.pow(1024, 3),
+                            "[mem1]": torch.cuda.max_memory_allocated() / math.pow(1024, 3),
+                            "[mem2]": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
                         }
 
                         # Validation loop
@@ -756,6 +781,7 @@ def train(
                                     metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.1f}",
                                                                        save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
                             model.train()
+                            torch.cuda.reset_peak_memory_stats()
 
                         # Print and save metrics
                         metrics = print_metrics(denumpify_detensorize(metrics))
