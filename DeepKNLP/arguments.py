@@ -108,9 +108,9 @@ class TrainingArguments(NewCommonArguments):
 
     class InputOption(BaseModel):
         pretrained: str | Path = Field(default=None)
-        train_path: str | Path | None = Field(default=None)
-        eval_path: str | Path | None = Field(default=None)
-        test_path: str | Path | None = Field(default=None)
+        train_file: str | Path | None = Field(default=None)
+        eval_file: str | Path | None = Field(default=None)
+        test_file: str | Path | None = Field(default=None)
         max_train_samples: int = Field(default=-1)
         max_eval_samples: int = Field(default=-1)
         max_test_samples: int = Field(default=-1)
@@ -122,37 +122,37 @@ class TrainingArguments(NewCommonArguments):
         @model_validator(mode='after')
         def after(self) -> Self:
             self.pretrained = Path(self.pretrained).absolute() if self.pretrained else None
-            self.train_path = Path(self.train_path).absolute() if self.train_path else None
-            self.eval_path = Path(self.eval_path).absolute() if self.eval_path else None
-            self.test_path = Path(self.test_path).absolute() if self.test_path else None
+            self.train_file = Path(self.train_file).absolute() if self.train_file else None
+            self.eval_file = Path(self.eval_file).absolute() if self.eval_file else None
+            self.test_file = Path(self.test_file).absolute() if self.test_file else None
             return self
 
         @property
         def cache_train_dir(self) -> Optional[Path]:
-            if self.train_path:
-                return self.train_path.parent / ".cache"
+            if self.train_file:
+                return self.train_file.parent / ".cache"
 
         @property
         def cache_eval_dir(self) -> Optional[Path]:
-            if self.eval_path:
-                return self.eval_path.parent / ".cache"
+            if self.eval_file:
+                return self.eval_file.parent / ".cache"
 
         @property
         def cache_test_dir(self) -> Optional[Path]:
-            if self.test_path:
-                return self.test_path.parent / ".cache"
+            if self.test_file:
+                return self.test_file.parent / ".cache"
 
         def cache_train_path(self, size: int) -> Optional[Path]:
-            if self.train_path:
-                return self.cache_train_dir / f"{self.train_path.stem}={size}.tmp"
+            if self.train_file:
+                return self.cache_train_dir / f"{self.train_file.stem}={size}.tmp"
 
         def cache_eval_path(self, size: int) -> Optional[Path]:
-            if self.eval_path:
-                return self.cache_eval_dir / f"{self.eval_path.stem}={size}.tmp"
+            if self.eval_file:
+                return self.cache_eval_dir / f"{self.eval_file.stem}={size}.tmp"
 
         def cache_test_path(self, size: int) -> Optional[Path]:
-            if self.test_path:
-                return self.cache_test_dir / f"{self.test_path.stem}={size}.tmp"
+            if self.test_file:
+                return self.cache_test_dir / f"{self.test_file.stem}={size}.tmp"
 
     class LearnOption(BaseModel):
         run_name: str = Field(default="run")
