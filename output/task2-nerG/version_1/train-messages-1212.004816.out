@@ -1,0 +1,420 @@
+[12.12 00:48:31] ┇ INFO     ┇                         __main__ ┇ [local_rank=0] accelerator=<accelerate.accelerator.Accelerator object at 0x7f1281d8ffd0>, main=(True, True)
+[12.12 00:48:31] ┇ INFO     ┇                         __main__ ┇ [local_rank=1] accelerator=<accelerate.accelerator.Accelerator object at 0x7f81fb7f41d0>, main=(False, False)
+[12.12 00:48:31] ┇ INFO     ┇                         __main__ ┇ [local_rank=3] accelerator=<accelerate.accelerator.Accelerator object at 0x7fdb90528a50>, main=(False, False)
+[12.12 00:48:31] ┇ INFO     ┇                         __main__ ┇ [local_rank=2] accelerator=<accelerate.accelerator.Accelerator object at 0x7fa283c14a50>, main=(False, False)
+[12.12 00:48:31] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.12 00:48:31] ┇ INFO     ┇                   chrisbase.data ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py train
+[12.12 00:48:31] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    # | TrainingArguments           | value
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    1 | env.hostname                | dgx-a100
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    2 | env.hostaddr                | 129.254.23.12
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    3 | env.global_rank             | 0
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    4 | env.local_rank              | 0
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    5 | env.node_rank               | 0
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    6 | env.world_size              | 4
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    7 | env.time_stamp              | 1212.004816
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    8 | env.python_path             | /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇    9 | env.current_dir             | /raid/chrisjihee/proj/DeepKNLP
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   10 | env.current_file            | /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   11 | env.command_args            | ['train']
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   12 | env.logging_home            | /raid/chrisjihee/proj/DeepKNLP/output/task2-nerG/version_1
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   13 | env.logging_file            | train-messages.out
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   14 | env.argument_file           | train-arguments.json
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   15 | env.random_seed             | 7
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   16 | env.max_workers             | 4
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   17 | env.debugging               | False
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   18 | env.date_format             | [%m.%d %H:%M:%S]
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   19 | env.message_level           | 20
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   20 | env.message_format          | %(asctime)s ┇ %(levelname)-8s ┇ %(name)32s ┇ %(message)s
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   21 | time.t1                     | 2024-12-12 00:48:31.479424
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   22 | time.t2                     | 2024-12-12 00:48:16.885258
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   23 | time.started                | [12.12 00:48:31]
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   24 | time.settled                |
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   25 | time.elapsed                |
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   26 | input.pretrained            | /raid/chrisjihee/proj/DeepKNLP/meta-llama/Llama-3.2-1B
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   27 | input.train_path            | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   28 | input.eval_path             | /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   29 | input.test_path             |
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   30 | input.max_train_samples     | -1
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   31 | input.max_eval_samples      | 128
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   32 | input.max_test_samples      | -1
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   33 | input.num_prog_samples      | 5000
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   34 | input.max_source_length     | 640
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   35 | input.max_target_length     | 640
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   36 | input.max_generation_length | 1280
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   37 | input.use_cache_data        | False
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   38 | learn.run_name              | task2-nerG
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   39 | learn.output_home           | /raid/chrisjihee/proj/DeepKNLP/output
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   40 | learn.num_train_epochs      | 1
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   41 | learn.learning_rate         | 2e-05
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   42 | learn.weight_decay          | 0.0
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   43 | learn.device_type           | gpu
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   44 | learn.device_idx            | 0
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   45 | learn.num_device            | 4
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   46 | learn.precision             | bf16-mixed
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   47 | learn.grad_steps            | 8
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   48 | learn.eval_steps            | 8
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   49 | learn.train_batch           | 2
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   50 | learn.infer_batch           | 8
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   51 | learn.strategy              | ddp
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   52 | learn.ds_stage              | 1
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   53 | learn.ds_offload            | 0
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   54 | learn.fsdp_shard            | FULL_SHARD
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   55 | learn.fsdp_offload          | False
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇   56 | learn.devices               | [0, 1, 2, 3]
+[12.12 00:48:31] ┇ INFO     ┇               DeepKNLP.arguments ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.12 00:48:31] ┇ INFO     ┇  lightning.fabric.utilities.seed ┇ [rank: 0] Seed set to 7
+[12.12 00:48:31] ┇ INFO     ┇  lightning.fabric.utilities.seed ┇ [rank: 3] Seed set to 7
+[12.12 00:48:31] ┇ INFO     ┇  lightning.fabric.utilities.seed ┇ [rank: 1] Seed set to 7
+[12.12 00:48:31] ┇ INFO     ┇  lightning.fabric.utilities.seed ┇ [rank: 2] Seed set to 7
+[12.12 00:48:31] ┇ INFO     ┇                         __main__ ┇ type(config)=<class 'transformers.models.llama.configuration_llama.LlamaConfig'> - True
+[12.12 00:48:32] ┇ INFO     ┇                         __main__ ┇ type(tokenizer)=<class 'transformers.tokenization_utils_fast.PreTrainedTokenizerFast'> - True, len(tokenizer)=128256
+[12.12 00:48:33] ┇ INFO     ┇                         __main__ ┇ type(model)=<class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'> - True
+[12.12 00:48:33] ┇ INFO     ┇                         __main__ ┇ embedding_size=128256
+[12.12 00:48:33] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.12 00:48:34] ┇ INFO     ┇                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-train.jsonl as train dataset: 18,135 samples
+[12.12 00:48:34] ┇ INFO     ┇                         __main__ ┇ Use /raid/chrisjihee/proj/DeepKNLP/data/gner/zero-shot-dev.jsonl as eval dataset: 128 samples
+[12.12 00:48:35] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.12 00:48:36] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:   0%|                    |     4/18135 [0:00:01<1:44:05, 2.9Hz]
+[12.12 00:48:38] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  37%|███████▍            |  6728/18135 [0:00:03<0:00:02, 4414.1Hz]
+[12.12 00:48:40] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples:  80%|████████████████    | 14548/18135 [0:00:05<0:00:00, 4304.7Hz]
+[12.12 00:48:41] ┇ INFO     ┇                         __main__ ┇ Preprocess train samples: 100%|████████████████████| 18135/18135 [0:00:06<0:00:00, 4346.9Hz]
+[12.12 00:48:50] ┇ INFO     ┇                         __main__ ┇ Preprocess  eval samples:   3%|▋                   |   4/128 [0:00:01<0:00:46, 2.7Hz]
+[12.12 00:48:50] ┇ INFO     ┇                         __main__ ┇ Preprocess  eval samples: 100%|████████████████████| 128/128 [0:00:01<0:00:00, 84.9Hz]
+[12.12 00:48:54] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.12 00:48:54] ┇ INFO     ┇                         __main__ ┇ type(optimizer)=<class 'torch.optim.adamw.AdamW'> - True
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇ type(optimizer)=<class 'lightning.fabric.wrappers.FabricAdamW'> - True
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇ type(model)=<class 'lightning.fabric.wrappers._FabricModule'> - True
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇ ===== Running training =====
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   Num Epochs = 1
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   Num Examples = 18,135
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   Num Parameters = 1,235,814,400
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   World size = 4
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   Grad acc. steps = 8
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   Train batch size = 2
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   Infer batch size = 8
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   Total batch size = 64
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇   Epoch optim steps = 284
+[12.12 00:48:56] ┇ INFO     ┇                         __main__ ┇ ----------------------------------------------------------------------------------------------------
+[12.12 00:48:57] ┇ INFO     ┇                         __main__ ┇ Training [0.00/1]:   0%|                    |   1/284 [0:00:01<0:08:18, 0.6Hz] | train_loss=1.7666
+[12.12 00:49:01] ┇ INFO     ┇                         __main__ ┇ Training [0.01/1]:   1%|▎                   |   4/284 [0:00:05<0:05:56, 0.8Hz] | train_loss=0.4906
+[12.12 00:49:04] ┇ INFO     ┇                         __main__ ┇ Training [0.02/1]:   2%|▍                   |   7/284 [0:00:08<0:05:23, 0.9Hz] | train_loss=0.3404
+[12.12 00:49:05] ┇ INFO     ┇                         __main__ ┇ Training [0.03/1]:   3%|▌                   |   8/284 [0:00:09<0:05:17, 0.9Hz] | train_loss=0.2692
+[12.12 00:49:07] ┇ INFO     ┇                         __main__ ┇  Testing [0.03/1]:  25%|█████               | 1/4 [0:00:02<0:00:07, 0.4Hz]
+[12.12 00:49:25] ┇ INFO     ┇                         __main__ ┇  Testing [0.03/1]:  50%|██████████          | 2/4 [0:00:19<0:00:19, 0.1Hz]
+[12.12 00:49:42] ┇ INFO     ┇                         __main__ ┇  Testing [0.03/1]:  75%|███████████████     | 3/4 [0:00:36<0:00:12, 0.1Hz]
+[12.12 00:49:46] ┇ INFO     ┇                         __main__ ┇  Testing [0.03/1]: 100%|████████████████████| 4/4 [0:00:40<0:00:00, 0.1Hz]
+[12.12 00:49:46] ┇ INFO     ┇                         __main__ ┇ Training [0.03/1]: average_f1=0.017093
+[12.12 00:49:47] ┇ INFO     ┇                         __main__ ┇ Training [0.03/1]:   3%|▋                   |   9/284 [0:00:51<0:26:07, 0.2Hz] | train_loss=0.2536
+[12.12 00:49:50] ┇ INFO     ┇                         __main__ ┇ Training [0.04/1]:   4%|▊                   |  12/284 [0:00:54<0:20:31, 0.2Hz] | train_loss=0.1908
+[12.12 00:49:53] ┇ INFO     ┇                         __main__ ┇ Training [0.05/1]:   5%|█                   |  15/284 [0:00:57<0:17:08, 0.3Hz] | train_loss=0.1456
+[12.12 00:49:54] ┇ INFO     ┇                         __main__ ┇ Training [0.06/1]:   6%|█▏                  |  16/284 [0:00:58<0:16:17, 0.3Hz] | train_loss=0.1001
+[12.12 00:50:11] ┇ INFO     ┇                         __main__ ┇  Testing [0.06/1]:  25%|█████               | 1/4 [0:00:17<0:00:51, 0.1Hz]
+[12.12 00:50:15] ┇ INFO     ┇                         __main__ ┇  Testing [0.06/1]:  50%|██████████          | 2/4 [0:00:21<0:00:21, 0.1Hz]
+[12.12 00:50:32] ┇ INFO     ┇                         __main__ ┇  Testing [0.06/1]:  75%|███████████████     | 3/4 [0:00:38<0:00:12, 0.1Hz]
+[12.12 00:50:50] ┇ INFO     ┇                         __main__ ┇  Testing [0.06/1]: 100%|████████████████████| 4/4 [0:00:55<0:00:00, 0.1Hz]
+[12.12 00:50:50] ┇ INFO     ┇                         __main__ ┇ Training [0.06/1]: average_f1=0.031216
+[12.12 00:50:51] ┇ INFO     ┇                         __main__ ┇ Training [0.06/1]:   6%|█▏                  |  17/284 [0:01:55<0:30:06, 0.1Hz] | train_loss=0.1094
+[12.12 00:50:54] ┇ INFO     ┇                         __main__ ┇ Training [0.07/1]:   7%|█▍                  |  20/284 [0:01:58<0:25:59, 0.2Hz] | train_loss=0.1106
+[12.12 00:50:58] ┇ INFO     ┇                         __main__ ┇ Training [0.08/1]:   8%|█▋                  |  24/284 [0:02:02<0:22:02, 0.2Hz] | train_loss=0.0835
+[12.12 00:50:58] ┇ INFO     ┇                         __main__ ┇ Training [0.08/1]:   8%|█▋                  |  24/284 [0:02:02<0:22:02, 0.2Hz] | train_loss=0.0835
+[12.12 00:51:01] ┇ INFO     ┇                         __main__ ┇  Testing [0.08/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 00:51:18] ┇ INFO     ┇                         __main__ ┇  Testing [0.08/1]:  50%|██████████          | 2/4 [0:00:20<0:00:20, 0.1Hz]
+[12.12 00:51:35] ┇ INFO     ┇                         __main__ ┇  Testing [0.08/1]:  75%|███████████████     | 3/4 [0:00:37<0:00:12, 0.1Hz]
+[12.12 00:51:52] ┇ INFO     ┇                         __main__ ┇  Testing [0.08/1]: 100%|████████████████████| 4/4 [0:00:54<0:00:00, 0.1Hz]
+[12.12 00:51:52] ┇ INFO     ┇                         __main__ ┇ Training [0.08/1]: average_f1=0.031371
+[12.12 00:51:53] ┇ INFO     ┇                         __main__ ┇ Training [0.09/1]:   9%|█▊                  |  25/284 [0:02:57<0:30:41, 0.1Hz] | train_loss=0.0855
+[12.12 00:51:57] ┇ INFO     ┇                         __main__ ┇ Training [0.10/1]:  10%|█▉                  |  28/284 [0:03:00<0:27:33, 0.2Hz] | train_loss=0.0686
+[12.12 00:52:00] ┇ INFO     ┇                         __main__ ┇ Training [0.11/1]:  11%|██▏                 |  31/284 [0:03:03<0:25:00, 0.2Hz] | train_loss=0.0799
+[12.12 00:52:00] ┇ INFO     ┇                         __main__ ┇ Training [0.11/1]:  11%|██▎                 |  32/284 [0:03:04<0:24:15, 0.2Hz] | train_loss=0.0450
+[12.12 00:52:18] ┇ INFO     ┇                         __main__ ┇  Testing [0.11/1]:  25%|█████               | 1/4 [0:00:17<0:00:51, 0.1Hz]
+[12.12 00:52:35] ┇ INFO     ┇                         __main__ ┇  Testing [0.11/1]:  50%|██████████          | 2/4 [0:00:34<0:00:34, 0.1Hz]
+[12.12 00:52:40] ┇ INFO     ┇                         __main__ ┇  Testing [0.11/1]:  75%|███████████████     | 3/4 [0:00:39<0:00:13, 0.1Hz]
+[12.12 00:52:44] ┇ INFO     ┇                         __main__ ┇  Testing [0.11/1]: 100%|████████████████████| 4/4 [0:00:43<0:00:00, 0.1Hz]
+[12.12 00:52:44] ┇ INFO     ┇                         __main__ ┇ Training [0.11/1]: average_f1=0.023748
+[12.12 00:52:45] ┇ INFO     ┇                         __main__ ┇ Training [0.12/1]:  12%|██▎                 |  33/284 [0:03:49<0:29:04, 0.1Hz] | train_loss=0.0711
+[12.12 00:52:49] ┇ INFO     ┇                         __main__ ┇ Training [0.13/1]:  13%|██▌                 |  37/284 [0:03:53<0:25:58, 0.2Hz] | train_loss=0.0715
+[12.12 00:52:52] ┇ INFO     ┇                         __main__ ┇ Training [0.14/1]:  14%|██▊                 |  40/284 [0:03:56<0:24:02, 0.2Hz] | train_loss=0.0615
+[12.12 00:52:52] ┇ INFO     ┇                         __main__ ┇ Training [0.14/1]:  14%|██▊                 |  40/284 [0:03:56<0:24:02, 0.2Hz] | train_loss=0.0615
+[12.12 00:52:56] ┇ INFO     ┇                         __main__ ┇  Testing [0.14/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 00:53:00] ┇ INFO     ┇                         __main__ ┇  Testing [0.14/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 00:53:04] ┇ INFO     ┇                         __main__ ┇  Testing [0.14/1]:  75%|███████████████     | 3/4 [0:00:11<0:00:03, 0.3Hz]
+[12.12 00:53:09] ┇ INFO     ┇                         __main__ ┇  Testing [0.14/1]: 100%|████████████████████| 4/4 [0:00:16<0:00:00, 0.2Hz]
+[12.12 00:53:09] ┇ INFO     ┇                         __main__ ┇ Training [0.14/1]: average_f1=0.039669
+[12.12 00:53:10] ┇ INFO     ┇                         __main__ ┇ Training [0.14/1]:  14%|██▉                 |  41/284 [0:04:14<0:25:06, 0.2Hz] | train_loss=0.0590
+[12.12 00:53:14] ┇ INFO     ┇                         __main__ ┇ Training [0.16/1]:  16%|███▏                |  45/284 [0:04:18<0:22:50, 0.2Hz] | train_loss=0.0502
+[12.12 00:53:17] ┇ INFO     ┇                         __main__ ┇ Training [0.17/1]:  17%|███▍                |  48/284 [0:04:21<0:21:24, 0.2Hz] | train_loss=0.0584
+[12.12 00:53:17] ┇ INFO     ┇                         __main__ ┇ Training [0.17/1]:  17%|███▍                |  48/284 [0:04:21<0:21:24, 0.2Hz] | train_loss=0.0584
+[12.12 00:53:20] ┇ INFO     ┇                         __main__ ┇  Testing [0.17/1]:  25%|█████               | 1/4 [0:00:03<0:00:09, 0.3Hz]
+[12.12 00:53:25] ┇ INFO     ┇                         __main__ ┇  Testing [0.17/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 00:53:29] ┇ INFO     ┇                         __main__ ┇  Testing [0.17/1]:  75%|███████████████     | 3/4 [0:00:12<0:00:04, 0.2Hz]
+[12.12 00:53:46] ┇ INFO     ┇                         __main__ ┇  Testing [0.17/1]: 100%|████████████████████| 4/4 [0:00:29<0:00:00, 0.1Hz]
+[12.12 00:53:46] ┇ INFO     ┇                         __main__ ┇ Training [0.17/1]: average_f1=0.042133
+[12.12 00:53:47] ┇ INFO     ┇                         __main__ ┇ Training [0.17/1]:  17%|███▍                |  49/284 [0:04:51<0:23:19, 0.2Hz] | train_loss=0.0636
+[12.12 00:53:50] ┇ INFO     ┇                         __main__ ┇ Training [0.18/1]:  18%|███▋                |  52/284 [0:04:54<0:21:55, 0.2Hz] | train_loss=0.0557
+[12.12 00:53:53] ┇ INFO     ┇                         __main__ ┇ Training [0.19/1]:  19%|███▊                |  55/284 [0:04:57<0:20:39, 0.2Hz] | train_loss=0.0529
+[12.12 00:53:54] ┇ INFO     ┇                         __main__ ┇ Training [0.20/1]:  20%|███▉                |  56/284 [0:04:58<0:20:16, 0.2Hz] | train_loss=0.0423
+[12.12 00:53:58] ┇ INFO     ┇                         __main__ ┇  Testing [0.20/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 00:54:03] ┇ INFO     ┇                         __main__ ┇  Testing [0.20/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 00:54:20] ┇ INFO     ┇                         __main__ ┇  Testing [0.20/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 00:54:37] ┇ INFO     ┇                         __main__ ┇  Testing [0.20/1]: 100%|████████████████████| 4/4 [0:00:42<0:00:00, 0.1Hz]
+[12.12 00:54:37] ┇ INFO     ┇                         __main__ ┇ Training [0.20/1]: average_f1=0.041847
+[12.12 00:54:38] ┇ INFO     ┇                         __main__ ┇ Training [0.20/1]:  20%|████                |  57/284 [0:05:42<0:22:44, 0.2Hz] | train_loss=0.0574
+[12.12 00:54:41] ┇ INFO     ┇                         __main__ ┇ Training [0.21/1]:  21%|████▏               |  60/284 [0:05:45<0:21:30, 0.2Hz] | train_loss=0.0480
+[12.12 00:54:44] ┇ INFO     ┇                         __main__ ┇ Training [0.22/1]:  22%|████▍               |  63/284 [0:05:48<0:20:23, 0.2Hz] | train_loss=0.0410
+[12.12 00:54:45] ┇ INFO     ┇                         __main__ ┇ Training [0.23/1]:  23%|████▌               |  64/284 [0:05:49<0:20:15, 0.2Hz] | train_loss=0.0414
+[12.12 00:54:49] ┇ INFO     ┇                         __main__ ┇  Testing [0.23/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 00:54:54] ┇ INFO     ┇                         __main__ ┇  Testing [0.23/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 00:54:58] ┇ INFO     ┇                         __main__ ┇  Testing [0.23/1]:  75%|███████████████     | 3/4 [0:00:12<0:00:04, 0.2Hz]
+[12.12 00:55:03] ┇ INFO     ┇                         __main__ ┇  Testing [0.23/1]: 100%|████████████████████| 4/4 [0:00:17<0:00:00, 0.2Hz]
+[12.12 00:55:03] ┇ INFO     ┇                         __main__ ┇ Training [0.23/1]: average_f1=0.036075
+[12.12 00:55:04] ┇ INFO     ┇                         __main__ ┇ Training [0.23/1]:  23%|████▌               |  65/284 [0:06:08<0:21:09, 0.2Hz] | train_loss=0.0472
+[12.12 00:55:07] ┇ INFO     ┇                         __main__ ┇ Training [0.24/1]:  24%|████▊               |  68/284 [0:06:11<0:20:51, 0.2Hz] | train_loss=0.0488
+[12.12 00:55:10] ┇ INFO     ┇                         __main__ ┇ Training [0.25/1]:  25%|█████               |  71/284 [0:06:14<0:20:34, 0.2Hz] | train_loss=0.0545
+[12.12 00:55:11] ┇ INFO     ┇                         __main__ ┇ Training [0.25/1]:  25%|█████               |  72/284 [0:06:15<0:18:10, 0.2Hz] | train_loss=0.0382
+[12.12 00:55:28] ┇ INFO     ┇                         __main__ ┇  Testing [0.25/1]:  25%|█████               | 1/4 [0:00:17<0:00:51, 0.1Hz]
+[12.12 00:55:33] ┇ INFO     ┇                         __main__ ┇  Testing [0.25/1]:  50%|██████████          | 2/4 [0:00:21<0:00:21, 0.1Hz]
+[12.12 00:55:50] ┇ INFO     ┇                         __main__ ┇  Testing [0.25/1]:  75%|███████████████     | 3/4 [0:00:39<0:00:13, 0.1Hz]
+[12.12 00:55:55] ┇ INFO     ┇                         __main__ ┇  Testing [0.25/1]: 100%|████████████████████| 4/4 [0:00:44<0:00:00, 0.1Hz]
+[12.12 00:55:55] ┇ INFO     ┇                         __main__ ┇ Training [0.25/1]: average_f1=0.033227
+[12.12 00:55:56] ┇ INFO     ┇                         __main__ ┇ Training [0.26/1]:  26%|█████▏              |  73/284 [0:07:00<0:20:33, 0.2Hz] | train_loss=0.0503
+[12.12 00:55:59] ┇ INFO     ┇                         __main__ ┇ Training [0.27/1]:  27%|█████▎              |  76/284 [0:07:03<0:20:16, 0.2Hz] | train_loss=0.0417
+[12.12 00:56:02] ┇ INFO     ┇                         __main__ ┇ Training [0.28/1]:  28%|█████▌              |  79/284 [0:07:06<0:19:58, 0.2Hz] | train_loss=0.0321
+[12.12 00:56:03] ┇ INFO     ┇                         __main__ ┇ Training [0.28/1]:  28%|█████▋              |  80/284 [0:07:07<0:16:52, 0.2Hz] | train_loss=0.0362
+[12.12 00:56:07] ┇ INFO     ┇                         __main__ ┇  Testing [0.28/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 00:56:12] ┇ INFO     ┇                         __main__ ┇  Testing [0.28/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 00:56:29] ┇ INFO     ┇                         __main__ ┇  Testing [0.28/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 00:56:34] ┇ INFO     ┇                         __main__ ┇  Testing [0.28/1]: 100%|████████████████████| 4/4 [0:00:31<0:00:00, 0.1Hz]
+[12.12 00:56:35] ┇ INFO     ┇                         __main__ ┇ Training [0.28/1]: average_f1=0.042027
+[12.12 00:56:36] ┇ INFO     ┇                         __main__ ┇ Training [0.29/1]:  29%|█████▋              |  81/284 [0:07:39<0:18:27, 0.2Hz] | train_loss=0.0427
+[12.12 00:56:39] ┇ INFO     ┇                         __main__ ┇ Training [0.30/1]:  30%|█████▉              |  84/284 [0:07:42<0:18:11, 0.2Hz] | train_loss=0.0313
+[12.12 00:56:42] ┇ INFO     ┇                         __main__ ┇ Training [0.31/1]:  31%|██████▏             |  87/284 [0:07:46<0:17:55, 0.2Hz] | train_loss=0.0425
+[12.12 00:56:43] ┇ INFO     ┇                         __main__ ┇ Training [0.31/1]:  31%|██████▏             |  88/284 [0:07:47<0:15:00, 0.2Hz] | train_loss=0.0395
+[12.12 00:57:00] ┇ INFO     ┇                         __main__ ┇  Testing [0.31/1]:  25%|█████               | 1/4 [0:00:17<0:00:51, 0.1Hz]
+[12.12 00:57:04] ┇ INFO     ┇                         __main__ ┇  Testing [0.31/1]:  50%|██████████          | 2/4 [0:00:21<0:00:21, 0.1Hz]
+[12.12 00:57:22] ┇ INFO     ┇                         __main__ ┇  Testing [0.31/1]:  75%|███████████████     | 3/4 [0:00:39<0:00:13, 0.1Hz]
+[12.12 00:57:27] ┇ INFO     ┇                         __main__ ┇  Testing [0.31/1]: 100%|████████████████████| 4/4 [0:00:44<0:00:00, 0.1Hz]
+[12.12 00:57:27] ┇ INFO     ┇                         __main__ ┇ Training [0.31/1]: average_f1=0.044083
+[12.12 00:57:28] ┇ INFO     ┇                         __main__ ┇ Training [0.31/1]:  31%|██████▎             |  89/284 [0:08:32<0:17:12, 0.2Hz] | train_loss=0.0451
+[12.12 00:57:32] ┇ INFO     ┇                         __main__ ┇ Training [0.33/1]:  33%|██████▌             |  93/284 [0:08:36<0:16:51, 0.2Hz] | train_loss=0.0491
+[12.12 00:57:35] ┇ INFO     ┇                         __main__ ┇ Training [0.34/1]:  34%|██████▊             |  96/284 [0:08:39<0:14:25, 0.2Hz] | train_loss=0.0366
+[12.12 00:57:35] ┇ INFO     ┇                         __main__ ┇ Training [0.34/1]:  34%|██████▊             |  96/284 [0:08:39<0:14:25, 0.2Hz] | train_loss=0.0366
+[12.12 00:57:39] ┇ INFO     ┇                         __main__ ┇  Testing [0.34/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 00:57:44] ┇ INFO     ┇                         __main__ ┇  Testing [0.34/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 00:58:01] ┇ INFO     ┇                         __main__ ┇  Testing [0.34/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 00:58:06] ┇ INFO     ┇                         __main__ ┇  Testing [0.34/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 00:58:06] ┇ INFO     ┇                         __main__ ┇ Training [0.34/1]: average_f1=0.038131
+[12.12 00:58:07] ┇ INFO     ┇                         __main__ ┇ Training [0.34/1]:  34%|██████▊             |  97/284 [0:09:11<0:15:52, 0.2Hz] | train_loss=0.0318
+[12.12 00:58:10] ┇ INFO     ┇                         __main__ ┇ Training [0.35/1]:  35%|███████             | 100/284 [0:09:14<0:15:37, 0.2Hz] | train_loss=0.0362
+[12.12 00:58:13] ┇ INFO     ┇                         __main__ ┇ Training [0.36/1]:  36%|███████▎            | 103/284 [0:09:17<0:15:22, 0.2Hz] | train_loss=0.0305
+[12.12 00:58:14] ┇ INFO     ┇                         __main__ ┇ Training [0.37/1]:  37%|███████▎            | 104/284 [0:09:18<0:14:29, 0.2Hz] | train_loss=0.0358
+[12.12 00:58:18] ┇ INFO     ┇                         __main__ ┇  Testing [0.37/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 00:58:22] ┇ INFO     ┇                         __main__ ┇  Testing [0.37/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 00:58:40] ┇ INFO     ┇                         __main__ ┇  Testing [0.37/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 00:58:45] ┇ INFO     ┇                         __main__ ┇  Testing [0.37/1]: 100%|████████████████████| 4/4 [0:00:31<0:00:00, 0.1Hz]
+[12.12 00:58:45] ┇ INFO     ┇                         __main__ ┇ Training [0.37/1]: average_f1=0.041919
+[12.12 00:58:46] ┇ INFO     ┇                         __main__ ┇ Training [0.37/1]:  37%|███████▍            | 105/284 [0:09:50<0:15:53, 0.2Hz] | train_loss=0.0384
+[12.12 00:58:49] ┇ INFO     ┇                         __main__ ┇ Training [0.38/1]:  38%|███████▌            | 108/284 [0:09:53<0:15:37, 0.2Hz] | train_loss=0.0438
+[12.12 00:58:52] ┇ INFO     ┇                         __main__ ┇ Training [0.39/1]:  39%|███████▊            | 111/284 [0:09:56<0:15:21, 0.2Hz] | train_loss=0.0421
+[12.12 00:58:53] ┇ INFO     ┇                         __main__ ┇ Training [0.39/1]:  39%|███████▉            | 112/284 [0:09:57<0:13:55, 0.2Hz] | train_loss=0.0408
+[12.12 00:58:57] ┇ INFO     ┇                         __main__ ┇  Testing [0.39/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 00:59:02] ┇ INFO     ┇                         __main__ ┇  Testing [0.39/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 00:59:19] ┇ INFO     ┇                         __main__ ┇  Testing [0.39/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 00:59:25] ┇ INFO     ┇                         __main__ ┇  Testing [0.39/1]: 100%|████████████████████| 4/4 [0:00:31<0:00:00, 0.1Hz]
+[12.12 00:59:25] ┇ INFO     ┇                         __main__ ┇ Training [0.39/1]: average_f1=0.047997
+[12.12 00:59:26] ┇ INFO     ┇                         __main__ ┇ Training [0.40/1]:  40%|███████▉            | 113/284 [0:10:30<0:15:15, 0.2Hz] | train_loss=0.0419
+[12.12 00:59:29] ┇ INFO     ┇                         __main__ ┇ Training [0.41/1]:  41%|████████▏           | 116/284 [0:10:33<0:14:59, 0.2Hz] | train_loss=0.0328
+[12.12 00:59:32] ┇ INFO     ┇                         __main__ ┇ Training [0.42/1]:  42%|████████▍           | 119/284 [0:10:36<0:14:43, 0.2Hz] | train_loss=0.0493
+[12.12 00:59:33] ┇ INFO     ┇                         __main__ ┇ Training [0.42/1]:  42%|████████▍           | 120/284 [0:10:37<0:12:46, 0.2Hz] | train_loss=0.0482
+[12.12 00:59:36] ┇ INFO     ┇                         __main__ ┇  Testing [0.42/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 00:59:41] ┇ INFO     ┇                         __main__ ┇  Testing [0.42/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 00:59:59] ┇ INFO     ┇                         __main__ ┇  Testing [0.42/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:00:04] ┇ INFO     ┇                         __main__ ┇  Testing [0.42/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:00:04] ┇ INFO     ┇                         __main__ ┇ Training [0.42/1]: average_f1=0.055456
+[12.12 01:00:05] ┇ INFO     ┇                         __main__ ┇ Training [0.43/1]:  43%|████████▌           | 121/284 [0:11:09<0:14:02, 0.2Hz] | train_loss=0.0395
+[12.12 01:00:09] ┇ INFO     ┇                         __main__ ┇ Training [0.44/1]:  44%|████████▊           | 125/284 [0:11:13<0:13:41, 0.2Hz] | train_loss=0.0254
+[12.12 01:00:12] ┇ INFO     ┇                         __main__ ┇ Training [0.45/1]:  45%|█████████           | 128/284 [0:11:16<0:12:43, 0.2Hz] | train_loss=0.0343
+[12.12 01:00:12] ┇ INFO     ┇                         __main__ ┇ Training [0.45/1]:  45%|█████████           | 128/284 [0:11:16<0:12:43, 0.2Hz] | train_loss=0.0343
+[12.12 01:00:29] ┇ INFO     ┇                         __main__ ┇  Testing [0.45/1]:  25%|█████               | 1/4 [0:00:16<0:00:50, 0.1Hz]
+[12.12 01:00:34] ┇ INFO     ┇                         __main__ ┇  Testing [0.45/1]:  50%|██████████          | 2/4 [0:00:21<0:00:21, 0.1Hz]
+[12.12 01:00:51] ┇ INFO     ┇                         __main__ ┇  Testing [0.45/1]:  75%|███████████████     | 3/4 [0:00:39<0:00:13, 0.1Hz]
+[12.12 01:00:56] ┇ INFO     ┇                         __main__ ┇  Testing [0.45/1]: 100%|████████████████████| 4/4 [0:00:44<0:00:00, 0.1Hz]
+[12.12 01:00:56] ┇ INFO     ┇                         __main__ ┇ Training [0.45/1]: average_f1=0.042208
+[12.12 01:00:57] ┇ INFO     ┇                         __main__ ┇ Training [0.45/1]:  45%|█████████           | 129/284 [0:12:01<0:14:27, 0.2Hz] | train_loss=0.0403
+[12.12 01:01:00] ┇ INFO     ┇                         __main__ ┇ Training [0.46/1]:  46%|█████████▎          | 132/284 [0:12:04<0:14:10, 0.2Hz] | train_loss=0.0473
+[12.12 01:01:04] ┇ INFO     ┇                         __main__ ┇ Training [0.48/1]:  48%|█████████▌          | 135/284 [0:12:07<0:13:53, 0.2Hz] | train_loss=0.0519
+[12.12 01:01:05] ┇ INFO     ┇                         __main__ ┇ Training [0.48/1]:  48%|█████████▌          | 136/284 [0:12:08<0:12:04, 0.2Hz] | train_loss=0.0310
+[12.12 01:01:08] ┇ INFO     ┇                         __main__ ┇  Testing [0.48/1]:  25%|█████               | 1/4 [0:00:03<0:00:09, 0.3Hz]
+[12.12 01:01:13] ┇ INFO     ┇                         __main__ ┇  Testing [0.48/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 01:01:30] ┇ INFO     ┇                         __main__ ┇  Testing [0.48/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:01:47] ┇ INFO     ┇                         __main__ ┇  Testing [0.48/1]: 100%|████████████████████| 4/4 [0:00:42<0:00:00, 0.1Hz]
+[12.12 01:01:47] ┇ INFO     ┇                         __main__ ┇ Training [0.48/1]: average_f1=0.048160
+[12.12 01:01:48] ┇ INFO     ┇                         __main__ ┇ Training [0.48/1]:  48%|█████████▋          | 137/284 [0:12:52<0:13:38, 0.2Hz] | train_loss=0.0260
+[12.12 01:01:52] ┇ INFO     ┇                         __main__ ┇ Training [0.50/1]:  50%|█████████▉          | 141/284 [0:12:56<0:13:16, 0.2Hz] | train_loss=0.0344
+[12.12 01:01:55] ┇ INFO     ┇                         __main__ ┇ Training [0.51/1]:  51%|██████████▏         | 144/284 [0:12:59<0:11:50, 0.2Hz] | train_loss=0.0485
+[12.12 01:01:59] ┇ INFO     ┇                         __main__ ┇  Testing [0.51/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 01:02:04] ┇ INFO     ┇                         __main__ ┇  Testing [0.51/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:02:21] ┇ INFO     ┇                         __main__ ┇  Testing [0.51/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:02:26] ┇ INFO     ┇                         __main__ ┇  Testing [0.51/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:02:26] ┇ INFO     ┇                         __main__ ┇ Training [0.51/1]: average_f1=0.053870
+[12.12 01:02:27] ┇ INFO     ┇                         __main__ ┇ Training [0.51/1]:  51%|██████████▏         | 145/284 [0:13:31<0:12:53, 0.2Hz] | train_loss=0.0312
+[12.12 01:02:30] ┇ INFO     ┇                         __main__ ┇ Training [0.52/1]:  52%|██████████▍         | 148/284 [0:13:34<0:12:37, 0.2Hz] | train_loss=0.0441
+[12.12 01:02:33] ┇ INFO     ┇                         __main__ ┇ Training [0.53/1]:  53%|██████████▋         | 151/284 [0:13:37<0:12:20, 0.2Hz] | train_loss=0.0444
+[12.12 01:02:34] ┇ INFO     ┇                         __main__ ┇ Training [0.54/1]:  54%|██████████▋         | 152/284 [0:13:38<0:10:41, 0.2Hz] | train_loss=0.0434
+[12.12 01:02:38] ┇ INFO     ┇                         __main__ ┇  Testing [0.54/1]:  25%|█████               | 1/4 [0:00:03<0:00:09, 0.3Hz]
+[12.12 01:02:42] ┇ INFO     ┇                         __main__ ┇  Testing [0.54/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 01:03:00] ┇ INFO     ┇                         __main__ ┇  Testing [0.54/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:03:04] ┇ INFO     ┇                         __main__ ┇  Testing [0.54/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:03:05] ┇ INFO     ┇                         __main__ ┇ Training [0.54/1]: average_f1=0.045874
+[12.12 01:03:06] ┇ INFO     ┇                         __main__ ┇ Training [0.54/1]:  54%|██████████▊         | 153/284 [0:14:09<0:11:39, 0.2Hz] | train_loss=0.0335
+[12.12 01:03:09] ┇ INFO     ┇                         __main__ ┇ Training [0.55/1]:  55%|██████████▉         | 156/284 [0:14:12<0:11:23, 0.2Hz] | train_loss=0.0332
+[12.12 01:03:12] ┇ INFO     ┇                         __main__ ┇ Training [0.56/1]:  56%|███████████▏        | 159/284 [0:14:15<0:11:07, 0.2Hz] | train_loss=0.0433
+[12.12 01:03:13] ┇ INFO     ┇                         __main__ ┇ Training [0.56/1]:  56%|███████████▎        | 160/284 [0:14:16<0:10:01, 0.2Hz] | train_loss=0.0234
+[12.12 01:03:16] ┇ INFO     ┇                         __main__ ┇  Testing [0.56/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 01:03:21] ┇ INFO     ┇                         __main__ ┇  Testing [0.56/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:03:38] ┇ INFO     ┇                         __main__ ┇  Testing [0.56/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:03:43] ┇ INFO     ┇                         __main__ ┇  Testing [0.56/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:03:43] ┇ INFO     ┇                         __main__ ┇ Training [0.56/1]: average_f1=0.053870
+[12.12 01:03:44] ┇ INFO     ┇                         __main__ ┇ Training [0.57/1]:  57%|███████████▎        | 161/284 [0:14:48<0:10:56, 0.2Hz] | train_loss=0.0338
+[12.12 01:03:48] ┇ INFO     ┇                         __main__ ┇ Training [0.58/1]:  58%|███████████▌        | 165/284 [0:14:52<0:10:34, 0.2Hz] | train_loss=0.0472
+[12.12 01:03:51] ┇ INFO     ┇                         __main__ ┇ Training [0.59/1]:  59%|███████████▊        | 168/284 [0:14:55<0:09:20, 0.2Hz] | train_loss=0.0298
+[12.12 01:03:51] ┇ INFO     ┇                         __main__ ┇ Training [0.59/1]:  59%|███████████▊        | 168/284 [0:14:55<0:09:20, 0.2Hz] | train_loss=0.0298
+[12.12 01:03:55] ┇ INFO     ┇                         __main__ ┇  Testing [0.59/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 01:03:59] ┇ INFO     ┇                         __main__ ┇  Testing [0.59/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:04:17] ┇ INFO     ┇                         __main__ ┇  Testing [0.59/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:04:34] ┇ INFO     ┇                         __main__ ┇  Testing [0.59/1]: 100%|████████████████████| 4/4 [0:00:42<0:00:00, 0.1Hz]
+[12.12 01:04:34] ┇ INFO     ┇                         __main__ ┇ Training [0.59/1]: average_f1=0.045959
+[12.12 01:04:35] ┇ INFO     ┇                         __main__ ┇ Training [0.60/1]:  60%|███████████▉        | 169/284 [0:15:39<0:10:34, 0.2Hz] | train_loss=0.0286
+[12.12 01:04:38] ┇ INFO     ┇                         __main__ ┇ Training [0.61/1]:  61%|████████████        | 172/284 [0:15:42<0:10:17, 0.2Hz] | train_loss=0.0346
+[12.12 01:04:41] ┇ INFO     ┇                         __main__ ┇ Training [0.62/1]:  62%|████████████▎       | 175/284 [0:15:45<0:10:01, 0.2Hz] | train_loss=0.0426
+[12.12 01:04:42] ┇ INFO     ┇                         __main__ ┇ Training [0.62/1]:  62%|████████████▍       | 176/284 [0:15:46<0:09:02, 0.2Hz] | train_loss=0.0334
+[12.12 01:04:45] ┇ INFO     ┇                         __main__ ┇  Testing [0.62/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 01:04:50] ┇ INFO     ┇                         __main__ ┇  Testing [0.62/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 01:04:54] ┇ INFO     ┇                         __main__ ┇  Testing [0.62/1]:  75%|███████████████     | 3/4 [0:00:12<0:00:04, 0.2Hz]
+[12.12 01:04:59] ┇ INFO     ┇                         __main__ ┇  Testing [0.62/1]: 100%|████████████████████| 4/4 [0:00:16<0:00:00, 0.2Hz]
+[12.12 01:04:59] ┇ INFO     ┇                         __main__ ┇ Training [0.62/1]: average_f1=0.053707
+[12.12 01:05:00] ┇ INFO     ┇                         __main__ ┇ Training [0.62/1]:  62%|████████████▍       | 177/284 [0:16:04<0:09:25, 0.2Hz] | train_loss=0.0267
+[12.12 01:05:03] ┇ INFO     ┇                         __main__ ┇ Training [0.63/1]:  63%|████████████▋       | 180/284 [0:16:07<0:09:10, 0.2Hz] | train_loss=0.0367
+[12.12 01:05:06] ┇ INFO     ┇                         __main__ ┇ Training [0.64/1]:  64%|████████████▉       | 183/284 [0:16:10<0:08:54, 0.2Hz] | train_loss=0.0338
+[12.12 01:05:07] ┇ INFO     ┇                         __main__ ┇ Training [0.65/1]:  65%|████████████▉       | 184/284 [0:16:11<0:07:59, 0.2Hz] | train_loss=0.0461
+[12.12 01:05:25] ┇ INFO     ┇                         __main__ ┇  Testing [0.65/1]:  25%|█████               | 1/4 [0:00:17<0:00:53, 0.1Hz]
+[12.12 01:05:29] ┇ INFO     ┇                         __main__ ┇  Testing [0.65/1]:  50%|██████████          | 2/4 [0:00:21<0:00:21, 0.1Hz]
+[12.12 01:05:47] ┇ INFO     ┇                         __main__ ┇  Testing [0.65/1]:  75%|███████████████     | 3/4 [0:00:39<0:00:13, 0.1Hz]
+[12.12 01:05:52] ┇ INFO     ┇                         __main__ ┇  Testing [0.65/1]: 100%|████████████████████| 4/4 [0:00:44<0:00:00, 0.1Hz]
+[12.12 01:05:52] ┇ INFO     ┇                         __main__ ┇ Training [0.65/1]: average_f1=0.049668
+[12.12 01:05:53] ┇ INFO     ┇                         __main__ ┇ Training [0.65/1]:  65%|█████████████       | 185/284 [0:16:57<0:09:05, 0.2Hz] | train_loss=0.0472
+[12.12 01:05:56] ┇ INFO     ┇                         __main__ ┇ Training [0.66/1]:  66%|█████████████▏      | 188/284 [0:17:00<0:08:48, 0.2Hz] | train_loss=0.0351
+[12.12 01:05:59] ┇ INFO     ┇                         __main__ ┇ Training [0.67/1]:  67%|█████████████▍      | 191/284 [0:17:03<0:08:32, 0.2Hz] | train_loss=0.0326
+[12.12 01:06:00] ┇ INFO     ┇                         __main__ ┇ Training [0.68/1]:  68%|█████████████▌      | 192/284 [0:17:04<0:07:21, 0.2Hz] | train_loss=0.0484
+[12.12 01:06:04] ┇ INFO     ┇                         __main__ ┇  Testing [0.68/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 01:06:08] ┇ INFO     ┇                         __main__ ┇  Testing [0.68/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:06:26] ┇ INFO     ┇                         __main__ ┇  Testing [0.68/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:06:30] ┇ INFO     ┇                         __main__ ┇  Testing [0.68/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:06:30] ┇ INFO     ┇                         __main__ ┇ Training [0.68/1]: average_f1=0.041694
+[12.12 01:06:31] ┇ INFO     ┇                         __main__ ┇ Training [0.68/1]:  68%|█████████████▌      | 193/284 [0:17:35<0:08:00, 0.2Hz] | train_loss=0.0342
+[12.12 01:06:34] ┇ INFO     ┇                         __main__ ┇ Training [0.69/1]:  69%|█████████████▊      | 196/284 [0:17:38<0:07:44, 0.2Hz] | train_loss=0.0384
+[12.12 01:06:37] ┇ INFO     ┇                         __main__ ┇ Training [0.70/1]:  70%|██████████████      | 199/284 [0:17:41<0:07:28, 0.2Hz] | train_loss=0.0436
+[12.12 01:06:38] ┇ INFO     ┇                         __main__ ┇ Training [0.70/1]:  70%|██████████████      | 200/284 [0:17:42<0:06:26, 0.2Hz] | train_loss=0.0385
+[12.12 01:06:42] ┇ INFO     ┇                         __main__ ┇  Testing [0.70/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 01:06:46] ┇ INFO     ┇                         __main__ ┇  Testing [0.70/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 01:07:04] ┇ INFO     ┇                         __main__ ┇  Testing [0.70/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:07:09] ┇ INFO     ┇                         __main__ ┇  Testing [0.70/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:07:09] ┇ INFO     ┇                         __main__ ┇ Training [0.70/1]: average_f1=0.045879
+[12.12 01:07:10] ┇ INFO     ┇                         __main__ ┇ Training [0.71/1]:  71%|██████████████▏     | 201/284 [0:18:14<0:07:02, 0.2Hz] | train_loss=0.0343
+[12.12 01:07:13] ┇ INFO     ┇                         __main__ ┇ Training [0.72/1]:  72%|██████████████▎     | 204/284 [0:18:17<0:06:46, 0.2Hz] | train_loss=0.0278
+[12.12 01:07:16] ┇ INFO     ┇                         __main__ ┇ Training [0.73/1]:  73%|██████████████▌     | 207/284 [0:18:20<0:06:31, 0.2Hz] | train_loss=0.0363
+[12.12 01:07:17] ┇ INFO     ┇                         __main__ ┇ Training [0.73/1]:  73%|██████████████▋     | 208/284 [0:18:21<0:05:49, 0.2Hz] | train_loss=0.0449
+[12.12 01:07:20] ┇ INFO     ┇                         __main__ ┇  Testing [0.73/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 01:07:25] ┇ INFO     ┇                         __main__ ┇  Testing [0.73/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:07:42] ┇ INFO     ┇                         __main__ ┇  Testing [0.73/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:07:48] ┇ INFO     ┇                         __main__ ┇  Testing [0.73/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:07:48] ┇ INFO     ┇                         __main__ ┇ Training [0.73/1]: average_f1=0.047395
+[12.12 01:07:49] ┇ INFO     ┇                         __main__ ┇ Training [0.74/1]:  74%|██████████████▋     | 209/284 [0:18:53<0:06:21, 0.2Hz] | train_loss=0.0447
+[12.12 01:07:52] ┇ INFO     ┇                         __main__ ┇ Training [0.75/1]:  75%|██████████████▉     | 212/284 [0:18:56<0:06:06, 0.2Hz] | train_loss=0.0245
+[12.12 01:07:55] ┇ INFO     ┇                         __main__ ┇ Training [0.76/1]:  76%|███████████████▏    | 215/284 [0:18:59<0:05:51, 0.2Hz] | train_loss=0.0295
+[12.12 01:07:56] ┇ INFO     ┇                         __main__ ┇ Training [0.76/1]:  76%|███████████████▏    | 216/284 [0:19:00<0:05:13, 0.2Hz] | train_loss=0.0293
+[12.12 01:08:00] ┇ INFO     ┇                         __main__ ┇  Testing [0.76/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 01:08:04] ┇ INFO     ┇                         __main__ ┇  Testing [0.76/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:08:22] ┇ INFO     ┇                         __main__ ┇  Testing [0.76/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:08:26] ┇ INFO     ┇                         __main__ ┇  Testing [0.76/1]: 100%|████████████████████| 4/4 [0:00:29<0:00:00, 0.1Hz]
+[12.12 01:08:26] ┇ INFO     ┇                         __main__ ┇ Training [0.76/1]: average_f1=0.047648
+[12.12 01:08:27] ┇ INFO     ┇                         __main__ ┇ Training [0.76/1]:  76%|███████████████▎    | 217/284 [0:19:31<0:05:40, 0.2Hz] | train_loss=0.0362
+[12.12 01:08:30] ┇ INFO     ┇                         __main__ ┇ Training [0.77/1]:  77%|███████████████▍    | 220/284 [0:19:34<0:05:25, 0.2Hz] | train_loss=0.0606
+[12.12 01:08:33] ┇ INFO     ┇                         __main__ ┇ Training [0.79/1]:  79%|███████████████▋    | 223/284 [0:19:37<0:05:10, 0.2Hz] | train_loss=0.0413
+[12.12 01:08:34] ┇ INFO     ┇                         __main__ ┇ Training [0.79/1]:  79%|███████████████▊    | 224/284 [0:19:38<0:04:36, 0.2Hz] | train_loss=0.0284
+[12.12 01:08:52] ┇ INFO     ┇                         __main__ ┇  Testing [0.79/1]:  25%|█████               | 1/4 [0:00:17<0:00:51, 0.1Hz]
+[12.12 01:08:56] ┇ INFO     ┇                         __main__ ┇  Testing [0.79/1]:  50%|██████████          | 2/4 [0:00:21<0:00:21, 0.1Hz]
+[12.12 01:09:14] ┇ INFO     ┇                         __main__ ┇  Testing [0.79/1]:  75%|███████████████     | 3/4 [0:00:39<0:00:13, 0.1Hz]
+[12.12 01:09:18] ┇ INFO     ┇                         __main__ ┇  Testing [0.79/1]: 100%|████████████████████| 4/4 [0:00:43<0:00:00, 0.1Hz]
+[12.12 01:09:18] ┇ INFO     ┇                         __main__ ┇ Training [0.79/1]: average_f1=0.049508
+[12.12 01:09:19] ┇ INFO     ┇                         __main__ ┇ Training [0.79/1]:  79%|███████████████▊    | 225/284 [0:20:23<0:05:12, 0.2Hz] | train_loss=0.0289
+[12.12 01:09:22] ┇ INFO     ┇                         __main__ ┇ Training [0.80/1]:  80%|████████████████    | 228/284 [0:20:26<0:04:57, 0.2Hz] | train_loss=0.0427
+[12.12 01:09:25] ┇ INFO     ┇                         __main__ ┇ Training [0.81/1]:  81%|████████████████▎   | 231/284 [0:20:29<0:04:41, 0.2Hz] | train_loss=0.0446
+[12.12 01:09:26] ┇ INFO     ┇                         __main__ ┇ Training [0.82/1]:  82%|████████████████▎   | 232/284 [0:20:30<0:04:00, 0.2Hz] | train_loss=0.0339
+[12.12 01:09:30] ┇ INFO     ┇                         __main__ ┇  Testing [0.82/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 01:09:34] ┇ INFO     ┇                         __main__ ┇  Testing [0.82/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:09:52] ┇ INFO     ┇                         __main__ ┇  Testing [0.82/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:09:56] ┇ INFO     ┇                         __main__ ┇  Testing [0.82/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:09:57] ┇ INFO     ┇                         __main__ ┇ Training [0.82/1]: average_f1=0.045482
+[12.12 01:09:58] ┇ INFO     ┇                         __main__ ┇ Training [0.82/1]:  82%|████████████████▍   | 233/284 [0:21:01<0:04:20, 0.2Hz] | train_loss=0.0326
+[12.12 01:10:01] ┇ INFO     ┇                         __main__ ┇ Training [0.83/1]:  83%|████████████████▌   | 236/284 [0:21:05<0:04:05, 0.2Hz] | train_loss=0.0304
+[12.12 01:10:04] ┇ INFO     ┇                         __main__ ┇ Training [0.84/1]:  84%|████████████████▊   | 239/284 [0:21:08<0:03:49, 0.2Hz] | train_loss=0.0436
+[12.12 01:10:05] ┇ INFO     ┇                         __main__ ┇ Training [0.85/1]:  85%|████████████████▉   | 240/284 [0:21:09<0:03:32, 0.2Hz] | train_loss=0.0590
+[12.12 01:10:08] ┇ INFO     ┇                         __main__ ┇  Testing [0.85/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 01:10:13] ┇ INFO     ┇                         __main__ ┇  Testing [0.85/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:10:31] ┇ INFO     ┇                         __main__ ┇  Testing [0.85/1]:  75%|███████████████     | 3/4 [0:00:26<0:00:08, 0.1Hz]
+[12.12 01:10:36] ┇ INFO     ┇                         __main__ ┇  Testing [0.85/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:10:36] ┇ INFO     ┇                         __main__ ┇ Training [0.85/1]: average_f1=0.052007
+[12.12 01:10:37] ┇ INFO     ┇                         __main__ ┇ Training [0.85/1]:  85%|████████████████▉   | 241/284 [0:21:41<0:03:49, 0.2Hz] | train_loss=0.0383
+[12.12 01:10:40] ┇ INFO     ┇                         __main__ ┇ Training [0.86/1]:  86%|█████████████████▏  | 244/284 [0:21:44<0:03:33, 0.2Hz] | train_loss=0.0326
+[12.12 01:10:43] ┇ INFO     ┇                         __main__ ┇ Training [0.87/1]:  87%|█████████████████▍  | 247/284 [0:21:47<0:03:17, 0.2Hz] | train_loss=0.0637
+[12.12 01:10:44] ┇ INFO     ┇                         __main__ ┇ Training [0.87/1]:  87%|█████████████████▍  | 248/284 [0:21:48<0:02:46, 0.2Hz] | train_loss=0.0326
+[12.12 01:10:48] ┇ INFO     ┇                         __main__ ┇  Testing [0.87/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 01:10:52] ┇ INFO     ┇                         __main__ ┇  Testing [0.87/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 01:10:57] ┇ INFO     ┇                         __main__ ┇  Testing [0.87/1]:  75%|███████████████     | 3/4 [0:00:12<0:00:04, 0.2Hz]
+[12.12 01:11:02] ┇ INFO     ┇                         __main__ ┇  Testing [0.87/1]: 100%|████████████████████| 4/4 [0:00:17<0:00:00, 0.2Hz]
+[12.12 01:11:02] ┇ INFO     ┇                         __main__ ┇ Training [0.87/1]: average_f1=0.048039
+[12.12 01:11:03] ┇ INFO     ┇                         __main__ ┇ Training [0.88/1]:  88%|█████████████████▌  | 249/284 [0:22:07<0:02:51, 0.2Hz] | train_loss=0.0372
+[12.12 01:11:06] ┇ INFO     ┇                         __main__ ┇ Training [0.89/1]:  89%|█████████████████▋  | 252/284 [0:22:10<0:02:36, 0.2Hz] | train_loss=0.0420
+[12.12 01:11:09] ┇ INFO     ┇                         __main__ ┇ Training [0.90/1]:  90%|█████████████████▉  | 255/284 [0:22:13<0:02:22, 0.2Hz] | train_loss=0.0410
+[12.12 01:11:10] ┇ INFO     ┇                         __main__ ┇ Training [0.90/1]:  90%|██████████████████  | 256/284 [0:22:14<0:02:03, 0.2Hz] | train_loss=0.0453
+[12.12 01:11:14] ┇ INFO     ┇                         __main__ ┇  Testing [0.90/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 01:11:18] ┇ INFO     ┇                         __main__ ┇  Testing [0.90/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 01:11:22] ┇ INFO     ┇                         __main__ ┇  Testing [0.90/1]:  75%|███████████████     | 3/4 [0:00:12<0:00:04, 0.2Hz]
+[12.12 01:11:27] ┇ INFO     ┇                         __main__ ┇  Testing [0.90/1]: 100%|████████████████████| 4/4 [0:00:17<0:00:00, 0.2Hz]
+[12.12 01:11:27] ┇ INFO     ┇                         __main__ ┇ Training [0.90/1]: average_f1=0.049625
+[12.12 01:11:28] ┇ INFO     ┇                         __main__ ┇ Training [0.90/1]:  90%|██████████████████  | 257/284 [0:22:32<0:02:06, 0.2Hz] | train_loss=0.0399
+[12.12 01:11:31] ┇ INFO     ┇                         __main__ ┇ Training [0.92/1]:  92%|██████████████████▎ | 260/284 [0:22:35<0:01:52, 0.2Hz] | train_loss=0.0432
+[12.12 01:11:34] ┇ INFO     ┇                         __main__ ┇ Training [0.93/1]:  93%|██████████████████▌ | 263/284 [0:22:38<0:01:38, 0.2Hz] | train_loss=0.0332
+[12.12 01:11:35] ┇ INFO     ┇                         __main__ ┇ Training [0.93/1]:  93%|██████████████████▌ | 264/284 [0:22:39<0:01:24, 0.2Hz] | train_loss=0.0482
+[12.12 01:11:39] ┇ INFO     ┇                         __main__ ┇  Testing [0.93/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 01:11:43] ┇ INFO     ┇                         __main__ ┇  Testing [0.93/1]:  50%|██████████          | 2/4 [0:00:07<0:00:07, 0.3Hz]
+[12.12 01:12:01] ┇ INFO     ┇                         __main__ ┇  Testing [0.93/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:12:06] ┇ INFO     ┇                         __main__ ┇  Testing [0.93/1]: 100%|████████████████████| 4/4 [0:00:30<0:00:00, 0.1Hz]
+[12.12 01:12:06] ┇ INFO     ┇                         __main__ ┇ Training [0.93/1]: average_f1=0.051890
+[12.12 01:12:07] ┇ INFO     ┇                         __main__ ┇ Training [0.93/1]:  93%|██████████████████▋ | 265/284 [0:23:11<0:01:29, 0.2Hz] | train_loss=0.0233
+[12.12 01:12:11] ┇ INFO     ┇                         __main__ ┇ Training [0.95/1]:  95%|██████████████████▉ | 269/284 [0:23:15<0:01:10, 0.2Hz] | train_loss=0.0364
+[12.12 01:12:14] ┇ INFO     ┇                         __main__ ┇ Training [0.96/1]:  96%|███████████████████▏| 272/284 [0:23:18<0:00:50, 0.2Hz] | train_loss=0.0310
+[12.12 01:12:14] ┇ INFO     ┇                         __main__ ┇ Training [0.96/1]:  96%|███████████████████▏| 272/284 [0:23:18<0:00:50, 0.2Hz] | train_loss=0.0310
+[12.12 01:12:18] ┇ INFO     ┇                         __main__ ┇  Testing [0.96/1]:  25%|█████               | 1/4 [0:00:03<0:00:10, 0.3Hz]
+[12.12 01:12:22] ┇ INFO     ┇                         __main__ ┇  Testing [0.96/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:12:27] ┇ INFO     ┇                         __main__ ┇  Testing [0.96/1]:  75%|███████████████     | 3/4 [0:00:12<0:00:04, 0.2Hz]
+[12.12 01:12:44] ┇ INFO     ┇                         __main__ ┇  Testing [0.96/1]: 100%|████████████████████| 4/4 [0:00:29<0:00:00, 0.1Hz]
+[12.12 01:12:44] ┇ INFO     ┇                         __main__ ┇ Training [0.96/1]: average_f1=0.053412
+[12.12 01:12:45] ┇ INFO     ┇                         __main__ ┇ Training [0.96/1]:  96%|███████████████████▏| 273/284 [0:23:49<0:00:51, 0.2Hz] | train_loss=0.0334
+[12.12 01:12:48] ┇ INFO     ┇                         __main__ ┇ Training [0.97/1]:  97%|███████████████████▍| 276/284 [0:23:52<0:00:37, 0.2Hz] | train_loss=0.0431
+[12.12 01:12:51] ┇ INFO     ┇                         __main__ ┇ Training [0.98/1]:  98%|███████████████████▋| 279/284 [0:23:55<0:00:23, 0.2Hz] | train_loss=0.0338
+[12.12 01:12:53] ┇ INFO     ┇                         __main__ ┇ Training [0.99/1]:  99%|███████████████████▋| 280/284 [0:23:56<0:00:16, 0.2Hz] | train_loss=0.0332
+[12.12 01:12:56] ┇ INFO     ┇                         __main__ ┇  Testing [0.99/1]:  25%|█████               | 1/4 [0:00:03<0:00:11, 0.3Hz]
+[12.12 01:13:01] ┇ INFO     ┇                         __main__ ┇  Testing [0.99/1]:  50%|██████████          | 2/4 [0:00:08<0:00:08, 0.2Hz]
+[12.12 01:13:18] ┇ INFO     ┇                         __main__ ┇  Testing [0.99/1]:  75%|███████████████     | 3/4 [0:00:25<0:00:08, 0.1Hz]
+[12.12 01:13:24] ┇ INFO     ┇                         __main__ ┇  Testing [0.99/1]: 100%|████████████████████| 4/4 [0:00:31<0:00:00, 0.1Hz]
+[12.12 01:13:24] ┇ INFO     ┇                         __main__ ┇ Training [0.99/1]: average_f1=0.055223
+[12.12 01:13:25] ┇ INFO     ┇                         __main__ ┇ Training [0.99/1]:  99%|███████████████████▊| 281/284 [0:24:29<0:00:14, 0.2Hz] | train_loss=0.0385
+[12.12 01:13:27] ┇ INFO     ┇                         __main__ ┇ Training [1.00/1]: 100%|████████████████████| 284/284 [0:24:31<0:00:00, 0.2Hz] | train_loss=0.0545
+[12.12 01:13:27] ┇ INFO     ┇                         __main__ ┇ Training [1.00/1]: max_memory=30.3GB
+[12.12 01:13:27] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
+[12.12 01:13:27] ┇ INFO     ┇                   chrisbase.data ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP/DeepKNLP/arguments.py train ($=00:24:56.252)
+[12.12 01:13:27] ┇ INFO     ┇                   chrisbase.data ┇ =========================================================================================================================================
