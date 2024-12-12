@@ -34,6 +34,8 @@ class DataCollatorForGNER:
             The id to use when padding the labels (-100 will be automatically ignored by PyTorch loss functions).
         return_tensors (`str`, *optional*, defaults to `"pt"`):
             The type of Tensor to return. Allowable values are "np", "pt" and "tf".
+        feature_names (`Tuple[str]`, *optional*, defaults to `("input_ids", "attention_mask", "labels")`):
+            The list of keys in feature dict that should be considered as features and handled as input to the model.
     """
 
     tokenizer: PreTrainedTokenizerBase
@@ -43,10 +45,10 @@ class DataCollatorForGNER:
     pad_to_multiple_of: Optional[int] = None
     label_pad_token_id: int = -100
     return_tensors: str = "pt"
+    feature_names: tuple[str] = ("input_ids", "attention_mask", "labels")
 
     def __call__(self, features, return_tensors=None):
-        used_features_name = ["input_ids", "attention_mask", "labels"]
-        features = [dict([item for item in feature.items() if item[0] in used_features_name]) for feature in features]
+        features = [dict([item for item in feature.items() if item[0] in self.feature_names]) for feature in features]
 
         if return_tensors is None:
             return_tensors = self.return_tensors
