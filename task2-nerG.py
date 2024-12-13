@@ -1,3 +1,4 @@
+import contextlib
 import json
 import logging
 import math
@@ -37,6 +38,25 @@ env = None
 app = AppTyper(name="Generative NER",
                help="Generative Named Entity Recognition (NER) using Hugging Face Transformers.")
 logger = logging.getLogger(__name__)
+
+
+def do_nothing(*args, **kwargs):
+    pass
+
+
+def info_or_debug(fabric, x, *y, **z):
+    if fabric.is_global_zero:  # or debugging:
+        logger.info(x, *y, **z)
+    else:
+        logger.debug(x, *y, **z)
+
+
+def info_or_debug_r(fabric, x, *y, **z):
+    x = str(x).rstrip()
+    if fabric.is_global_zero:  # or debugging:
+        logger.info(x, *y, **z)
+    else:
+        logger.debug(x, *y, **z)
 
 
 class TestCases(unittest.TestCase):
@@ -83,23 +103,10 @@ class TestCases(unittest.TestCase):
         print(data3)
 
 
-def do_nothing(*args, **kwargs):
-    pass
-
-
-def info_or_debug(fabric, x, *y, **z):
-    if fabric.is_global_zero:  # or debugging:
-        logger.info(x, *y, **z)
-    else:
-        logger.debug(x, *y, **z)
-
-
-def info_or_debug_r(fabric, x, *y, **z):
-    x = str(x).rstrip()
-    if fabric.is_global_zero:  # or debugging:
-        logger.info(x, *y, **z)
-    else:
-        logger.debug(x, *y, **z)
+@app.command()
+def check():
+    checker = TestCases()
+    checker.test_dataframe()
 
 
 @app.callback()
@@ -135,12 +142,6 @@ def main(
     # logger.info(f"Start running {app.info.name} with env={env}")
 
 
-@app.command()
-def testcases():
-    tester = TestCases()
-    tester.test_dataframe()
-
-
 # Reference
 # [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py
 # [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation_no_trainer.py
@@ -167,13 +168,13 @@ def train(
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 256,  # TODO: 128, 256, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = False,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = True,
         # learn
         run_name: Annotated[str, typer.Option("--run_name")] = "task2-nerG",
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 1,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
-        weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,
+        weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
@@ -182,7 +183,7 @@ def train(
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 16,  # TODO: -> 16, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,  # TODO: -> 16, 32
-        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
+        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
@@ -293,17 +294,8 @@ def train(
         using_decoder_only_model = not config.is_encoder_decoder
 
         if using_decoder_only_model:
-            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
-                pretrained,
-                # cache_dir=model_args.cache_dir,
-                # use_fast=model_args.use_fast_tokenizer,
-                # revision=model_args.model_revision,
-                # token=model_args.token,
-                # trust_remote_code=model_args.trust_remote_code,
-                padding_side="left",
-                add_eos_token=True,
-                add_bos_token=True,
-            )
+            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, padding_side="left",
+                                                                               add_eos_token=True, add_bos_token=True)
         else:
             tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained)
         if tokenizer.pad_token is None:
@@ -580,9 +572,9 @@ def train(
                 },
             ],
         )
-        fabric_setup_ret = fabric.setup(model, optimizer)
-        model: lightning.fabric.wrappers._FabricModule = fabric_setup_ret[0]
-        optimizer: lightning.fabric.wrappers._FabricOptimizer = fabric_setup_ret[1]
+        model_optimizer = fabric.setup(model, optimizer)
+        model: lightning.fabric.wrappers._FabricModule = model_optimizer[0]
+        optimizer: lightning.fabric.wrappers._FabricOptimizer = model_optimizer[1]
         model.mark_forward_method("generate")
 
         # Define compute metrics function
@@ -609,7 +601,7 @@ def train(
                         fout.write(json.dumps(example) + "\n")
             return results
 
-        def make_performance(origin: dict[str, float], column_name_width=5,
+        def get_performance(origin: dict[str, float], column_name_width=5,
                              score_keys="f1", index_keys="epoch", env_keys="[mem]",
                              score_factor: float = 100.0) -> Tuple[dict[str, float], Optional[pd.DataFrame]]:
             score_keys = tupled(score_keys)
@@ -674,9 +666,9 @@ def train(
                 torch.cuda.reset_peak_memory_stats()
                 with ProgIter(total=epoch_optimization_steps, desc=f'Training [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as train_pbar:
                     for train_loop_i, train_batch in enumerate(train_dataloader, start=1):
+                        # Forward & Backward pass
                         is_accumulating = train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader)
-                        with fabric.no_backward_sync(model, enabled=is_accumulating):
-                            # Forward & Backward pass
+                        with fabric.no_backward_sync(model, enabled=is_accumulating) if args.learn.strategy != "deepspeed" else contextlib.nullcontext():
                             outputs = model(**train_batch)
                             train_losses.append(outputs.loss.item())
                             fabric.backward(outputs.loss)
@@ -686,9 +678,9 @@ def train(
                         # Optimize parameters
                         optimizer.step()
                         optimizer.zero_grad()
+                        fabric.barrier()
 
                         # Update train progress
-                        fabric.barrier()
                         global_step += 1
                         global_epoch += epoch_per_step
                         train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
@@ -737,10 +729,11 @@ def train(
                         # Log metrics
                         metrics = denumpify_detensorize(metrics)
                         fabric.log_dict(metrics=metrics, step=metrics["step"])
-                        performance_row = make_performance(metrics)
-                        if performance_row is not None:
+                        performance_row = get_performance(metrics)
+                        if fabric.is_global_zero and performance_row is not None:
                             performance_rows.append(performance_row)
                             fabric.prints(to_table_lines(performance_row, transposed_df=True, floatfmt=".2f"))
+                        fabric.barrier()
 
                 # Save performance
                 model.eval()
