@@ -178,7 +178,7 @@ def train(
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 16,  # TODO: -> 16, 32
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 16, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,  # TODO: -> 16, 32
         strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
