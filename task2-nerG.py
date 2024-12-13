@@ -181,7 +181,7 @@ def train(
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 16, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,  # TODO: -> 16, 32
-        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
+        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
@@ -325,7 +325,7 @@ def train(
                     whole_indices = shuffled(range(len(train_dataset)), seed=args.env.random_seed)
                     train_dataset = train_dataset.select(whole_indices[:args.input.max_train_samples])
                 train_dataset = train_dataset.add_column("idx", range(len(train_dataset)))
-                fabric.print(f"Use {args.input.train_file} as train dataset: {len(train_dataset):,} samples")
+                fabric.print(f"Load train dataset from {args.input.train_file}")
         if args.input.eval_file:
             with fabric.rank_zero_first():
                 eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -335,7 +335,7 @@ def train(
                     whole_indices = shuffled(range(len(eval_dataset)), seed=args.env.random_seed)
                     eval_dataset = eval_dataset.select(whole_indices[:args.input.max_eval_samples])
                 eval_dataset = eval_dataset.add_column("idx", range(len(eval_dataset)))
-                fabric.print(f"Use {args.input.eval_file} as eval dataset: {len(eval_dataset):,} samples")
+                fabric.print(f"Load eval dataset from {args.input.eval_file}")
         if args.input.test_file:
             with fabric.rank_zero_first():
                 test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -345,7 +345,7 @@ def train(
                     whole_indices = shuffled(range(len(test_dataset)), seed=args.env.random_seed)
                     test_dataset = test_dataset.select(whole_indices[:args.input.max_test_samples])
                 test_dataset = test_dataset.add_column("idx", range(len(test_dataset)))
-                fabric.print(f"Use {args.input.test_file} as test dataset: {len(test_dataset):,} samples")
+                fabric.print(f"Load test dataset from {args.input.test_file}")
         fabric.barrier()
         fabric.print("-" * 100)
 
