@@ -137,10 +137,9 @@ def main(
         "lightning.fabric.utilities.seed"
     )
     torch.set_float32_matmul_precision('high')
-    # logger.info(f"Start running {app.info.name} with env={env}")
 
 
-# Reference
+# Reference for implementation
 # [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm_no_trainer.py
 # [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation_no_trainer.py
 # [3]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/summarization/run_summarization_no_trainer.py
@@ -164,7 +163,7 @@ def train(
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
-        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 1024,  # TODO: 128, 256, 512, 1024, -1
+        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 1024,  # TODO: 256, 1024, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = True,
         # learn
@@ -250,6 +249,8 @@ def train(
     # Setup logger
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
     args.env.setup_logger(logging_home=basic_logger.log_dir)
+    transformers.logging.disable_progress_bar()
+    datasets.utils.logging.disable_progress_bar()
     if fabric.is_global_zero:
         transformers.logging.set_verbosity_info()
         datasets.utils.logging.set_verbosity_warning()
@@ -274,9 +275,6 @@ def train(
             "lightning",
             "DeepSpeed",
         )
-    transformers.logging.disable_progress_bar()
-    datasets.utils.logging.disable_progress_bar()
-    # logger.info(f"[local_rank={fabric.local_rank}] args.env={args.env}({type(args.env)})")
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
@@ -305,12 +303,12 @@ def train(
             model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained, config=config)
         else:
             model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained, config=config)
-        embedding_size = model.get_input_embeddings().weight.shape[0]
-        if len(tokenizer) > embedding_size:
+        model_embedding_size = model.get_input_embeddings().weight.shape[0]
+        if len(tokenizer) > model_embedding_size:
             model.resize_token_embeddings(len(tokenizer))
+            model_embedding_size = model.get_input_embeddings().weight.shape[0]
+        assert len(tokenizer) == model_embedding_size, f"Tokenizer size({len(tokenizer):,}) and model embedding size({model_embedding_size:,}) are different."
         fabric.barrier()
-        fabric.print(f"Size tokenizer: {len(tokenizer):,}")
-        fabric.print(f"Size embedding: {model.get_input_embeddings().weight.shape[0]:,}")
 
         # Load dataset
         train_dataset: Dataset | None = None
@@ -335,7 +333,7 @@ def train(
                     whole_indices = shuffled(range(len(eval_dataset)), seed=args.env.random_seed)
                     eval_dataset = eval_dataset.select(whole_indices[:args.input.max_eval_samples])
                 eval_dataset = eval_dataset.add_column("idx", range(len(eval_dataset)))
-                fabric.print(f"Load eval dataset from {args.input.eval_file}")
+                fabric.print(f"Load  eval dataset from {args.input.eval_file}")
         if args.input.test_file:
             with fabric.rank_zero_first():
                 test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -345,7 +343,7 @@ def train(
                     whole_indices = shuffled(range(len(test_dataset)), seed=args.env.random_seed)
                     test_dataset = test_dataset.select(whole_indices[:args.input.max_test_samples])
                 test_dataset = test_dataset.add_column("idx", range(len(test_dataset)))
-                fabric.print(f"Load test dataset from {args.input.test_file}")
+                fabric.print(f"Load  test dataset from {args.input.test_file}")
         fabric.barrier()
         fabric.print("-" * 100)
 
@@ -517,7 +515,7 @@ def train(
         fabric.barrier()
         fabric.print("-" * 100)
 
-        # Set data collator
+        # Set dataloader
         label_pad_token_id = -100
         data_collator: DataCollatorForGNER = DataCollatorForGNER(
             tokenizer,
@@ -528,8 +526,6 @@ def train(
             return_tensors="pt",
             feature_names=("input_ids", "attention_mask", "labels", "idx"),
         )
-
-        # Set data loader
         if train_dataset:
             train_dataloader = DataLoader(
                 train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
@@ -642,20 +638,21 @@ def train(
             }
 
             fabric.print(f"===== Running training =====")
-            fabric.print(f"  Num Epochs = {total_epochs}")
-            fabric.print(f"  Num Parameters = {get_model_param_count(model, trainable_only=True):,}")
-            fabric.print(f"  Num Train Examples = {len(train_dataset):,}")
+            fabric.print(f"  # Model Embedding = {model_embedding_size:,}")
+            fabric.print(f"  # Model Parameters = {get_model_param_count(model, trainable_only=True):,}")
+            fabric.print(f"  # Total Train Epochs = {total_epochs}")
+            fabric.print(f"  # Train Total Samples = {len(train_dataset):,}")
             if eval_dataset:
-                fabric.print(f"  Num Infer Examples = {len(eval_dataset):,}")
-            fabric.print(f"  Size Train Batch"
+                fabric.print(f"  #  Eval Total Samples = {len(eval_dataset):,}")
+            fabric.print(f"  # Train Batch Samples"
                          f" = {args.learn.train_batch} * {args.learn.grad_steps} * {args.env.world_size}"
                          f" = {args.env.world_size * args.learn.train_batch * args.learn.grad_steps}")
             if eval_dataset:
-                fabric.print(f"  Size Infer Batch"
+                fabric.print(f"  #  Eval Batch Samples"
                              f" = {args.learn.infer_batch} * {args.env.world_size}"
                              f" = {args.learn.infer_batch * args.env.world_size}")
-            fabric.print(f"  Evaluation Steps = {args.learn.eval_steps}")
-            fabric.print(f"  Epoch Optim Steps = {epoch_optimization_steps:,}")
+            fabric.print(f"  #  Eval Cycle Steps = {args.learn.eval_steps}")
+            fabric.print(f"  # Total Optim Steps = {epoch_optimization_steps * total_epochs:,}")
 
             for epoch in range(args.learn.num_train_epochs):
                 fabric.barrier()
@@ -726,7 +723,7 @@ def train(
 
                         # Log metrics
                         metrics = denumpify_detensorize(metrics)
-                        fabric.log_dict(metrics=metrics, step=metrics["step"])
+                        fabric.log_dict(metrics=metrics, step=metrics["step"])  # TODO: utilize transformers.trainer_utils.speed_metrics()
                         performance_row = get_performance(metrics)
                         if fabric.is_global_zero and performance_row is not None:
                             performance_rows.append(performance_row)
