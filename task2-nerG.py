@@ -71,7 +71,7 @@ class TestCases(unittest.TestCase):
             "movie": 0.7744,
             "restaurant": 0.7742
         }
-        score_factor = 100.0
+        score_scale = 100.0
         floatfmt = ".2f"
         width = 5
 
@@ -81,7 +81,7 @@ class TestCases(unittest.TestCase):
         ]
         score_values = score_dict.values()
 
-        data = pd.DataFrame(score_values) * score_factor
+        data = pd.DataFrame(score_values) * score_scale
         data.set_index(pd.Index(score_headers), inplace=True)
         data = data.transpose()
         data["epoch"] = 2.44
@@ -600,8 +600,8 @@ def train(
             return results
 
         def get_performance(origin: dict[str, float], column_name_width=5,
-                            score_keys="f1", index_keys="epoch", env_keys="[mem]",
-                            score_factor: float = 100.0) -> Tuple[dict[str, float], Optional[pd.DataFrame]]:
+                            score_keys="f1", score_scale: float = 100.0,
+                            index_keys="epoch", env_keys="[mem]") -> Tuple[dict[str, float], Optional[pd.DataFrame]]:
             score_keys = tupled(score_keys)
             score_dict = {}
             for key1 in sorted(origin.keys()):
@@ -614,7 +614,7 @@ def train(
 
             performance = None
             if score_dict:
-                performance = pd.DataFrame(score_dict.values()) * score_factor
+                performance = pd.DataFrame(score_dict.values()) * score_scale
                 performance = performance.set_index(pd.Index([
                     (column_name_width - len(k2)) * ' ' + k2
                     for k2 in [k1[:column_name_width] for k1 in score_dict.keys()]
