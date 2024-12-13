@@ -176,11 +176,11 @@ def train(
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 16, 32
-        train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 256,  # TODO: -> 16, 32, 128, 256
-        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
+        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,  # TODO: -> 2, 4, 8, 16
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,
+        train_batch: Annotated[int, typer.Option("--train_batch")] = 2,  # TODO: -> 2, 4, 8, 16
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 80,  # TODO: -> 20, 40, 80
+        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
@@ -651,8 +651,8 @@ def train(
                 fabric.print(f"  #  Eval Batch Samples"
                              f" = {args.learn.infer_batch} * {args.env.world_size}"
                              f" = {args.learn.infer_batch * args.env.world_size}")
-            fabric.print(f"  #  Eval Cycle Steps = {args.learn.eval_steps}")
             fabric.print(f"  # Total Optim Steps = {epoch_optimization_steps * total_epochs:,}")
+            fabric.print(f"  #  Eval Cycle Steps = {args.learn.eval_steps}")
 
             for epoch in range(args.learn.num_train_epochs):
                 fabric.barrier()
@@ -680,7 +680,7 @@ def train(
                         global_epoch += epoch_per_step
                         train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
                         train_losses.clear()
-                        train_pbar.set_extra(f"| mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.1f}G, loss={train_loss:.5f}")
+                        train_pbar.set_extra(f"| mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}, loss={train_loss:.4f}")
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
@@ -713,7 +713,7 @@ def train(
                                         indexs = accelerator.gather_for_metrics(indexs)
                                         eval_logits = logits if eval_logits is None else nested_concat(eval_logits, logits, padding_index=-100)
                                         eval_indexs = indexs if eval_indexs is None else nested_concat(eval_indexs, indexs, padding_index=-100)
-                                        train_pbar.set_extra(f"| mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.1f}G")
+                                        eval_pbar.set_extra(f"| mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}")
                                         eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
                                     eval_logits = nested_numpify(eval_logits)
                                     eval_indexs = nested_numpify(eval_indexs).tolist()
