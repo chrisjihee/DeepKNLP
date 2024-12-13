@@ -680,7 +680,7 @@ def train(
                         global_epoch += epoch_per_step
                         train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
                         train_losses.clear()
-                        train_pbar.set_extra(f"| loss={train_loss:.6f}")  # TODO: check memory usage
+                        train_pbar.set_extra(f"| loss={train_loss:.6f}, mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.1f}GB")
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
