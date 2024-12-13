@@ -680,7 +680,7 @@ def train(
                         global_epoch += epoch_per_step
                         train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
                         train_losses.clear()
-                        train_pbar.set_extra(f"| loss={train_loss:.6f}, mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.1f}GB")
+                        train_pbar.set_extra(f"| mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.1f}G, loss={train_loss:.5f}")
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
@@ -713,6 +713,7 @@ def train(
                                         indexs = accelerator.gather_for_metrics(indexs)
                                         eval_logits = logits if eval_logits is None else nested_concat(eval_logits, logits, padding_index=-100)
                                         eval_indexs = indexs if eval_indexs is None else nested_concat(eval_indexs, indexs, padding_index=-100)
+                                        train_pbar.set_extra(f"| mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.1f}G")
                                         eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
                                     eval_logits = nested_numpify(eval_logits)
                                     eval_indexs = nested_numpify(eval_indexs).tolist()
