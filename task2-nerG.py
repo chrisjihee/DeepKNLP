@@ -20,7 +20,7 @@ from lightning.fabric import Fabric
 from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, BatchEncoding, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerBase
+from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerBase, BatchEncoding
 from transformers.trainer import get_model_param_count, nested_concat, nested_numpify, denumpify_detensorize
 from typing_extensions import Annotated
 
@@ -35,8 +35,7 @@ from progiter import ProgIter
 
 # Global settings
 env = None
-app = AppTyper(name="Generative NER",
-               help="Generative Named Entity Recognition (NER) using Hugging Face Transformers.")
+app = AppTyper(name="Generative NER", help="Generative Named Entity Recognition (NER) using Transformer.")
 logger = logging.getLogger(__name__)
 
 
@@ -61,6 +60,7 @@ def info_or_debug_r(fabric, x, *y, **z):
 
 class TestCases(unittest.TestCase):
     def test_dataframe(self):
+        print()
         score_dict = {
             "[avg]": 0.7621,
             "ai": 0.8461,
@@ -72,7 +72,7 @@ class TestCases(unittest.TestCase):
             "restaurant": 0.7742
         }
         score_factor = 100.0
-        floatfmt = ".1f"
+        floatfmt = ".2f"
         width = 5
 
         score_headers = [
@@ -84,18 +84,16 @@ class TestCases(unittest.TestCase):
         data = pd.DataFrame(score_values) * score_factor
         data.set_index(pd.Index(score_headers), inplace=True)
         data = data.transpose()
-        data["epoch"] = 2.4
-        data["step"] = 250
+        data["epoch"] = 2.44
         data["[mem]"] = 20.0
-        data = data.set_index(["epoch", "step"])
+        data = data.set_index("epoch")
         print(data)
         for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
             print(x)
 
         data2 = data.copy()
-        data2["step"] = 500
-        data2["epoch"] = 4.8
-        data2 = data2.set_index(["epoch", "step"])
+        data2["epoch"] = 4.85
+        data2 = data2.set_index("epoch")
         print(data2)
 
         data3 = pd.concat([data, data2])
@@ -166,13 +164,13 @@ def train(
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
-        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 256,  # TODO: 128, 256, -1
+        max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = 1024,  # TODO: 128, 256, 512, 1024, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = True,
         # learn
         run_name: Annotated[str, typer.Option("--run_name")] = "task2-nerG",
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
-        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 1,  # TODO: -> 1, 2, 3, 4, 5, 6
+        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 6,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
@@ -602,8 +600,8 @@ def train(
             return results
 
         def get_performance(origin: dict[str, float], column_name_width=5,
-                             score_keys="f1", index_keys="epoch", env_keys="[mem]",
-                             score_factor: float = 100.0) -> Tuple[dict[str, float], Optional[pd.DataFrame]]:
+                            score_keys="f1", index_keys="epoch", env_keys="[mem]",
+                            score_factor: float = 100.0) -> Tuple[dict[str, float], Optional[pd.DataFrame]]:
             score_keys = tupled(score_keys)
             score_dict = {}
             for key1 in sorted(origin.keys()):
