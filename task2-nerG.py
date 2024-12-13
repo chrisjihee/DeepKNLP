@@ -180,7 +180,7 @@ def train(
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 16, 32
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 32,  # TODO: -> 16, 32
-        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
+        strategy: Annotated[str, typer.Option("--strategy")] = "fsdp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
