@@ -66,8 +66,7 @@ class TestCases(unittest.TestCase):
         data = data.transpose()
         data["epoch"] = 2.4
         data["step"] = 250
-        data["[mem1]"] = 20.0
-        data["[mem2]"] = 21.0
+        data["[mem]"] = 20.0
         data = data.set_index(["epoch", "step"])
         print(data)
         for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
@@ -80,7 +79,6 @@ class TestCases(unittest.TestCase):
         print(data2)
 
         data3 = pd.concat([data, data2])
-        data3.to_excel("data3.xlsx")
         print("=" * 100)
         print(data3)
 
@@ -229,6 +227,7 @@ def train(
     )
 
     # Setup fabric
+    lightning.fabric.loggers.csv_logs._ExperimentWriter.NAME_METRICS_FILE = "train-metrics.csv"
     basic_logger = CSVLogger(args.learn.output_home, args.learn.run_name, flush_logs_every_n_steps=1)
     visual_logger = TensorBoardLogger(args.learn.output_home, args.learn.run_name, basic_logger.version)  # tensorboard --logdir output --bind_all
     fabric = Fabric(
@@ -243,6 +242,7 @@ def train(
     fabric.flush = do_nothing
     fabric.write = lambda x, *y, **z: info_or_debug_r(fabric, x, *y, **z)
     fabric.print = lambda x, *y, **z: info_or_debug(fabric, x, *y, **z)
+    fabric.prints = lambda xs: [info_or_debug(fabric, x) for x in xs]
     args.env.global_rank = fabric.global_rank
     args.env.local_rank = fabric.local_rank
     args.env.node_rank = fabric.node_rank
@@ -601,7 +601,7 @@ def train(
 
             results = compute_metrics(all_examples, tokenizer=tokenizer, average_key="[avg]")
             if save_prefix is not None:
-                outfile_path = args.env.logging_home / f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl"
+                outfile_path = args.env.logging_home / f"{save_prefix}-text_generations{'-' + save_suffix if save_suffix else ''}.jsonl"
                 with outfile_path.open("w") as fout:
                     for example in all_examples:
                         if save_keys:
@@ -609,45 +609,40 @@ def train(
                         fout.write(json.dumps(example) + "\n")
             return results
 
-        def print_metrics(origin: dict[str, float], column_name_width=5,
-                          score_keys="f1", index_keys="epoch", env_keys=("[mem1]", "[mem2]"),
-                          score_factor: float = 100.0, floatfmt=".2f") -> Tuple[dict[str, float], Optional[pd.DataFrame]]:
+        def make_performance(origin: dict[str, float], column_name_width=5,
+                             score_keys="f1", index_keys="epoch", env_keys="[mem]",
+                             score_factor: float = 100.0) -> Tuple[dict[str, float], Optional[pd.DataFrame]]:
             score_keys = tupled(score_keys)
-            score_dict = {
-                re.sub(f'_{"|".join(score_keys)}$', '', key): origin[key]
-                for key in sorted(origin.keys())
-                if any(score_key in key for score_key in score_keys)
-            }
+            score_dict = {}
+            for key1 in sorted(origin.keys()):
+                if any(score_key in key1 for score_key in score_keys):
+                    key2 = key1
+                    for score_key in score_keys:
+                        key2 = key2.removesuffix(f"_{score_key}")
+                    key2 = re.sub('[^-_]+[-_]', '', key2)
+                    score_dict[key2] = origin[key1]
 
-            data = None
+            performance = None
             if score_dict:
-                score_headers = [
+                performance = pd.DataFrame(score_dict.values()) * score_factor
+                performance = performance.set_index(pd.Index([
                     (column_name_width - len(k2)) * ' ' + k2
-                    for k2 in [
-                        re.sub('[^-_]+[-_]', '', k1)[:column_name_width]
-                        for k1 in score_dict.keys()
-                    ]
-                ]
-                score_values = score_dict.values()
-
-                data = pd.DataFrame(score_values) * score_factor
-                data = data.set_index(pd.Index(score_headers))
-                data = data.transpose()
+                    for k2 in [k1[:column_name_width] for k1 in score_dict.keys()]
+                ]))
+                performance = performance.transpose()
                 for idx_key in tupled(index_keys):
-                    data[idx_key] = origin[idx_key]
+                    performance[idx_key] = origin[idx_key]
                 for env_key in tupled(env_keys):
-                    data[env_key] = origin[env_key]
-                data = data.set_index(index_keys)
-                for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
-                    fabric.print(x)
-            return origin, data
+                    performance[env_key] = origin[env_key]
+                performance = performance.set_index(index_keys)
+            return performance
 
         # Train loop
         if train_dataloader:
             epoch_optimization_steps = math.ceil(len(train_dataloader) / args.learn.grad_steps)
             epoch_per_step = 1.0 / epoch_optimization_steps
             train_losses = []
-            metrics_dfs = []
+            performance_rows = []
             global_step = 0
             global_epoch = 0.0
             total_epochs = args.learn.num_train_epochs
@@ -707,8 +702,7 @@ def train(
                             "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
                             "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
                             "loss": train_loss,
-                            "[mem1]": torch.cuda.max_memory_allocated() / math.pow(1024, 3),
-                            "[mem2]": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
+                            "[mem]": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
                         }
 
                         # Validation loop
@@ -740,15 +734,20 @@ def train(
                             model.train()
                             torch.cuda.reset_peak_memory_stats()
 
-                        # Print and save metrics
-                        metrics_dict, metrics_df = print_metrics(denumpify_detensorize(metrics))
-                        fabric.log_dict(metrics=metrics_dict, step=metrics["step"])
-                        if metrics_df is not None:
-                            metrics_dfs.append(metrics_df)
+                        # Log metrics
+                        metrics = denumpify_detensorize(metrics)
+                        fabric.log_dict(metrics=metrics, step=metrics["step"])
+                        performance_row = make_performance(metrics)
+                        if performance_row is not None:
+                            performance_rows.append(performance_row)
+                            fabric.prints(to_table_lines(performance_row, transposed_df=True, floatfmt=".2f"))
 
+                # Save performance
                 model.eval()
-                for x in to_table_lines(pd.concat(metrics_dfs), transposed_df=True, floatfmt=".2f"):
-                    fabric.print(x)
+                if fabric.is_global_zero:
+                    performance_table = pd.concat(performance_rows)
+                    performance_table.to_excel(args.env.logging_home / f"eval-performances.xlsx")
+                    fabric.prints(to_table_lines(performance_table, transposed_df=True, floatfmt=".2f"))
                 fabric.barrier()
 
 
