@@ -172,14 +172,14 @@ def train(
         num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 6,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
-        device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
-        device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
+        train_batch: Annotated[int, typer.Option("--train_batch")] = 2,  # TODO: -> 1, 2, 4, 8
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 40,  # TODO: -> 20, 40, 80
+        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 20,  # TODO: -> 2, 4, 8, 10, 20, 40
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 20, 40
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 1, 2, 4, 8
+        device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
+        device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 8,  # TODO: -> 2, 4, 8, 16
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,
-        train_batch: Annotated[int, typer.Option("--train_batch")] = 2,  # TODO: -> 2, 4, 8, 16
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 80,  # TODO: -> 20, 40, 80
         strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
@@ -208,14 +208,14 @@ def train(
             num_train_epochs=num_train_epochs,
             learning_rate=learning_rate,
             weight_decay=weight_decay,
-            device_type=device_type,
-            device_idx=device_idx,
-            num_device=num_device,
-            precision=precision,
-            grad_steps=grad_steps,
-            eval_steps=eval_steps,
             train_batch=train_batch,
             infer_batch=infer_batch,
+            grad_steps=grad_steps,
+            eval_steps=eval_steps,
+            num_device=num_device,
+            device_idx=device_idx,
+            device_type=device_type,
+            precision=precision,
             strategy=strategy,
             ds_stage=ds_stage,
             ds_offload=ds_offload,
@@ -680,7 +680,7 @@ def train(
                         global_epoch += epoch_per_step
                         train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
                         train_losses.clear()
-                        train_pbar.set_extra(f"| mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}, loss={train_loss:.4f}")
+                        train_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}, loss={train_loss:.4f}")
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
@@ -713,7 +713,7 @@ def train(
                                         indexs = accelerator.gather_for_metrics(indexs)
                                         eval_logits = logits if eval_logits is None else nested_concat(eval_logits, logits, padding_index=-100)
                                         eval_indexs = indexs if eval_indexs is None else nested_concat(eval_indexs, indexs, padding_index=-100)
-                                        eval_pbar.set_extra(f"| mem={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}")
+                                        eval_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}")
                                         eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
                                     eval_logits = nested_numpify(eval_logits)
                                     eval_indexs = nested_numpify(eval_indexs).tolist()
