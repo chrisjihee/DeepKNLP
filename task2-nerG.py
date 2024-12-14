@@ -152,13 +152,11 @@ def main(
 def train(
         # input
         pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # TODO: "google/flan-t5-small", "etri-lirs/egpt-1.3b-preview",
-        # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
-        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
-        # eval_file: Annotated[str, typer.Option("--eval_file")] = None,
+        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
+        # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
-        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-debug.jsonl",
-        test_file: Annotated[str, typer.Option("--test_file")] = None,
         # test_file: Annotated[str, typer.Option("--test_file")] = "data/gner/zero-shot-test.jsonl"
+        test_file: Annotated[str, typer.Option("--test_file")] = None,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
