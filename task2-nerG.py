@@ -715,7 +715,7 @@ def train(
                                         eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
                                     eval_logits = nested_numpify(eval_logits)
                                     eval_indexs = nested_numpify(eval_indexs).tolist()
-                                    metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.1f}",
+                                    metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.2f}",
                                                                        save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
                             model.train()
                             torch.cuda.reset_peak_memory_stats()
