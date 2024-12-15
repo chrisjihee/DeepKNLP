@@ -167,7 +167,7 @@ def train(
         # learn
         run_name: Annotated[str, typer.Option("--run_name")] = "task2-nerG",
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
-        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 6,  # TODO: -> 1, 2, 3, 4, 5, 6
+        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 3,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
         train_batch: Annotated[int, typer.Option("--train_batch")] = 2,  # TODO: -> 1, 2, 4, 8
