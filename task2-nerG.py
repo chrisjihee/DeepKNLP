@@ -156,8 +156,8 @@ def train(
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
         # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
-        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
-        eval_file: Annotated[str, typer.Option("--eval_file")] = None,
+        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        # eval_file: Annotated[str, typer.Option("--eval_file")] = None,
         # test_file: Annotated[str, typer.Option("--test_file")] = "data/gner/zero-shot-test.jsonl"
         test_file: Annotated[str, typer.Option("--test_file")] = None,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
