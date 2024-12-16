@@ -1,3 +1,4 @@
+import itertools
 import contextlib
 import json
 import logging
@@ -180,7 +181,7 @@ def train(
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
+        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
@@ -326,7 +327,7 @@ def train(
                     whole_indices = shuffled(range(len(train_dataset)), seed=args.env.random_seed)
                     train_dataset = train_dataset.select(whole_indices[:args.input.max_train_samples])
                 train_dataset = train_dataset.add_column("idx", range(len(train_dataset)))
-                fabric.print(f"Load train dataset from {args.input.train_file}: {len(train_dataset):,}")
+                fabric.print(f"Load train dataset from {args.input.train_file} => {len(train_dataset):,}")
         if args.input.study_file:
             with fabric.rank_zero_first():
                 study_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -336,7 +337,7 @@ def train(
                     whole_indices = shuffled(range(len(study_dataset)), seed=args.env.random_seed)
                     study_dataset = study_dataset.select(whole_indices[:args.input.max_study_samples])
                 study_dataset = study_dataset.add_column("idx", range(len(study_dataset)))
-                fabric.print(f"Load study dataset from {args.input.study_file}: {len(study_dataset):,}")
+                fabric.print(f"Load study dataset from {args.input.study_file} => {len(study_dataset):,}")
         if args.input.eval_file:
             with fabric.rank_zero_first():
                 eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -346,7 +347,7 @@ def train(
                     whole_indices = shuffled(range(len(eval_dataset)), seed=args.env.random_seed)
                     eval_dataset = eval_dataset.select(whole_indices[:args.input.max_eval_samples])
                 eval_dataset = eval_dataset.add_column("idx", range(len(eval_dataset)))
-                fabric.print(f"Load  eval dataset from {args.input.eval_file}: {len(eval_dataset):,}")
+                fabric.print(f"Load  eval dataset from {args.input.eval_file} => {len(eval_dataset):,}")
         if args.input.test_file:
             with fabric.rank_zero_first():
                 test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -356,7 +357,7 @@ def train(
                     whole_indices = shuffled(range(len(test_dataset)), seed=args.env.random_seed)
                     test_dataset = test_dataset.select(whole_indices[:args.input.max_test_samples])
                 test_dataset = test_dataset.add_column("idx", range(len(test_dataset)))
-                fabric.print(f"Load  test dataset from {args.input.test_file}: {len(test_dataset):,}")
+                fabric.print(f"Load  test dataset from {args.input.test_file} => {len(test_dataset):,}")
         fabric.barrier()
         fabric.print("-" * 100)
 
@@ -413,6 +414,8 @@ def train(
                 for i in range(len(prompt_tokens)):
                     model_inputs["labels"][i] = -100
 
+                # model_inputs["num_token_full_instruction"] = len(model_inputs["input_ids"])
+                # model_inputs["num_token_prompt_token"] = len(prompt_tokens)
                 return model_inputs
 
             def tokenize_infer_sample():
@@ -507,6 +510,8 @@ def train(
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
                         cache_file_name=str(args.input.cache_train_path(len(train_dataset))) if args.input.use_cache_data else None,
                     )
+                # fabric.print(train_dataset["num_token_full_instruction"])
+                # fabric.print(train_dataset["num_token_prompt_token"])
         if study_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(study_dataset), desc='Preprocess study samples:', stream=fabric, verbose=2) as manual_pbar:
@@ -516,6 +521,8 @@ def train(
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
                         cache_file_name=str(args.input.cache_study_path(len(study_dataset))) if args.input.use_cache_data else None,
                     )
+                # fabric.print(study_dataset["num_token_full_instruction"])
+                # fabric.print(study_dataset["num_token_prompt_token"])
         if eval_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(eval_dataset), desc='Preprocess  eval samples:', stream=fabric, verbose=2) as manual_pbar:
@@ -563,6 +570,7 @@ def train(
                 collate_fn=data_collator,
                 drop_last=False,
             )
+            study_dataloader = fabric.setup_dataloaders(study_dataloader)
         if eval_dataset:
             eval_dataloader = DataLoader(
                 eval_dataset, sampler=SequentialSampler(eval_dataset),
@@ -657,6 +665,7 @@ def train(
             epoch_optimization_steps = math.ceil(len(train_dataloader) / args.learn.grad_steps)
             epoch_per_step = 1.0 / epoch_optimization_steps
             train_losses = []
+            study_losses = []
             performance_rows = []
             global_step = 0
             global_epoch = 0.0
@@ -691,13 +700,21 @@ def train(
                 model.train()
                 torch.cuda.reset_peak_memory_stats()
                 with ProgIter(total=epoch_optimization_steps, desc=f'Training [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as train_pbar:
+                    study_iter = itertools.chain(*[iter(study_dataloader) for _ in range(math.ceil(len(train_dataloader) / len(study_dataloader)))])
                     for train_loop_i, train_batch in enumerate(train_dataloader, start=1):
+                        train_batch: BatchEncoding = train_batch
+                        study_batch: BatchEncoding = next(study_iter)
+
                         # Forward & Backward pass
                         is_accumulating = train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader)
                         with fabric.no_backward_sync(model, enabled=is_accumulating) if args.learn.strategy != "deepspeed" else contextlib.nullcontext():
-                            outputs = model(**train_batch)
-                            train_losses.append(outputs.loss.item())
-                            fabric.backward(outputs.loss)
+                            train_outputs = model(**train_batch)
+                            train_losses.append(train_outputs.loss.item())
+                            fabric.backward(train_outputs.loss)
+
+                            study_outputs = model(**study_batch)
+                            study_losses.append(study_outputs.loss.item())
+                            fabric.backward(study_outputs.loss)
                         if is_accumulating:
                             continue
 
@@ -715,52 +732,52 @@ def train(
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
-                        # Define metrics
-                        metrics: dict[str, Any] = {
-                            "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
-                            "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
-                            "loss": train_loss,
-                            "[mem]": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
-                        }
-
-                        # Validation loop
-                        if eval_dataloader and (
-                                train_loop_i == len(train_dataloader) or
-                                (args.learn.eval_steps > 0 and global_step % args.learn.eval_steps) == 0
-                        ):
-                            train_pbar.refresh()
-                            model.eval()
-                            accelerator = Accelerator()
-                            with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
-                                with torch.no_grad():
-                                    eval_logits = None
-                                    eval_indexs = None
-                                    for eval_loop_i, eval_batch in enumerate(eval_dataloader, start=1):
-                                        eval_batch: BatchEncoding = eval_batch
-                                        indexs: torch.Tensor = eval_batch.pop("idx")
-                                        logits: torch.Tensor = model.generate(**eval_batch, **gen_kwargs)
-                                        logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
-                                        logits = accelerator.gather_for_metrics(logits)
-                                        indexs = accelerator.gather_for_metrics(indexs)
-                                        eval_logits = logits if eval_logits is None else nested_concat(eval_logits, logits, padding_index=-100)
-                                        eval_indexs = indexs if eval_indexs is None else nested_concat(eval_indexs, indexs, padding_index=-100)
-                                        eval_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}")
-                                        eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
-                                    eval_logits = nested_numpify(eval_logits)
-                                    eval_indexs = nested_numpify(eval_indexs).tolist()
-                                    metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.2f}",
-                                                                       save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
-                            model.train()
-                            torch.cuda.reset_peak_memory_stats()
-
-                        # Log metrics
-                        metrics = denumpify_detensorize(metrics)
-                        fabric.log_dict(metrics=metrics, step=metrics["step"])  # TODO: utilize transformers.trainer_utils.speed_metrics()
-                        performance_row = get_performance(metrics)
-                        if fabric.is_global_zero and performance_row is not None:
-                            performance_rows.append(performance_row)
-                            fabric.prints(to_table_lines(performance_row, transposed_df=True, floatfmt=".2f"))
-                        fabric.barrier()
+                        # # Define metrics
+                        # metrics: dict[str, Any] = {
+                        #     "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
+                        #     "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
+                        #     "loss": train_loss,
+                        #     "[mem]": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
+                        # }
+                        #
+                        # # Validation loop
+                        # if eval_dataloader and (
+                        #         train_loop_i == len(train_dataloader) or
+                        #         (args.learn.eval_steps > 0 and global_step % args.learn.eval_steps) == 0
+                        # ):
+                        #     train_pbar.refresh()
+                        #     model.eval()
+                        #     accelerator = Accelerator()
+                        #     with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
+                        #         with torch.no_grad():
+                        #             eval_logits = None
+                        #             eval_indexs = None
+                        #             for eval_loop_i, eval_batch in enumerate(eval_dataloader, start=1):
+                        #                 eval_batch: BatchEncoding = eval_batch
+                        #                 indexs: torch.Tensor = eval_batch.pop("idx")
+                        #                 logits: torch.Tensor = model.generate(**eval_batch, **gen_kwargs)
+                        #                 logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
+                        #                 logits = accelerator.gather_for_metrics(logits)
+                        #                 indexs = accelerator.gather_for_metrics(indexs)
+                        #                 eval_logits = logits if eval_logits is None else nested_concat(eval_logits, logits, padding_index=-100)
+                        #                 eval_indexs = indexs if eval_indexs is None else nested_concat(eval_indexs, indexs, padding_index=-100)
+                        #                 eval_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}")
+                        #                 eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
+                        #             eval_logits = nested_numpify(eval_logits)
+                        #             eval_indexs = nested_numpify(eval_indexs).tolist()
+                        #             metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.2f}",
+                        #                                                save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
+                        #     model.train()
+                        #     torch.cuda.reset_peak_memory_stats()
+                        #
+                        # # Log metrics
+                        # metrics = denumpify_detensorize(metrics)
+                        # fabric.log_dict(metrics=metrics, step=metrics["step"])  # TODO: utilize transformers.trainer_utils.speed_metrics()
+                        # performance_row = get_performance(metrics)
+                        # if fabric.is_global_zero and performance_row is not None:
+                        #     performance_rows.append(performance_row)
+                        #     fabric.prints(to_table_lines(performance_row, transposed_df=True, floatfmt=".2f"))
+                        # fabric.barrier()
 
                 # Save performance
                 model.eval()
