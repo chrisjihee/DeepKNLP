@@ -156,7 +156,8 @@ def train(
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
         # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
-        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        eval_file: Annotated[str, typer.Option("--eval_file")] = None,
         # test_file: Annotated[str, typer.Option("--test_file")] = "data/gner/zero-shot-test.jsonl"
         test_file: Annotated[str, typer.Option("--test_file")] = None,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
@@ -173,7 +174,7 @@ def train(
         num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 3,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
-        train_batch: Annotated[int, typer.Option("--train_batch")] = 2,  # TODO: -> 1, 2, 4, 8
+        train_batch: Annotated[int, typer.Option("--train_batch")] = 1,  # TODO: -> 1, 2, 4, 8
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 40,  # TODO: -> 20, 40, 80
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 20,  # TODO: -> 2, 4, 8, 10, 20, 40
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 20, 40
@@ -546,6 +547,10 @@ def train(
 
         # Set dataloader
         label_pad_token_id = -100
+        train_dataloader: DataLoader | None = None
+        study_dataloader: DataLoader | None = None
+        eval_dataloader: DataLoader | None = None
+        test_dataloader: DataLoader | None = None
         data_collator: DataCollatorForGNER = DataCollatorForGNER(
             tokenizer,
             model=model,
@@ -666,6 +671,7 @@ def train(
             epoch_per_step = 1.0 / epoch_optimization_steps
             train_losses = []
             study_losses = []
+            joint_losses = []
             performance_rows = []
             global_step = 0
             global_epoch = 0.0
@@ -708,13 +714,17 @@ def train(
                         # Forward & Backward pass
                         is_accumulating = train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader)
                         with fabric.no_backward_sync(model, enabled=is_accumulating) if args.learn.strategy != "deepspeed" else contextlib.nullcontext():
-                            train_outputs = model(**train_batch)
-                            train_losses.append(train_outputs.loss.item())
-                            fabric.backward(train_outputs.loss)
-
                             study_outputs = model(**study_batch)
                             study_losses.append(study_outputs.loss.item())
-                            fabric.backward(study_outputs.loss)
+                            # fabric.backward(study_outputs.loss)
+
+                            train_outputs = model(**train_batch)
+                            train_losses.append(train_outputs.loss.item())
+                            # fabric.backward(train_outputs.loss)
+
+                            joint_loss = study_outputs.loss + train_outputs.loss
+                            joint_losses.append(joint_loss.item())
+                            fabric.backward(joint_loss)
                         if is_accumulating:
                             continue
 
@@ -727,57 +737,63 @@ def train(
                         global_step += 1
                         global_epoch += epoch_per_step
                         train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
+                        study_loss = torch.cat(fabric.all_gather(study_losses)).mean().item()
+                        joint_loss = torch.cat(fabric.all_gather(joint_losses)).mean().item()
                         train_losses.clear()
-                        train_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}, loss={train_loss:.4f}")
+                        study_losses.clear()
+                        joint_losses.clear()
+                        train_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f} / train_loss={train_loss:.4f}, study_loss={study_loss:.4f}, joint_loss={joint_loss:.4f}")
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
-                        # # Define metrics
-                        # metrics: dict[str, Any] = {
-                        #     "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
-                        #     "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
-                        #     "loss": train_loss,
-                        #     "[mem]": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
-                        # }
-                        #
-                        # # Validation loop
-                        # if eval_dataloader and (
-                        #         train_loop_i == len(train_dataloader) or
-                        #         (args.learn.eval_steps > 0 and global_step % args.learn.eval_steps) == 0
-                        # ):
-                        #     train_pbar.refresh()
-                        #     model.eval()
-                        #     accelerator = Accelerator()
-                        #     with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
-                        #         with torch.no_grad():
-                        #             eval_logits = None
-                        #             eval_indexs = None
-                        #             for eval_loop_i, eval_batch in enumerate(eval_dataloader, start=1):
-                        #                 eval_batch: BatchEncoding = eval_batch
-                        #                 indexs: torch.Tensor = eval_batch.pop("idx")
-                        #                 logits: torch.Tensor = model.generate(**eval_batch, **gen_kwargs)
-                        #                 logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
-                        #                 logits = accelerator.gather_for_metrics(logits)
-                        #                 indexs = accelerator.gather_for_metrics(indexs)
-                        #                 eval_logits = logits if eval_logits is None else nested_concat(eval_logits, logits, padding_index=-100)
-                        #                 eval_indexs = indexs if eval_indexs is None else nested_concat(eval_indexs, indexs, padding_index=-100)
-                        #                 eval_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}")
-                        #                 eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
-                        #             eval_logits = nested_numpify(eval_logits)
-                        #             eval_indexs = nested_numpify(eval_indexs).tolist()
-                        #             metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.2f}",
-                        #                                                save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
-                        #     model.train()
-                        #     torch.cuda.reset_peak_memory_stats()
-                        #
-                        # # Log metrics
-                        # metrics = denumpify_detensorize(metrics)
-                        # fabric.log_dict(metrics=metrics, step=metrics["step"])  # TODO: utilize transformers.trainer_utils.speed_metrics()
-                        # performance_row = get_performance(metrics)
-                        # if fabric.is_global_zero and performance_row is not None:
-                        #     performance_rows.append(performance_row)
-                        #     fabric.prints(to_table_lines(performance_row, transposed_df=True, floatfmt=".2f"))
-                        # fabric.barrier()
+                        # Define metrics
+                        metrics: dict[str, Any] = {
+                            "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
+                            "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
+                            "train_loss": train_loss,
+                            "study_loss": study_loss,
+                            "joint_loss": joint_loss,
+                            "[mem]": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
+                        }
+
+                        # Validation loop
+                        if eval_dataloader and (
+                                train_loop_i == len(train_dataloader) or
+                                (args.learn.eval_steps > 0 and global_step % args.learn.eval_steps) == 0
+                        ):
+                            train_pbar.refresh()
+                            model.eval()
+                            accelerator = Accelerator()
+                            with ProgIter(total=len(eval_dataloader), desc=f' Testing [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as eval_pbar:
+                                with torch.no_grad():
+                                    eval_logits = None
+                                    eval_indexs = None
+                                    for eval_loop_i, eval_batch in enumerate(eval_dataloader, start=1):
+                                        eval_batch: BatchEncoding = eval_batch
+                                        indexs: torch.Tensor = eval_batch.pop("idx")
+                                        logits: torch.Tensor = model.generate(**eval_batch, **gen_kwargs)
+                                        logits = accelerator.pad_across_processes(logits, dim=1, pad_index=-100)
+                                        logits = accelerator.gather_for_metrics(logits)
+                                        indexs = accelerator.gather_for_metrics(indexs)
+                                        eval_logits = logits if eval_logits is None else nested_concat(eval_logits, logits, padding_index=-100)
+                                        eval_indexs = indexs if eval_indexs is None else nested_concat(eval_indexs, indexs, padding_index=-100)
+                                        eval_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}")
+                                        eval_pbar.step(force=eval_loop_i == 1 or eval_loop_i >= len(eval_dataloader))
+                                    eval_logits = nested_numpify(eval_logits)
+                                    eval_indexs = nested_numpify(eval_indexs).tolist()
+                                    metrics.update(compute_ner_metrics(eval_logits, eval_indexs, eval_dataset, save_prefix="eval", save_suffix=f"{global_epoch:.2f}",
+                                                                       save_keys=["id", "dataset", "split", "prediction", "instance", "label_list", "input_ids", "attention_mask"]))
+                            model.train()
+                            torch.cuda.reset_peak_memory_stats()
+
+                        # Log metrics
+                        metrics = denumpify_detensorize(metrics)
+                        fabric.log_dict(metrics=metrics, step=metrics["step"])  # TODO: utilize transformers.trainer_utils.speed_metrics()
+                        performance_row = get_performance(metrics)
+                        if fabric.is_global_zero and performance_row is not None:
+                            performance_rows.append(performance_row)
+                            fabric.prints(to_table_lines(performance_row, transposed_df=True, floatfmt=".2f"))
+                        fabric.barrier()
 
                 # Save performance
                 model.eval()
