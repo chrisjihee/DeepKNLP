@@ -109,9 +109,11 @@ class TrainingArguments(NewCommonArguments):
     class InputOption(BaseModel):
         pretrained: str | Path = Field(default=None)
         train_file: str | Path | None = Field(default=None)
+        study_file: str | Path | None = Field(default=None)
         eval_file: str | Path | None = Field(default=None)
         test_file: str | Path | None = Field(default=None)
         max_train_samples: int = Field(default=-1)
+        max_study_samples: int = Field(default=-1)
         max_eval_samples: int = Field(default=-1)
         max_test_samples: int = Field(default=-1)
         max_source_length: int = Field(default=512)
@@ -123,6 +125,7 @@ class TrainingArguments(NewCommonArguments):
         def after(self) -> Self:
             self.pretrained = Path(self.pretrained).absolute() if self.pretrained else None
             self.train_file = Path(self.train_file).absolute() if self.train_file else None
+            self.study_file = Path(self.study_file).absolute() if self.study_file else None
             self.eval_file = Path(self.eval_file).absolute() if self.eval_file else None
             self.test_file = Path(self.test_file).absolute() if self.test_file else None
             return self
@@ -131,6 +134,11 @@ class TrainingArguments(NewCommonArguments):
         def cache_train_dir(self) -> Optional[Path]:
             if self.train_file:
                 return self.train_file.parent / ".cache"
+
+        @property
+        def cache_study_dir(self) -> Optional[Path]:
+            if self.study_file:
+                return self.study_file.parent / ".cache"
 
         @property
         def cache_eval_dir(self) -> Optional[Path]:
@@ -145,6 +153,10 @@ class TrainingArguments(NewCommonArguments):
         def cache_train_path(self, size: int) -> Optional[Path]:
             if self.train_file:
                 return self.cache_train_dir / f"{self.train_file.stem}={size}.tmp"
+
+        def cache_study_path(self, size: int) -> Optional[Path]:
+            if self.study_file:
+                return self.cache_study_dir / f"{self.study_file.stem}={size}.tmp"
 
         def cache_eval_path(self, size: int) -> Optional[Path]:
             if self.eval_file:

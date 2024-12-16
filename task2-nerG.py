@@ -154,6 +154,7 @@ def train(
         pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # TODO: "google/flan-t5-small", "etri-lirs/egpt-1.3b-preview",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
         # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
+        study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
         eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
         # test_file: Annotated[str, typer.Option("--test_file")] = "data/gner/zero-shot-test.jsonl"
         test_file: Annotated[str, typer.Option("--test_file")] = None,
@@ -161,6 +162,7 @@ def train(
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
         max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
         max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
+        max_study_samples: Annotated[int, typer.Option("--max_study_samples")] = -1,  # TODO: 256, -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,  # TODO: 256, 1024, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = True,
@@ -190,12 +192,14 @@ def train(
         input=TrainingArguments.InputOption(
             pretrained=pretrained,
             train_file=train_file,
+            study_file=study_file,
             eval_file=eval_file,
             test_file=test_file,
             max_source_length=max_source_length,
             max_target_length=max_target_length,
             max_generation_length=max_generation_length,
             max_train_samples=max_train_samples,
+            max_study_samples=max_study_samples,
             max_eval_samples=max_eval_samples,
             max_test_samples=max_test_samples,
             use_cache_data=use_cache_data,
@@ -310,6 +314,7 @@ def train(
 
         # Load dataset
         train_dataset: Dataset | None = None
+        study_dataset: Dataset | None = None
         eval_dataset: Dataset | None = None
         test_dataset: Dataset | None = None
         if args.input.train_file:
@@ -321,7 +326,17 @@ def train(
                     whole_indices = shuffled(range(len(train_dataset)), seed=args.env.random_seed)
                     train_dataset = train_dataset.select(whole_indices[:args.input.max_train_samples])
                 train_dataset = train_dataset.add_column("idx", range(len(train_dataset)))
-                fabric.print(f"Load train dataset from {args.input.train_file}")
+                fabric.print(f"Load train dataset from {args.input.train_file}: {len(train_dataset):,}")
+        if args.input.study_file:
+            with fabric.rank_zero_first():
+                study_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+                                                      data_files=str(args.input.study_file),
+                                                      cache_dir=str(args.input.cache_study_dir))
+                if args.input.max_study_samples > 0:
+                    whole_indices = shuffled(range(len(study_dataset)), seed=args.env.random_seed)
+                    study_dataset = study_dataset.select(whole_indices[:args.input.max_study_samples])
+                study_dataset = study_dataset.add_column("idx", range(len(study_dataset)))
+                fabric.print(f"Load study dataset from {args.input.study_file}: {len(study_dataset):,}")
         if args.input.eval_file:
             with fabric.rank_zero_first():
                 eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -331,7 +346,7 @@ def train(
                     whole_indices = shuffled(range(len(eval_dataset)), seed=args.env.random_seed)
                     eval_dataset = eval_dataset.select(whole_indices[:args.input.max_eval_samples])
                 eval_dataset = eval_dataset.add_column("idx", range(len(eval_dataset)))
-                fabric.print(f"Load  eval dataset from {args.input.eval_file}")
+                fabric.print(f"Load  eval dataset from {args.input.eval_file}: {len(eval_dataset):,}")
         if args.input.test_file:
             with fabric.rank_zero_first():
                 test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
@@ -341,7 +356,7 @@ def train(
                     whole_indices = shuffled(range(len(test_dataset)), seed=args.env.random_seed)
                     test_dataset = test_dataset.select(whole_indices[:args.input.max_test_samples])
                 test_dataset = test_dataset.add_column("idx", range(len(test_dataset)))
-                fabric.print(f"Load  test dataset from {args.input.test_file}")
+                fabric.print(f"Load  test dataset from {args.input.test_file}: {len(test_dataset):,}")
         fabric.barrier()
         fabric.print("-" * 100)
 
@@ -492,6 +507,15 @@ def train(
                         with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
                         cache_file_name=str(args.input.cache_train_path(len(train_dataset))) if args.input.use_cache_data else None,
                     )
+        if study_dataset:
+            with fabric.rank_zero_first():
+                with ProgIter(total=len(study_dataset), desc='Preprocess study samples:', stream=fabric, verbose=2) as manual_pbar:
+                    study_dataset = study_dataset.map(
+                        preprocess_for_decoder_only_model if using_decoder_only_model else preprocess_for_encoder_decoder_model,
+                        fn_kwargs={"data_opt": args.input.model_dump(), "update": lambda *xs: update_progress(*xs, pbar=manual_pbar)},
+                        with_rank=True, batched=False, num_proc=args.env.max_workers, load_from_cache_file=args.input.use_cache_data,
+                        cache_file_name=str(args.input.cache_study_path(len(study_dataset))) if args.input.use_cache_data else None,
+                    )
         if eval_dataset:
             with fabric.rank_zero_first():
                 with ProgIter(total=len(eval_dataset), desc='Preprocess  eval samples:', stream=fabric, verbose=2) as manual_pbar:
@@ -532,6 +556,13 @@ def train(
                 drop_last=False,
             )
             train_dataloader = fabric.setup_dataloaders(train_dataloader)
+        if study_dataset:
+            study_dataloader = DataLoader(
+                study_dataset, sampler=RandomSampler(study_dataset, replacement=False),
+                batch_size=args.learn.train_batch,
+                collate_fn=data_collator,
+                drop_last=False,
+            )
         if eval_dataset:
             eval_dataloader = DataLoader(
                 eval_dataset, sampler=SequentialSampler(eval_dataset),
@@ -640,6 +671,8 @@ def train(
             fabric.print(f"  # Model Parameters = {get_model_param_count(model, trainable_only=True):,}")
             fabric.print(f"  # Total Train Epochs = {total_epochs}")
             fabric.print(f"  # Train Total Samples = {len(train_dataset):,}")
+            if study_dataset:
+                fabric.print(f"  # Study Total Samples = {len(study_dataset):,}")
             if eval_dataset:
                 fabric.print(f"  #  Eval Total Samples = {len(eval_dataset):,}")
             fabric.print(f"  # Train Batch Samples"
