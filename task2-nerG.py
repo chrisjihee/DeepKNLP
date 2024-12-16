@@ -155,7 +155,8 @@ def train(
         pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # TODO: "google/flan-t5-small", "etri-lirs/egpt-1.3b-preview",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
         # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
-        study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
+        # study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
+        study_file: Annotated[str, typer.Option("--study_file")] = None,
         eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
         # eval_file: Annotated[str, typer.Option("--eval_file")] = None,
         # test_file: Annotated[str, typer.Option("--test_file")] = "data/gner/zero-shot-test.jsonl"
@@ -706,23 +707,24 @@ def train(
                 model.train()
                 torch.cuda.reset_peak_memory_stats()
                 with ProgIter(total=epoch_optimization_steps, desc=f'Training [{global_epoch:.2f}/{total_epochs}]:', stream=fabric, verbose=2, time_thresh=3.0) as train_pbar:
-                    study_iter = itertools.chain(*[iter(study_dataloader) for _ in range(math.ceil(len(train_dataloader) / len(study_dataloader)))])
+                    study_iter = itertools.chain(*[iter(study_dataloader) for _ in range(math.ceil(len(train_dataloader) / len(study_dataloader)))]) if study_dataloader else None
                     for train_loop_i, train_batch in enumerate(train_dataloader, start=1):
                         train_batch: BatchEncoding = train_batch
-                        study_batch: BatchEncoding = next(study_iter)
+                        study_batch: BatchEncoding | None = next(study_iter) if study_iter else None
 
                         # Forward & Backward pass
                         is_accumulating = train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader)
                         with fabric.no_backward_sync(model, enabled=is_accumulating) if args.learn.strategy != "deepspeed" else contextlib.nullcontext():
-                            study_outputs = model(**study_batch)
-                            study_losses.append(study_outputs.loss.item())
-                            # fabric.backward(study_outputs.loss)
+                            if study_batch:
+                                study_outputs = model(**study_batch)
+                                study_losses.append(study_outputs.loss.item())
+                                # fabric.backward(study_outputs.loss)
 
                             train_outputs = model(**train_batch)
                             train_losses.append(train_outputs.loss.item())
                             # fabric.backward(train_outputs.loss)
 
-                            joint_loss = study_outputs.loss + train_outputs.loss
+                            joint_loss = study_outputs.loss + train_outputs.loss if study_batch else train_outputs.loss
                             joint_losses.append(joint_loss.item())
                             fabric.backward(joint_loss)
                         if is_accumulating:
@@ -737,12 +739,15 @@ def train(
                         global_step += 1
                         global_epoch += epoch_per_step
                         train_loss = torch.cat(fabric.all_gather(train_losses)).mean().item()
-                        study_loss = torch.cat(fabric.all_gather(study_losses)).mean().item()
+                        study_loss = torch.cat(fabric.all_gather(study_losses)).mean().item() if study_batch else None
                         joint_loss = torch.cat(fabric.all_gather(joint_losses)).mean().item()
                         train_losses.clear()
                         study_losses.clear()
                         joint_losses.clear()
-                        train_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f} / train_loss={train_loss:.4f}, study_loss={study_loss:.4f}, joint_loss={joint_loss:.4f}")
+                        if study_loss:
+                            train_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f} / train_loss={train_loss:.4f}, study_loss={study_loss:.4f}, joint_loss={joint_loss:.4f}")
+                        else:
+                            train_pbar.set_extra(f"| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f} / train_loss={train_loss:.4f}, joint_loss={joint_loss:.4f}")
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
@@ -751,10 +756,11 @@ def train(
                             "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
                             "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
                             "train_loss": train_loss,
-                            "study_loss": study_loss,
+                            "study_loss": study_loss if study_loss else None,
                             "joint_loss": joint_loss,
                             "[mem]": torch.cuda.max_memory_reserved() / math.pow(1024, 3),
                         }
+                        metrics = {k: v for k, v in metrics.items() if v is not None}
 
                         # Validation loop
                         if eval_dataloader and (
