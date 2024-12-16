@@ -1,5 +1,5 @@
-import itertools
 import contextlib
+import itertools
 import json
 import logging
 import math
