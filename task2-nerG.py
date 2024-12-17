@@ -152,7 +152,8 @@ def main(
 @app.command()
 def train(
         # input
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # TODO: "google/flan-t5-small", "etri-lirs/egpt-1.3b-preview",
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # TODO: "google/flan-t5-small"
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
         # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         # study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
