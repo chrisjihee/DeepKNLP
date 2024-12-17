@@ -177,7 +177,7 @@ def train(
         # learn
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
-        run_version: Annotated[str, typer.Option("--run_version")] = "LLaMA-3B-KGC2-24.12",
+        run_version: Annotated[str, typer.Option("--run_version")] = None,
         num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 3,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
@@ -239,13 +239,13 @@ def train(
     # Setup fabric
     lightning.fabric.loggers.csv_logs._ExperimentWriter.NAME_METRICS_FILE = "train-metrics.csv"
     basic_logger = CSVLogger(args.learn.output_home, args.learn.output_name, args.learn.run_version, flush_logs_every_n_steps=1)
-    visual_logger = TensorBoardLogger(args.learn.output_home, args.learn.output_name, basic_logger.version)  # tensorboard --logdir output --bind_all
+    graph_logger = TensorBoardLogger(basic_logger.root_dir, basic_logger.name, basic_logger.version)  # tensorboard --logdir output --bind_all
     fabric = Fabric(
         accelerator=args.learn.device_type,
         precision=args.learn.precision,
         strategy=args.learn.strategy_inst,
         devices=args.learn.devices,
-        loggers=[basic_logger, visual_logger],
+        loggers=[basic_logger, graph_logger],
     )
     fabric.launch()
     fabric.barrier()
