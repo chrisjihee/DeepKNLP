@@ -167,8 +167,9 @@ class TrainingArguments(NewCommonArguments):
                 return self.cache_test_dir / f"{self.test_file.stem}={size}.tmp"
 
     class LearnOption(BaseModel):
-        run_name: str = Field(default="run")
         output_home: str | Path | None = Field(default=None)
+        output_name: str = Field(default="run")
+        run_version: str | int | None = Field(default=None)
         num_train_epochs: int = Field(default=1)
         learning_rate: float = Field(default=5e-5)
         weight_decay: float = Field(default=0.0)

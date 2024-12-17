@@ -175,8 +175,9 @@ def train(
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--use_fresh_data")] = True,
         # learn
-        run_name: Annotated[str, typer.Option("--run_name")] = "task2-nerG",
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
+        output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
+        run_version: Annotated[str, typer.Option("--run_version")] = "LLaMA-3B-KGC2-24.12",
         num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 3,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
@@ -213,8 +214,9 @@ def train(
             use_cache_data=use_cache_data,
         ),
         learn=TrainingArguments.LearnOption(
-            run_name=run_name,
             output_home=output_home,
+            output_name=output_name,
+            run_version=run_version,
             num_train_epochs=num_train_epochs,
             learning_rate=learning_rate,
             weight_decay=weight_decay,
@@ -236,8 +238,8 @@ def train(
 
     # Setup fabric
     lightning.fabric.loggers.csv_logs._ExperimentWriter.NAME_METRICS_FILE = "train-metrics.csv"
-    basic_logger = CSVLogger(args.learn.output_home, args.learn.run_name, flush_logs_every_n_steps=1)
-    visual_logger = TensorBoardLogger(args.learn.output_home, args.learn.run_name, basic_logger.version)  # tensorboard --logdir output --bind_all
+    basic_logger = CSVLogger(args.learn.output_home, args.learn.output_name, args.learn.run_version, flush_logs_every_n_steps=1)
+    visual_logger = TensorBoardLogger(args.learn.output_home, args.learn.output_name, basic_logger.version)  # tensorboard --logdir output --bind_all
     fabric = Fabric(
         accelerator=args.learn.device_type,
         precision=args.learn.precision,
