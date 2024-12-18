@@ -155,8 +155,11 @@ def train(
         # input
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",  # RuntimeError: CUDA error: device-side assert triggered
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",  # RuntimeError: CUDA error: device-side assert triggered
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct",
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "Qwen/Qwen2.5-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error: device-side assert triggered
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error: device-side assert triggered
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error: device-side assert triggered
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
@@ -192,8 +195,8 @@ def train(
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
-        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 3,  # TODO: -> 1, 2, 3
-        ds_offload: Annotated[int, typer.Option("--ds_offload")] = 3,  # TODO: -> 0, 1, 2, 3
+        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 2,  # TODO: -> 1, 2, 3
+        ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
         fsdp_offload: Annotated[bool, typer.Option("--fsdp_offload")] = False,  # TODO: -> True, False
 ):
@@ -301,25 +304,30 @@ def train(
         using_decoder_only_model = not config.is_encoder_decoder
 
         if using_decoder_only_model:
-            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, padding_side="left",
-                                                                               add_eos_token=True, add_bos_token=True)
+            # tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, padding_side="left",
+            #                                                                    add_eos_token=True, add_bos_token=True)
+            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained)
         else:
             tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained)
+        fabric.print(f"tokenizer.pad_token={tokenizer.pad_token}")
+        fabric.print(f"tokenizer.pad_token_id={tokenizer.pad_token_id}")
+        fabric.print(f"tokenizer.unk_token={tokenizer.unk_token}")
+        fabric.print(f"tokenizer.unk_token_id={tokenizer.unk_token_id}")
         if tokenizer.pad_token is None:
             # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
-            tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
-            # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+            # tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+            tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+        fabric.print(f"tokenizer.pad_token={tokenizer.pad_token}")
+        fabric.print(f"tokenizer.pad_token_id={tokenizer.pad_token_id}")
 
-        with fabric.rank_zero_first():
-            if using_decoder_only_model:
-                model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained, config=config)
-            else:
-                model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained, config=config)
+        if using_decoder_only_model:
+            model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained, config=config)
+        else:
+            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained, config=config)
+        model_embedding_size = model.get_input_embeddings().weight.shape[0]
+        if len(tokenizer) > model_embedding_size:
+            model.resize_token_embeddings(len(tokenizer), pad_to_multiple_of=8, mean_resizing=False)
             model_embedding_size = model.get_input_embeddings().weight.shape[0]
-            if len(tokenizer) != model_embedding_size:
-                model.resize_token_embeddings(len(tokenizer))
-                model_embedding_size = model.get_input_embeddings().weight.shape[0]
-            assert len(tokenizer) == model_embedding_size, f"Tokenizer size({len(tokenizer):,}) and model embedding size({model_embedding_size:,}) are different."
         fabric.barrier()
 
         # Load dataset
@@ -724,12 +732,12 @@ def train(
                         is_accumulating = train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader)
                         with fabric.no_backward_sync(model, enabled=is_accumulating) if args.learn.strategy != "deepspeed" else contextlib.nullcontext():
                             if study_batch:
-                                study_batch.pop("idx")
+                                # study_batch.pop("idx")
                                 study_outputs = model(**study_batch)
                                 study_losses.append(study_outputs.loss.item())
                                 # fabric.backward(study_outputs.loss)
                             if train_batch:
-                                train_batch.pop("idx")
+                                # train_batch.pop("idx")
                                 train_outputs = model(**train_batch)
                                 train_losses.append(train_outputs.loss.item())
                                 # fabric.backward(train_outputs.loss)
@@ -766,7 +774,7 @@ def train(
                                                  f'| joint_loss={metrics["joint_loss"]:.4f}, train_loss={metrics["train_loss"]:.4f}, study_loss={metrics["study_loss"]:.4f}')
                         else:
                             train_pbar.set_extra(f'| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f} '
-                                                 f'| joint_loss={metrics["joint_loss"]:.4f}, train_loss={metrics["train_loss"]:.4f}')
+                                                 f'| train_loss={metrics["train_loss"]:.4f}')
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
