@@ -215,21 +215,17 @@ class TrainingArguments(NewCommonArguments):
                 )
             elif self.strategy == "deepspeed":
                 if self.ds_offload >= 3:
-                    return DeepSpeedStrategy(stage=self.ds_stage,
-                                             offload_optimizer=True,
-                                             offload_parameters=True)
+                    strategy = DeepSpeedStrategy(stage=self.ds_stage, offload_optimizer=True, offload_parameters=True)
                 elif self.ds_offload >= 2:
-                    return DeepSpeedStrategy(stage=self.ds_stage,
-                                             offload_optimizer=False,
-                                             offload_parameters=True)
+                    strategy = DeepSpeedStrategy(stage=self.ds_stage, offload_optimizer=False, offload_parameters=True)
                 elif self.ds_offload >= 1:
-                    return DeepSpeedStrategy(stage=self.ds_stage,
-                                             offload_optimizer=True,
-                                             offload_parameters=False)
+                    strategy = DeepSpeedStrategy(stage=self.ds_stage, offload_optimizer=True, offload_parameters=False)
                 else:
-                    return DeepSpeedStrategy(stage=self.ds_stage,
-                                             offload_optimizer=False,
-                                             offload_parameters=False)
+                    strategy = DeepSpeedStrategy(stage=self.ds_stage, offload_optimizer=False, offload_parameters=False)
+                strategy.config["zero_force_ds_cpu_optimizer"] = False
+                logger.warning(f"strategy.config={strategy.config}")
+                return strategy
+
             else:
                 return self.strategy
 

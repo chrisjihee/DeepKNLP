@@ -131,7 +131,7 @@ def main(
     )
     set_verbosity_warning(
         # "root",
-        "DeepSpeed",
+        # "DeepSpeed",
         "c10d-NullHandler",
         "c10d-NullHandler-default",
         "lightning.fabric.utilities.seed"
@@ -601,26 +601,6 @@ def train(
             )
             test_dataloader = fabric.setup_dataloaders(test_dataloader)
 
-        # Set optimizer
-        no_decay = ("bias", "layer_norm.weight",)
-        optimizer: Optimizer = torch.optim.AdamW(
-            lr=args.learn.learning_rate,
-            params=[
-                {
-                    "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-                    "weight_decay": args.learn.weight_decay,
-                },
-                {
-                    "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
-                    "weight_decay": 0.0,
-                },
-            ],
-        )
-        model_optimizer = fabric.setup(model, optimizer)
-        model: lightning.fabric.wrappers._FabricModule = model_optimizer[0]
-        optimizer: lightning.fabric.wrappers._FabricOptimizer = model_optimizer[1]
-        model.mark_forward_method("generate")
-
         # Define compute metrics function
         def compute_ner_metrics(pred_logits: np.ndarray, pred_indexs: list[int], dataset: Dataset,
                                 save_prefix: str | None = None, save_suffix: str | None = None, save_keys: Iterable[str] | None = None) -> dict[str, float]:
@@ -708,6 +688,26 @@ def train(
                              f" = {args.learn.infer_batch * args.env.world_size}")
             fabric.print(f"  # Total Optim Steps = {epoch_optimization_steps * total_epochs:,}")
             fabric.print(f"  #  Eval Cycle Steps = {args.learn.eval_steps}")
+
+            # Set optimizer
+            no_decay = ("bias", "layer_norm.weight",)
+            optimizer: Optimizer = torch.optim.AdamW(
+                [
+                    {
+                        "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
+                        "weight_decay": args.learn.weight_decay,
+                    },
+                    {
+                        "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
+                        "weight_decay": 0.0,
+                    },
+                ],
+                lr=args.learn.learning_rate,
+            )
+            model_optimizer = fabric.setup(model, optimizer)
+            model: lightning.fabric.wrappers._FabricModule = model_optimizer[0]
+            optimizer: lightning.fabric.wrappers._FabricOptimizer = model_optimizer[1]
+            model.mark_forward_method("generate")
 
             for epoch in range(args.learn.num_train_epochs):
                 fabric.barrier()
