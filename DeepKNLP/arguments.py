@@ -223,7 +223,6 @@ class TrainingArguments(NewCommonArguments):
                 else:
                     strategy = DeepSpeedStrategy(stage=self.ds_stage, offload_optimizer=False, offload_parameters=False)
                 strategy.config["zero_force_ds_cpu_optimizer"] = False
-                logger.warning(f"strategy.config={strategy.config}")
                 return strategy
 
             else:
