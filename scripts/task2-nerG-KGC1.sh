@@ -1,4 +1,4 @@
-#export CUDA_VISIBLE_DEVICES=4,5,6,7
+export CUDA_VISIBLE_DEVICES=4,5,6,7
 
 cd ~/proj/DeepKNLP || exit
 #python task2-nerG.py train --run_version FlanT5-3B-KGC1 --pretrained google/flan-t5-xl --study_file data/gner/KG-generation-YAGO3-53220@1.jsonl

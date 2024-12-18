@@ -718,10 +718,10 @@ def train(
                             metrics["study_loss"] = torch.cat(fabric.all_gather(study_losses)).mean().item() if study_batch else None
                             study_losses.clear()
                             train_pbar.set_extra(f'| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f} '
-                                                 f'| joint_loss={metrics["joint_loss"]:.4f}, train_loss={metrics["train_loss"]:.4f}, study_loss={metrics["study_loss"]:.4f}')
+                                                 f'| loss={metrics["joint_loss"]:.4f}={metrics["train_loss"]:.4f}+{metrics["study_loss"]:.4f}')
                         else:
                             train_pbar.set_extra(f'| M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f} '
-                                                 f'| train_loss={metrics["train_loss"]:.4f}')
+                                                 f'| loss={metrics["joint_loss"]:.4f}')
                         train_pbar.set_description(f'Training [{global_epoch:.2f}/{total_epochs}]:', refresh=False)
                         train_pbar.step(force=train_loop_i == 1 or train_loop_i >= len(train_dataloader))
 
