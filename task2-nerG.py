@@ -153,13 +153,13 @@ def main(
 @app.command()
 def train(
         # input
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",  # RuntimeError: CUDA error: device-side assert triggered
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",  # RuntimeError: CUDA error: device-side assert triggered
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct",  # RuntimeError: CUDA error
         pretrained: Annotated[str, typer.Option("--pretrained")] = "Qwen/Qwen2.5-3B",
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error: device-side assert triggered
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error: device-side assert triggered
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
@@ -300,30 +300,27 @@ def train(
         fabric.seed_everything(args.env.random_seed)
 
         # Load model
-        config: PretrainedConfig = AutoConfig.from_pretrained(pretrained)
+        config: PretrainedConfig = AutoConfig.from_pretrained(pretrained, trust_remote_code=True)
         using_decoder_only_model = not config.is_encoder_decoder
 
         if using_decoder_only_model:
             # tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, padding_side="left",
             #                                                                    add_eos_token=True, add_bos_token=True)
-            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained)
+            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, trust_remote_code=True)
         else:
-            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained)
-        fabric.print(f"tokenizer.pad_token={tokenizer.pad_token}")
-        fabric.print(f"tokenizer.pad_token_id={tokenizer.pad_token_id}")
-        fabric.print(f"tokenizer.unk_token={tokenizer.unk_token}")
-        fabric.print(f"tokenizer.unk_token_id={tokenizer.unk_token_id}")
+            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, trust_remote_code=True)
+        fabric.print(f"tokenizer.pad_token={tokenizer.pad_token} (id={tokenizer.pad_token_id})")
+        fabric.print(f"tokenizer.eos_token={tokenizer.eos_token} (id={tokenizer.eos_token_id})")
         if tokenizer.pad_token is None:
-            # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
+            tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
             # tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
-            tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
-        fabric.print(f"tokenizer.pad_token={tokenizer.pad_token}")
-        fabric.print(f"tokenizer.pad_token_id={tokenizer.pad_token_id}")
+            # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+        fabric.print(f"tokenizer.pad_token={tokenizer.pad_token} (id={tokenizer.pad_token_id})")
 
         if using_decoder_only_model:
-            model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained, config=config)
+            model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained, config=config, trust_remote_code=True)
         else:
-            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained, config=config)
+            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained, config=config, trust_remote_code=True)
         model_embedding_size = model.get_input_embeddings().weight.shape[0]
         if len(tokenizer) > model_embedding_size:
             model.resize_token_embeddings(len(tokenizer), pad_to_multiple_of=8, mean_resizing=False)
@@ -732,12 +729,12 @@ def train(
                         is_accumulating = train_loop_i % args.learn.grad_steps != 0 and train_loop_i != len(train_dataloader)
                         with fabric.no_backward_sync(model, enabled=is_accumulating) if args.learn.strategy != "deepspeed" else contextlib.nullcontext():
                             if study_batch:
-                                # study_batch.pop("idx")
+                                study_batch.pop("idx")
                                 study_outputs = model(**study_batch)
                                 study_losses.append(study_outputs.loss.item())
                                 # fabric.backward(study_outputs.loss)
                             if train_batch:
-                                # train_batch.pop("idx")
+                                train_batch.pop("idx")
                                 train_outputs = model(**train_batch)
                                 train_losses.append(train_outputs.loss.item())
                                 # fabric.backward(train_outputs.loss)
