@@ -4,7 +4,6 @@ import json
 import logging
 import math
 import re
-import unittest
 from typing import Any, Callable, Iterable, Tuple, Optional
 
 import datasets
@@ -57,55 +56,6 @@ def info_or_debug_r(fabric, x, *y, **z):
         logger.info(x, *y, **z)
     else:
         logger.debug(x, *y, **z)
-
-
-class TestCases(unittest.TestCase):
-    def test_dataframe(self):
-        print()
-        score_dict = {
-            "[avg]": 0.7621,
-            "ai": 0.8461,
-            "literature": 0.7302,
-            "music": 0.7533,
-            "politics": 0.7884,
-            "science": 0.6673,
-            "movie": 0.7744,
-            "restaurant": 0.7742
-        }
-        score_scale = 100.0
-        floatfmt = ".2f"
-        width = 5
-
-        score_headers = [
-            (width - len(k[:width])) * ' ' + k[:width]
-            for k in score_dict.keys()
-        ]
-        score_values = score_dict.values()
-
-        data = pd.DataFrame(score_values) * score_scale
-        data.set_index(pd.Index(score_headers), inplace=True)
-        data = data.transpose()
-        data["epoch"] = 2.44
-        data["[mem]"] = 20.0
-        data = data.set_index("epoch")
-        print(data)
-        for x in to_table_lines(data, transposed_df=True, floatfmt=floatfmt):
-            print(x)
-
-        data2 = data.copy()
-        data2["epoch"] = 4.85
-        data2 = data2.set_index("epoch")
-        print(data2)
-
-        data3 = pd.concat([data, data2])
-        print("=" * 100)
-        print(data3)
-
-
-@app.command()
-def check():
-    checker = TestCases()
-    checker.test_dataframe()
 
 
 @app.callback()
