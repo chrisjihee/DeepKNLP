@@ -29,10 +29,10 @@
   },
   "time": {
     "t1": "2024-12-17T22:19:13.084668",
-    "t2": "2024-12-17T22:18:39.369445",
+    "t2": "2024-12-18T13:27:49.131622",
     "started": "[12.17 22:19:13]",
-    "settled": null,
-    "elapsed": null
+    "settled": "[12.18 13:27:49]",
+    "elapsed": "15:08:36.047"
   },
   "input": {
     "pretrained": "/raid/chrisjihee/proj/DeepKNLP/meta-llama/Llama-3.2-3B",
