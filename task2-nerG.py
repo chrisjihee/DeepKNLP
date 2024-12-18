@@ -185,7 +185,7 @@ def train(
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
         train_batch: Annotated[int, typer.Option("--train_batch")] = 1,  # TODO: -> 1, 2, 4, 8
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 10,  # TODO: -> 10, 20, 40
-        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 20,  # TODO: -> 2, 4, 8, 10, 20, 40
+        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 10,  # TODO: -> 2, 4, 8, 10, 20, 40
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 20, 40
         num_device: Annotated[int, typer.Option("--num_device")] = 8,  # TODO: -> 4, 8
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
