@@ -746,10 +746,10 @@ def train(
                         optimizer.step()
                         optimizer.zero_grad()
                         fabric.barrier()
+                        global_epoch += epoch_per_step
+                        global_step += 1
 
                         # Define metrics and Update train progress
-                        global_step += 1
-                        global_epoch += epoch_per_step
                         metrics: dict[str, int | float] = {
                             "step": round(fabric.all_gather(torch.tensor(global_step * 1.0)).mean().item()),
                             "epoch": round(fabric.all_gather(torch.tensor(global_epoch)).mean().item(), 4),
