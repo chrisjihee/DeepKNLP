@@ -156,8 +156,8 @@ def train(
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",  # RuntimeError: CUDA error: device-side assert triggered
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",  # RuntimeError: CUDA error: device-side assert triggered
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error: device-side assert triggered
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error: device-side assert triggered
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error: device-side assert triggered
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
