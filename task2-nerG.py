@@ -190,7 +190,7 @@ def train(
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 10,  # TODO: -> 10, 20, 40
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 10,  # TODO: -> 2, 4, 8, 10, 20, 40
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 20, 40
-        num_device: Annotated[int, typer.Option("--num_device")] = 8,  # TODO: -> 4, 8
+        num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 4, 8
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
