@@ -50,11 +50,11 @@ class TrainingArguments(NewCommonArguments):
 
         @model_validator(mode='after')
         def after(self) -> Self:
-            self.pretrained = Path(self.pretrained).absolute() if self.pretrained else None
-            self.train_file = Path(self.train_file).absolute() if self.train_file else None
-            self.study_file = Path(self.study_file).absolute() if self.study_file else None
-            self.eval_file = Path(self.eval_file).absolute() if self.eval_file else None
-            self.test_file = Path(self.test_file).absolute() if self.test_file else None
+            self.pretrained = Path(self.pretrained) if self.pretrained else None
+            self.train_file = Path(self.train_file) if self.train_file else None
+            self.study_file = Path(self.study_file) if self.study_file else None
+            self.eval_file = Path(self.eval_file) if self.eval_file else None
+            self.test_file = Path(self.test_file) if self.test_file else None
             return self
 
         @property
@@ -117,7 +117,7 @@ class TrainingArguments(NewCommonArguments):
 
         @model_validator(mode='after')
         def after(self) -> Self:
-            self.output_home = Path(self.output_home).absolute() if self.output_home else None
+            self.output_home = Path(self.output_home) if self.output_home else None
             self.devices = self.num_device
             if self.strategy == "ddp" and (self.device_type == "gpu" or self.device_type == "cuda") and self.device_idx >= 0:
                 self.devices = list(range(self.device_idx, self.device_idx + self.num_device))

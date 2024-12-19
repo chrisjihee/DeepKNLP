@@ -210,9 +210,10 @@ def train(
             fsdp_offload=fsdp_offload,
         ),
     )
-
-    # Setup logger
-    args.env.setup_logger(logging_home=args.learn.output_home)
+    basic_logger = CSVLogger(args.learn.output_home, args.learn.output_name, args.learn.run_version, flush_logs_every_n_steps=1)
+    graph_logger = TensorBoardLogger(basic_logger.root_dir, basic_logger.name, basic_logger.version)  # tensorboard --logdir output --bind_all
+    args.env.setup_logger(logging_home=basic_logger.log_dir)
+    training_args = Seq2SeqTrainingArguments(output_dir=basic_logger.log_dir)
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
