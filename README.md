@@ -36,14 +36,18 @@ Transformer-based Korean Natural Language Processing
     pip install -U -r requirements.txt
     pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
     ```
-5. Install some packages as editable (optional)
+5-1. Install some packages as editable (optional) [update]
+    ```bash
+    pip install -U -e chrisbase*
+    pip install -U -e chrisdata*
+    pip install -U -e progiter*
+    pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
+    ```
+5-2. Install some packages as editable (optional) [reset]
     ```bash
     rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git; pip install -U -e chrisbase*
     rm -rf chrisdata*; git clone git@github.com:chrisjihee/chrisdata.git; pip install -U -e chrisdata*
     rm -rf progiter*;  git clone git@github.com:chrisjihee/progiter.git;  pip install -U -e progiter*
-    pip install -U -e chrisbase*
-    pip install -U -e chrisdata*
-    pip install -U -e progiter*
     pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
     ```
 6. Log in to Huggingface
@@ -139,5 +143,8 @@ class LitModel(L.LightningModule):
   - `python task2-ner.py train --help`
   - `python task2-ner.py test --help`
   - `python task2-ner.py serve --help`
+* Word Sequence Labelling (GenerativeNER) [no-trainer]:
+  - `python task2-nerG-no-trainer.py --help`
+  - `python task2-nerG-no-trainer.py train --help`
 * [Not Yet Provided] Sentence Pair Classification: https://ratsgo.github.io/nlpbook/docs/pair_cls/overview/
 * [Not Yet Provided] Extractive Question Answering: https://ratsgo.github.io/nlpbook/docs/qa/overview/
