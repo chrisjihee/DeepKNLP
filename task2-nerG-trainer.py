@@ -51,10 +51,10 @@ from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoM
 from transformers.trainer import get_model_param_count, nested_concat, nested_numpify, denumpify_detensorize
 from typing_extensions import Annotated
 
-from DeepKNLP.arguments import NewProjectEnv, TrainingArguments
+from DeepKNLP.arguments import TrainingArguments
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
-from chrisbase.data import AppTyper, JobTimer, Counter
+from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
 from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error, to_table_lines
 from chrisbase.util import shuffled, tupled
 from chrisdata.ner import GenNERSampleWrapper
