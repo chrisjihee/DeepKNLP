@@ -36,14 +36,14 @@ Transformer-based Korean Natural Language Processing
     pip install -U -r requirements.txt
     pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
     ```
-5-1. Install some packages as editable (optional) [update]
+5. Install some packages as editable (optional)
     ```bash
     pip install -U -e chrisbase*
     pip install -U -e chrisdata*
     pip install -U -e progiter*
     pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
     ```
-5-2. Install some packages as editable (optional) [reset]
+    or
     ```bash
     rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git; pip install -U -e chrisbase*
     rm -rf chrisdata*; git clone git@github.com:chrisjihee/chrisdata.git; pip install -U -e chrisdata*
