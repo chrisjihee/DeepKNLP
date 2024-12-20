@@ -1,0 +1,402 @@
+[12.20 18:07:47] ┇        task2-nerG-trainer.py:205  ┇ Process rank: 0, device: cuda:0, n_gpu: 8, distributed training: False, 16-bits training: False
+[12.20 18:07:47] ┇        task2-nerG-trainer.py:209  ┇ Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=8,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+average_tokens_across_devices=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=False,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=IntervalStrategy.NO,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=HubStrategy.EVERY_SAVE,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_for_metrics=[],
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=info,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=output/GNER/version_1/runs/Dec20_18-07-43_dgx-a100,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=IntervalStrategy.STEPS,
+lr_scheduler_kwargs={},
+lr_scheduler_type=SchedulerType.LINEAR,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=1,
+optim=OptimizerNames.ADAMW_TORCH,
+optim_args=None,
+optim_target_modules=None,
+output_dir=output/GNER/version_1,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=1,
+predict_with_generate=False,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['tensorboard'],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=output/GNER/version_1,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=IntervalStrategy.STEPS,
+save_total_limit=None,
+seed=7,
+skip_memory_metrics=True,
+sortish_sampler=False,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+[12.20 18:07:48] ┇                 rank_zero.py:63   ┇ You are using a CUDA device ('NVIDIA A100-SXM4-40GB') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+[12.20 18:07:48] ┇                 deepspeed.py:644  ┇ initializing deepspeed distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+[12.20 18:07:48] ┇               c10d_logger.py:94   ┇ {'func_name': 'init_process_group', 'args': "('nccl',), {'timeout': datetime.timedelta(seconds=1800), 'init_method': None, 'rank': -1, 'world_size': -1}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '1', 'group_size': '1', 'global_rank': '0', 'local_rank': '0', 'nccl_version': '2.20.5', 'time_spent': '2352677ns'}
+[12.20 18:07:48] ┇                 rank_zero.py:63   ┇ Enabling DeepSpeed BF16. Model parameters and inputs will be cast to `bfloat16`.
+[12.20 18:07:54] ┇                      data.py:793  ┇ =========================================================================================================================================
+[12.20 18:07:54] ┇                      data.py:795  ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py train
+[12.20 18:07:54] ┇                      data.py:798  ┇ =========================================================================================================================================
+[12.20 18:07:55] ┇                      data.py:124  ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.20 18:07:55] ┇                      data.py:124  ┇    # | TrainingArguments           | value
+[12.20 18:07:55] ┇                      data.py:124  ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.20 18:07:55] ┇                      data.py:124  ┇    1 | env.hostname                | dgx-a100
+[12.20 18:07:55] ┇                      data.py:124  ┇    2 | env.hostaddr                | 129.254.23.12
+[12.20 18:07:55] ┇                      data.py:124  ┇    3 | env.global_rank             | 0
+[12.20 18:07:55] ┇                      data.py:124  ┇    4 | env.local_rank              | 0
+[12.20 18:07:55] ┇                      data.py:124  ┇    5 | env.node_rank               | 0
+[12.20 18:07:55] ┇                      data.py:124  ┇    6 | env.world_size              | 1
+[12.20 18:07:55] ┇                      data.py:124  ┇    7 | env.time_stamp              | 1220.180742
+[12.20 18:07:55] ┇                      data.py:124  ┇    8 | env.python_path             | /raid/chrisjihee/miniforge3/envs/GNER/bin/python
+[12.20 18:07:55] ┇                      data.py:124  ┇    9 | env.current_dir             | /raid/chrisjihee/proj/DeepKNLP
+[12.20 18:07:55] ┇                      data.py:124  ┇   10 | env.current_file            | /raid/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py
+[12.20 18:07:55] ┇                      data.py:124  ┇   11 | env.command_args            | ['train']
+[12.20 18:07:55] ┇                      data.py:124  ┇   12 | env.logging_home            | /raid/chrisjihee/proj/DeepKNLP/output/GNER/version_1
+[12.20 18:07:55] ┇                      data.py:124  ┇   13 | env.logging_file            | train-messages.out
+[12.20 18:07:55] ┇                      data.py:124  ┇   14 | env.logging_level           | info
+[12.20 18:07:55] ┇                      data.py:124  ┇   15 | env.logging_format          | %(asctime)s ┇ %(filename)28s:%(lineno)-4d ┇ %(message)s
+[12.20 18:07:55] ┇                      data.py:124  ┇   16 | env.datetime_format         | [%m.%d %H:%M:%S]
+[12.20 18:07:55] ┇                      data.py:124  ┇   17 | env.argument_file           | train-arguments.json
+[12.20 18:07:55] ┇                      data.py:124  ┇   18 | env.random_seed             | 7
+[12.20 18:07:55] ┇                      data.py:124  ┇   19 | env.max_workers             | 4
+[12.20 18:07:55] ┇                      data.py:124  ┇   20 | env.debugging               | False
+[12.20 18:07:55] ┇                      data.py:124  ┇   21 | time.t1                     | 2024-12-20 18:07:55.163719
+[12.20 18:07:55] ┇                      data.py:124  ┇   22 | time.t2                     | 2024-12-20 18:07:42.837755
+[12.20 18:07:55] ┇                      data.py:124  ┇   23 | time.started                | [12.20 18:07:55]
+[12.20 18:07:55] ┇                      data.py:124  ┇   24 | time.settled                |
+[12.20 18:07:55] ┇                      data.py:124  ┇   25 | time.elapsed                |
+[12.20 18:07:55] ┇                      data.py:124  ┇   26 | input.pretrained            | google/flan-t5-large
+[12.20 18:07:55] ┇                      data.py:124  ┇   27 | input.train_file            | data/gner/zero-shot-train.jsonl
+[12.20 18:07:55] ┇                      data.py:124  ┇   28 | input.study_file            |
+[12.20 18:07:55] ┇                      data.py:124  ┇   29 | input.eval_file             |
+[12.20 18:07:55] ┇                      data.py:124  ┇   30 | input.test_file             |
+[12.20 18:07:55] ┇                      data.py:124  ┇   31 | input.max_train_samples     | 100
+[12.20 18:07:55] ┇                      data.py:124  ┇   32 | input.max_study_samples     | -1
+[12.20 18:07:55] ┇                      data.py:124  ┇   33 | input.max_eval_samples      | -1
+[12.20 18:07:55] ┇                      data.py:124  ┇   34 | input.max_test_samples      | -1
+[12.20 18:07:55] ┇                      data.py:124  ┇   35 | input.max_source_length     | 640
+[12.20 18:07:55] ┇                      data.py:124  ┇   36 | input.max_target_length     | 640
+[12.20 18:07:55] ┇                      data.py:124  ┇   37 | input.max_generation_length | 640
+[12.20 18:07:55] ┇                      data.py:124  ┇   38 | input.use_cache_data        | True
+[12.20 18:07:55] ┇                      data.py:124  ┇   39 | learn.output_home           | output
+[12.20 18:07:55] ┇                      data.py:124  ┇   40 | learn.output_name           | GNER
+[12.20 18:07:55] ┇                      data.py:124  ┇   41 | learn.run_version           |
+[12.20 18:07:55] ┇                      data.py:124  ┇   42 | learn.num_train_epochs      | 1
+[12.20 18:07:55] ┇                      data.py:124  ┇   43 | learn.learning_rate         | 5e-05
+[12.20 18:07:55] ┇                      data.py:124  ┇   44 | learn.weight_decay          | 0.0
+[12.20 18:07:55] ┇                      data.py:124  ┇   45 | learn.train_batch           | 1
+[12.20 18:07:55] ┇                      data.py:124  ┇   46 | learn.infer_batch           | 10
+[12.20 18:07:55] ┇                      data.py:124  ┇   47 | learn.grad_steps            | 1
+[12.20 18:07:55] ┇                      data.py:124  ┇   48 | learn.eval_steps            | 10
+[12.20 18:07:55] ┇                      data.py:124  ┇   49 | learn.num_device            | 1
+[12.20 18:07:55] ┇                      data.py:124  ┇   50 | learn.device_idx            | 0
+[12.20 18:07:55] ┇                      data.py:124  ┇   51 | learn.device_type           | gpu
+[12.20 18:07:55] ┇                      data.py:124  ┇   52 | learn.precision             | bf16-mixed
+[12.20 18:07:55] ┇                      data.py:124  ┇   53 | learn.strategy              | deepspeed
+[12.20 18:07:55] ┇                      data.py:124  ┇   54 | learn.ds_stage              | 1
+[12.20 18:07:55] ┇                      data.py:124  ┇   55 | learn.ds_offload            | 0
+[12.20 18:07:55] ┇                      data.py:124  ┇   56 | learn.fsdp_shard            | FULL_SHARD
+[12.20 18:07:55] ┇                      data.py:124  ┇   57 | learn.fsdp_offload          | False
+[12.20 18:07:55] ┇                      data.py:124  ┇   58 | learn.devices               | 1
+[12.20 18:07:55] ┇                      data.py:124  ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.20 18:07:55] ┇                      seed.py:57   ┇ [rank: 0] Seed set to 7
+[12.20 18:07:55] ┇       configuration_utils.py:679  ┇ loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-large/snapshots/0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a/config.json
+[12.20 18:07:55] ┇       configuration_utils.py:746  ┇ Model config T5Config {
+  "_name_or_path": "google/flan-t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "classifier_dropout": 0.0,
+  "d_ff": 2816,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "gelu_new",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "gated-gelu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": true,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "tie_word_embeddings": false,
+  "transformers_version": "4.46.3",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+
+[12.20 18:07:55] ┇   tokenization_utils_base.py:2211 ┇ loading file spiece.model from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-large/snapshots/0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a/spiece.model
+[12.20 18:07:55] ┇   tokenization_utils_base.py:2211 ┇ loading file tokenizer.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-large/snapshots/0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a/tokenizer.json
+[12.20 18:07:55] ┇   tokenization_utils_base.py:2211 ┇ loading file added_tokens.json from cache at None
+[12.20 18:07:55] ┇   tokenization_utils_base.py:2211 ┇ loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-large/snapshots/0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a/special_tokens_map.json
+[12.20 18:07:55] ┇   tokenization_utils_base.py:2211 ┇ loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-large/snapshots/0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a/tokenizer_config.json
+[12.20 18:07:56] ┇        task2-nerG-trainer.py:240  ┇ tokenizer.pad_token=<pad> (id=0)
+[12.20 18:07:56] ┇        task2-nerG-trainer.py:241  ┇ tokenizer.eos_token=</s> (id=1)
+[12.20 18:07:56] ┇            modeling_utils.py:3937 ┇ loading weights file model.safetensors from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-large/snapshots/0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a/model.safetensors
+[12.20 18:07:56] ┇       configuration_utils.py:1096 ┇ Generate config GenerationConfig {
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0
+}
+
+[12.20 18:07:56] ┇            modeling_utils.py:4800 ┇ All model checkpoint weights were used when initializing T5ForConditionalGeneration.
+
+[12.20 18:07:56] ┇            modeling_utils.py:4808 ┇ All the weights of T5ForConditionalGeneration were initialized from the model checkpoint at google/flan-t5-large.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use T5ForConditionalGeneration for predictions without further training.
+[12.20 18:07:57] ┇       configuration_utils.py:1051 ┇ loading configuration file generation_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-large/snapshots/0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a/generation_config.json
+[12.20 18:07:57] ┇       configuration_utils.py:1096 ┇ Generate config GenerationConfig {
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0
+}
+
+[12.20 18:07:57] ┇                   builder.py:609  ┇ Using custom data configuration default-bab2e02a90e2ed76
+[12.20 18:07:57] ┇                   builder.py:609  ┇ Using custom data configuration default-bab2e02a90e2ed76
+[12.20 18:07:57] ┇                      info.py:355  ┇ Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/GNER/lib/python3.11/site-packages/datasets/packaged_modules/json
+[12.20 18:07:57] ┇                      info.py:355  ┇ Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/GNER/lib/python3.11/site-packages/datasets/packaged_modules/json
+[12.20 18:07:57] ┇                   builder.py:393  ┇ Overwrite dataset info from restored data version if exists.
+[12.20 18:07:57] ┇                   builder.py:393  ┇ Overwrite dataset info from restored data version if exists.
+[12.20 18:07:57] ┇                      info.py:274  ┇ Loading Dataset info from data/gner/.cache/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+[12.20 18:07:57] ┇                      info.py:274  ┇ Loading Dataset info from data/gner/.cache/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+[12.20 18:07:57] ┇                   builder.py:863  ┇ Found cached dataset json (/raid/chrisjihee/proj/DeepKNLP/data/gner/.cache/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+[12.20 18:07:57] ┇                   builder.py:863  ┇ Found cached dataset json (/raid/chrisjihee/proj/DeepKNLP/data/gner/.cache/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+[12.20 18:07:57] ┇                      info.py:274  ┇ Loading Dataset info from /raid/chrisjihee/proj/DeepKNLP/data/gner/.cache/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+[12.20 18:07:57] ┇                      info.py:274  ┇ Loading Dataset info from /raid/chrisjihee/proj/DeepKNLP/data/gner/.cache/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+[12.20 18:07:57] ┇             arrow_dataset.py:3064 ┇ Loading cached processed dataset at /raid/chrisjihee/proj/DeepKNLP/data/gner/.cache/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-ba75849b3579ebdd.arrow
+[12.20 18:07:57] ┇             arrow_dataset.py:3064 ┇ Loading cached processed dataset at /raid/chrisjihee/proj/DeepKNLP/data/gner/.cache/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-ba75849b3579ebdd.arrow
+[12.20 18:07:57] ┇        task2-nerG-trainer.py:270  ┇ Load train dataset from data/gner/zero-shot-train.jsonl => 100
+[12.20 18:07:57] ┇        task2-nerG-trainer.py:298  ┇ ----------------------------------------------------------------------------------------------------
+[12.20 18:07:57] ┇             arrow_dataset.py:3097 ┇ Process #0 will write at data/gner/.cache/zero-shot-train=100_00000_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3097 ┇ Process #0 will write at data/gner/.cache/zero-shot-train=100_00000_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3097 ┇ Process #1 will write at data/gner/.cache/zero-shot-train=100_00001_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3097 ┇ Process #1 will write at data/gner/.cache/zero-shot-train=100_00001_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3097 ┇ Process #2 will write at data/gner/.cache/zero-shot-train=100_00002_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3097 ┇ Process #2 will write at data/gner/.cache/zero-shot-train=100_00002_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3097 ┇ Process #3 will write at data/gner/.cache/zero-shot-train=100_00003_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3097 ┇ Process #3 will write at data/gner/.cache/zero-shot-train=100_00003_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3178 ┇ Loading cached processed dataset at data/gner/.cache/zero-shot-train=100_*_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3178 ┇ Loading cached processed dataset at data/gner/.cache/zero-shot-train=100_*_of_00004.tmp
+[12.20 18:07:57] ┇             arrow_dataset.py:3182 ┇ Concatenating 4 shards
+[12.20 18:07:57] ┇             arrow_dataset.py:3182 ┇ Concatenating 4 shards
+[12.20 18:07:57] ┇        task2-nerG-trainer.py:470  ┇ ----------------------------------------------------------------------------------------------------
+[12.20 18:08:04] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': '(range(0, 1),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '1', 'group_size': '1', 'global_rank': '0', 'local_rank': '0', 'nccl_version': '2.20.5', 'time_spent': '511815ns'}
+[12.20 18:08:19] ┇        task2-nerG-trainer.py:567  ┇ Epoch 1/1
+[12.20 18:08:24] ┇                   logging.py:328  ┇ Passing a tuple of `past_key_values` is deprecated and will be removed in Transformers v4.48.0. You should pass an instance of `EncoderDecoderCache` instead, e.g. `past_key_values=EncoderDecoderCache.from_legacy_cache(past_key_values)`.
+[12.20 18:08:27] ┇        task2-nerG-trainer.py:579  ┇ Step 1/100: loss=1.5859
+[12.20 18:08:30] ┇        task2-nerG-trainer.py:579  ┇ Step 2/100: loss=2.1406
+[12.20 18:08:31] ┇        task2-nerG-trainer.py:579  ┇ Step 3/100: loss=1.7031
+[12.20 18:08:31] ┇        task2-nerG-trainer.py:579  ┇ Step 4/100: loss=1.3828
+[12.20 18:08:31] ┇        task2-nerG-trainer.py:579  ┇ Step 5/100: loss=1.3359
+[12.20 18:08:31] ┇        task2-nerG-trainer.py:579  ┇ Step 6/100: loss=0.8438
+[12.20 18:08:32] ┇        task2-nerG-trainer.py:579  ┇ Step 7/100: loss=0.7461
+[12.20 18:08:32] ┇        task2-nerG-trainer.py:579  ┇ Step 8/100: loss=0.9219
+[12.20 18:08:32] ┇        task2-nerG-trainer.py:579  ┇ Step 9/100: loss=0.8164
+[12.20 18:08:34] ┇        task2-nerG-trainer.py:579  ┇ Step 10/100: loss=0.4414
+[12.20 18:08:34] ┇        task2-nerG-trainer.py:579  ┇ Step 11/100: loss=0.3574
+[12.20 18:08:34] ┇        task2-nerG-trainer.py:579  ┇ Step 12/100: loss=0.4297
+[12.20 18:08:34] ┇        task2-nerG-trainer.py:579  ┇ Step 13/100: loss=0.4863
+[12.20 18:08:37] ┇        task2-nerG-trainer.py:579  ┇ Step 14/100: loss=0.4648
+[12.20 18:08:37] ┇        task2-nerG-trainer.py:579  ┇ Step 15/100: loss=0.6172
+[12.20 18:08:37] ┇        task2-nerG-trainer.py:579  ┇ Step 16/100: loss=0.6523
+[12.20 18:08:40] ┇        task2-nerG-trainer.py:579  ┇ Step 17/100: loss=0.4629
+[12.20 18:08:41] ┇        task2-nerG-trainer.py:579  ┇ Step 18/100: loss=0.7344
+[12.20 18:08:41] ┇        task2-nerG-trainer.py:579  ┇ Step 19/100: loss=0.8164
+[12.20 18:08:41] ┇        task2-nerG-trainer.py:579  ┇ Step 20/100: loss=0.3984
+[12.20 18:08:44] ┇        task2-nerG-trainer.py:579  ┇ Step 21/100: loss=0.3184
+[12.20 18:08:44] ┇        task2-nerG-trainer.py:579  ┇ Step 22/100: loss=0.3086
+[12.20 18:08:44] ┇        task2-nerG-trainer.py:579  ┇ Step 23/100: loss=0.2080
+[12.20 18:08:45] ┇        task2-nerG-trainer.py:579  ┇ Step 24/100: loss=0.2334
+[12.20 18:08:45] ┇        task2-nerG-trainer.py:579  ┇ Step 25/100: loss=0.5195
+[12.20 18:08:45] ┇        task2-nerG-trainer.py:579  ┇ Step 26/100: loss=0.6875
+[12.20 18:08:46] ┇        task2-nerG-trainer.py:579  ┇ Step 27/100: loss=0.2715
+[12.20 18:08:46] ┇        task2-nerG-trainer.py:579  ┇ Step 28/100: loss=0.3770
+[12.20 18:08:46] ┇        task2-nerG-trainer.py:579  ┇ Step 29/100: loss=0.3750
+[12.20 18:08:46] ┇        task2-nerG-trainer.py:579  ┇ Step 30/100: loss=1.0547
+[12.20 18:08:47] ┇        task2-nerG-trainer.py:579  ┇ Step 31/100: loss=0.5195
+[12.20 18:08:47] ┇        task2-nerG-trainer.py:579  ┇ Step 32/100: loss=0.2559
+[12.20 18:08:47] ┇        task2-nerG-trainer.py:579  ┇ Step 33/100: loss=0.2715
+[12.20 18:08:48] ┇        task2-nerG-trainer.py:579  ┇ Step 34/100: loss=0.3145
+[12.20 18:08:48] ┇        task2-nerG-trainer.py:579  ┇ Step 35/100: loss=0.0894
+[12.20 18:08:48] ┇        task2-nerG-trainer.py:579  ┇ Step 36/100: loss=0.2412
+[12.20 18:08:49] ┇        task2-nerG-trainer.py:579  ┇ Step 37/100: loss=0.4961
+[12.20 18:08:49] ┇        task2-nerG-trainer.py:579  ┇ Step 38/100: loss=0.2129
+[12.20 18:08:49] ┇        task2-nerG-trainer.py:579  ┇ Step 39/100: loss=0.2617
+[12.20 18:08:49] ┇        task2-nerG-trainer.py:579  ┇ Step 40/100: loss=0.2432
+[12.20 18:08:50] ┇        task2-nerG-trainer.py:579  ┇ Step 41/100: loss=0.2988
+[12.20 18:08:50] ┇        task2-nerG-trainer.py:579  ┇ Step 42/100: loss=0.3301
+[12.20 18:08:50] ┇        task2-nerG-trainer.py:579  ┇ Step 43/100: loss=0.3418
+[12.20 18:08:51] ┇        task2-nerG-trainer.py:579  ┇ Step 44/100: loss=0.2793
+[12.20 18:08:51] ┇        task2-nerG-trainer.py:579  ┇ Step 45/100: loss=0.1592
+[12.20 18:08:51] ┇        task2-nerG-trainer.py:579  ┇ Step 46/100: loss=0.1689
+[12.20 18:08:52] ┇        task2-nerG-trainer.py:579  ┇ Step 47/100: loss=0.3027
+[12.20 18:08:52] ┇        task2-nerG-trainer.py:579  ┇ Step 48/100: loss=0.3691
+[12.20 18:08:52] ┇        task2-nerG-trainer.py:579  ┇ Step 49/100: loss=0.2471
+[12.20 18:08:52] ┇        task2-nerG-trainer.py:579  ┇ Step 50/100: loss=0.2520
+[12.20 18:08:53] ┇        task2-nerG-trainer.py:579  ┇ Step 51/100: loss=0.3066
+[12.20 18:08:53] ┇        task2-nerG-trainer.py:579  ┇ Step 52/100: loss=0.2598
+[12.20 18:08:53] ┇        task2-nerG-trainer.py:579  ┇ Step 53/100: loss=0.2637
+[12.20 18:08:54] ┇        task2-nerG-trainer.py:579  ┇ Step 54/100: loss=0.3242
+[12.20 18:08:54] ┇        task2-nerG-trainer.py:579  ┇ Step 55/100: loss=0.2324
+[12.20 18:08:54] ┇        task2-nerG-trainer.py:579  ┇ Step 56/100: loss=0.2676
+[12.20 18:08:55] ┇        task2-nerG-trainer.py:579  ┇ Step 57/100: loss=0.0840
+[12.20 18:08:55] ┇        task2-nerG-trainer.py:579  ┇ Step 58/100: loss=0.1992
+[12.20 18:08:55] ┇        task2-nerG-trainer.py:579  ┇ Step 59/100: loss=0.3418
+[12.20 18:08:56] ┇        task2-nerG-trainer.py:579  ┇ Step 60/100: loss=0.2793
+[12.20 18:08:56] ┇        task2-nerG-trainer.py:579  ┇ Step 61/100: loss=0.2314
+[12.20 18:08:56] ┇        task2-nerG-trainer.py:579  ┇ Step 62/100: loss=0.1592
+[12.20 18:08:56] ┇        task2-nerG-trainer.py:579  ┇ Step 63/100: loss=0.3711
+[12.20 18:08:57] ┇        task2-nerG-trainer.py:579  ┇ Step 64/100: loss=0.2695
+[12.20 18:08:57] ┇        task2-nerG-trainer.py:579  ┇ Step 65/100: loss=0.2969
+[12.20 18:08:57] ┇        task2-nerG-trainer.py:579  ┇ Step 66/100: loss=0.5195
+[12.20 18:08:58] ┇        task2-nerG-trainer.py:579  ┇ Step 67/100: loss=0.1592
+[12.20 18:08:58] ┇        task2-nerG-trainer.py:579  ┇ Step 68/100: loss=0.1289
+[12.20 18:08:58] ┇        task2-nerG-trainer.py:579  ┇ Step 69/100: loss=0.2520
+[12.20 18:08:59] ┇        task2-nerG-trainer.py:579  ┇ Step 70/100: loss=0.2139
+[12.20 18:08:59] ┇        task2-nerG-trainer.py:579  ┇ Step 71/100: loss=0.2891
+[12.20 18:08:59] ┇        task2-nerG-trainer.py:579  ┇ Step 72/100: loss=0.1836
+[12.20 18:08:59] ┇        task2-nerG-trainer.py:579  ┇ Step 73/100: loss=0.1699
+[12.20 18:09:00] ┇        task2-nerG-trainer.py:579  ┇ Step 74/100: loss=0.1226
+[12.20 18:09:00] ┇        task2-nerG-trainer.py:579  ┇ Step 75/100: loss=0.2393
+[12.20 18:09:00] ┇        task2-nerG-trainer.py:579  ┇ Step 76/100: loss=0.1455
+[12.20 18:09:01] ┇        task2-nerG-trainer.py:579  ┇ Step 77/100: loss=0.0742
+[12.20 18:09:01] ┇        task2-nerG-trainer.py:579  ┇ Step 78/100: loss=0.1318
+[12.20 18:09:01] ┇        task2-nerG-trainer.py:579  ┇ Step 79/100: loss=0.0869
+[12.20 18:09:02] ┇        task2-nerG-trainer.py:579  ┇ Step 80/100: loss=0.2305
+[12.20 18:09:02] ┇        task2-nerG-trainer.py:579  ┇ Step 81/100: loss=0.0586
+[12.20 18:09:02] ┇        task2-nerG-trainer.py:579  ┇ Step 82/100: loss=0.1709
+[12.20 18:09:02] ┇        task2-nerG-trainer.py:579  ┇ Step 83/100: loss=0.2617
+[12.20 18:09:03] ┇        task2-nerG-trainer.py:579  ┇ Step 84/100: loss=0.0620
+[12.20 18:09:03] ┇        task2-nerG-trainer.py:579  ┇ Step 85/100: loss=0.1738
+[12.20 18:09:03] ┇        task2-nerG-trainer.py:579  ┇ Step 86/100: loss=0.0728
+[12.20 18:09:04] ┇        task2-nerG-trainer.py:579  ┇ Step 87/100: loss=0.0732
+[12.20 18:09:04] ┇        task2-nerG-trainer.py:579  ┇ Step 88/100: loss=0.0864
+[12.20 18:09:04] ┇        task2-nerG-trainer.py:579  ┇ Step 89/100: loss=0.1147
+[12.20 18:09:05] ┇        task2-nerG-trainer.py:579  ┇ Step 90/100: loss=0.2539
+[12.20 18:09:05] ┇        task2-nerG-trainer.py:579  ┇ Step 91/100: loss=0.1021
+[12.20 18:09:05] ┇        task2-nerG-trainer.py:579  ┇ Step 92/100: loss=0.1113
+[12.20 18:09:05] ┇        task2-nerG-trainer.py:579  ┇ Step 93/100: loss=0.2178
+[12.20 18:09:06] ┇        task2-nerG-trainer.py:579  ┇ Step 94/100: loss=0.0894
+[12.20 18:09:06] ┇        task2-nerG-trainer.py:579  ┇ Step 95/100: loss=0.2471
+[12.20 18:09:06] ┇        task2-nerG-trainer.py:579  ┇ Step 96/100: loss=0.1226
+[12.20 18:09:07] ┇        task2-nerG-trainer.py:579  ┇ Step 97/100: loss=0.0664
+[12.20 18:09:07] ┇        task2-nerG-trainer.py:579  ┇ Step 98/100: loss=0.0591
+[12.20 18:09:07] ┇        task2-nerG-trainer.py:579  ┇ Step 99/100: loss=0.2598
+[12.20 18:09:08] ┇        task2-nerG-trainer.py:579  ┇ Step 100/100: loss=0.1895
+[12.20 18:09:08] ┇                      data.py:829  ┇ =========================================================================================================================================
+[12.20 18:09:08] ┇                      data.py:831  ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py train ($=00:01:12.923)
+[12.20 18:09:08] ┇                      data.py:834  ┇ =========================================================================================================================================

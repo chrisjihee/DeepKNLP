@@ -3,6 +3,7 @@ import logging
 from typing import Any, Callable, Iterable
 
 import datasets
+import lightning
 import numpy as np
 import torch
 import transformers
@@ -14,6 +15,7 @@ from chrisbase.util import shuffled
 from chrisdata.ner import GenNERSampleWrapper
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
+from lightning.fabric import Fabric
 from lightning.fabric.loggers import CSVLogger
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
@@ -200,12 +202,27 @@ def train(
     transformers.logging.set_verbosity(log_level)
     transformers.logging.enable_default_handler()
     args.env.setup_logger(logging_home=basic_logger.log_dir, level=log_level)
-
     logger.warning(
         f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
         f", distributed training: {training_args.parallel_mode.value == 'distributed'}, 16-bits training: {training_args.fp16 or training_args.bf16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
+
+    # Setup fabric
+    fabric = Fabric(
+        accelerator=args.learn.device_type,
+        precision=args.learn.precision,
+        strategy=args.learn.strategy_inst,
+        devices=args.learn.devices,
+        loggers=[basic_logger],
+    )
+    fabric.launch()
+    fabric.barrier()
+    args.env.global_rank = fabric.global_rank
+    args.env.local_rank = fabric.local_rank
+    args.env.node_rank = fabric.node_rank
+    args.env.world_size = fabric.world_size
+    args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
@@ -213,6 +230,7 @@ def train(
     ):
         # Set random seed
         set_seed(args.env.random_seed)
+        fabric.seed_everything(args.env.random_seed)
 
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained, trust_remote_code=True)
@@ -473,6 +491,7 @@ def train(
                 collate_fn=data_collator,
                 drop_last=False,
             )
+            train_dataloader = fabric.setup_dataloaders(train_dataloader)
         if study_dataset:
             study_dataloader = DataLoader(
                 study_dataset, sampler=RandomSampler(study_dataset, replacement=False),
@@ -480,6 +499,7 @@ def train(
                 collate_fn=data_collator,
                 drop_last=False,
             )
+            study_dataloader = fabric.setup_dataloaders(study_dataloader)
         if eval_dataset:
             eval_dataloader = DataLoader(
                 eval_dataset, sampler=SequentialSampler(eval_dataset),
@@ -487,6 +507,7 @@ def train(
                 collate_fn=data_collator,
                 drop_last=False,
             )
+            eval_dataloader = fabric.setup_dataloaders(eval_dataloader)
         if test_dataset:
             test_dataloader = DataLoader(
                 test_dataset, sampler=SequentialSampler(eval_dataset),
@@ -494,6 +515,7 @@ def train(
                 collate_fn=data_collator,
                 drop_last=False,
             )
+            test_dataloader = fabric.setup_dataloaders(test_dataloader)
 
         # Define compute metrics function
         def compute_ner_metrics(pred_logits: np.ndarray, pred_indexs: list[int], dataset: Dataset,
@@ -534,7 +556,10 @@ def train(
             ],
             lr=args.learn.learning_rate,
         )
-        model = model.to(training_args.device)
+        # model = model.to(training_args.device)
+        model_optimizer = fabric.setup(model, optimizer)
+        model: lightning.fabric.wrappers._FabricModule = model_optimizer[0]
+        optimizer: lightning.fabric.wrappers._FabricOptimizer = model_optimizer[1]
 
         # Train model
         model.train()
@@ -543,10 +568,11 @@ def train(
             for step, batch in enumerate(train_dataloader, start=1):
                 batch: BatchEncoding = batch
                 batch.pop("idx")
-                batch = batch.to(training_args.device)
+                # batch = batch.to(training_args.device)
                 outputs = model(**batch)
                 loss = outputs.loss
-                loss.backward()
+                # loss.backward()
+                fabric.backward(loss)
                 if step % args.learn.grad_steps == 0:
                     optimizer.step()
                     optimizer.zero_grad()
