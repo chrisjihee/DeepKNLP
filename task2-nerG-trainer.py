@@ -4,6 +4,7 @@ from typing import Any, Callable, Iterable
 
 import datasets
 import numpy as np
+import torch
 import transformers
 import typer
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
@@ -14,12 +15,9 @@ from chrisdata.ner import GenNERSampleWrapper
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric.loggers import CSVLogger
+from torch.optim import Optimizer
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import (
-    AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM,
-    PretrainedConfig, PreTrainedModel, PreTrainedTokenizerBase, BatchEncoding,
-    Seq2SeqTrainingArguments, set_seed,
-)
+from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerBase, BatchEncoding, Seq2SeqTrainingArguments, set_seed
 from typing_extensions import Annotated
 
 from DeepKNLP.arguments import TrainingArguments
@@ -140,6 +138,7 @@ def train(
         fsdp_offload: Annotated[bool, typer.Option("--fsdp_offload")] = False,  # TODO: -> True, False
 ):
     # Setup arguments
+    basic_logger = CSVLogger(output_home, output_name, run_version, flush_logs_every_n_steps=1)
     args = TrainingArguments(
         env=env,
         input=TrainingArguments.InputOption(
@@ -179,13 +178,23 @@ def train(
             fsdp_offload=fsdp_offload,
         ),
     )
-
-    # Setup logger
-    basic_logger = CSVLogger(args.learn.output_home, args.learn.output_name, args.learn.run_version, flush_logs_every_n_steps=1)
     training_args = Seq2SeqTrainingArguments(
+        overwrite_output_dir=True,
         output_dir=basic_logger.log_dir,
         log_level=args.env.logging_level,
     )
+    training_args.set_training(
+        learning_rate=args.learn.learning_rate,
+        batch_size=args.learn.train_batch,
+        weight_decay=args.learn.weight_decay,
+        num_epochs=args.learn.num_train_epochs,
+        max_steps=-1,
+        gradient_accumulation_steps=args.learn.grad_steps,
+        seed=args.env.random_seed,
+        gradient_checkpointing=False,
+    )
+
+    # Setup logger
     log_level = training_args.get_process_log_level()
     datasets.logging.set_verbosity(log_level)
     transformers.logging.set_verbosity(log_level)
@@ -509,6 +518,39 @@ def train(
                             example = {key: example[key] for key in save_keys if key in example}
                         fout.write(json.dumps(example) + "\n")
             return results
+
+        # Set optimizer
+        no_decay = ("bias", "layer_norm.weight",)
+        optimizer: Optimizer = torch.optim.AdamW(
+            [
+                {
+                    "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
+                    "weight_decay": args.learn.weight_decay,
+                },
+                {
+                    "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
+                    "weight_decay": 0.0,
+                },
+            ],
+            lr=args.learn.learning_rate,
+        )
+        model = model.to(training_args.device)
+
+        # Train model
+        model.train()
+        for epoch in range(args.learn.num_train_epochs):
+            logger.info(f"Epoch {epoch + 1}/{args.learn.num_train_epochs}")
+            for step, batch in enumerate(train_dataloader):
+                batch: BatchEncoding = batch
+                batch.pop("idx")
+                batch = batch.to(training_args.device)
+                outputs = model(**batch)
+                loss = outputs.loss
+                loss.backward()
+                if step % args.learn.grad_steps == 0:
+                    optimizer.step()
+                    optimizer.zero_grad()
+                logger.info(f"Step {step}/{len(train_dataloader)}: loss={loss.item():.4f}")
 
 
 if __name__ == "__main__":
