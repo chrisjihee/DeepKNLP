@@ -6,7 +6,8 @@ import transformers
 import typer
 from chrisbase.data import AppTyper, JobTimer, NewProjectEnv
 from chrisbase.io import LoggingFormat
-from datasets import Dataset
+from chrisbase.util import shuffled
+from datasets import Dataset, load_dataset
 from lightning.fabric.loggers import CSVLogger
 from transformers import (
     Seq2SeqTrainingArguments,
@@ -191,16 +192,12 @@ def train(
     ):
         # Set random seed
         set_seed(args.env.random_seed)
-        ran = random.Random(training_args.seed)
 
         # Load model
         config: PretrainedConfig = AutoConfig.from_pretrained(pretrained, trust_remote_code=True)
         using_decoder_only_model = not config.is_encoder_decoder
 
-        if using_decoder_only_model:
-            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, trust_remote_code=True)
-        else:
-            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, trust_remote_code=True)
+        tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, trust_remote_code=True)
         logger.info(f"tokenizer.pad_token={tokenizer.pad_token} (id={tokenizer.pad_token_id})")
         logger.info(f"tokenizer.eos_token={tokenizer.eos_token} (id={tokenizer.eos_token_id})")
         if tokenizer.pad_token is None:
@@ -223,6 +220,43 @@ def train(
         study_dataset: Dataset | None = None
         eval_dataset: Dataset | None = None
         test_dataset: Dataset | None = None
+        if args.input.train_file:
+            train_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+                                                  data_files=str(args.input.train_file),
+                                                  cache_dir=str(args.input.cache_train_dir))
+            if args.input.max_train_samples > 0:
+                whole_indices = shuffled(range(len(train_dataset)), seed=args.env.random_seed)
+                train_dataset = train_dataset.select(whole_indices[:args.input.max_train_samples])
+            train_dataset = train_dataset.add_column("idx", range(len(train_dataset)))
+            logger.info(f"Load train dataset from {args.input.train_file} => {len(train_dataset):,}")
+        if args.input.study_file:
+            study_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+                                                  data_files=str(args.input.study_file),
+                                                  cache_dir=str(args.input.cache_study_dir))
+            if args.input.max_study_samples > 0:
+                whole_indices = shuffled(range(len(study_dataset)), seed=args.env.random_seed)
+                study_dataset = study_dataset.select(whole_indices[:args.input.max_study_samples])
+            study_dataset = study_dataset.add_column("idx", range(len(study_dataset)))
+            logger.info(f"Load study dataset from {args.input.study_file} => {len(study_dataset):,}")
+        if args.input.eval_file:
+            eval_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+                                                 data_files=str(args.input.eval_file),
+                                                 cache_dir=str(args.input.cache_eval_dir))
+            if args.input.max_eval_samples > 0:
+                whole_indices = shuffled(range(len(eval_dataset)), seed=args.env.random_seed)
+                eval_dataset = eval_dataset.select(whole_indices[:args.input.max_eval_samples])
+            eval_dataset = eval_dataset.add_column("idx", range(len(eval_dataset)))
+            logger.info(f"Load  eval dataset from {args.input.eval_file} => {len(eval_dataset):,}")
+        if args.input.test_file:
+            test_dataset: Dataset = load_dataset("json", split=datasets.Split.TRAIN,
+                                                 data_files=str(args.input.test_file),
+                                                 cache_dir=str(args.input.cache_test_dir))
+            if args.input.max_test_samples > 0:
+                whole_indices = shuffled(range(len(test_dataset)), seed=args.env.random_seed)
+                test_dataset = test_dataset.select(whole_indices[:args.input.max_test_samples])
+            test_dataset = test_dataset.add_column("idx", range(len(test_dataset)))
+            logger.info(f"Load  test dataset from {args.input.test_file} => {len(test_dataset):,}")
+        logger.info("-" * 100)
 
 
 if __name__ == "__main__":
