@@ -96,11 +96,11 @@ def train(
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # 80M
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # 250M
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # 780M
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # 3B
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # 3B
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # 11B
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
         # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
@@ -134,7 +134,7 @@ def train(
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
+        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
