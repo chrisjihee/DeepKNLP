@@ -1,64 +1,18 @@
-import random
 import logging
-import os
-import sys
-import json
-from dataclasses import dataclass, field
-from typing import Optional
 
 import datasets
-import numpy as np
-from datasets import load_dataset
-
-import transformers
-from transformers import (
-    AutoConfig,
-    AutoModelForCausalLM,
-    AutoModelForSeq2SeqLM,
-    AutoTokenizer,
-    HfArgumentParser,
-    Seq2SeqTrainingArguments,
-    DataCollatorForSeq2Seq,
-    set_seed,
-)
-from transformers.trainer_utils import get_last_checkpoint
-from transformers.utils import check_min_version, is_offline_mode, send_example_telemetry
-from transformers.utils.versions import require_version
-
-import contextlib
-import itertools
-import json
-import logging
-import math
-import re
-from typing import Any, Callable, Iterable, Tuple, Optional
-
-import datasets
-import lightning
-import numpy as np
-import pandas as pd
-import torch
 import transformers
 import typer
-from accelerate import Accelerator
-from datasets import load_dataset, Dataset
-from datasets.formatting.formatting import LazyRow
-from lightning.fabric import Fabric
-from lightning.fabric.loggers import CSVLogger, TensorBoardLogger
-from torch.optim import Optimizer
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerBase, BatchEncoding
-from transformers.trainer import get_model_param_count, nested_concat, nested_numpify, denumpify_detensorize
+from chrisbase.data import AppTyper, JobTimer, NewProjectEnv
+from chrisbase.io import LoggingFormat
+from lightning.fabric.loggers import CSVLogger
+from transformers import (
+    Seq2SeqTrainingArguments,
+    set_seed,
+)
 from typing_extensions import Annotated
 
 from DeepKNLP.arguments import TrainingArguments
-from DeepKNLP.gner_collator import DataCollatorForGNER
-from DeepKNLP.gner_evaluator import compute_metrics
-from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error, to_table_lines
-from chrisbase.util import shuffled, tupled
-from chrisdata.ner import GenNERSampleWrapper
-from progiter import ProgIter
 
 # Global settings
 env = None
@@ -99,12 +53,12 @@ def main(
     env = NewProjectEnv(
         logging_home=logging_home,
         logging_file=logging_file,
+        logging_level="info",
+        logging_format=LoggingFormat.CHECK_20,
         argument_file=argument_file,
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
-        message_level=logging.INFO,
-        message_format=LoggingFormat.CHECK_20,
     )
 
 
@@ -210,10 +164,25 @@ def train(
             fsdp_offload=fsdp_offload,
         ),
     )
+
+    # Setup logger
     basic_logger = CSVLogger(args.learn.output_home, args.learn.output_name, args.learn.run_version, flush_logs_every_n_steps=1)
-    graph_logger = TensorBoardLogger(basic_logger.root_dir, basic_logger.name, basic_logger.version)  # tensorboard --logdir output --bind_all
-    args.env.setup_logger(logging_home=basic_logger.log_dir)
-    training_args = Seq2SeqTrainingArguments(output_dir=basic_logger.log_dir)
+    training_args = Seq2SeqTrainingArguments(
+        output_dir=basic_logger.log_dir,
+        log_level=args.env.logging_level,
+    )
+    log_level = training_args.get_process_log_level()
+    args.env.setup_logger(logging_home=basic_logger.log_dir, level=log_level)
+    datasets.logging.set_verbosity(log_level)
+    transformers.logging.set_verbosity(log_level)
+    transformers.logging.enable_default_handler()
+    transformers.logging.enable_explicit_format()
+
+    logger.warning(
+        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
+        f", distributed training: {training_args.parallel_mode.value == 'distributed'}, 16-bits training: {training_args.fp16 or training_args.bf16}"
+    )
+    logger.info(f"Training/evaluation parameters {training_args}")
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
