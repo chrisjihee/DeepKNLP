@@ -15,7 +15,7 @@ import transformers
 import typer
 from accelerate import Accelerator
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error, to_table_lines
+from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error, to_table_lines, do_nothing
 from chrisbase.util import shuffled, tupled
 from chrisdata.ner import GenNERSampleWrapper
 from datasets import load_dataset, Dataset
@@ -37,10 +37,6 @@ from progiter import ProgIter
 env = None
 app = AppTyper(name="Generative NER", help="Generative Named Entity Recognition (NER) using Transformer.")
 logger = logging.getLogger(__name__)
-
-
-def do_nothing(*args, **kwargs):
-    pass
 
 
 def info_or_debug(fabric, x, *y, **z):

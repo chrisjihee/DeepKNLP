@@ -1,24 +1,30 @@
+import json
 import logging
-from typing import Any, Callable
+from typing import Any, Callable, Iterable
 
 import datasets
+import numpy as np
 import transformers
 import typer
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, do_nothing, info_r
+from chrisbase.io import LoggingFormat, do_nothing
+from chrisbase.io import info_r
 from chrisbase.util import shuffled
 from chrisdata.ner import GenNERSampleWrapper
 from datasets import load_dataset, Dataset
 from datasets.formatting.formatting import LazyRow
 from lightning.fabric.loggers import CSVLogger
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from transformers import (
-    AutoConfig, AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM,
-    PretrainedConfig, PreTrainedTokenizerBase, PreTrainedModel,
-    Seq2SeqTrainingArguments, BatchEncoding, set_seed,
+    AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM,
+    PretrainedConfig, PreTrainedModel, PreTrainedTokenizerBase, BatchEncoding,
+    Seq2SeqTrainingArguments, set_seed,
 )
 from typing_extensions import Annotated
 
 from DeepKNLP.arguments import TrainingArguments
+from DeepKNLP.gner_collator import DataCollatorForGNER
+from DeepKNLP.gner_evaluator import compute_metrics
 from progiter import ProgIter
 
 # Global settings
@@ -435,6 +441,74 @@ def train(
                     cache_file_name=str(args.input.cache_test_path(len(test_dataset))) if args.input.use_cache_data else None,
                 )
         logger.info("-" * 100)
+
+        # Set dataloader
+        label_pad_token_id = -100
+        train_dataloader: DataLoader | None = None
+        study_dataloader: DataLoader | None = None
+        eval_dataloader: DataLoader | None = None
+        test_dataloader: DataLoader | None = None
+        data_collator: DataCollatorForGNER = DataCollatorForGNER(
+            tokenizer,
+            model=model,
+            padding=True,
+            pad_to_multiple_of=8,  # if training_args.fp16 else None,
+            label_pad_token_id=label_pad_token_id,
+            return_tensors="pt",
+            feature_names=("input_ids", "attention_mask", "labels", "idx"),
+        )
+        if train_dataset:
+            train_dataloader = DataLoader(
+                train_dataset, sampler=RandomSampler(train_dataset, replacement=False),
+                batch_size=args.learn.train_batch,
+                collate_fn=data_collator,
+                drop_last=False,
+            )
+        if study_dataset:
+            study_dataloader = DataLoader(
+                study_dataset, sampler=RandomSampler(study_dataset, replacement=False),
+                batch_size=args.learn.train_batch,
+                collate_fn=data_collator,
+                drop_last=False,
+            )
+        if eval_dataset:
+            eval_dataloader = DataLoader(
+                eval_dataset, sampler=SequentialSampler(eval_dataset),
+                batch_size=args.learn.infer_batch,
+                collate_fn=data_collator,
+                drop_last=False,
+            )
+        if test_dataset:
+            test_dataloader = DataLoader(
+                test_dataset, sampler=SequentialSampler(eval_dataset),
+                batch_size=args.learn.infer_batch,
+                collate_fn=data_collator,
+                drop_last=False,
+            )
+
+        # Define compute metrics function
+        def compute_ner_metrics(pred_logits: np.ndarray, pred_indexs: list[int], dataset: Dataset,
+                                save_prefix: str | None = None, save_suffix: str | None = None, save_keys: Iterable[str] | None = None) -> dict[str, float]:
+            pred_logits = np.where(pred_logits != -100, pred_logits, tokenizer.pad_token_id)
+            decoded_preds: list[str] = tokenizer.batch_decode(pred_logits, skip_special_tokens=True)
+            if using_decoder_only_model:
+                match_pattern = "[/INST]"
+                for i, decoded_pred in enumerate(decoded_preds):
+                    decoded_preds[i] = decoded_pred[decoded_pred.find(match_pattern) + len(match_pattern):].strip()
+
+            all_examples = [example.copy() for example in dataset]
+            for i, decoded_pred in zip(pred_indexs, decoded_preds):
+                all_examples[i]["prediction"] = decoded_pred
+
+            results = compute_metrics(all_examples, tokenizer=tokenizer, average_key="[avg]")
+            if save_prefix is not None:
+                outfile_path = args.env.logging_home / f"{save_prefix}-text_generations{'-' + save_suffix if save_suffix else ''}.jsonl"
+                with outfile_path.open("w") as fout:
+                    for example in all_examples:
+                        if save_keys:
+                            example = {key: example[key] for key in save_keys if key in example}
+                        fout.write(json.dumps(example) + "\n")
+            return results
 
 
 if __name__ == "__main__":
