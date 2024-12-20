@@ -75,6 +75,7 @@ def main(
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
     )
+    torch.set_float32_matmul_precision('high')
 
 
 # Reference for implementation
@@ -94,8 +95,8 @@ def train(
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # 80M
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # 250M
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # 780M
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # 3B
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # 780M
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # 3B
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # 11B
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",
@@ -126,10 +127,10 @@ def train(
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 5e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
         train_batch: Annotated[int, typer.Option("--train_batch")] = 1,  # TODO: -> 1, 2, 4, 8
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 10,  # TODO: -> 10, 20, 40
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 1,  # TODO: -> 10, 20, 40
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 1,  # TODO: -> 2, 4, 8, 10, 20, 40
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 10,  # TODO: -> 20, 40
-        num_device: Annotated[int, typer.Option("--num_device")] = 1,  # TODO: -> 4, 8
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 1,  # TODO: -> 20, 40
+        num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 4, 8
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
@@ -180,33 +181,6 @@ def train(
             fsdp_offload=fsdp_offload,
         ),
     )
-    training_args = Seq2SeqTrainingArguments(
-        overwrite_output_dir=True,
-        output_dir=basic_logger.log_dir,
-        log_level=args.env.logging_level,
-    )
-    training_args.set_training(
-        learning_rate=args.learn.learning_rate,
-        batch_size=args.learn.train_batch,
-        weight_decay=args.learn.weight_decay,
-        num_epochs=args.learn.num_train_epochs,
-        max_steps=-1,
-        gradient_accumulation_steps=args.learn.grad_steps,
-        seed=args.env.random_seed,
-        gradient_checkpointing=False,
-    )
-
-    # Setup logger
-    log_level = training_args.get_process_log_level()
-    datasets.logging.set_verbosity(log_level)
-    transformers.logging.set_verbosity(log_level)
-    transformers.logging.enable_default_handler()
-    args.env.setup_logger(logging_home=basic_logger.log_dir, level=log_level)
-    logger.warning(
-        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        f", distributed training: {training_args.parallel_mode.value == 'distributed'}, 16-bits training: {training_args.fp16 or training_args.bf16}"
-    )
-    logger.info(f"Training/evaluation parameters {training_args}")
 
     # Setup fabric
     fabric = Fabric(
@@ -223,6 +197,57 @@ def train(
     args.env.node_rank = fabric.node_rank
     args.env.world_size = fabric.world_size
     args.env.time_stamp = fabric.broadcast(args.env.time_stamp, src=0)
+
+    # Setup HF arguments
+    training_args = Seq2SeqTrainingArguments(
+        overwrite_output_dir=True,
+        output_dir=basic_logger.log_dir,
+        log_level=args.env.logging_level,
+    )
+    training_args.set_training(
+        learning_rate=args.learn.learning_rate,
+        batch_size=args.learn.train_batch,
+        weight_decay=args.learn.weight_decay,
+        num_epochs=args.learn.num_train_epochs,
+        max_steps=-1,
+        gradient_accumulation_steps=args.learn.grad_steps,
+        seed=args.env.random_seed,
+        gradient_checkpointing=False,
+    )
+    training_args.set_dataloader(
+        train_batch_size=args.learn.train_batch,
+        eval_batch_size=args.learn.infer_batch,
+        drop_last=False,
+        num_workers=args.env.max_workers,
+        pin_memory=True,
+        persistent_workers=False,
+        prefetch_factor=None,
+        auto_find_batch_size=False,
+        ignore_data_skip=False,
+        sampler_seed=args.env.random_seed,
+    )
+    training_args.set_optimizer(
+        name="adamw_torch",
+        learning_rate=args.learn.learning_rate,
+        weight_decay=args.learn.weight_decay,
+        beta1=0.9,
+        beta2=0.999,
+        epsilon=1e-8,
+    )
+    training_args.bf16 = "bf16" in args.learn.precision
+    training_args.fp16 = "16" in args.learn.precision
+
+    # Setup logger
+    log_level = training_args.get_process_log_level()
+    datasets.logging.set_verbosity(log_level)
+    transformers.logging.set_verbosity(log_level)
+    transformers.logging.enable_default_handler()
+    args.env.setup_logger(logging_home=basic_logger.log_dir, level=log_level)
+    logger.warning(
+        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
+        f", distributed training: {training_args.parallel_mode.value == 'distributed'}, 16-bits training: {training_args.fp16 or training_args.bf16}"
+    )
+    logger.info(f"Training/evaluation parameters {training_args}")
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
@@ -560,6 +585,7 @@ def train(
         model_optimizer = fabric.setup(model, optimizer)
         model: lightning.fabric.wrappers._FabricModule = model_optimizer[0]
         optimizer: lightning.fabric.wrappers._FabricOptimizer = model_optimizer[1]
+        fabric.barrier()
 
         # Train model
         model.train()
