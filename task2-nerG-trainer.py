@@ -90,9 +90,9 @@ def train(
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct",
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # 80M
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # 80M
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # 250M
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # 780M
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # 780M
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # 3B
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # 11B
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",
@@ -540,7 +540,7 @@ def train(
         model.train()
         for epoch in range(args.learn.num_train_epochs):
             logger.info(f"Epoch {epoch + 1}/{args.learn.num_train_epochs}")
-            for step, batch in enumerate(train_dataloader):
+            for step, batch in enumerate(train_dataloader, start=1):
                 batch: BatchEncoding = batch
                 batch.pop("idx")
                 batch = batch.to(training_args.device)
