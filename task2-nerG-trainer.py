@@ -1,3 +1,4 @@
+import random
 import logging
 
 import datasets
@@ -5,10 +6,11 @@ import transformers
 import typer
 from chrisbase.data import AppTyper, JobTimer, NewProjectEnv
 from chrisbase.io import LoggingFormat
+from datasets import Dataset
 from lightning.fabric.loggers import CSVLogger
 from transformers import (
     Seq2SeqTrainingArguments,
-    set_seed,
+    set_seed, PretrainedConfig, AutoConfig, PreTrainedTokenizerBase, AutoTokenizer, PreTrainedModel, AutoModelForCausalLM, AutoModelForSeq2SeqLM,
 )
 from typing_extensions import Annotated
 
@@ -54,7 +56,7 @@ def main(
         logging_home=logging_home,
         logging_file=logging_file,
         logging_level="info",
-        logging_format=LoggingFormat.CHECK_20,
+        logging_format=LoggingFormat.TRACE_28,
         argument_file=argument_file,
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
@@ -172,11 +174,10 @@ def train(
         log_level=args.env.logging_level,
     )
     log_level = training_args.get_process_log_level()
-    args.env.setup_logger(logging_home=basic_logger.log_dir, level=log_level)
     datasets.logging.set_verbosity(log_level)
     transformers.logging.set_verbosity(log_level)
     transformers.logging.enable_default_handler()
-    transformers.logging.enable_explicit_format()
+    args.env.setup_logger(logging_home=basic_logger.log_dir, level=log_level)
 
     logger.warning(
         f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
@@ -190,7 +191,38 @@ def train(
     ):
         # Set random seed
         set_seed(args.env.random_seed)
-        logger.warning(f"Set random seed: {args.env.random_seed}")
+        ran = random.Random(training_args.seed)
+
+        # Load model
+        config: PretrainedConfig = AutoConfig.from_pretrained(pretrained, trust_remote_code=True)
+        using_decoder_only_model = not config.is_encoder_decoder
+
+        if using_decoder_only_model:
+            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, trust_remote_code=True)
+        else:
+            tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(pretrained, trust_remote_code=True)
+        logger.info(f"tokenizer.pad_token={tokenizer.pad_token} (id={tokenizer.pad_token_id})")
+        logger.info(f"tokenizer.eos_token={tokenizer.eos_token} (id={tokenizer.eos_token_id})")
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
+            # tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+            # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+            logger.info(f"tokenizer.pad_token={tokenizer.pad_token} (id={tokenizer.pad_token_id})")
+
+        if using_decoder_only_model:
+            model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(pretrained, config=config, trust_remote_code=True)
+        else:
+            model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(pretrained, config=config, trust_remote_code=True)
+        model_embedding_size = model.get_input_embeddings().weight.shape[0]
+        if len(tokenizer) > model_embedding_size:
+            model.resize_token_embeddings(len(tokenizer), pad_to_multiple_of=8, mean_resizing=False)
+            model_embedding_size = model.get_input_embeddings().weight.shape[0]
+
+        # Load dataset
+        train_dataset: Dataset | None = None
+        study_dataset: Dataset | None = None
+        eval_dataset: Dataset | None = None
+        test_dataset: Dataset | None = None
 
 
 if __name__ == "__main__":
