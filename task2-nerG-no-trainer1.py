@@ -90,8 +90,8 @@ def main(
 @app.command()
 def train(
         # input
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # (80M)
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # (250M)
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # (80M)
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # (250M)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # RuntimeError: CUDA error
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # RuntimeError: CUDA error
@@ -106,8 +106,8 @@ def train(
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         # study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
         study_file: Annotated[str, typer.Option("--study_file")] = None,
-        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
-        eval_file: Annotated[str, typer.Option("--eval_file")] = None,
+        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        # eval_file: Annotated[str, typer.Option("--eval_file")] = None,
         # test_file: Annotated[str, typer.Option("--test_file")] = "data/gner/zero-shot-test.jsonl"
         test_file: Annotated[str, typer.Option("--test_file")] = None,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
@@ -129,12 +129,12 @@ def train(
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 1,  # TODO: -> 10, 20, 40
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 1,  # TODO: -> 2, 4, 8, 10, 20, 40
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 1,  # TODO: -> 20, 40
-        num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 4, 8
+        num_device: Annotated[int, typer.Option("--num_device")] = 1,  # TODO: -> 4, 8
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
-        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 2,  # TODO: -> 1, 2, 3
+        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
+        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
         fsdp_offload: Annotated[bool, typer.Option("--fsdp_offload")] = False,  # TODO: -> True, False
