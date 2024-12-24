@@ -90,8 +90,8 @@ def main(
 @app.command()
 def train(
         # input
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # (80M)
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # (80M)
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # (250M)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # RuntimeError: CUDA error
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # RuntimeError: CUDA error
