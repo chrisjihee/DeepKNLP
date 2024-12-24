@@ -87,11 +87,11 @@ def main(
 @app.command()
 def train(
         # input
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # 80M
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # 250M
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # 780M
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # 3B
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # 11B
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # (80M)
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # (250M)
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # (780M)
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # (3B)
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # (11B) #torch.cuda.OutOfMemoryError: CUDA out of memory.
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # ValueError: Expected input batch_size (175) to match target batch_size (55)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
@@ -126,13 +126,13 @@ def train(
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 1,  # TODO: -> 10, 20, 40
         grad_steps: Annotated[int, typer.Option("--grad_steps")] = 1,  # TODO: -> 2, 4, 8, 10, 20, 40
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = 1,  # TODO: -> 20, 40
-        num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 4, 8
+        num_device: Annotated[int, typer.Option("--num_device")] = 8,  # TODO: -> 4, 8
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
-        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
-        ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
+        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 3,  # TODO: -> 1, 2, 3
+        ds_offload: Annotated[int, typer.Option("--ds_offload")] = 3,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
         fsdp_offload: Annotated[bool, typer.Option("--fsdp_offload")] = False,  # TODO: -> True, False
 ):
