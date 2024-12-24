@@ -68,21 +68,12 @@ def main(
     env = NewProjectEnv(
         logging_home=logging_home,
         logging_file=logging_file,
-        logging_level=logging.INFO,
-        logging_format=LoggingFormat.CHECK_20,
+        logging_level="info",
+        logging_format=LoggingFormat.TRACE_28,
         argument_file=argument_file,
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
-    )
-    set_verbosity_warning(
-        # "root",
-        # "DeepSpeed",
-        "c10d-NullHandler",
-        "c10d-NullHandler-default",
-        "lightning.fabric.utilities.seed"
-        # "lightning.pytorch.utilities.rank_zero",
-        # "lightning.fabric.utilities.distributed",
     )
     torch.set_float32_matmul_precision('high')
 
@@ -99,12 +90,12 @@ def main(
 @app.command()
 def train(
         # input
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # RuntimeError: CUDA error
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # (80M)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # RuntimeError: CUDA error
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # RuntimeError: CUDA error
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # RuntimeError: CUDA error
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error
@@ -764,10 +755,10 @@ def train(
 
                 # Save performance
                 model.eval()
-                if fabric.is_global_zero:
-                    performance_table = pd.concat(performance_rows)
-                    performance_table.to_excel(args.env.logging_home / f"eval-performances.xlsx")
-                    fabric.prints(to_table_lines(performance_table, transposed_df=True, floatfmt=".2f"))
+                # if fabric.is_global_zero:
+                #     performance_table = pd.concat(performance_rows)
+                #     performance_table.to_excel(args.env.logging_home / f"eval-performances.xlsx")
+                #     fabric.prints(to_table_lines(performance_table, transposed_df=True, floatfmt=".2f"))
                 fabric.barrier()
 
 

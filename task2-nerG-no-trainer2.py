@@ -87,11 +87,11 @@ def main(
 @app.command()
 def train(
         # input
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # (80M)
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # (80M)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # (250M)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # (780M)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # (3B)
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # (11B) #torch.cuda.OutOfMemoryError: CUDA out of memory.
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # (11B) #torch.cuda.OutOfMemoryError: CUDA out of memory.
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # ValueError: Expected input batch_size (175) to match target batch_size (55)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",

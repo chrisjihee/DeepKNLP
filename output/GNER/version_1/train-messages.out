@@ -1,0 +1,118 @@
+[12.24 15:47:59] ┇                      data.py:793  ┇ =========================================================================================================================================
+[12.24 15:47:59] ┇                      data.py:795  ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py train
+[12.24 15:47:59] ┇                      data.py:798  ┇ =========================================================================================================================================
+[12.24 15:47:59] ┇                      data.py:124  ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.24 15:47:59] ┇                      data.py:124  ┇    # | TrainingArguments           | value
+[12.24 15:47:59] ┇                      data.py:124  ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.24 15:47:59] ┇                      data.py:124  ┇    1 | env.hostname                | dgx-a100
+[12.24 15:47:59] ┇                      data.py:124  ┇    2 | env.hostaddr                | 129.254.23.12
+[12.24 15:47:59] ┇                      data.py:124  ┇    3 | env.global_rank             | 0
+[12.24 15:47:59] ┇                      data.py:124  ┇    4 | env.local_rank              | 0
+[12.24 15:47:59] ┇                      data.py:124  ┇    5 | env.node_rank               | 0
+[12.24 15:47:59] ┇                      data.py:124  ┇    6 | env.world_size              | 4
+[12.24 15:47:59] ┇                      data.py:124  ┇    7 | env.time_stamp              | 1224.154739
+[12.24 15:47:59] ┇                      data.py:124  ┇    8 | env.python_path             | /raid/chrisjihee/miniforge3/envs/GNER/bin/python
+[12.24 15:47:59] ┇                      data.py:124  ┇    9 | env.current_dir             | /raid/chrisjihee/proj/DeepKNLP
+[12.24 15:47:59] ┇                      data.py:124  ┇   10 | env.current_file            | /raid/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py
+[12.24 15:47:59] ┇                      data.py:124  ┇   11 | env.command_args            | ['train']
+[12.24 15:47:59] ┇                      data.py:124  ┇   12 | env.logging_home            | /raid/chrisjihee/proj/DeepKNLP/output/GNER/version_1
+[12.24 15:47:59] ┇                      data.py:124  ┇   13 | env.logging_file            | train-messages.out
+[12.24 15:47:59] ┇                      data.py:124  ┇   14 | env.logging_level           | info
+[12.24 15:47:59] ┇                      data.py:124  ┇   15 | env.logging_format          | %(asctime)s ┇ %(filename)28s:%(lineno)-4d ┇ %(message)s
+[12.24 15:47:59] ┇                      data.py:124  ┇   16 | env.datetime_format         | [%m.%d %H:%M:%S]
+[12.24 15:47:59] ┇                      data.py:124  ┇   17 | env.argument_file           | train-arguments.json
+[12.24 15:47:59] ┇                      data.py:124  ┇   18 | env.random_seed             | 7
+[12.24 15:47:59] ┇                      data.py:124  ┇   19 | env.max_workers             | 4
+[12.24 15:47:59] ┇                      data.py:124  ┇   20 | env.debugging               | False
+[12.24 15:47:59] ┇                      data.py:124  ┇   21 | time.t1                     | 2024-12-24 15:47:59.704484
+[12.24 15:47:59] ┇                      data.py:124  ┇   22 | time.t2                     | 2024-12-24 15:47:40.297194
+[12.24 15:47:59] ┇                      data.py:124  ┇   23 | time.started                | [12.24 15:47:59]
+[12.24 15:47:59] ┇                      data.py:124  ┇   24 | time.settled                |
+[12.24 15:47:59] ┇                      data.py:124  ┇   25 | time.elapsed                |
+[12.24 15:47:59] ┇                      data.py:124  ┇   26 | input.pretrained            | google/flan-t5-small
+[12.24 15:47:59] ┇                      data.py:124  ┇   27 | input.train_file            | data/gner/zero-shot-train.jsonl
+[12.24 15:47:59] ┇                      data.py:124  ┇   28 | input.study_file            |
+[12.24 15:47:59] ┇                      data.py:124  ┇   29 | input.eval_file             |
+[12.24 15:47:59] ┇                      data.py:124  ┇   30 | input.test_file             |
+[12.24 15:47:59] ┇                      data.py:124  ┇   31 | input.max_train_samples     | 100
+[12.24 15:47:59] ┇                      data.py:124  ┇   32 | input.max_study_samples     | -1
+[12.24 15:47:59] ┇                      data.py:124  ┇   33 | input.max_eval_samples      | -1
+[12.24 15:47:59] ┇                      data.py:124  ┇   34 | input.max_test_samples      | -1
+[12.24 15:47:59] ┇                      data.py:124  ┇   35 | input.max_source_length     | 640
+[12.24 15:47:59] ┇                      data.py:124  ┇   36 | input.max_target_length     | 640
+[12.24 15:47:59] ┇                      data.py:124  ┇   37 | input.max_generation_length | 640
+[12.24 15:47:59] ┇                      data.py:124  ┇   38 | input.use_cache_data        | True
+[12.24 15:47:59] ┇                      data.py:124  ┇   39 | learn.output_home           | output
+[12.24 15:47:59] ┇                      data.py:124  ┇   40 | learn.output_name           | GNER
+[12.24 15:47:59] ┇                      data.py:124  ┇   41 | learn.run_version           |
+[12.24 15:47:59] ┇                      data.py:124  ┇   42 | learn.num_train_epochs      | 1
+[12.24 15:47:59] ┇                      data.py:124  ┇   43 | learn.learning_rate         | 2e-05
+[12.24 15:47:59] ┇                      data.py:124  ┇   44 | learn.weight_decay          | 0.0
+[12.24 15:47:59] ┇                      data.py:124  ┇   45 | learn.train_batch           | 1
+[12.24 15:47:59] ┇                      data.py:124  ┇   46 | learn.infer_batch           | 1
+[12.24 15:47:59] ┇                      data.py:124  ┇   47 | learn.grad_steps            | 1
+[12.24 15:47:59] ┇                      data.py:124  ┇   48 | learn.eval_steps            | 1
+[12.24 15:47:59] ┇                      data.py:124  ┇   49 | learn.num_device            | 4
+[12.24 15:47:59] ┇                      data.py:124  ┇   50 | learn.device_idx            | 0
+[12.24 15:47:59] ┇                      data.py:124  ┇   51 | learn.device_type           | gpu
+[12.24 15:47:59] ┇                      data.py:124  ┇   52 | learn.precision             | bf16-mixed
+[12.24 15:47:59] ┇                      data.py:124  ┇   53 | learn.strategy              | deepspeed
+[12.24 15:47:59] ┇                      data.py:124  ┇   54 | learn.ds_stage              | 2
+[12.24 15:47:59] ┇                      data.py:124  ┇   55 | learn.ds_offload            | 0
+[12.24 15:47:59] ┇                      data.py:124  ┇   56 | learn.fsdp_shard            | FULL_SHARD
+[12.24 15:47:59] ┇                      data.py:124  ┇   57 | learn.fsdp_offload          | False
+[12.24 15:47:59] ┇                      data.py:124  ┇   58 | learn.devices               | 4
+[12.24 15:47:59] ┇                      data.py:124  ┇ -----+-----------------------------+----------------------------------------------------------------
+[12.24 15:47:59] ┇                      seed.py:57   ┇ [rank: 0] Seed set to 7
+[12.24 15:47:59] ┇                      seed.py:57   ┇ [rank: 2] Seed set to 7
+[12.24 15:47:59] ┇                      seed.py:57   ┇ [rank: 1] Seed set to 7
+[12.24 15:47:59] ┇                      seed.py:57   ┇ [rank: 3] Seed set to 7
+[12.24 15:48:00] ┇   tokenization_utils_base.py:2211 ┇ loading file spiece.model from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-small/snapshots/0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab/spiece.model
+[12.24 15:48:00] ┇   tokenization_utils_base.py:2211 ┇ loading file tokenizer.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-small/snapshots/0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab/tokenizer.json
+[12.24 15:48:00] ┇   tokenization_utils_base.py:2211 ┇ loading file added_tokens.json from cache at None
+[12.24 15:48:00] ┇   tokenization_utils_base.py:2211 ┇ loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-small/snapshots/0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab/special_tokens_map.json
+[12.24 15:48:00] ┇   tokenization_utils_base.py:2211 ┇ loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-small/snapshots/0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab/tokenizer_config.json
+[12.24 15:48:00] ┇    task2-nerG-no-trainer1.py:44   ┇ tokenizer.pad_token=<pad> (id=0)
+[12.24 15:48:00] ┇    task2-nerG-no-trainer1.py:44   ┇ tokenizer.eos_token=</s> (id=1)
+[12.24 15:48:00] ┇    task2-nerG-no-trainer1.py:44   ┇ tokenizer.pad_token=<pad> (id=0)
+[12.24 15:48:00] ┇            modeling_utils.py:3937 ┇ loading weights file model.safetensors from cache at /raid/chrisjihee/.cache/huggingface/hub/models--google--flan-t5-small/snapshots/0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab/model.safetensors
+[12.24 15:48:00] ┇            modeling_utils.py:4800 ┇ All model checkpoint weights were used when initializing T5ForConditionalGeneration.
+
+[12.24 15:48:00] ┇            modeling_utils.py:4808 ┇ All the weights of T5ForConditionalGeneration were initialized from the model checkpoint at google/flan-t5-small.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use T5ForConditionalGeneration for predictions without further training.
+[12.24 15:48:01] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': "(), {'backend': 'gloo', 'timeout': datetime.timedelta(days=10000)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '0', 'local_rank': '0', 'nccl_version': '2.20.5', 'time_spent': '13682617ns'}
+[12.24 15:48:01] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': "(), {'backend': 'gloo', 'timeout': datetime.timedelta(days=10000)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '2', 'local_rank': '2', 'nccl_version': '2.20.5', 'time_spent': '14428423ns'}
+[12.24 15:48:01] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': "(), {'backend': 'gloo', 'timeout': datetime.timedelta(days=10000)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '1', 'local_rank': '1', 'nccl_version': '2.20.5', 'time_spent': '14044028ns'}
+[12.24 15:48:01] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': "(), {'backend': 'gloo', 'timeout': datetime.timedelta(days=10000)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '3', 'local_rank': '3', 'nccl_version': '2.20.5', 'time_spent': '14444393ns'}
+[12.24 15:48:01] ┇    task2-nerG-no-trainer1.py:44   ┇ Load train dataset from data/gner/zero-shot-train.jsonl => 100
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇ ----------------------------------------------------------------------------------------------------
+[12.24 15:48:02] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': "(), {'backend': 'gloo', 'timeout': datetime.timedelta(days=10000)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '0', 'local_rank': '0', 'nccl_version': '2.20.5', 'time_spent': '6566049ns'}
+[12.24 15:48:02] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': "(), {'backend': 'gloo', 'timeout': datetime.timedelta(days=10000)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '2', 'local_rank': '2', 'nccl_version': '2.20.5', 'time_spent': '6875293ns'}
+[12.24 15:48:02] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': "(), {'backend': 'gloo', 'timeout': datetime.timedelta(days=10000)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '1', 'local_rank': '1', 'nccl_version': '2.20.5', 'time_spent': '6917663ns'}
+[12.24 15:48:02] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': "(), {'backend': 'gloo', 'timeout': datetime.timedelta(days=10000)}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '3', 'local_rank': '3', 'nccl_version': '2.20.5', 'time_spent': '7187130ns'}
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇ ----------------------------------------------------------------------------------------------------
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇ ===== Running training =====
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇   # Total Tokens = 32,100
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇   # Model Embedding = 32,128
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇   # Model Parameters = 76,961,152
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇   # Total Train Epochs = 1
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇   # Train Total Samples = 100
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇   # Train Batch Samples = 1 * 1 * 4 = 4
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇   # Total Optim Steps = 25
+[12.24 15:48:02] ┇    task2-nerG-no-trainer1.py:44   ┇   #  Eval Cycle Steps = 1
+[12.24 15:48:04] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '0', 'local_rank': '0', 'nccl_version': '2.20.5', 'time_spent': '537384ns'}
+[12.24 15:48:04] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '1', 'local_rank': '1', 'nccl_version': '2.20.5', 'time_spent': '537674ns'}
+[12.24 15:48:04] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '2', 'local_rank': '2', 'nccl_version': '2.20.5', 'time_spent': '323570ns'}
+[12.24 15:48:04] ┇               c10d_logger.py:94   ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '3', 'local_rank': '3', 'nccl_version': '2.20.5', 'time_spent': '509791ns'}
+[12.24 15:48:13] ┇    task2-nerG-no-trainer1.py:44   ┇ ----------------------------------------------------------------------------------------------------
+[12.24 15:48:16] ┇                   logging.py:328  ┇ Passing a tuple of `past_key_values` is deprecated and will be removed in Transformers v4.48.0. You should pass an instance of `EncoderDecoderCache` instead, e.g. `past_key_values=EncoderDecoderCache.from_legacy_cache(past_key_values)`.
+[12.24 15:48:16] ┇    task2-nerG-no-trainer1.py:52   ┇ Training [0.04/1]:   4%|▊                   |  1/25 [0:00:03<0:01:15, 0.32Hz] | M=2 | loss=3.4648
+[12.24 15:48:22] ┇    task2-nerG-no-trainer1.py:52   ┇ Training [0.16/1]:  16%|███▏                |  4/25 [0:00:08<0:00:44, 0.48Hz] | M=2 | loss=2.9570
+[12.24 15:48:27] ┇    task2-nerG-no-trainer1.py:52   ┇ Training [0.28/1]:  28%|█████▌              |  7/25 [0:00:14<0:00:36, 0.50Hz] | M=2 | loss=3.1992
+[12.24 15:48:31] ┇    task2-nerG-no-trainer1.py:52   ┇ Training [0.40/1]:  40%|████████            | 10/25 [0:00:17<0:00:25, 0.58Hz] | M=2 | loss=2.5664
+[12.24 15:48:34] ┇    task2-nerG-no-trainer1.py:52   ┇ Training [0.56/1]:  56%|███████████▏        | 14/25 [0:00:20<0:00:16, 0.69Hz] | M=2 | loss=2.7891
+[12.24 15:48:37] ┇    task2-nerG-no-trainer1.py:52   ┇ Training [0.92/1]:  92%|██████████████████▍ | 23/25 [0:00:23<0:00:02, 0.97Hz] | M=2 | loss=2.3516
+[12.24 15:48:39] ┇    task2-nerG-no-trainer1.py:52   ┇ Training [1.00/1]: 100%|████████████████████| 25/25 [0:00:25<0:00:00, 0.99Hz] | M=2 | loss=2.2617
+[12.24 15:48:39] ┇                      data.py:829  ┇ =========================================================================================================================================
+[12.24 15:48:39] ┇                      data.py:831  ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py train ($=00:00:39.430)
+[12.24 15:48:39] ┇                      data.py:834  ┇ =========================================================================================================================================
