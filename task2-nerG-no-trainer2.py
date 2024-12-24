@@ -1,5 +1,6 @@
 import json
 import logging
+import math
 from typing import Any, Callable, Iterable
 
 import datasets
@@ -33,10 +34,6 @@ app = AppTyper(name="Generative NER", help="Generative Named Entity Recognition 
 logger = logging.getLogger(__name__)
 logger.flush = do_nothing
 logger.write = lambda x, *y, **z: info_r(x, *y, **z)
-
-
-def do_nothing(*args, **kwargs):
-    pass
 
 
 def info_or_debug(fabric, x, *y, **z):
@@ -90,19 +87,18 @@ def main(
 @app.command()
 def train(
         # input
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # 80M
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # 250M
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # 780M
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # 3B
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # 3B
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # 11B
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",  # ValueError: Expected input batch_size (175) to match target batch_size (55)
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
         # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         # study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
@@ -124,7 +120,7 @@ def train(
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
         run_version: Annotated[str, typer.Option("--run_version")] = None,
         num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 1,  # TODO: -> 1, 2, 3, 4, 5, 6
-        learning_rate: Annotated[float, typer.Option("--learning_rate")] = 5e-5,
+        learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
         train_batch: Annotated[int, typer.Option("--train_batch")] = 1,  # TODO: -> 1, 2, 4, 8
         infer_batch: Annotated[int, typer.Option("--infer_batch")] = 1,  # TODO: -> 10, 20, 40
@@ -134,7 +130,7 @@ def train(
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps
         precision: Annotated[str, typer.Option("--precision")] = "bf16-mixed",  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: Annotated[str, typer.Option("--strategy")] = "ddp",  # TODO: -> ddp, fsdp, deepspeed
+        strategy: Annotated[str, typer.Option("--strategy")] = "deepspeed",  # TODO: -> ddp, fsdp, deepspeed
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_offload: Annotated[int, typer.Option("--ds_offload")] = 0,  # TODO: -> 0, 1, 2, 3
         fsdp_shard: Annotated[str, typer.Option("--fsdp_shard")] = "FULL_SHARD",  # TODO: -> FULL_SHARD, SHARD_GRAD_OP
@@ -602,7 +598,7 @@ def train(
                 if step % args.learn.grad_steps == 0:
                     optimizer.step()
                     optimizer.zero_grad()
-                logger.info(f"Step {step}/{len(train_dataloader)}: loss={loss.item():.4f}")
+                logger.info(f"Step {step}/{len(train_dataloader)}: loss={loss.item():.4f}, M={torch.cuda.max_memory_reserved() / math.pow(1024, 3):.0f}")
 
 
 if __name__ == "__main__":

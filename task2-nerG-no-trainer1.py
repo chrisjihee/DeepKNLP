@@ -68,12 +68,12 @@ def main(
     env = NewProjectEnv(
         logging_home=logging_home,
         logging_file=logging_file,
+        logging_level=logging.INFO,
+        logging_format=LoggingFormat.CHECK_20,
         argument_file=argument_file,
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
-        message_level=logging.INFO,
-        message_format=LoggingFormat.CHECK_20,
     )
     set_verbosity_warning(
         # "root",
@@ -99,27 +99,30 @@ def main(
 @app.command()
 def train(
         # input
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",  # RuntimeError: CUDA error
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",  # RuntimeError: CUDA error
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct",  # RuntimeError: CUDA error
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",  # RuntimeError: CUDA error
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-small",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-base",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-large",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xl",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "google/flan-t5-xxl",  # RuntimeError: CUDA error
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
         # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-3B",
-        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.2-1B",
-        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
-        # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-3.1-8B",
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "meta-llama/Llama-2-7b-hf",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "microsoft/Phi-3.5-mini-instruct",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",  # RuntimeError: CUDA error
+        # pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/eagle-3b-preview",  # RuntimeError: CUDA error
+        # train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/pile-ner.jsonl",
+        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         # study_file: Annotated[str, typer.Option("--study_file")] = "data/gner/KG-generation-YAGO3-53220@2.jsonl",
         study_file: Annotated[str, typer.Option("--study_file")] = None,
-        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
-        # eval_file: Annotated[str, typer.Option("--eval_file")] = None,
+        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        eval_file: Annotated[str, typer.Option("--eval_file")] = None,
         # test_file: Annotated[str, typer.Option("--test_file")] = "data/gner/zero-shot-test.jsonl"
         test_file: Annotated[str, typer.Option("--test_file")] = None,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,  # TODO: 512, 640
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,  # TODO: 512, 640
-        max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 1280,  # TODO: 512, 640
-        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = -1,  # TODO: 256, -1
+        max_generation_length: Annotated[int, typer.Option("--max_generation_length")] = 640,  # TODO: 512, 640
+        max_train_samples: Annotated[int, typer.Option("--max_train_samples")] = 100,  # TODO: 256, -1
         max_study_samples: Annotated[int, typer.Option("--max_study_samples")] = -1,  # TODO: 256, -1
         max_eval_samples: Annotated[int, typer.Option("--max_eval_samples")] = -1,  # TODO: 256, 1024, -1
         max_test_samples: Annotated[int, typer.Option("--max_test_samples")] = -1,
@@ -128,13 +131,13 @@ def train(
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
         run_version: Annotated[str, typer.Option("--run_version")] = None,
-        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 3,  # TODO: -> 1, 2, 3, 4, 5, 6
+        num_train_epochs: Annotated[int, typer.Option("--num_train_epochs")] = 1,  # TODO: -> 1, 2, 3, 4, 5, 6
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         weight_decay: Annotated[float, typer.Option("--weight_decay")] = 0.0,  # TODO: utilize lr_scheduler
         train_batch: Annotated[int, typer.Option("--train_batch")] = 1,  # TODO: -> 1, 2, 4, 8
-        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 10,  # TODO: -> 10, 20, 40
-        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 10,  # TODO: -> 2, 4, 8, 10, 20, 40
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 40,  # TODO: -> 20, 40
+        infer_batch: Annotated[int, typer.Option("--infer_batch")] = 1,  # TODO: -> 10, 20, 40
+        grad_steps: Annotated[int, typer.Option("--grad_steps")] = 1,  # TODO: -> 2, 4, 8, 10, 20, 40
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 1,  # TODO: -> 20, 40
         num_device: Annotated[int, typer.Option("--num_device")] = 4,  # TODO: -> 4, 8
         device_idx: Annotated[int, typer.Option("--device_idx")] = 0,  # TODO: -> 0, 4
         device_type: Annotated[str, typer.Option("--device_type")] = "gpu",  # TODO: -> gpu, cpu, mps

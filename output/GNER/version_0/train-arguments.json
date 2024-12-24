@@ -2,18 +2,18 @@
   "env": {
     "hostname": "dgx-a100",
     "hostaddr": "129.254.23.12",
-    "global_rank": -1,
-    "local_rank": -1,
-    "node_rank": -1,
-    "world_size": -1,
-    "time_stamp": "1220.175230",
+    "global_rank": 1,
+    "local_rank": 1,
+    "node_rank": 0,
+    "world_size": 4,
+    "time_stamp": "1224.150736",
     "python_path": "/raid/chrisjihee/miniforge3/envs/GNER/bin/python",
     "current_dir": "/raid/chrisjihee/proj/DeepKNLP",
     "current_file": "/raid/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py",
     "command_args": [
       "train"
     ],
-    "logging_home": "/raid/chrisjihee/proj/DeepKNLP/output/GNER/version_0",
+    "logging_home": "/raid/chrisjihee/proj/DeepKNLP/output/GNER/version_4",
     "logging_file": "train-messages.out",
     "logging_level": "info",
     "logging_format": "%(asctime)s ┇ %(filename)28s:%(lineno)-4d ┇ %(message)s",
@@ -24,14 +24,14 @@
     "debugging": false
   },
   "time": {
-    "t1": "2024-12-20T17:52:39.013309",
-    "t2": "2024-12-20T17:53:47.063261",
-    "started": "[12.20 17:52:39]",
-    "settled": "[12.20 17:53:47]",
-    "elapsed": "00:01:08.050"
+    "t1": "2024-12-24T15:07:59.077709",
+    "t2": "2024-12-24T15:09:11.846087",
+    "started": "[12.24 15:07:59]",
+    "settled": "[12.24 15:09:11]",
+    "elapsed": "00:01:12.768"
   },
   "input": {
-    "pretrained": "google/flan-t5-large",
+    "pretrained": "google/flan-t5-xl",
     "train_file": "data/gner/zero-shot-train.jsonl",
     "study_file": null,
     "eval_file": null,
@@ -50,13 +50,13 @@
     "output_name": "GNER",
     "run_version": null,
     "num_train_epochs": 1,
-    "learning_rate": 0.00005,
+    "learning_rate": 0.00002,
     "weight_decay": 0.0,
     "train_batch": 1,
-    "infer_batch": 10,
+    "infer_batch": 1,
     "grad_steps": 1,
-    "eval_steps": 10,
-    "num_device": 1,
+    "eval_steps": 1,
+    "num_device": 4,
     "device_idx": 0,
     "device_type": "gpu",
     "precision": "bf16-mixed",
@@ -65,6 +65,6 @@
     "ds_offload": 0,
     "fsdp_shard": "FULL_SHARD",
     "fsdp_offload": false,
-    "devices": 1
+    "devices": 4
   }
 }
