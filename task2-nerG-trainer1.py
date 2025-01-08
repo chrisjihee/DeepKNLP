@@ -281,6 +281,154 @@ def main():
     # model.resize_token_embeddings(len(tokenizer))  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
     model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
 
+    def preprocess_function(example):
+        # remove pairs where at least one record is None
+        inference = example['split'] != "train"
+        if is_encoder_decoder:
+            model_inputs = tokenizer(
+                text=example['instance']['instruction_inputs'],
+                max_length=data_args.max_source_length,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )
+            if not inference:
+                model_inputs["labels"] = tokenizer(
+                    text_target=example['instance']['prompt_labels'],
+                    max_length=data_args.max_target_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )['input_ids']
+        else:
+            prompt = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
+            full_instruction = f"{prompt} {example['instance']['prompt_labels']}"
+            max_length = data_args.max_source_length + data_args.max_target_length
+            if inference:
+                model_inputs = tokenizer(
+                    text=prompt,
+                    max_length=max_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )
+                # Remove the last token if it is an eos token
+                if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
+                    model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
+                    model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
+            else:
+                model_inputs = tokenizer(
+                    text=full_instruction,
+                    max_length=max_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )
+
+                if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
+                    model_inputs["input_ids"].append(tokenizer.eos_token_id)
+                    model_inputs["attention_mask"].append(1)
+
+                model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+                # Find the prompt length
+                prompt = tokenizer(
+                    text=prompt,
+                    max_length=max_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )["input_ids"]
+
+                # Remove the last token if it is an eos token
+                if prompt[-1] == tokenizer.eos_token_id:
+                    prompt = prompt[:-1]
+
+                if len(prompt) > len(model_inputs["labels"]):
+                    raise ValueError(
+                        f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
+                        f" {model_inputs['input_ids']}"
+                    )
+
+                for i in range(len(prompt)):
+                    model_inputs["labels"][i] = -100
+
+        return model_inputs
+
+    if training_args.do_train:
+        if data_args.train_json_dir is not None:
+            train_dataset = load_dataset("json", data_files=data_args.train_json_dir, split="train")
+            logger.info(f"Use {data_args.train_json_dir} as train dataset, len(dataset) = {len(train_dataset)}")
+        elif datasets.Split.TRAIN in raw_datasets:
+            train_dataset = raw_datasets[datasets.Split.TRAIN]
+        else:
+            raise ValueError("--do_train requires a train dataset")
+
+        if data_args.max_train_samples is not None:
+            max_train_samples = min(len(train_dataset), data_args.max_train_samples)
+            train_dataset = train_dataset.select(range(max_train_samples))
+        logger.info(f"len(dataset) = {len(train_dataset)}")
+
+        with training_args.main_process_first(desc="train dataset map pre-processing"):
+            train_dataset = train_dataset.map(
+                preprocess_function,
+                batched=False,
+                num_proc=data_args.preprocessing_num_workers,
+                load_from_cache_file=not data_args.overwrite_cache,
+                desc="Running tokenizer on train dataset",
+            )
+
+    if training_args.do_eval:
+        if data_args.valid_json_dir is not None:
+            eval_dataset = load_dataset("json", data_files=data_args.valid_json_dir, split="train")
+            logger.info(f"Use {data_args.valid_json_dir} as valid dataset, len(dataset) = {len(eval_dataset)}")
+        elif datasets.Split.VALIDATION in raw_datasets:
+            eval_dataset = raw_datasets[datasets.Split.VALIDATION]
+        else:
+            raise ValueError("--do_eval requires a validation dataset")
+
+        if data_args.max_eval_samples is not None:
+            max_eval_samples = min(len(eval_dataset), data_args.max_eval_samples)
+            whole_indices = list(range(len(eval_dataset)))
+            ran.shuffle(whole_indices)  # randomize the indices
+            eval_dataset = eval_dataset.select(whole_indices[:max_eval_samples])
+
+        with training_args.main_process_first(desc="validation dataset map pre-processing"):
+            eval_dataset = eval_dataset.map(
+                preprocess_function,
+                batched=False,
+                num_proc=data_args.preprocessing_num_workers,
+                load_from_cache_file=not data_args.overwrite_cache,
+                desc="Running tokenizer on validation dataset",
+            )
+
+    if training_args.do_predict:
+        if data_args.test_json_dir is not None:
+            predict_dataset = load_dataset("json", data_files=data_args.test_json_dir, split="train")
+            logger.info(f"Use {data_args.test_json_dir} as predict dataset, len(dataset) = {len(predict_dataset)}")
+        elif datasets.Split.TEST in raw_datasets:
+            predict_dataset = raw_datasets[datasets.Split.TEST]
+        else:
+            raise ValueError("--do_predict requires a test dataset")
+
+        if data_args.max_predict_samples is not None:
+            max_predict_samples = min(len(predict_dataset), data_args.max_predict_samples)
+            predict_dataset = predict_dataset.select(range(max_predict_samples))
+
+        with training_args.main_process_first(desc="prediction dataset map pre-processing"):
+            predict_dataset = predict_dataset.map(
+                preprocess_function,
+                batched=False,
+                num_proc=data_args.preprocessing_num_workers,
+                load_from_cache_file=not data_args.overwrite_cache,
+                desc="Running tokenizer on prediction dataset",
+            )
+
 
 if __name__ == "__main__":
     main()

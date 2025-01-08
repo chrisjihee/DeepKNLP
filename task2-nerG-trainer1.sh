@@ -1,7 +1,7 @@
-TRAIN_JSON_DIR=data/zero-shot-train.jsonl
-VALID_JSON_DIR=data/zero-shot-test.jsonl
+TRAIN_JSON_DIR=data/gner/zero-shot-train.jsonl
+VALID_JSON_DIR=data/gner/zero-shot-test.jsonl
 MODEL_NAME_OR_PATH=etri-lirs/egpt-1.3b-preview
-OUTPUT_DIR=output/train_eagle_1b_supervised-base
+OUTPUT_DIR=output/GNER/EAGLE-1B-supervised
 
 python task2-nerG-trainer1.py \
     --do_train --do_eval --predict_with_generate \
