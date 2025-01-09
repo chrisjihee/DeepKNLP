@@ -1,0 +1,454 @@
+/bin/bash /raid/chrisjihee/proj/DeepKNLP/task2-nerG-trainer1.sh
+[2025-01-08 18:17:40,194] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-08 18:17:41,783] [WARNING] [runner.py:202:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+[2025-01-08 18:17:44,295] [INFO] [runner.py:568:main] cmd = /raid/chrisjihee/miniforge3/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29682 --enable_each_rank_log=None task2-nerG-trainer1.py --do_train --do_eval --predict_with_generate --train_json_dir data/gner/zero-shot-train.jsonl --valid_json_dir data/gner/zero-shot-test.jsonl --no_load_gner_customized_datasets --model_name_or_path etri-lirs/egpt-1.3b-preview --output_dir output/GNER/EAGLE-1B-supervised --run_name train_eagle_1b_supervised-base --preprocessing_num_workers 4 --per_device_eval_batch_size 16 --per_device_train_batch_size 4 --gradient_accumulation_steps 4 --gradient_checkpointing True --bf16 True --tf32 True --lr_scheduler_type cosine --learning_rate 2e-05 --warmup_ratio 0.04 --weight_decay 0. --num_train_epochs 6 --max_source_length 640 --max_target_length 640 --generation_max_length 1280 --logging_strategy steps --logging_steps 10 --eval_strategy epoch --save_strategy no --overwrite_output_dir --overwrite_cache --seed 1234
+[2025-01-08 18:17:48,239] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-08 18:17:49,737] [INFO] [launch.py:145:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3, 4, 5, 6, 7]}
+[2025-01-08 18:17:49,737] [INFO] [launch.py:151:main] nnodes=1, num_local_procs=8, node_rank=0
+[2025-01-08 18:17:49,737] [INFO] [launch.py:162:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5, 6, 7]})
+[2025-01-08 18:17:49,737] [INFO] [launch.py:163:main] dist_world_size=8
+[2025-01-08 18:17:49,737] [INFO] [launch.py:165:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/08/2025 18:18:01 - WARNING - __main__ - Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/08/2025 18:18:01 - WARNING - __main__ - Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/08/2025 18:18:01 - WARNING - __main__ - Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/08/2025 18:18:01 - WARNING - __main__ - Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/08/2025 18:18:01 - WARNING - __main__ - Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/08/2025 18:18:01 - WARNING - __main__ - Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/08/2025 18:18:01 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+01/08/2025 18:18:01 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+average_tokens_across_devices=False,
+batch_eval_metrics=False,
+bf16=True,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=IntervalStrategy.EPOCH,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=1280,
+generation_num_beams=None,
+gradient_accumulation_steps=4,
+gradient_checkpointing=True,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=HubStrategy.EVERY_SAVE,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_for_metrics=[],
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=2e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=output/GNER/EAGLE-1B-supervised/runs/Jan08_18-17-56_dgx-a100,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=10,
+logging_strategy=IntervalStrategy.STEPS,
+lr_scheduler_kwargs={},
+lr_scheduler_type=SchedulerType.COSINE,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=6.0,
+optim=OptimizerNames.ADAMW_TORCH,
+optim_args=None,
+optim_target_modules=None,
+output_dir=output/GNER/EAGLE-1B-supervised,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=16,
+per_device_train_batch_size=4,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['tensorboard'],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=train_eagle_1b_supervised-base,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=IntervalStrategy.NO,
+save_total_limit=None,
+seed=1234,
+skip_memory_metrics=True,
+sortish_sampler=False,
+split_batches=None,
+tf32=True,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.04,
+warmup_steps=0,
+weight_decay=0.0,
+)
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/08/2025 18:18:01 - WARNING - __main__ - Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
+[INFO|configuration_utils.py:679] 2025-01-08 18:18:01,958 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/config.json
+[INFO|configuration_utils.py:746] 2025-01-08 18:18:01,960 >> Model config GPTNeoXConfig {
+  "_name_or_path": "etri-lirs/egpt-1.3b-preview",
+  "architectures": [
+    "GPTNeoXForCausalLM"
+  ],
+  "attention_bias": true,
+  "attention_dropout": 0.0,
+  "bos_token_id": 2,
+  "classifier_dropout": 0.1,
+  "eos_token_id": 2,
+  "hidden_act": "gelu",
+  "hidden_dropout": 0.0,
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 8192,
+  "layer_norm_eps": 1e-05,
+  "max_position_embeddings": 2048,
+  "model_type": "gpt_neox",
+  "num_attention_heads": 16,
+  "num_hidden_layers": 24,
+  "partial_rotary_factor": 1.0,
+  "rope_scaling": null,
+  "rope_theta": 10000,
+  "rotary_emb_base": 10000,
+  "rotary_pct": 1.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.46.3",
+  "use_cache": true,
+  "use_parallel_residual": false,
+  "vocab_size": 32384
+}
+
+[INFO|tokenization_utils_base.py:2211] 2025-01-08 18:18:02,166 >> loading file tokenizer.model from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/tokenizer.model
+[INFO|tokenization_utils_base.py:2211] 2025-01-08 18:18:02,166 >> loading file tokenizer.json from cache at None
+[INFO|tokenization_utils_base.py:2211] 2025-01-08 18:18:02,166 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2211] 2025-01-08 18:18:02,166 >> loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/special_tokens_map.json
+[INFO|tokenization_utils_base.py:2211] 2025-01-08 18:18:02,166 >> loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/tokenizer_config.json
+[INFO|modeling_utils.py:3937] 2025-01-08 18:18:02,870 >> loading weights file pytorch_model.bin from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/pytorch_model.bin
+[INFO|configuration_utils.py:1096] 2025-01-08 18:18:02,897 >> Generate config GenerationConfig {
+  "bos_token_id": 2,
+  "eos_token_id": 2
+}
+
+[INFO|safetensors_conversion.py:61] 2025-01-08 18:18:03,134 >> Attempting to create safetensors variant
+[INFO|safetensors_conversion.py:24] 2025-01-08 18:18:03,806 >> Attempting to convert .bin model on the fly to safetensors.
+[INFO|modeling_utils.py:4800] 2025-01-08 18:18:09,539 >> All model checkpoint weights were used when initializing GPTNeoXForCausalLM.
+
+[INFO|modeling_utils.py:4808] 2025-01-08 18:18:09,539 >> All the weights of GPTNeoXForCausalLM were initialized from the model checkpoint at etri-lirs/egpt-1.3b-preview.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use GPTNeoXForCausalLM for predictions without further training.
+[INFO|configuration_utils.py:1051] 2025-01-08 18:18:09,765 >> loading configuration file generation_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/generation_config.json
+[INFO|configuration_utils.py:1096] 2025-01-08 18:18:09,766 >> Generate config GenerationConfig {
+  "bos_token_id": 2,
+  "eos_token_id": 2
+}
+
+Using custom data configuration default-bab2e02a90e2ed76
+01/08/2025 18:18:10 - INFO - datasets.builder - Using custom data configuration default-bab2e02a90e2ed76
+Loading Dataset Infos from /raid/chrisjihee/miniforge3/lib/python3.12/site-packages/datasets/packaged_modules/json
+01/08/2025 18:18:10 - INFO - datasets.info - Loading Dataset Infos from /raid/chrisjihee/miniforge3/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+01/08/2025 18:18:10 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/08/2025 18:18:10 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+01/08/2025 18:18:10 - INFO - datasets.builder - Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/08/2025 18:18:10 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/08/2025 18:18:10 - INFO - __main__ - Use data/gner/zero-shot-train.jsonl as train dataset, len(dataset) = 18135
+01/08/2025 18:18:10 - INFO - __main__ - len(dataset) = 18135
+Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00000_of_00004.arrow
+01/08/2025 18:18:10 - INFO - datasets.arrow_dataset - Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00000_of_00004.arrow
+Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00001_of_00004.arrow
+01/08/2025 18:18:10 - INFO - datasets.arrow_dataset - Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00001_of_00004.arrow
+Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00002_of_00004.arrow
+01/08/2025 18:18:10 - INFO - datasets.arrow_dataset - Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00002_of_00004.arrow
+Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00003_of_00004.arrow
+01/08/2025 18:18:10 - INFO - datasets.arrow_dataset - Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00003_of_00004.arrow
+Spawning 4 processes
+01/08/2025 18:18:11 - INFO - datasets.arrow_dataset - Spawning 4 processes
+Running tokenizer on train dataset (num_proc=4):   0%|                                                                                                                                                            | 0/18135 [00:00<?, ? examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00000_of_00004.arrow
+01/08/2025 18:18:11 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00000_of_00004.arrow
+Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00001_of_00004.arrow
+01/08/2025 18:18:11 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00001_of_00004.arrow
+Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00002_of_00004.arrow
+01/08/2025 18:18:11 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00002_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4):   0%|▎                                                                                                                                                 | 43/18135 [00:00<01:56, 154.76 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00003_of_00004.arrow
+01/08/2025 18:18:11 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-26604f05e2ac4824_00003_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3697.31 examples/s]
+Concatenating 4 shards
+01/08/2025 18:18:16 - INFO - datasets.arrow_dataset - Concatenating 4 shards
+Using custom data configuration default-f2d9de4176636284
+01/08/2025 18:18:22 - INFO - datasets.builder - Using custom data configuration default-f2d9de4176636284
+Loading Dataset Infos from /raid/chrisjihee/miniforge3/lib/python3.12/site-packages/datasets/packaged_modules/json
+01/08/2025 18:18:22 - INFO - datasets.info - Loading Dataset Infos from /raid/chrisjihee/miniforge3/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+01/08/2025 18:18:22 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/08/2025 18:18:22 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+01/08/2025 18:18:22 - INFO - datasets.builder - Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/08/2025 18:18:22 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/08/2025 18:18:22 - INFO - __main__ - Use data/gner/zero-shot-test.jsonl as valid dataset, len(dataset) = 6470
+Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00000_of_00004.arrow
+01/08/2025 18:18:22 - INFO - datasets.arrow_dataset - Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00000_of_00004.arrow
+Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00001_of_00004.arrow
+01/08/2025 18:18:22 - INFO - datasets.arrow_dataset - Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00001_of_00004.arrow
+Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00002_of_00004.arrow
+01/08/2025 18:18:22 - INFO - datasets.arrow_dataset - Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00002_of_00004.arrow
+Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00003_of_00004.arrow
+01/08/2025 18:18:22 - INFO - datasets.arrow_dataset - Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00003_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4):   0%|▎                                                                                                                                                 | 43/18135 [00:00<02:15, 133.96 examples/s]Spawning 4 processes
+01/08/2025 18:18:23 - INFO - datasets.arrow_dataset - Spawning 4 processes
+Running tokenizer on train dataset (num_proc=4):   8%|██████████▊                                                                                                                                    | 1375/18135 [00:00<00:05, 3050.43 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00000_of_00004.arrow
+01/08/2025 18:18:23 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00000_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4):  10%|██████████████▋                                                                                                                                | 1858/18135 [00:00<00:04, 3570.00 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00001_of_00004.arrow
+01/08/2025 18:18:23 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00001_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4):   8%|██████████▉                                                                                                                                    | 1390/18135 [00:00<00:05, 3065.85 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00002_of_00004.arrow
+01/08/2025 18:18:23 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00002_of_00004.arrow
+Running tokenizer on validation dataset (num_proc=4):   1%|█▎                                                                                                                                            | 58/6470 [00:00<00:32, 198.01 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00003_of_00004.arrow
+01/08/2025 18:18:23 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-f2d9de4176636284/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-9624c626f01bb31a_00003_of_00004.arrow
+Running tokenizer on validation dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6470/6470 [00:01<00:00, 4342.47 examples/s]
+Running tokenizer on train dataset (num_proc=4):  39%|███████████████████████████████████████████████████████▊                                                                                       | 7080/18135 [00:01<00:02, 4589.58 examples/s]Concatenating 4 shards
+01/08/2025 18:18:24 - INFO - datasets.arrow_dataset - Concatenating 4 shards
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3716.53 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3721.73 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3729.06 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3653.40 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3647.01 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3634.75 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3491.38 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6470/6470 [00:01<00:00, 4386.96 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6470/6470 [00:01<00:00, 4248.35 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6470/6470 [00:01<00:00, 4275.56 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6470/6470 [00:01<00:00, 4208.43 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6470/6470 [00:01<00:00, 4168.75 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6470/6470 [00:01<00:00, 4193.61 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6470/6470 [00:01<00:00, 4079.29 examples/s]
+[2025-01-08 18:18:34,344] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[INFO|trainer.py:699] 2025-01-08 18:18:34,559 >> Using auto half precision backend
+[2025-01-08 18:18:39,159] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-08 18:18:40,283] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-08 18:18:40,359] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-08 18:18:40,718] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-08 18:18:40,936] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-08 18:18:43,011] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-08 18:18:43,389] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[INFO|trainer.py:2314] 2025-01-08 18:18:43,861 >> ***** Running training *****
+[INFO|trainer.py:2315] 2025-01-08 18:18:43,861 >>   Num examples = 18,135
+[INFO|trainer.py:2316] 2025-01-08 18:18:43,861 >>   Num Epochs = 6
+[INFO|trainer.py:2317] 2025-01-08 18:18:43,861 >>   Instantaneous batch size per device = 4
+[INFO|trainer.py:2320] 2025-01-08 18:18:43,861 >>   Total train batch size (w. parallel, distributed & accumulation) = 128
+[INFO|trainer.py:2321] 2025-01-08 18:18:43,861 >>   Gradient Accumulation steps = 4
+[INFO|trainer.py:2322] 2025-01-08 18:18:43,861 >>   Total optimization steps = 846
+[INFO|trainer.py:2323] 2025-01-08 18:18:43,862 >>   Number of trainable parameters = 1,341,247,488
+  0%|                                                                                                                                                                                                                      | 0/846 [00:00<?, ?it/s][WARNING|logging.py:328] 2025-01-08 18:18:43,876 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-08 18:18:43,879 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-08 18:18:43,879 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-08 18:18:43,879 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-08 18:18:43,880 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-08 18:18:43,880 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-08 18:18:43,880 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-08 18:18:43,887 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+{'loss': 0.8014, 'grad_norm': 39.95637130737305, 'learning_rate': 5.882352941176471e-06, 'epoch': 0.07}
+{'loss': 0.1512, 'grad_norm': 11.683234214782715, 'learning_rate': 1.1764705882352942e-05, 'epoch': 0.14}
+{'loss': 0.0787, 'grad_norm': 2.897144079208374, 'learning_rate': 1.7647058823529414e-05, 'epoch': 0.21}
+{'loss': 0.0658, 'grad_norm': 4.449148654937744, 'learning_rate': 1.9997305732643377e-05, 'epoch': 0.28}
+{'loss': 0.0493, 'grad_norm': 2.544158458709717, 'learning_rate': 1.9980846022772978e-05, 'epoch': 0.35}
+{'loss': 0.0424, 'grad_norm': 4.738119125366211, 'learning_rate': 1.9949448023532727e-05, 'epoch': 0.42}
+{'loss': 0.0423, 'grad_norm': 2.1212158203125, 'learning_rate': 1.9903158728173206e-05, 'epoch': 0.49}
+{'loss': 0.0371, 'grad_norm': 1.877948522567749, 'learning_rate': 1.984204741768395e-05, 'epoch': 0.56}
+{'loss': 0.0383, 'grad_norm': 3.7558701038360596, 'learning_rate': 1.976620555710087e-05, 'epoch': 0.63}
+{'loss': 0.0363, 'grad_norm': 1.2144176959991455, 'learning_rate': 1.9675746658610917e-05, 'epoch': 0.71}
+{'loss': 0.0351, 'grad_norm': 2.150923252105713, 'learning_rate': 1.95708061116589e-05, 'epoch': 0.78}
+{'loss': 0.0336, 'grad_norm': 1.6411184072494507, 'learning_rate': 1.9451540980310676e-05, 'epoch': 0.85}
+{'loss': 0.0317, 'grad_norm': 0.9679929614067078, 'learning_rate': 1.9318129768176033e-05, 'epoch': 0.92}
+{'loss': 0.0301, 'grad_norm': 0.8163888454437256, 'learning_rate': 1.9170772151243106e-05, 'epoch': 0.99}
+ 17%|██████████████████████████████████                                                                                                                                                                          | 141/846 [01:56<09:03,  1.30it/s][INFO|gner_trainer.py:60] 2025-01-08 18:20:40,944 >> ***** Running Evaluation *****
+[INFO|gner_trainer.py:62] 2025-01-08 18:20:40,944 >>   Num examples = 6470
+[INFO|gner_trainer.py:65] 2025-01-08 18:20:40,944 >>   Batch size = 16
+{'eval_crossner_ai_prec': 0.4688204357625493, 'eval_crossner_ai_rec': 0.3883011823272938, 'eval_crossner_ai_f1': 0.42477876101235923, 'eval_crossner_literature_prec': 0.5828759604829538, 'eval_crossner_literature_rec': 0.5358224016145038, 'eval_crossner_literature_f1': 0.5583596214011632, 'eval_crossner_music_prec': 0.5367521367521184, 'eval_crossner_music_rec': 0.5025608194622119, 'eval_crossner_music_f1': 0.51909406508477, 'eval_crossner_politics_prec': 0.7241379310344629, 'eval_crossner_politics_rec': 0.678461538461521, 'eval_crossner_politics_f1': 0.7005559967729098, 'eval_crossner_science_prec': 0.5715506193933972, 'eval_crossner_science_rec': 0.5288537549406905, 'eval_crossner_science_f1': 0.5493738451563758, 'eval_mit-movie_prec': 0.8586123059659462, 'eval_mit-movie_rec': 0.8598988574639285, 'eval_mit-movie_f1': 0.8592551000809965, 'eval_mit-restaurant_prec': 0.772769953051619, 'eval_mit-restaurant_rec': 0.7838095238094989, 'eval_mit-restaurant_f1': 0.7782505909665265, 'eval_AVERAGE_f1': 0.6270954257821572, 'eval_runtime': 483.1073, 'eval_samples_per_second': 13.392, 'eval_steps_per_second': 0.106, 'epoch': 0.99}
+{'loss': 0.0297, 'grad_norm': 2.557267665863037, 'learning_rate': 1.900968867902419e-05, 'epoch': 1.06}
+{'loss': 0.036, 'grad_norm': 2.70686674118042, 'learning_rate': 1.883512044446023e-05, 'epoch': 1.13}
+{'loss': 0.037, 'grad_norm': 1.184352993965149, 'learning_rate': 1.864732872307804e-05, 'epoch': 1.2}
+{'loss': 0.0407, 'grad_norm': 1.5673372745513916, 'learning_rate': 1.844659458194036e-05, 'epoch': 1.27}
+{'loss': 0.0388, 'grad_norm': 2.143115758895874, 'learning_rate': 1.8233218458973984e-05, 'epoch': 1.34}
+{'loss': 0.0382, 'grad_norm': 1.3731870651245117, 'learning_rate': 1.8007519713305607e-05, 'epoch': 1.41}
+{'loss': 0.0375, 'grad_norm': 1.6415132284164429, 'learning_rate': 1.776983614727838e-05, 'epoch': 1.48}
+{'loss': 0.0381, 'grad_norm': 1.5283808708190918, 'learning_rate': 1.7520523500864624e-05, 'epoch': 1.55}
+{'loss': 0.0353, 'grad_norm': 1.6493407487869263, 'learning_rate': 1.725995491923131e-05, 'epoch': 1.62}
+{'loss': 0.0377, 'grad_norm': 1.2188739776611328, 'learning_rate': 1.69885203942553e-05, 'epoch': 1.69}
+{'loss': 0.0348, 'grad_norm': 1.957509994506836, 'learning_rate': 1.6706626180824185e-05, 'epoch': 1.76}
+{'loss': 0.034, 'grad_norm': 2.328245162963867, 'learning_rate': 1.6414694188796347e-05, 'epoch': 1.83}
+{'loss': 0.0376, 'grad_norm': 1.910173773765564, 'learning_rate': 1.611316135153026e-05, 'epoch': 1.9}
+{'loss': 0.0356, 'grad_norm': 1.6665011644363403, 'learning_rate': 1.580247897192824e-05, 'epoch': 1.98}
+ 33%|████████████████████████████████████████████████████████████████████▏                                                                                                                                       | 283/846 [11:51<07:15,  1.29it/s][INFO|gner_trainer.py:60] 2025-01-08 18:30:35,895 >> ***** Running Evaluation *****
+[INFO|gner_trainer.py:62] 2025-01-08 18:30:35,895 >>   Num examples = 6470
+[INFO|gner_trainer.py:65] 2025-01-08 18:30:35,895 >>   Batch size = 16
+{'eval_crossner_ai_prec': 0.5214770158251303, 'eval_crossner_ai_rec': 0.4306160547603963, 'eval_crossner_ai_f1': 0.4717109747288826, 'eval_crossner_literature_prec': 0.5630461922596403, 'eval_crossner_literature_rec': 0.45509586276486097, 'eval_crossner_literature_f1': 0.5033482142362483, 'eval_crossner_music_prec': 0.6065134099616626, 'eval_crossner_music_rec': 0.5067221510883321, 'eval_crossner_music_f1': 0.5521450993574282, 'eval_crossner_politics_prec': 0.5643415514130918, 'eval_crossner_politics_rec': 0.48128205128203894, 'eval_crossner_politics_f1': 0.5195128701412782, 'eval_crossner_science_prec': 0.5948164146867994, 'eval_crossner_science_rec': 0.5442687747035357, 'eval_crossner_science_f1': 0.5684210525816539, 'eval_mit-movie_prec': 0.8336166194522977, 'eval_mit-movie_rec': 0.8267465817568678, 'eval_mit-movie_f1': 0.8301673875745855, 'eval_mit-restaurant_prec': 0.7500784929356122, 'eval_mit-restaurant_rec': 0.7584126984126743, 'eval_mit-restaurant_f1': 0.7542225729570811, 'eval_AVERAGE_f1': 0.5999325959395939, 'eval_runtime': 744.8487, 'eval_samples_per_second': 8.686, 'eval_steps_per_second': 0.068, 'epoch': 2.0}
+{'loss': 0.0294, 'grad_norm': 2.823457717895508, 'learning_rate': 1.548311204697331e-05, 'epoch': 2.05}
+{'loss': 0.0314, 'grad_norm': 2.285062313079834, 'learning_rate': 1.515553857177022e-05, 'epoch': 2.12}
+{'loss': 0.0313, 'grad_norm': 6.629708290100098, 'learning_rate': 1.4820248824132221e-05, 'epoch': 2.19}
+{'loss': 0.0291, 'grad_norm': 1.9156385660171509, 'learning_rate': 1.4477744630784378e-05, 'epoch': 2.26}
+{'loss': 0.0297, 'grad_norm': 1.9283808469772339, 'learning_rate': 1.412853861628166e-05, 'epoch': 2.33}
+{'loss': 0.0268, 'grad_norm': 0.6812810301780701, 'learning_rate': 1.3773153435765965e-05, 'epoch': 2.4}
+{'loss': 0.0286, 'grad_norm': 1.3198093175888062, 'learning_rate': 1.3412120992710425e-05, 'epoch': 2.47}
+{'loss': 0.029, 'grad_norm': 1.8577988147735596, 'learning_rate': 1.3045981642821762e-05, 'epoch': 2.54}
+{'loss': 0.0281, 'grad_norm': 3.676201820373535, 'learning_rate': 1.2675283385292212e-05, 'epoch': 2.61}
+{'loss': 0.0287, 'grad_norm': 2.098855495452881, 'learning_rate': 1.2300581042611492e-05, 'epoch': 2.68}
+{'loss': 0.0283, 'grad_norm': 1.499481201171875, 'learning_rate': 1.192243543016637e-05, 'epoch': 2.75}
+{'loss': 0.0281, 'grad_norm': 1.0479775667190552, 'learning_rate': 1.1541412516870684e-05, 'epoch': 2.82}
+{'loss': 0.025, 'grad_norm': 2.7294068336486816, 'learning_rate': 1.115808257808209e-05, 'epoch': 2.89}
+{'loss': 0.0271, 'grad_norm': 1.4785585403442383, 'learning_rate': 1.077301934207339e-05, 'epoch': 2.96}
+ 50%|██████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                                                                     | 425/846 [26:08<05:35,  1.26it/s][INFO|gner_trainer.py:60] 2025-01-08 18:44:52,323 >> ***** Running Evaluation *****
+[INFO|gner_trainer.py:62] 2025-01-08 18:44:52,323 >>   Num examples = 6470
+[INFO|gner_trainer.py:65] 2025-01-08 18:44:52,323 >>   Batch size = 16
+{'eval_crossner_ai_prec': 0.6031406138472089, 'eval_crossner_ai_rec': 0.525824517734877, 'eval_crossner_ai_f1': 0.5618351063331759, 'eval_crossner_literature_prec': 0.5551158846805792, 'eval_crossner_literature_rec': 0.49545913218968235, 'eval_crossner_literature_f1': 0.5235937082945749, 'eval_crossner_music_prec': 0.5903225806451401, 'eval_crossner_music_rec': 0.5272087067861547, 'eval_crossner_music_f1': 0.5569834291013074, 'eval_crossner_politics_prec': 0.6727118163785585, 'eval_crossner_politics_rec': 0.608717948717933, 'eval_crossner_politics_f1': 0.639116973970837, 'eval_crossner_science_prec': 0.5621445978878732, 'eval_crossner_science_rec': 0.5470355731225081, 'eval_crossner_science_f1': 0.5544871794371665, 'eval_mit-movie_prec': 0.8513032064503872, 'eval_mit-movie_rec': 0.8503465068364703, 'eval_mit-movie_f1': 0.850824587656131, 'eval_mit-restaurant_prec': 0.7597217831172697, 'eval_mit-restaurant_rec': 0.7628571428571186, 'eval_mit-restaurant_f1': 0.761286234703659, 'eval_AVERAGE_f1': 0.6354467456424074, 'eval_runtime': 706.1412, 'eval_samples_per_second': 9.162, 'eval_steps_per_second': 0.072, 'epoch': 3.0}
+{'loss': 0.0234, 'grad_norm': 3.8818418979644775, 'learning_rate': 1.038679913133589e-05, 'epoch': 3.03}
+{'loss': 0.0232, 'grad_norm': 1.649709939956665, 'learning_rate': 1e-05, 'epoch': 3.1}
+{'loss': 0.0226, 'grad_norm': 2.235748529434204, 'learning_rate': 9.613200868664112e-06, 'epoch': 3.17}
+{'loss': 0.0255, 'grad_norm': 2.4804089069366455, 'learning_rate': 9.226980657926615e-06, 'epoch': 3.25}
+{'loss': 0.0229, 'grad_norm': 0.8426290154457092, 'learning_rate': 8.841917421917913e-06, 'epoch': 3.32}
+{'loss': 0.0206, 'grad_norm': 10.441118240356445, 'learning_rate': 8.458587483129316e-06, 'epoch': 3.39}
+{'loss': 0.0232, 'grad_norm': 8.351653099060059, 'learning_rate': 8.077564569833633e-06, 'epoch': 3.46}
+{'loss': 0.0222, 'grad_norm': 2.368365526199341, 'learning_rate': 7.699418957388512e-06, 'epoch': 3.53}
+{'loss': 0.0242, 'grad_norm': 2.405693769454956, 'learning_rate': 7.324716614707794e-06, 'epoch': 3.6}
+{'loss': 0.0198, 'grad_norm': 2.980395555496216, 'learning_rate': 6.954018357178241e-06, 'epoch': 3.67}
+{'loss': 0.0201, 'grad_norm': 2.0777792930603027, 'learning_rate': 6.587879007289576e-06, 'epoch': 3.74}
+{'loss': 0.0211, 'grad_norm': 4.232048988342285, 'learning_rate': 6.2268465642340405e-06, 'epoch': 3.81}
+{'loss': 0.0204, 'grad_norm': 0.8093772530555725, 'learning_rate': 5.871461383718344e-06, 'epoch': 3.88}
+{'loss': 0.0193, 'grad_norm': 2.6425294876098633, 'learning_rate': 5.522255369215622e-06, 'epoch': 3.95}
+ 67%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                                   | 567/846 [39:46<03:37,  1.28it/s][INFO|gner_trainer.py:60] 2025-01-08 18:58:30,254 >> ***** Running Evaluation *****
+[INFO|gner_trainer.py:62] 2025-01-08 18:58:30,254 >>   Num examples = 6470
+[INFO|gner_trainer.py:65] 2025-01-08 18:58:30,254 >>   Batch size = 16
+{'eval_crossner_ai_prec': 0.6369910282953322, 'eval_crossner_ai_rec': 0.5743621655257888, 'eval_crossner_ai_f1': 0.6040575915731308, 'eval_crossner_literature_prec': 0.6440489432702645, 'eval_crossner_literature_rec': 0.5842583249242894, 'eval_crossner_literature_f1': 0.6126984126484988, 'eval_crossner_music_prec': 0.666666666666644, 'eval_crossner_music_rec': 0.6286811779769325, 'eval_crossner_music_f1': 0.647116968648539, 'eval_crossner_politics_prec': 0.7405200433369247, 'eval_crossner_politics_rec': 0.701025641025623, 'eval_crossner_politics_f1': 0.7202318229215676, 'eval_crossner_science_prec': 0.6765542462413378, 'eval_crossner_science_rec': 0.658102766798393, 'eval_crossner_science_f1': 0.6672009616810989, 'eval_mit-movie_prec': 0.8636363636363474, 'eval_mit-movie_rec': 0.8647686832740051, 'eval_mit-movie_f1': 0.8642021525002881, 'eval_mit-restaurant_prec': 0.7839036755386317, 'eval_mit-restaurant_rec': 0.7853968253968004, 'eval_mit-restaurant_f1': 0.7846495400704954, 'eval_AVERAGE_f1': 0.700022492863374, 'eval_runtime': 573.23, 'eval_samples_per_second': 11.287, 'eval_steps_per_second': 0.089, 'epoch': 4.0}
+{'loss': 0.0192, 'grad_norm': 0.8279673457145691, 'learning_rate': 5.179751175867784e-06, 'epoch': 4.02}
+{'loss': 0.0201, 'grad_norm': 0.8185304999351501, 'learning_rate': 4.844461428229782e-06, 'epoch': 4.09}
+{'loss': 0.0186, 'grad_norm': 0.8607878684997559, 'learning_rate': 4.5168879530266906e-06, 'epoch': 4.16}
+{'loss': 0.0194, 'grad_norm': 0.7209059000015259, 'learning_rate': 4.1975210280717645e-06, 'epoch': 4.23}
+{'loss': 0.0204, 'grad_norm': 0.9278780817985535, 'learning_rate': 3.886838648469742e-06, 'epoch': 4.3}
+{'loss': 0.0198, 'grad_norm': 0.5528000593185425, 'learning_rate': 3.58530581120366e-06, 'epoch': 4.37}
+{'loss': 0.0199, 'grad_norm': 0.9739131927490234, 'learning_rate': 3.2933738191758158e-06, 'epoch': 4.44}
+{'loss': 0.0165, 'grad_norm': 2.2619118690490723, 'learning_rate': 3.011479605744703e-06, 'epoch': 4.51}
+{'loss': 0.0183, 'grad_norm': 0.8727861046791077, 'learning_rate': 2.740045080768694e-06, 'epoch': 4.59}
+{'loss': 0.0191, 'grad_norm': 0.6859909892082214, 'learning_rate': 2.4794764991353746e-06, 'epoch': 4.66}
+{'loss': 0.0178, 'grad_norm': 0.6665116548538208, 'learning_rate': 2.2301638527216196e-06, 'epoch': 4.73}
+{'loss': 0.017, 'grad_norm': 0.9152809381484985, 'learning_rate': 1.992480286694397e-06, 'epoch': 4.8}
+{'loss': 0.017, 'grad_norm': 0.6330703496932983, 'learning_rate': 1.7667815410260181e-06, 'epoch': 4.87}
+{'loss': 0.0176, 'grad_norm': 0.6921748518943787, 'learning_rate': 1.5534054180596415e-06, 'epoch': 4.94}
+ 84%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                 | 708/846 [51:10<01:46,  1.29it/s][INFO|gner_trainer.py:60] 2025-01-08 19:09:55,409 >> ***** Running Evaluation *****
+[INFO|gner_trainer.py:62] 2025-01-08 19:09:55,409 >>   Num examples = 6470
+[INFO|gner_trainer.py:65] 2025-01-08 19:09:55,409 >>   Batch size = 16
+{'eval_crossner_ai_prec': 0.6410256410255978, 'eval_crossner_ai_rec': 0.5911636589918736, 'eval_crossner_ai_f1': 0.6150857882310392, 'eval_crossner_literature_prec': 0.632530120481893, 'eval_crossner_literature_rec': 0.5827447023208586, 'eval_crossner_literature_f1': 0.6066176470088755, 'eval_crossner_music_prec': 0.6869361844303145, 'eval_crossner_music_rec': 0.6581306017925526, 'eval_crossner_music_f1': 0.6722249468193814, 'eval_crossner_politics_prec': 0.7472673953612171, 'eval_crossner_politics_rec': 0.7187179487179303, 'eval_crossner_politics_f1': 0.7327146777698927, 'eval_crossner_science_prec': 0.6735022114997719, 'eval_crossner_science_rec': 0.6620553359683533, 'eval_crossner_science_f1': 0.6677297189055282, 'eval_mit-movie_prec': 0.8707686553207243, 'eval_mit-movie_rec': 0.8720734219891202, 'eval_mit-movie_f1': 0.8714205502026507, 'eval_mit-restaurant_prec': 0.7817548305352936, 'eval_mit-restaurant_rec': 0.7834920634920386, 'eval_mit-restaurant_f1': 0.7826224829054216, 'eval_AVERAGE_f1': 0.7069165445489699, 'eval_runtime': 449.2711, 'eval_samples_per_second': 14.401, 'eval_steps_per_second': 0.114, 'epoch': 4.99}
+{'loss': 0.0185, 'grad_norm': 0.6661946177482605, 'learning_rate': 1.3526712769219619e-06, 'epoch': 5.01}
+{'loss': 0.0166, 'grad_norm': 1.9738534688949585, 'learning_rate': 1.1648795555397719e-06, 'epoch': 5.08}
+{'loss': 0.016, 'grad_norm': 0.5192237496376038, 'learning_rate': 9.903113209758098e-07, 'epoch': 5.15}
+{'loss': 0.0177, 'grad_norm': 1.0347263813018799, 'learning_rate': 8.29227848756895e-07, 'epoch': 5.22}
+{'loss': 0.0163, 'grad_norm': 0.6268316507339478, 'learning_rate': 6.81870231823969e-07, 'epoch': 5.29}
+{'loss': 0.0161, 'grad_norm': 0.5359205007553101, 'learning_rate': 5.484590196893246e-07, 'epoch': 5.36}
+{'loss': 0.0158, 'grad_norm': 0.9358980059623718, 'learning_rate': 4.2919388834110066e-07, 'epoch': 5.43}
+{'loss': 0.0149, 'grad_norm': 0.6051222681999207, 'learning_rate': 3.242533413890858e-07, 'epoch': 5.5}
+{'loss': 0.0159, 'grad_norm': 1.6550066471099854, 'learning_rate': 2.3379444289913344e-07, 'epoch': 5.57}
+{'loss': 0.0157, 'grad_norm': 0.4500259459018707, 'learning_rate': 1.5795258231605105e-07, 'epoch': 5.64}
+{'loss': 0.0168, 'grad_norm': 4.29532527923584, 'learning_rate': 9.684127182679526e-08, 'epoch': 5.71}
+{'loss': 0.0152, 'grad_norm': 0.822218120098114, 'learning_rate': 5.055197646727572e-08, 'epoch': 5.78}
+{'loss': 0.0156, 'grad_norm': 0.9184415936470032, 'learning_rate': 1.9153977227022168e-08, 'epoch': 5.86}
+{'loss': 0.0151, 'grad_norm': 0.4816553592681885, 'learning_rate': 2.69426735662659e-09, 'epoch': 5.93}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 846/846 [1:00:29<00:00,  1.28it/s][INFO|gner_trainer.py:60] 2025-01-08 19:19:13,354 >> ***** Running Evaluation *****
+[INFO|gner_trainer.py:62] 2025-01-08 19:19:13,354 >>   Num examples = 6470
+[INFO|gner_trainer.py:65] 2025-01-08 19:19:13,354 >>   Batch size = 16
+{'eval_crossner_ai_prec': 0.6589986468199824, 'eval_crossner_ai_rec': 0.6060983198506157, 'eval_crossner_ai_f1': 0.6314424634832718, 'eval_crossner_literature_prec': 0.6465707964601413, 'eval_crossner_literature_rec': 0.5898082744702023, 'eval_crossner_literature_f1': 0.6168865434856928, 'eval_crossner_music_prec': 0.6776359973136106, 'eval_crossner_music_rec': 0.6459667093469703, 'eval_crossner_music_f1': 0.661422484381341, 'eval_crossner_politics_prec': 0.7520128824476449, 'eval_crossner_politics_rec': 0.71846153846152, 'eval_crossner_politics_f1': 0.7348544452686534, 'eval_crossner_science_prec': 0.6834271922767223, 'eval_crossner_science_rec': 0.6715415019762581, 'eval_crossner_science_f1': 0.677432216855878, 'eval_mit-movie_prec': 0.8701734750979132, 'eval_mit-movie_rec': 0.8737591309233775, 'eval_mit-movie_f1': 0.8719626167724137, 'eval_mit-restaurant_prec': 0.7889558870199685, 'eval_mit-restaurant_rec': 0.7892063492063242, 'eval_mit-restaurant_f1': 0.7890810981883498, 'eval_AVERAGE_f1': 0.7118688383479428, 'eval_runtime': 462.9914, 'eval_samples_per_second': 13.974, 'eval_steps_per_second': 0.11, 'epoch': 5.97}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 846/846 [1:08:12<00:00,  1.28it/s]
+[INFO|trainer.py:2591] 2025-01-08 19:26:56,351 >>
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+{'train_runtime': 4092.4899, 'train_samples_per_second': 26.588, 'train_steps_per_second': 0.207, 'train_loss': 0.03770685660923626, 'epoch': 5.97}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 846/846 [1:08:12<00:00,  4.84s/it]
+[2025-01-08 19:26:59,009] [INFO] [launch.py:347:main] Process 3311427 exits successfully.
+[2025-01-08 19:26:59,010] [INFO] [launch.py:347:main] Process 3311426 exits successfully.
+[2025-01-08 19:26:59,010] [INFO] [launch.py:347:main] Process 3311431 exits successfully.
+[2025-01-08 19:26:59,010] [INFO] [launch.py:347:main] Process 3311429 exits successfully.
+[2025-01-08 19:26:59,010] [INFO] [launch.py:347:main] Process 3311430 exits successfully.
+[2025-01-08 19:26:59,010] [INFO] [launch.py:347:main] Process 3311424 exits successfully.
+[2025-01-08 19:27:00,010] [INFO] [launch.py:347:main] Process 3311425 exits successfully.
+[2025-01-08 19:27:00,010] [INFO] [launch.py:347:main] Process 3311428 exits successfully.
+
+Process finished with exit code 0
