@@ -15,8 +15,8 @@ deepspeed --include="localhost:0,1,2,3,4,5,6,7" --master_port $port task2-nerG-t
     --output_dir $OUTPUT_DIR \
     --run_name $RUN_NAME \
     --preprocessing_num_workers 4 \
-    --per_device_eval_batch_size 32 \
-    --per_device_train_batch_size 8 \
+    --per_device_eval_batch_size 16 \
+    --per_device_train_batch_size 4 \
     --gradient_accumulation_steps 4 \
     --gradient_checkpointing True \
     --bf16 True --tf32 True \
