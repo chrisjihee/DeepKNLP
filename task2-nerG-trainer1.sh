@@ -1,3 +1,4 @@
+set -x
 port=$(shuf -i25000-30000 -n1)
 TRAIN_JSON_DIR=data/gner/zero-shot-train.jsonl
 VALID_JSON_DIR=data/gner/zero-shot-test.jsonl
@@ -6,7 +7,7 @@ OUTPUT_DIR=output/GNER/EAGLE-1B-supervised
 RUN_NAME=train_eagle_1b_supervised-base
 DEEPSPEED_CONFIG=configs/deepspeed_configs/deepspeed_zero1_llama.json
 
-/raid/chrisjihee/miniforge3/envs/GNER/bin/python -m deepspeed.launcher.runner --include="localhost:0,1,2,3,4,5,6,7" --master_port $port task2-nerG-trainer1.py \
+~/miniforge3/envs/GNER/bin/python -m deepspeed.launcher.runner --include="localhost:0,1,2,3,4,5,6,7" --master_port $port task2-nerG-trainer1.py \
     --do_train --do_eval --predict_with_generate \
     --train_json_dir $TRAIN_JSON_DIR \
     --valid_json_dir $VALID_JSON_DIR \
@@ -15,8 +16,8 @@ DEEPSPEED_CONFIG=configs/deepspeed_configs/deepspeed_zero1_llama.json
     --output_dir $OUTPUT_DIR \
     --run_name $RUN_NAME \
     --preprocessing_num_workers 4 \
-    --per_device_eval_batch_size 16 \
-    --per_device_train_batch_size 4 \
+    --per_device_eval_batch_size 32 \
+    --per_device_train_batch_size 8 \
     --gradient_accumulation_steps 4 \
     --gradient_checkpointing True \
     --bf16 True --tf32 True \
