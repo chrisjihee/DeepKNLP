@@ -34,7 +34,7 @@ Transformer-based Korean Natural Language Processing
 4. Install the required packages
     ```bash
     pip install -U -r requirements.txt
-    DS_BUILD_FUSED_ADAM=1 DS_BUILD_CPU_ADAM=1 pip install --no-cache deepspeed==0.13.2
+    DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed==0.13.5
     ds_report
     pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
     ```
