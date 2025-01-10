@@ -27,13 +27,15 @@ Transformer-based Korean Natural Language Processing
     conda activate DeepKNLP
     conda install cuda-libraries=11.8 cuda-libraries-dev=11.8 cuda-cudart=11.8 cuda-cudart-dev=11.8 \
                   cuda-nvrtc=11.8 cuda-nvrtc-dev=11.8 cuda-driver-dev=11.8 \
-                  cuda-nvcc=11.8 cuda-cccl=11.8 cuda-runtime=11.8 cuda-version=12.4 \
+                  cuda-nvcc=11.8 cuda-cccl=11.8 cuda-runtime=11.8 cuda-version=11.8 \
                   libcusparse=11 libcusparse-dev=11 libcublas=11 libcublas-dev=11 \
                   -c nvidia -c pytorch -y
     ```
 4. Install the required packages
     ```bash
     pip install -U -r requirements.txt
+    DS_BUILD_FUSED_ADAM=1 DS_BUILD_CPU_ADAM=1 pip install --no-cache deepspeed==0.13.1
+    ds_report
     pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
     ```
 5. Install some packages as editable (optional)

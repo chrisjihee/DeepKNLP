@@ -7,7 +7,6 @@ tensorboard>=2.18.0
 transformers<4.47.0,>=4.46.0
 accelerate<1.0.0
 datasets>=3.0.1
-deepspeed<0.13.2
 sentencepiece
 
 # Metrics
@@ -21,6 +20,9 @@ Flask-Classful>=0.16.0
 
 # Utils
 importlib-metadata>=8.5.0
+
+# Manual install
+#deepspeed<0.13.2
 #chrisbase>=0.5.7
 #chrisdata>=0.5.0
 #progiter>=2.0.0
