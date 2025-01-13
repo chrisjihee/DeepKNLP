@@ -1,5 +1,5 @@
 (DeepKNLP) chrisjihee@dgx-a100:~/proj/DeepKNLP$ ds_report; pip list | grep -E "torch|lightn|transformer|accel|deep|numpy|piece|chris|prog"
-[2025-01-13 21:09:40,336] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:38:26,568] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
 --------------------------------------------------
 DeepSpeed C++/CUDA extension op report
 --------------------------------------------------
@@ -69,57 +69,71 @@ transformers             4.48.0
 
 /bin/bash /raid/chrisjihee/proj/DeepKNLP/task2-nerG-trainer1.sh
 ++ shuf -i25000-30000 -n1
-+ port=27443
++ port=29648
 + TRAIN_JSON_DIR=data/gner/zero-shot-train.jsonl
 + VALID_JSON_DIR=data/gner/zero-shot-test-min.jsonl
 + MODEL_NAME_OR_PATH=etri-lirs/egpt-1.3b-preview
 + OUTPUT_DIR=output/GNER/EAGLE-1B-supervised
 + RUN_NAME=train_eagle_1b_supervised-base
 + DEEPSPEED_CONFIG=configs/deepspeed_configs/deepspeed_zero1_llama.json
-+ /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include=localhost:0,1,2,3,4,5,6,7 --master_port 27443 task2-nerG-trainer1.py --do_train --do_eval --predict_with_generate --train_json_dir data/gner/zero-shot-train.jsonl --valid_json_dir data/gner/zero-shot-test-min.jsonl --no_load_gner_customized_datasets --model_name_or_path etri-lirs/egpt-1.3b-preview --output_dir output/GNER/EAGLE-1B-supervised --run_name train_eagle_1b_supervised-base --preprocessing_num_workers 4 --per_device_eval_batch_size 8 --per_device_train_batch_size 8 --gradient_accumulation_steps 4 --gradient_checkpointing True --bf16 True --tf32 True --lr_scheduler_type cosine --learning_rate 2e-05 --warmup_ratio 0.04 --weight_decay 0. --max_source_length 640 --max_target_length 640 --generation_max_length 1280 --num_train_epochs 0.5 --logging_strategy steps --logging_steps 10 --eval_strategy epoch --save_strategy epoch --overwrite_output_dir --overwrite_cache --seed 1234 --deepspeed configs/deepspeed_configs/deepspeed_zero1_llama.json
-[2025-01-13 21:09:56,248] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:01,737] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
-[2025-01-13 21:10:01,737] [INFO] [runner.py:607:main] cmd = /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=27443 --enable_each_rank_log=None task2-nerG-trainer1.py --do_train --do_eval --predict_with_generate --train_json_dir data/gner/zero-shot-train.jsonl --valid_json_dir data/gner/zero-shot-test-min.jsonl --no_load_gner_customized_datasets --model_name_or_path etri-lirs/egpt-1.3b-preview --output_dir output/GNER/EAGLE-1B-supervised --run_name train_eagle_1b_supervised-base --preprocessing_num_workers 4 --per_device_eval_batch_size 8 --per_device_train_batch_size 8 --gradient_accumulation_steps 4 --gradient_checkpointing True --bf16 True --tf32 True --lr_scheduler_type cosine --learning_rate 2e-05 --warmup_ratio 0.04 --weight_decay 0. --max_source_length 640 --max_target_length 640 --generation_max_length 1280 --num_train_epochs 0.5 --logging_strategy steps --logging_steps 10 --eval_strategy epoch --save_strategy epoch --overwrite_output_dir --overwrite_cache --seed 1234 --deepspeed configs/deepspeed_configs/deepspeed_zero1_llama.json
-[2025-01-13 21:10:04,745] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:09,897] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3, 4, 5, 6, 7]}
-[2025-01-13 21:10:09,898] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=8, node_rank=0
-[2025-01-13 21:10:09,898] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5, 6, 7]})
-[2025-01-13 21:10:09,898] [INFO] [launch.py:164:main] dist_world_size=8
-[2025-01-13 21:10:09,898] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
-[2025-01-13 21:10:09,898] [INFO] [launch.py:256:main] process 3854187 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=0', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
-[2025-01-13 21:10:09,899] [INFO] [launch.py:256:main] process 3854188 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=1', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
-[2025-01-13 21:10:09,900] [INFO] [launch.py:256:main] process 3854189 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=2', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
-[2025-01-13 21:10:09,900] [INFO] [launch.py:256:main] process 3854190 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=3', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
-[2025-01-13 21:10:09,901] [INFO] [launch.py:256:main] process 3854191 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=4', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
-[2025-01-13 21:10:09,901] [INFO] [launch.py:256:main] process 3854192 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=5', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
-[2025-01-13 21:10:09,902] [INFO] [launch.py:256:main] process 3854193 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=6', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
-[2025-01-13 21:10:09,902] [INFO] [launch.py:256:main] process 3854194 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=7', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
-[2025-01-13 21:10:21,170] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:21,275] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:21,358] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:21,363] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:21,366] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:21,373] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:21,391] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:21,406] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2025-01-13 21:10:22,007] [INFO] [comm.py:652:init_distributed] cdb=None
-[2025-01-13 21:10:22,188] [INFO] [comm.py:652:init_distributed] cdb=None
-[2025-01-13 21:10:22,191] [INFO] [comm.py:652:init_distributed] cdb=None
-[2025-01-13 21:10:22,192] [INFO] [comm.py:683:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
-[2025-01-13 21:10:22,200] [INFO] [comm.py:652:init_distributed] cdb=None
-[2025-01-13 21:10:22,212] [INFO] [comm.py:652:init_distributed] cdb=None
-[2025-01-13 21:10:22,222] [INFO] [comm.py:652:init_distributed] cdb=None
-[2025-01-13 21:10:22,227] [INFO] [comm.py:652:init_distributed] cdb=None
-[2025-01-13 21:10:22,247] [INFO] [comm.py:652:init_distributed] cdb=None
++ /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include=localhost:0,1,2,3,4,5,6,7 --master_port 29648 task2-nerG-trainer1.py --do_train --do_eval --predict_with_generate --train_json_dir data/gner/zero-shot-train.jsonl --valid_json_dir data/gner/zero-shot-test-min.jsonl --no_load_gner_customized_datasets --model_name_or_path etri-lirs/egpt-1.3b-preview --output_dir output/GNER/EAGLE-1B-supervised --run_name train_eagle_1b_supervised-base --preprocessing_num_workers 4 --per_device_eval_batch_size 8 --per_device_train_batch_size 8 --gradient_accumulation_steps 4 --gradient_checkpointing True --bf16 True --tf32 True --lr_scheduler_type cosine --learning_rate 2e-05 --warmup_ratio 0.04 --weight_decay 0. --max_source_length 640 --max_target_length 640 --generation_max_length 1280 --num_train_epochs 0.5 --logging_strategy steps --logging_steps 10 --eval_strategy epoch --save_strategy epoch --overwrite_output_dir --overwrite_cache --seed 1234 --deepspeed configs/deepspeed_configs/deepspeed_zero1_llama.json
+[2025-01-13 21:39:19,516] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:39:24,171] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+[2025-01-13 21:39:24,171] [INFO] [runner.py:607:main] cmd = /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29648 --enable_each_rank_log=None task2-nerG-trainer1.py --do_train --do_eval --predict_with_generate --train_json_dir data/gner/zero-shot-train.jsonl --valid_json_dir data/gner/zero-shot-test-min.jsonl --no_load_gner_customized_datasets --model_name_or_path etri-lirs/egpt-1.3b-preview --output_dir output/GNER/EAGLE-1B-supervised --run_name train_eagle_1b_supervised-base --preprocessing_num_workers 4 --per_device_eval_batch_size 8 --per_device_train_batch_size 8 --gradient_accumulation_steps 4 --gradient_checkpointing True --bf16 True --tf32 True --lr_scheduler_type cosine --learning_rate 2e-05 --warmup_ratio 0.04 --weight_decay 0. --max_source_length 640 --max_target_length 640 --generation_max_length 1280 --num_train_epochs 0.5 --logging_strategy steps --logging_steps 10 --eval_strategy epoch --save_strategy epoch --overwrite_output_dir --overwrite_cache --seed 1234 --deepspeed configs/deepspeed_configs/deepspeed_zero1_llama.json
+[2025-01-13 21:39:27,205] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:39:32,241] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3, 4, 5, 6, 7]}
+[2025-01-13 21:39:32,241] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=8, node_rank=0
+[2025-01-13 21:39:32,241] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5, 6, 7]})
+[2025-01-13 21:39:32,241] [INFO] [launch.py:164:main] dist_world_size=8
+[2025-01-13 21:39:32,241] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+[2025-01-13 21:39:32,242] [INFO] [launch.py:256:main] process 3877677 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=0', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
+[2025-01-13 21:39:32,243] [INFO] [launch.py:256:main] process 3877678 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=1', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
+[2025-01-13 21:39:32,243] [INFO] [launch.py:256:main] process 3877679 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=2', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
+[2025-01-13 21:39:32,244] [INFO] [launch.py:256:main] process 3877680 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=3', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
+[2025-01-13 21:39:32,244] [INFO] [launch.py:256:main] process 3877681 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=4', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
+[2025-01-13 21:39:32,245] [INFO] [launch.py:256:main] process 3877682 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=5', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
+[2025-01-13 21:39:32,245] [INFO] [launch.py:256:main] process 3877683 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=6', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
+[2025-01-13 21:39:32,246] [INFO] [launch.py:256:main] process 3877684 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer1.py', '--local_rank=7', '--do_train', '--do_eval', '--predict_with_generate', '--train_json_dir', 'data/gner/zero-shot-train.jsonl', '--valid_json_dir', 'data/gner/zero-shot-test-min.jsonl', '--no_load_gner_customized_datasets', '--model_name_or_path', 'etri-lirs/egpt-1.3b-preview', '--output_dir', 'output/GNER/EAGLE-1B-supervised', '--run_name', 'train_eagle_1b_supervised-base', '--preprocessing_num_workers', '4', '--per_device_eval_batch_size', '8', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '4', '--gradient_checkpointing', 'True', '--bf16', 'True', '--tf32', 'True', '--lr_scheduler_type', 'cosine', '--learning_rate', '2e-05', '--warmup_ratio', '0.04', '--weight_decay', '0.', '--max_source_length', '640', '--max_target_length', '640', '--generation_max_length', '1280', '--num_train_epochs', '0.5', '--logging_strategy', 'steps', '--logging_steps', '10', '--eval_strategy', 'epoch', '--save_strategy', 'epoch', '--overwrite_output_dir', '--overwrite_cache', '--seed', '1234', '--deepspeed', 'configs/deepspeed_configs/deepspeed_zero1_llama.json']
+[2025-01-13 21:39:40,756] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:39:40,775] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:39:40,936] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:39:41,571] [INFO] [comm.py:652:init_distributed] cdb=None
+[2025-01-13 21:39:41,571] [INFO] [comm.py:683:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2025-01-13 21:39:41,675] [INFO] [comm.py:652:init_distributed] cdb=None
+[2025-01-13 21:39:41,684] [INFO] [comm.py:652:init_distributed] cdb=None
+[2025-01-13 21:39:44,053] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:39:44,074] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:39:44,095] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/13/2025 21:39:44 - WARNING - __main__ - Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
+[2025-01-13 21:39:44,143] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-13 21:39:44,145] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/13/2025 21:39:44 - WARNING - __main__ - Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
+[2025-01-13 21:39:44,835] [INFO] [comm.py:652:init_distributed] cdb=None
+[2025-01-13 21:39:44,906] [INFO] [comm.py:652:init_distributed] cdb=None
+[2025-01-13 21:39:44,925] [INFO] [comm.py:652:init_distributed] cdb=None
+[2025-01-13 21:39:44,961] [INFO] [comm.py:652:init_distributed] cdb=None
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/13/2025 21:39:45 - WARNING - __main__ - Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
+[2025-01-13 21:39:45,107] [INFO] [comm.py:652:init_distributed] cdb=None
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/13/2025 21:39:45 - WARNING - __main__ - Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
 Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
 Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
-01/13/2025 21:10:25 - WARNING - __main__ - Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
-01/13/2025 21:10:25 - WARNING - __main__ - Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
+01/13/2025 21:39:45 - WARNING - __main__ - Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
+01/13/2025 21:39:45 - WARNING - __main__ - Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
+[WARNING|logging.py:328] 2025-01-13 21:39:45,361 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[WARNING|logging.py:328] 2025-01-13 21:39:45,397 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[WARNING|logging.py:328] 2025-01-13 21:39:46,351 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[WARNING|logging.py:328] 2025-01-13 21:39:46,460 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[WARNING|logging.py:328] 2025-01-13 21:39:46,559 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[WARNING|logging.py:328] 2025-01-13 21:39:46,580 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
 Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+01/13/2025 21:39:48 - WARNING - __main__ - Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
 Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
-01/13/2025 21:10:25 - WARNING - __main__ - Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
-01/13/2025 21:10:25 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
-01/13/2025 21:10:25 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+01/13/2025 21:39:48 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+01/13/2025 21:39:48 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
 _n_gpu=1,
 accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
 adafactor=False,
@@ -195,7 +209,7 @@ local_rank=0,
 log_level=passive,
 log_level_replica=warning,
 log_on_each_node=True,
-logging_dir=output/GNER/EAGLE-1B-supervised/runs/Jan13_21-10-13_dgx-a100,
+logging_dir=output/GNER/EAGLE-1B-supervised/runs/Jan13_21-39-35_dgx-a100,
 logging_first_step=False,
 logging_nan_inf_filter=True,
 logging_steps=10,
@@ -256,16 +270,8 @@ warmup_ratio=0.04,
 warmup_steps=0,
 weight_decay=0.0,
 )
-Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
-01/13/2025 21:10:25 - WARNING - __main__ - Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
-Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
-Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
-01/13/2025 21:10:25 - WARNING - __main__ - Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
-01/13/2025 21:10:25 - WARNING - __main__ - Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
-Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
-01/13/2025 21:10:25 - WARNING - __main__ - Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
-[INFO|configuration_utils.py:696] 2025-01-13 21:10:25,503 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/config.json
-[INFO|configuration_utils.py:768] 2025-01-13 21:10:25,505 >> Model config GPTNeoXConfig {
+[INFO|configuration_utils.py:696] 2025-01-13 21:39:48,479 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/config.json
+[INFO|configuration_utils.py:768] 2025-01-13 21:39:48,482 >> Model config GPTNeoXConfig {
   "_name_or_path": "etri-lirs/egpt-1.3b-preview",
   "architectures": [
     "GPTNeoXForCausalLM"
@@ -298,167 +304,163 @@ Using the `WANDB_DISABLED` environment variable is deprecated and will be remove
   "vocab_size": 32384
 }
 
-[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:10:26,039 >> loading file tokenizer.model from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/tokenizer.model
-[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:10:26,039 >> loading file tokenizer.json from cache at None
-[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:10:26,039 >> loading file added_tokens.json from cache at None
-[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:10:26,039 >> loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/special_tokens_map.json
-[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:10:26,039 >> loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/tokenizer_config.json
-[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:10:26,039 >> loading file chat_template.jinja from cache at None
-[WARNING|logging.py:328] 2025-01-13 21:10:26,499 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
-[WARNING|logging.py:328] 2025-01-13 21:10:26,518 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
-[WARNING|logging.py:328] 2025-01-13 21:10:26,665 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
-[WARNING|logging.py:328] 2025-01-13 21:10:26,689 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
-[INFO|modeling_utils.py:3904] 2025-01-13 21:10:26,713 >> loading weights file pytorch_model.bin from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/pytorch_model.bin
-[INFO|configuration_utils.py:1140] 2025-01-13 21:10:26,748 >> Generate config GenerationConfig {
+[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:39:48,687 >> loading file tokenizer.model from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/tokenizer.model
+[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:39:48,689 >> loading file tokenizer.json from cache at None
+[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:39:48,689 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:39:48,689 >> loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/special_tokens_map.json
+[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:39:48,694 >> loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2034] 2025-01-13 21:39:48,694 >> loading file chat_template.jinja from cache at None
+[rank3]:[W113 21:39:48.501938962 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank6]:[W113 21:39:48.589679779 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 6]  using GPU 6 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[INFO|modeling_utils.py:3904] 2025-01-13 21:39:49,500 >> loading weights file pytorch_model.bin from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/pytorch_model.bin
+[INFO|configuration_utils.py:1140] 2025-01-13 21:39:49,529 >> Generate config GenerationConfig {
   "bos_token_id": 2,
   "eos_token_id": 2
 }
 
-[WARNING|logging.py:328] 2025-01-13 21:10:26,855 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
-[INFO|safetensors_conversion.py:61] 2025-01-13 21:10:26,943 >> Attempting to create safetensors variant
-[WARNING|logging.py:328] 2025-01-13 21:10:27,015 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
-[WARNING|logging.py:328] 2025-01-13 21:10:27,119 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
-[WARNING|logging.py:328] 2025-01-13 21:10:27,336 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
-[INFO|safetensors_conversion.py:74] 2025-01-13 21:10:27,731 >> Safetensors PR exists
-[INFO|modeling_utils.py:4867] 2025-01-13 21:10:33,853 >> All model checkpoint weights were used when initializing GPTNeoXForCausalLM.
+[WARNING|logging.py:328] 2025-01-13 21:39:49,575 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[INFO|safetensors_conversion.py:61] 2025-01-13 21:39:49,710 >> Attempting to create safetensors variant
+[WARNING|logging.py:328] 2025-01-13 21:39:49,870 >> The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[INFO|modeling_utils.py:4867] 2025-01-13 21:39:49,873 >> All model checkpoint weights were used when initializing GPTNeoXForCausalLM.
 
-[INFO|modeling_utils.py:4875] 2025-01-13 21:10:33,853 >> All the weights of GPTNeoXForCausalLM were initialized from the model checkpoint at etri-lirs/egpt-1.3b-preview.
+[INFO|modeling_utils.py:4875] 2025-01-13 21:39:49,873 >> All the weights of GPTNeoXForCausalLM were initialized from the model checkpoint at etri-lirs/egpt-1.3b-preview.
 If your task is similar to the task the model of the checkpoint was trained on, you can already use GPTNeoXForCausalLM for predictions without further training.
-[INFO|configuration_utils.py:1095] 2025-01-13 21:10:34,059 >> loading configuration file generation_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/generation_config.json
-[INFO|configuration_utils.py:1140] 2025-01-13 21:10:34,059 >> Generate config GenerationConfig {
+[INFO|configuration_utils.py:1095] 2025-01-13 21:39:50,075 >> loading configuration file generation_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--etri-lirs--egpt-1.3b-preview/snapshots/31d1b605e933486cad270e689434f64aaf4906d3/generation_config.json
+[INFO|configuration_utils.py:1140] 2025-01-13 21:39:50,075 >> Generate config GenerationConfig {
   "bos_token_id": 2,
   "eos_token_id": 2
 }
 
-[rank1]:[W113 21:10:34.764184050 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
-[rank7]:[W113 21:10:34.103535094 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 7]  using GPU 7 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[INFO|safetensors_conversion.py:74] 2025-01-13 21:39:50,368 >> Safetensors PR exists
 Using custom data configuration default-bab2e02a90e2ed76
-01/13/2025 21:10:34 - INFO - datasets.builder - Using custom data configuration default-bab2e02a90e2ed76
+01/13/2025 21:39:50 - INFO - datasets.builder - Using custom data configuration default-bab2e02a90e2ed76
 Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP/lib/python3.12/site-packages/datasets/packaged_modules/json
-01/13/2025 21:10:34 - INFO - datasets.info - Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP/lib/python3.12/site-packages/datasets/packaged_modules/json
+01/13/2025 21:39:50 - INFO - datasets.info - Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP/lib/python3.12/site-packages/datasets/packaged_modules/json
 Overwrite dataset info from restored data version if exists.
-01/13/2025 21:10:34 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+01/13/2025 21:39:50 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
 Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
-01/13/2025 21:10:34 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/13/2025 21:39:50 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
 Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
-01/13/2025 21:10:34 - INFO - datasets.builder - Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+01/13/2025 21:39:50 - INFO - datasets.builder - Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
 Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
-01/13/2025 21:10:34 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
-01/13/2025 21:10:34 - INFO - __main__ - Use data/gner/zero-shot-train.jsonl as train dataset, len(dataset) = 18135
-01/13/2025 21:10:34 - INFO - __main__ - len(dataset) = 18135
+01/13/2025 21:39:50 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/13/2025 21:39:50 - INFO - __main__ - Use data/gner/zero-shot-train.jsonl as train dataset, len(dataset) = 18135
+01/13/2025 21:39:50 - INFO - __main__ - len(dataset) = 18135
 Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00000_of_00004.arrow
-01/13/2025 21:10:34 - INFO - datasets.arrow_dataset - Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00000_of_00004.arrow
+01/13/2025 21:39:50 - INFO - datasets.arrow_dataset - Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00000_of_00004.arrow
 Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00001_of_00004.arrow
-01/13/2025 21:10:34 - INFO - datasets.arrow_dataset - Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00001_of_00004.arrow
+01/13/2025 21:39:50 - INFO - datasets.arrow_dataset - Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00001_of_00004.arrow
 Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00002_of_00004.arrow
-01/13/2025 21:10:34 - INFO - datasets.arrow_dataset - Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00002_of_00004.arrow
+01/13/2025 21:39:50 - INFO - datasets.arrow_dataset - Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00002_of_00004.arrow
 Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00003_of_00004.arrow
-01/13/2025 21:10:34 - INFO - datasets.arrow_dataset - Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00003_of_00004.arrow
-[rank5]:[W113 21:10:35.827290043 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 5]  using GPU 5 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+01/13/2025 21:39:50 - INFO - datasets.arrow_dataset - Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00003_of_00004.arrow
 Spawning 4 processes
-01/13/2025 21:10:35 - INFO - datasets.arrow_dataset - Spawning 4 processes
+01/13/2025 21:39:51 - INFO - datasets.arrow_dataset - Spawning 4 processes
 Running tokenizer on train dataset (num_proc=4):   0%|                                                                                                                                                            | 0/18135 [00:00<?, ? examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00000_of_00004.arrow
-01/13/2025 21:10:35 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00000_of_00004.arrow
+01/13/2025 21:39:51 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00000_of_00004.arrow
 Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00001_of_00004.arrow
-01/13/2025 21:10:35 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00001_of_00004.arrow
-Running tokenizer on train dataset (num_proc=4):   0%|▎                                                                                                                                                 | 42/18135 [00:00<01:55, 156.62 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00002_of_00004.arrow
-01/13/2025 21:10:35 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00002_of_00004.arrow
-Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00003_of_00004.arrow
-01/13/2025 21:10:35 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00003_of_00004.arrow
-Running tokenizer on train dataset (num_proc=4):  40%|█████████████████████████████████████████████████████████▋                                                                                     | 7318/18135 [00:02<00:02, 4644.83 examples/s][rank4]:[W113 21:10:37.211036406 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 4]  using GPU 4 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
-[rank2]:[W113 21:10:37.218718736 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
-[rank6]:[W113 21:10:37.218728795 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 6]  using GPU 6 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
-[rank3]:[W113 21:10:37.221851501 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
-Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3622.04 examples/s]
+01/13/2025 21:39:51 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00001_of_00004.arrow
+Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00002_of_00004.arrow
+01/13/2025 21:39:51 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00002_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4):   0%|▎                                                                                                                                                 | 42/18135 [00:00<01:47, 168.06 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00003_of_00004.arrow
+01/13/2025 21:39:51 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-bab2e02a90e2ed76/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b49d95b9fe96eb10_00003_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4):  15%|█████████████████████▊                                                                                                                         | 2774/18135 [00:00<00:03, 4172.68 examples/s][rank5]:[W113 21:39:52.890207764 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 5]  using GPU 5 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Running tokenizer on train dataset (num_proc=4):  22%|███████████████████████████████▎                                                                                                               | 3972/18135 [00:01<00:05, 2770.64 examples/s][rank1]:[W113 21:39:52.288506560 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank4]:[W113 21:39:52.319429429 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 4]  using GPU 4 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Running tokenizer on train dataset (num_proc=4):  24%|██████████████████████████████████▏                                                                                                            | 4332/18135 [00:01<00:04, 2828.16 examples/s][rank7]:[W113 21:39:52.339789096 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 7]  using GPU 7 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank2]:[W113 21:39:52.360075274 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3648.71 examples/s]
 Concatenating 4 shards
-01/13/2025 21:10:40 - INFO - datasets.arrow_dataset - Concatenating 4 shards
-[rank0]:[W113 21:10:41.867995574 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
-Running tokenizer on train dataset (num_proc=4):   0%|                                                                                                                                                            | 0/18135 [00:00<?, ? examples/s]Using custom data configuration default-cbfc9467ee23e983
-01/13/2025 21:10:46 - INFO - datasets.builder - Using custom data configuration default-cbfc9467ee23e983
+01/13/2025 21:39:56 - INFO - datasets.arrow_dataset - Concatenating 4 shards
+[rank0]:[W113 21:39:56.114221483 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Running tokenizer on train dataset (num_proc=4):   0%|▎                                                                                                                                                 | 42/18135 [00:00<01:45, 171.29 examples/s]Using custom data configuration default-cbfc9467ee23e983
+01/13/2025 21:40:04 - INFO - datasets.builder - Using custom data configuration default-cbfc9467ee23e983
 Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP/lib/python3.12/site-packages/datasets/packaged_modules/json
-01/13/2025 21:10:46 - INFO - datasets.info - Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP/lib/python3.12/site-packages/datasets/packaged_modules/json
+01/13/2025 21:40:04 - INFO - datasets.info - Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP/lib/python3.12/site-packages/datasets/packaged_modules/json
 Overwrite dataset info from restored data version if exists.
-01/13/2025 21:10:46 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+01/13/2025 21:40:04 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
 Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
-01/13/2025 21:10:46 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/13/2025 21:40:04 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
 Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
-01/13/2025 21:10:46 - INFO - datasets.builder - Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+01/13/2025 21:40:04 - INFO - datasets.builder - Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
 Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
-01/13/2025 21:10:46 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
-01/13/2025 21:10:46 - INFO - __main__ - Use data/gner/zero-shot-test-min.jsonl as valid dataset, len(dataset) = 65
-Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00000_of_00004.arrow
-01/13/2025 21:10:46 - INFO - datasets.arrow_dataset - Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00000_of_00004.arrow
+01/13/2025 21:40:04 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+01/13/2025 21:40:04 - INFO - __main__ - Use data/gner/zero-shot-test-min.jsonl as valid dataset, len(dataset) = 65
+Running tokenizer on train dataset (num_proc=4):   0%|                                                                                                                                                            | 0/18135 [00:00<?, ? examples/s]Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00000_of_00004.arrow
+01/13/2025 21:40:04 - INFO - datasets.arrow_dataset - Process #0 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00000_of_00004.arrow
 Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00001_of_00004.arrow
-01/13/2025 21:10:46 - INFO - datasets.arrow_dataset - Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00001_of_00004.arrow
+01/13/2025 21:40:04 - INFO - datasets.arrow_dataset - Process #1 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00001_of_00004.arrow
 Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00002_of_00004.arrow
-01/13/2025 21:10:46 - INFO - datasets.arrow_dataset - Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00002_of_00004.arrow
+01/13/2025 21:40:04 - INFO - datasets.arrow_dataset - Process #2 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00002_of_00004.arrow
 Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00003_of_00004.arrow
-01/13/2025 21:10:46 - INFO - datasets.arrow_dataset - Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00003_of_00004.arrow
-Running tokenizer on train dataset (num_proc=4):   5%|███████                                                                                                                                         | 889/18135 [00:00<00:07, 2269.11 examples/s]Spawning 4 processes
-01/13/2025 21:10:47 - INFO - datasets.arrow_dataset - Spawning 4 processes
-Running tokenizer on train dataset (num_proc=4):  15%|█████████████████████▌                                                                                                                         | 2727/18135 [00:01<00:08, 1731.10 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00000_of_00004.arrow
-01/13/2025 21:10:47 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00000_of_00004.arrow
-Running tokenizer on validation dataset (num_proc=4):  26%|█████████████████████████████████████▉                                                                                                           | 17/65 [00:00<00:02, 21.01 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00001_of_00004.arrow
-01/13/2025 21:10:47 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00001_of_00004.arrow
-Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00002_of_00004.arrow
-01/13/2025 21:10:47 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00002_of_00004.arrow
-Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00003_of_00004.arrow
-01/13/2025 21:10:48 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00003_of_00004.arrow
-Running tokenizer on validation dataset (num_proc=4): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:01<00:00, 59.45 examples/s]
-Running tokenizer on train dataset (num_proc=4):  27%|█████████████████████████████████████▉                                                                                                         | 4806/18135 [00:01<00:04, 3270.56 examples/s]Concatenating 4 shards
-01/13/2025 21:10:48 - INFO - datasets.arrow_dataset - Concatenating 4 shards
-Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3417.57 examples/s]
-Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3390.39 examples/s]
-Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3358.46 examples/s]
-Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3309.78 examples/s]
-Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3301.46 examples/s]
-Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3157.83 examples/s]
-Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3175.53 examples/s]
-[INFO|trainer.py:741] 2025-01-13 21:10:53,201 >> Using auto half precision backend
-[2025-01-13 21:10:53,392] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed info: version=0.15.4, git-hash=unknown, git-branch=unknown
-[2025-01-13 21:10:53,393] [INFO] [config.py:733:__init__] Config mesh_device None world_size = 8
-Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 106.62 examples/s]
-Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 107.15 examples/s]
-Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 105.51 examples/s]
-Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 101.06 examples/s]
-Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 100.53 examples/s]
-Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 111.47 examples/s]
-Running tokenizer on validation dataset (num_proc=4): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 94.15 examples/s]
-[2025-01-13 21:11:13,099] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Flops Profiler Enabled: False
-[2025-01-13 21:11:13,110] [INFO] [logging.py:128:log_dist] [Rank 0] Using DeepSpeed Optimizer param name adamw as basic optimizer
-[2025-01-13 21:11:13,110] [INFO] [logging.py:128:log_dist] [Rank 0] Removing param_group that has no 'params' in the basic Optimizer
-[2025-01-13 21:11:13,119] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Basic Optimizer = FusedAdam
-[2025-01-13 21:11:13,119] [INFO] [utils.py:59:is_zero_supported_optimizer] Checking ZeRO support for optimizer=FusedAdam type=<class 'deepspeed.ops.adam.fused_adam.FusedAdam'>
-[2025-01-13 21:11:13,119] [INFO] [logging.py:128:log_dist] [Rank 0] Creating torch.bfloat16 ZeRO stage 1 optimizer
-[2025-01-13 21:11:13,119] [INFO] [stage_1_and_2.py:149:__init__] Reduce bucket size 200000000
-[2025-01-13 21:11:13,119] [INFO] [stage_1_and_2.py:150:__init__] Allgather bucket size 200000000
-[2025-01-13 21:11:13,119] [INFO] [stage_1_and_2.py:151:__init__] CPU Offload: False
-[2025-01-13 21:11:13,119] [INFO] [stage_1_and_2.py:152:__init__] Round robin gradient partitioning: False
-[2025-01-13 21:11:22,823] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
-[WARNING|logging.py:328] 2025-01-13 21:11:22,856 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[2025-01-13 21:11:23,554] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
-[WARNING|logging.py:328] 2025-01-13 21:11:23,591 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[2025-01-13 21:11:23,772] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
-[WARNING|logging.py:328] 2025-01-13 21:11:23,805 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[2025-01-13 21:11:23,823] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
-[WARNING|logging.py:328] 2025-01-13 21:11:23,856 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[2025-01-13 21:11:24,230] [INFO] [utils.py:781:see_memory_usage] Before initializing optimizer states
-[2025-01-13 21:11:24,231] [INFO] [utils.py:782:see_memory_usage] MA 3.22 GB         Max_MA 3.53 GB         CA 3.71 GB         Max_CA 4 GB
-[2025-01-13 21:11:24,231] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 52.9 GB, percent = 5.2%
-[2025-01-13 21:11:24,723] [INFO] [utils.py:781:see_memory_usage] After initializing optimizer states
-[2025-01-13 21:11:24,724] [INFO] [utils.py:782:see_memory_usage] MA 3.22 GB         Max_MA 3.84 GB         CA 4.34 GB         Max_CA 4 GB
-[2025-01-13 21:11:24,724] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 49.94 GB, percent = 5.0%
-[2025-01-13 21:11:24,724] [INFO] [stage_1_and_2.py:544:__init__] optimizer state initialized
-[2025-01-13 21:11:24,882] [INFO] [utils.py:781:see_memory_usage] After initializing ZeRO optimizer
-[2025-01-13 21:11:24,883] [INFO] [utils.py:782:see_memory_usage] MA 3.22 GB         Max_MA 3.22 GB         CA 4.34 GB         Max_CA 4 GB
-[2025-01-13 21:11:24,883] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 48.28 GB, percent = 4.8%
-[2025-01-13 21:11:24,884] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Final Optimizer = DeepSpeedZeroOptimizer
-[2025-01-13 21:11:24,884] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
-[2025-01-13 21:11:24,884] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed using configured LR scheduler = WarmupDecayLR
-[2025-01-13 21:11:24,885] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed LR Scheduler = <deepspeed.runtime.lr_schedules.WarmupDecayLR object at 0x7f49916f07a0>
-[2025-01-13 21:11:24,885] [INFO] [logging.py:128:log_dist] [Rank 0] step=0, skipped=0, lr=[0], mom=[[0.9, 0.999]]
-[2025-01-13 21:11:24,885] [INFO] [config.py:999:print] DeepSpeedEngine configuration:
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   activation_checkpointing_config  {
+01/13/2025 21:40:04 - INFO - datasets.arrow_dataset - Process #3 will write at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00003_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4):   5%|██████▉                                                                                                                                         | 877/18135 [00:00<00:07, 2298.78 examples/s]Spawning 4 processes
+01/13/2025 21:40:04 - INFO - datasets.arrow_dataset - Spawning 4 processes
+Running tokenizer on train dataset (num_proc=4):  17%|████████████████████████▏                                                                                                                      | 3071/18135 [00:01<00:06, 2205.07 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00000_of_00004.arrow
+01/13/2025 21:40:05 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00000_of_00004.arrow
+Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00001_of_00004.arrow
+01/13/2025 21:40:05 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00001_of_00004.arrow
+Running tokenizer on validation dataset (num_proc=4):  26%|█████████████████████████████████████▉                                                                                                           | 17/65 [00:00<00:02, 19.07 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00002_of_00004.arrow
+01/13/2025 21:40:05 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00002_of_00004.arrow
+Running tokenizer on train dataset (num_proc=4):  20%|████████████████████████████▏                                                                                                                  | 3577/18135 [00:01<00:05, 2758.55 examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00003_of_00004.arrow
+01/13/2025 21:40:05 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-cbfc9467ee23e983/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-182ce941750c3eea_00003_of_00004.arrow
+Running tokenizer on validation dataset (num_proc=4): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:01<00:00, 57.39 examples/s]
+Running tokenizer on train dataset (num_proc=4):  26%|█████████████████████████████████████▊                                                                                                         | 4796/18135 [00:01<00:04, 3142.04 examples/s]Concatenating 4 shards
+01/13/2025 21:40:05 - INFO - datasets.arrow_dataset - Concatenating 4 shards
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3508.32 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3490.20 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3419.99 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3421.05 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3328.74 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3300.24 examples/s]
+Running tokenizer on train dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3201.72 examples/s]
+[INFO|trainer.py:741] 2025-01-13 21:40:10,643 >> Using auto half precision backend
+[2025-01-13 21:40:10,843] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed info: version=0.15.4, git-hash=unknown, git-branch=unknown
+[2025-01-13 21:40:10,843] [INFO] [config.py:733:__init__] Config mesh_device None world_size = 8
+Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 139.65 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 101.29 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 107.12 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 105.29 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 105.03 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 104.04 examples/s]
+Running tokenizer on validation dataset (num_proc=4): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 85.93 examples/s]
+[2025-01-13 21:40:28,161] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Flops Profiler Enabled: False
+[2025-01-13 21:40:28,164] [INFO] [logging.py:128:log_dist] [Rank 0] Using DeepSpeed Optimizer param name adamw as basic optimizer
+[2025-01-13 21:40:28,164] [INFO] [logging.py:128:log_dist] [Rank 0] Removing param_group that has no 'params' in the basic Optimizer
+[2025-01-13 21:40:28,173] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Basic Optimizer = FusedAdam
+[2025-01-13 21:40:28,173] [INFO] [utils.py:59:is_zero_supported_optimizer] Checking ZeRO support for optimizer=FusedAdam type=<class 'deepspeed.ops.adam.fused_adam.FusedAdam'>
+[2025-01-13 21:40:28,173] [INFO] [logging.py:128:log_dist] [Rank 0] Creating torch.bfloat16 ZeRO stage 1 optimizer
+[2025-01-13 21:40:28,173] [INFO] [stage_1_and_2.py:149:__init__] Reduce bucket size 200000000
+[2025-01-13 21:40:28,173] [INFO] [stage_1_and_2.py:150:__init__] Allgather bucket size 200000000
+[2025-01-13 21:40:28,173] [INFO] [stage_1_and_2.py:151:__init__] CPU Offload: False
+[2025-01-13 21:40:28,173] [INFO] [stage_1_and_2.py:152:__init__] Round robin gradient partitioning: False
+[2025-01-13 21:40:37,671] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
+[WARNING|logging.py:328] 2025-01-13 21:40:37,703 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[2025-01-13 21:40:37,904] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
+[WARNING|logging.py:328] 2025-01-13 21:40:37,936 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[2025-01-13 21:40:38,072] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
+[WARNING|logging.py:328] 2025-01-13 21:40:38,103 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[2025-01-13 21:40:38,142] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
+[2025-01-13 21:40:38,164] [INFO] [utils.py:781:see_memory_usage] Before initializing optimizer states
+[2025-01-13 21:40:38,164] [INFO] [utils.py:782:see_memory_usage] MA 3.22 GB         Max_MA 3.53 GB         CA 3.71 GB         Max_CA 4 GB
+[2025-01-13 21:40:38,164] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 51.89 GB, percent = 5.1%
+[2025-01-13 21:40:38,171] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
+[WARNING|logging.py:328] 2025-01-13 21:40:38,173 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-13 21:40:38,202 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[2025-01-13 21:40:38,319] [INFO] [utils.py:781:see_memory_usage] After initializing optimizer states
+[2025-01-13 21:40:38,320] [INFO] [utils.py:782:see_memory_usage] MA 3.22 GB         Max_MA 3.84 GB         CA 4.34 GB         Max_CA 4 GB
+[2025-01-13 21:40:38,320] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 51.9 GB, percent = 5.2%
+[2025-01-13 21:40:38,320] [INFO] [stage_1_and_2.py:544:__init__] optimizer state initialized
+[2025-01-13 21:40:38,469] [INFO] [utils.py:781:see_memory_usage] After initializing ZeRO optimizer
+[2025-01-13 21:40:38,469] [INFO] [utils.py:782:see_memory_usage] MA 3.22 GB         Max_MA 3.22 GB         CA 4.34 GB         Max_CA 4 GB
+[2025-01-13 21:40:38,470] [INFO] [utils.py:789:see_memory_usage] CPU Virtual Memory:  used = 51.95 GB, percent = 5.2%
+[2025-01-13 21:40:38,471] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed Final Optimizer = DeepSpeedZeroOptimizer
+[2025-01-13 21:40:38,471] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
+[2025-01-13 21:40:38,471] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed using configured LR scheduler = WarmupDecayLR
+[2025-01-13 21:40:38,471] [INFO] [logging.py:128:log_dist] [Rank 0] DeepSpeed LR Scheduler = <deepspeed.runtime.lr_schedules.WarmupDecayLR object at 0x7f3eb4f43290>
+[2025-01-13 21:40:38,471] [INFO] [logging.py:128:log_dist] [Rank 0] step=0, skipped=0, lr=[0], mom=[[0.9, 0.999]]
+[2025-01-13 21:40:38,472] [INFO] [config.py:999:print] DeepSpeedEngine configuration:
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   activation_checkpointing_config  {
     "partition_activations": false,
     "contiguous_memory_optimization": false,
     "cpu_checkpointing": false,
@@ -466,10 +468,10 @@ Running tokenizer on validation dataset (num_proc=4): 100%|███████
     "synchronize_checkpoint_boundary": false,
     "profile": false
 }
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   aio_config ................... {'block_size': 1048576, 'queue_depth': 8, 'thread_count': 1, 'single_submit': False, 'overlap_events': True, 'use_gds': False}
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   amp_enabled .................. False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   amp_params ................... False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   autotuning_config ............ {
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   aio_config ................... {'block_size': 1048576, 'queue_depth': 8, 'thread_count': 1, 'single_submit': False, 'overlap_events': True, 'use_gds': False}
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   amp_enabled .................. False
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   amp_params ................... False
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   autotuning_config ............ {
     "enabled": false,
     "start_step": null,
     "end_step": null,
@@ -494,32 +496,32 @@ Running tokenizer on validation dataset (num_proc=4): 100%|███████
     "min_train_micro_batch_size_per_gpu": 1,
     "num_tuning_micro_batch_sizes": 3
 }
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   bfloat16_enabled ............. True
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   bfloat16_immediate_grad_update  False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   checkpoint_parallel_write_pipeline  False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   checkpoint_tag_validation_enabled  True
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   checkpoint_tag_validation_fail  False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   comms_config ................. <deepspeed.comm.config.DeepSpeedCommsConfig object at 0x7f49772476b0>
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   communication_data_type ...... None
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   compression_config ........... {'weight_quantization': {'shared_parameters': {'enabled': False, 'quantizer_kernel': False, 'schedule_offset': 0, 'quantize_groups': 1, 'quantize_verbose': False, 'quantization_type': 'symmetric', 'quantize_weight_in_forward': False, 'rounding': 'nearest', 'fp16_mixed_quantize': False, 'quantize_change_ratio': 0.001}, 'different_groups': {}}, 'activation_quantization': {'shared_parameters': {'enabled': False, 'quantization_type': 'symmetric', 'range_calibration': 'dynamic', 'schedule_offset': 1000}, 'different_groups': {}}, 'sparse_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'row_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'head_pruning': {'shared_parameters': {'enabled': False, 'method': 'topk', 'schedule_offset': 1000}, 'different_groups': {}}, 'channel_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'layer_reduction': {'enabled': False}}
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   curriculum_enabled_legacy .... False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   curriculum_params_legacy ..... False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   data_efficiency_config ....... {'enabled': False, 'seed': 1234, 'data_sampling': {'enabled': False, 'num_epochs': 1000, 'num_workers': 0, 'curriculum_learning': {'enabled': False}}, 'data_routing': {'enabled': False, 'random_ltd': {'enabled': False, 'layer_token_lr_schedule': {'enabled': False}}}}
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   data_efficiency_enabled ...... False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   dataloader_drop_last ......... False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   disable_allgather ............ False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   dump_state ................... False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   dynamic_loss_scale_args ...... None
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   eigenvalue_enabled ........... False
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   eigenvalue_gas_boundary_resolution  1
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   eigenvalue_layer_name ........ bert.encoder.layer
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   eigenvalue_layer_num ......... 0
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   eigenvalue_max_iter .......... 100
-[2025-01-13 21:11:24,886] [INFO] [config.py:1003:print]   eigenvalue_stability ......... 1e-06
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   eigenvalue_tol ............... 0.01
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   eigenvalue_verbose ........... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   elasticity_enabled ........... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   flops_profiler_config ........ {
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   bfloat16_enabled ............. True
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   bfloat16_immediate_grad_update  False
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   checkpoint_parallel_write_pipeline  False
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   checkpoint_tag_validation_enabled  True
+[2025-01-13 21:40:38,472] [INFO] [config.py:1003:print]   checkpoint_tag_validation_fail  False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   comms_config ................. <deepspeed.comm.config.DeepSpeedCommsConfig object at 0x7f3eb4f99d90>
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   communication_data_type ...... None
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   compression_config ........... {'weight_quantization': {'shared_parameters': {'enabled': False, 'quantizer_kernel': False, 'schedule_offset': 0, 'quantize_groups': 1, 'quantize_verbose': False, 'quantization_type': 'symmetric', 'quantize_weight_in_forward': False, 'rounding': 'nearest', 'fp16_mixed_quantize': False, 'quantize_change_ratio': 0.001}, 'different_groups': {}}, 'activation_quantization': {'shared_parameters': {'enabled': False, 'quantization_type': 'symmetric', 'range_calibration': 'dynamic', 'schedule_offset': 1000}, 'different_groups': {}}, 'sparse_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'row_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'head_pruning': {'shared_parameters': {'enabled': False, 'method': 'topk', 'schedule_offset': 1000}, 'different_groups': {}}, 'channel_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'layer_reduction': {'enabled': False}}
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   curriculum_enabled_legacy .... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   curriculum_params_legacy ..... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   data_efficiency_config ....... {'enabled': False, 'seed': 1234, 'data_sampling': {'enabled': False, 'num_epochs': 1000, 'num_workers': 0, 'curriculum_learning': {'enabled': False}}, 'data_routing': {'enabled': False, 'random_ltd': {'enabled': False, 'layer_token_lr_schedule': {'enabled': False}}}}
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   data_efficiency_enabled ...... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   dataloader_drop_last ......... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   disable_allgather ............ False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   dump_state ................... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   dynamic_loss_scale_args ...... None
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   eigenvalue_enabled ........... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   eigenvalue_gas_boundary_resolution  1
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   eigenvalue_layer_name ........ bert.encoder.layer
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   eigenvalue_layer_num ......... 0
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   eigenvalue_max_iter .......... 100
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   eigenvalue_stability ......... 1e-06
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   eigenvalue_tol ............... 0.01
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   eigenvalue_verbose ........... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   elasticity_enabled ........... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   flops_profiler_config ........ {
     "enabled": false,
     "recompute_fwd_factor": 0.0,
     "profile_step": 1,
@@ -528,24 +530,24 @@ Running tokenizer on validation dataset (num_proc=4): 100%|███████
     "detailed": true,
     "output_file": null
 }
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   fp16_auto_cast ............... None
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   fp16_enabled ................. False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   fp16_master_weights_and_gradients  False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   global_rank .................. 0
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   grad_accum_dtype ............. None
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   gradient_accumulation_steps .. 4
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   gradient_clipping ............ 1.0
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   gradient_predivide_factor .... 1.0
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   graph_harvesting ............. False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   hybrid_engine ................ enabled=False max_out_tokens=512 inference_tp_size=1 release_inference_cache=False pin_parameters=True tp_gather_partition_size=8
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   initial_dynamic_scale ........ 1
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   load_universal_checkpoint .... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   loss_scale ................... 1.0
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   memory_breakdown ............. False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   mics_hierarchial_params_gather  False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   mics_shard_size .............. -1
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   monitor_config ............... tensorboard=TensorBoardConfig(enabled=False, output_path='', job_name='DeepSpeedJobName') comet=CometConfig(enabled=False, samples_log_interval=100, project=None, workspace=None, api_key=None, experiment_name=None, experiment_key=None, online=None, mode=None) wandb=WandbConfig(enabled=False, group=None, team=None, project='deepspeed') csv_monitor=CSVConfig(enabled=False, output_path='', job_name='DeepSpeedJobName')
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   nebula_config ................ {
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   fp16_auto_cast ............... None
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   fp16_enabled ................. False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   fp16_master_weights_and_gradients  False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   global_rank .................. 0
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   grad_accum_dtype ............. None
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   gradient_accumulation_steps .. 4
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   gradient_clipping ............ 1.0
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   gradient_predivide_factor .... 1.0
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   graph_harvesting ............. False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   hybrid_engine ................ enabled=False max_out_tokens=512 inference_tp_size=1 release_inference_cache=False pin_parameters=True tp_gather_partition_size=8
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   initial_dynamic_scale ........ 1
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   load_universal_checkpoint .... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   loss_scale ................... 1.0
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   memory_breakdown ............. False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   mics_hierarchial_params_gather  False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   mics_shard_size .............. -1
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   monitor_config ............... tensorboard=TensorBoardConfig(enabled=False, output_path='', job_name='DeepSpeedJobName') comet=CometConfig(enabled=False, samples_log_interval=100, project=None, workspace=None, api_key=None, experiment_name=None, experiment_key=None, online=None, mode=None) wandb=WandbConfig(enabled=False, group=None, team=None, project='deepspeed') csv_monitor=CSVConfig(enabled=False, output_path='', job_name='DeepSpeedJobName')
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   nebula_config ................ {
     "enabled": false,
     "persistent_storage_path": null,
     "persistent_time_interval": 100,
@@ -553,33 +555,33 @@ Running tokenizer on validation dataset (num_proc=4): 100%|███████
     "enable_nebula_load": true,
     "load_path": null
 }
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   optimizer_legacy_fusion ...... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   optimizer_name ............... adamw
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   optimizer_params ............. {'lr': 2e-05, 'betas': [0.9, 0.999], 'eps': 1e-08, 'weight_decay': 0.0}
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   pipeline ..................... {'stages': 'auto', 'partition': 'best', 'seed_layers': False, 'activation_checkpoint_interval': 0, 'pipe_partitioned': True, 'grad_partitioned': True}
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   pld_enabled .................. False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   pld_params ................... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   prescale_gradients ........... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   scheduler_name ............... WarmupDecayLR
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   scheduler_params ............. {'warmup_min_lr': 0, 'warmup_max_lr': 2e-05, 'warmup_num_steps': 2, 'total_num_steps': 36}
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   seq_parallel_communication_data_type  torch.float32
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   sparse_attention ............. None
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   sparse_gradients_enabled ..... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   steps_per_print .............. inf
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   timers_config ................ enabled=True synchronized=True
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   train_batch_size ............. 256
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   train_micro_batch_size_per_gpu  8
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   use_data_before_expert_parallel_  False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   use_node_local_storage ....... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   wall_clock_breakdown ......... False
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   weight_quantization_config ... None
-[2025-01-13 21:11:24,887] [INFO] [config.py:1003:print]   world_size ................... 8
-[2025-01-13 21:11:24,888] [INFO] [config.py:1003:print]   zero_allow_untested_optimizer  False
-[2025-01-13 21:11:24,888] [INFO] [config.py:1003:print]   zero_config .................. stage=1 contiguous_gradients=True reduce_scatter=True reduce_bucket_size=200000000 use_multi_rank_bucket_allreduce=True allgather_partitions=True allgather_bucket_size=200000000 overlap_comm=True load_from_fp32_weights=True elastic_checkpoint=False offload_param=None offload_optimizer=None sub_group_size=1000000000 cpu_offload_param=None cpu_offload_use_pin_memory=None cpu_offload=None prefetch_bucket_size=50000000 param_persistence_threshold=100000 model_persistence_threshold=9223372036854775807 max_live_parameters=1000000000 max_reuse_distance=1000000000 gather_16bit_weights_on_model_save=False use_all_reduce_for_fetch_params=False stage3_gather_fp16_weights_on_model_save=False ignore_unused_parameters=True legacy_stage1=False round_robin_gradients=False zero_hpz_partition_size=1 zero_quantized_weights=False zero_quantized_nontrainable_weights=False zero_quantized_gradients=False mics_shard_size=-1 mics_hierarchical_params_gather=False memory_efficient_linear=True pipeline_loading_checkpoint=False override_module_apply=True
-[2025-01-13 21:11:24,888] [INFO] [config.py:1003:print]   zero_enabled ................. True
-[2025-01-13 21:11:24,888] [INFO] [config.py:1003:print]   zero_force_ds_cpu_optimizer .. True
-[2025-01-13 21:11:24,888] [INFO] [config.py:1003:print]   zero_optimization_stage ...... 1
-[2025-01-13 21:11:24,888] [INFO] [config.py:989:print_user_config]   json = {
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   optimizer_legacy_fusion ...... False
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   optimizer_name ............... adamw
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   optimizer_params ............. {'lr': 2e-05, 'betas': [0.9, 0.999], 'eps': 1e-08, 'weight_decay': 0.0}
+[2025-01-13 21:40:38,473] [INFO] [config.py:1003:print]   pipeline ..................... {'stages': 'auto', 'partition': 'best', 'seed_layers': False, 'activation_checkpoint_interval': 0, 'pipe_partitioned': True, 'grad_partitioned': True}
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   pld_enabled .................. False
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   pld_params ................... False
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   prescale_gradients ........... False
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   scheduler_name ............... WarmupDecayLR
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   scheduler_params ............. {'warmup_min_lr': 0, 'warmup_max_lr': 2e-05, 'warmup_num_steps': 2, 'total_num_steps': 36}
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   seq_parallel_communication_data_type  torch.float32
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   sparse_attention ............. None
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   sparse_gradients_enabled ..... False
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   steps_per_print .............. inf
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   timers_config ................ enabled=True synchronized=True
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   train_batch_size ............. 256
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   train_micro_batch_size_per_gpu  8
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   use_data_before_expert_parallel_  False
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   use_node_local_storage ....... False
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   wall_clock_breakdown ......... False
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   weight_quantization_config ... None
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   world_size ................... 8
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   zero_allow_untested_optimizer  False
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   zero_config .................. stage=1 contiguous_gradients=True reduce_scatter=True reduce_bucket_size=200000000 use_multi_rank_bucket_allreduce=True allgather_partitions=True allgather_bucket_size=200000000 overlap_comm=True load_from_fp32_weights=True elastic_checkpoint=False offload_param=None offload_optimizer=None sub_group_size=1000000000 cpu_offload_param=None cpu_offload_use_pin_memory=None cpu_offload=None prefetch_bucket_size=50000000 param_persistence_threshold=100000 model_persistence_threshold=9223372036854775807 max_live_parameters=1000000000 max_reuse_distance=1000000000 gather_16bit_weights_on_model_save=False use_all_reduce_for_fetch_params=False stage3_gather_fp16_weights_on_model_save=False ignore_unused_parameters=True legacy_stage1=False round_robin_gradients=False zero_hpz_partition_size=1 zero_quantized_weights=False zero_quantized_nontrainable_weights=False zero_quantized_gradients=False mics_shard_size=-1 mics_hierarchical_params_gather=False memory_efficient_linear=True pipeline_loading_checkpoint=False override_module_apply=True
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   zero_enabled ................. True
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   zero_force_ds_cpu_optimizer .. True
+[2025-01-13 21:40:38,474] [INFO] [config.py:1003:print]   zero_optimization_stage ...... 1
+[2025-01-13 21:40:38,474] [INFO] [config.py:989:print_user_config]   json = {
     "bf16": {
         "enabled": true
     },
@@ -619,72 +621,70 @@ Running tokenizer on validation dataset (num_proc=4): 100%|███████
         "enabled": false
     }
 }
-[INFO|trainer.py:2369] 2025-01-13 21:11:24,889 >> ***** Running training *****
-[INFO|trainer.py:2370] 2025-01-13 21:11:24,889 >>   Num examples = 18,135
-[INFO|trainer.py:2371] 2025-01-13 21:11:24,889 >>   Num Epochs = 1
-[INFO|trainer.py:2372] 2025-01-13 21:11:24,889 >>   Instantaneous batch size per device = 8
-[INFO|trainer.py:2375] 2025-01-13 21:11:24,889 >>   Total train batch size (w. parallel, distributed & accumulation) = 256
-[INFO|trainer.py:2376] 2025-01-13 21:11:24,889 >>   Gradient Accumulation steps = 4
-[INFO|trainer.py:2377] 2025-01-13 21:11:24,889 >>   Total optimization steps = 36
-[INFO|trainer.py:2378] 2025-01-13 21:11:24,890 >>   Number of trainable parameters = 1,341,247,488
-  0%|                                                                                                                                                                                                                       | 0/36 [00:00<?, ?it/s][WARNING|logging.py:328] 2025-01-13 21:11:24,924 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[2025-01-13 21:11:25,243] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
-[WARNING|logging.py:328] 2025-01-13 21:11:25,274 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[2025-01-13 21:11:25,502] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
-[WARNING|logging.py:328] 2025-01-13 21:11:25,532 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[2025-01-13 21:11:26,029] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
-[WARNING|logging.py:328] 2025-01-13 21:11:26,063 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-{'loss': 0.8358, 'grad_norm': 0.48784685134887695, 'learning_rate': 1.5882352941176473e-05, 'epoch': 0.14}
-{'loss': 0.1194, 'grad_norm': 0.41371801495552063, 'learning_rate': 1e-05, 'epoch': 0.28}
-{'loss': 0.0701, 'grad_norm': 0.12175389379262924, 'learning_rate': 4.11764705882353e-06, 'epoch': 0.42}
-100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 36/36 [00:44<00:00,  1.09s/it][INFO|trainer.py:3913] 2025-01-13 21:12:10,251 >> Saving model checkpoint to output/GNER/EAGLE-1B-supervised/checkpoint-36
-[INFO|configuration_utils.py:420] 2025-01-13 21:12:10,253 >> Configuration saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/config.json
-[INFO|configuration_utils.py:909] 2025-01-13 21:12:10,254 >> Configuration saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/generation_config.json
-[INFO|modeling_utils.py:2988] 2025-01-13 21:12:12,792 >> Model weights saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/model.safetensors
-[INFO|tokenization_utils_base.py:2491] 2025-01-13 21:12:12,792 >> tokenizer config file saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/tokenizer_config.json
-[INFO|tokenization_utils_base.py:2500] 2025-01-13 21:12:12,793 >> Special tokens file saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/special_tokens_map.json
-[2025-01-13 21:12:12,906] [INFO] [logging.py:128:log_dist] [Rank 0] [Torch] Checkpoint global_step36 is about to be saved!
-[2025-01-13 21:12:12,911] [INFO] [logging.py:128:log_dist] [Rank 0] Saving model checkpoint: output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt
-[2025-01-13 21:12:12,911] [INFO] [torch_checkpoint_engine.py:21:save] [Torch] Saving output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt...
-[2025-01-13 21:12:16,668] [INFO] [torch_checkpoint_engine.py:23:save] [Torch] Saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt.
-[2025-01-13 21:12:16,671] [INFO] [torch_checkpoint_engine.py:21:save] [Torch] Saving output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt...
-[2025-01-13 21:12:20,570] [INFO] [torch_checkpoint_engine.py:23:save] [Torch] Saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt.
-[2025-01-13 21:12:20,570] [INFO] [engine.py:3536:_save_zero_checkpoint] zero checkpoint saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
-[2025-01-13 21:12:20,571] [INFO] [torch_checkpoint_engine.py:33:commit] [Torch] Checkpoint global_step36 is ready now!
-[INFO|gner_trainer.py:60] 2025-01-13 21:12:20,574 >> ***** Running Evaluation *****
-[INFO|gner_trainer.py:62] 2025-01-13 21:12:20,574 >>   Num examples = 65
-[INFO|gner_trainer.py:65] 2025-01-13 21:12:20,574 >>   Batch size = 8
-{'eval_crossner_ai_prec': 0.272189349112265, 'eval_crossner_ai_rec': 0.2062780269057371, 'eval_crossner_ai_f1': 0.2346938775018495, 'eval_AVERAGE_f1': 0.2346938775018495, 'eval_runtime': 34.7905, 'eval_samples_per_second': 1.868, 'eval_steps_per_second': 0.057, 'epoch': 0.51}
-100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 36/36 [01:30<00:00,  1.09s/it]
-[INFO|trainer.py:3913] 2025-01-13 21:12:56,682 >> Saving model checkpoint to output/GNER/EAGLE-1B-supervised/checkpoint-36
-[INFO|configuration_utils.py:420] 2025-01-13 21:12:56,685 >> Configuration saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/config.json
-[INFO|configuration_utils.py:909] 2025-01-13 21:12:56,685 >> Configuration saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/generation_config.json
-[INFO|modeling_utils.py:2988] 2025-01-13 21:12:59,962 >> Model weights saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/model.safetensors
-[INFO|tokenization_utils_base.py:2491] 2025-01-13 21:12:59,963 >> tokenizer config file saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/tokenizer_config.json
-[INFO|tokenization_utils_base.py:2500] 2025-01-13 21:12:59,963 >> Special tokens file saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/special_tokens_map.json
-[2025-01-13 21:13:00,074] [INFO] [logging.py:128:log_dist] [Rank 0] [Torch] Checkpoint global_step36 is about to be saved!
-[2025-01-13 21:13:00,079] [INFO] [logging.py:128:log_dist] [Rank 0] Saving model checkpoint: output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt
-[2025-01-13 21:13:00,079] [INFO] [torch_checkpoint_engine.py:21:save] [Torch] Saving output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt...
-[2025-01-13 21:13:04,137] [INFO] [torch_checkpoint_engine.py:23:save] [Torch] Saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt.
-[2025-01-13 21:13:04,141] [INFO] [torch_checkpoint_engine.py:21:save] [Torch] Saving output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt...
-[2025-01-13 21:13:08,996] [INFO] [torch_checkpoint_engine.py:23:save] [Torch] Saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt.
-[2025-01-13 21:13:08,997] [INFO] [engine.py:3536:_save_zero_checkpoint] zero checkpoint saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
-[2025-01-13 21:13:08,997] [INFO] [torch_checkpoint_engine.py:33:commit] [Torch] Checkpoint global_step36 is ready now!
-[INFO|trainer.py:2643] 2025-01-13 21:13:09,025 >>
+[INFO|trainer.py:2369] 2025-01-13 21:40:38,475 >> ***** Running training *****
+[INFO|trainer.py:2370] 2025-01-13 21:40:38,475 >>   Num examples = 18,135
+[INFO|trainer.py:2371] 2025-01-13 21:40:38,475 >>   Num Epochs = 1
+[INFO|trainer.py:2372] 2025-01-13 21:40:38,475 >>   Instantaneous batch size per device = 8
+[INFO|trainer.py:2375] 2025-01-13 21:40:38,475 >>   Total train batch size (w. parallel, distributed & accumulation) = 256
+[INFO|trainer.py:2376] 2025-01-13 21:40:38,475 >>   Gradient Accumulation steps = 4
+[INFO|trainer.py:2377] 2025-01-13 21:40:38,475 >>   Total optimization steps = 36
+[INFO|trainer.py:2378] 2025-01-13 21:40:38,476 >>   Number of trainable parameters = 1,341,247,488
+  0%|                                                                                                                                                                                                                       | 0/36 [00:00<?, ?it/s][WARNING|logging.py:328] 2025-01-13 21:40:38,510 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[2025-01-13 21:40:40,733] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
+[2025-01-13 21:40:40,734] [WARNING] [lr_schedules.py:683:get_lr] Attempting to get learning rate from scheduler before it has started
+[WARNING|logging.py:328] 2025-01-13 21:40:40,769 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[WARNING|logging.py:328] 2025-01-13 21:40:40,769 >> `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+{'loss': 0.8341, 'grad_norm': 0.4504877030849457, 'learning_rate': 1.5882352941176473e-05, 'epoch': 0.14}
+{'loss': 0.1172, 'grad_norm': 0.3208780586719513, 'learning_rate': 1e-05, 'epoch': 0.28}
+{'loss': 0.0696, 'grad_norm': 0.1105474978685379, 'learning_rate': 4.11764705882353e-06, 'epoch': 0.42}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 36/36 [00:47<00:00,  1.09s/it][INFO|trainer.py:3913] 2025-01-13 21:41:27,235 >> Saving model checkpoint to output/GNER/EAGLE-1B-supervised/checkpoint-36
+[INFO|configuration_utils.py:420] 2025-01-13 21:41:27,237 >> Configuration saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/config.json
+[INFO|configuration_utils.py:909] 2025-01-13 21:41:27,238 >> Configuration saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/generation_config.json
+[INFO|modeling_utils.py:2988] 2025-01-13 21:41:30,511 >> Model weights saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/model.safetensors
+[INFO|tokenization_utils_base.py:2491] 2025-01-13 21:41:30,514 >> tokenizer config file saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2500] 2025-01-13 21:41:30,514 >> Special tokens file saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/special_tokens_map.json
+[2025-01-13 21:41:30,633] [INFO] [logging.py:128:log_dist] [Rank 0] [Torch] Checkpoint global_step36 is about to be saved!
+[2025-01-13 21:41:30,639] [INFO] [logging.py:128:log_dist] [Rank 0] Saving model checkpoint: output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt
+[2025-01-13 21:41:30,639] [INFO] [torch_checkpoint_engine.py:21:save] [Torch] Saving output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt...
+[2025-01-13 21:41:34,774] [INFO] [torch_checkpoint_engine.py:23:save] [Torch] Saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt.
+[2025-01-13 21:41:34,777] [INFO] [torch_checkpoint_engine.py:21:save] [Torch] Saving output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt...
+[2025-01-13 21:41:39,128] [INFO] [torch_checkpoint_engine.py:23:save] [Torch] Saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt.
+[2025-01-13 21:41:39,128] [INFO] [engine.py:3536:_save_zero_checkpoint] zero checkpoint saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+[2025-01-13 21:41:39,128] [INFO] [torch_checkpoint_engine.py:33:commit] [Torch] Checkpoint global_step36 is ready now!
+[INFO|gner_trainer.py:60] 2025-01-13 21:41:39,133 >> ***** Running Evaluation *****
+[INFO|gner_trainer.py:62] 2025-01-13 21:41:39,133 >>   Num examples = 65
+[INFO|gner_trainer.py:65] 2025-01-13 21:41:39,133 >>   Batch size = 8
+{'eval_crossner_ai_prec': 0.24999999999984757, 'eval_crossner_ai_rec': 0.18385650224207004, 'eval_crossner_ai_f1': 0.21188630486061333, 'eval_AVERAGE_f1': 0.21188630486061333, 'eval_runtime': 33.7861, 'eval_samples_per_second': 1.924, 'eval_steps_per_second': 0.059, 'epoch': 0.51}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 36/36 [01:34<00:00,  1.09s/it]
+[INFO|trainer.py:3913] 2025-01-13 21:42:14,086 >> Saving model checkpoint to output/GNER/EAGLE-1B-supervised/checkpoint-36
+[INFO|configuration_utils.py:420] 2025-01-13 21:42:14,089 >> Configuration saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/config.json
+[INFO|configuration_utils.py:909] 2025-01-13 21:42:14,089 >> Configuration saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/generation_config.json
+[INFO|modeling_utils.py:2988] 2025-01-13 21:42:17,506 >> Model weights saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/model.safetensors
+[INFO|tokenization_utils_base.py:2491] 2025-01-13 21:42:17,507 >> tokenizer config file saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2500] 2025-01-13 21:42:17,507 >> Special tokens file saved in output/GNER/EAGLE-1B-supervised/checkpoint-36/special_tokens_map.json
+[2025-01-13 21:42:17,599] [INFO] [logging.py:128:log_dist] [Rank 0] [Torch] Checkpoint global_step36 is about to be saved!
+[2025-01-13 21:42:17,604] [INFO] [logging.py:128:log_dist] [Rank 0] Saving model checkpoint: output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt
+[2025-01-13 21:42:17,604] [INFO] [torch_checkpoint_engine.py:21:save] [Torch] Saving output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt...
+[2025-01-13 21:42:21,691] [INFO] [torch_checkpoint_engine.py:23:save] [Torch] Saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/mp_rank_00_model_states.pt.
+[2025-01-13 21:42:21,693] [INFO] [torch_checkpoint_engine.py:21:save] [Torch] Saving output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt...
+[2025-01-13 21:42:26,799] [INFO] [torch_checkpoint_engine.py:23:save] [Torch] Saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt.
+[2025-01-13 21:42:26,799] [INFO] [engine.py:3536:_save_zero_checkpoint] zero checkpoint saved output/GNER/EAGLE-1B-supervised/checkpoint-36/global_step36/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+[2025-01-13 21:42:26,800] [INFO] [torch_checkpoint_engine.py:33:commit] [Torch] Checkpoint global_step36 is ready now!
+[INFO|trainer.py:2643] 2025-01-13 21:42:26,833 >>
 
 Training completed. Do not forget to share your model on huggingface.co/models =)
 
 
-{'train_runtime': 104.1357, 'train_samples_per_second': 87.074, 'train_steps_per_second': 0.346, 'train_loss': 0.2943117353651259, 'epoch': 0.51}
-100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 36/36 [01:44<00:00,  2.89s/it]
-[rank0]:[W113 21:13:09.389220222 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
-[2025-01-13 21:13:12,929] [INFO] [launch.py:351:main] Process 3854191 exits successfully.
-[2025-01-13 21:13:13,930] [INFO] [launch.py:351:main] Process 3854189 exits successfully.
-[2025-01-13 21:13:13,930] [INFO] [launch.py:351:main] Process 3854194 exits successfully.
-[2025-01-13 21:13:13,930] [INFO] [launch.py:351:main] Process 3854192 exits successfully.
-[2025-01-13 21:13:13,930] [INFO] [launch.py:351:main] Process 3854188 exits successfully.
-[2025-01-13 21:13:13,930] [INFO] [launch.py:351:main] Process 3854187 exits successfully.
-[2025-01-13 21:13:14,930] [INFO] [launch.py:351:main] Process 3854193 exits successfully.
-[2025-01-13 21:13:14,931] [INFO] [launch.py:351:main] Process 3854190 exits successfully.
+{'train_runtime': 108.3566, 'train_samples_per_second': 83.682, 'train_steps_per_second': 0.332, 'train_loss': 0.2929878234863281, 'epoch': 0.51}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 36/36 [01:48<00:00,  3.01s/it]
+[rank0]:[W113 21:42:27.199622169 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+[2025-01-13 21:42:29,263] [INFO] [launch.py:351:main] Process 3877683 exits successfully.
+[2025-01-13 21:42:29,263] [INFO] [launch.py:351:main] Process 3877681 exits successfully.
+[2025-01-13 21:42:30,264] [INFO] [launch.py:351:main] Process 3877682 exits successfully.
+[2025-01-13 21:42:30,264] [INFO] [launch.py:351:main] Process 3877684 exits successfully.
+[2025-01-13 21:42:30,264] [INFO] [launch.py:351:main] Process 3877678 exits successfully.
+[2025-01-13 21:42:30,264] [INFO] [launch.py:351:main] Process 3877680 exits successfully.
+[2025-01-13 21:42:30,264] [INFO] [launch.py:351:main] Process 3877677 exits successfully.
+[2025-01-13 21:42:30,264] [INFO] [launch.py:351:main] Process 3877679 exits successfully.
 
 Process finished with exit code 0
