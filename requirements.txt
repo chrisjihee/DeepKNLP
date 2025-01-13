@@ -1,13 +1,12 @@
 # Deep Learning
 --extra-index-url https://download.pytorch.org/whl/cu118
-numpy>=2.0.0
 torch>2.5.0
-lightning>=2.4.0
-tensorboard>=2.18.0
+lightning>=2.5.0
 transformers>=4.47.0
-accelerate<1.0.0
-datasets>=3.0.1
+accelerate>=1.0.0
 sentencepiece
+tensorboard
+datasets
 
 # Metrics
 torchmetrics>=1.4.3
