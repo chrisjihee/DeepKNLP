@@ -2,8 +2,8 @@
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch>2.5.0
 lightning>=2.5.0
-transformers>=4.47.0
 accelerate>=1.0.0
+transformers>=4.47.0
 sentencepiece
 tensorboard
 datasets
