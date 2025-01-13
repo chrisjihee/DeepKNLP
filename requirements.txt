@@ -3,7 +3,6 @@
 torch>2.5.0
 lightning>=2.5.0
 accelerate>=1.2.1
-transformers>=4.48.0
 sentencepiece
 tensorboard
 datasets
@@ -21,6 +20,7 @@ Flask-Classful
 importlib-metadata
 
 # Manual install
+#transformers>=4.48.0
 #deepspeed==0.15.4
 #chrisbase>=0.5.7
 #chrisdata>=0.5.0
