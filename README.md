@@ -41,14 +41,14 @@ Transformer-based Korean Natural Language Processing
     pip install -U -e chrisbase*
     pip install -U -e chrisdata*
     pip install -U -e progiter*
-    pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
+    ds_report; pip list | grep -E "torch|lightn|transformer|accel|deep|numpy|piece|chris|prog"
     ```
     or
     ```bash
     rm -rf chrisbase*; git clone git@github.com:chrisjihee/chrisbase.git; pip install -U -e chrisbase*
     rm -rf chrisdata*; git clone git@github.com:chrisjihee/chrisdata.git; pip install -U -e chrisdata*
     rm -rf progiter*;  git clone git@github.com:chrisjihee/progiter.git;  pip install -U -e progiter*
-    pip list | grep -E "torch|lightn|transformer|deep|piece|chris|prog"
+    ds_report; pip list | grep -E "torch|lightn|transformer|accel|deep|numpy|piece|chris|prog"
     ```
 6. Log in to Huggingface
     ```bash

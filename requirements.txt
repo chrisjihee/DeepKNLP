@@ -2,23 +2,23 @@
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch>2.5.0
 lightning>=2.5.0
-accelerate>=1.0.0
-transformers>=4.47.0
+accelerate>=1.2.1
+transformers>=4.48.0
 sentencepiece
 tensorboard
 datasets
 
 # Metrics
-torchmetrics>=1.4.3
-scikit-learn>=1.5.2
-seqeval>=1.2.2
+torchmetrics
+scikit-learn
+seqeval
 
 # Server
-Flask>=3.0.3
-Flask-Classful>=0.16.0
+Flask
+Flask-Classful
 
 # Utils
-importlib-metadata>=8.5.0
+importlib-metadata
 
 # Manual install
 #deepspeed==0.15.4
