@@ -75,6 +75,7 @@ def begin(
 # [5]: https://huggingface.co/docs/accelerate/en/basic_tutorials/migration
 # [6]: https://huggingface.co/docs/accelerate/en/basic_tutorials/execution
 # [7]: https://huggingface.co/docs/transformers/en/main_classes/logging
+# [8]: https://huggingface.co/docs/transformers/en/main_classes/trainer
 @app.command()
 def train(
         # input
@@ -100,11 +101,14 @@ def train(
         logging_home=basic_logger.log_dir,
         logging_level=training_args.get_process_log_level()
     )
+
+    # Log on each process the small summary:
     logger.warning(
         f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
         f", distributed training: {training_args.parallel_mode.value == 'distributed'}, 16-bits training: {training_args.fp16 or training_args.bf16}"
     )
-    logger.warning(f"training_args.get_process_log_level()={training_args.get_process_log_level()}")
+    logger.info(f"Training/evaluation parameters {training_args}")
+    logger.info(f"training_args.should_log={training_args.should_log}")
 
 
 if __name__ == "__main__":
