@@ -66,7 +66,8 @@ def begin(
         logging_home=logging_home,
         logging_file=logging_file,
         logging_level="info",
-        logging_format=LoggingFormat.CHECK_28,
+        logging_format=LoggingFormat.CHECK_48,
+        # logging_format=LoggingFormat.DEBUG_48,
         argument_file=argument_file,
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
@@ -162,7 +163,42 @@ def train(
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
-    logger.info(f"training_args.seed={training_args.seed}")
+    ran = random.Random(training_args.seed)
+    raw_datasets = {}
+
+    # Load pretrained model and tokenizer
+    config = AutoConfig.from_pretrained(
+        training_args.model_name_or_path,
+        trust_remote_code=True,
+    )
+    is_encoder_decoder = config.is_encoder_decoder
+    if is_encoder_decoder:
+        tokenizer = AutoTokenizer.from_pretrained(
+            training_args.model_name_or_path,
+            trust_remote_code=True,
+        )
+    else:  # https://github.com/Vision-CAIR/MiniGPT-4/issues/129
+        tokenizer = AutoTokenizer.from_pretrained(
+            training_args.model_name_or_path,
+            trust_remote_code=True,
+            add_eos_token=True,
+            add_bos_token=True,
+            padding_side="left",
+        )
+    if tokenizer.pad_token is None:
+        # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
+        tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+        # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+    MODEL_CLASS = AutoModelForSeq2SeqLM if is_encoder_decoder else AutoModelForCausalLM
+    model = MODEL_CLASS.from_pretrained(
+        training_args.model_name_or_path,
+        from_tf=bool(".ckpt" in training_args.model_name_or_path),
+        config=config,
+        trust_remote_code=True,
+    )
+    logger.info(f"type(model)={type(model)}")
+    model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
+    logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
 
 
 if __name__ == "__main__":
