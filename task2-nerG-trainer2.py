@@ -155,8 +155,6 @@ def train(
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
-    ran = random.Random(training_args.seed)
-    raw_datasets = {}
 
     # Load pretrained model and tokenizer
     config = AutoConfig.from_pretrained(
@@ -355,6 +353,7 @@ def train(
     # Do training
     if training_args.do_train:
         train_result = trainer.train()
+        logger.info(f"train_result={train_result}")
 
 
 if __name__ == "__main__":
