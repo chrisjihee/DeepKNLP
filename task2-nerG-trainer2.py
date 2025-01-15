@@ -365,6 +365,10 @@ def train(
         compute_metrics=compute_ner_metrics if training_args.predict_with_generate else None,
     )
 
+    # Do training
+    if training_args.do_train:
+        train_result = trainer.train()
+
 
 if __name__ == "__main__":
     app()
