@@ -85,6 +85,7 @@ class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
     pred_data_path: str = field(default=None)
     max_source_length: int = field(default=640)
     max_target_length: int = field(default=640)
+    ignore_pad_token_for_loss: bool = field(default=True)
 
 
 # Reference for implementation
@@ -109,6 +110,7 @@ def train(
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
+        ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss")] = True,
         # Seq2SeqTrainingArguments
         deepspeed: Annotated[str, typer.Option("--deepspeed")] = "configs/deepspeed_configs/deepspeed_zero1_llama.json",
 ):
@@ -121,6 +123,8 @@ def train(
         max_source_length=max_source_length,
         max_target_length=max_target_length,
         generation_max_length=generation_max_length,
+        ignore_pad_token_for_loss=ignore_pad_token_for_loss,
+        remove_unused_columns=False,
         overwrite_output_dir=True,
         output_dir=csv.log_dir,
         report_to="tensorboard",
@@ -319,6 +323,47 @@ def train(
                 load_from_cache_file=not overwrite_cache,
                 desc="Running tokenizer on pred_dataset",
             )
+
+    # Construct a data collator
+    label_pad_token_id = -100 if training_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
+    data_collator = DataCollatorForGNER(
+        tokenizer,
+        model=model,
+        padding=True,
+        pad_to_multiple_of=8 if training_args.fp16 else None,
+        label_pad_token_id=label_pad_token_id,
+        return_tensors="pt",
+    )
+
+    def compute_ner_metrics(dataset, preds, save_prefix=None, save_suffix=None):
+        preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
+        decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+        if not is_encoder_decoder:
+            match_pattern = "[/INST]"
+            for i, preds in enumerate(decoded_preds):
+                decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
+
+        all_examples = [example.copy() for example in dataset]
+        for idx, decoded_pred in enumerate(decoded_preds):
+            all_examples[idx]["prediction"] = decoded_pred
+
+        results = compute_metrics(all_examples, tokenizer=tokenizer)
+        if save_prefix is not None:
+            with open(os.path.join(training_args.output_dir, f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl"), "w") as fout:
+                for example in all_examples:
+                    fout.write(json.dumps(example) + "\n")
+        return results
+
+    # Initialize our trainer
+    trainer = GNERTrainer(
+        model=model,
+        args=training_args,
+        train_dataset=train_dataset if training_args.do_train else None,
+        eval_dataset=eval_dataset if training_args.do_eval else None,
+        processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
+        data_collator=data_collator,
+        compute_metrics=compute_ner_metrics if training_args.predict_with_generate else None,
+    )
 
 
 if __name__ == "__main__":
