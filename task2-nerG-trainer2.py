@@ -1,44 +1,31 @@
-import random
+import json
 import logging
 import os
-import sys
-import json
+import random
 from dataclasses import dataclass, field
-from pydantic import BaseModel
-from pydantic import Field, model_validator
 from typing import Optional
 
-import datasets
 import numpy as np
+import torch
+import typer
 from datasets import load_dataset
-from sympy.vector import gradient
+from lightning.fabric.loggers import CSVLogger
+from typing_extensions import Annotated
 
-import transformers
+from DeepKNLP.gner_collator import DataCollatorForGNER
+from DeepKNLP.gner_evaluator import compute_metrics
+from DeepKNLP.gner_trainer import GNERTrainer
+from chrisbase.data import AppTyper, NewProjectEnv
+from chrisbase.io import LoggingFormat
 from transformers import (
     AutoConfig,
     AutoModelForCausalLM,
     AutoModelForSeq2SeqLM,
     AutoTokenizer,
-    HfArgumentParser,
     Seq2SeqTrainingArguments,
-    DataCollatorForSeq2Seq,
     set_seed,
 )
-from transformers.trainer_utils import get_last_checkpoint
-from transformers.utils import check_min_version, is_offline_mode, send_example_telemetry, is_torch_tf32_available, is_torch_bf16_available, is_torch_bf16_gpu_available
-from transformers.utils.versions import require_version
-
-from DeepKNLP.gner_trainer import GNERTrainer
-from DeepKNLP.gner_collator import DataCollatorForGNER
-from DeepKNLP.gner_evaluator import compute_metrics
-
-from lightning.fabric.loggers import CSVLogger
-
-from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, set_verbosity_error, to_table_lines, do_nothing, make_parent_dir
-from typing_extensions import Annotated
-import typer
-import torch
+from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
 
 # Global settings
 app: AppTyper = AppTyper(name="Generative NER", help="Generative Named Entity Recognition (NER) using Transformer.")
