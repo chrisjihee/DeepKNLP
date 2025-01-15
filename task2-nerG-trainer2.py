@@ -82,7 +82,7 @@ class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
     model_name_or_path: str = field(default=None)
     train_data_path: str = field(default=None)
     eval_data_path: str = field(default=None)
-    test_data_path: str = field(default=None)
+    pred_data_path: str = field(default=None)
     max_source_length: int = field(default=640)
     max_target_length: int = field(default=640)
 
@@ -101,10 +101,11 @@ def train(
         # ModelArguments
         model_name_or_path: Annotated[str, typer.Option("--model_name_or_path")] = "etri-lirs/egpt-1.3b-preview",
         # DataTrainingArguments
-        overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--use_cache")] = False,
+        overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--load_from_cache")] = False,
         train_data_path: Annotated[str, typer.Option("--train_json_file")] = "data/gner/zero-shot-train.jsonl",
-        eval_data_path: Annotated[str, typer.Option("--eval_json_file")] = "data/gner/zero-shot-dev.jsonl",
-        test_data_path: Annotated[str, typer.Option("--test_json_file")] = "data/gner/zero-shot-test-min.jsonl",
+        eval_data_path: Annotated[str, typer.Option("--eval_json_file")] = "data/gner/zero-shot-test-min.jsonl",
+        # eval_data_path: Annotated[str, typer.Option("--eval_json_file")] = "data/gner/zero-shot-dev.jsonl",
+        pred_data_path: Annotated[str, typer.Option("--test_json_file")] = "data/gner/zero-shot-test-min.jsonl",
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
@@ -116,7 +117,7 @@ def train(
         model_name_or_path=model_name_or_path,
         train_data_path=train_data_path,
         eval_data_path=eval_data_path,
-        test_data_path=test_data_path,
+        pred_data_path=pred_data_path,
         max_source_length=max_source_length,
         max_target_length=max_target_length,
         generation_max_length=generation_max_length,
@@ -200,6 +201,7 @@ def train(
     model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
     logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
 
+    # Preprocess the datasets
     def preprocess_function(example):
         # remove pairs where at least one record is None
         inference = example['split'] != "train"
@@ -278,6 +280,45 @@ def train(
                     model_inputs["labels"][i] = -100
 
         return model_inputs
+
+    if training_args.do_train:
+        assert training_args.train_data_path is not None, "Need to provide train_data_path"
+        train_dataset = load_dataset("json", data_files=training_args.train_data_path, split="train")
+        logger.info(f"Use {training_args.train_data_path} as train_dataset(#={len(train_dataset)})")
+        with training_args.main_process_first(desc="train_dataset map preprocessing"):
+            train_dataset = train_dataset.map(
+                preprocess_function,
+                batched=False,
+                num_proc=env.max_workers,
+                load_from_cache_file=not overwrite_cache,
+                desc="Running tokenizer on train_dataset",
+            )
+
+    if training_args.do_eval:
+        assert training_args.eval_data_path is not None, "Need to provide eval_data_path"
+        eval_dataset = load_dataset("json", data_files=training_args.eval_data_path, split="train")
+        logger.info(f"Use {training_args.eval_data_path} as eval_dataset(#={len(eval_dataset)})")
+        with training_args.main_process_first(desc="eval_dataset map preprocessing"):
+            eval_dataset = eval_dataset.map(
+                preprocess_function,
+                batched=False,
+                num_proc=env.max_workers,
+                load_from_cache_file=not overwrite_cache,
+                desc="Running tokenizer on eval_dataset",
+            )
+
+    if training_args.do_predict:
+        assert training_args.pred_data_path is not None, "Need to provide pred_data_path"
+        pred_dataset = load_dataset("json", data_files=training_args.pred_data_path, split="train")
+        logger.info(f"Use {training_args.pred_data_path} as pred_dataset(#={len(pred_dataset)})")
+        with training_args.main_process_first(desc="pred_dataset map preprocessing"):
+            pred_dataset = pred_dataset.map(
+                preprocess_function,
+                batched=False,
+                num_proc=env.max_workers,
+                load_from_cache_file=not overwrite_cache,
+                desc="Running tokenizer on pred_dataset",
+            )
 
 
 if __name__ == "__main__":
