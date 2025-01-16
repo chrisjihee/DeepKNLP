@@ -14,7 +14,7 @@ from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
 from chrisbase.data import AppTyper, NewProjectEnv
-from chrisbase.io import LoggingFormat
+from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info
 from transformers import (
     AutoConfig,
     AutoModelForCausalLM,
@@ -64,13 +64,14 @@ def base(
         logging_file=logging_file,
         logging_level="info",
         logging_format=LoggingFormat.CHECK_48,
-        # logging_format=LoggingFormat.DEBUG_48,
         argument_file=argument_file,
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
     )
     env.setup_logger(logging.INFO)
+    set_verbosity_warning("root")
+    set_verbosity_info("c10d-NullHandler-default")
     logger.info(f"env={env}")
     logger.info(f"env.output_dir={env.output_dir}")
     logger.info(f"env.time_stamp={env.time_stamp}")
