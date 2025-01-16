@@ -28,7 +28,7 @@ from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_availa
 # Global settings
 app: AppTyper = AppTyper(name="Generative NER", help="Generative Named Entity Recognition (NER) using Transformer.")
 env: Optional[NewProjectEnv] = None
-logger: logging.Logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 
 # Class for training arguments
@@ -69,12 +69,6 @@ def base(
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
     )
-    env.setup_logger(logging.INFO)
-    set_verbosity_warning("root")
-    set_verbosity_info("c10d-NullHandler-default")
-    logger.info(f"env={env}")
-    logger.info(f"env.output_dir={env.output_dir}")
-    logger.info(f"env.time_stamp={env.time_stamp}")
 
 
 # Reference for implementation
@@ -145,218 +139,224 @@ def train(
         local_rank=env.local_rank,
         deepspeed=deepspeed,
     )
+
+    # Setup logging
     env.setup_logger(args.get_process_log_level())
+    set_verbosity_info("c10d-NullHandler-default")
+    logger.info(f"env={env}")
+    logger.info(f"env.output_dir={env.output_dir}")
+    logger.info(f"env.time_stamp={env.time_stamp}")
 
     # Log on each process the small summary:
     logger.warning(
         f"Process rank: {args.local_rank}, device: {args.device}, n_gpu: {args.n_gpu}"
         f", distributed training: {args.parallel_mode.value == 'distributed'}, 16-bits training: {args.fp16 or args.bf16}"
     )
-    logger.info(f"Training/evaluation parameters {args}")
-    logger.info(f"training_args.should_log={args.should_log}")
-
-    # Set seed before initializing model.
-    set_seed(args.seed)
-    torch.set_float32_matmul_precision('high')
-
-    # Load pretrained model and tokenizer
-    config = AutoConfig.from_pretrained(
-        args.model_name_or_path,
-        trust_remote_code=True,
-    )
-    is_encoder_decoder = config.is_encoder_decoder
-    if is_encoder_decoder:
-        tokenizer = AutoTokenizer.from_pretrained(
-            args.model_name_or_path,
-            trust_remote_code=True,
-        )
-    else:  # https://github.com/Vision-CAIR/MiniGPT-4/issues/129
-        tokenizer = AutoTokenizer.from_pretrained(
-            args.model_name_or_path,
-            trust_remote_code=True,
-            add_eos_token=True,
-            add_bos_token=True,
-            padding_side="left",
-        )
-    if tokenizer.pad_token is None:
-        # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
-        tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
-        # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
-    MODEL_CLASS = AutoModelForSeq2SeqLM if is_encoder_decoder else AutoModelForCausalLM
-    model = MODEL_CLASS.from_pretrained(
-        args.model_name_or_path,
-        from_tf=bool(".ckpt" in args.model_name_or_path),
-        config=config,
-        trust_remote_code=True,
-    )
-    logger.info(f"type(model)={type(model)}")
-    model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
-    logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
-
-    # Preprocess the datasets
-    def preprocess_function(example):
-        # remove pairs where at least one record is None
-        inference = example['split'] != "train"
-        if is_encoder_decoder:
-            model_inputs = tokenizer(
-                text=example['instance']['instruction_inputs'],
-                max_length=args.max_source_length,
-                truncation=True,
-                padding=False,
-                return_tensors=None,
-                add_special_tokens=True,
-            )
-            if not inference:
-                model_inputs["labels"] = tokenizer(
-                    text_target=example['instance']['prompt_labels'],
-                    max_length=args.max_target_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )['input_ids']
-        else:
-            prompt = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
-            full_instruction = f"{prompt} {example['instance']['prompt_labels']}"
-            max_length = args.max_source_length + args.max_target_length
-            if inference:
-                model_inputs = tokenizer(
-                    text=prompt,
-                    max_length=max_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )
-                # Remove the last token if it is an eos token
-                if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
-                    model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
-                    model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
-            else:
-                model_inputs = tokenizer(
-                    text=full_instruction,
-                    max_length=max_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )
-
-                if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
-                    model_inputs["input_ids"].append(tokenizer.eos_token_id)
-                    model_inputs["attention_mask"].append(1)
-
-                model_inputs["labels"] = model_inputs["input_ids"].copy()
-
-                # Find the prompt length
-                prompt = tokenizer(
-                    text=prompt,
-                    max_length=max_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )["input_ids"]
-
-                # Remove the last token if it is an eos token
-                if prompt[-1] == tokenizer.eos_token_id:
-                    prompt = prompt[:-1]
-
-                if len(prompt) > len(model_inputs["labels"]):
-                    raise ValueError(
-                        f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
-                        f" {model_inputs['input_ids']}"
-                    )
-
-                for i in range(len(prompt)):
-                    model_inputs["labels"][i] = -100
-
-        return model_inputs
-
-    if args.do_train:
-        assert args.train_data_path is not None, "Need to provide train_data_path"
-        train_dataset = load_dataset("json", data_files=args.train_data_path, split="train")
-        logger.info(f"Use {args.train_data_path} as train_dataset(#={len(train_dataset)})")
-        with args.main_process_first(desc="train_dataset map preprocessing"):
-            train_dataset = train_dataset.map(
-                preprocess_function,
-                batched=False,
-                num_proc=env.max_workers,
-                load_from_cache_file=not overwrite_cache,
-                desc="Running tokenizer on train_dataset",
-            )
-
-    if args.do_eval:
-        assert args.eval_data_path is not None, "Need to provide eval_data_path"
-        eval_dataset = load_dataset("json", data_files=args.eval_data_path, split="train")
-        logger.info(f"Use {args.eval_data_path} as eval_dataset(#={len(eval_dataset)})")
-        with args.main_process_first(desc="eval_dataset map preprocessing"):
-            eval_dataset = eval_dataset.map(
-                preprocess_function,
-                batched=False,
-                num_proc=env.max_workers,
-                load_from_cache_file=not overwrite_cache,
-                desc="Running tokenizer on eval_dataset",
-            )
-
-    if args.do_predict:
-        assert args.pred_data_path is not None, "Need to provide pred_data_path"
-        pred_dataset = load_dataset("json", data_files=args.pred_data_path, split="train")
-        logger.info(f"Use {args.pred_data_path} as pred_dataset(#={len(pred_dataset)})")
-        with args.main_process_first(desc="pred_dataset map preprocessing"):
-            pred_dataset = pred_dataset.map(
-                preprocess_function,
-                batched=False,
-                num_proc=env.max_workers,
-                load_from_cache_file=not overwrite_cache,
-                desc="Running tokenizer on pred_dataset",
-            )
-
-    # Construct a data collator
-    label_pad_token_id = -100 if args.ignore_pad_token_for_loss else tokenizer.pad_token_id
-    data_collator = DataCollatorForGNER(
-        tokenizer,
-        model=model,
-        padding=True,
-        pad_to_multiple_of=8 if args.fp16 else None,
-        label_pad_token_id=label_pad_token_id,
-        return_tensors="pt",
-    )
-
-    def compute_ner_metrics(dataset, preds, save_prefix=None, save_suffix=None):
-        preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
-        decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
-        if not is_encoder_decoder:
-            match_pattern = "[/INST]"
-            for i, preds in enumerate(decoded_preds):
-                decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
-
-        all_examples = [example.copy() for example in dataset]
-        for idx, decoded_pred in enumerate(decoded_preds):
-            all_examples[idx]["prediction"] = decoded_pred
-
-        results = compute_metrics(all_examples, tokenizer=tokenizer)
-        if save_prefix is not None:
-            with open(os.path.join(args.output_dir, f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl"), "w") as fout:
-                for example in all_examples:
-                    fout.write(json.dumps(example) + "\n")
-        return results
-
-    # Initialize our trainer
-    trainer = GNERTrainer(
-        args=args,
-        model=model,
-        train_dataset=train_dataset if args.do_train else None,
-        eval_dataset=eval_dataset if args.do_eval else None,
-        processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
-        data_collator=data_collator,
-        compute_metrics=compute_ner_metrics if args.predict_with_generate else None,
-    )
-
-    # Do training
-    if args.do_train:
-        train_result = trainer.train()
-        logger.info(f"train_result={train_result}")
+    # logger.info(f"Training/evaluation parameters {args}")
+    # logger.info(f"args.should_log={args.should_log}")
+    #
+    # # Set seed before initializing model.
+    # set_seed(args.seed)
+    # torch.set_float32_matmul_precision('high')
+    #
+    # # Load pretrained model and tokenizer
+    # config = AutoConfig.from_pretrained(
+    #     args.model_name_or_path,
+    #     trust_remote_code=True,
+    # )
+    # is_encoder_decoder = config.is_encoder_decoder
+    # if is_encoder_decoder:
+    #     tokenizer = AutoTokenizer.from_pretrained(
+    #         args.model_name_or_path,
+    #         trust_remote_code=True,
+    #     )
+    # else:  # https://github.com/Vision-CAIR/MiniGPT-4/issues/129
+    #     tokenizer = AutoTokenizer.from_pretrained(
+    #         args.model_name_or_path,
+    #         trust_remote_code=True,
+    #         add_eos_token=True,
+    #         add_bos_token=True,
+    #         padding_side="left",
+    #     )
+    # if tokenizer.pad_token is None:
+    #     # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
+    #     tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+    #     # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+    # MODEL_CLASS = AutoModelForSeq2SeqLM if is_encoder_decoder else AutoModelForCausalLM
+    # model = MODEL_CLASS.from_pretrained(
+    #     args.model_name_or_path,
+    #     from_tf=bool(".ckpt" in args.model_name_or_path),
+    #     config=config,
+    #     trust_remote_code=True,
+    # )
+    # logger.info(f"type(model)={type(model)}")
+    # model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
+    # logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
+    #
+    # # Preprocess the datasets
+    # def preprocess_function(example):
+    #     # remove pairs where at least one record is None
+    #     inference = example['split'] != "train"
+    #     if is_encoder_decoder:
+    #         model_inputs = tokenizer(
+    #             text=example['instance']['instruction_inputs'],
+    #             max_length=args.max_source_length,
+    #             truncation=True,
+    #             padding=False,
+    #             return_tensors=None,
+    #             add_special_tokens=True,
+    #         )
+    #         if not inference:
+    #             model_inputs["labels"] = tokenizer(
+    #                 text_target=example['instance']['prompt_labels'],
+    #                 max_length=args.max_target_length,
+    #                 truncation=True,
+    #                 padding=False,
+    #                 return_tensors=None,
+    #                 add_special_tokens=True,
+    #             )['input_ids']
+    #     else:
+    #         prompt = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
+    #         full_instruction = f"{prompt} {example['instance']['prompt_labels']}"
+    #         max_length = args.max_source_length + args.max_target_length
+    #         if inference:
+    #             model_inputs = tokenizer(
+    #                 text=prompt,
+    #                 max_length=max_length,
+    #                 truncation=True,
+    #                 padding=False,
+    #                 return_tensors=None,
+    #                 add_special_tokens=True,
+    #             )
+    #             # Remove the last token if it is an eos token
+    #             if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
+    #                 model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
+    #                 model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
+    #         else:
+    #             model_inputs = tokenizer(
+    #                 text=full_instruction,
+    #                 max_length=max_length,
+    #                 truncation=True,
+    #                 padding=False,
+    #                 return_tensors=None,
+    #                 add_special_tokens=True,
+    #             )
+    #
+    #             if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
+    #                 model_inputs["input_ids"].append(tokenizer.eos_token_id)
+    #                 model_inputs["attention_mask"].append(1)
+    #
+    #             model_inputs["labels"] = model_inputs["input_ids"].copy()
+    #
+    #             # Find the prompt length
+    #             prompt = tokenizer(
+    #                 text=prompt,
+    #                 max_length=max_length,
+    #                 truncation=True,
+    #                 padding=False,
+    #                 return_tensors=None,
+    #                 add_special_tokens=True,
+    #             )["input_ids"]
+    #
+    #             # Remove the last token if it is an eos token
+    #             if prompt[-1] == tokenizer.eos_token_id:
+    #                 prompt = prompt[:-1]
+    #
+    #             if len(prompt) > len(model_inputs["labels"]):
+    #                 raise ValueError(
+    #                     f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
+    #                     f" {model_inputs['input_ids']}"
+    #                 )
+    #
+    #             for i in range(len(prompt)):
+    #                 model_inputs["labels"][i] = -100
+    #
+    #     return model_inputs
+    #
+    # if args.do_train:
+    #     assert args.train_data_path is not None, "Need to provide train_data_path"
+    #     train_dataset = load_dataset("json", data_files=args.train_data_path, split="train")
+    #     logger.info(f"Use {args.train_data_path} as train_dataset(#={len(train_dataset)})")
+    #     with args.main_process_first(desc="train_dataset map preprocessing"):
+    #         train_dataset = train_dataset.map(
+    #             preprocess_function,
+    #             batched=False,
+    #             num_proc=env.max_workers,
+    #             load_from_cache_file=not overwrite_cache,
+    #             desc="Running tokenizer on train_dataset",
+    #         )
+    #
+    # if args.do_eval:
+    #     assert args.eval_data_path is not None, "Need to provide eval_data_path"
+    #     eval_dataset = load_dataset("json", data_files=args.eval_data_path, split="train")
+    #     logger.info(f"Use {args.eval_data_path} as eval_dataset(#={len(eval_dataset)})")
+    #     with args.main_process_first(desc="eval_dataset map preprocessing"):
+    #         eval_dataset = eval_dataset.map(
+    #             preprocess_function,
+    #             batched=False,
+    #             num_proc=env.max_workers,
+    #             load_from_cache_file=not overwrite_cache,
+    #             desc="Running tokenizer on eval_dataset",
+    #         )
+    #
+    # if args.do_predict:
+    #     assert args.pred_data_path is not None, "Need to provide pred_data_path"
+    #     pred_dataset = load_dataset("json", data_files=args.pred_data_path, split="train")
+    #     logger.info(f"Use {args.pred_data_path} as pred_dataset(#={len(pred_dataset)})")
+    #     with args.main_process_first(desc="pred_dataset map preprocessing"):
+    #         pred_dataset = pred_dataset.map(
+    #             preprocess_function,
+    #             batched=False,
+    #             num_proc=env.max_workers,
+    #             load_from_cache_file=not overwrite_cache,
+    #             desc="Running tokenizer on pred_dataset",
+    #         )
+    #
+    # # Construct a data collator
+    # label_pad_token_id = -100 if args.ignore_pad_token_for_loss else tokenizer.pad_token_id
+    # data_collator = DataCollatorForGNER(
+    #     tokenizer,
+    #     model=model,
+    #     padding=True,
+    #     pad_to_multiple_of=8 if args.fp16 else None,
+    #     label_pad_token_id=label_pad_token_id,
+    #     return_tensors="pt",
+    # )
+    #
+    # def compute_ner_metrics(dataset, preds, save_prefix=None, save_suffix=None):
+    #     preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
+    #     decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+    #     if not is_encoder_decoder:
+    #         match_pattern = "[/INST]"
+    #         for i, preds in enumerate(decoded_preds):
+    #             decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
+    #
+    #     all_examples = [example.copy() for example in dataset]
+    #     for idx, decoded_pred in enumerate(decoded_preds):
+    #         all_examples[idx]["prediction"] = decoded_pred
+    #
+    #     results = compute_metrics(all_examples, tokenizer=tokenizer)
+    #     if save_prefix is not None:
+    #         with open(os.path.join(args.output_dir, f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl"), "w") as fout:
+    #             for example in all_examples:
+    #                 fout.write(json.dumps(example) + "\n")
+    #     return results
+    #
+    # # Initialize our trainer
+    # trainer = GNERTrainer(
+    #     args=args,
+    #     model=model,
+    #     train_dataset=train_dataset if args.do_train else None,
+    #     eval_dataset=eval_dataset if args.do_eval else None,
+    #     processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
+    #     data_collator=data_collator,
+    #     compute_metrics=compute_ner_metrics if args.predict_with_generate else None,
+    # )
+    #
+    # # Do training
+    # if args.do_train:
+    #     train_result = trainer.train()
+    #     logger.info(f"train_result={train_result}")
 
 
 if __name__ == "__main__":
