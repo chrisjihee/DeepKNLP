@@ -38,14 +38,6 @@ Transformer-based Korean Natural Language Processing
     ```
 5. Install some packages as editable
     ```bash
-    pip install -U -e transformers*
-    pip install -U -e chrisbase*
-    pip install -U -e chrisdata*
-    pip install -U -e progiter*
-    pip list | grep -E "torch|lightn|trans|accel|speed|numpy|piece|chris|prog"
-    ```
-    or
-    ```bash
     rm -rf transformers*; git clone git@github.com:chrisjihee/transformers.git; pip install -U -e transformers*
     rm -rf chrisbase*;    git clone git@github.com:chrisjihee/chrisbase.git;    pip install -U -e chrisbase*
     rm -rf chrisdata*;    git clone git@github.com:chrisjihee/chrisdata.git;    pip install -U -e chrisdata*
