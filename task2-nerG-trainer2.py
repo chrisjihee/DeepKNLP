@@ -7,6 +7,7 @@ from typing import Optional
 import numpy as np
 import torch
 import typer
+from accelerate import Accelerator
 from datasets import load_dataset
 from typing_extensions import Annotated
 
@@ -24,6 +25,8 @@ from transformers import (
     set_seed,
 )
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
+from transformers.utils.logging import set_verbosity as transformers_set_verbosity
+from datasets.utils.logging import set_verbosity as datasets_set_verbosity
 
 # Global settings
 app: AppTyper = AppTyper(name="Generative NER", help="Generative Named Entity Recognition (NER) using Transformer.")
@@ -98,6 +101,10 @@ def train(
         # for Other
         overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--load_from_cache")] = False,
 ):
+    # Setup accelerator
+    accelerator = Accelerator()
+    accelerator.wait_for_everyone()
+
     # Setup training arguments
     args = Seq2SeqTrainingArgumentsForGNER(
         # Seq2SeqTrainingArgumentsForGNER
@@ -141,24 +148,26 @@ def train(
     )
 
     # Setup logging
-    env.setup_logger(args.get_process_log_level())
-    set_verbosity_info("c10d-NullHandler-default")
-    logger.info(f"env={env}")
-    logger.info(f"env.output_dir={env.output_dir}")
-    logger.info(f"env.time_stamp={env.time_stamp}")
+    process_log_level = args.get_process_log_level()
+    env.setup_logger(process_log_level)
+    datasets_set_verbosity(process_log_level)
+    transformers_set_verbosity(process_log_level)
+    # set_verbosity_info("c10d-NullHandler-default")
 
     # Log on each process the small summary:
-    logger.warning(
-        f"Process rank: {args.local_rank}, device: {args.device}, n_gpu: {args.n_gpu}"
-        f", distributed training: {args.parallel_mode.value == 'distributed'}, 16-bits training: {args.fp16 or args.bf16}"
-    )
-    # logger.info(f"Training/evaluation parameters {args}")
-    # logger.info(f"args.should_log={args.should_log}")
-    #
-    # # Set seed before initializing model.
-    # set_seed(args.seed)
-    # torch.set_float32_matmul_precision('high')
-    #
+    with accelerator.main_process_first():
+        logger.info(f"ProjectEnv({env})")
+        logger.info(f"Training/evaluation parameters {args}")
+        logger.warning(
+            f"Process rank: {args.local_rank}, started: {env.time_stamp}, device: {args.device}, n_gpu: {args.n_gpu}"
+            f", distributed training: {args.parallel_mode.value == 'distributed'}"
+            f", 16-bits training: {args.fp16 or args.bf16}"
+        )
+
+    # Set seed before initializing model.
+    set_seed(args.seed)
+    torch.set_float32_matmul_precision('high')
+
     # # Load pretrained model and tokenizer
     # config = AutoConfig.from_pretrained(
     #     args.model_name_or_path,
