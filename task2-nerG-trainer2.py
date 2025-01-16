@@ -45,7 +45,6 @@ class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
 
 @app.callback()
 def base(
-        # for NewProjectEnv
         local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
@@ -56,7 +55,6 @@ def base(
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
 ):
-    # Global variables
     global env
     env = NewProjectEnv(
         local_rank=local_rank,
@@ -72,7 +70,10 @@ def base(
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
     )
-    env.setup_logger()
+    env.setup_logger(logging.INFO)
+    logger.info(f"env={env}")
+    logger.info(f"env.output_dir={env.output_dir}")
+    logger.info(f"env.time_stamp={env.time_stamp}")
 
 
 # Reference for implementation
