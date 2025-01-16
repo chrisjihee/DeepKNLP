@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import random
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -34,22 +33,37 @@ csv: Optional[CSVLogger] = None
 logger: logging.Logger = logging.getLogger(__name__)
 
 
+# Class for training arguments
+@dataclass
+class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
+    model_name_or_path: str = field(default=None)
+    train_data_path: str = field(default=None)
+    eval_data_path: str = field(default=None)
+    pred_data_path: str = field(default=None)
+    max_source_length: int = field(default=640)
+    max_target_length: int = field(default=640)
+    ignore_pad_token_for_loss: bool = field(default=True)
+
+
 @app.callback()
-def begin(
-        # env
+def base(
+        # for NewProjectEnv
+        local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
         logging_home: Annotated[str, typer.Option("--logging_home")] = "output",
         logging_file: Annotated[str, typer.Option("--logging_file")] = "train-messages.out",
         argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
         random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
-        debugging: Annotated[bool, typer.Option("--debugging")] = False,
-        # out
+        debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
+        # for CSVLogger
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
         run_version: Annotated[str, typer.Option("--run_version")] = "EAGLE-1B-debug",
 ):
+    # Global variables
     global env, csv
     env = NewProjectEnv(
+        local_rank=local_rank,
         logging_home=logging_home,
         logging_file=logging_file,
         logging_level="info",
@@ -61,18 +75,6 @@ def begin(
         debugging=debugging,
     )
     csv = CSVLogger(output_home, output_name, run_version, flush_logs_every_n_steps=1)
-    torch.set_float32_matmul_precision('high')
-
-
-@dataclass
-class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
-    model_name_or_path: str = field(default=None)
-    train_data_path: str = field(default=None)
-    eval_data_path: str = field(default=None)
-    pred_data_path: str = field(default=None)
-    max_source_length: int = field(default=640)
-    max_target_length: int = field(default=640)
-    ignore_pad_token_for_loss: bool = field(default=True)
 
 
 # Reference for implementation
@@ -86,38 +88,42 @@ class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
 # [8]: https://huggingface.co/docs/transformers/en/main_classes/trainer
 @app.command()
 def train(
-        # ModelArguments
+        # for Seq2SeqTrainingArgumentsForGNER
         model_name_or_path: Annotated[str, typer.Option("--model_name_or_path")] = "etri-lirs/egpt-1.3b-preview",
-        # DataTrainingArguments
-        overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--load_from_cache")] = False,
         train_data_path: Annotated[str, typer.Option("--train_json_file")] = "data/gner/zero-shot-train.jsonl",
         eval_data_path: Annotated[str, typer.Option("--eval_json_file")] = "data/gner/zero-shot-test-min.jsonl",
         # eval_data_path: Annotated[str, typer.Option("--eval_json_file")] = "data/gner/zero-shot-dev.jsonl",
         pred_data_path: Annotated[str, typer.Option("--test_json_file")] = "data/gner/zero-shot-test-min.jsonl",
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
-        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss")] = True,
-        # Seq2SeqTrainingArguments
+        # for Seq2SeqTrainingArguments
+        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
+        # for TrainingArguments
         deepspeed: Annotated[str, typer.Option("--deepspeed")] = "configs/deepspeed_configs/deepspeed_zero1_llama.json",
+        # for Other
+        overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--load_from_cache")] = False,
 ):
     # Setup training arguments
     training_args = Seq2SeqTrainingArgumentsForGNER(
+        # Seq2SeqTrainingArgumentsForGNER
         model_name_or_path=model_name_or_path,
         train_data_path=train_data_path,
         eval_data_path=eval_data_path,
         pred_data_path=pred_data_path,
         max_source_length=max_source_length,
         max_target_length=max_target_length,
-        generation_max_length=generation_max_length,
         ignore_pad_token_for_loss=ignore_pad_token_for_loss,
+        # Seq2SeqTrainingArguments
+        predict_with_generate=True,
+        generation_max_length=generation_max_length,
+        # TrainingArguments
         remove_unused_columns=False,
         overwrite_output_dir=True,
         output_dir=csv.log_dir,
         report_to="tensorboard",
         log_level=env.logging_level,
         seed=env.random_seed,
-        predict_with_generate=True,
         do_train=True,
         do_eval=True,
         gradient_checkpointing=True,
@@ -136,6 +142,7 @@ def train(
         tf32=is_torch_tf32_available(),
         bf16=is_torch_bf16_gpu_available(),
         bf16_full_eval=is_torch_bf16_gpu_available(),
+        local_rank=env.local_rank,
         deepspeed=deepspeed,
     )
 
@@ -155,6 +162,7 @@ def train(
 
     # Set seed before initializing model.
     set_seed(training_args.seed)
+    torch.set_float32_matmul_precision('high')
 
     # Load pretrained model and tokenizer
     config = AutoConfig.from_pretrained(
