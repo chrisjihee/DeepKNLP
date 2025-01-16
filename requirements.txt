@@ -1,27 +1,19 @@
-# Deep Learning
+# Machine Learning
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch>2.5.0
 lightning>=2.5.0
 accelerate>=1.2.1
 sentencepiece
-tensorboard
-datasets
-
-# Metrics
-torchmetrics
 scikit-learn
+torchmetrics
 seqeval
+datasets
+tensorboard
+
+# Utils
+pydantic
+importlib-metadata
 
 # Server
 Flask
 Flask-Classful
-
-# Utils
-importlib-metadata
-
-# Manual install
-#transformers>=4.48.0
-#deepspeed==0.15.4
-#chrisbase>=0.5.7
-#chrisdata>=0.5.0
-#progiter>=2.0.0

@@ -7,7 +7,7 @@ OUTPUT_DIR=output/GNER/EAGLE-1B-supervised
 RUN_NAME=train_eagle_1b_supervised-base
 DEEPSPEED_CONFIG=configs/deepspeed_configs/deepspeed_zero1_llama.json
 
-~/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include="localhost:0,1,2,3,4,5,6,7" --master_port $port task2-nerG-trainer1.py \
+~/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include="localhost:0,1,2,3" --master_port $port task2-nerG-trainer1.py \
     --do_train --do_eval --predict_with_generate \
     --train_json_dir $TRAIN_JSON_DIR \
     --valid_json_dir $VALID_JSON_DIR \
