@@ -104,7 +104,7 @@ def train(
         overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--load_from_cache")] = False,
 ):
     # Setup training arguments
-    training_args = Seq2SeqTrainingArgumentsForGNER(
+    args = Seq2SeqTrainingArgumentsForGNER(
         # Seq2SeqTrainingArgumentsForGNER
         model_name_or_path=model_name_or_path,
         train_data_path=train_data_path,
@@ -144,34 +144,34 @@ def train(
         local_rank=env.local_rank,
         deepspeed=deepspeed,
     )
-    env.setup_logger(training_args.get_process_log_level())
+    env.setup_logger(args.get_process_log_level())
 
     # Log on each process the small summary:
     logger.warning(
-        f"Process rank: {training_args.local_rank}, device: {training_args.device}, n_gpu: {training_args.n_gpu}"
-        f", distributed training: {training_args.parallel_mode.value == 'distributed'}, 16-bits training: {training_args.fp16 or training_args.bf16}"
+        f"Process rank: {args.local_rank}, device: {args.device}, n_gpu: {args.n_gpu}"
+        f", distributed training: {args.parallel_mode.value == 'distributed'}, 16-bits training: {args.fp16 or args.bf16}"
     )
-    logger.info(f"Training/evaluation parameters {training_args}")
-    logger.info(f"training_args.should_log={training_args.should_log}")
+    logger.info(f"Training/evaluation parameters {args}")
+    logger.info(f"training_args.should_log={args.should_log}")
 
     # Set seed before initializing model.
-    set_seed(training_args.seed)
+    set_seed(args.seed)
     torch.set_float32_matmul_precision('high')
 
     # Load pretrained model and tokenizer
     config = AutoConfig.from_pretrained(
-        training_args.model_name_or_path,
+        args.model_name_or_path,
         trust_remote_code=True,
     )
     is_encoder_decoder = config.is_encoder_decoder
     if is_encoder_decoder:
         tokenizer = AutoTokenizer.from_pretrained(
-            training_args.model_name_or_path,
+            args.model_name_or_path,
             trust_remote_code=True,
         )
     else:  # https://github.com/Vision-CAIR/MiniGPT-4/issues/129
         tokenizer = AutoTokenizer.from_pretrained(
-            training_args.model_name_or_path,
+            args.model_name_or_path,
             trust_remote_code=True,
             add_eos_token=True,
             add_bos_token=True,
@@ -183,8 +183,8 @@ def train(
         # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
     MODEL_CLASS = AutoModelForSeq2SeqLM if is_encoder_decoder else AutoModelForCausalLM
     model = MODEL_CLASS.from_pretrained(
-        training_args.model_name_or_path,
-        from_tf=bool(".ckpt" in training_args.model_name_or_path),
+        args.model_name_or_path,
+        from_tf=bool(".ckpt" in args.model_name_or_path),
         config=config,
         trust_remote_code=True,
     )
@@ -199,7 +199,7 @@ def train(
         if is_encoder_decoder:
             model_inputs = tokenizer(
                 text=example['instance']['instruction_inputs'],
-                max_length=training_args.max_source_length,
+                max_length=args.max_source_length,
                 truncation=True,
                 padding=False,
                 return_tensors=None,
@@ -208,7 +208,7 @@ def train(
             if not inference:
                 model_inputs["labels"] = tokenizer(
                     text_target=example['instance']['prompt_labels'],
-                    max_length=training_args.max_target_length,
+                    max_length=args.max_target_length,
                     truncation=True,
                     padding=False,
                     return_tensors=None,
@@ -217,7 +217,7 @@ def train(
         else:
             prompt = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
             full_instruction = f"{prompt} {example['instance']['prompt_labels']}"
-            max_length = training_args.max_source_length + training_args.max_target_length
+            max_length = args.max_source_length + args.max_target_length
             if inference:
                 model_inputs = tokenizer(
                     text=prompt,
@@ -272,11 +272,11 @@ def train(
 
         return model_inputs
 
-    if training_args.do_train:
-        assert training_args.train_data_path is not None, "Need to provide train_data_path"
-        train_dataset = load_dataset("json", data_files=training_args.train_data_path, split="train")
-        logger.info(f"Use {training_args.train_data_path} as train_dataset(#={len(train_dataset)})")
-        with training_args.main_process_first(desc="train_dataset map preprocessing"):
+    if args.do_train:
+        assert args.train_data_path is not None, "Need to provide train_data_path"
+        train_dataset = load_dataset("json", data_files=args.train_data_path, split="train")
+        logger.info(f"Use {args.train_data_path} as train_dataset(#={len(train_dataset)})")
+        with args.main_process_first(desc="train_dataset map preprocessing"):
             train_dataset = train_dataset.map(
                 preprocess_function,
                 batched=False,
@@ -285,11 +285,11 @@ def train(
                 desc="Running tokenizer on train_dataset",
             )
 
-    if training_args.do_eval:
-        assert training_args.eval_data_path is not None, "Need to provide eval_data_path"
-        eval_dataset = load_dataset("json", data_files=training_args.eval_data_path, split="train")
-        logger.info(f"Use {training_args.eval_data_path} as eval_dataset(#={len(eval_dataset)})")
-        with training_args.main_process_first(desc="eval_dataset map preprocessing"):
+    if args.do_eval:
+        assert args.eval_data_path is not None, "Need to provide eval_data_path"
+        eval_dataset = load_dataset("json", data_files=args.eval_data_path, split="train")
+        logger.info(f"Use {args.eval_data_path} as eval_dataset(#={len(eval_dataset)})")
+        with args.main_process_first(desc="eval_dataset map preprocessing"):
             eval_dataset = eval_dataset.map(
                 preprocess_function,
                 batched=False,
@@ -298,11 +298,11 @@ def train(
                 desc="Running tokenizer on eval_dataset",
             )
 
-    if training_args.do_predict:
-        assert training_args.pred_data_path is not None, "Need to provide pred_data_path"
-        pred_dataset = load_dataset("json", data_files=training_args.pred_data_path, split="train")
-        logger.info(f"Use {training_args.pred_data_path} as pred_dataset(#={len(pred_dataset)})")
-        with training_args.main_process_first(desc="pred_dataset map preprocessing"):
+    if args.do_predict:
+        assert args.pred_data_path is not None, "Need to provide pred_data_path"
+        pred_dataset = load_dataset("json", data_files=args.pred_data_path, split="train")
+        logger.info(f"Use {args.pred_data_path} as pred_dataset(#={len(pred_dataset)})")
+        with args.main_process_first(desc="pred_dataset map preprocessing"):
             pred_dataset = pred_dataset.map(
                 preprocess_function,
                 batched=False,
@@ -312,12 +312,12 @@ def train(
             )
 
     # Construct a data collator
-    label_pad_token_id = -100 if training_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
+    label_pad_token_id = -100 if args.ignore_pad_token_for_loss else tokenizer.pad_token_id
     data_collator = DataCollatorForGNER(
         tokenizer,
         model=model,
         padding=True,
-        pad_to_multiple_of=8 if training_args.fp16 else None,
+        pad_to_multiple_of=8 if args.fp16 else None,
         label_pad_token_id=label_pad_token_id,
         return_tensors="pt",
     )
@@ -336,7 +336,7 @@ def train(
 
         results = compute_metrics(all_examples, tokenizer=tokenizer)
         if save_prefix is not None:
-            with open(os.path.join(training_args.output_dir, f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl"), "w") as fout:
+            with open(os.path.join(args.output_dir, f"{save_prefix}_text_generations{'_' + save_suffix if save_suffix else ''}.jsonl"), "w") as fout:
                 for example in all_examples:
                     fout.write(json.dumps(example) + "\n")
         return results
@@ -344,16 +344,16 @@ def train(
     # Initialize our trainer
     trainer = GNERTrainer(
         model=model,
-        args=training_args,
-        train_dataset=train_dataset if training_args.do_train else None,
-        eval_dataset=eval_dataset if training_args.do_eval else None,
+        args=args,
+        train_dataset=train_dataset if args.do_train else None,
+        eval_dataset=eval_dataset if args.do_eval else None,
         processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
         data_collator=data_collator,
-        compute_metrics=compute_ner_metrics if training_args.predict_with_generate else None,
+        compute_metrics=compute_ner_metrics if args.predict_with_generate else None,
     )
 
     # Do training
-    if training_args.do_train:
+    if args.do_train:
         train_result = trainer.train()
         logger.info(f"train_result={train_result}")
 
