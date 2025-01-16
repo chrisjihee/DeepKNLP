@@ -48,7 +48,7 @@ def base(
         local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
-        run_version: Annotated[Optional[str], typer.Option("--run_version")] = None,  # "EAGLE-1B-debug"
+        run_version: Annotated[Optional[str], typer.Option("--run_version")] = "EAGLE-1B-debug",  # try None
         logging_file: Annotated[str, typer.Option("--logging_file")] = "train-messages.out",
         argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
         random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
@@ -343,8 +343,8 @@ def train(
 
     # Initialize our trainer
     trainer = GNERTrainer(
-        model=model,
         args=args,
+        model=model,
         train_dataset=train_dataset if args.do_train else None,
         eval_dataset=eval_dataset if args.do_eval else None,
         processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
