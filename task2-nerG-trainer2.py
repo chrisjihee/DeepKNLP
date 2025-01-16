@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import typer
 from datasets import load_dataset
-from lightning.fabric.loggers import CSVLogger
 from typing_extensions import Annotated
 
 from DeepKNLP.gner_collator import DataCollatorForGNER
@@ -29,7 +28,6 @@ from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_availa
 # Global settings
 app: AppTyper = AppTyper(name="Generative NER", help="Generative Named Entity Recognition (NER) using Transformer.")
 env: Optional[NewProjectEnv] = None
-csv: Optional[CSVLogger] = None
 logger: logging.Logger = logging.getLogger(__name__)
 
 
@@ -49,22 +47,22 @@ class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
 def base(
         # for NewProjectEnv
         local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
-        logging_home: Annotated[str, typer.Option("--logging_home")] = "output",
+        output_home: Annotated[str, typer.Option("--output_home")] = "output",
+        output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
+        run_version: Annotated[Optional[str], typer.Option("--run_version")] = None,  # "EAGLE-1B-debug"
         logging_file: Annotated[str, typer.Option("--logging_file")] = "train-messages.out",
         argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
         random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
-        # for CSVLogger
-        output_home: Annotated[str, typer.Option("--output_home")] = "output",
-        output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
-        run_version: Annotated[str, typer.Option("--run_version")] = "EAGLE-1B-debug",
 ):
     # Global variables
-    global env, csv
+    global env
     env = NewProjectEnv(
         local_rank=local_rank,
-        logging_home=logging_home,
+        output_home=output_home,
+        output_name=output_name,
+        run_version=run_version,
         logging_file=logging_file,
         logging_level="info",
         logging_format=LoggingFormat.CHECK_48,
@@ -74,7 +72,7 @@ def base(
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
     )
-    csv = CSVLogger(output_home, output_name, run_version, flush_logs_every_n_steps=1)
+    env.setup_logger()
 
 
 # Reference for implementation
@@ -120,7 +118,7 @@ def train(
         # TrainingArguments
         remove_unused_columns=False,
         overwrite_output_dir=True,
-        output_dir=csv.log_dir,
+        output_dir=str(env.output_dir),
         report_to="tensorboard",
         log_level=env.logging_level,
         seed=env.random_seed,
@@ -145,12 +143,7 @@ def train(
         local_rank=env.local_rank,
         deepspeed=deepspeed,
     )
-
-    # Setup logging
-    env.setup_logger(
-        logging_home=training_args.output_dir,
-        logging_level=training_args.get_process_log_level()
-    )
+    env.setup_logger(training_args.get_process_log_level())
 
     # Log on each process the small summary:
     logger.warning(
