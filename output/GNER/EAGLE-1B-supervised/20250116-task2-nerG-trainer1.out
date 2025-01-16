@@ -1,0 +1,472 @@
+/bin/bash /home/chrisjihee/proj/DeepKNLP/task2-nerG-trainer2.sh
+(DeepKNLP) chrisjihee@ptlm2:~/proj/DeepKNLP$ /bin/bash /home/chrisjihee/proj/DeepKNLP/task2-nerG-trainer2.sh
++ /home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include=localhost:0,1,2,3 --master_port 30000 task2-nerG-trainer2.py train
+[2025-01-16 23:29:58,792] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-16 23:30:02,541] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+[2025-01-16 23:30:02,541] [INFO] [runner.py:607:main] cmd = /home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgM119 --master_addr=127.0.0.1 --master_port=30000 --enable_each_rank_log=None task2-nerG-trainer2.py train
+[2025-01-16 23:30:04,300] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-16 23:30:07,345] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3]}
+[2025-01-16 23:30:07,345] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=4, node_rank=0
+[2025-01-16 23:30:07,345] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3]})
+[2025-01-16 23:30:07,345] [INFO] [launch.py:164:main] dist_world_size=4
+[2025-01-16 23:30:07,345] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3
+[2025-01-16 23:30:07,346] [INFO] [launch.py:256:main] process 82361 spawned with command: ['/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer2.py', '--local_rank=0', 'train']
+[2025-01-16 23:30:07,346] [INFO] [launch.py:256:main] process 82362 spawned with command: ['/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer2.py', '--local_rank=1', 'train']
+[2025-01-16 23:30:07,347] [INFO] [launch.py:256:main] process 82363 spawned with command: ['/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer2.py', '--local_rank=2', 'train']
+[2025-01-16 23:30:07,348] [INFO] [launch.py:256:main] process 82364 spawned with command: ['/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer2.py', '--local_rank=3', 'train']
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env=hostname='ptlm2' hostaddr='129.254.121.73' global_rank=-1 local_rank=2 node_rank=-1 world_size=-1 time_stamp='0116.233012' python_path=PosixPath('/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python') current_dir=PosixPath('/home/chrisjihee/proj/DeepKNLP') current_file=PosixPath('/home/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py') command_args=['--local_rank=2', 'train'] output_home='output' output_name='GNER' run_version=None logging_file='train-messages.out' logging_level='info' logging_format='%(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s' datetime_format='[%m.%d %H:%M:%S]' argument_file='train-arguments.json' random_seed=7 max_workers=4 debugging=False output_dir=PosixPath('output/GNER/version_6')
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env.output_dir=output/GNER/version_6
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env.time_stamp=0116.233012
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env=hostname='ptlm2' hostaddr='129.254.121.73' global_rank=-1 local_rank=3 node_rank=-1 world_size=-1 time_stamp='0116.233012' python_path=PosixPath('/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python') current_dir=PosixPath('/home/chrisjihee/proj/DeepKNLP') current_file=PosixPath('/home/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py') command_args=['--local_rank=3', 'train'] output_home='output' output_name='GNER' run_version=None logging_file='train-messages.out' logging_level='info' logging_format='%(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s' datetime_format='[%m.%d %H:%M:%S]' argument_file='train-arguments.json' random_seed=7 max_workers=4 debugging=False output_dir=PosixPath('output/GNER/version_7')
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env.output_dir=output/GNER/version_7
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env.time_stamp=0116.233012
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env=hostname='ptlm2' hostaddr='129.254.121.73' global_rank=-1 local_rank=1 node_rank=-1 world_size=-1 time_stamp='0116.233012' python_path=PosixPath('/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python') current_dir=PosixPath('/home/chrisjihee/proj/DeepKNLP') current_file=PosixPath('/home/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py') command_args=['--local_rank=1', 'train'] output_home='output' output_name='GNER' run_version=None logging_file='train-messages.out' logging_level='info' logging_format='%(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s' datetime_format='[%m.%d %H:%M:%S]' argument_file='train-arguments.json' random_seed=7 max_workers=4 debugging=False output_dir=PosixPath('output/GNER/version_8')
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env.output_dir=output/GNER/version_8
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env.time_stamp=0116.233012
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env=hostname='ptlm2' hostaddr='129.254.121.73' global_rank=-1 local_rank=0 node_rank=-1 world_size=-1 time_stamp='0116.233012' python_path=PosixPath('/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python') current_dir=PosixPath('/home/chrisjihee/proj/DeepKNLP') current_file=PosixPath('/home/chrisjihee/proj/DeepKNLP/chrisbase/src/chrisbase/data.py') command_args=['--local_rank=0', 'train'] output_home='output' output_name='GNER' run_version=None logging_file='train-messages.out' logging_level='info' logging_format='%(asctime)s ┇ %(levelname)-8s ┇ %(name)48s ┇ %(message)s' datetime_format='[%m.%d %H:%M:%S]' argument_file='train-arguments.json' random_seed=7 max_workers=4 debugging=False output_dir=PosixPath('output/GNER/version_9')
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env.output_dir=output/GNER/version_9
+[01.16 23:30:12] ┇ INFO     ┇                                         __main__ ┇ env.time_stamp=0116.233012
+[2025-01-16 23:30:13,256] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-16 23:30:13,277] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-16 23:30:13,286] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-16 23:30:13,293] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmpqsfkbni6/test.c -o /tmp/tmpqsfkbni6/test.o
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmpr__xh7_m/test.c -o /tmp/tmpr__xh7_m/test.o
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmpqsfkbni6/test.o -laio -o /tmp/tmpqsfkbni6/a.out
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmpl6gfzbuj/test.c -o /tmp/tmpl6gfzbuj/test.o
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmpr__xh7_m/test.o -laio -o /tmp/tmpr__xh7_m/a.out
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmpt5o7mr0j/test.c -o /tmp/tmpt5o7mr0j/test.o
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmpl6gfzbuj/test.o -laio -o /tmp/tmpl6gfzbuj/a.out
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmpt5o7mr0j/test.o -laio -o /tmp/tmpt5o7mr0j/a.out
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmpeny0hszy/test.c -o /tmp/tmpeny0hszy/test.o
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmp5fcdihst/test.c -o /tmp/tmp5fcdihst/test.o
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmpeny0hszy/test.o -L/home/chrisjihee/miniforge3/envs/DeepKNLP -L/home/chrisjihee/miniforge3/envs/DeepKNLP/lib64 -lcufile -o /tmp/tmpeny0hszy/a.out
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmpqimyi6cj/test.c -o /tmp/tmpqimyi6cj/test.o
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmp688lf1jb/test.c -o /tmp/tmp688lf1jb/test.o
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmp5fcdihst/test.o -L/home/chrisjihee/miniforge3/envs/DeepKNLP -L/home/chrisjihee/miniforge3/envs/DeepKNLP/lib64 -lcufile -o /tmp/tmp5fcdihst/a.out
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmpqimyi6cj/test.o -L/home/chrisjihee/miniforge3/envs/DeepKNLP -L/home/chrisjihee/miniforge3/envs/DeepKNLP/lib64 -lcufile -o /tmp/tmpqimyi6cj/a.out
+[01.16 23:30:13] ┇ INFO     ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmp688lf1jb/test.o -L/home/chrisjihee/miniforge3/envs/DeepKNLP -L/home/chrisjihee/miniforge3/envs/DeepKNLP/lib64 -lcufile -o /tmp/tmp688lf1jb/a.out
+[2025-01-16 23:30:13,969] [INFO] [comm.py:652:init_distributed] cdb=None
+[2025-01-16 23:30:13,971] [INFO] [comm.py:652:init_distributed] cdb=None
+[2025-01-16 23:30:13,971] [INFO] [comm.py:683:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2025-01-16 23:30:13,978] [INFO] [comm.py:652:init_distributed] cdb=None
+[01.16 23:30:13] ┇ DEBUG    ┇                         c10d-NullHandler-default ┇ {'func_name': 'init_process_group', 'args': "('nccl',), {'timeout': datetime.timedelta(seconds=1800), 'init_method': None, 'rank': -1, 'world_size': -1}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '3', 'local_rank': '3', 'nccl_version': '2.21.5', 'time_spent': '966583ns'}
+[2025-01-16 23:30:13,984] [INFO] [comm.py:652:init_distributed] cdb=None
+[01.16 23:30:13] ┇ DEBUG    ┇                         c10d-NullHandler-default ┇ {'func_name': 'init_process_group', 'args': "('nccl',), {'timeout': datetime.timedelta(seconds=1800), 'init_method': None, 'rank': -1, 'world_size': -1}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '2', 'local_rank': '2', 'nccl_version': '2.21.5', 'time_spent': '916047ns'}
+[01.16 23:30:14] ┇ DEBUG    ┇                         c10d-NullHandler-default ┇ {'func_name': 'init_process_group', 'args': "('nccl',), {'timeout': datetime.timedelta(seconds=1800), 'init_method': None, 'rank': -1, 'world_size': -1}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '1', 'local_rank': '1', 'nccl_version': '2.21.5', 'time_spent': '313861040ns'}
+[01.16 23:30:14] ┇ DEBUG    ┇                         c10d-NullHandler-default ┇ {'func_name': 'init_process_group', 'args': "('nccl',), {'timeout': datetime.timedelta(seconds=1800), 'init_method': None, 'rank': -1, 'world_size': -1}", 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '0', 'local_rank': '0', 'nccl_version': '2.21.5', 'time_spent': '317392677ns'}
+[01.16 23:30:15] ┇ WARNING  ┇                                         __main__ ┇ Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.16 23:30:15] ┇ INFO     ┇                                         __main__ ┇ Training/evaluation parameters Seq2SeqTrainingArgumentsForGNER(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+average_tokens_across_devices=False,
+batch_eval_metrics=False,
+bf16=True,
+bf16_full_eval=True,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=configs/deepspeed_configs/deepspeed_zero1_llama.json,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_data_path=data/gner/zero-shot-test-min.jsonl,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=IntervalStrategy.EPOCH,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=1280,
+generation_num_beams=None,
+gradient_accumulation_steps=4,
+gradient_checkpointing=True,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=None,
+hub_strategy=HubStrategy.EVERY_SAVE,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+ignore_pad_token_for_loss=True,
+include_for_metrics=[],
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=2e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=info,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=output/GNER/version_9/runs/Jan16_23-30-13_ptlm2,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=10,
+logging_strategy=IntervalStrategy.STEPS,
+lr_scheduler_kwargs={},
+lr_scheduler_type=SchedulerType.COSINE,
+max_grad_norm=1.0,
+max_source_length=640,
+max_steps=-1,
+max_target_length=640,
+metric_for_best_model=None,
+model_name_or_path=etri-lirs/egpt-1.3b-preview,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=0.5,
+optim=OptimizerNames.ADAMW_TORCH,
+optim_args=None,
+optim_target_modules=None,
+output_dir=output/GNER/version_9,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=8,
+pred_data_path=data/gner/zero-shot-test-min.jsonl,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=False,
+report_to=['tensorboard'],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=output/GNER/version_9,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=SaveStrategy.EPOCH,
+save_total_limit=None,
+seed=7,
+skip_memory_metrics=True,
+sortish_sampler=False,
+split_batches=None,
+tf32=True,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+train_data_path=data/gner/zero-shot-train.jsonl,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.04,
+warmup_steps=0,
+weight_decay=0.0,
+)
+[01.16 23:30:15] ┇ WARNING  ┇                                         __main__ ┇ Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.16 23:30:15] ┇ INFO     ┇                                         __main__ ┇ training_args.should_log=True
+[01.16 23:30:15] ┇ WARNING  ┇                                         __main__ ┇ Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.16 23:30:15] ┇ WARNING  ┇                                         __main__ ┇ Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.16 23:30:16] ┇ WARNING  ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[01.16 23:30:16] ┇ WARNING  ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[01.16 23:30:16] ┇ WARNING  ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[01.16 23:30:17] ┇ WARNING  ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ The `GPTNeoXSdpaAttention` class is deprecated in favor of simply modifying the `config._attn_implementation`attribute of the `GPTNeoXAttention` class! It will be removed in v4.48
+[01.16 23:30:18] ┇ INFO     ┇                                         __main__ ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
+[01.16 23:30:18] ┇ INFO     ┇                                         __main__ ┇ model.generation_config.pad_token_id=0
+[01.16 23:30:19] ┇ INFO     ┇                                         __main__ ┇ Use data/gner/zero-shot-train.jsonl as train_dataset(#=18135)
+Running tokenizer on train_dataset (num_proc=4):   0%|                                                                                | 0/18135 [00:00<?, ? examples/s][rank1]:[W116 23:30:20.479105785 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank2]:[W116 23:30:20.562947898 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Running tokenizer on train_dataset (num_proc=4):   0%|▏                                                                     | 40/18135 [00:00<02:19, 129.51 examples/s][rank3]:[W116 23:30:20.790782392 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3528.66 examples/s]
+[rank0]:[W116 23:30:25.014665611 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Running tokenizer on train_dataset (num_proc=4):   0%|▏                                                                     | 34/18135 [00:00<02:28, 122.06 examples/s][01.16 23:30:27] ┇ INFO     ┇                                         __main__ ┇ Use data/gner/zero-shot-test-min.jsonl as eval_dataset(#=65)
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 111.04 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████| 18135/18135 [00:06<00:00, 2865.65 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████| 18135/18135 [00:06<00:00, 2853.20 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████| 18135/18135 [00:06<00:00, 2846.25 examples/s]
+[01.16 23:30:34] ┇ INFO     ┇                             transformers.trainer ┇ Using auto half precision backend
+[01.16 23:30:34] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed info: version=0.15.4, git-hash=unknown, git-branch=unknown
+[01.16 23:30:34] ┇ INFO     ┇                                        DeepSpeed ┇ Config mesh_device None world_size = 4
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 101.05 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|███████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 97.12 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 100.56 examples/s]
+[01.16 23:30:36] ┇ DEBUG    ┇                         c10d-NullHandler-default ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '0', 'local_rank': '0', 'nccl_version': '2.21.5', 'time_spent': '433732ns'}
+[01.16 23:30:38] ┇ DEBUG    ┇                         c10d-NullHandler-default ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '1', 'local_rank': '1', 'nccl_version': '2.21.5', 'time_spent': '435977ns'}
+[01.16 23:30:38] ┇ DEBUG    ┇                         c10d-NullHandler-default ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '3', 'local_rank': '3', 'nccl_version': '2.21.5', 'time_spent': '385190ns'}
+[01.16 23:30:38] ┇ DEBUG    ┇                         c10d-NullHandler-default ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '2', 'local_rank': '2', 'nccl_version': '2.21.5', 'time_spent': '390731ns'}
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed Flops Profiler Enabled: False
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] Using DeepSpeed Optimizer param name adamw as basic optimizer
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] Removing param_group that has no 'params' in the basic Optimizer
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed Basic Optimizer = FusedAdam
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ Checking ZeRO support for optimizer=FusedAdam type=<class 'deepspeed.ops.adam.fused_adam.FusedAdam'>
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] Creating torch.bfloat16 ZeRO stage 1 optimizer
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ Reduce bucket size 200000000
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ Allgather bucket size 200000000
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ CPU Offload: False
+[01.16 23:30:38] ┇ INFO     ┇                                        DeepSpeed ┇ Round robin gradient partitioning: False
+[01.16 23:30:43] ┇ WARNING  ┇                                        DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[01.16 23:30:43] ┇ WARNING  ┇                                        DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[01.16 23:30:43] ┇ WARNING  ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[01.16 23:30:43] ┇ WARNING  ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[01.16 23:30:43] ┇ WARNING  ┇                                        DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[01.16 23:30:43] ┇ WARNING  ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ Before initializing optimizer states
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ MA 3.84 GB         Max_MA 4.47 GB         CA 4.65 GB         Max_CA 5 GB
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ CPU Virtual Memory:  used = 17.32 GB, percent = 6.9%
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ After initializing optimizer states
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ MA 3.84 GB         Max_MA 5.09 GB         CA 5.9 GB         Max_CA 6 GB
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ CPU Virtual Memory:  used = 17.34 GB, percent = 6.9%
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ optimizer state initialized
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ After initializing ZeRO optimizer
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ MA 3.84 GB         Max_MA 3.84 GB         CA 5.9 GB         Max_CA 6 GB
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ CPU Virtual Memory:  used = 17.27 GB, percent = 6.9%
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed Final Optimizer = DeepSpeedZeroOptimizer
+[01.16 23:30:43] ┇ WARNING  ┇                                        DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed using configured LR scheduler = WarmupDecayLR
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed LR Scheduler = <deepspeed.runtime.lr_schedules.WarmupDecayLR object at 0x7f3316044bf0>
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] step=0, skipped=0, lr=[0], mom=[[0.9, 0.999]]
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇ DeepSpeedEngine configuration:
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   activation_checkpointing_config  {
+    "partition_activations": false,
+    "contiguous_memory_optimization": false,
+    "cpu_checkpointing": false,
+    "number_checkpoints": null,
+    "synchronize_checkpoint_boundary": false,
+    "profile": false
+}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   aio_config ................... {'block_size': 1048576, 'queue_depth': 8, 'thread_count': 1, 'single_submit': False, 'overlap_events': True, 'use_gds': False}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   amp_enabled .................. False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   amp_params ................... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   autotuning_config ............ {
+    "enabled": false,
+    "start_step": null,
+    "end_step": null,
+    "metric_path": null,
+    "arg_mappings": null,
+    "metric": "throughput",
+    "model_info": null,
+    "results_dir": "autotuning_results",
+    "exps_dir": "autotuning_exps",
+    "overwrite": true,
+    "fast": true,
+    "start_profile_step": 3,
+    "end_profile_step": 5,
+    "tuner_type": "gridsearch",
+    "tuner_early_stopping": 5,
+    "tuner_num_trials": 50,
+    "model_info_path": null,
+    "mp_size": 1,
+    "max_train_batch_size": null,
+    "min_train_batch_size": 1,
+    "max_train_micro_batch_size_per_gpu": 1.024000e+03,
+    "min_train_micro_batch_size_per_gpu": 1,
+    "num_tuning_micro_batch_sizes": 3
+}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   bfloat16_enabled ............. True
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   bfloat16_immediate_grad_update  False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   checkpoint_parallel_write_pipeline  False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   checkpoint_tag_validation_enabled  True
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   checkpoint_tag_validation_fail  False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   comms_config ................. <deepspeed.comm.config.DeepSpeedCommsConfig object at 0x7f333049acf0>
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   communication_data_type ...... None
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   compression_config ........... {'weight_quantization': {'shared_parameters': {'enabled': False, 'quantizer_kernel': False, 'schedule_offset': 0, 'quantize_groups': 1, 'quantize_verbose': False, 'quantization_type': 'symmetric', 'quantize_weight_in_forward': False, 'rounding': 'nearest', 'fp16_mixed_quantize': False, 'quantize_change_ratio': 0.001}, 'different_groups': {}}, 'activation_quantization': {'shared_parameters': {'enabled': False, 'quantization_type': 'symmetric', 'range_calibration': 'dynamic', 'schedule_offset': 1000}, 'different_groups': {}}, 'sparse_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'row_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'head_pruning': {'shared_parameters': {'enabled': False, 'method': 'topk', 'schedule_offset': 1000}, 'different_groups': {}}, 'channel_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'layer_reduction': {'enabled': False}}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   curriculum_enabled_legacy .... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   curriculum_params_legacy ..... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   data_efficiency_config ....... {'enabled': False, 'seed': 1234, 'data_sampling': {'enabled': False, 'num_epochs': 1000, 'num_workers': 0, 'curriculum_learning': {'enabled': False}}, 'data_routing': {'enabled': False, 'random_ltd': {'enabled': False, 'layer_token_lr_schedule': {'enabled': False}}}}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   data_efficiency_enabled ...... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   dataloader_drop_last ......... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   disable_allgather ............ False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   dump_state ................... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   dynamic_loss_scale_args ...... None
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   eigenvalue_enabled ........... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   eigenvalue_gas_boundary_resolution  1
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   eigenvalue_layer_name ........ bert.encoder.layer
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   eigenvalue_layer_num ......... 0
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   eigenvalue_max_iter .......... 100
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   eigenvalue_stability ......... 1e-06
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   eigenvalue_tol ............... 0.01
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   eigenvalue_verbose ........... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   elasticity_enabled ........... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   flops_profiler_config ........ {
+    "enabled": false,
+    "recompute_fwd_factor": 0.0,
+    "profile_step": 1,
+    "module_depth": -1,
+    "top_modules": 1,
+    "detailed": true,
+    "output_file": null
+}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   fp16_auto_cast ............... None
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   fp16_enabled ................. False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   fp16_master_weights_and_gradients  False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   global_rank .................. 0
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   grad_accum_dtype ............. None
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   gradient_accumulation_steps .. 4
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   gradient_clipping ............ 1.0
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   gradient_predivide_factor .... 1.0
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   graph_harvesting ............. False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   hybrid_engine ................ enabled=False max_out_tokens=512 inference_tp_size=1 release_inference_cache=False pin_parameters=True tp_gather_partition_size=8
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   initial_dynamic_scale ........ 1
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   load_universal_checkpoint .... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   loss_scale ................... 1.0
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   memory_breakdown ............. False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   mics_hierarchial_params_gather  False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   mics_shard_size .............. -1
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   monitor_config ............... tensorboard=TensorBoardConfig(enabled=False, output_path='', job_name='DeepSpeedJobName') comet=CometConfig(enabled=False, samples_log_interval=100, project=None, workspace=None, api_key=None, experiment_name=None, experiment_key=None, online=None, mode=None) wandb=WandbConfig(enabled=False, group=None, team=None, project='deepspeed') csv_monitor=CSVConfig(enabled=False, output_path='', job_name='DeepSpeedJobName')
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   nebula_config ................ {
+    "enabled": false,
+    "persistent_storage_path": null,
+    "persistent_time_interval": 100,
+    "num_of_version_in_retention": 2,
+    "enable_nebula_load": true,
+    "load_path": null
+}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   optimizer_legacy_fusion ...... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   optimizer_name ............... adamw
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   optimizer_params ............. {'lr': 2e-05, 'betas': [0.9, 0.999], 'eps': 1e-08, 'weight_decay': 0.0}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   pipeline ..................... {'stages': 'auto', 'partition': 'best', 'seed_layers': False, 'activation_checkpoint_interval': 0, 'pipe_partitioned': True, 'grad_partitioned': True}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   pld_enabled .................. False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   pld_params ................... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   prescale_gradients ........... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   scheduler_name ............... WarmupDecayLR
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   scheduler_params ............. {'warmup_min_lr': 0, 'warmup_max_lr': 2e-05, 'warmup_num_steps': 3, 'total_num_steps': 71}
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   seq_parallel_communication_data_type  torch.float32
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   sparse_attention ............. None
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   sparse_gradients_enabled ..... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   steps_per_print .............. inf
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   timers_config ................ enabled=True synchronized=True
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   train_batch_size ............. 128
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   train_micro_batch_size_per_gpu  8
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   use_data_before_expert_parallel_  False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   use_node_local_storage ....... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   wall_clock_breakdown ......... False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   weight_quantization_config ... None
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   world_size ................... 4
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   zero_allow_untested_optimizer  False
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   zero_config .................. stage=1 contiguous_gradients=True reduce_scatter=True reduce_bucket_size=200000000 use_multi_rank_bucket_allreduce=True allgather_partitions=True allgather_bucket_size=200000000 overlap_comm=True load_from_fp32_weights=True elastic_checkpoint=False offload_param=None offload_optimizer=None sub_group_size=1000000000 cpu_offload_param=None cpu_offload_use_pin_memory=None cpu_offload=None prefetch_bucket_size=50000000 param_persistence_threshold=100000 model_persistence_threshold=9223372036854775807 max_live_parameters=1000000000 max_reuse_distance=1000000000 gather_16bit_weights_on_model_save=False use_all_reduce_for_fetch_params=False stage3_gather_fp16_weights_on_model_save=False ignore_unused_parameters=True legacy_stage1=False round_robin_gradients=False zero_hpz_partition_size=1 zero_quantized_weights=False zero_quantized_nontrainable_weights=False zero_quantized_gradients=False mics_shard_size=-1 mics_hierarchical_params_gather=False memory_efficient_linear=True pipeline_loading_checkpoint=False override_module_apply=True
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   zero_enabled ................. True
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   zero_force_ds_cpu_optimizer .. True
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   zero_optimization_stage ...... 1
+[01.16 23:30:43] ┇ INFO     ┇                                        DeepSpeed ┇   json = {
+    "bf16": {
+        "enabled": true
+    },
+    "optimizer": {
+        "type": "AdamW",
+        "params": {
+            "lr": 2e-05,
+            "betas": [0.9, 0.999],
+            "eps": 1e-08,
+            "weight_decay": 0.0
+        }
+    },
+    "scheduler": {
+        "type": "WarmupDecayLR",
+        "params": {
+            "warmup_min_lr": 0,
+            "warmup_max_lr": 2e-05,
+            "warmup_num_steps": 3,
+            "total_num_steps": 71
+        }
+    },
+    "zero_optimization": {
+        "stage": 1,
+        "allgather_partitions": true,
+        "allgather_bucket_size": 2.000000e+08,
+        "overlap_comm": true,
+        "reduce_scatter": true,
+        "reduce_bucket_size": 2.000000e+08,
+        "contiguous_gradients": true
+    },
+    "gradient_accumulation_steps": 4,
+    "gradient_clipping": 1.0,
+    "train_batch_size": 128,
+    "train_micro_batch_size_per_gpu": 8,
+    "steps_per_print": inf,
+    "fp16": {
+        "enabled": false
+    }
+}
+[01.16 23:30:43] ┇ INFO     ┇                             transformers.trainer ┇ ***** Running training *****
+[01.16 23:30:43] ┇ INFO     ┇                             transformers.trainer ┇   Num examples = 18,135
+[01.16 23:30:43] ┇ INFO     ┇                             transformers.trainer ┇   Num Epochs = 1
+[01.16 23:30:43] ┇ INFO     ┇                             transformers.trainer ┇   Instantaneous batch size per device = 8
+[01.16 23:30:43] ┇ INFO     ┇                             transformers.trainer ┇   Total train batch size (w. parallel, distributed & accumulation) = 128
+[01.16 23:30:43] ┇ INFO     ┇                             transformers.trainer ┇   Gradient Accumulation steps = 4
+[01.16 23:30:43] ┇ INFO     ┇                             transformers.trainer ┇   Total optimization steps = 71
+[01.16 23:30:43] ┇ INFO     ┇                             transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
+  0%|                                                                                                                                           | 0/71 [00:00<?, ?it/s][01.16 23:30:43] ┇ WARNING  ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+{'loss': 0.9358, 'grad_norm': 0.7520268559455872, 'learning_rate': 1.823529411764706e-05, 'epoch': 0.07}
+{'loss': 0.1278, 'grad_norm': 0.31632018089294434, 'learning_rate': 1.5294117647058822e-05, 'epoch': 0.14}
+{'loss': 0.0705, 'grad_norm': 0.19092705845832825, 'learning_rate': 1.235294117647059e-05, 'epoch': 0.21}
+{'loss': 0.0532, 'grad_norm': 0.195684015750885, 'learning_rate': 9.411764705882354e-06, 'epoch': 0.28}
+{'loss': 0.0477, 'grad_norm': 0.153150275349617, 'learning_rate': 6.470588235294119e-06, 'epoch': 0.35}
+{'loss': 0.039, 'grad_norm': 0.10214919596910477, 'learning_rate': 3.529411764705883e-06, 'epoch': 0.42}
+{'loss': 0.0407, 'grad_norm': 0.11457229405641556, 'learning_rate': 5.882352941176471e-07, 'epoch': 0.49}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [02:28<00:00,  1.98s/it][01.16 23:33:13] ┇ INFO     ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/version_9/checkpoint-71
+[01.16 23:33:13] ┇ INFO     ┇                 transformers.configuration_utils ┇ Configuration saved in output/GNER/version_9/checkpoint-71/config.json
+[01.16 23:33:13] ┇ INFO     ┇      transformers.generation.configuration_utils ┇ Configuration saved in output/GNER/version_9/checkpoint-71/generation_config.json
+[01.16 23:33:18] ┇ INFO     ┇                      transformers.modeling_utils ┇ Model weights saved in output/GNER/version_9/checkpoint-71/model.safetensors
+[01.16 23:33:18] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ tokenizer config file saved in output/GNER/version_9/checkpoint-71/tokenizer_config.json
+[01.16 23:33:18] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ Special tokens file saved in output/GNER/version_9/checkpoint-71/special_tokens_map.json
+[01.16 23:33:18] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] [Torch] Checkpoint global_step71 is about to be saved!
+[01.16 23:33:18] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] Saving model checkpoint: output/GNER/version_9/checkpoint-71/global_step71/mp_rank_00_model_states.pt
+[01.16 23:33:18] ┇ INFO     ┇                                        DeepSpeed ┇ [Torch] Saving output/GNER/version_9/checkpoint-71/global_step71/mp_rank_00_model_states.pt...
+[01.16 23:33:23] ┇ INFO     ┇                                        DeepSpeed ┇ [Torch] Saved output/GNER/version_9/checkpoint-71/global_step71/mp_rank_00_model_states.pt.
+[01.16 23:33:24] ┇ INFO     ┇                                        DeepSpeed ┇ [Torch] Saving output/GNER/version_9/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt...
+[01.16 23:33:33] ┇ INFO     ┇                                        DeepSpeed ┇ [Torch] Saved output/GNER/version_9/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt.
+[01.16 23:33:33] ┇ INFO     ┇                                        DeepSpeed ┇ zero checkpoint saved output/GNER/version_9/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+[01.16 23:33:33] ┇ INFO     ┇                                        DeepSpeed ┇ [Torch] Checkpoint global_step71 is ready now!
+[01.16 23:33:33] ┇ INFO     ┇                             transformers.trainer ┇ ***** Running Evaluation *****
+[01.16 23:33:33] ┇ INFO     ┇                             transformers.trainer ┇   Num examples = 65
+[01.16 23:33:33] ┇ INFO     ┇                             transformers.trainer ┇   Batch size = 8
+{'eval_crossner_ai_prec': 0.35532994923839833, 'eval_crossner_ai_rec': 0.31390134529133906, 'eval_crossner_ai_f1': 0.33333333328336623, 'eval_AVERAGE_f1': 0.33333333328336623, 'eval_runtime': 13.6168, 'eval_samples_per_second': 4.773, 'eval_steps_per_second': 0.22, 'epoch': 0.5}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [03:02<00:00,  1.98s/it]
+[01.16 23:33:47] ┇ INFO     ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/version_9/checkpoint-71
+[01.16 23:33:47] ┇ INFO     ┇                 transformers.configuration_utils ┇ Configuration saved in output/GNER/version_9/checkpoint-71/config.json
+[01.16 23:33:47] ┇ INFO     ┇      transformers.generation.configuration_utils ┇ Configuration saved in output/GNER/version_9/checkpoint-71/generation_config.json
+[01.16 23:34:35] ┇ INFO     ┇                      transformers.modeling_utils ┇ Model weights saved in output/GNER/version_9/checkpoint-71/model.safetensors
+[01.16 23:34:35] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ tokenizer config file saved in output/GNER/version_9/checkpoint-71/tokenizer_config.json
+[01.16 23:34:35] ┇ INFO     ┇             transformers.tokenization_utils_base ┇ Special tokens file saved in output/GNER/version_9/checkpoint-71/special_tokens_map.json
+[01.16 23:34:36] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] [Torch] Checkpoint global_step71 is about to be saved!
+[01.16 23:34:36] ┇ INFO     ┇                                        DeepSpeed ┇ [Rank 0] Saving model checkpoint: output/GNER/version_9/checkpoint-71/global_step71/mp_rank_00_model_states.pt
+[01.16 23:34:36] ┇ INFO     ┇                                        DeepSpeed ┇ [Torch] Saving output/GNER/version_9/checkpoint-71/global_step71/mp_rank_00_model_states.pt...
+[01.16 23:35:21] ┇ INFO     ┇                                        DeepSpeed ┇ [Torch] Saved output/GNER/version_9/checkpoint-71/global_step71/mp_rank_00_model_states.pt.
+[01.16 23:35:21] ┇ INFO     ┇                                        DeepSpeed ┇ [Torch] Saving output/GNER/version_9/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt...
