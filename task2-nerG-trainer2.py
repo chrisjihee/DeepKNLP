@@ -14,7 +14,7 @@ from typing_extensions import Annotated
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
-from chrisbase.data import AppTyper, NewProjectEnv
+from chrisbase.data import AppTyper, NewProjectEnv, JobTimer
 from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info
 from transformers import (
     AutoConfig,
@@ -101,10 +101,6 @@ def train(
         # for Other
         overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--load_from_cache")] = False,
 ):
-    # Setup accelerator
-    accelerator = Accelerator()
-    accelerator.wait_for_everyone()
-
     # Setup training arguments
     args = Seq2SeqTrainingArgumentsForGNER(
         # Seq2SeqTrainingArgumentsForGNER
@@ -144,8 +140,12 @@ def train(
         bf16=is_torch_bf16_gpu_available(),
         bf16_full_eval=is_torch_bf16_gpu_available(),
         local_rank=env.local_rank,
-        deepspeed=deepspeed,
+        deepspeed=None,
     )
+
+    # Setup accelerator
+    accelerator = Accelerator()
+    accelerator.wait_for_everyone()
 
     # Setup logging
     process_log_level = args.get_process_log_level()
@@ -157,7 +157,7 @@ def train(
     # Log on each process the small summary:
     with accelerator.main_process_first():
         logger.info(f"ProjectEnv({env})")
-        logger.info(f"Training/evaluation parameters {args}")
+        # logger.info(f"Training/evaluation parameters {args}")
         logger.warning(
             f"Process rank: {args.local_rank}, started: {env.time_stamp}, device: {args.device}, n_gpu: {args.n_gpu}"
             f", distributed training: {args.parallel_mode.value == 'distributed'}"
@@ -167,6 +167,15 @@ def train(
     # Set seed before initializing model.
     set_seed(args.seed)
     torch.set_float32_matmul_precision('high')
+
+    with JobTimer(
+            name=f"python {env.current_file} {' '.join(env.command_args)}", rt=1, rb=1, rc='=',
+            verbose=True,
+            # args=args,
+    ):
+        logger.warning(f"INSIDE of JobTimer (1): local_rank={args.local_rank}, is_main_process={accelerator.is_main_process}, local_process_index={accelerator.local_process_index}")
+        accelerator.wait_for_everyone()
+        logger.warning(f"INSIDE of JobTimer (3): state={accelerator.state}")
 
     # # Load pretrained model and tokenizer
     # config = AutoConfig.from_pretrained(
