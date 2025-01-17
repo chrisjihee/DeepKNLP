@@ -23,7 +23,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoModelForCausalLM, PretrainedConfig, PreTrainedModel, PreTrainedTokenizerBase, BatchEncoding, Seq2SeqTrainingArguments, set_seed
 from typing_extensions import Annotated
 
-from DeepKNLP.arguments import TrainingArguments
+from DeepKNLP.arguments import TrainingArgumentsForFabric
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from progiter import ProgIter
@@ -138,9 +138,9 @@ def train(
 ):
     # Setup arguments
     basic_logger = CSVLogger(output_home, output_name, run_version, flush_logs_every_n_steps=1)
-    args = TrainingArguments(
+    args = TrainingArgumentsForFabric(
         env=env,
-        input=TrainingArguments.InputOption(
+        input=TrainingArgumentsForFabric.InputOption(
             pretrained=pretrained,
             train_file=train_file,
             study_file=study_file,
@@ -155,7 +155,7 @@ def train(
             max_test_samples=max_test_samples,
             use_cache_data=use_cache_data,
         ),
-        learn=TrainingArguments.LearnOption(
+        learn=TrainingArgumentsForFabric.LearnOption(
             output_home=output_home,
             output_name=output_name,
             run_version=run_version,
@@ -323,7 +323,7 @@ def train(
                                               update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
             # Fetch input data
             sample = GenNERSampleWrapper.model_validate(row)
-            data_opt = TrainingArguments.InputOption.model_validate(data_opt)
+            data_opt = TrainingArgumentsForFabric.InputOption.model_validate(data_opt)
             prompt_text = f"[INST] {sample.instance.instruction_inputs} [/INST]"
             full_instruction = f"{prompt_text} {sample.instance.prompt_labels}"
 
@@ -403,7 +403,7 @@ def train(
                                                  update: Callable[[BatchEncoding, int, Counter, ProgIter], BatchEncoding] = None) -> BatchEncoding:
             # Fetch input data
             sample = GenNERSampleWrapper.model_validate(row)
-            data_opt = TrainingArguments.InputOption.model_validate(data_opt)
+            data_opt = TrainingArgumentsForFabric.InputOption.model_validate(data_opt)
 
             def tokenize_train_sample():
                 # Tokenize the instruction inputs
