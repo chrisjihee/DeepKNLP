@@ -7,7 +7,7 @@ from typing import Optional
 import numpy as np
 import torch
 import typer
-from accelerate import Accelerator
+from accelerate import Accelerator, DeepSpeedPlugin
 from datasets import load_dataset
 from typing_extensions import Annotated
 
@@ -93,12 +93,20 @@ def train(
         pred_data_path: Annotated[str, typer.Option("--test_json_file")] = "data/gner/zero-shot-test-min.jsonl",
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
-        ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss")] = True,
+        ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
         # for TrainingArguments
-        deepspeed: Annotated[str, typer.Option("--deepspeed")] = "configs/deepspeed_configs/deepspeed_zero1_llama.json",
-        # for Other
+        report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",
+        gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
+        gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
+        per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
+        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.5,
+        # for DeepSpeedPlugin
+        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
+        ds_config: Annotated[str, typer.Option("--deepspeed")] = "configs/deepspeed/deepspeed_zero1_llama.json",
+        # for main code
         overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--load_from_cache")] = False,
 ):
     # Setup training arguments
@@ -118,16 +126,16 @@ def train(
         remove_unused_columns=False,
         overwrite_output_dir=True,
         output_dir=str(env.output_dir),
-        report_to="tensorboard",
+        report_to=report_to,
         log_level=env.logging_level,
         seed=env.random_seed,
         do_train=True,
         do_eval=True,
-        gradient_checkpointing=True,
-        gradient_accumulation_steps=4,
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=8,
-        num_train_epochs=0.5,
+        gradient_checkpointing=gradient_checkpointing,
+        gradient_accumulation_steps=gradient_accumulation_steps,
+        per_device_train_batch_size=per_device_train_batch_size,
+        per_device_eval_batch_size=per_device_eval_batch_size,
+        num_train_epochs=num_train_epochs,
         logging_strategy="steps",
         logging_steps=10,
         lr_scheduler_type="cosine",
@@ -140,11 +148,15 @@ def train(
         bf16=is_torch_bf16_gpu_available(),
         bf16_full_eval=is_torch_bf16_gpu_available(),
         local_rank=env.local_rank,
-        deepspeed=None,
     )
 
     # Setup accelerator
-    accelerator = Accelerator()
+    accelerator = Accelerator(
+        gradient_accumulation_steps=args.gradient_accumulation_steps,
+        deepspeed_plugin=DeepSpeedPlugin(zero_stage=ds_stage, hf_ds_config=ds_config),
+        project_dir=args.output_dir,
+        log_with=args.report_to,
+    )
     accelerator.wait_for_everyone()
 
     # Setup logging
@@ -173,9 +185,8 @@ def train(
             verbose=True,
             # args=args,
     ):
-        logger.warning(f"INSIDE of JobTimer (1): local_rank={args.local_rank}, is_main_process={accelerator.is_main_process}, local_process_index={accelerator.local_process_index}")
-        accelerator.wait_for_everyone()
-        logger.warning(f"INSIDE of JobTimer (3): state={accelerator.state}")
+        logger.warning(f"INSIDE of JobTimer (1): local_rank={args.local_rank}, is_main_process={accelerator.is_main_process}, "
+                       f"local_process_index={accelerator.local_process_index}, is_last_process={accelerator.is_last_process}, num_processes={accelerator.num_processes}")
 
     # # Load pretrained model and tokenizer
     # config = AutoConfig.from_pretrained(
