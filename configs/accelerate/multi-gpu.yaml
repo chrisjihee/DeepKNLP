@@ -1,0 +1,8 @@
+compute_environment: LOCAL_MACHINE
+distribution_strategy: MULTI_GPU
+num_processes: 4
+num_machines: 1
+machine_rank: 0
+mixed_precision: bf16
+use_cpu: false
+debug: false
