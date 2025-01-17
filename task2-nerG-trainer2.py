@@ -7,6 +7,8 @@ from typing import Optional
 import numpy as np
 import torch
 import typer
+
+from DeepKNLP.arguments import TrainingArgumentsForAccelerator
 from accelerate import Accelerator, DeepSpeedPlugin
 from datasets import load_dataset
 from typing_extensions import Annotated
@@ -85,7 +87,7 @@ def base(
 # [8]: https://huggingface.co/docs/transformers/en/main_classes/trainer
 @app.command()
 def train(
-        # for Seq2SeqTrainingArgumentsForGNER
+        # for TrainingArgumentsForAccelerator.OtherOption
         model_name_or_path: Annotated[str, typer.Option("--model_name_or_path")] = "etri-lirs/egpt-1.3b-preview",
         train_data_path: Annotated[str, typer.Option("--train_json_file")] = "data/gner/zero-shot-train.jsonl",
         eval_data_path: Annotated[str, typer.Option("--eval_json_file")] = "data/gner/zero-shot-test-min.jsonl",
@@ -94,9 +96,9 @@ def train(
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
-        # for Seq2SeqTrainingArguments
-        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
         # for TrainingArguments
+        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
         report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
@@ -106,86 +108,90 @@ def train(
         # for DeepSpeedPlugin
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_config: Annotated[str, typer.Option("--deepspeed")] = "configs/deepspeed/deepspeed_zero1_llama.json",
-        # for main code
-        overwrite_cache: Annotated[bool, typer.Option("--overwrite_cache/--load_from_cache")] = False,
 ):
     # Setup training arguments
-    args = Seq2SeqTrainingArgumentsForGNER(
-        # Seq2SeqTrainingArgumentsForGNER
-        model_name_or_path=model_name_or_path,
-        train_data_path=train_data_path,
-        eval_data_path=eval_data_path,
-        pred_data_path=pred_data_path,
-        max_source_length=max_source_length,
-        max_target_length=max_target_length,
-        ignore_pad_token_for_loss=ignore_pad_token_for_loss,
-        # Seq2SeqTrainingArguments
-        predict_with_generate=True,
-        generation_max_length=generation_max_length,
-        # TrainingArguments
-        remove_unused_columns=False,
-        overwrite_output_dir=True,
-        output_dir=str(env.output_dir),
-        report_to=report_to,
-        log_level=env.logging_level,
-        seed=env.random_seed,
-        do_train=True,
-        do_eval=True,
-        gradient_checkpointing=gradient_checkpointing,
-        gradient_accumulation_steps=gradient_accumulation_steps,
-        per_device_train_batch_size=per_device_train_batch_size,
-        per_device_eval_batch_size=per_device_eval_batch_size,
-        num_train_epochs=num_train_epochs,
-        logging_strategy="steps",
-        logging_steps=10,
-        lr_scheduler_type="cosine",
-        eval_strategy="epoch",
-        save_strategy="epoch",
-        learning_rate=2e-5,
-        warmup_ratio=0.04,
-        weight_decay=0.,
-        tf32=is_torch_tf32_available(),
-        bf16=is_torch_bf16_gpu_available(),
-        bf16_full_eval=is_torch_bf16_gpu_available(),
-        local_rank=env.local_rank,
+    args = TrainingArgumentsForAccelerator(
+        env=env,
+        other=TrainingArgumentsForAccelerator.OtherOption(
+            pretrained=model_name_or_path,
+            train_file=train_data_path,
+            eval_file=eval_data_path,
+            pred_file=pred_data_path,
+            max_source_length=max_source_length,
+            max_target_length=max_target_length,
+            ignore_pad_token_for_loss=ignore_pad_token_for_loss,
+            use_cache_data=use_cache_data,
+        ),
+        train=Seq2SeqTrainingArguments(
+            predict_with_generate=True,
+            generation_max_length=generation_max_length,
+            remove_unused_columns=False,
+            overwrite_output_dir=True,
+            output_dir=str(env.output_dir),
+            report_to=report_to,
+            log_level=env.logging_level,
+            seed=env.random_seed,
+            do_train=True,
+            do_eval=True,
+            gradient_checkpointing=gradient_checkpointing,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            per_device_train_batch_size=per_device_train_batch_size,
+            per_device_eval_batch_size=per_device_eval_batch_size,
+            num_train_epochs=num_train_epochs,
+            logging_strategy="steps",
+            logging_steps=10,
+            lr_scheduler_type="cosine",
+            eval_strategy="epoch",
+            save_strategy="epoch",
+            learning_rate=2e-5,
+            warmup_ratio=0.04,
+            weight_decay=0.,
+            tf32=is_torch_tf32_available(),
+            bf16=is_torch_bf16_gpu_available(),
+            bf16_full_eval=is_torch_bf16_gpu_available(),
+            local_rank=env.local_rank,
+        ),
     )
+    args.env.local_rank = args.train.local_rank
 
     # Setup accelerator
     accelerator = Accelerator(
-        gradient_accumulation_steps=args.gradient_accumulation_steps,
+        gradient_accumulation_steps=args.train.gradient_accumulation_steps,
         deepspeed_plugin=DeepSpeedPlugin(zero_stage=ds_stage, hf_ds_config=ds_config),
-        project_dir=args.output_dir,
-        log_with=args.report_to,
+        project_dir=env.output_dir,
+        log_with=args.train.report_to,
     )
     accelerator.wait_for_everyone()
 
     # Setup logging
-    process_log_level = args.get_process_log_level()
+    process_log_level = args.train.get_process_log_level()
     env.setup_logger(process_log_level)
     datasets_set_verbosity(process_log_level)
     transformers_set_verbosity(process_log_level)
     # set_verbosity_info("c10d-NullHandler-default")
+    logger.info(args)
 
     # Log on each process the small summary:
     with accelerator.main_process_first():
         logger.info(f"ProjectEnv({env})")
         # logger.info(f"Training/evaluation parameters {args}")
         logger.warning(
-            f"Process rank: {args.local_rank}, started: {env.time_stamp}, device: {args.device}, n_gpu: {args.n_gpu}"
-            f", distributed training: {args.parallel_mode.value == 'distributed'}"
-            f", 16-bits training: {args.fp16 or args.bf16}"
+            f"Process rank: {args.train.local_rank}, started: {env.time_stamp}, device: {args.train.device}, n_gpu: {args.train.n_gpu}"
+            f", distributed training: {args.train.parallel_mode.value == 'distributed'}"
+            f", 16-bits training: {args.train.fp16 or args.train.bf16}"
         )
 
     # Set seed before initializing model.
-    set_seed(args.seed)
+    set_seed(args.train.seed)
     torch.set_float32_matmul_precision('high')
 
     with JobTimer(
             name=f"python {env.current_file} {' '.join(env.command_args)}", rt=1, rb=1, rc='=',
             verbose=True,
-            # args=args,
+            args=args,
     ):
-        logger.warning(f"INSIDE of JobTimer (1): local_rank={args.local_rank}, is_main_process={accelerator.is_main_process}, "
+        accelerator.wait_for_everyone()
+        logger.warning(f"INSIDE of JobTimer: local_rank={args.env.local_rank}, is_main_process={accelerator.is_main_process}, "
                        f"local_process_index={accelerator.local_process_index}, is_last_process={accelerator.is_last_process}, num_processes={accelerator.num_processes}")
 
     # # Load pretrained model and tokenizer
@@ -386,6 +392,8 @@ def train(
     # if args.do_train:
     #     train_result = trainer.train()
     #     logger.info(f"train_result={train_result}")
+
+    accelerator.end_training()
 
 
 if __name__ == "__main__":
