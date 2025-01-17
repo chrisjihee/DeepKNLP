@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -8,7 +9,7 @@ import numpy as np
 import torch
 import typer
 
-from DeepKNLP.arguments import TrainingArgumentsForAccelerator
+from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments
 from accelerate import Accelerator, DeepSpeedPlugin
 from datasets import load_dataset
 from typing_extensions import Annotated
@@ -16,8 +17,10 @@ from typing_extensions import Annotated
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
+from accelerate.utils import broadcast, broadcast_object_list
 from chrisbase.data import AppTyper, NewProjectEnv, JobTimer
 from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info
+from chrisbase.time import from_timestamp
 from transformers import (
     AutoConfig,
     AutoModelForCausalLM,
@@ -87,17 +90,17 @@ def base(
 # [8]: https://huggingface.co/docs/transformers/en/main_classes/trainer
 @app.command()
 def train(
-        # for TrainingArgumentsForAccelerator.OtherOption
-        model_name_or_path: Annotated[str, typer.Option("--model_name_or_path")] = "etri-lirs/egpt-1.3b-preview",
-        train_data_path: Annotated[str, typer.Option("--train_json_file")] = "data/gner/zero-shot-train.jsonl",
-        eval_data_path: Annotated[str, typer.Option("--eval_json_file")] = "data/gner/zero-shot-test-min.jsonl",
-        # eval_data_path: Annotated[str, typer.Option("--eval_json_file")] = "data/gner/zero-shot-dev.jsonl",
-        pred_data_path: Annotated[str, typer.Option("--test_json_file")] = "data/gner/zero-shot-test-min.jsonl",
+        # for CustomDataArguments
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
+        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
+        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-test-min.jsonl",
+        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-min.jsonl",
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
-        # for TrainingArguments
+        # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
         report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
@@ -107,16 +110,16 @@ def train(
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.5,
         # for DeepSpeedPlugin
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
-        ds_config: Annotated[str, typer.Option("--deepspeed")] = "configs/deepspeed/deepspeed_zero1_llama.json",
+        ds_config: Annotated[str, typer.Option("--ds_config")] = "configs/deepspeed/deepspeed_zero1_llama.json",
 ):
     # Setup training arguments
     args = TrainingArgumentsForAccelerator(
         env=env,
-        other=TrainingArgumentsForAccelerator.OtherOption(
-            pretrained=model_name_or_path,
-            train_file=train_data_path,
-            eval_file=eval_data_path,
-            pred_file=pred_data_path,
+        data=CustomDataArguments(
+            pretrained=pretrained,
+            train_file=train_file,
+            eval_file=eval_file,
+            pred_file=pred_file,
             max_source_length=max_source_length,
             max_target_length=max_target_length,
             ignore_pad_token_for_loss=ignore_pad_token_for_loss,
@@ -173,7 +176,7 @@ def train(
 
     # Log on each process the small summary:
     with accelerator.main_process_first():
-        logger.info(f"ProjectEnv({env})")
+        logger.warning(f"ProjectEnv({env})")
         # logger.info(f"Training/evaluation parameters {args}")
         logger.warning(
             f"Process rank: {args.train.local_rank}, started: {env.time_stamp}, device: {args.train.device}, n_gpu: {args.train.n_gpu}"
@@ -191,8 +194,9 @@ def train(
             args=args,
     ):
         accelerator.wait_for_everyone()
-        logger.warning(f"INSIDE of JobTimer: local_rank={args.env.local_rank}, is_main_process={accelerator.is_main_process}, "
-                       f"local_process_index={accelerator.local_process_index}, is_last_process={accelerator.is_last_process}, num_processes={accelerator.num_processes}")
+        logger.warning(f"INSIDE of JobTimer: local_rank={args.env.local_rank}, process_index={accelerator.process_index}, env.time_stamp={env.time_stamp}")
+        env.time_stamp = broadcast_object_list([env.time_stamp])[0]
+        logger.warning(f"INSIDE of JobTimer: env.time_stamp={env.time_stamp}")
 
     # # Load pretrained model and tokenizer
     # config = AutoConfig.from_pretrained(
