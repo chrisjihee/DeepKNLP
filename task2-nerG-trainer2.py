@@ -166,14 +166,14 @@ def train(
     accelerator = Accelerator(
         gradient_accumulation_steps=args.train.gradient_accumulation_steps,
         deepspeed_plugin=DeepSpeedPlugin(zero_stage=ds_stage, hf_ds_config=ds_config),
-        project_dir=env.output_dir,
+        project_dir=args.env.output_dir,
         log_with=args.train.report_to,
     )
 
     # Setup logging
     process_log_level = args.train.get_process_log_level()
-    env.setup_logger(process_log_level)
-    datasets_set_verbosity(process_log_level)
+    args.env.setup_logger(process_log_level)
+    datasets_set_verbosity(process_log_level + 10)
     transformers_set_verbosity(process_log_level)
     # set_verbosity_info("c10d-NullHandler-default")
 
@@ -190,7 +190,7 @@ def train(
     torch.set_float32_matmul_precision('high')
 
     with JobTimer(
-            name=f"python {env.current_file} {' '.join(env.command_args)}", rt=1, rb=1, rc='=',
+            name=f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
             verbose=True,
             args=args,
     ):
@@ -230,125 +230,128 @@ def train(
         model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
         logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
 
-    # # Preprocess the datasets
-    # def preprocess_function(example):
-    #     # remove pairs where at least one record is None
-    #     inference = example['split'] != "train"
-    #     if is_encoder_decoder:
-    #         model_inputs = tokenizer(
-    #             text=example['instance']['instruction_inputs'],
-    #             max_length=args.max_source_length,
-    #             truncation=True,
-    #             padding=False,
-    #             return_tensors=None,
-    #             add_special_tokens=True,
-    #         )
-    #         if not inference:
-    #             model_inputs["labels"] = tokenizer(
-    #                 text_target=example['instance']['prompt_labels'],
-    #                 max_length=args.max_target_length,
-    #                 truncation=True,
-    #                 padding=False,
-    #                 return_tensors=None,
-    #                 add_special_tokens=True,
-    #             )['input_ids']
-    #     else:
-    #         prompt = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
-    #         full_instruction = f"{prompt} {example['instance']['prompt_labels']}"
-    #         max_length = args.max_source_length + args.max_target_length
-    #         if inference:
-    #             model_inputs = tokenizer(
-    #                 text=prompt,
-    #                 max_length=max_length,
-    #                 truncation=True,
-    #                 padding=False,
-    #                 return_tensors=None,
-    #                 add_special_tokens=True,
-    #             )
-    #             # Remove the last token if it is an eos token
-    #             if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
-    #                 model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
-    #                 model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
-    #         else:
-    #             model_inputs = tokenizer(
-    #                 text=full_instruction,
-    #                 max_length=max_length,
-    #                 truncation=True,
-    #                 padding=False,
-    #                 return_tensors=None,
-    #                 add_special_tokens=True,
-    #             )
-    #
-    #             if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
-    #                 model_inputs["input_ids"].append(tokenizer.eos_token_id)
-    #                 model_inputs["attention_mask"].append(1)
-    #
-    #             model_inputs["labels"] = model_inputs["input_ids"].copy()
-    #
-    #             # Find the prompt length
-    #             prompt = tokenizer(
-    #                 text=prompt,
-    #                 max_length=max_length,
-    #                 truncation=True,
-    #                 padding=False,
-    #                 return_tensors=None,
-    #                 add_special_tokens=True,
-    #             )["input_ids"]
-    #
-    #             # Remove the last token if it is an eos token
-    #             if prompt[-1] == tokenizer.eos_token_id:
-    #                 prompt = prompt[:-1]
-    #
-    #             if len(prompt) > len(model_inputs["labels"]):
-    #                 raise ValueError(
-    #                     f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
-    #                     f" {model_inputs['input_ids']}"
-    #                 )
-    #
-    #             for i in range(len(prompt)):
-    #                 model_inputs["labels"][i] = -100
-    #
-    #     return model_inputs
-    #
-    # if args.do_train:
-    #     assert args.train_data_path is not None, "Need to provide train_data_path"
-    #     train_dataset = load_dataset("json", data_files=args.train_data_path, split="train")
-    #     logger.info(f"Use {args.train_data_path} as train_dataset(#={len(train_dataset)})")
-    #     with args.main_process_first(desc="train_dataset map preprocessing"):
-    #         train_dataset = train_dataset.map(
-    #             preprocess_function,
-    #             batched=False,
-    #             num_proc=env.max_workers,
-    #             load_from_cache_file=not overwrite_cache,
-    #             desc="Running tokenizer on train_dataset",
-    #         )
-    #
-    # if args.do_eval:
-    #     assert args.eval_data_path is not None, "Need to provide eval_data_path"
-    #     eval_dataset = load_dataset("json", data_files=args.eval_data_path, split="train")
-    #     logger.info(f"Use {args.eval_data_path} as eval_dataset(#={len(eval_dataset)})")
-    #     with args.main_process_first(desc="eval_dataset map preprocessing"):
-    #         eval_dataset = eval_dataset.map(
-    #             preprocess_function,
-    #             batched=False,
-    #             num_proc=env.max_workers,
-    #             load_from_cache_file=not overwrite_cache,
-    #             desc="Running tokenizer on eval_dataset",
-    #         )
-    #
-    # if args.do_predict:
-    #     assert args.pred_data_path is not None, "Need to provide pred_data_path"
-    #     pred_dataset = load_dataset("json", data_files=args.pred_data_path, split="train")
-    #     logger.info(f"Use {args.pred_data_path} as pred_dataset(#={len(pred_dataset)})")
-    #     with args.main_process_first(desc="pred_dataset map preprocessing"):
-    #         pred_dataset = pred_dataset.map(
-    #             preprocess_function,
-    #             batched=False,
-    #             num_proc=env.max_workers,
-    #             load_from_cache_file=not overwrite_cache,
-    #             desc="Running tokenizer on pred_dataset",
-    #         )
-    #
+        # Preprocess the datasets
+        def preprocess_function(example):
+            # remove pairs where at least one record is None
+            inference = example['split'] != "train"
+            if is_encoder_decoder:
+                model_inputs = tokenizer(
+                    text=example['instance']['instruction_inputs'],
+                    max_length=args.data.max_source_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )
+                if not inference:
+                    model_inputs["labels"] = tokenizer(
+                        text_target=example['instance']['prompt_labels'],
+                        max_length=args.data.max_target_length,
+                        truncation=True,
+                        padding=False,
+                        return_tensors=None,
+                        add_special_tokens=True,
+                    )['input_ids']
+            else:
+                prompt = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
+                full_instruction = f"{prompt} {example['instance']['prompt_labels']}"
+                max_length = args.data.max_source_length + args.data.max_target_length
+                if inference:
+                    model_inputs = tokenizer(
+                        text=prompt,
+                        max_length=max_length,
+                        truncation=True,
+                        padding=False,
+                        return_tensors=None,
+                        add_special_tokens=True,
+                    )
+                    # Remove the last token if it is an eos token
+                    if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
+                        model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
+                        model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
+                else:
+                    model_inputs = tokenizer(
+                        text=full_instruction,
+                        max_length=max_length,
+                        truncation=True,
+                        padding=False,
+                        return_tensors=None,
+                        add_special_tokens=True,
+                    )
+
+                    if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
+                        model_inputs["input_ids"].append(tokenizer.eos_token_id)
+                        model_inputs["attention_mask"].append(1)
+
+                    model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+                    # Find the prompt length
+                    prompt = tokenizer(
+                        text=prompt,
+                        max_length=max_length,
+                        truncation=True,
+                        padding=False,
+                        return_tensors=None,
+                        add_special_tokens=True,
+                    )["input_ids"]
+
+                    # Remove the last token if it is an eos token
+                    if prompt[-1] == tokenizer.eos_token_id:
+                        prompt = prompt[:-1]
+
+                    if len(prompt) > len(model_inputs["labels"]):
+                        raise ValueError(
+                            f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
+                            f" {model_inputs['input_ids']}"
+                        )
+
+                    for i in range(len(prompt)):
+                        model_inputs["labels"][i] = -100
+
+            return model_inputs
+
+        if args.train.do_train:
+            assert args.data.train_file is not None, "Need to provide train_data_path"
+            train_dataset = load_dataset("json", data_files=str(args.data.train_file), split="train")
+            logger.info(f"Use {args.data.train_file} as train_dataset(#={len(train_dataset)})")
+            with args.train.main_process_first(desc="train_dataset map preprocessing"):
+                train_dataset = train_dataset.map(
+                    preprocess_function,
+                    batched=False,
+                    num_proc=args.env.max_workers,
+                    load_from_cache_file=args.data.use_cache_data,
+                    desc="Running tokenizer on train_dataset",
+                )
+            accelerator.wait_for_everyone()
+
+        if args.train.do_eval:
+            assert args.data.eval_file is not None, "Need to provide eval_data_path"
+            eval_dataset = load_dataset("json", data_files=str(args.data.eval_file), split="train")
+            logger.info(f"Use {args.data.eval_file} as eval_dataset(#={len(eval_dataset)})")
+            with args.train.main_process_first(desc="eval_dataset map preprocessing"):
+                eval_dataset = eval_dataset.map(
+                    preprocess_function,
+                    batched=False,
+                    num_proc=args.env.max_workers,
+                    load_from_cache_file=args.data.use_cache_data,
+                    desc="Running tokenizer on eval_dataset",
+                )
+            accelerator.wait_for_everyone()
+
+        if args.train.do_predict:
+            assert args.data.pred_file is not None, "Need to provide pred_data_path"
+            pred_dataset = load_dataset("json", data_files=str(args.data.pred_file), split="train")
+            logger.info(f"Use {args.data.pred_file} as pred_dataset(#={len(pred_dataset)})")
+            with args.train.main_process_first(desc="pred_dataset map preprocessing"):
+                pred_dataset = pred_dataset.map(
+                    preprocess_function,
+                    batched=False,
+                    num_proc=args.env.max_workers,
+                    load_from_cache_file=args.data.use_cache_data,
+                    desc="Running tokenizer on pred_dataset",
+                )
+            accelerator.wait_for_everyone()
+
     # # Construct a data collator
     # label_pad_token_id = -100 if args.ignore_pad_token_for_loss else tokenizer.pad_token_id
     # data_collator = DataCollatorForGNER(
