@@ -1,3 +1,4 @@
+import random
 import json
 import logging
 import os
@@ -17,10 +18,10 @@ from typing_extensions import Annotated
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
-from accelerate.utils import broadcast, broadcast_object_list
+from accelerate.utils import broadcast, broadcast_object_list, gather_object, gather
 from chrisbase.data import AppTyper, NewProjectEnv, JobTimer
-from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info
-from chrisbase.time import from_timestamp
+from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, new_path
+from chrisbase.time import from_timestamp, now, now_stamp
 from transformers import (
     AutoConfig,
     AutoModelForCausalLM,
@@ -64,15 +65,19 @@ def init(
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
 ):
     global env
+    stamp = now_stamp(delay=random.randint(1, 500) / 200.0)  # TODO: remove delay
+    logger.warning(f"stamp={stamp} / {from_timestamp(stamp)}")
+    stamp = sorted(gather(torch.tensor(stamp, dtype=torch.float64)).tolist())[0]
     env = NewProjectEnv(
+        time_stamp=from_timestamp(stamp, fmt='%m%d.%H%M%S'),
         local_rank=local_rank,
         output_home=output_home,
         output_name=output_name,
         run_version=run_version,
-        logging_file=logging_file,
-        logging_level="info",
         logging_format=LoggingFormat.CHECK_48,
-        argument_file=argument_file,
+        logging_level="info",
+        logging_file=new_path(logging_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
+        argument_file=new_path(argument_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
@@ -164,7 +169,6 @@ def train(
         project_dir=env.output_dir,
         log_with=args.train.report_to,
     )
-    accelerator.wait_for_everyone()
 
     # Setup logging
     process_log_level = args.train.get_process_log_level()
@@ -172,17 +176,14 @@ def train(
     datasets_set_verbosity(process_log_level)
     transformers_set_verbosity(process_log_level)
     # set_verbosity_info("c10d-NullHandler-default")
-    logger.info(args)
 
     # Log on each process the small summary:
-    with accelerator.main_process_first():
-        logger.warning(f"ProjectEnv({env})")
-        # logger.info(f"Training/evaluation parameters {args}")
-        logger.warning(
-            f"Process rank: {args.train.local_rank}, started: {env.time_stamp}, device: {args.train.device}, n_gpu: {args.train.n_gpu}"
-            f", distributed training: {args.train.parallel_mode.value == 'distributed'}"
-            f", 16-bits training: {args.train.fp16 or args.train.bf16}"
-        )
+    logger.warning(
+        f"Process rank: {args.train.local_rank}, device: {args.train.device}, n_gpu: {args.train.n_gpu}"
+        f", distributed training: {args.train.parallel_mode.value == 'distributed'}"
+        f", 16-bits training: {args.train.fp16 or args.train.bf16}"
+    )
+    accelerator.wait_for_everyone()
 
     # Set seed before initializing model.
     set_seed(args.train.seed)
@@ -195,8 +196,6 @@ def train(
     ):
         accelerator.wait_for_everyone()
         logger.warning(f"INSIDE of JobTimer: local_rank={args.env.local_rank}, process_index={accelerator.process_index}, env.time_stamp={env.time_stamp}")
-        env.time_stamp = broadcast_object_list([env.time_stamp])[0]
-        logger.warning(f"INSIDE of JobTimer: env.time_stamp={env.time_stamp}")
 
     # # Load pretrained model and tokenizer
     # config = AutoConfig.from_pretrained(
