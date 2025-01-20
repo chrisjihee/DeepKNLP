@@ -395,10 +395,10 @@ def train(
             compute_metrics=compute_ner_metrics if args.train.predict_with_generate else None,
         )
 
-    # # Do training
-    # if args.train.do_train:
-    #     train_result = trainer.train()
-    #     logger.info(f"train_result={train_result}")
+        # Do training
+        if args.train.do_train:
+            train_result = trainer.train()
+            logger.info(f"train_result={train_result}")
 
     accelerator.end_training()
 
