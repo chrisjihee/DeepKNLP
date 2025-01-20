@@ -65,9 +65,11 @@ def init(
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
 ):
     global env
-    stamp = now_stamp(delay=random.randint(1, 500) / 200.0)  # TODO: remove delay
-    logger.warning(f"stamp={stamp} / {from_timestamp(stamp)}")
-    stamp = sorted(gather(torch.tensor(stamp, dtype=torch.float64)).tolist())[0]
+    accelerator = Accelerator()
+    # stamp = now_stamp(delay=random.randint(1, 500) / 200.0)  # TODO: remove delay
+    stamp = now_stamp()
+    if accelerator.num_processes > 1:
+        stamp = sorted(gather(torch.tensor(stamp, dtype=torch.float64, device=accelerator.device)).tolist())[0]
     env = NewProjectEnv(
         time_stamp=from_timestamp(stamp, fmt='%m%d.%H%M%S'),
         local_rank=local_rank,
