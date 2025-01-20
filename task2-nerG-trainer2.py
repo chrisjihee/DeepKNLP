@@ -52,7 +52,7 @@ class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
 
 
 @app.callback()
-def base(
+def init(
         local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
