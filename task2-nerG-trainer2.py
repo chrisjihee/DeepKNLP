@@ -55,6 +55,7 @@ class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
 @app.callback()
 def init(
         local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
+        world_size: Annotated[int, typer.Option("--world_size")] = -1,
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
         run_version: Annotated[Optional[str], typer.Option("--run_version")] = "EAGLE-1B-debug",  # try None
@@ -65,14 +66,18 @@ def init(
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
 ):
     global env
-    accelerator = Accelerator()
+    # accelerator = Accelerator()
+    if local_rank < 0 and "LOCAL_RANK" in os.environ:
+        local_rank = int(os.environ["LOCAL_RANK"])
+    if world_size < 0 and "WORLD_SIZE" in os.environ:
+        world_size = int(os.environ["WORLD_SIZE"])
     # stamp = now_stamp(delay=random.randint(1, 500) / 200.0)  # TODO: remove delay
     stamp = now_stamp()
-    if accelerator.num_processes > 1:
-        stamp = sorted(gather(torch.tensor(stamp, dtype=torch.float64, device=accelerator.device)).tolist())[0]
+    stamp = sorted(gather_object([stamp]))[0]
     env = NewProjectEnv(
         time_stamp=from_timestamp(stamp, fmt='%m%d.%H%M%S'),
         local_rank=local_rank,
+        world_size=world_size,
         output_home=output_home,
         output_name=output_name,
         run_version=run_version,
