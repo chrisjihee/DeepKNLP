@@ -1,0 +1,11 @@
+compute_environment: LOCAL_MACHINE
+distributed_type: DEEPSPEED
+machine_rank: 0
+num_machines: 1
+num_processes: 4
+gpu_ids: 0,1,2,3
+deepspeed_config:
+  deepspeed_config_file: configs/deepspeed/deepspeed_zero1_llama.json
+  zero3_init_flag: false
+use_cpu: false
+debug: false
