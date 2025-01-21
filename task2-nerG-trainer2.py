@@ -69,8 +69,6 @@ def main(
         random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
-        # for Accelerator
-        deepspeed: Annotated[bool, typer.Option("--deepspeed/--no-deepspeed")] = False,
         # for CustomDataArguments
         pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
@@ -89,6 +87,9 @@ def main(
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.5,
+        # for DeepSpeed
+        deepspeed_for_accel: Annotated[bool, typer.Option("--deepspeed_for_accel")] = False,
+        deepspeed_for_train: Annotated[str, typer.Option("--deepspeed_for_train")] = None,
 ):
     # Setup project environment
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
@@ -116,7 +117,7 @@ def main(
     # Setup accelerator
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
-        deepspeed_plugin=DeepSpeedPlugin() if deepspeed else None,
+        deepspeed_plugin=DeepSpeedPlugin() if deepspeed_for_accel else None,
         project_dir=env.output_dir,
         log_with=report_to,
     )
@@ -170,6 +171,7 @@ def main(
             bf16=is_torch_bf16_gpu_available(),
             bf16_full_eval=is_torch_bf16_gpu_available(),
             local_rank=env.local_rank,
+            deepspeed=deepspeed_for_train,
         ),
     )
     args.env.local_rank = args.train.local_rank
