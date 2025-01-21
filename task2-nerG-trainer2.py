@@ -10,6 +10,7 @@ import numpy as np
 import torch
 import typer
 
+import transformers.utils.logging
 from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments
 from accelerate import Accelerator, DeepSpeedPlugin
 from datasets import load_dataset
@@ -35,8 +36,6 @@ from transformers.utils.logging import set_verbosity as transformers_set_verbosi
 from datasets.utils.logging import set_verbosity as datasets_set_verbosity
 
 # Global settings
-app: AppTyper = AppTyper(name="Generative NER", help="Generative Named Entity Recognition (NER) using Transformer.")
-env: Optional[NewProjectEnv] = None
 logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 
@@ -52,8 +51,17 @@ class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
     ignore_pad_token_for_loss: bool = field(default=True)
 
 
-@app.callback()
-def init(
+# Reference for implementation
+# [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm.py
+# [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation.py
+# [3]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/summarization/run_summarization.py
+# [4]: https://huggingface.co/docs/accelerate/en/quicktour
+# [5]: https://huggingface.co/docs/accelerate/en/basic_tutorials/migration
+# [6]: https://huggingface.co/docs/accelerate/en/basic_tutorials/execution
+# [7]: https://huggingface.co/docs/transformers/en/main_classes/logging
+# [8]: https://huggingface.co/docs/transformers/en/main_classes/trainer
+def main(
+        # for NewProjectEnv
         local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
         world_size: Annotated[int, typer.Option("--world_size")] = -1,
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
@@ -64,8 +72,26 @@ def init(
         random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
+        # for CustomDataArguments
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
+        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
+        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-test-min.jsonl",
+        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-min.jsonl",
+        max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
+        max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
+        ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
+        # for Seq2SeqTrainingArguments
+        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
+        report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER/EAGLE-1B-debug/runs
+        gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
+        gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
+        per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
+        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.5,
 ):
-    global env
+    # Setup project environment
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
         local_rank = int(os.environ["LOCAL_RANK"])
     if world_size < 0 and "WORLD_SIZE" in os.environ:
@@ -80,59 +106,30 @@ def init(
         output_name=output_name,
         run_version=run_version,
         logging_format=LoggingFormat.CHECK_48,
-        logging_level="info",
+        logging_level=logging.INFO,
         logging_file=new_path(logging_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         argument_file=new_path(argument_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
     )
-    if local_rank == 0:
-        for k in os.environ.keys():
-            logger.warning(f"os.environ[{k}]={os.environ[k]}")
 
-
-# Reference for implementation
-# [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm.py
-# [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation.py
-# [3]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/summarization/run_summarization.py
-# [4]: https://huggingface.co/docs/accelerate/en/quicktour
-# [5]: https://huggingface.co/docs/accelerate/en/basic_tutorials/migration
-# [6]: https://huggingface.co/docs/accelerate/en/basic_tutorials/execution
-# [7]: https://huggingface.co/docs/transformers/en/main_classes/logging
-# [8]: https://huggingface.co/docs/transformers/en/main_classes/trainer
-@app.command()
-def train(
-        # for CustomDataArguments
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
-        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
-        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-test-min.jsonl",
-        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
-        pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-min.jsonl",
-        max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
-        max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
-        ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
-        # for Seq2SeqTrainingArguments
-        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
-        report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",
-        gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
-        gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
-        per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
-        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
-        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.5,
-):
     # Setup accelerator
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
-        deepspeed_plugin=DeepSpeedPlugin(),
+        # deepspeed_plugin=DeepSpeedPlugin(),
         project_dir=env.output_dir,
         log_with=report_to,
     )
     if accelerator.is_main_process:
+        for k in os.environ.keys():
+            logger.warning(f"os.environ[{k}]={os.environ[k]}")
         logger.warning(f"accelerator(1)={accelerator} / accelerator.state={accelerator.state}")
 
     # Setup training arguments
+    level_to_str = {n: s for s, n in transformers.utils.logging.log_levels.items()}
+    log_level_str = level_to_str.get(env.logging_level, "passive")
+    log_level_rep_str = level_to_str.get(env.logging_level + 10, "passive")
     args = TrainingArgumentsForAccelerator(
         env=env,
         data=CustomDataArguments(
@@ -152,9 +149,10 @@ def train(
             overwrite_output_dir=True,
             output_dir=str(env.output_dir),
             report_to=report_to,
-            log_level=env.logging_level,
+            log_level=log_level_str,
+            log_level_replica=log_level_rep_str,
             seed=env.random_seed,
-            do_train=True,
+            do_train=False,  # TODO: False -> True
             do_eval=True,
             gradient_checkpointing=gradient_checkpointing,
             gradient_accumulation_steps=gradient_accumulation_steps,
@@ -181,7 +179,7 @@ def train(
     process_log_level = args.train.get_process_log_level()
     args.env.setup_logger(process_log_level)
     datasets_set_verbosity(process_log_level + 10)
-    transformers_set_verbosity(process_log_level)
+    transformers_set_verbosity(process_log_level + 10)
     set_verbosity_info("c10d-NullHandler-default")
 
     # Log on each process the small summary:
@@ -411,4 +409,4 @@ def train(
 
 
 if __name__ == "__main__":
-    app()
+    AppTyper.run(main)
