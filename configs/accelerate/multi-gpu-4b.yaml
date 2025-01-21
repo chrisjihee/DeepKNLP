@@ -4,5 +4,6 @@ machine_rank: 0
 num_machines: 1
 num_processes: 4
 gpu_ids: 4,5,6,7
+mixed_precision: bf16
 use_cpu: false
 debug: false

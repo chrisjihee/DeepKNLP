@@ -125,10 +125,11 @@ def train(
     # Setup accelerator
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
-        deepspeed_plugin=DeepSpeedPlugin(zero_stage=ds_stage, hf_ds_config=ds_config),
+        deepspeed_plugin=DeepSpeedPlugin(zero_stage=ds_stage),
         project_dir=env.output_dir,
         log_with=report_to,
     )
+    logger.warning(f"accelerator={accelerator} / state={accelerator.state}")
 
     # Setup training arguments
     args = TrainingArgumentsForAccelerator(
