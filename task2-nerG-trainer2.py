@@ -172,14 +172,6 @@ def train(
     )
     args.env.local_rank = args.train.local_rank
 
-    # Setup accelerator
-    accelerator = Accelerator(
-        gradient_accumulation_steps=args.train.gradient_accumulation_steps,
-        deepspeed_plugin=DeepSpeedPlugin(zero_stage=ds_stage, hf_ds_config=ds_config),
-        project_dir=args.env.output_dir,
-        log_with=args.train.report_to,
-    )
-
     # Setup logging
     process_log_level = args.train.get_process_log_level()
     args.env.setup_logger(process_log_level)
