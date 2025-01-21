@@ -1,3 +1,23 @@
++ /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -m accelerate.commands.launch --config_file configs/accelerate/gpu4b-ds2.yaml task2-nerG-trainer2.py --accelerate_deepspeed
+[01.21 21:39:28] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:28] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+W0121 21:39:31.733000 640726 site-packages/torch/distributed/run.py:793]
+W0121 21:39:31.733000 640726 site-packages/torch/distributed/run.py:793] *****************************************
+W0121 21:39:31.733000 640726 site-packages/torch/distributed/run.py:793] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed.
+W0121 21:39:31.733000 640726 site-packages/torch/distributed/run.py:793] *****************************************
+[01.21 21:39:39] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:39] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:39] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:39] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:39] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:39] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:39] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:39] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:39:41] ┇ INFO    ┇                                        DeepSpeed ┇ cdb=None
+[01.21 21:39:41] ┇ INFO    ┇                                        DeepSpeed ┇ cdb=None
+[01.21 21:39:41] ┇ INFO    ┇                                        DeepSpeed ┇ cdb=None
+[01.21 21:39:41] ┇ INFO    ┇                                        DeepSpeed ┇ Initializing TorchBackend in DeepSpeed with backend nccl
+[01.21 21:39:41] ┇ INFO    ┇                                        DeepSpeed ┇ cdb=None
 [01.21 21:39:48] ┇ INFO    ┇                                         DeepKNLP ┇ Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
 [01.21 21:39:48] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
 [01.21 21:39:48] ┇ INFO    ┇                                   chrisbase.data ┇ [INIT] python task2-nerG-trainer2.py --accelerate_deepspeed
@@ -187,7 +207,15 @@
 [01.21 21:39:53] ┇ INFO    ┇                                         DeepKNLP ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
 [01.21 21:39:53] ┇ INFO    ┇                                         DeepKNLP ┇ model.generation_config.pad_token_id=0
 [01.21 21:39:53] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-train.jsonl as train_dataset(#=18135)
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3301.75 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3428.82 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3349.03 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3149.15 examples/s]
 [01.21 21:40:06] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-test-min.jsonl as eval_dataset(#=65)
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 114.45 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 139.29 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 131.94 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 111.88 examples/s]
 [01.21 21:40:09] ┇ INFO    ┇                             transformers.trainer ┇ Using auto half precision backend
 [01.21 21:40:09] ┇ WARNING ┇                                         DeepKNLP ┇ trainer.accelerator=<accelerate.accelerator.Accelerator object at 0x7f678732e480> / trainer.accelerator.state=Distributed environment: DistributedType.DEEPSPEED  Backend: nccl
 Num processes: 4
@@ -206,16 +234,27 @@ ds_config: {'train_batch_size': 128, 'train_micro_batch_size_per_gpu': 8, 'gradi
 [01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Gradient Accumulation steps = 4
 [01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Total optimization steps = 71
 [01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
-[01.21 21:41:54] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
+{'loss': 0.8462, 'grad_norm': 0.7538475394248962, 'learning_rate': 1.948160647590966e-05, 'epoch': 0.07}
+{'loss': 0.1232, 'grad_norm': 0.29584625363349915, 'learning_rate': 1.7071067811865477e-05, 'epoch': 0.14}
+{'loss': 0.0661, 'grad_norm': 0.1477169245481491, 'learning_rate': 1.3177914195819018e-05, 'epoch': 0.21}
+{'loss': 0.0506, 'grad_norm': 0.16175371408462524, 'learning_rate': 8.618436450481182e-06, 'epoch': 0.28}
+{'loss': 0.0451, 'grad_norm': 0.21688157320022583, 'learning_rate': 4.348635855774082e-06, 'epoch': 0.35}
+{'loss': 0.0387, 'grad_norm': 0.10703189671039581, 'learning_rate': 1.2637760935363053e-06, 'epoch': 0.42}
+{'loss': 0.0407, 'grad_norm': 0.1112724095582962, 'learning_rate': 1.0670251976275803e-08, 'epoch': 0.49}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [01:25<00:00,  1.14s/it][01.21 21:41:54] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
 [01.21 21:42:09] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running Evaluation *****
 [01.21 21:42:09] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 65
 [01.21 21:42:09] ┇ INFO    ┇                             transformers.trainer ┇   Batch size = 8
+{'eval_crossner_ai_prec': 0.2898550724636281, 'eval_crossner_ai_rec': 0.26905829596400493, 'eval_crossner_ai_f1': 0.27906976739179995, 'eval_AVERAGE_f1': 0.27906976739179995, 'eval_runtime': 13.6807, 'eval_samples_per_second': 4.751, 'eval_steps_per_second': 0.219, 'epoch': 0.5}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [01:56<00:00,  1.14s/it]
 [01.21 21:42:24] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
-[01.21 21:42:40] ┇ INFO    ┇                             transformers.trainer ┇ 
+[01.21 21:42:40] ┇ INFO    ┇                             transformers.trainer ┇
 
 Training completed. Do not forget to share your model on huggingface.co/models =)
 
 
+{'train_runtime': 133.3541, 'train_samples_per_second': 67.996, 'train_steps_per_second': 0.532, 'train_loss': 0.17123805301290163, 'epoch': 0.5}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [02:13<00:00,  1.88s/it]
 [01.21 21:42:40] ┇ INFO    ┇                                         DeepKNLP ┇ train_result=TrainOutput(global_step=71, training_loss=0.17123805301290163, metrics={'train_runtime': 133.3541, 'train_samples_per_second': 67.996, 'train_steps_per_second': 0.532, 'total_flos': 2.2242260498251776e+16, 'train_loss': 0.17123805301290163, 'epoch': 0.5008818342151675})
 [01.21 21:42:40] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
 [01.21 21:42:40] ┇ INFO    ┇                                   chrisbase.data ┇ [EXIT] python task2-nerG-trainer2.py --accelerate_deepspeed ($=00:02:51.314)

@@ -1,3 +1,31 @@
++ /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include=localhost:4,5,6,7 --master_port 30000 task2-nerG-trainer2.py --trainer_deepspeed configs/deepspeed/ds1_llama.json
+[01.21 21:25:23] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:23] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:28] ┇ WARNING ┇                                        DeepSpeed ┇ Unable to find hostfile, will proceed with training with local resources only.
+[01.21 21:25:28] ┇ INFO    ┇                                        DeepSpeed ┇ cmd = /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=30000 --enable_each_rank_log=None task2-nerG-trainer2.py --trainer_deepspeed configs/deepspeed/ds1_llama.json
+[01.21 21:25:31] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:31] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ WORLD INFO DICT: {'localhost': [4, 5, 6, 7]}
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ nnodes=1, num_local_procs=4, node_rank=0
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3]})
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ dist_world_size=4
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ Setting CUDA_VISIBLE_DEVICES=4,5,6,7
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ process 625449 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer2.py', '--local_rank=0', '--trainer_deepspeed', 'configs/deepspeed/ds1_llama.json']
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ process 625450 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer2.py', '--local_rank=1', '--trainer_deepspeed', 'configs/deepspeed/ds1_llama.json']
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ process 625451 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer2.py', '--local_rank=2', '--trainer_deepspeed', 'configs/deepspeed/ds1_llama.json']
+[01.21 21:25:34] ┇ INFO    ┇                                        DeepSpeed ┇ process 625452 spawned with command: ['/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python', '-u', 'task2-nerG-trainer2.py', '--local_rank=3', '--trainer_deepspeed', 'configs/deepspeed/ds1_llama.json']
+[01.21 21:25:47] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:47] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:47] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:47] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:47] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:47] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:47] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:47] ┇ INFO    ┇                                        DeepSpeed ┇ Setting ds_accelerator to cuda (auto detect)
+[01.21 21:25:48] ┇ INFO    ┇                                        DeepSpeed ┇ cdb=None
+[01.21 21:25:48] ┇ INFO    ┇                                        DeepSpeed ┇ cdb=None
+[01.21 21:25:48] ┇ INFO    ┇                                        DeepSpeed ┇ cdb=None
+[01.21 21:25:48] ┇ INFO    ┇                                        DeepSpeed ┇ cdb=None
 [01.21 21:25:50] ┇ INFO    ┇                                         DeepKNLP ┇ Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
 [01.21 21:25:50] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
 [01.21 21:25:50] ┇ INFO    ┇                                   chrisbase.data ┇ [INIT] python task2-nerG-trainer2.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds1_llama.json
@@ -187,7 +215,15 @@
 [01.21 21:25:55] ┇ INFO    ┇                                         DeepKNLP ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
 [01.21 21:25:55] ┇ INFO    ┇                                         DeepKNLP ┇ model.generation_config.pad_token_id=0
 [01.21 21:25:56] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-train.jsonl as train_dataset(#=18135)
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3280.12 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3320.12 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3176.75 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3198.04 examples/s]
 [01.21 21:26:09] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-test-min.jsonl as eval_dataset(#=65)
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 131.05 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 128.14 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 119.76 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 118.58 examples/s]
 [01.21 21:26:11] ┇ INFO    ┇                             transformers.trainer ┇ Using auto half precision backend
 [01.21 21:26:11] ┇ WARNING ┇                                         DeepKNLP ┇ trainer.accelerator=<accelerate.accelerator.Accelerator object at 0x7fbe01915a60> / trainer.accelerator.state=Distributed environment: DistributedType.DEEPSPEED  Backend: nccl
 Num processes: 4
@@ -207,17 +243,32 @@ ds_config: {'bf16': {'enabled': True}, 'optimizer': {'type': 'AdamW', 'params': 
 [01.21 21:26:29] ┇ INFO    ┇                             transformers.trainer ┇   Gradient Accumulation steps = 4
 [01.21 21:26:29] ┇ INFO    ┇                             transformers.trainer ┇   Total optimization steps = 71
 [01.21 21:26:29] ┇ INFO    ┇                             transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
-[01.21 21:27:39] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
+{'loss': 0.9359, 'grad_norm': 0.7268014550209045, 'learning_rate': 1.823529411764706e-05, 'epoch': 0.07}
+{'loss': 0.1286, 'grad_norm': 0.33760005235671997, 'learning_rate': 1.5294117647058822e-05, 'epoch': 0.14}
+{'loss': 0.0707, 'grad_norm': 0.18424257636070251, 'learning_rate': 1.235294117647059e-05, 'epoch': 0.21}
+{'loss': 0.0533, 'grad_norm': 0.1991187036037445, 'learning_rate': 9.411764705882354e-06, 'epoch': 0.28}
+{'loss': 0.0477, 'grad_norm': 0.15302297472953796, 'learning_rate': 6.470588235294119e-06, 'epoch': 0.35}
+{'loss': 0.039, 'grad_norm': 0.10275735706090927, 'learning_rate': 3.529411764705883e-06, 'epoch': 0.42}
+{'loss': 0.0406, 'grad_norm': 0.11399132013320923, 'learning_rate': 5.882352941176471e-07, 'epoch': 0.49}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [01:08<00:00,  1.12it/s][01.21 21:27:39] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
 [01.21 21:27:54] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running Evaluation *****
 [01.21 21:27:54] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 65
 [01.21 21:27:54] ┇ INFO    ┇                             transformers.trainer ┇   Batch size = 8
+{'eval_crossner_ai_prec': 0.3711340206183654, 'eval_crossner_ai_rec': 0.3228699551568059, 'eval_crossner_ai_f1': 0.3453237409572705, 'eval_AVERAGE_f1': 0.3453237409572705, 'eval_runtime': 13.6783, 'eval_samples_per_second': 4.752, 'eval_steps_per_second': 0.219, 'epoch': 0.5}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [01:38<00:00,  1.12it/s]
 [01.21 21:28:08] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
-[01.21 21:28:26] ┇ INFO    ┇                             transformers.trainer ┇ 
+[01.21 21:28:26] ┇ INFO    ┇                             transformers.trainer ┇
 
 Training completed. Do not forget to share your model on huggingface.co/models =)
 
 
+{'train_runtime': 116.7614, 'train_samples_per_second': 77.658, 'train_steps_per_second': 0.608, 'train_loss': 0.18605804443359375, 'epoch': 0.5}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [01:56<00:00,  1.64s/it]
 [01.21 21:28:26] ┇ INFO    ┇                                         DeepKNLP ┇ train_result=TrainOutput(global_step=71, training_loss=0.18605804443359375, metrics={'train_runtime': 116.7614, 'train_samples_per_second': 77.658, 'train_steps_per_second': 0.608, 'total_flos': 2.2242260498251776e+16, 'train_loss': 0.18605804443359375, 'epoch': 0.5008818342151675})
 [01.21 21:28:26] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
 [01.21 21:28:26] ┇ INFO    ┇                                   chrisbase.data ┇ [EXIT] python task2-nerG-trainer2.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds1_llama.json ($=00:02:35.281)
 [01.21 21:28:26] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[01.21 21:28:32] ┇ INFO    ┇                                        DeepSpeed ┇ Process 625452 exits successfully.
+[01.21 21:28:32] ┇ INFO    ┇                                        DeepSpeed ┇ Process 625450 exits successfully.
+[01.21 21:28:32] ┇ INFO    ┇                                        DeepSpeed ┇ Process 625451 exits successfully.
+[01.21 21:28:32] ┇ INFO    ┇                                        DeepSpeed ┇ Process 625449 exits successfully.
