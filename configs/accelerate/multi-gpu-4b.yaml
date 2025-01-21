@@ -6,4 +6,3 @@ num_processes: 4
 gpu_ids: 4,5,6,7
 use_cpu: false
 debug: false
-mixed_precision: bf16
