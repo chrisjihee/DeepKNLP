@@ -1,3 +1,5 @@
+/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include=localhost:0,1,2,3 --master_port 30000 task2-nerG-trainer2.py train
+[01.21 03:26:28] ┇ WARNING ┇                                        DeepSpeed ┇ Unable to find hostfile, will proceed with training with local resources only.
 [01.21 03:26:41] ┇ WARNING ┇                                         DeepKNLP ┇ Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
 [01.21 03:26:41] ┇ WARNING ┇                                         DeepKNLP ┇ Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
 [01.21 03:26:41] ┇ WARNING ┇                                         DeepKNLP ┇ Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
@@ -248,7 +250,15 @@ If your task is similar to the task the model of the checkpoint was trained on, 
 [01.21 03:26:46] ┇ INFO    ┇                                         DeepKNLP ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
 [01.21 03:26:46] ┇ INFO    ┇                                         DeepKNLP ┇ model.generation_config.pad_token_id=0
 [01.21 03:26:46] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-train.jsonl as train_dataset(#=18135)
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████| 18135/18135 [00:05<00:00, 3475.75 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████| 18135/18135 [00:05<00:00, 3227.18 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████| 18135/18135 [00:05<00:00, 3220.37 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████| 18135/18135 [00:05<00:00, 3203.04 examples/s]
 [01.21 03:26:59] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-test-min.jsonl as eval_dataset(#=65)
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████| 65/65 [00:00<00:00, 111.89 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████| 65/65 [00:00<00:00, 114.92 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████| 65/65 [00:00<00:00, 112.31 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████| 65/65 [00:00<00:00, 112.62 examples/s]
 [01.21 03:27:01] ┇ INFO    ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmp60pq94lu/test.c -o /tmp/tmp60pq94lu/test.o
 [01.21 03:27:01] ┇ INFO    ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmp60pq94lu/test.o -laio -o /tmp/tmp60pq94lu/a.out
 [01.21 03:27:02] ┇ INFO    ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmpffnjfb5q/test.c -o /tmp/tmpffnjfb5q/test.o
@@ -258,9 +268,13 @@ If your task is similar to the task the model of the checkpoint was trained on, 
 [01.21 03:27:06] ┇ DEBUG   ┇                         c10d-NullHandler-default ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '2', 'local_rank': '2', 'nccl_version': '2.21.5', 'time_spent': '397173ns'}
 [01.21 03:27:06] ┇ DEBUG   ┇                         c10d-NullHandler-default ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '1', 'local_rank': '1', 'nccl_version': '2.21.5', 'time_spent': '401492ns'}
 [01.21 03:27:06] ┇ DEBUG   ┇                         c10d-NullHandler-default ┇ {'func_name': 'new_group', 'args': '(range(0, 4),), {}', 'pg_name': 'None', 'backend': 'nccl', 'world_size': '4', 'group_size': '4', 'global_rank': '3', 'local_rank': '3', 'nccl_version': '2.21.5', 'time_spent': '389799ns'}
+[01.21 03:27:11] ┇ WARNING ┇                                        DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[01.21 03:27:11] ┇ WARNING ┇                                        DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[01.21 03:27:11] ┇ WARNING ┇                                        DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
 [01.21 03:27:11] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
 [01.21 03:27:11] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
 [01.21 03:27:11] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[01.21 03:27:11] ┇ WARNING ┇                                        DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
 [01.21 03:27:11] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running training *****
 [01.21 03:27:11] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 18,135
 [01.21 03:27:11] ┇ INFO    ┇                             transformers.trainer ┇   Num Epochs = 1
@@ -269,8 +283,15 @@ If your task is similar to the task the model of the checkpoint was trained on, 
 [01.21 03:27:11] ┇ INFO    ┇                             transformers.trainer ┇   Gradient Accumulation steps = 4
 [01.21 03:27:11] ┇ INFO    ┇                             transformers.trainer ┇   Total optimization steps = 71
 [01.21 03:27:11] ┇ INFO    ┇                             transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
-[01.21 03:27:11] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[01.21 03:29:42] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
+  0%|          | 0/71 [00:00<?, ?it/s][01.21 03:27:11] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+ 14%|█▍        | 10/71 [00:23<02:11,  2.16s/it]{'loss': 0.9358, 'grad_norm': 0.7520268559455872, 'learning_rate': 1.823529411764706e-05, 'epoch': 0.07}
+ 28%|██▊       | 20/71 [00:43<01:39,  1.95s/it]{'loss': 0.1278, 'grad_norm': 0.31632018089294434, 'learning_rate': 1.5294117647058822e-05, 'epoch': 0.14}
+ 42%|████▏     | 30/71 [01:04<01:28,  2.16s/it]{'loss': 0.0705, 'grad_norm': 0.19092705845832825, 'learning_rate': 1.235294117647059e-05, 'epoch': 0.21}
+ 56%|█████▋    | 40/71 [01:24<01:02,  2.01s/it]{'loss': 0.0532, 'grad_norm': 0.195684015750885, 'learning_rate': 9.411764705882354e-06, 'epoch': 0.28}
+ 70%|███████   | 50/71 [01:45<00:47,  2.24s/it]{'loss': 0.0477, 'grad_norm': 0.153150275349617, 'learning_rate': 6.470588235294119e-06, 'epoch': 0.35}
+ 85%|████████▍ | 60/71 [02:06<00:24,  2.20s/it]{'loss': 0.039, 'grad_norm': 0.10214919596910477, 'learning_rate': 3.529411764705883e-06, 'epoch': 0.42}
+ 99%|█████████▊| 70/71 [02:26<00:01,  1.99s/it]{'loss': 0.0407, 'grad_norm': 0.11457229405641556, 'learning_rate': 5.882352941176471e-07, 'epoch': 0.49}
+100%|██████████| 71/71 [02:28<00:00,  1.99s/it][01.21 03:29:42] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
 [01.21 03:29:42] ┇ INFO    ┇                 transformers.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/config.json
 [01.21 03:29:42] ┇ INFO    ┇      transformers.generation.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/generation_config.json
 [01.21 03:29:46] ┇ INFO    ┇                      transformers.modeling_utils ┇ Model weights saved in output/GNER/EAGLE-1B-debug/checkpoint-71/model.safetensors
@@ -279,18 +300,29 @@ If your task is similar to the task the model of the checkpoint was trained on, 
 [01.21 03:30:02] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running Evaluation *****
 [01.21 03:30:02] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 65
 [01.21 03:30:02] ┇ INFO    ┇                             transformers.trainer ┇   Batch size = 8
+
+  0%|          | 0/3 [00:00<?, ?it/s]
+ 67%|██████▋   | 2/3 [00:05<00:02,  2.50s/it]
+
+100%|██████████| 71/71 [03:04<00:00,  1.99s/it]
+100%|██████████| 3/3 [00:09<00:00,  3.25s/it]
+                                             {'eval_crossner_ai_prec': 0.35532994923839833, 'eval_crossner_ai_rec': 0.31390134529133906, 'eval_crossner_ai_f1': 0.33333333328336623, 'eval_AVERAGE_f1': 0.33333333328336623, 'eval_runtime': 14.0607, 'eval_samples_per_second': 4.623, 'eval_steps_per_second': 0.213, 'epoch': 0.5}
 [01.21 03:30:17] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
 [01.21 03:30:17] ┇ INFO    ┇                 transformers.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/config.json
 [01.21 03:30:17] ┇ INFO    ┇      transformers.generation.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/generation_config.json
 [01.21 03:30:52] ┇ INFO    ┇                      transformers.modeling_utils ┇ Model weights saved in output/GNER/EAGLE-1B-debug/checkpoint-71/model.safetensors
 [01.21 03:30:52] ┇ INFO    ┇             transformers.tokenization_utils_base ┇ tokenizer config file saved in output/GNER/EAGLE-1B-debug/checkpoint-71/tokenizer_config.json
 [01.21 03:30:52] ┇ INFO    ┇             transformers.tokenization_utils_base ┇ Special tokens file saved in output/GNER/EAGLE-1B-debug/checkpoint-71/special_tokens_map.json
-[01.21 03:33:14] ┇ INFO    ┇                             transformers.trainer ┇ 
+100%|██████████| 71/71 [06:02<00:00,  5.11s/it]
+[01.21 03:33:14] ┇ INFO    ┇                             transformers.trainer ┇
 
 Training completed. Do not forget to share your model on huggingface.co/models =)
 
 
+{'train_runtime': 362.6492, 'train_samples_per_second': 25.004, 'train_steps_per_second': 0.196, 'train_loss': 0.1858822997187225, 'epoch': 0.5}
 [01.21 03:33:14] ┇ INFO    ┇                                         DeepKNLP ┇ train_result=TrainOutput(global_step=71, training_loss=0.1858822997187225, metrics={'train_runtime': 362.6492, 'train_samples_per_second': 25.004, 'train_steps_per_second': 0.196, 'total_flos': 2.2242260498251776e+16, 'train_loss': 0.1858822997187225, 'epoch': 0.5008818342151675})
 [01.21 03:33:15] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
 [01.21 03:33:15] ┇ INFO    ┇                                   chrisbase.data ┇ [EXIT] python task2-nerG-trainer2.py --local_rank=0 train ($=00:06:32.859)
 [01.21 03:33:15] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
+
+Process finished with exit code 0
