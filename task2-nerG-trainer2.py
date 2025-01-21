@@ -119,6 +119,14 @@ def train(
         ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
         ds_config: Annotated[str, typer.Option("--ds_config")] = "configs/deepspeed/deepspeed_zero1_llama.json",
 ):
+    # Setup accelerator
+    accelerator = Accelerator(
+        gradient_accumulation_steps=gradient_accumulation_steps,
+        deepspeed_plugin=DeepSpeedPlugin(zero_stage=ds_stage, hf_ds_config=ds_config),
+        project_dir=env.output_dir,
+        log_with=report_to,
+    )
+
     # Setup training arguments
     args = TrainingArgumentsForAccelerator(
         env=env,
