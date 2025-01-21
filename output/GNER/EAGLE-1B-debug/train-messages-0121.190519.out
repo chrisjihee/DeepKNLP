@@ -1,0 +1,512 @@
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[SHELL]=/bin/bash
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_EXE]=/home/chrisjihee/miniforge3/bin/conda
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[_CE_M]=
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TERMINAL_EMULATOR]=JetBrains-JediTerm
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_ADDRESS]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_NAME]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TERM_SESSION_ID]=44148f63-5b47-414c-a084-df998b8310b0
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_MONETARY]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[PWD]=/home/chrisjihee/proj/DeepKNLP
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LOGNAME]=chrisjihee
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[XDG_SESSION_TYPE]=tty
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_PREFIX]=/home/chrisjihee/miniforge3/envs/DeepKNLP
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[MOTD_SHOWN]=pam
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[HOME]=/home/chrisjihee
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_PAPER]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LANG]=en_US.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LS_COLORS]=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_PROMPT_MODIFIER]=(DeepKNLP) 
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[SSH_CONNECTION]=129.254.181.36 46680 129.254.121.74 122
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LESSCLOSE]=/usr/bin/lesspipe %s %s
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[XDG_SESSION_CLASS]=user
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_IDENTIFICATION]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TERM]=xterm-256color
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[_CE_CONDA]=
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LESSOPEN]=| /usr/bin/lesspipe %s
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[USER]=chrisjihee
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_SHLVL]=2
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[DISPLAY]=localhost:11.0
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[SHLVL]=3
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_TELEPHONE]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_MEASUREMENT]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[XDG_SESSION_ID]=17
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_PYTHON_EXE]=/home/chrisjihee/miniforge3/bin/python
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[XDG_RUNTIME_DIR]=/run/user/1000016
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[SSH_CLIENT]=129.254.181.36 46680 122
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_DEFAULT_ENV]=DeepKNLP
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_TIME]=en_US.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_ALL]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_COLLATE]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[XDG_DATA_DIRS]=/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[PATH]=/home/chrisjihee/.cargo/bin:/home/chrisjihee/miniforge3/envs/DeepKNLP/bin:/home/chrisjihee/miniforge3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[DBUS_SESSION_BUS_ADDRESS]=unix:path=/run/user/1000016/bus
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[SSH_TTY]=/dev/pts/1
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_PREFIX_1]=/home/chrisjihee/miniforge3
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_NUMERIC]=ko_KR.UTF-8
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[_]=/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CUDA_MODULE_LOADING]=LAZY
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[KMP_DUPLICATE_LIB_OK]=True
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[KMP_INIT_AT_FORK]=FALSE
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CUDA_VISIBLE_DEVICES]=0,1,2,3
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[PYTHONPATH]=/home/chrisjihee/proj/DeepKNLP
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[ACCELERATE_MIXED_PRECISION]=bf16
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[ACCELERATE_CONFIG_DS_FIELDS]=zero_stage,mixed_precision
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[ACCELERATE_USE_DEEPSPEED]=true
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[ACCELERATE_DEEPSPEED_ZERO_STAGE]=2
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[OMP_NUM_THREADS]=1
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LOCAL_RANK]=0
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[RANK]=0
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[GROUP_RANK]=0
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[ROLE_RANK]=0
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[ROLE_NAME]=default
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LOCAL_WORLD_SIZE]=4
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[WORLD_SIZE]=4
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[GROUP_WORLD_SIZE]=1
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[ROLE_WORLD_SIZE]=4
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[MASTER_ADDR]=127.0.0.1
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[MASTER_PORT]=29500
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TORCHELASTIC_RESTART_COUNT]=0
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TORCHELASTIC_MAX_RESTARTS]=0
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TORCHELASTIC_RUN_ID]=none
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TORCHELASTIC_USE_AGENT_STORE]=True
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TORCH_NCCL_ASYNC_ERROR_HANDLING]=1
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[TORCHELASTIC_ERROR_FILE]=/tmp/torchelastic_qvu2vta2/none_zo33yx5p/attempt_0/0/error.json
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[PYTORCH_NVML_BASED_CUDA_CHECK]=1
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ accelerator=<accelerate.accelerator.Accelerator object at 0x7ff25eca9b50> / accelerator.state=Distributed environment: DistributedType.DEEPSPEED  Backend: nccl
+Num processes: 4
+Process index: 0
+Local process index: 0
+Device: cuda:0
+
+Mixed precision type: bf16
+ds_config: {'train_batch_size': 'auto', 'train_micro_batch_size_per_gpu': 'auto', 'gradient_accumulation_steps': 'auto', 'zero_optimization': {'stage': 2, 'offload_optimizer': {'device': 'none', 'nvme_path': None}, 'offload_param': {'device': 'none', 'nvme_path': None}, 'stage3_gather_16bit_weights_on_model_save': False}, 'gradient_clipping': 'auto', 'steps_per_print': inf, 'bf16': {'enabled': True}, 'fp16': {'enabled': False}}
+
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.21 19:05:23] ┇ WARNING ┇                                         DeepKNLP ┇ Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇ [INIT] python task2-nerG-trainer2.py --deepspeed
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇ -----+-----------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    # | TrainingArgumentsForAccelerator               | value
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇ -----+-----------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    1 | env.hostname                                  | ptlm3
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    2 | env.hostaddr                                  | 129.254.121.74
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    3 | env.global_rank                               | -1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    4 | env.local_rank                                | 0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    5 | env.node_rank                                 | -1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    6 | env.world_size                                | 4
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    7 | env.time_stamp                                | 0121.190519
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    8 | env.python_path                               | /home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇    9 | env.current_dir                               | /home/chrisjihee/proj/DeepKNLP
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   10 | env.current_file                              | task2-nerG-trainer2.py
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   11 | env.command_args                              | ['--deepspeed']
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   12 | env.output_home                               | output
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   13 | env.output_name                               | GNER
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   14 | env.run_version                               | EAGLE-1B-debug
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   15 | env.logging_file                              | train-messages-0121.190519.out
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   16 | env.logging_level                             | 20
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   17 | env.logging_format                            | %(asctime)s ┇ %(levelname)-7s ┇ %(name)48s ┇ %(message)s
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   18 | env.datetime_format                           | [%m.%d %H:%M:%S]
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   19 | env.argument_file                             | train-arguments-0121.190519.json
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   20 | env.random_seed                               | 7
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   21 | env.max_workers                               | 4
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   22 | env.debugging                                 | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   23 | env.output_dir                                | output/GNER/EAGLE-1B-debug
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   24 | time.t1                                       | 2025-01-21 19:05:24.343470
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   25 | time.t2                                       | 2025-01-21 19:05:19.661196
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   26 | time.started                                  | [01.21 19:05:24]
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   27 | time.settled                                  |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   28 | time.elapsed                                  |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   29 | data.pretrained                               | etri-lirs/egpt-1.3b-preview
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   30 | data.train_file                               | data/gner/zero-shot-train.jsonl
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   31 | data.study_file                               |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   32 | data.eval_file                                | data/gner/zero-shot-test-min.jsonl
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   33 | data.pred_file                                | data/gner/zero-shot-test-min.jsonl
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   34 | data.max_train_samples                        | -1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   35 | data.max_study_samples                        | -1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   36 | data.max_eval_samples                         | -1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   37 | data.max_pred_samples                         | -1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   38 | data.max_source_length                        | 640
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   39 | data.max_target_length                        | 640
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   40 | data.use_cache_data                           | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   41 | data.ignore_pad_token_for_loss                | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   42 | train.output_dir                              | output/GNER/EAGLE-1B-debug
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   43 | train.overwrite_output_dir                    | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   44 | train.do_train                                | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   45 | train.do_eval                                 | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   46 | train.do_predict                              | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   47 | train.eval_strategy                           | IntervalStrategy.EPOCH
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   48 | train.prediction_loss_only                    | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   49 | train.per_device_train_batch_size             | 8
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   50 | train.per_device_eval_batch_size              | 8
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   51 | train.per_gpu_train_batch_size                |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   52 | train.per_gpu_eval_batch_size                 |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   53 | train.gradient_accumulation_steps             | 4
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   54 | train.eval_accumulation_steps                 |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   55 | train.eval_delay                              | 0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   56 | train.torch_empty_cache_steps                 |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   57 | train.learning_rate                           | 2e-05
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   58 | train.weight_decay                            | 0.0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   59 | train.adam_beta1                              | 0.9
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   60 | train.adam_beta2                              | 0.999
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   61 | train.adam_epsilon                            | 1e-08
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   62 | train.max_grad_norm                           | 1.0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   63 | train.num_train_epochs                        | 0.5
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   64 | train.max_steps                               | -1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   65 | train.lr_scheduler_type                       | SchedulerType.COSINE
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   66 | train.lr_scheduler_kwargs                     | {}
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   67 | train.warmup_ratio                            | 0.04
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   68 | train.warmup_steps                            | 0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   69 | train.log_level                               | info
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   70 | train.log_level_replica                       | warning
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   71 | train.log_on_each_node                        | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   72 | train.logging_dir                             | output/GNER/EAGLE-1B-debug/runs/Jan21_19-05-23_ptlm3
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   73 | train.logging_strategy                        | IntervalStrategy.STEPS
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   74 | train.logging_first_step                      | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   75 | train.logging_steps                           | 10
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   76 | train.logging_nan_inf_filter                  | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   77 | train.save_strategy                           | SaveStrategy.EPOCH
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   78 | train.save_steps                              | 500
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   79 | train.save_total_limit                        |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   80 | train.save_safetensors                        | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   81 | train.save_on_each_node                       | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   82 | train.save_only_model                         | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   83 | train.restore_callback_states_from_checkpoint | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   84 | train.no_cuda                                 | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   85 | train.use_cpu                                 | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   86 | train.use_mps_device                          | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   87 | train.seed                                    | 7
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   88 | train.data_seed                               |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   89 | train.jit_mode_eval                           | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   90 | train.use_ipex                                | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   91 | train.bf16                                    | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   92 | train.fp16                                    | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   93 | train.fp16_opt_level                          | O1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   94 | train.half_precision_backend                  | auto
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   95 | train.bf16_full_eval                          | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   96 | train.fp16_full_eval                          | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   97 | train.tf32                                    | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   98 | train.local_rank                              | 0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇   99 | train.ddp_backend                             |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  100 | train.tpu_num_cores                           |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  101 | train.tpu_metrics_debug                       | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  102 | train.debug                                   | []
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  103 | train.dataloader_drop_last                    | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  104 | train.eval_steps                              |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  105 | train.dataloader_num_workers                  | 0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  106 | train.dataloader_prefetch_factor              |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  107 | train.past_index                              | -1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  108 | train.run_name                                | output/GNER/EAGLE-1B-debug
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  109 | train.disable_tqdm                            | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  110 | train.remove_unused_columns                   | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  111 | train.label_names                             |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  112 | train.load_best_model_at_end                  | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  113 | train.metric_for_best_model                   |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  114 | train.greater_is_better                       |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  115 | train.ignore_data_skip                        | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  116 | train.fsdp                                    | []
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  117 | train.fsdp_min_num_params                     | 0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  118 | train.fsdp_config                             | {'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False}
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  119 | train.fsdp_transformer_layer_cls_to_wrap      |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  120 | train.accelerator_config                      | {'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False}
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  121 | train.deepspeed                               |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  122 | train.label_smoothing_factor                  | 0.0
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  123 | train.optim                                   | OptimizerNames.ADAMW_TORCH
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  124 | train.optim_args                              |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  125 | train.adafactor                               | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  126 | train.group_by_length                         | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  127 | train.length_column_name                      | length
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  128 | train.report_to                               | ['tensorboard']
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  129 | train.ddp_find_unused_parameters              |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  130 | train.ddp_bucket_cap_mb                       |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  131 | train.ddp_broadcast_buffers                   |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  132 | train.dataloader_pin_memory                   | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  133 | train.dataloader_persistent_workers           | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  134 | train.skip_memory_metrics                     | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  135 | train.use_legacy_prediction_loop              | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  136 | train.push_to_hub                             | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  137 | train.resume_from_checkpoint                  |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  138 | train.hub_model_id                            |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  139 | train.hub_strategy                            | HubStrategy.EVERY_SAVE
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  140 | train.hub_token                               |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  141 | train.hub_private_repo                        |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  142 | train.hub_always_push                         | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  143 | train.gradient_checkpointing                  | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  144 | train.gradient_checkpointing_kwargs           |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  145 | train.include_inputs_for_metrics              | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  146 | train.include_for_metrics                     | []
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  147 | train.eval_do_concat_batches                  | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  148 | train.fp16_backend                            | auto
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  149 | train.evaluation_strategy                     |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  150 | train.push_to_hub_model_id                    |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  151 | train.push_to_hub_organization                |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  152 | train.push_to_hub_token                       |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  153 | train._n_gpu                                  | 1
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  154 | train.mp_parameters                           |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  155 | train.auto_find_batch_size                    | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  156 | train.full_determinism                        | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  157 | train.torchdynamo                             |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  158 | train.ray_scope                               | last
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  159 | train.ddp_timeout                             | 1800
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  160 | train.torch_compile                           | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  161 | train.torch_compile_backend                   |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  162 | train.torch_compile_mode                      |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  163 | train.dispatch_batches                        |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  164 | train.split_batches                           |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  165 | train.include_tokens_per_second               | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  166 | train.include_num_input_tokens_seen           | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  167 | train.neftune_noise_alpha                     |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  168 | train.optim_target_modules                    |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  169 | train.batch_eval_metrics                      | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  170 | train.eval_on_start                           | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  171 | train.use_liger_kernel                        | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  172 | train.eval_use_gather_object                  | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  173 | train.average_tokens_across_devices           | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  174 | train.sortish_sampler                         | False
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  175 | train.predict_with_generate                   | True
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  176 | train.generation_max_length                   | 1280
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  177 | train.generation_num_beams                    |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇  178 | train.generation_config                       |
+[01.21 19:05:24] ┇ INFO    ┇                                   chrisbase.data ┇ -----+-----------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[01.21 19:05:29] ┇ INFO    ┇                                         DeepKNLP ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
+[01.21 19:05:29] ┇ INFO    ┇                                         DeepKNLP ┇ model.generation_config.pad_token_id=0
+[01.21 19:05:29] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-train.jsonl as train_dataset(#=18135)
+[01.21 19:05:42] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-test-min.jsonl as eval_dataset(#=65)
+[01.21 19:05:44] ┇ INFO    ┇                             transformers.trainer ┇ Using auto half precision backend
+[01.21 19:05:44] ┇ WARNING ┇                                         DeepKNLP ┇ trainer.accelerator=<accelerate.accelerator.Accelerator object at 0x7ff250d70440> / trainer.accelerator.state=Distributed environment: DistributedType.DEEPSPEED  Backend: nccl
+Num processes: 4
+Process index: 0
+Local process index: 0
+Device: cuda:0
+
+Mixed precision type: bf16
+ds_config: {'train_batch_size': 128, 'train_micro_batch_size_per_gpu': 8, 'gradient_accumulation_steps': 4, 'zero_optimization': {'stage': 2, 'offload_optimizer': {'device': 'none', 'nvme_path': None}, 'offload_param': {'device': 'none', 'nvme_path': None}, 'stage3_gather_16bit_weights_on_model_save': False}, 'gradient_clipping': 1.0, 'steps_per_print': inf, 'bf16': {'enabled': True}, 'fp16': {'enabled': False}}
+
+[01.21 19:05:45] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed info: version=0.16.3+f0edaf2a, git-hash=f0edaf2a, git-branch=master
+[01.21 19:05:45] ┇ INFO    ┇                                        DeepSpeed ┇ Config mesh_device None world_size = 4
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed Flops Profiler Enabled: False
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] Using client Optimizer as basic optimizer
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] Removing param_group that has no 'params' in the basic Optimizer
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed Basic Optimizer = AdamW
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ Checking ZeRO support for optimizer=AdamW type=<class 'torch.optim.adamw.AdamW'>
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] Creating torch.bfloat16 ZeRO stage 2 optimizer
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ Reduce bucket size 500000000
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ Allgather bucket size 500000000
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ CPU Offload: False
+[01.21 19:05:48] ┇ INFO    ┇                                        DeepSpeed ┇ Round robin gradient partitioning: False
+[01.21 19:05:53] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[01.21 19:05:53] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[01.21 19:05:53] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[01.21 19:05:53] ┇ INFO    ┇                                        DeepSpeed ┇ Before initializing optimizer states
+[01.21 19:05:53] ┇ INFO    ┇                                        DeepSpeed ┇ MA 3.84 GB         Max_MA 3.84 GB         CA 4.03 GB         Max_CA 4 GB 
+[01.21 19:05:53] ┇ INFO    ┇                                        DeepSpeed ┇ CPU Virtual Memory:  used = 14.87 GB, percent = 5.9%
+[01.21 19:05:53] ┇ INFO    ┇                                        DeepSpeed ┇ After initializing optimizer states
+[01.21 19:05:53] ┇ INFO    ┇                                        DeepSpeed ┇ MA 3.84 GB         Max_MA 5.09 GB         CA 5.28 GB         Max_CA 5 GB 
+[01.21 19:05:53] ┇ INFO    ┇                                        DeepSpeed ┇ CPU Virtual Memory:  used = 15.09 GB, percent = 6.0%
+[01.21 19:05:53] ┇ INFO    ┇                                        DeepSpeed ┇ optimizer state initialized
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇ After initializing ZeRO optimizer
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇ MA 3.84 GB         Max_MA 3.84 GB         CA 5.28 GB         Max_CA 5 GB 
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇ CPU Virtual Memory:  used = 15.09 GB, percent = 6.0%
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed Final Optimizer = DeepSpeedZeroOptimizer
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed using configured LR scheduler = None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] DeepSpeed LR Scheduler = None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] step=0, skipped=0, lr=[0.0, 0.0], mom=[(0.9, 0.999), (0.9, 0.999)]
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇ DeepSpeedEngine configuration:
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   activation_checkpointing_config  {
+    "partition_activations": false, 
+    "contiguous_memory_optimization": false, 
+    "cpu_checkpointing": false, 
+    "number_checkpoints": null, 
+    "synchronize_checkpoint_boundary": false, 
+    "profile": false
+}
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   aio_config ................... {'block_size': 1048576, 'queue_depth': 8, 'thread_count': 1, 'single_submit': False, 'overlap_events': True, 'use_gds': False}
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   amp_enabled .................. False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   amp_params ................... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   autotuning_config ............ {
+    "enabled": false, 
+    "start_step": null, 
+    "end_step": null, 
+    "metric_path": null, 
+    "arg_mappings": null, 
+    "metric": "throughput", 
+    "model_info": null, 
+    "results_dir": "autotuning_results", 
+    "exps_dir": "autotuning_exps", 
+    "overwrite": true, 
+    "fast": true, 
+    "start_profile_step": 3, 
+    "end_profile_step": 5, 
+    "tuner_type": "gridsearch", 
+    "tuner_early_stopping": 5, 
+    "tuner_num_trials": 50, 
+    "model_info_path": null, 
+    "mp_size": 1, 
+    "max_train_batch_size": null, 
+    "min_train_batch_size": 1, 
+    "max_train_micro_batch_size_per_gpu": 1.024000e+03, 
+    "min_train_micro_batch_size_per_gpu": 1, 
+    "num_tuning_micro_batch_sizes": 3
+}
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   bfloat16_enabled ............. True
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   bfloat16_immediate_grad_update  False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   checkpoint_parallel_write_pipeline  False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   checkpoint_tag_validation_enabled  True
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   checkpoint_tag_validation_fail  False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   comms_config ................. <deepspeed.comm.config.DeepSpeedCommsConfig object at 0x7ff1f7994860>
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   communication_data_type ...... None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   compression_config ........... {'weight_quantization': {'shared_parameters': {'enabled': False, 'quantizer_kernel': False, 'schedule_offset': 0, 'quantize_groups': 1, 'quantize_verbose': False, 'quantization_type': 'symmetric', 'quantize_weight_in_forward': False, 'rounding': 'nearest', 'fp16_mixed_quantize': False, 'quantize_change_ratio': 0.001}, 'different_groups': {}}, 'activation_quantization': {'shared_parameters': {'enabled': False, 'quantization_type': 'symmetric', 'range_calibration': 'dynamic', 'schedule_offset': 1000}, 'different_groups': {}}, 'sparse_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'row_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'head_pruning': {'shared_parameters': {'enabled': False, 'method': 'topk', 'schedule_offset': 1000}, 'different_groups': {}}, 'channel_pruning': {'shared_parameters': {'enabled': False, 'method': 'l1', 'schedule_offset': 1000}, 'different_groups': {}}, 'layer_reduction': {'enabled': False}}
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   curriculum_enabled_legacy .... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   curriculum_params_legacy ..... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   data_efficiency_config ....... {'enabled': False, 'seed': 1234, 'data_sampling': {'enabled': False, 'num_epochs': 1000, 'num_workers': 0, 'curriculum_learning': {'enabled': False}}, 'data_routing': {'enabled': False, 'random_ltd': {'enabled': False, 'layer_token_lr_schedule': {'enabled': False}}}}
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   data_efficiency_enabled ...... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   dataloader_drop_last ......... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   disable_allgather ............ False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   dump_state ................... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   dynamic_loss_scale_args ...... None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   eigenvalue_enabled ........... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   eigenvalue_gas_boundary_resolution  1
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   eigenvalue_layer_name ........ bert.encoder.layer
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   eigenvalue_layer_num ......... 0
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   eigenvalue_max_iter .......... 100
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   eigenvalue_stability ......... 1e-06
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   eigenvalue_tol ............... 0.01
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   eigenvalue_verbose ........... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   elasticity_enabled ........... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   flops_profiler_config ........ {
+    "enabled": false, 
+    "recompute_fwd_factor": 0.0, 
+    "profile_step": 1, 
+    "module_depth": -1, 
+    "top_modules": 1, 
+    "detailed": true, 
+    "output_file": null
+}
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   fp16_auto_cast ............... None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   fp16_enabled ................. False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   fp16_master_weights_and_gradients  False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   global_rank .................. 0
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   grad_accum_dtype ............. None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   gradient_accumulation_steps .. 4
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   gradient_clipping ............ 1.0
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   gradient_predivide_factor .... 1.0
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   graph_harvesting ............. False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   hybrid_engine ................ enabled=False max_out_tokens=512 inference_tp_size=1 release_inference_cache=False pin_parameters=True tp_gather_partition_size=8
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   initial_dynamic_scale ........ 1
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   load_universal_checkpoint .... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   loss_scale ................... 1.0
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   memory_breakdown ............. False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   mics_hierarchial_params_gather  False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   mics_shard_size .............. -1
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   monitor_config ............... tensorboard=TensorBoardConfig(enabled=False, output_path='', job_name='DeepSpeedJobName') comet=CometConfig(enabled=False, samples_log_interval=100, project=None, workspace=None, api_key=None, experiment_name=None, experiment_key=None, online=None, mode=None) wandb=WandbConfig(enabled=False, group=None, team=None, project='deepspeed') csv_monitor=CSVConfig(enabled=False, output_path='', job_name='DeepSpeedJobName')
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   nebula_config ................ {
+    "enabled": false, 
+    "persistent_storage_path": null, 
+    "persistent_time_interval": 100, 
+    "num_of_version_in_retention": 2, 
+    "enable_nebula_load": true, 
+    "load_path": null
+}
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   optimizer_legacy_fusion ...... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   optimizer_name ............... None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   optimizer_params ............. None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   pipeline ..................... {'stages': 'auto', 'partition': 'best', 'seed_layers': False, 'activation_checkpoint_interval': 0, 'pipe_partitioned': True, 'grad_partitioned': True}
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   pld_enabled .................. False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   pld_params ................... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   prescale_gradients ........... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   scheduler_name ............... None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   scheduler_params ............. None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   seq_parallel_communication_data_type  torch.float32
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   sparse_attention ............. None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   sparse_gradients_enabled ..... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   steps_per_print .............. inf
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   timers_config ................ enabled=True synchronized=True
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   train_batch_size ............. 128
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   train_micro_batch_size_per_gpu  8
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   use_data_before_expert_parallel_  False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   use_node_local_storage ....... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   wall_clock_breakdown ......... False
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   weight_quantization_config ... None
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   world_size ................... 4
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   zero_allow_untested_optimizer  True
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   zero_config .................. stage=2 contiguous_gradients=True reduce_scatter=True reduce_bucket_size=500000000 use_multi_rank_bucket_allreduce=True allgather_partitions=True allgather_bucket_size=500000000 overlap_comm=False load_from_fp32_weights=True elastic_checkpoint=False offload_param=DeepSpeedZeroOffloadParamConfig(device='none', nvme_path=None, buffer_count=5, buffer_size=100000000, max_in_cpu=1000000000, pin_memory=False) offload_optimizer=DeepSpeedZeroOffloadOptimizerConfig(device='none', nvme_path=None, buffer_count=4, pin_memory=False, pipeline_read=False, pipeline_write=False, fast_init=False, ratio=1.0) sub_group_size=1000000000 cpu_offload_param=None cpu_offload_use_pin_memory=None cpu_offload=None prefetch_bucket_size=50000000 param_persistence_threshold=100000 model_persistence_threshold=9223372036854775807 max_live_parameters=1000000000 max_reuse_distance=1000000000 gather_16bit_weights_on_model_save=False module_granularity_threshold=0 use_all_reduce_for_fetch_params=False stage3_gather_fp16_weights_on_model_save=False ignore_unused_parameters=True legacy_stage1=False round_robin_gradients=False zero_hpz_partition_size=1 zero_quantized_weights=False zero_quantized_nontrainable_weights=False zero_quantized_gradients=False zeropp_loco_param=None mics_shard_size=-1 mics_hierarchical_params_gather=False memory_efficient_linear=True pipeline_loading_checkpoint=False override_module_apply=True
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   zero_enabled ................. True
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   zero_force_ds_cpu_optimizer .. True
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   zero_optimization_stage ...... 2
+[01.21 19:05:54] ┇ INFO    ┇                                        DeepSpeed ┇   json = {
+    "train_batch_size": 128, 
+    "train_micro_batch_size_per_gpu": 8, 
+    "gradient_accumulation_steps": 4, 
+    "zero_optimization": {
+        "stage": 2, 
+        "offload_optimizer": {
+            "device": "none", 
+            "nvme_path": null
+        }, 
+        "offload_param": {
+            "device": "none", 
+            "nvme_path": null
+        }, 
+        "stage3_gather_16bit_weights_on_model_save": false
+    }, 
+    "gradient_clipping": 1.0, 
+    "steps_per_print": inf, 
+    "bf16": {
+        "enabled": true
+    }, 
+    "fp16": {
+        "enabled": false
+    }, 
+    "zero_allow_untested_optimizer": true
+}
+[01.21 19:05:54] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running training *****
+[01.21 19:05:54] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 18,135
+[01.21 19:05:54] ┇ INFO    ┇                             transformers.trainer ┇   Num Epochs = 1
+[01.21 19:05:54] ┇ INFO    ┇                             transformers.trainer ┇   Instantaneous batch size per device = 8
+[01.21 19:05:54] ┇ INFO    ┇                             transformers.trainer ┇   Total train batch size (w. parallel, distributed & accumulation) = 128
+[01.21 19:05:54] ┇ INFO    ┇                             transformers.trainer ┇   Gradient Accumulation steps = 4
+[01.21 19:05:54] ┇ INFO    ┇                             transformers.trainer ┇   Total optimization steps = 71
+[01.21 19:05:54] ┇ INFO    ┇                             transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
+[01.21 19:05:54] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+[01.21 19:09:40] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
+[01.21 19:09:40] ┇ INFO    ┇                 transformers.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/config.json
+[01.21 19:09:40] ┇ INFO    ┇      transformers.generation.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/generation_config.json
+[01.21 19:10:01] ┇ INFO    ┇                      transformers.modeling_utils ┇ Model weights saved in output/GNER/EAGLE-1B-debug/checkpoint-71/model.safetensors
+[01.21 19:10:01] ┇ INFO    ┇             transformers.tokenization_utils_base ┇ tokenizer config file saved in output/GNER/EAGLE-1B-debug/checkpoint-71/tokenizer_config.json
+[01.21 19:10:01] ┇ INFO    ┇             transformers.tokenization_utils_base ┇ Special tokens file saved in output/GNER/EAGLE-1B-debug/checkpoint-71/special_tokens_map.json
+[01.21 19:10:01] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] [Torch] Checkpoint global_step71 is about to be saved!
+[01.21 19:10:01] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] Saving model checkpoint: output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/mp_rank_00_model_states.pt
+[01.21 19:10:01] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Saving output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/mp_rank_00_model_states.pt...
+[01.21 19:10:24] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Saved output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/mp_rank_00_model_states.pt.
+[01.21 19:10:24] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Saving output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt...
+[01.21 19:12:36] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Saved output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt.
+[01.21 19:12:36] ┇ INFO    ┇                                        DeepSpeed ┇ zero checkpoint saved output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+[01.21 19:12:36] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Checkpoint global_step71 is ready now!
+[01.21 19:12:36] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running Evaluation *****
+[01.21 19:12:36] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 65
+[01.21 19:12:36] ┇ INFO    ┇                             transformers.trainer ┇   Batch size = 8
+[01.21 19:12:52] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
+[01.21 19:12:52] ┇ INFO    ┇                 transformers.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/config.json
+[01.21 19:12:52] ┇ INFO    ┇      transformers.generation.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/generation_config.json
+[01.21 19:13:13] ┇ INFO    ┇                      transformers.modeling_utils ┇ Model weights saved in output/GNER/EAGLE-1B-debug/checkpoint-71/model.safetensors
+[01.21 19:13:13] ┇ INFO    ┇             transformers.tokenization_utils_base ┇ tokenizer config file saved in output/GNER/EAGLE-1B-debug/checkpoint-71/tokenizer_config.json
+[01.21 19:13:13] ┇ INFO    ┇             transformers.tokenization_utils_base ┇ Special tokens file saved in output/GNER/EAGLE-1B-debug/checkpoint-71/special_tokens_map.json
+[01.21 19:13:13] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] [Torch] Checkpoint global_step71 is about to be saved!
+[01.21 19:13:13] ┇ INFO    ┇                                        DeepSpeed ┇ [Rank 0] Saving model checkpoint: output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/mp_rank_00_model_states.pt
+[01.21 19:13:13] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Saving output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/mp_rank_00_model_states.pt...
+[01.21 19:13:35] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Saved output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/mp_rank_00_model_states.pt.
+[01.21 19:13:35] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Saving output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt...
+[01.21 19:15:45] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Saved output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt.
+[01.21 19:15:45] ┇ INFO    ┇                                        DeepSpeed ┇ zero checkpoint saved output/GNER/EAGLE-1B-debug/checkpoint-71/global_step71/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+[01.21 19:15:45] ┇ INFO    ┇                                        DeepSpeed ┇ [Torch] Checkpoint global_step71 is ready now!
+[01.21 19:15:45] ┇ INFO    ┇                             transformers.trainer ┇ 
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+[01.21 19:15:45] ┇ INFO    ┇                                         DeepKNLP ┇ train_result=TrainOutput(global_step=71, training_loss=0.1712613710215394, metrics={'train_runtime': 591.061, 'train_samples_per_second': 15.341, 'train_steps_per_second': 0.12, 'total_flos': 2.2242260498251776e+16, 'train_loss': 0.1712613710215394, 'epoch': 0.5008818342151675})
+[01.21 19:15:45] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[01.21 19:15:45] ┇ INFO    ┇                                   chrisbase.data ┇ [EXIT] python task2-nerG-trainer2.py --deepspeed ($=00:10:21.017)
+[01.21 19:15:45] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
