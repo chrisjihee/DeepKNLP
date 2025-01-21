@@ -66,7 +66,6 @@ def init(
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
 ):
     global env
-    # accelerator = Accelerator()
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
         local_rank = int(os.environ["LOCAL_RANK"])
     if world_size < 0 and "WORLD_SIZE" in os.environ:
