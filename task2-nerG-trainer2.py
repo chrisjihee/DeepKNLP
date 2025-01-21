@@ -1,39 +1,36 @@
-import random
 import json
 import logging
 import os
-import time
 from dataclasses import dataclass, field
 from typing import Optional
 
 import numpy as np
 import torch
 import typer
+from datasets import load_dataset
+from datasets.utils.logging import set_verbosity as datasets_set_verbosity
+from typing_extensions import Annotated
 
 import transformers.utils.logging
 from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments
-from accelerate import Accelerator, DeepSpeedPlugin
-from datasets import load_dataset
-from typing_extensions import Annotated
-
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
-from accelerate.utils import broadcast, broadcast_object_list, gather_object, gather
+from accelerate import Accelerator, DeepSpeedPlugin
+from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, NewProjectEnv, JobTimer
-from chrisbase.io import LoggingFormat, set_verbosity_warning, set_verbosity_info, new_path
-from chrisbase.time import from_timestamp, now, now_stamp
+from chrisbase.io import LoggingFormat, set_verbosity_info, new_path
+from chrisbase.time import from_timestamp, now_stamp
 from transformers import (
     AutoConfig,
+    AutoTokenizer,
     AutoModelForCausalLM,
     AutoModelForSeq2SeqLM,
-    AutoTokenizer,
     Seq2SeqTrainingArguments,
     set_seed,
 )
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
 from transformers.utils.logging import set_verbosity as transformers_set_verbosity
-from datasets.utils.logging import set_verbosity as datasets_set_verbosity
 
 # Global settings
 logger: logging.Logger = logging.getLogger("DeepKNLP")
@@ -72,6 +69,8 @@ def main(
         random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
+        # for Accelerator
+        deepspeed: Annotated[bool, typer.Option("--deepspeed/--no-deepspeed")] = False,
         # for CustomDataArguments
         pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
@@ -117,14 +116,14 @@ def main(
     # Setup accelerator
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
-        # deepspeed_plugin=DeepSpeedPlugin(),
+        deepspeed_plugin=DeepSpeedPlugin() if deepspeed else None,
         project_dir=env.output_dir,
         log_with=report_to,
     )
     if accelerator.is_main_process:
         for k in os.environ.keys():
             logger.warning(f"os.environ[{k}]={os.environ[k]}")
-        logger.warning(f"accelerator(1)={accelerator} / accelerator.state={accelerator.state}")
+        logger.warning(f"accelerator={accelerator} / accelerator.state={accelerator.state}")
 
     # Setup training arguments
     level_to_str = {n: s for s, n in transformers.utils.logging.log_levels.items()}
@@ -152,7 +151,7 @@ def main(
             log_level=log_level_str,
             log_level_replica=log_level_rep_str,
             seed=env.random_seed,
-            do_train=False,  # TODO: False -> True
+            do_train=True,  # TODO: True
             do_eval=True,
             gradient_checkpointing=gradient_checkpointing,
             gradient_accumulation_steps=gradient_accumulation_steps,
@@ -163,7 +162,7 @@ def main(
             logging_steps=10,
             lr_scheduler_type="cosine",
             eval_strategy="epoch",
-            save_strategy="no",
+            save_strategy="epoch",  # TODO: "epoch"
             learning_rate=2e-5,
             warmup_ratio=0.04,
             weight_decay=0.,
@@ -398,7 +397,7 @@ def main(
             compute_metrics=compute_ner_metrics if args.train.predict_with_generate else None,
         )
         if accelerator.is_main_process:
-            logger.warning(f"accelerator(2)={accelerator} / accelerator.state={accelerator.state}")
+            logger.warning(f"trainer.accelerator={trainer.accelerator} / trainer.accelerator.state={trainer.accelerator.state}")
 
         # Do training
         if args.train.do_train:
