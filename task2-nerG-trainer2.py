@@ -70,7 +70,6 @@ def init(
         local_rank = int(os.environ["LOCAL_RANK"])
     if world_size < 0 and "WORLD_SIZE" in os.environ:
         world_size = int(os.environ["WORLD_SIZE"])
-    # stamp = now_stamp(delay=random.randint(1, 500) / 200.0)  # TODO: remove delay
     stamp = now_stamp()
     stamp = sorted(gather_object([stamp]))[0]
     env = NewProjectEnv(
