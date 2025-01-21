@@ -1,3 +1,5 @@
++ /home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include=localhost:0,1,2,3 --master_port 30000 task2-nerG-trainer2.py
+[01.21 18:41:16] ┇ WARNING ┇                                        DeepSpeed ┇ Unable to find hostfile, will proceed with training with local resources only.
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[SHELL]=/bin/bash
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_EXE]=/home/chrisjihee/miniforge3/bin/conda
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[_CE_M]=
@@ -15,7 +17,7 @@
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LC_PAPER]=ko_KR.UTF-8
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LANG]=en_US.UTF-8
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LS_COLORS]=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
-[01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_PROMPT_MODIFIER]=(DeepKNLP) 
+[01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[CONDA_PROMPT_MODIFIER]=(DeepKNLP)
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[SSH_CONNECTION]=129.254.181.36 46680 129.254.121.74 122
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[LESSCLOSE]=/usr/bin/lesspipe %s %s
 [01.21 18:41:30] ┇ WARNING ┇                                         DeepKNLP ┇ os.environ[XDG_SESSION_CLASS]=user
@@ -257,7 +259,15 @@ Mixed precision type: no
 [01.21 18:41:35] ┇ INFO    ┇                                         DeepKNLP ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
 [01.21 18:41:35] ┇ INFO    ┇                                         DeepKNLP ┇ model.generation_config.pad_token_id=0
 [01.21 18:41:36] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-train.jsonl as train_dataset(#=18135)
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:04<00:00, 3697.36 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3149.74 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3148.82 examples/s]
+Running tokenizer on train_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18135/18135 [00:05<00:00, 3145.53 examples/s]
 [01.21 18:41:48] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-test-min.jsonl as eval_dataset(#=65)
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 111.26 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 117.13 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 114.96 examples/s]
+Running tokenizer on eval_dataset (num_proc=4): 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65/65 [00:00<00:00, 113.13 examples/s]
 [01.21 18:41:52] ┇ INFO    ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmp3ys3hox6/test.c -o /tmp/tmp3ys3hox6/test.o
 [01.21 18:41:52] ┇ INFO    ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat /tmp/tmp3ys3hox6/test.o -laio -o /tmp/tmp3ys3hox6/a.out
 [01.21 18:41:53] ┇ INFO    ┇                                             root ┇ gcc -pthread -B /home/chrisjihee/miniforge3/envs/DeepKNLP/compiler_compat -fno-strict-overflow -Wsign-compare -DNDEBUG -O2 -Wall -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -O2 -isystem /home/chrisjihee/miniforge3/envs/DeepKNLP/include -fPIC -c /tmp/tmpgfyumqcc/test.c -o /tmp/tmpgfyumqcc/test.o
@@ -279,11 +289,18 @@ Mixed precision type: bf16
 [01.21 18:41:54] ┇ INFO    ┇                             transformers.trainer ┇   Gradient Accumulation steps = 4
 [01.21 18:41:54] ┇ INFO    ┇                             transformers.trainer ┇   Total optimization steps = 71
 [01.21 18:41:54] ┇ INFO    ┇                             transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
+  0%|                                                                                                                                                                                                                       | 0/71 [00:00<?, ?it/s][01.21 18:41:54] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
 [01.21 18:41:54] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
 [01.21 18:41:54] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
 [01.21 18:41:54] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[01.21 18:41:54] ┇ WARNING ┇   transformers.models.gpt_neox.modeling_gpt_neox ┇ `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
-[01.21 18:44:59] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
+{'loss': 0.7005, 'grad_norm': 2.703373670578003, 'learning_rate': 1.948160647590966e-05, 'epoch': 0.07}
+{'loss': 0.0908, 'grad_norm': 0.8325344324111938, 'learning_rate': 1.7071067811865477e-05, 'epoch': 0.14}
+{'loss': 0.0528, 'grad_norm': 0.48385995626449585, 'learning_rate': 1.3177914195819018e-05, 'epoch': 0.21}
+{'loss': 0.0426, 'grad_norm': 0.6479025483131409, 'learning_rate': 8.618436450481182e-06, 'epoch': 0.28}
+{'loss': 0.0382, 'grad_norm': 0.48098400235176086, 'learning_rate': 4.348635855774082e-06, 'epoch': 0.35}
+{'loss': 0.0322, 'grad_norm': 0.4060382544994354, 'learning_rate': 1.2637760935363053e-06, 'epoch': 0.42}
+{'loss': 0.0334, 'grad_norm': 0.35541069507598877, 'learning_rate': 1.0670251976275803e-08, 'epoch': 0.49}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [03:04<00:00,  2.49s/it][01.21 18:44:59] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
 [01.21 18:44:59] ┇ INFO    ┇                 transformers.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/config.json
 [01.21 18:44:59] ┇ INFO    ┇      transformers.generation.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/generation_config.json
 [01.21 18:45:12] ┇ INFO    ┇                      transformers.modeling_utils ┇ The model is bigger than the maximum size per checkpoint (5GB) and is going to be split in 2 checkpoint shards. You can find where each parameters has been saved in the index located at output/GNER/EAGLE-1B-debug/checkpoint-71/model.safetensors.index.json.
@@ -292,17 +309,21 @@ Mixed precision type: bf16
 [01.21 18:45:34] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running Evaluation *****
 [01.21 18:45:34] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 65
 [01.21 18:45:34] ┇ INFO    ┇                             transformers.trainer ┇   Batch size = 8
+{'eval_crossner_ai_prec': 0.48148148148122677, 'eval_crossner_ai_rec': 0.4080717488787408, 'eval_crossner_ai_f1': 0.44174757276566007, 'eval_AVERAGE_f1': 0.44174757276566007, 'eval_runtime': 19.6491, 'eval_samples_per_second': 3.308, 'eval_steps_per_second': 0.153, 'epoch': 0.5}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [03:59<00:00,  2.49s/it]
 [01.21 18:45:53] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
 [01.21 18:45:54] ┇ INFO    ┇                 transformers.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/config.json
 [01.21 18:45:54] ┇ INFO    ┇      transformers.generation.configuration_utils ┇ Configuration saved in output/GNER/EAGLE-1B-debug/checkpoint-71/generation_config.json
 [01.21 18:47:08] ┇ INFO    ┇                      transformers.modeling_utils ┇ The model is bigger than the maximum size per checkpoint (5GB) and is going to be split in 2 checkpoint shards. You can find where each parameters has been saved in the index located at output/GNER/EAGLE-1B-debug/checkpoint-71/model.safetensors.index.json.
 [01.21 18:47:08] ┇ INFO    ┇             transformers.tokenization_utils_base ┇ tokenizer config file saved in output/GNER/EAGLE-1B-debug/checkpoint-71/tokenizer_config.json
 [01.21 18:47:08] ┇ INFO    ┇             transformers.tokenization_utils_base ┇ Special tokens file saved in output/GNER/EAGLE-1B-debug/checkpoint-71/special_tokens_map.json
-[01.21 18:48:42] ┇ INFO    ┇                             transformers.trainer ┇ 
+[01.21 18:48:42] ┇ INFO    ┇                             transformers.trainer ┇
 
 Training completed. Do not forget to share your model on huggingface.co/models =)
 
 
+{'train_runtime': 407.5994, 'train_samples_per_second': 22.246, 'train_steps_per_second': 0.174, 'train_loss': 0.14000394095627355, 'epoch': 0.5}
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 71/71 [06:47<00:00,  5.74s/it]
 [01.21 18:48:42] ┇ INFO    ┇                                         DeepKNLP ┇ train_result=TrainOutput(global_step=71, training_loss=0.14000394095627355, metrics={'train_runtime': 407.5994, 'train_samples_per_second': 22.246, 'train_steps_per_second': 0.174, 'total_flos': 2.2242260498251776e+16, 'train_loss': 0.14000394095627355, 'epoch': 0.5008818342151675})
 [01.21 18:48:42] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
 [01.21 18:48:42] ┇ INFO    ┇                                   chrisbase.data ┇ [EXIT] python task2-nerG-trainer2.py --local_rank=0 ($=00:07:11.035)
