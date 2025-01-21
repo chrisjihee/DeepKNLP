@@ -87,6 +87,9 @@ def init(
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
     )
+    if local_rank == 0:
+        for k in os.environ.keys():
+            logger.warning(f"os.environ[{k}]={os.environ[k]}")
 
 
 # Reference for implementation
@@ -118,18 +121,16 @@ def train(
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.5,
-        # for DeepSpeedPlugin
-        ds_stage: Annotated[int, typer.Option("--ds_stage")] = 1,  # TODO: -> 1, 2, 3
-        ds_config: Annotated[str, typer.Option("--ds_config")] = "configs/deepspeed/deepspeed_zero1_llama.json",
 ):
     # Setup accelerator
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
-        deepspeed_plugin=DeepSpeedPlugin(zero_stage=ds_stage),
+        deepspeed_plugin=DeepSpeedPlugin(),
         project_dir=env.output_dir,
         log_with=report_to,
     )
-    logger.warning(f"accelerator={accelerator} / state={accelerator.state}")
+    if accelerator.is_main_process:
+        logger.warning(f"accelerator(1)={accelerator} / accelerator.state={accelerator.state}")
 
     # Setup training arguments
     args = TrainingArgumentsForAccelerator(
@@ -181,7 +182,7 @@ def train(
     args.env.setup_logger(process_log_level)
     datasets_set_verbosity(process_log_level + 10)
     transformers_set_verbosity(process_log_level)
-    # set_verbosity_info("c10d-NullHandler-default")
+    set_verbosity_info("c10d-NullHandler-default")
 
     # Log on each process the small summary:
     logger.warning(
@@ -398,6 +399,8 @@ def train(
             data_collator=data_collator,
             compute_metrics=compute_ner_metrics if args.train.predict_with_generate else None,
         )
+        if accelerator.is_main_process:
+            logger.warning(f"accelerator(2)={accelerator} / accelerator.state={accelerator.state}")
 
         # Do training
         if args.train.do_train:
