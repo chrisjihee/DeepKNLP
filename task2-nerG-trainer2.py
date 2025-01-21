@@ -19,7 +19,7 @@ from DeepKNLP.gner_trainer import GNERTrainer
 from accelerate import Accelerator, DeepSpeedPlugin
 from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, NewProjectEnv, JobTimer
-from chrisbase.io import LoggingFormat, set_verbosity_info, new_path
+from chrisbase.io import LoggingFormat, new_path, set_verbosity_info
 from chrisbase.time import from_timestamp, now_stamp
 from transformers import (
     AutoConfig,
@@ -88,8 +88,8 @@ def main(
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.5,
         # for DeepSpeed
-        deepspeed_for_accel: Annotated[bool, typer.Option("--deepspeed_for_accel")] = False,
-        deepspeed_for_train: Annotated[str, typer.Option("--deepspeed_for_train")] = None,
+        trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,
+        accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,
 ):
     # Setup project environment
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
@@ -106,7 +106,7 @@ def main(
         output_name=output_name,
         run_version=run_version,
         logging_format=LoggingFormat.CHECK_48,
-        logging_level=logging.INFO,
+        logging_level=logging.WARNING,
         logging_file=new_path(logging_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         argument_file=new_path(argument_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         random_seed=random_seed,
@@ -117,14 +117,14 @@ def main(
     # Setup accelerator
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
-        deepspeed_plugin=DeepSpeedPlugin() if deepspeed_for_accel else None,
+        deepspeed_plugin=DeepSpeedPlugin() if accelerate_deepspeed else None,
         project_dir=env.output_dir,
         log_with=report_to,
     )
     if accelerator.is_main_process:
         for k in os.environ.keys():
-            logger.warning(f"os.environ[{k}]={os.environ[k]}")
-        logger.warning(f"accelerator={accelerator} / accelerator.state={accelerator.state}")
+            logger.info(f"os.environ[{k}]={os.environ[k]}")
+        logger.info(f"accelerator={accelerator} / accelerator.state={accelerator.state}")
 
     # Setup training arguments
     level_to_str = {n: s for s, n in transformers.utils.logging.log_levels.items()}
@@ -152,7 +152,7 @@ def main(
             log_level=log_level_str,
             log_level_replica=log_level_rep_str,
             seed=env.random_seed,
-            do_train=True,  # TODO: True
+            do_train=True,
             do_eval=True,
             gradient_checkpointing=gradient_checkpointing,
             gradient_accumulation_steps=gradient_accumulation_steps,
@@ -163,7 +163,7 @@ def main(
             logging_steps=10,
             lr_scheduler_type="cosine",
             eval_strategy="epoch",
-            save_strategy="epoch",  # TODO: "epoch"
+            save_strategy="epoch",
             learning_rate=2e-5,
             warmup_ratio=0.04,
             weight_decay=0.,
@@ -171,7 +171,7 @@ def main(
             bf16=is_torch_bf16_gpu_available(),
             bf16_full_eval=is_torch_bf16_gpu_available(),
             local_rank=env.local_rank,
-            deepspeed=deepspeed_for_train,
+            deepspeed=trainer_deepspeed,
         ),
     )
     args.env.local_rank = args.train.local_rank
@@ -179,12 +179,18 @@ def main(
     # Setup logging
     process_log_level = args.train.get_process_log_level()
     args.env.setup_logger(process_log_level)
-    datasets_set_verbosity(process_log_level + 10)
-    transformers_set_verbosity(process_log_level + 10)
+    datasets_set_verbosity(process_log_level)
+    transformers_set_verbosity(process_log_level)
     set_verbosity_info("c10d-NullHandler-default")
+    if accelerator.is_main_process:
+        set_verbosity_info(
+            "transformers.trainer",
+            "chrisbase.data",
+            "DeepKNLP",
+        )
 
     # Log on each process the small summary:
-    logger.warning(
+    logger.info(
         f"Process rank: {args.train.local_rank}, device: {args.train.device}, n_gpu: {args.train.n_gpu}"
         f", distributed training: {args.train.parallel_mode.value == 'distributed'}"
         f", 16-bits training: {args.train.fp16 or args.train.bf16}"
