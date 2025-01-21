@@ -163,7 +163,7 @@ def train(
             logging_steps=10,
             lr_scheduler_type="cosine",
             eval_strategy="epoch",
-            save_strategy="epoch",
+            save_strategy="no",
             learning_rate=2e-5,
             warmup_ratio=0.04,
             weight_decay=0.,
