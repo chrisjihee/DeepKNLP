@@ -1,0 +1,222 @@
+[01.21 21:39:48] ┇ INFO    ┇                                         DeepKNLP ┇ Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.21 21:39:48] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[01.21 21:39:48] ┇ INFO    ┇                                   chrisbase.data ┇ [INIT] python task2-nerG-trainer2.py --accelerate_deepspeed
+[01.21 21:39:48] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇ -----+-----------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    # | TrainingArgumentsForAccelerator               | value
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇ -----+-----------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    1 | env.hostname                                  | dgx-a100
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    2 | env.hostaddr                                  | 129.254.23.12
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    3 | env.global_rank                               | -1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    4 | env.local_rank                                | 0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    5 | env.node_rank                                 | -1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    6 | env.world_size                                | 4
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    7 | env.time_stamp                                | 0121.213936
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    8 | env.python_path                               | /raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇    9 | env.current_dir                               | /raid/chrisjihee/proj/DeepKNLP
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   10 | env.current_file                              | task2-nerG-trainer2.py
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   11 | env.command_args                              | ['--accelerate_deepspeed']
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   12 | env.output_home                               | output
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   13 | env.output_name                               | GNER
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   14 | env.run_version                               | EAGLE-1B-debug
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   15 | env.logging_file                              | train-messages-0121.213936.out
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   16 | env.logging_level                             | 30
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   17 | env.logging_format                            | %(asctime)s ┇ %(levelname)-7s ┇ %(name)48s ┇ %(message)s
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   18 | env.datetime_format                           | [%m.%d %H:%M:%S]
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   19 | env.argument_file                             | train-arguments-0121.213936.json
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   20 | env.random_seed                               | 7
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   21 | env.max_workers                               | 4
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   22 | env.debugging                                 | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   23 | env.output_dir                                | output/GNER/EAGLE-1B-debug
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   24 | time.t1                                       | 2025-01-21 21:39:49.133744
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   25 | time.t2                                       | 2025-01-21 21:39:36.654870
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   26 | time.started                                  | [01.21 21:39:49]
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   27 | time.settled                                  |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   28 | time.elapsed                                  |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   29 | data.pretrained                               | etri-lirs/egpt-1.3b-preview
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   30 | data.train_file                               | data/gner/zero-shot-train.jsonl
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   31 | data.study_file                               |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   32 | data.eval_file                                | data/gner/zero-shot-test-min.jsonl
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   33 | data.pred_file                                | data/gner/zero-shot-test-min.jsonl
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   34 | data.max_train_samples                        | -1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   35 | data.max_study_samples                        | -1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   36 | data.max_eval_samples                         | -1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   37 | data.max_pred_samples                         | -1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   38 | data.max_source_length                        | 640
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   39 | data.max_target_length                        | 640
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   40 | data.use_cache_data                           | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   41 | data.ignore_pad_token_for_loss                | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   42 | train.output_dir                              | output/GNER/EAGLE-1B-debug
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   43 | train.overwrite_output_dir                    | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   44 | train.do_train                                | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   45 | train.do_eval                                 | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   46 | train.do_predict                              | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   47 | train.eval_strategy                           | IntervalStrategy.EPOCH
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   48 | train.prediction_loss_only                    | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   49 | train.per_device_train_batch_size             | 8
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   50 | train.per_device_eval_batch_size              | 8
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   51 | train.per_gpu_train_batch_size                |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   52 | train.per_gpu_eval_batch_size                 |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   53 | train.gradient_accumulation_steps             | 4
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   54 | train.eval_accumulation_steps                 |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   55 | train.eval_delay                              | 0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   56 | train.torch_empty_cache_steps                 |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   57 | train.learning_rate                           | 2e-05
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   58 | train.weight_decay                            | 0.0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   59 | train.adam_beta1                              | 0.9
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   60 | train.adam_beta2                              | 0.999
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   61 | train.adam_epsilon                            | 1e-08
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   62 | train.max_grad_norm                           | 1.0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   63 | train.num_train_epochs                        | 0.5
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   64 | train.max_steps                               | -1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   65 | train.lr_scheduler_type                       | SchedulerType.COSINE
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   66 | train.lr_scheduler_kwargs                     | {}
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   67 | train.warmup_ratio                            | 0.04
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   68 | train.warmup_steps                            | 0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   69 | train.log_level                               | warning
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   70 | train.log_level_replica                       | error
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   71 | train.log_on_each_node                        | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   72 | train.logging_dir                             | output/GNER/EAGLE-1B-debug/runs/Jan21_21-39-48_dgx-a100
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   73 | train.logging_strategy                        | IntervalStrategy.STEPS
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   74 | train.logging_first_step                      | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   75 | train.logging_steps                           | 10
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   76 | train.logging_nan_inf_filter                  | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   77 | train.save_strategy                           | SaveStrategy.EPOCH
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   78 | train.save_steps                              | 500
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   79 | train.save_total_limit                        |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   80 | train.save_safetensors                        | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   81 | train.save_on_each_node                       | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   82 | train.save_only_model                         | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   83 | train.restore_callback_states_from_checkpoint | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   84 | train.no_cuda                                 | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   85 | train.use_cpu                                 | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   86 | train.use_mps_device                          | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   87 | train.seed                                    | 7
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   88 | train.data_seed                               |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   89 | train.jit_mode_eval                           | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   90 | train.use_ipex                                | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   91 | train.bf16                                    | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   92 | train.fp16                                    | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   93 | train.fp16_opt_level                          | O1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   94 | train.half_precision_backend                  | auto
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   95 | train.bf16_full_eval                          | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   96 | train.fp16_full_eval                          | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   97 | train.tf32                                    | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   98 | train.local_rank                              | 0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇   99 | train.ddp_backend                             |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  100 | train.tpu_num_cores                           |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  101 | train.tpu_metrics_debug                       | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  102 | train.debug                                   | []
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  103 | train.dataloader_drop_last                    | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  104 | train.eval_steps                              |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  105 | train.dataloader_num_workers                  | 0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  106 | train.dataloader_prefetch_factor              |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  107 | train.past_index                              | -1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  108 | train.run_name                                | output/GNER/EAGLE-1B-debug
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  109 | train.disable_tqdm                            | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  110 | train.remove_unused_columns                   | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  111 | train.label_names                             |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  112 | train.load_best_model_at_end                  | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  113 | train.metric_for_best_model                   |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  114 | train.greater_is_better                       |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  115 | train.ignore_data_skip                        | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  116 | train.fsdp                                    | []
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  117 | train.fsdp_min_num_params                     | 0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  118 | train.fsdp_config                             | {'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False}
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  119 | train.fsdp_transformer_layer_cls_to_wrap      |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  120 | train.accelerator_config                      | {'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False}
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  121 | train.deepspeed                               |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  122 | train.label_smoothing_factor                  | 0.0
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  123 | train.optim                                   | OptimizerNames.ADAMW_TORCH
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  124 | train.optim_args                              |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  125 | train.adafactor                               | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  126 | train.group_by_length                         | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  127 | train.length_column_name                      | length
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  128 | train.report_to                               | ['tensorboard']
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  129 | train.ddp_find_unused_parameters              |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  130 | train.ddp_bucket_cap_mb                       |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  131 | train.ddp_broadcast_buffers                   |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  132 | train.dataloader_pin_memory                   | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  133 | train.dataloader_persistent_workers           | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  134 | train.skip_memory_metrics                     | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  135 | train.use_legacy_prediction_loop              | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  136 | train.push_to_hub                             | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  137 | train.resume_from_checkpoint                  |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  138 | train.hub_model_id                            |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  139 | train.hub_strategy                            | HubStrategy.EVERY_SAVE
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  140 | train.hub_token                               |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  141 | train.hub_private_repo                        |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  142 | train.hub_always_push                         | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  143 | train.gradient_checkpointing                  | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  144 | train.gradient_checkpointing_kwargs           |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  145 | train.include_inputs_for_metrics              | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  146 | train.include_for_metrics                     | []
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  147 | train.eval_do_concat_batches                  | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  148 | train.fp16_backend                            | auto
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  149 | train.evaluation_strategy                     |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  150 | train.push_to_hub_model_id                    |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  151 | train.push_to_hub_organization                |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  152 | train.push_to_hub_token                       |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  153 | train._n_gpu                                  | 1
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  154 | train.mp_parameters                           |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  155 | train.auto_find_batch_size                    | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  156 | train.full_determinism                        | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  157 | train.torchdynamo                             |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  158 | train.ray_scope                               | last
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  159 | train.ddp_timeout                             | 1800
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  160 | train.torch_compile                           | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  161 | train.torch_compile_backend                   |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  162 | train.torch_compile_mode                      |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  163 | train.dispatch_batches                        |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  164 | train.split_batches                           |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  165 | train.include_tokens_per_second               | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  166 | train.include_num_input_tokens_seen           | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  167 | train.neftune_noise_alpha                     |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  168 | train.optim_target_modules                    |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  169 | train.batch_eval_metrics                      | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  170 | train.eval_on_start                           | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  171 | train.use_liger_kernel                        | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  172 | train.eval_use_gather_object                  | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  173 | train.average_tokens_across_devices           | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  174 | train.sortish_sampler                         | False
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  175 | train.predict_with_generate                   | True
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  176 | train.generation_max_length                   | 1280
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  177 | train.generation_num_beams                    |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇  178 | train.generation_config                       |
+[01.21 21:39:49] ┇ INFO    ┇                                   chrisbase.data ┇ -----+-----------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[01.21 21:39:53] ┇ INFO    ┇                                         DeepKNLP ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
+[01.21 21:39:53] ┇ INFO    ┇                                         DeepKNLP ┇ model.generation_config.pad_token_id=0
+[01.21 21:39:53] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-train.jsonl as train_dataset(#=18135)
+[01.21 21:40:06] ┇ INFO    ┇                                         DeepKNLP ┇ Use data/gner/zero-shot-test-min.jsonl as eval_dataset(#=65)
+[01.21 21:40:09] ┇ INFO    ┇                             transformers.trainer ┇ Using auto half precision backend
+[01.21 21:40:09] ┇ WARNING ┇                                         DeepKNLP ┇ trainer.accelerator=<accelerate.accelerator.Accelerator object at 0x7f678732e480> / trainer.accelerator.state=Distributed environment: DistributedType.DEEPSPEED  Backend: nccl
+Num processes: 4
+Process index: 0
+Local process index: 0
+Device: cuda:0
+
+Mixed precision type: bf16
+ds_config: {'train_batch_size': 128, 'train_micro_batch_size_per_gpu': 8, 'gradient_accumulation_steps': 4, 'zero_optimization': {'stage': 2, 'offload_optimizer': {'device': 'none', 'nvme_path': None}, 'offload_param': {'device': 'none', 'nvme_path': None}, 'stage3_gather_16bit_weights_on_model_save': False}, 'gradient_clipping': 1.0, 'steps_per_print': inf, 'bf16': {'enabled': True}, 'fp16': {'enabled': False}}
+
+[01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running training *****
+[01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 18,135
+[01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Num Epochs = 1
+[01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Instantaneous batch size per device = 8
+[01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Total train batch size (w. parallel, distributed & accumulation) = 128
+[01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Gradient Accumulation steps = 4
+[01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Total optimization steps = 71
+[01.21 21:40:27] ┇ INFO    ┇                             transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
+[01.21 21:41:54] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
+[01.21 21:42:09] ┇ INFO    ┇                             transformers.trainer ┇ ***** Running Evaluation *****
+[01.21 21:42:09] ┇ INFO    ┇                             transformers.trainer ┇   Num examples = 65
+[01.21 21:42:09] ┇ INFO    ┇                             transformers.trainer ┇   Batch size = 8
+[01.21 21:42:24] ┇ INFO    ┇                             transformers.trainer ┇ Saving model checkpoint to output/GNER/EAGLE-1B-debug/checkpoint-71
+[01.21 21:42:40] ┇ INFO    ┇                             transformers.trainer ┇ 
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+[01.21 21:42:40] ┇ INFO    ┇                                         DeepKNLP ┇ train_result=TrainOutput(global_step=71, training_loss=0.17123805301290163, metrics={'train_runtime': 133.3541, 'train_samples_per_second': 67.996, 'train_steps_per_second': 0.532, 'total_flos': 2.2242260498251776e+16, 'train_loss': 0.17123805301290163, 'epoch': 0.5008818342151675})
+[01.21 21:42:40] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
+[01.21 21:42:40] ┇ INFO    ┇                                   chrisbase.data ┇ [EXIT] python task2-nerG-trainer2.py --accelerate_deepspeed ($=00:02:51.314)
+[01.21 21:42:40] ┇ INFO    ┇                                   chrisbase.data ┇ =========================================================================================================================================
