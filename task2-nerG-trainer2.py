@@ -1,33 +1,42 @@
 import json
 import logging
 import os
-from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
+import datasets
 import numpy as np
 import torch
 import typer
 from datasets import load_dataset
+from datasets.formatting.formatting import LazyRow
 from datasets.utils.logging import set_verbosity as datasets_set_verbosity
 from typing_extensions import Annotated
 
+import transformers
 import transformers.utils.logging
 from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
-from accelerate import Accelerator, DeepSpeedPlugin
+from accelerate import Accelerator
+from accelerate import DeepSpeedPlugin
 from accelerate.utils import gather_object
-from chrisbase.data import AppTyper, NewProjectEnv, JobTimer
-from chrisbase.io import LoggingFormat, new_path, set_verbosity_info, files, tb_events_to_csv
+from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
+from chrisbase.io import LoggingFormat, set_verbosity_info, file_size, non_empty_files
+from chrisbase.io import new_path, files, tb_events_to_csv
 from chrisbase.time import from_timestamp, now_stamp
+from chrisdata.ner import GenNERSampleWrapper
+from progiter import ProgIter
 from transformers import (
     AutoConfig,
     AutoTokenizer,
     AutoModelForCausalLM,
     AutoModelForSeq2SeqLM,
+    PreTrainedTokenizerBase,
+    BatchEncoding,
     Seq2SeqTrainingArguments,
+    ProgressCallback,
     set_seed,
 )
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
@@ -50,16 +59,163 @@ def convert_all_events_in_dir(log_dir: str | Path):
             tb_events_to_csv(input_file, output_file)
 
 
-# Class for training arguments
-@dataclass
-class Seq2SeqTrainingArgumentsForGNER(Seq2SeqTrainingArguments):
-    model_name_or_path: str = field(default=None)
-    train_data_path: str = field(default=None)
-    eval_data_path: str = field(default=None)
-    pred_data_path: str = field(default=None)
-    max_source_length: int = field(default=640)
-    max_target_length: int = field(default=640)
-    ignore_pad_token_for_loss: bool = field(default=True)
+# Define progress update function
+def update_progress(res: BatchEncoding, rank: int, counter: Counter, pbar: ProgIter):
+    if rank > 0:
+        return res
+    pre, cnt = counter.val(), counter.inc()
+    pbar.step(min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
+    return res
+
+
+# Define tokenizer function for encoder-decoder model
+def preprocess_for_encoder_decoder_model(row: LazyRow, process_rank: int, max_source_length: int, max_target_length: int,
+                                         tokenizer: PreTrainedTokenizerBase, counter: Counter,
+                                         update: Callable[[BatchEncoding, int, Counter], BatchEncoding] = None) -> BatchEncoding:
+    # Fetch input data
+    sample = GenNERSampleWrapper.model_validate(row)
+
+    def tokenize_train_sample():
+        # Tokenize the instruction inputs
+        model_inputs = tokenizer(
+            text=sample.instance.instruction_inputs,
+            max_length=max_source_length,
+            truncation=True,
+            padding=False,
+            return_tensors=None,
+            add_special_tokens=True,
+        )
+
+        # Tokenize the prompt labels
+        model_inputs["labels"] = tokenizer(
+            text=sample.instance.prompt_labels,
+            max_length=max_target_length,
+            truncation=True,
+            padding=False,
+            return_tensors=None,
+            add_special_tokens=True,
+        )["input_ids"]
+
+        model_inputs["processed"] = 1
+        return model_inputs
+
+    def tokenize_infer_sample():
+        # Tokenize the instruction inputs
+        model_inputs = tokenizer(
+            text=sample.instance.instruction_inputs,
+            max_length=max_source_length,
+            truncation=True,
+            padding=False,
+            return_tensors=None,
+            add_special_tokens=True,
+        )
+
+        model_inputs["processed"] = 1
+        return model_inputs
+
+    # Tokenize the sample
+    tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
+    if update:
+        return update(tokenized_sample, process_rank, counter)
+    else:
+        return tokenized_sample
+
+
+# Define tokenizer function for decoder-only model
+def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, max_source_length: int, max_target_length: int,
+                                      tokenizer: PreTrainedTokenizerBase, counter: Counter,
+                                      update: Callable[[BatchEncoding, int], BatchEncoding] = None) -> BatchEncoding:
+    # Fetch input data
+    sample = GenNERSampleWrapper.model_validate(row)
+    prompt_text = f"[INST] {sample.instance.instruction_inputs} [/INST]"
+    full_instruction = f"{prompt_text} {sample.instance.prompt_labels}"
+
+    def tokenize_train_sample():
+        # Tokenize the full instruction
+        model_inputs = tokenizer(
+            text=full_instruction,
+            max_length=max_source_length + max_target_length,
+            truncation=True,
+            padding=False,
+            return_tensors=None,
+            add_special_tokens=True,
+        )
+
+        # Add eos token if it is not the last token
+        if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
+            model_inputs["input_ids"].append(tokenizer.eos_token_id)
+            model_inputs["attention_mask"].append(1)
+
+        # Add labels
+        model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+        # Find the prompt length
+        prompt_tokens = tokenizer(
+            text=prompt_text,
+            max_length=max_source_length + max_target_length,
+            truncation=True,
+            padding=False,
+            return_tensors=None,
+            add_special_tokens=True,
+        )["input_ids"]
+
+        # Remove the last token if it is an eos token
+        if prompt_tokens[-1] == tokenizer.eos_token_id:
+            prompt_tokens = prompt_tokens[:-1]
+
+        # Check if the prompt is longer than the input
+        if len(prompt_tokens) > len(model_inputs["labels"]):
+            raise ValueError(
+                f"Prompt is longer than the input, something went wrong. Prompt: {prompt_tokens}, input:"
+                f" {model_inputs['input_ids']}"
+            )
+
+        # Mask the prompt tokens
+        for i in range(len(prompt_tokens)):
+            model_inputs["labels"][i] = -100
+
+        # model_inputs["num_token_full_instruction"] = len(model_inputs["input_ids"])
+        # model_inputs["num_token_prompt_token"] = len(prompt_tokens)
+        model_inputs["processed"] = 1
+        return model_inputs
+
+    def tokenize_infer_sample():
+        # Tokenize the prompt
+        model_inputs = tokenizer(
+            text=prompt_text,
+            max_length=max_source_length + max_target_length,
+            truncation=True,
+            padding=False,
+            return_tensors=None,
+            add_special_tokens=True,
+        )
+
+        # Remove the last token if it is an eos token
+        if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
+            model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
+            model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
+
+        model_inputs["processed"] = 1
+        return model_inputs
+
+    # Tokenize the sample
+    tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
+    if update:
+        return update(tokenized_sample, process_rank, counter)
+    else:
+        return tokenized_sample
+
+
+def check_cache_usage(path_prefix: Optional[str], dataset: str = "train_dataset"):
+    if path_prefix:
+        path_prefix = Path(path_prefix)
+        cached_path_glob = path_prefix.with_stem(path_prefix.stem + "*")
+        if non_empty_files(cached_path_glob):
+            logger.info(f"Use preprocessed {dataset} from cache: {cached_path_glob}")
+        else:
+            logger.warning(f"No preprocessed {dataset} in cache: {cached_path_glob}")
+    else:
+        logger.warning(f"train_dataset is not preprocessed!")
 
 
 # Reference for implementation
@@ -92,7 +248,7 @@ def main(
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,  # TODO: True
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
         report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER/EAGLE-1B-debug/runs
@@ -177,7 +333,7 @@ def main(
             logging_steps=10,
             lr_scheduler_type="cosine",
             eval_strategy="epoch",
-            save_strategy="epoch",
+            save_strategy="no",  # TODO: "epoch",
             learning_rate=2e-5,
             warmup_ratio=0.04,
             weight_decay=0.,
@@ -264,99 +420,38 @@ def main(
         model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
         logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
 
-        # Preprocess the datasets
-        def preprocess_function(example):
-            # remove pairs where at least one record is None
-            inference = example['split'] != "train"
-            if is_encoder_decoder:
-                model_inputs = tokenizer(
-                    text=example['instance']['instruction_inputs'],
-                    max_length=args.data.max_source_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )
-                if not inference:
-                    model_inputs["labels"] = tokenizer(
-                        text_target=example['instance']['prompt_labels'],
-                        max_length=args.data.max_target_length,
-                        truncation=True,
-                        padding=False,
-                        return_tensors=None,
-                        add_special_tokens=True,
-                    )['input_ids']
-            else:
-                prompt = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
-                full_instruction = f"{prompt} {example['instance']['prompt_labels']}"
-                max_length = args.data.max_source_length + args.data.max_target_length
-                if inference:
-                    model_inputs = tokenizer(
-                        text=prompt,
-                        max_length=max_length,
-                        truncation=True,
-                        padding=False,
-                        return_tensors=None,
-                        add_special_tokens=True,
-                    )
-                    # Remove the last token if it is an eos token
-                    if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
-                        model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
-                        model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
-                else:
-                    model_inputs = tokenizer(
-                        text=full_instruction,
-                        max_length=max_length,
-                        truncation=True,
-                        padding=False,
-                        return_tensors=None,
-                        add_special_tokens=True,
-                    )
-
-                    if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
-                        model_inputs["input_ids"].append(tokenizer.eos_token_id)
-                        model_inputs["attention_mask"].append(1)
-
-                    model_inputs["labels"] = model_inputs["input_ids"].copy()
-
-                    # Find the prompt length
-                    prompt = tokenizer(
-                        text=prompt,
-                        max_length=max_length,
-                        truncation=True,
-                        padding=False,
-                        return_tensors=None,
-                        add_special_tokens=True,
-                    )["input_ids"]
-
-                    # Remove the last token if it is an eos token
-                    if prompt[-1] == tokenizer.eos_token_id:
-                        prompt = prompt[:-1]
-
-                    if len(prompt) > len(model_inputs["labels"]):
-                        raise ValueError(
-                            f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
-                            f" {model_inputs['input_ids']}"
-                        )
-
-                    for i in range(len(prompt)):
-                        model_inputs["labels"][i] = -100
-
-            return model_inputs
-
         if args.train.do_train:
             assert args.data.train_file is not None, "Need to provide train_data_path"
             train_dataset = load_dataset("json", data_files=str(args.data.train_file), split="train")
             logger.info(f"Use {args.data.train_file} as train_dataset(#={len(train_dataset)})")
             with args.train.main_process_first(desc="train_dataset map preprocessing"):
-                train_dataset = train_dataset.map(
-                    preprocess_function,
-                    batched=False,
-                    num_proc=args.env.max_workers,
-                    load_from_cache_file=args.data.use_cache_data,
-                    desc="Running tokenizer on train_dataset",
-                )
+                cache_path = args.data.cache_train_path(len(train_dataset))
+                with ProgIter(total=len(train_dataset), desc="Preprocess train samples:", stream=None, verbose=2) as manual_pbar:
+                    datasets.disable_progress_bar()
+                    train_dataset = train_dataset.map(
+                        preprocess_for_encoder_decoder_model if is_encoder_decoder else preprocess_for_decoder_only_model,
+                        with_rank=True, batched=False, num_proc=args.env.max_workers,
+                        fn_kwargs={
+                            "max_source_length": args.data.max_source_length,
+                            "max_target_length": args.data.max_target_length,
+                            "tokenizer": tokenizer,
+                            "counter": Counter(step=args.env.max_workers),
+                            "update": lambda *xs: update_progress(*xs, pbar=manual_pbar),
+                        },
+                        load_from_cache_file=args.data.use_cache_data, cache_file_name=cache_path,
+                    )
+                    datasets.enable_progress_bars()
+                if sum(train_dataset["processed"]) == 0:
+                    check_cache_usage(cache_path, dataset="train_dataset")
+                # train_dataset = train_dataset.map(
+                #     preprocess_function,
+                #     batched=False,
+                #     num_proc=args.env.max_workers,
+                #     load_from_cache_file=args.data.use_cache_data,
+                #     desc="Running tokenizer on train_dataset",
+                # )
             accelerator.wait_for_everyone()
+            exit(0)
 
         if args.train.do_eval:
             assert args.data.eval_file is not None, "Need to provide eval_data_path"
@@ -420,6 +515,7 @@ def main(
         trainer = GNERTrainer(
             args=args.train,
             model=model,
+            callbacks=[ProgressCallback(max_str_len=300)],
             train_dataset=train_dataset if args.train.do_train else None,
             eval_dataset=eval_dataset if args.train.do_eval else None,
             processing_class=tokenizer,  # FutureWarning: `tokenizer` is deprecated and will be removed in version 5.0.0 for `GNERTrainer.__init__`. Use `processing_class` instead.
