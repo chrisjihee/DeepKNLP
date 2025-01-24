@@ -341,7 +341,7 @@ def main(
         output_home=output_home,
         output_name=output_name,
         run_version=run_version,
-        logging_format=LoggingFormat.CHECK_48,
+        logging_format=LoggingFormat.CHECK_20,
         logging_level=logging.WARNING,
         logging_file=new_path(logging_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         argument_file=new_path(argument_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
