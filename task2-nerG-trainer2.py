@@ -322,7 +322,7 @@ def main(
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
-        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.5,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.2,
         # for DeepSpeed
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,
         accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,
@@ -569,7 +569,7 @@ def main(
         trainer = GNERTrainer(
             args=args.train,
             model=model,
-            callbacks=[ProgressCallback(max_str_len=300)],
+            # callbacks=[ProgressCallback(max_str_len=300)],
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
