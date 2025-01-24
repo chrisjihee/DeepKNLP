@@ -23,7 +23,7 @@ from accelerate import Accelerator
 from accelerate import DeepSpeedPlugin
 from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, set_verbosity_info, file_size, non_empty_files
+from chrisbase.io import LoggingFormat, set_verbosity_info, make_parent_dir
 from chrisbase.io import new_path, files, tb_events_to_csv
 from chrisbase.time import from_timestamp, now_stamp
 from chrisdata.ner import GenNERSampleWrapper
@@ -59,10 +59,20 @@ def convert_all_events_in_dir(log_dir: str | Path):
             tb_events_to_csv(input_file, output_file)
 
 
+def read_state(path: str | Path) -> dict:
+    return json.loads(make_parent_dir(path).read_text())
+
+
+def write_state(path: str | Path, state: dict):
+    make_parent_dir(path).write_text(json.dumps(state))
+
+
 # Define progress update function
-def update_progress(res: BatchEncoding, counter: Counter, pbar: Optional[ProgIter] = None, proc_rank: int = -1):
+def update_progress(res: BatchEncoding, counter: Counter, pbar: Optional[ProgIter] = None, proc_rank: int = -1, state_path: Optional[str | Path] = None):
+    pre, cnt = counter.val(), counter.inc()
+    if state_path:
+        write_state(state_path, {"cnt": cnt})
     if pbar and proc_rank == 0:
-        pre, cnt = counter.val(), counter.inc()
         pbar.step(min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
     return res
 
@@ -95,7 +105,6 @@ def preprocess_for_encoder_decoder_model(row: LazyRow, proc_rank: int, max_sourc
             add_special_tokens=True,
         )["input_ids"]
 
-        model_inputs["processed"] = 1
         return model_inputs
 
     def tokenize_infer_sample():
@@ -109,7 +118,6 @@ def preprocess_for_encoder_decoder_model(row: LazyRow, proc_rank: int, max_sourc
             add_special_tokens=True,
         )
 
-        model_inputs["processed"] = 1
         return model_inputs
 
     # Tokenize the sample
@@ -175,7 +183,6 @@ def preprocess_for_decoder_only_model(row: LazyRow, proc_rank: int, max_source_l
 
         # model_inputs["num_token_full_instruction"] = len(model_inputs["input_ids"])
         # model_inputs["num_token_prompt_token"] = len(prompt_tokens)
-        model_inputs["processed"] = 1
         return model_inputs
 
     def tokenize_infer_sample():
@@ -194,7 +201,6 @@ def preprocess_for_decoder_only_model(row: LazyRow, proc_rank: int, max_source_l
             model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
             model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
 
-        model_inputs["processed"] = 1
         return model_inputs
 
     # Tokenize the sample
@@ -203,18 +209,6 @@ def preprocess_for_decoder_only_model(row: LazyRow, proc_rank: int, max_source_l
         return update(tokenized_sample, counter=counter, proc_rank=proc_rank)
     else:
         return tokenized_sample
-
-
-def check_cache_usage(path_prefix: Optional[str], dataset: str = "train_dataset"):
-    if path_prefix:
-        path_prefix = Path(path_prefix)
-        cached_path_glob = path_prefix.with_stem(path_prefix.stem + "*")
-        if non_empty_files(cached_path_glob):
-            logger.info(f"Use preprocessed {dataset} from cache: {cached_path_glob}")
-        else:
-            logger.warning(f"No preprocessed {dataset} in cache: {cached_path_glob}")
-    else:
-        logger.warning(f"train_dataset is not preprocessed!")
 
 
 # Reference for implementation
@@ -425,7 +419,9 @@ def main(
             train_dataset = load_dataset("json", data_files=str(args.data.train_file), split="train")
             logger.info(f"Use {args.data.train_file} as train_dataset(#={len(train_dataset)})")
             cache_path = args.data.cache_train_path(len(train_dataset))
-            print(f"args.train.local_rank={args.train.local_rank}")
+            state_path = new_path(cache_path, post=f"rank={args.train.local_rank}").with_suffix(".json")
+            write_state(state_path, {"cnt": 0})
+            # print(f"args.train.local_rank={args.train.local_rank}, state_path={state_path}, state={read_state(state_path)}, train_dataset(#={len(train_dataset)})")
             with ProgIter(total=len(train_dataset), desc="Preprocess train samples:", stream=None, verbose=2) as pbar:
                 pbar = pbar if args.train.local_rank == 0 else None
                 datasets.disable_progress_bar()
@@ -438,20 +434,13 @@ def main(
                         "max_target_length": args.data.max_target_length,
                         "tokenizer": tokenizer,
                         "counter": Counter(step=args.env.max_workers),
-                        "update": lambda *vs, **ws: update_progress(*vs, **ws, pbar=pbar),
+                        "update": lambda *vs, **ws: update_progress(*vs, **ws, pbar=pbar, state_path=state_path),
                     },
                 )
                 datasets.enable_progress_bars()
-            # train_dataset = train_dataset.map(
-            #     preprocess_function,
-            #     batched=False,
-            #     num_proc=args.env.max_workers,
-            #     load_from_cache_file=args.data.use_cache_data,
-            #     desc="Running tokenizer on train_dataset",
-            # )
-            logger.info(f"Tokenized train_dataset(#={sum(train_dataset["processed"])})")
-            if sum(train_dataset["processed"]) == 0:
-                check_cache_usage(cache_path, dataset="train_dataset")
+            # print(f"args.train.local_rank={args.train.local_rank}, state_path={state_path}, state={read_state(state_path)}, train_dataset(#={len(train_dataset)})")
+            if read_state(state_path)["cnt"] == 0 and args.data.cache_train_files(len(train_dataset)):
+                logger.info(f"Use preprocessed train_dataset from cache: {args.data.cache_train_files(len(train_dataset))[0]}, ...")
             accelerator.wait_for_everyone()
             exit(0)
 
