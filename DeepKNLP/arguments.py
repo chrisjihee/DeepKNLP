@@ -66,35 +66,35 @@ class CustomDataArguments(BaseModel):
             return self.test_file.parent / ".cache"
 
     def cache_train_path(self, size: int) -> Optional[str]:
-        if self.use_cache_data and self.train_file:
+        if self.train_file:
             return str(self.cache_train_dir / f"{self.train_file.stem}={size}.tmp")
 
     def cache_study_path(self, size: int) -> Optional[str]:
-        if self.use_cache_data and self.study_file:
+        if self.study_file:
             return str(self.cache_study_dir / f"{self.study_file.stem}={size}.tmp")
 
     def cache_eval_path(self, size: int) -> Optional[str]:
-        if self.use_cache_data and self.eval_file:
+        if self.eval_file:
             return str(self.cache_eval_dir / f"{self.eval_file.stem}={size}.tmp")
 
     def cache_test_path(self, size: int) -> Optional[str]:
-        if self.use_cache_data and self.test_file:
+        if self.test_file:
             return str(self.cache_test_dir / f"{self.test_file.stem}={size}.tmp")
 
     def cache_train_files(self, size: int) -> List[Path]:
-        if self.use_cache_data and self.train_file:
+        if self.train_file:
             return non_empty_files(self.cache_train_dir / f"{self.train_file.stem}={size}*.tmp")
 
     def cache_study_files(self, size: int) -> List[Path]:
-        if self.use_cache_data and self.study_file:
+        if self.study_file:
             return non_empty_files(self.cache_study_dir / f"{self.study_file.stem}={size}*.tmp")
 
     def cache_eval_files(self, size: int) -> List[Path]:
-        if self.use_cache_data and self.eval_file:
+        if self.eval_file:
             return non_empty_files(self.cache_eval_dir / f"{self.eval_file.stem}={size}*.tmp")
 
     def cache_test_files(self, size: int) -> List[Path]:
-        if self.use_cache_data and self.test_file:
+        if self.test_file:
             return non_empty_files(self.cache_test_dir / f"{self.test_file.stem}={size}*.tmp")
 
 
