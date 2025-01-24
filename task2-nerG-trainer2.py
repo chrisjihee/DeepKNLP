@@ -60,8 +60,8 @@ def convert_all_events_in_dir(log_dir: str | Path):
 
 
 # Define progress update function
-def update_progress(res: BatchEncoding, counter: Counter, pbar: Optional[ProgIter] = None, proc_rank: int = -1, local_rank: int = -1):
-    if pbar and proc_rank == 0 and local_rank == 0:
+def update_progress(res: BatchEncoding, counter: Counter, pbar: Optional[ProgIter] = None, proc_rank: int = -1):
+    if pbar and proc_rank == 0:
         pre, cnt = counter.val(), counter.inc()
         pbar.step(min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
     return res
@@ -215,15 +215,6 @@ def check_cache_usage(path_prefix: Optional[str], dataset: str = "train_dataset"
             logger.warning(f"No preprocessed {dataset} in cache: {cached_path_glob}")
     else:
         logger.warning(f"train_dataset is not preprocessed!")
-
-
-class MyProgIter(ProgIter):
-
-    def __enter__(self):
-        super().__init__()
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        super().__exit__(exc_type, exc_val, exc_tb)
 
 
 # Reference for implementation
@@ -435,9 +426,10 @@ def main(
             logger.info(f"Use {args.data.train_file} as train_dataset(#={len(train_dataset)})")
             # with args.train.main_process_first(desc="train_dataset map preprocessing"):
             cache_path = args.data.cache_train_path(len(train_dataset))
-            with ProgIter(total=len(train_dataset), desc="Preprocess train samples:", stream=None, verbose=2) as manual_pbar:
+            print(f"args.train.local_rank={args.train.local_rank}")
+            with ProgIter(total=len(train_dataset), desc="Preprocess train samples:", stream=None, verbose=2) as pbar:
+                pbar = pbar if args.train.local_rank == 0 else None
                 datasets.disable_progress_bar()
-                logger.warning(f"args.train.local_rank={args.train.local_rank}")
                 train_dataset = train_dataset.map(
                     preprocess_for_encoder_decoder_model if is_encoder_decoder else preprocess_for_decoder_only_model,
                     load_from_cache_file=args.data.use_cache_data, cache_file_name=cache_path,
@@ -447,12 +439,10 @@ def main(
                         "max_target_length": args.data.max_target_length,
                         "tokenizer": tokenizer,
                         "counter": Counter(step=args.env.max_workers),
-                        "update": lambda *vs, **ws: update_progress(*vs, **ws, pbar=manual_pbar, local_rank=args.train.local_rank),
+                        "update": lambda *vs, **ws: update_progress(*vs, **ws, pbar=pbar),
                     },
                 )
                 datasets.enable_progress_bars()
-            if sum(train_dataset["processed"]) == 0:
-                check_cache_usage(cache_path, dataset="train_dataset")
             # train_dataset = train_dataset.map(
             #     preprocess_function,
             #     batched=False,
@@ -461,6 +451,8 @@ def main(
             #     desc="Running tokenizer on train_dataset",
             # )
             logger.info(f"Tokenized train_dataset(#={sum(train_dataset["processed"])})")
+            if sum(train_dataset["processed"]) == 0:
+                check_cache_usage(cache_path, dataset="train_dataset")
             accelerator.wait_for_everyone()
             exit(0)
 
