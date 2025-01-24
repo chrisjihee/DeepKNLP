@@ -23,7 +23,7 @@ from accelerate import Accelerator
 from accelerate import DeepSpeedPlugin
 from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, set_verbosity_info, make_parent_dir
+from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info
 from chrisbase.io import new_path, files, tb_events_to_csv
 from chrisbase.time import from_timestamp, now_stamp
 from chrisdata.ner import GenNERSampleWrapper
@@ -57,14 +57,6 @@ def convert_all_events_in_dir(log_dir: str | Path):
             output_file = input_file.with_name(input_file.name + ".csv")
             logger.info(f"Convert {input_file} to csv")
             tb_events_to_csv(input_file, output_file)
-
-
-def read_state(path: str | Path) -> dict:
-    return json.loads(make_parent_dir(path).read_text())
-
-
-def write_state(path: str | Path, state: dict):
-    make_parent_dir(path).write_text(json.dumps(state))
 
 
 # Define progress update function
@@ -445,7 +437,8 @@ def main(
             assert args.data.train_file is not None, "Need to provide train_data_path"
             train_dataset = load_dataset("json", data_files=str(args.data.train_file), split="train")
             logger.info(f"Load raw train_dataset(#={len(train_dataset)}): {args.data.train_file}")
-            with ProgIter(total=len(train_dataset), desc="Preprocess train samples:", stream=logger, verbose=2) as pbar:
+            with ProgIter(total=len(train_dataset), stream=LoggerWriter(logger), verbose=2,
+                          desc="Preprocess train samples:") as pbar:
                 datasets.disable_progress_bar()
                 train_dataset = train_dataset.map(
                     function=preprocess_row, batched=False, with_rank=True,
