@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional
 
 import numpy as np
@@ -19,7 +20,7 @@ from DeepKNLP.gner_trainer import GNERTrainer
 from accelerate import Accelerator, DeepSpeedPlugin
 from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, NewProjectEnv, JobTimer
-from chrisbase.io import LoggingFormat, new_path, set_verbosity_info
+from chrisbase.io import LoggingFormat, new_path, set_verbosity_info, files, tb_events_to_csv
 from chrisbase.time import from_timestamp, now_stamp
 from transformers import (
     AutoConfig,
@@ -34,6 +35,19 @@ from transformers.utils.logging import set_verbosity as transformers_set_verbosi
 
 # Global settings
 logger: logging.Logger = logging.getLogger("DeepKNLP")
+
+
+def convert_all_events_in_dir(log_dir: str | Path):
+    """
+    logdir 아래의 모든 event 파일을 찾아서 CSV로 변환.
+    이벤트 파일마다 따로 CSV를 만듭니다.
+    """
+    input_files = os.path.join(log_dir, "**/events.out.tfevents.*")
+    for input_file in files(input_files):
+        if not input_file.name.endswith(".csv"):
+            output_file = input_file.with_name(input_file.name + ".csv")
+            logger.info(f"Convert {input_file} to csv")
+            tb_events_to_csv(input_file, output_file)
 
 
 # Class for training arguments
@@ -419,6 +433,7 @@ def main(
         if args.train.do_train:
             train_result = trainer.train()
             logger.info(f"train_result={train_result}")
+            convert_all_events_in_dir(env.output_dir)
 
     accelerator.end_training()
 
