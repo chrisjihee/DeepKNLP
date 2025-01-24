@@ -64,21 +64,21 @@ class CustomDataArguments(BaseModel):
         if self.test_file:
             return self.test_file.parent / ".cache"
 
-    def cache_train_path(self, size: int) -> Optional[Path]:
+    def cache_train_path(self, size: int) -> Optional[str]:
         if self.use_cache_data and self.train_file:
-            return self.cache_train_dir / f"{self.train_file.stem}={size}.tmp"
+            return str(self.cache_train_dir / f"{self.train_file.stem}={size}.tmp")
 
-    def cache_study_path(self, size: int) -> Optional[Path]:
+    def cache_study_path(self, size: int) -> Optional[str]:
         if self.use_cache_data and self.study_file:
-            return self.cache_study_dir / f"{self.study_file.stem}={size}.tmp"
+            return str(self.cache_study_dir / f"{self.study_file.stem}={size}.tmp")
 
-    def cache_eval_path(self, size: int) -> Optional[Path]:
+    def cache_eval_path(self, size: int) -> Optional[str]:
         if self.use_cache_data and self.eval_file:
-            return self.cache_eval_dir / f"{self.eval_file.stem}={size}.tmp"
+            return str(self.cache_eval_dir / f"{self.eval_file.stem}={size}.tmp")
 
-    def cache_test_path(self, size: int) -> Optional[Path]:
+    def cache_test_path(self, size: int) -> Optional[str]:
         if self.use_cache_data and self.test_file:
-            return self.cache_test_dir / f"{self.test_file.stem}={size}.tmp"
+            return str(self.cache_test_dir / f"{self.test_file.stem}={size}.tmp")
 
 
 class TrainingArgumentsForAccelerator(NewCommonArguments):
