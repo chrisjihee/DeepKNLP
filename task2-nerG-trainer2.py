@@ -227,6 +227,7 @@ def preprocess_row(
     if update:
         update(counter=counter, rank=rank)
 
+    tokenized_sample["time_stamp"] = now_stamp()
     return tokenized_sample
 
 
@@ -260,7 +261,7 @@ def main(
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,  # TODO: True
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,  # TODO: True
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
         report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER/EAGLE-1B-debug/runs
@@ -457,9 +458,7 @@ def main(
                     num_proc=args.env.max_workers,
                 )
                 datasets.enable_progress_bars()
-            # if state_path:
-            #     if read_state(state_path)["cnt"] == 0 and args.data.cache_train_files(len(train_dataset)):
-            #         logger.info(f"Load processed train_dataset: {args.data.cache_train_files(len(train_dataset))[0]}")
+            logger.info(f"Use preprocessed train_dataset at {from_timestamp(max(train_dataset["time_stamp"]))}")
             accelerator.wait_for_everyone()
             exit(0)
 
