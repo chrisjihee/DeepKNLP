@@ -60,16 +60,15 @@ def convert_all_events_in_dir(log_dir: str | Path):
 
 
 # Define progress update function
-def update_progress(res: BatchEncoding, rank: int, counter: Counter, pbar: ProgIter):
-    if rank > 0:
-        return res
-    pre, cnt = counter.val(), counter.inc()
-    pbar.step(min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
+def update_progress(res: BatchEncoding, counter: Counter, pbar: Optional[ProgIter] = None, proc_rank: int = -1, local_rank: int = -1):
+    if pbar and proc_rank == 0 and local_rank == 0:
+        pre, cnt = counter.val(), counter.inc()
+        pbar.step(min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
     return res
 
 
 # Define tokenizer function for encoder-decoder model
-def preprocess_for_encoder_decoder_model(row: LazyRow, process_rank: int, max_source_length: int, max_target_length: int,
+def preprocess_for_encoder_decoder_model(row: LazyRow, proc_rank: int, max_source_length: int, max_target_length: int,
                                          tokenizer: PreTrainedTokenizerBase, counter: Counter,
                                          update: Callable[[BatchEncoding, int, Counter], BatchEncoding] = None) -> BatchEncoding:
     # Fetch input data
@@ -116,13 +115,13 @@ def preprocess_for_encoder_decoder_model(row: LazyRow, process_rank: int, max_so
     # Tokenize the sample
     tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
     if update:
-        return update(tokenized_sample, process_rank, counter)
+        return update(tokenized_sample, counter=counter, proc_rank=proc_rank)
     else:
         return tokenized_sample
 
 
 # Define tokenizer function for decoder-only model
-def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, max_source_length: int, max_target_length: int,
+def preprocess_for_decoder_only_model(row: LazyRow, proc_rank: int, max_source_length: int, max_target_length: int,
                                       tokenizer: PreTrainedTokenizerBase, counter: Counter,
                                       update: Callable[[BatchEncoding, int], BatchEncoding] = None) -> BatchEncoding:
     # Fetch input data
@@ -201,7 +200,7 @@ def preprocess_for_decoder_only_model(row: LazyRow, process_rank: int, max_sourc
     # Tokenize the sample
     tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
     if update:
-        return update(tokenized_sample, process_rank, counter)
+        return update(tokenized_sample, counter=counter, proc_rank=proc_rank)
     else:
         return tokenized_sample
 
@@ -216,6 +215,15 @@ def check_cache_usage(path_prefix: Optional[str], dataset: str = "train_dataset"
             logger.warning(f"No preprocessed {dataset} in cache: {cached_path_glob}")
     else:
         logger.warning(f"train_dataset is not preprocessed!")
+
+
+class MyProgIter(ProgIter):
+
+    def __enter__(self):
+        super().__init__()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        super().__exit__(exc_type, exc_val, exc_tb)
 
 
 # Reference for implementation
@@ -291,6 +299,7 @@ def main(
         project_dir=env.output_dir,
         log_with=report_to,
     )
+    logger.warning(f"accelerator.is_main_process={accelerator.is_main_process}")
     if accelerator.is_main_process:
         for k in os.environ.keys():
             logger.info(f"os.environ[{k}]={os.environ[k]}")
@@ -424,32 +433,34 @@ def main(
             assert args.data.train_file is not None, "Need to provide train_data_path"
             train_dataset = load_dataset("json", data_files=str(args.data.train_file), split="train")
             logger.info(f"Use {args.data.train_file} as train_dataset(#={len(train_dataset)})")
-            with args.train.main_process_first(desc="train_dataset map preprocessing"):
-                cache_path = args.data.cache_train_path(len(train_dataset))
-                with ProgIter(total=len(train_dataset), desc="Preprocess train samples:", stream=None, verbose=2) as manual_pbar:
-                    datasets.disable_progress_bar()
-                    train_dataset = train_dataset.map(
-                        preprocess_for_encoder_decoder_model if is_encoder_decoder else preprocess_for_decoder_only_model,
-                        with_rank=True, batched=False, num_proc=args.env.max_workers,
-                        fn_kwargs={
-                            "max_source_length": args.data.max_source_length,
-                            "max_target_length": args.data.max_target_length,
-                            "tokenizer": tokenizer,
-                            "counter": Counter(step=args.env.max_workers),
-                            "update": lambda *xs: update_progress(*xs, pbar=manual_pbar),
-                        },
-                        load_from_cache_file=args.data.use_cache_data, cache_file_name=cache_path,
-                    )
-                    datasets.enable_progress_bars()
-                if sum(train_dataset["processed"]) == 0:
-                    check_cache_usage(cache_path, dataset="train_dataset")
-                # train_dataset = train_dataset.map(
-                #     preprocess_function,
-                #     batched=False,
-                #     num_proc=args.env.max_workers,
-                #     load_from_cache_file=args.data.use_cache_data,
-                #     desc="Running tokenizer on train_dataset",
-                # )
+            # with args.train.main_process_first(desc="train_dataset map preprocessing"):
+            cache_path = args.data.cache_train_path(len(train_dataset))
+            with ProgIter(total=len(train_dataset), desc="Preprocess train samples:", stream=None, verbose=2) as manual_pbar:
+                datasets.disable_progress_bar()
+                logger.warning(f"args.train.local_rank={args.train.local_rank}")
+                train_dataset = train_dataset.map(
+                    preprocess_for_encoder_decoder_model if is_encoder_decoder else preprocess_for_decoder_only_model,
+                    load_from_cache_file=args.data.use_cache_data, cache_file_name=cache_path,
+                    with_rank=True, batched=False, num_proc=args.env.max_workers,
+                    fn_kwargs={
+                        "max_source_length": args.data.max_source_length,
+                        "max_target_length": args.data.max_target_length,
+                        "tokenizer": tokenizer,
+                        "counter": Counter(step=args.env.max_workers),
+                        "update": lambda *vs, **ws: update_progress(*vs, **ws, pbar=manual_pbar, local_rank=args.train.local_rank),
+                    },
+                )
+                datasets.enable_progress_bars()
+            if sum(train_dataset["processed"]) == 0:
+                check_cache_usage(cache_path, dataset="train_dataset")
+            # train_dataset = train_dataset.map(
+            #     preprocess_function,
+            #     batched=False,
+            #     num_proc=args.env.max_workers,
+            #     load_from_cache_file=args.data.use_cache_data,
+            #     desc="Running tokenizer on train_dataset",
+            # )
+            logger.info(f"Tokenized train_dataset(#={sum(train_dataset["processed"])})")
             accelerator.wait_for_everyone()
             exit(0)
 
