@@ -68,24 +68,55 @@ def write_state(path: str | Path, state: dict):
 
 
 # Define progress update function
-def update_progress(res: BatchEncoding, counter: Counter, pbar: Optional[ProgIter] = None, proc_rank: int = -1, state_path: Optional[str | Path] = None):
-    pre, cnt = counter.val(), counter.inc()
-    if state_path:
-        write_state(state_path, {"cnt": cnt})
-    if pbar and proc_rank == 0:
-        pbar.step(min(cnt - pbar._iter_idx, pbar.total - pbar._iter_idx), force=cnt >= pbar.total)
-    return res
+def update_progress(
+        counter: Counter,
+        rank: int = -1,
+        pbar: Optional[ProgIter] = None,
+):
+    count = counter.inc()
+    if pbar and rank == 0:
+        pbar.step(min(count - pbar._iter_idx, pbar.total - pbar._iter_idx), force=count >= pbar.total)
 
 
-# Define tokenizer function for encoder-decoder model
-def preprocess_for_encoder_decoder_model(row: LazyRow, proc_rank: int, max_source_length: int, max_target_length: int,
-                                         tokenizer: PreTrainedTokenizerBase, counter: Counter,
-                                         update: Callable[[BatchEncoding, int, Counter], BatchEncoding] = None) -> BatchEncoding:
-    # Fetch input data
+def preprocess_row(
+        row: LazyRow,
+        rank: int,
+        is_encoder_decoder: bool,
+        max_source_length: int,
+        max_target_length: int,
+        tokenizer: PreTrainedTokenizerBase,
+        counter: Counter,
+        update: Optional[Callable[[Counter, int], None]] = None,
+) -> BatchEncoding:
+    """
+    A unified preprocessing function for encoder-decoder models and decoder-only models.
+
+    Args:
+        row (LazyRow): A single row from the dataset.
+        rank (int): Process rank (for distributed processing).
+        is_encoder_decoder (bool): True if the model is an encoder-decoder model, False otherwise.
+        max_source_length (int): Maximum token length for the input (source).
+        max_target_length (int): Maximum token length for the output (target).
+        tokenizer (PreTrainedTokenizerBase): Pretrained tokenizer.
+        counter: A counter to track the number of processed samples.
+        update (Callable, optional): A callback function used for progress updates.
+            If provided, it will be called to update the batch encoding object.
+
+    Returns:
+        BatchEncoding: The tokenized sample.
+    """
+    # Convert the JSON row to a pydantic model object
     sample = GenNERSampleWrapper.model_validate(row)
 
-    def tokenize_train_sample():
-        # Tokenize the instruction inputs
+    # Text components for the decoder-only scenario
+    prompt_input = f"[INST] {sample.instance.instruction_inputs} [/INST]"
+    full_instruction = f"{prompt_input} {sample.instance.prompt_labels}"
+
+    def tokenize_encoder_decoder_train():
+        """
+        Preprocessing function for an encoder-decoder model in the train split.
+        """
+        # Tokenize the instruction_inputs as the source
         model_inputs = tokenizer(
             text=sample.instance.instruction_inputs,
             max_length=max_source_length,
@@ -94,21 +125,23 @@ def preprocess_for_encoder_decoder_model(row: LazyRow, proc_rank: int, max_sourc
             return_tensors=None,
             add_special_tokens=True,
         )
-
-        # Tokenize the prompt labels
-        model_inputs["labels"] = tokenizer(
-            text=sample.instance.prompt_labels,
-            max_length=max_target_length,
-            truncation=True,
-            padding=False,
-            return_tensors=None,
-            add_special_tokens=True,
-        )["input_ids"]
-
+        # Tokenize prompt_labels as the labels
+        with tokenizer.as_target_tokenizer():
+            labels = tokenizer(
+                text=sample.instance.prompt_labels,
+                max_length=max_target_length,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )["input_ids"]
+        model_inputs["labels"] = labels
         return model_inputs
 
-    def tokenize_infer_sample():
-        # Tokenize the instruction inputs
+    def tokenize_encoder_decoder_infer():
+        """
+        Preprocessing function for an encoder-decoder model in the eval/predict split.
+        """
         model_inputs = tokenizer(
             text=sample.instance.instruction_inputs,
             max_length=max_source_length,
@@ -117,28 +150,13 @@ def preprocess_for_encoder_decoder_model(row: LazyRow, proc_rank: int, max_sourc
             return_tensors=None,
             add_special_tokens=True,
         )
-
         return model_inputs
 
-    # Tokenize the sample
-    tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
-    if update:
-        return update(tokenized_sample, counter=counter, proc_rank=proc_rank)
-    else:
-        return tokenized_sample
-
-
-# Define tokenizer function for decoder-only model
-def preprocess_for_decoder_only_model(row: LazyRow, proc_rank: int, max_source_length: int, max_target_length: int,
-                                      tokenizer: PreTrainedTokenizerBase, counter: Counter,
-                                      update: Callable[[BatchEncoding, int], BatchEncoding] = None) -> BatchEncoding:
-    # Fetch input data
-    sample = GenNERSampleWrapper.model_validate(row)
-    prompt_text = f"[INST] {sample.instance.instruction_inputs} [/INST]"
-    full_instruction = f"{prompt_text} {sample.instance.prompt_labels}"
-
-    def tokenize_train_sample():
-        # Tokenize the full instruction
+    def tokenize_decoder_only_train():
+        """
+        Preprocessing function for a decoder-only model in the train split.
+        """
+        # Tokenize the entire instruction (prompt + labels)
         model_inputs = tokenizer(
             text=full_instruction,
             max_length=max_source_length + max_target_length,
@@ -148,17 +166,17 @@ def preprocess_for_decoder_only_model(row: LazyRow, proc_rank: int, max_source_l
             add_special_tokens=True,
         )
 
-        # Add eos token if it is not the last token
+        # If the last token is not the EOS token, append it
         if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
             model_inputs["input_ids"].append(tokenizer.eos_token_id)
             model_inputs["attention_mask"].append(1)
 
-        # Add labels
+        # Set labels by copying the input_ids
         model_inputs["labels"] = model_inputs["input_ids"].copy()
 
-        # Find the prompt length
+        # Determine the length of the prompt tokens (for masking)
         prompt_tokens = tokenizer(
-            text=prompt_text,
+            text=prompt_input,
             max_length=max_source_length + max_target_length,
             truncation=True,
             padding=False,
@@ -166,29 +184,22 @@ def preprocess_for_decoder_only_model(row: LazyRow, proc_rank: int, max_source_l
             add_special_tokens=True,
         )["input_ids"]
 
-        # Remove the last token if it is an eos token
+        # If the last token in prompt_tokens is the EOS token, remove it
         if prompt_tokens[-1] == tokenizer.eos_token_id:
             prompt_tokens = prompt_tokens[:-1]
 
-        # Check if the prompt is longer than the input
-        if len(prompt_tokens) > len(model_inputs["labels"]):
-            raise ValueError(
-                f"Prompt is longer than the input, something went wrong. Prompt: {prompt_tokens}, input:"
-                f" {model_inputs['input_ids']}"
-            )
-
-        # Mask the prompt tokens
+        # Replace label tokens corresponding to the prompt with -100
         for i in range(len(prompt_tokens)):
             model_inputs["labels"][i] = -100
 
-        # model_inputs["num_token_full_instruction"] = len(model_inputs["input_ids"])
-        # model_inputs["num_token_prompt_token"] = len(prompt_tokens)
         return model_inputs
 
-    def tokenize_infer_sample():
-        # Tokenize the prompt
+    def tokenize_decoder_only_infer():
+        """
+        Preprocessing function for a decoder-only model in the eval/predict split.
+        """
         model_inputs = tokenizer(
-            text=prompt_text,
+            text=prompt_input,
             max_length=max_source_length + max_target_length,
             truncation=True,
             padding=False,
@@ -196,19 +207,35 @@ def preprocess_for_decoder_only_model(row: LazyRow, proc_rank: int, max_source_l
             add_special_tokens=True,
         )
 
-        # Remove the last token if it is an eos token
+        # If the last token is the EOS token, remove it
         if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
-            model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
-            model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
+            model_inputs["input_ids"].pop()
+            model_inputs["attention_mask"].pop()
 
         return model_inputs
 
-    # Tokenize the sample
-    tokenized_sample: BatchEncoding = tokenize_train_sample() if sample.split == "train" else tokenize_infer_sample()
-    if update:
-        return update(tokenized_sample, counter=counter, proc_rank=proc_rank)
+    # Determine whether this is a training sample
+    is_train = (sample.split == "train")
+
+    # Branch by is_encoder_decoder
+    if is_encoder_decoder:
+        # Encoder-decoder model
+        if is_train:
+            tokenized_sample = tokenize_encoder_decoder_train()
+        else:
+            tokenized_sample = tokenize_encoder_decoder_infer()
     else:
-        return tokenized_sample
+        # Decoder-only model
+        if is_train:
+            tokenized_sample = tokenize_decoder_only_train()
+        else:
+            tokenized_sample = tokenize_decoder_only_infer()
+
+    # If the update callback is provided, call it (e.g., to update progress bars, etc.)
+    if update:
+        update(counter=counter, rank=rank)
+
+    return tokenized_sample
 
 
 # Reference for implementation
@@ -428,16 +455,18 @@ def main(
                 pbar = pbar if args.train.local_rank == 0 else None
                 datasets.disable_progress_bar()
                 train_dataset = train_dataset.map(
-                    preprocess_for_encoder_decoder_model if is_encoder_decoder else preprocess_for_decoder_only_model,
-                    load_from_cache_file=args.data.use_cache_data, cache_file_name=cache_path,
-                    with_rank=True, batched=False, num_proc=args.env.max_workers,
+                    function=preprocess_row, batched=False, with_rank=True,
                     fn_kwargs={
+                        "is_encoder_decoder": is_encoder_decoder,
                         "max_source_length": args.data.max_source_length,
                         "max_target_length": args.data.max_target_length,
                         "tokenizer": tokenizer,
                         "counter": Counter(step=args.env.max_workers),
-                        "update": lambda *vs, **ws: update_progress(*vs, **ws, pbar=pbar, state_path=state_path),
+                        "update": lambda *vs, **ws: update_progress(*vs, **ws, pbar=pbar),
                     },
+                    load_from_cache_file=args.data.use_cache_data,
+                    cache_file_name=cache_path,
+                    num_proc=args.env.max_workers,
                 )
                 datasets.enable_progress_bars()
             if state_path:
