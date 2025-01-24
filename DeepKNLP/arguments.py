@@ -61,9 +61,9 @@ class CustomDataArguments(BaseModel):
             return self.eval_file.parent / ".cache"
 
     @property
-    def cache_test_dir(self) -> Optional[Path]:
-        if self.test_file:
-            return self.test_file.parent / ".cache"
+    def cache_pred_dir(self) -> Optional[Path]:
+        if self.pred_file:
+            return self.pred_file.parent / ".cache"
 
     def cache_train_path(self, size: int) -> Optional[str]:
         if self.train_file:
@@ -77,9 +77,9 @@ class CustomDataArguments(BaseModel):
         if self.eval_file:
             return str(self.cache_eval_dir / f"{self.eval_file.stem}={size}.tmp")
 
-    def cache_test_path(self, size: int) -> Optional[str]:
-        if self.test_file:
-            return str(self.cache_test_dir / f"{self.test_file.stem}={size}.tmp")
+    def cache_pred_path(self, size: int) -> Optional[str]:
+        if self.pred_file:
+            return str(self.cache_pred_dir / f"{self.pred_file.stem}={size}.tmp")
 
     def cache_train_files(self, size: int) -> List[Path]:
         if self.train_file:
@@ -93,9 +93,9 @@ class CustomDataArguments(BaseModel):
         if self.eval_file:
             return non_empty_files(self.cache_eval_dir / f"{self.eval_file.stem}={size}*.tmp")
 
-    def cache_test_files(self, size: int) -> List[Path]:
-        if self.test_file:
-            return non_empty_files(self.cache_test_dir / f"{self.test_file.stem}={size}*.tmp")
+    def cache_pred_files(self, size: int) -> List[Path]:
+        if self.pred_file:
+            return non_empty_files(self.cache_pred_dir / f"{self.pred_file.stem}={size}*.tmp")
 
 
 class TrainingArgumentsForAccelerator(NewCommonArguments):

@@ -434,12 +434,13 @@ def main(
         model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
         logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
 
+        train_dataset = None
         if args.train.do_train:
-            assert args.data.train_file is not None, "Need to provide train_data_path"
+            assert args.data.train_file is not None, "Need to provide train_file"
             train_dataset = load_dataset("json", data_files=str(args.data.train_file), split="train")
             logger.info(f"Load raw train_dataset(#={len(train_dataset)}): {args.data.train_file}")
             with ProgIter(total=len(train_dataset), stream=LoggerWriter(logger), verbose=2,
-                          desc="Preprocess train samples:") as pbar:
+                          desc="Preprocess train_dataset:") as pbar:
                 datasets.disable_progress_bar()
                 train_dataset = train_dataset.map(
                     function=preprocess_row, batched=False, with_rank=True,
@@ -460,34 +461,61 @@ def main(
                 datasets.enable_progress_bars()
             logger.info(f"Use preprocessed train_dataset at {from_timestamp(max(train_dataset["time_stamp"]))}")
             accelerator.wait_for_everyone()
-            exit(0)
 
+        eval_dataset = None
         if args.train.do_eval:
-            assert args.data.eval_file is not None, "Need to provide eval_data_path"
+            assert args.data.eval_file is not None, "Need to provide eval_file"
             eval_dataset = load_dataset("json", data_files=str(args.data.eval_file), split="train")
-            logger.info(f"Use {args.data.eval_file} as eval_dataset(#={len(eval_dataset)})")
-            with args.train.main_process_first(desc="eval_dataset map preprocessing"):
+            logger.info(f"Load raw eval_dataset(#={len(eval_dataset)}): {args.data.eval_file}")
+            with ProgIter(total=len(eval_dataset), stream=LoggerWriter(logger), verbose=2,
+                          desc="Preprocess eval_dataset:") as pbar:
+                datasets.disable_progress_bar()
                 eval_dataset = eval_dataset.map(
-                    preprocess_function,
-                    batched=False,
-                    num_proc=args.env.max_workers,
+                    function=preprocess_row, batched=False, with_rank=True,
+                    fn_kwargs={
+                        "is_encoder_decoder": is_encoder_decoder,
+                        "max_source_length": args.data.max_source_length,
+                        "max_target_length": args.data.max_target_length,
+                        "tokenizer": tokenizer,
+                        "counter": Counter(step=args.env.max_workers),
+                        "update": lambda *vs, **ws: update_progress(
+                            *vs, **ws, pbar=pbar if args.train.local_rank == 0 else None
+                        ),
+                    },
                     load_from_cache_file=args.data.use_cache_data,
-                    desc="Running tokenizer on eval_dataset",
+                    cache_file_name=args.data.cache_eval_path(len(eval_dataset)),
+                    num_proc=args.env.max_workers,
                 )
+                datasets.enable_progress_bars()
+            logger.info(f"Use preprocessed eval_dataset at {from_timestamp(max(eval_dataset['time_stamp']))}")
             accelerator.wait_for_everyone()
 
+        pred_dataset = None
         if args.train.do_predict:
-            assert args.data.pred_file is not None, "Need to provide pred_data_path"
+            assert args.data.pred_file is not None, "Need to provide pred_file"
             pred_dataset = load_dataset("json", data_files=str(args.data.pred_file), split="train")
-            logger.info(f"Use {args.data.pred_file} as pred_dataset(#={len(pred_dataset)})")
-            with args.train.main_process_first(desc="pred_dataset map preprocessing"):
+            logger.info(f"Load raw pred_dataset(#={len(pred_dataset)}): {args.data.pred_file}")
+            with ProgIter(total=len(pred_dataset), stream=LoggerWriter(logger), verbose=2,
+                          desc="Preprocess pred_dataset:") as pbar:
+                datasets.disable_progress_bar()
                 pred_dataset = pred_dataset.map(
-                    preprocess_function,
-                    batched=False,
-                    num_proc=args.env.max_workers,
+                    function=preprocess_row, batched=False, with_rank=True,
+                    fn_kwargs={
+                        "is_encoder_decoder": is_encoder_decoder,
+                        "max_source_length": args.data.max_source_length,
+                        "max_target_length": args.data.max_target_length,
+                        "tokenizer": tokenizer,
+                        "counter": Counter(step=args.env.max_workers),
+                        "update": lambda *vs, **ws: update_progress(
+                            *vs, **ws, pbar=pbar if args.train.local_rank == 0 else None
+                        ),
+                    },
                     load_from_cache_file=args.data.use_cache_data,
-                    desc="Running tokenizer on pred_dataset",
+                    cache_file_name=args.data.cache_pred_path(len(pred_dataset)),
+                    num_proc=args.env.max_workers,
                 )
+                datasets.enable_progress_bars()
+            logger.info(f"Use preprocessed pred_dataset at {from_timestamp(max(pred_dataset['time_stamp']))}")
             accelerator.wait_for_everyone()
 
         # Construct a data collator
