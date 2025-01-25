@@ -36,9 +36,12 @@ from transformers import (
     PreTrainedTokenizerBase,
     BatchEncoding,
     Seq2SeqTrainingArguments,
-    ProgressCallback,
     set_seed,
+    PrinterCallback,
+    ProgressCallback,
+    DefaultFlowCallback,
 )
+from transformers.integrations import TensorBoardCallback
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
 from transformers.utils.logging import set_verbosity as transformers_set_verbosity
 
@@ -314,7 +317,7 @@ def main(
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
         report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER/EAGLE-1B-debug/runs
@@ -322,7 +325,8 @@ def main(
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
-        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 0.2,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 1.0,
+        max_steps: Annotated[int, typer.Option("--max_steps")] = 30,  # TODO: -1
         # for DeepSpeed
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,
         accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,
@@ -397,8 +401,9 @@ def main(
             per_device_train_batch_size=per_device_train_batch_size,
             per_device_eval_batch_size=per_device_eval_batch_size,
             num_train_epochs=num_train_epochs,
+            max_steps=max_steps,
             logging_strategy="steps",
-            logging_steps=10,
+            logging_steps=5,
             lr_scheduler_type="cosine",
             eval_strategy="epoch",
             save_strategy="no",  # "epoch" if saving is needed
@@ -577,6 +582,12 @@ def main(
             data_collator=data_collator,
             compute_metrics=compute_ner_metrics if args.train.predict_with_generate else None,
         )
+        for x in trainer.callback_handler.callbacks:
+            # DefaultFlowCallback
+            # TensorBoardCallback
+            # PrinterCallback
+            logger.warning(f" - {x}")
+        trainer.remove_callback(PrinterCallback)
         if accelerator.is_main_process:
             logger.warning(f"trainer.accelerator={trainer.accelerator} / "
                            f"trainer.accelerator.state={trainer.accelerator.state}")
