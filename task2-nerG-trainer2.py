@@ -1,8 +1,7 @@
 import json
 import logging
 import os
-from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable, Optional, Mapping, Any
 
 import datasets
 import numpy as np
@@ -23,8 +22,8 @@ from accelerate import Accelerator
 from accelerate import DeepSpeedPlugin
 from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info
-from chrisbase.io import new_path, files, tb_events_to_csv
+from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, convert_all_events_in_dir
+from chrisbase.io import new_path
 from chrisbase.time import from_timestamp, now_stamp
 from chrisdata.ner import GenNERSampleWrapper
 from progiter import ProgIter
@@ -35,13 +34,15 @@ from transformers import (
     AutoModelForSeq2SeqLM,
     PreTrainedTokenizerBase,
     BatchEncoding,
+    TrainerState,
+    TrainerControl,
+    TrainingArguments,
     Seq2SeqTrainingArguments,
     set_seed,
+    TrainerCallback,
     PrinterCallback,
-    ProgressCallback,
-    DefaultFlowCallback,
 )
-from transformers.integrations import TensorBoardCallback
+from transformers.trainer_utils import has_length
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
 from transformers.utils.logging import set_verbosity as transformers_set_verbosity
 
@@ -49,17 +50,72 @@ from transformers.utils.logging import set_verbosity as transformers_set_verbosi
 logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 
-def convert_all_events_in_dir(log_dir: str | Path):
-    """
-    Converts all TensorBoard event files in `log_dir` to CSV.
-    Each event file produces a separate CSV file.
-    """
-    input_files = os.path.join(log_dir, "**/events.out.tfevents.*")
-    for input_file in files(input_files):
-        if not input_file.name.endswith(".csv"):
-            output_file = input_file.with_name(input_file.name + ".csv")
-            logger.info(f"Convert {input_file} to csv")
-            tb_events_to_csv(input_file, output_file)
+class CustomProgressCallback(TrainerCallback):
+
+    def __init__(self):
+        super().__init__()
+        self.training_iter: Optional[ProgIter] = None
+        self.prediction_iter: Optional[ProgIter] = None
+        self.current_step: int = 0
+
+    def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if state.is_world_process_zero:
+            self.training_iter = ProgIter(
+                verbose=2,
+                stream=LoggerWriter(logger),
+                total=state.max_steps,
+                desc="Training",
+            )
+            self.training_iter.begin()
+        self.current_step = 0
+
+    def on_step_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if self.training_iter is not None:
+            self.training_iter.set_extra(f"| (Ep {state.epoch:.2f})")
+
+    def on_step_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if self.training_iter is not None:
+            self.training_iter.step(state.global_step - self.current_step)
+            self.current_step = state.global_step
+
+    def on_train_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if self.training_iter is not None:
+            self.training_iter.end()
+            self.training_iter = None
+
+    def on_prediction_step(self, args: TrainingArguments, state: TrainerState, control: TrainerControl,
+                           eval_dataloader=None, **kwargs):
+        if state.is_world_process_zero and has_length(eval_dataloader):
+            if self.prediction_iter is None:
+                self.prediction_iter = ProgIter(
+                    verbose=2,
+                    stream=LoggerWriter(logger),
+                    total=len(eval_dataloader),
+                    desc="Predicting",
+                )
+                self.prediction_iter.begin()
+            self.prediction_iter.step()
+
+    def on_evaluate(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if self.prediction_iter is not None:
+            self.prediction_iter.end()
+            self.prediction_iter = None
+
+    def on_predict(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if self.prediction_iter is not None:
+            self.prediction_iter.end()
+            self.prediction_iter = None
+
+    def on_log(self, args: TrainingArguments, state: TrainerState, control: TrainerControl,
+               logs=Optional[Mapping[str, Any]], **kwargs):
+        # Make a shallow copy of logs so we can mutate fields if needed
+        metrics = {}
+        for k, v in logs.items():
+            metrics[k] = v
+        metrics.pop("total_flos", None)
+        if "epoch" in metrics:
+            metrics["epoch"] = round(metrics["epoch"], 2)
+        logger.info(f"metrics={metrics}")
 
 
 def update_progress(
@@ -575,18 +631,13 @@ def main(
         trainer = GNERTrainer(
             args=args.train,
             model=model,
-            callbacks=[ProgressCallback(max_str_len=500)],
+            callbacks=[CustomProgressCallback()],
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
             data_collator=data_collator,
             compute_metrics=compute_ner_metrics if args.train.predict_with_generate else None,
         )
-        for x in trainer.callback_handler.callbacks:
-            # DefaultFlowCallback
-            # TensorBoardCallback
-            # PrinterCallback
-            logger.warning(f" - {x}")
         trainer.remove_callback(PrinterCallback)
         if accelerator.is_main_process:
             logger.warning(f"trainer.accelerator={trainer.accelerator} / "
