@@ -380,6 +380,7 @@ def main(
             use_cache_data=use_cache_data,
         ),
         train=Seq2SeqTrainingArguments(
+            disable_tqdm=True,
             predict_with_generate=True,
             generation_max_length=generation_max_length,
             remove_unused_columns=False,
@@ -569,7 +570,7 @@ def main(
         trainer = GNERTrainer(
             args=args.train,
             model=model,
-            # callbacks=[ProgressCallback(max_str_len=300)],
+            callbacks=[ProgressCallback(max_str_len=500)],
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
