@@ -1,6 +1,8 @@
 import json
 import logging
 import os
+import sys
+from pathlib import Path
 from typing import Callable, Optional, Mapping, Any
 
 import datasets
@@ -23,8 +25,7 @@ from accelerate import Accelerator
 from accelerate import DeepSpeedPlugin
 from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, convert_all_events_in_dir
-from chrisbase.io import new_path
+from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, log_table, new_path, convert_all_events_in_dir
 from chrisbase.time import from_timestamp, now_stamp
 from chrisdata.ner import GenNERSampleWrapper
 from progiter import ProgIter
@@ -53,13 +54,13 @@ logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 class CustomProgressCallback(TrainerCallback):
 
-    def __init__(self, output_path: str):
+    def __init__(self, output_path: str | Path):
         super().__init__()
         self.training_iter: Optional[ProgIter] = None
         self.prediction_iter: Optional[ProgIter] = None
         self.current_step: int = 0
-        self.metrics_df = pd.DataFrame()
-        self.output_path = output_path
+        self.output_path: str | Path = output_path
+        self.metrics_table: pd.DataFrame = pd.DataFrame()
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if state.is_world_process_zero:
@@ -67,7 +68,7 @@ class CustomProgressCallback(TrainerCallback):
                 verbose=2,
                 stream=LoggerWriter(logger),
                 total=state.max_steps,
-                desc="Training",
+                desc="[TRAINING]",
             )
             self.training_iter.begin()
         self.current_step = 0
@@ -94,7 +95,7 @@ class CustomProgressCallback(TrainerCallback):
                     verbose=2,
                     stream=LoggerWriter(logger),
                     total=len(eval_dataloader),
-                    desc="Predicting",
+                    desc="[METERING]",
                 )
                 self.prediction_iter.begin()
             self.prediction_iter.step()
@@ -110,18 +111,18 @@ class CustomProgressCallback(TrainerCallback):
             self.prediction_iter = None
 
     def on_log(self, args: TrainingArguments, state: TrainerState, control: TrainerControl,
-               logs: Optional[Mapping[str, Any]] = None, **kwargs):
-        metrics = {}
+               logs: Optional[Mapping[str, Any]] = None, exclude_keys=("epoch", "step"), **kwargs):
+        metrics = {
+            "step": state.global_step,
+            "epoch": round(state.epoch, 2),
+        }
         for k, v in logs.items():
-            metrics[k] = v
-        if "epoch" in metrics:
-            metrics["epoch"] = round(metrics["epoch"], 2)
-
-        self.metrics_df = pd.concat([self.metrics_df, pd.DataFrame([metrics])], ignore_index=True)
-        self.metrics_df.to_csv(self.output_path + ".csv", index=False)
-        self.metrics_df.to_json(self.output_path, orient="records", lines=True)
-        logger.info(f"metrics={metrics}")
-        logger.info(f"metrics_df={self.metrics_df}")
+            if k not in exclude_keys:
+                metrics[k] = v
+        new_metrics_row = pd.DataFrame([metrics])
+        log_table(logger, new_metrics_row, tablefmt="plain", left=">> ", showindex=False)
+        self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
+        self.metrics_table.to_csv(self.output_path, index=False)
 
 
 def update_progress(
@@ -365,7 +366,8 @@ def main(
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
         run_version: Annotated[Optional[str], typer.Option("--run_version")] = "EAGLE-1B-debug",
-        logging_file: Annotated[str, typer.Option("--logging_file")] = "train-messages.out",
+        output_file: Annotated[str, typer.Option("--output_file")] = "train-metrics.csv",
+        logging_file: Annotated[str, typer.Option("--logging_file")] = "train-loggings.out",
         argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
         random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
@@ -389,6 +391,13 @@ def main(
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 1.0,
         max_steps: Annotated[int, typer.Option("--max_steps")] = 30,  # TODO: -1
+        logging_steps: Annotated[int, typer.Option("--logging_steps")] = 5,
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
+        save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
+        logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = -1,
+        eval_ratio: Annotated[float, typer.Option("--eval_steps")] = 0.2,
+        save_ratio: Annotated[float, typer.Option("--save_steps")] = -1,
+        learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         # for DeepSpeed
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,
         accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,
@@ -407,8 +416,9 @@ def main(
         output_home=output_home,
         output_name=output_name,
         run_version=run_version,
-        logging_format=LoggingFormat.CHECK_20,
         logging_level=logging.WARNING,
+        logging_format=LoggingFormat.CHECK_20,
+        output_file=new_path(output_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         logging_file=new_path(logging_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         argument_file=new_path(argument_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
         random_seed=random_seed,
@@ -464,12 +474,14 @@ def main(
             per_device_eval_batch_size=per_device_eval_batch_size,
             num_train_epochs=num_train_epochs,
             max_steps=max_steps,
-            logging_strategy="steps",
-            logging_steps=5,
+            logging_strategy="steps" if 0 < logging_ratio < 1 or logging_steps > 0 else "epoch" if logging_steps == 0 else "no",
+            eval_strategy="steps" if 0 < eval_ratio < 1 or eval_steps > 0 else "epoch" if eval_steps == 0 else "no",
+            save_strategy="steps" if 0 < save_ratio < 1 or save_steps > 0 else "epoch" if save_steps == 0 else "no",
+            logging_steps=logging_ratio if 0 < logging_ratio < 1 else logging_steps if logging_steps >= 0 else sys.maxsize,
+            eval_steps=eval_ratio if 0 < eval_ratio < 1 else eval_steps if eval_steps >= 0 else sys.maxsize,
+            save_steps=save_ratio if 0 < save_ratio < 1 else save_steps if save_steps >= 0 else sys.maxsize,
+            learning_rate=learning_rate,
             lr_scheduler_type="cosine",
-            eval_strategy="epoch",
-            save_strategy="no",  # "epoch" if saving is needed
-            learning_rate=2e-5,
             warmup_ratio=0.04,
             weight_decay=0.0,
             tf32=is_torch_tf32_available(),
@@ -637,7 +649,7 @@ def main(
         trainer = GNERTrainer(
             args=args.train,
             model=model,
-            callbacks=[CustomProgressCallback(os.path.join(args.train.output_dir, f"train-metrics-{args.env.time_stamp}.jsonl"))],
+            callbacks=[CustomProgressCallback(args.env.output_dir / args.env.output_file)],
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
