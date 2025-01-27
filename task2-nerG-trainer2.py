@@ -5,6 +5,7 @@ from typing import Callable, Optional, Mapping, Any
 
 import datasets
 import numpy as np
+import pandas as pd
 import torch
 import typer
 from datasets import load_dataset
@@ -52,11 +53,13 @@ logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 class CustomProgressCallback(TrainerCallback):
 
-    def __init__(self):
+    def __init__(self, output_path: str):
         super().__init__()
         self.training_iter: Optional[ProgIter] = None
         self.prediction_iter: Optional[ProgIter] = None
         self.current_step: int = 0
+        self.metrics_df = pd.DataFrame()
+        self.output_path = output_path
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if state.is_world_process_zero:
@@ -107,15 +110,18 @@ class CustomProgressCallback(TrainerCallback):
             self.prediction_iter = None
 
     def on_log(self, args: TrainingArguments, state: TrainerState, control: TrainerControl,
-               logs=Optional[Mapping[str, Any]], **kwargs):
-        # Make a shallow copy of logs so we can mutate fields if needed
+               logs: Optional[Mapping[str, Any]] = None, **kwargs):
         metrics = {}
         for k, v in logs.items():
             metrics[k] = v
-        metrics.pop("total_flos", None)
         if "epoch" in metrics:
             metrics["epoch"] = round(metrics["epoch"], 2)
+
+        self.metrics_df = pd.concat([self.metrics_df, pd.DataFrame([metrics])], ignore_index=True)
+        self.metrics_df.to_csv(self.output_path + ".csv", index=False)
+        self.metrics_df.to_json(self.output_path, orient="records", lines=True)
         logger.info(f"metrics={metrics}")
+        logger.info(f"metrics_df={self.metrics_df}")
 
 
 def update_progress(
@@ -631,7 +637,7 @@ def main(
         trainer = GNERTrainer(
             args=args.train,
             model=model,
-            callbacks=[CustomProgressCallback()],
+            callbacks=[CustomProgressCallback(os.path.join(args.train.output_dir, f"train-metrics-{args.env.time_stamp}.jsonl"))],
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
@@ -647,7 +653,7 @@ def main(
         if args.train.do_train:
             train_result = trainer.train()
             logger.info(f"Train result: {train_result}")
-            convert_all_events_in_dir(env.output_dir)
+            convert_all_events_in_dir(args.train.output_dir)
 
     accelerator.end_training()
 
