@@ -126,8 +126,11 @@ dmypy.json
 transformers*
 lightning*
 chrisbase*
+chrisdata*
 chrislab*
 progiter*
+accelerate*
+deepspeed*
 
 # custom
 .cache*
