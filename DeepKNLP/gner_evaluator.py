@@ -224,7 +224,7 @@ class NEREvaluator:
         }
 
 
-def compute_metrics(examples, tokenizer=None, average_key="AVERAGE") -> dict[str, float]:
+def compute_metrics(examples, tokenizer=None, average_key="AVERAGE", detailed=False) -> dict[str, float]:
     all_examples = defaultdict(list)
     for example in examples:
         all_examples[example['dataset']].append(example)
@@ -235,12 +235,18 @@ def compute_metrics(examples, tokenizer=None, average_key="AVERAGE") -> dict[str
     tot_f1, tot_dataset = 0, 0
     for dataset in all_examples:
         eval_result = evaluator.evaluate(all_examples[dataset], tokenizer=tokenizer)
-        all_results[f"{dataset}_prec"] = eval_result["prec"]
-        all_results[f"{dataset}_rec"] = eval_result["rec"]
-        all_results[f"{dataset}_f1"] = eval_result["f1"]
+        if detailed:
+            all_results[f"{dataset}_prec"] = eval_result["prec"]
+            all_results[f"{dataset}_rec"] = eval_result["rec"]
+            all_results[f"{dataset}_f1"] = eval_result["f1"]
+        else:
+            all_results[dataset] = eval_result["f1"]
         tot_f1 += eval_result["f1"]
         tot_dataset += 1
-    all_results[f"{average_key}_f1"] = tot_f1 / tot_dataset
+    if detailed:
+        all_results[f"{average_key}_f1"] = tot_f1 / tot_dataset
+    else:
+        all_results[average_key] = tot_f1 / tot_dataset
     return all_results
 
 
