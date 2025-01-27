@@ -375,8 +375,7 @@ def main(
         # for CustomDataArguments
         pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
-        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-test-min.jsonl",
-        # eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
+        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-min.jsonl",
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
