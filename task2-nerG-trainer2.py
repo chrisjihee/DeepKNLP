@@ -382,7 +382,7 @@ def main(
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         # for Seq2SeqTrainingArguments
-        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
+        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,  # TODO: 1280 -> 640 (speed accuracy trade-off)
         report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER/EAGLE-1B-debug/runs
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
