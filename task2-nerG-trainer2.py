@@ -21,7 +21,6 @@ from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArgume
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
-from DeepKNLP.helper import epsilon
 from accelerate import Accelerator
 from accelerate import DeepSpeedPlugin
 from accelerate.utils import gather_object
@@ -386,15 +385,16 @@ def main(
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,
         report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER/EAGLE-1B-debug/runs
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
-        gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
-        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 32,
+        gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
+        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
+        eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 4,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 1.0,
         logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = -1,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 10,
-        eval_ratio: Annotated[float, typer.Option("--eval_ratio")] = 1 / 4,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
+        eval_ratio: Annotated[float, typer.Option("--eval_ratio")] = -1,
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 35,
         save_ratio: Annotated[float, typer.Option("--save_ratio")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
@@ -469,17 +469,18 @@ def main(
             do_train=True,
             do_eval=True,
             gradient_checkpointing=gradient_checkpointing,
-            gradient_accumulation_steps=gradient_accumulation_steps,
             per_device_train_batch_size=per_device_train_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
             per_device_eval_batch_size=per_device_eval_batch_size,
+            eval_accumulation_steps=eval_accumulation_steps,
             num_train_epochs=num_train_epochs,
             max_steps=max_steps,
-            logging_strategy="steps" if epsilon < logging_ratio < 1 or logging_steps > 0 else "epoch" if logging_steps == 0 else "no",
-            eval_strategy="steps" if epsilon < eval_ratio < 1 or eval_steps > 0 else "epoch" if eval_steps == 0 else "no",
-            save_strategy="steps" if epsilon < save_ratio < 1 or save_steps > 0 else "epoch" if save_steps == 0 else "no",
-            logging_steps=logging_ratio - epsilon if epsilon < logging_ratio < 1 else logging_steps if logging_steps >= 0 else sys.maxsize,
-            eval_steps=eval_ratio - epsilon if epsilon < eval_ratio < 1 else eval_steps if eval_steps >= 0 else sys.maxsize,
-            save_steps=save_ratio - epsilon if epsilon < save_ratio < 1 else save_steps if save_steps >= 0 else sys.maxsize,
+            logging_strategy="steps" if 0 < logging_ratio < 1 or logging_steps > 0 else "epoch" if logging_steps == 0 else "no",
+            eval_strategy="steps" if 0 < eval_ratio < 1 or eval_steps > 0 else "epoch" if eval_steps == 0 else "no",
+            save_strategy="steps" if 0 < save_ratio < 1 or save_steps > 0 else "epoch" if save_steps == 0 else "no",
+            logging_steps=logging_ratio if 0 < logging_ratio < 1 else logging_steps if logging_steps >= 0 else sys.maxsize,
+            eval_steps=eval_ratio if 0 < eval_ratio < 1 else eval_steps if eval_steps >= 0 else sys.maxsize,
+            save_steps=save_ratio if 0 < save_ratio < 1 else save_steps if save_steps >= 0 else sys.maxsize,
             learning_rate=learning_rate,
             lr_scheduler_type="cosine",
             warmup_ratio=0.04,
