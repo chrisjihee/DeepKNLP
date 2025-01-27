@@ -1,5 +1,5 @@
 compute_environment: LOCAL_MACHINE
-distributed_type: MULTI_GPU
+distributed_type: DEEPSPEED
 machine_rank: 0
 num_machines: 1
 num_processes: 8
