@@ -382,8 +382,8 @@ def main(
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         # for Seq2SeqTrainingArguments
-        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 1280,  # TODO: 1280 -> 640 (speed accuracy trade-off)
-        report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER/EAGLE-1B-debug/runs
+        generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
+        report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
@@ -394,13 +394,13 @@ def main(
         logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = -1,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 10,
         eval_ratio: Annotated[float, typer.Option("--eval_ratio")] = -1,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 35,
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 0,
         save_ratio: Annotated[float, typer.Option("--save_ratio")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         # for DeepSpeed
-        trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,
-        accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,
+        trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,  # for deepspeed.launcher.runner
+        accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,  # for accelerate.commands.launch
 ):
     # Setup project environment
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
