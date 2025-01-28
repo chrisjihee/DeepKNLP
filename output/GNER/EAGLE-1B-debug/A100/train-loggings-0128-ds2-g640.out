@@ -1,0 +1,855 @@
+[01.28 04:05:17] ┇ WARNING ┇             DeepKNLP ┇ accelerator.is_main_process=False
+[01.28 04:05:17] ┇ WARNING ┇             DeepKNLP ┇ accelerator.is_main_process=False
+[01.28 04:05:17] ┇ WARNING ┇             DeepKNLP ┇ accelerator.is_main_process=True
+[01.28 04:05:17] ┇ WARNING ┇             DeepKNLP ┇ accelerator.is_main_process=False
+[01.28 04:05:17] ┇ INFO    ┇             DeepKNLP ┇ Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ [INIT] python task2-nerG-trainer2.py --accelerate_deepspeed --generation_max_length=640 --run_version EAGLE-1B-debug-acc1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   #	TrainingArgumentsForAccelerator              	value
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   1	env.hostname                                 	lirs-b1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   2	env.hostaddr                                 	129.254.111.103
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   3	env.global_rank                              	-1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   4	env.local_rank                               	0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   5	env.node_rank                                	-1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   6	env.world_size                               	4
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   7	env.time_stamp                               	0128.040511
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   8	env.python_path                              	/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇   9	env.current_dir                              	/home/chrisjihee/proj/DeepKNLP
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  10	env.current_file                             	task2-nerG-trainer2.py
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  11	env.command_args                             	['--accelerate_deepspeed', '--generation_max_length=640', '--run_version', 'EAGLE-1B-debug-acc1']
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  12	env.output_home                              	output
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  13	env.output_name                              	GNER
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  14	env.run_version                              	EAGLE-1B-debug-acc1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  15	env.output_file                              	train-metrics-0128.040511.csv
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  16	env.logging_file                             	train-loggings-0128.040511.out
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  17	env.logging_level                            	30
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  18	env.logging_format                           	%(asctime)s ┇ %(levelname)-7s ┇ %(name)20s ┇ %(message)s
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  19	env.datetime_format                          	[%m.%d %H:%M:%S]
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  20	env.argument_file                            	train-arguments-0128.040511.json
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  21	env.random_seed                              	7
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  22	env.max_workers                              	4
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  23	env.debugging                                	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  24	env.output_dir                               	output/GNER/EAGLE-1B-debug-acc1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  25	time.t1                                      	2025-01-28 04:05:18.224222
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  26	time.t2                                      	2025-01-28 04:05:11.870738
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  27	time.started                                 	[01.28 04:05:18]
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  28	time.settled
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  29	time.elapsed
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  30	data.pretrained                              	etri-lirs/egpt-1.3b-preview
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  31	data.train_file                              	data/gner/zero-shot-train.jsonl
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  32	data.study_file
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  33	data.eval_file                               	data/gner/zero-shot-dev.jsonl
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  34	data.pred_file                               	data/gner/zero-shot-test-min.jsonl
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  35	data.max_train_samples                       	-1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  36	data.max_study_samples                       	-1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  37	data.max_eval_samples                        	-1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  38	data.max_pred_samples                        	-1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  39	data.max_source_length                       	640
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  40	data.max_target_length                       	640
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  41	data.use_cache_data                          	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  42	data.ignore_pad_token_for_loss               	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  43	train.output_dir                             	output/GNER/EAGLE-1B-debug-acc1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  44	train.overwrite_output_dir                   	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  45	train.do_train                               	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  46	train.do_eval                                	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  47	train.do_predict                             	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  48	train.eval_strategy                          	IntervalStrategy.STEPS
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  49	train.prediction_loss_only                   	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  50	train.per_device_train_batch_size            	8
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  51	train.per_device_eval_batch_size             	8
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  52	train.per_gpu_train_batch_size
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  53	train.per_gpu_eval_batch_size
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  54	train.gradient_accumulation_steps            	4
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  55	train.eval_accumulation_steps                	4
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  56	train.eval_delay                             	0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  57	train.torch_empty_cache_steps
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  58	train.learning_rate                          	2e-05
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  59	train.weight_decay                           	0.0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  60	train.adam_beta1                             	0.9
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  61	train.adam_beta2                             	0.999
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  62	train.adam_epsilon                           	1e-08
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  63	train.max_grad_norm                          	1.0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  64	train.num_train_epochs                       	1.0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  65	train.max_steps                              	-1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  66	train.lr_scheduler_type                      	SchedulerType.COSINE
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  67	train.lr_scheduler_kwargs                    	{}
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  68	train.warmup_ratio                           	0.04
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  69	train.warmup_steps                           	0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  70	train.log_level                              	warning
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  71	train.log_level_replica                      	error
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  72	train.log_on_each_node                       	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  73	train.logging_dir                            	output/GNER/EAGLE-1B-debug-acc1/runs/Jan28_04-05-17_lirs-b1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  74	train.logging_strategy                       	IntervalStrategy.STEPS
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  75	train.logging_first_step                     	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  76	train.logging_steps                          	10
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  77	train.logging_nan_inf_filter                 	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  78	train.save_strategy                          	SaveStrategy.NO
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  79	train.save_steps                             	9223372036854775807
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  80	train.save_total_limit
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  81	train.save_safetensors                       	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  82	train.save_on_each_node                      	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  83	train.save_only_model                        	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  84	train.restore_callback_states_from_checkpoint	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  85	train.no_cuda                                	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  86	train.use_cpu                                	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  87	train.use_mps_device                         	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  88	train.seed                                   	7
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  89	train.data_seed
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  90	train.jit_mode_eval                          	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  91	train.use_ipex                               	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  92	train.bf16                                   	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  93	train.fp16                                   	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  94	train.fp16_opt_level                         	O1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  95	train.half_precision_backend                 	auto
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  96	train.bf16_full_eval                         	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  97	train.fp16_full_eval                         	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  98	train.tf32                                   	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇  99	train.local_rank                             	0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 100	train.ddp_backend
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 101	train.tpu_num_cores
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 102	train.tpu_metrics_debug                      	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 103	train.debug                                  	[]
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 104	train.dataloader_drop_last                   	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 105	train.eval_steps                             	35
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 106	train.dataloader_num_workers                 	0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 107	train.dataloader_prefetch_factor
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 108	train.past_index                             	-1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 109	train.run_name                               	output/GNER/EAGLE-1B-debug-acc1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 110	train.disable_tqdm                           	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 111	train.remove_unused_columns                  	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 112	train.label_names
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 113	train.load_best_model_at_end                 	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 114	train.metric_for_best_model
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 115	train.greater_is_better
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 116	train.ignore_data_skip                       	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 117	train.fsdp                                   	[]
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 118	train.fsdp_min_num_params                    	0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 119	train.fsdp_config                            	{'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False}
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 120	train.fsdp_transformer_layer_cls_to_wrap
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 121	train.accelerator_config                     	{'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False}
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 122	train.deepspeed
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 123	train.label_smoothing_factor                 	0.0
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 124	train.optim                                  	OptimizerNames.ADAMW_TORCH
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 125	train.optim_args
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 126	train.adafactor                              	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 127	train.group_by_length                        	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 128	train.length_column_name                     	length
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 129	train.report_to                              	['tensorboard']
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 130	train.ddp_find_unused_parameters
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 131	train.ddp_bucket_cap_mb
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 132	train.ddp_broadcast_buffers
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 133	train.dataloader_pin_memory                  	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 134	train.dataloader_persistent_workers          	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 135	train.skip_memory_metrics                    	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 136	train.use_legacy_prediction_loop             	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 137	train.push_to_hub                            	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 138	train.resume_from_checkpoint
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 139	train.hub_model_id
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 140	train.hub_strategy                           	HubStrategy.EVERY_SAVE
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 141	train.hub_token
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 142	train.hub_private_repo
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 143	train.hub_always_push                        	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 144	train.gradient_checkpointing                 	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 145	train.gradient_checkpointing_kwargs
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 146	train.include_inputs_for_metrics             	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 147	train.include_for_metrics                    	[]
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 148	train.eval_do_concat_batches                 	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 149	train.fp16_backend                           	auto
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 150	train.evaluation_strategy
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 151	train.push_to_hub_model_id
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 152	train.push_to_hub_organization
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 153	train.push_to_hub_token
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 154	train._n_gpu                                 	1
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 155	train.mp_parameters
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 156	train.auto_find_batch_size                   	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 157	train.full_determinism                       	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 158	train.torchdynamo
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 159	train.ray_scope                              	last
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 160	train.ddp_timeout                            	1800
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 161	train.torch_compile                          	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 162	train.torch_compile_backend
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 163	train.torch_compile_mode
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 164	train.dispatch_batches
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 165	train.split_batches
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 166	train.include_tokens_per_second              	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 167	train.include_num_input_tokens_seen          	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 168	train.neftune_noise_alpha
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 169	train.optim_target_modules
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 170	train.batch_eval_metrics                     	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 171	train.eval_on_start                          	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 172	train.use_liger_kernel                       	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 173	train.eval_use_gather_object                 	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 174	train.average_tokens_across_devices          	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 175	train.sortish_sampler                        	False
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 176	train.predict_with_generate                  	True
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 177	train.generation_max_length                  	640
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 178	train.generation_num_beams
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ 179	train.generation_config
+[01.28 04:05:18] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[01.28 04:05:22] ┇ INFO    ┇             DeepKNLP ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
+[01.28 04:05:22] ┇ INFO    ┇             DeepKNLP ┇ model.generation_config.pad_token_id=0
+[01.28 04:05:23] ┇ INFO    ┇             DeepKNLP ┇ Loaded raw train_dataset (#=18135): data/gner/zero-shot-train.jsonl
+[01.28 04:05:23] ┇ INFO    ┇             DeepKNLP ┇ Completed preprocessing for train_dataset at [01.28 02:46:40]
+[01.28 04:05:23] ┇ INFO    ┇             DeepKNLP ┇ Loaded raw eval_dataset (#=6085): data/gner/zero-shot-dev.jsonl
+[01.28 04:05:23] ┇ INFO    ┇             DeepKNLP ┇ Completed preprocessing for eval_dataset at [01.28 02:46:43]
+[01.28 04:05:23] ┇ INFO    ┇ transformers.trainer ┇ Using auto half precision backend
+[01.28 04:05:23] ┇ WARNING ┇             DeepKNLP ┇ trainer.accelerator=<accelerate.accelerator.Accelerator object at 0x7f70705db350> / trainer.accelerator.state=Distributed environment: DistributedType.DEEPSPEED  Backend: nccl
+Num processes: 4
+Process index: 0
+Local process index: 0
+Device: cuda:0
+
+Mixed precision type: bf16
+ds_config: {'train_batch_size': 128, 'train_micro_batch_size_per_gpu': 8, 'gradient_accumulation_steps': 4, 'zero_optimization': {'stage': 2, 'offload_optimizer': {'device': 'none', 'nvme_path': None}, 'offload_param': {'device': 'none', 'nvme_path': None}, 'stage3_gather_16bit_weights_on_model_save': False}, 'gradient_clipping': 1.0, 'steps_per_print': inf, 'bf16': {'enabled': True}, 'fp16': {'enabled': False}}
+
+[01.28 04:05:38] ┇ INFO    ┇ transformers.trainer ┇ ***** Running training *****
+[01.28 04:05:38] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 18,135
+[01.28 04:05:38] ┇ INFO    ┇ transformers.trainer ┇   Num Epochs = 1
+[01.28 04:05:38] ┇ INFO    ┇ transformers.trainer ┇   Instantaneous batch size per device = 8
+[01.28 04:05:38] ┇ INFO    ┇ transformers.trainer ┇   Total train batch size (w. parallel, distributed & accumulation) = 128
+[01.28 04:05:38] ┇ INFO    ┇ transformers.trainer ┇   Gradient Accumulation steps = 4
+[01.28 04:05:38] ┇ INFO    ┇ transformers.trainer ┇   Total optimization steps = 141
+[01.28 04:05:38] ┇ INFO    ┇ transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
+[01.28 04:05:40] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   1%|▏                   |   1/141 [0:00:02<0:05:25, 0.43Hz] | (Ep 0.00)
+[01.28 04:05:43] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   2%|▍                   |   3/141 [0:00:05<0:03:56, 0.58Hz] | (Ep 0.01)
+[01.28 04:05:46] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   4%|▋                   |   5/141 [0:00:08<0:03:44, 0.61Hz] | (Ep 0.03)
+[01.28 04:05:48] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   5%|▉                   |   7/141 [0:00:10<0:03:19, 0.67Hz] | (Ep 0.04)
+[01.28 04:05:51] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   6%|█▎                  |   9/141 [0:00:12<0:03:09, 0.70Hz] | (Ep 0.06)
+[01.28 04:05:52] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:05:52] ┇ INFO    ┇             DeepKNLP ┇ >>     10     0.07  0.9329      1.64661      1.99567e-05
+[01.28 04:05:53] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   8%|█▌                  |  11/141 [0:00:15<0:02:59, 0.72Hz] | (Ep 0.07)
+[01.28 04:05:56] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  10%|█▉                  |  14/141 [0:00:18<0:02:46, 0.76Hz] | (Ep 0.09)
+[01.28 04:05:58] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  11%|██▎                 |  16/141 [0:00:20<0:02:39, 0.78Hz] | (Ep 0.11)
+[01.28 04:06:00] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  13%|██▌                 |  18/141 [0:00:22<0:02:34, 0.80Hz] | (Ep 0.12)
+[01.28 04:06:03] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  14%|██▊                 |  20/141 [0:00:24<0:02:30, 0.80Hz] | (Ep 0.13)
+[01.28 04:06:03] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:06:03] ┇ INFO    ┇             DeepKNLP ┇ >>     20     0.14  0.1387     0.437836       1.9474e-05
+[01.28 04:06:05] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  16%|███                 |  22/141 [0:00:26<0:02:25, 0.82Hz] | (Ep 0.15)
+[01.28 04:06:07] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  17%|███▍                |  24/141 [0:00:29<0:02:22, 0.82Hz] | (Ep 0.16)
+[01.28 04:06:09] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  18%|███▋                |  26/141 [0:00:31<0:02:19, 0.82Hz] | (Ep 0.18)
+[01.28 04:06:12] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  20%|███▉                |  28/141 [0:00:33<0:02:16, 0.83Hz] | (Ep 0.19)
+[01.28 04:06:14] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  21%|████▎               |  30/141 [0:00:36<0:02:14, 0.83Hz] | (Ep 0.20)
+[01.28 04:06:14] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:06:14] ┇ INFO    ┇             DeepKNLP ┇ >>     30     0.21  0.0728     0.213382      1.84805e-05
+[01.28 04:06:16] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  23%|████▌               |  32/141 [0:00:38<0:02:10, 0.83Hz] | (Ep 0.22)
+[01.28 04:06:18] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  24%|████▊               |  34/141 [0:00:40<0:02:07, 0.84Hz] | (Ep 0.23)
+[01.28 04:06:19] ┇ INFO    ┇ transformers.trainer ┇ ***** Running Evaluation *****
+[01.28 04:06:19] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 6085
+[01.28 04:06:19] ┇ INFO    ┇ transformers.trainer ┇   Batch size = 8
+[01.28 04:06:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   1%|                    |   1/191 [0:00:00<0:00:00, 68592.17Hz]
+[01.28 04:06:30] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   1%|▏                   |   2/191 [0:00:05<0:08:10, 0.39Hz]
+[01.28 04:06:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   2%|▎                   |   3/191 [0:00:10<0:10:30, 0.30Hz]
+[01.28 04:06:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   2%|▍                   |   4/191 [0:00:14<0:11:23, 0.27Hz]
+[01.28 04:06:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   3%|▌                   |   5/191 [0:00:18<0:11:41, 0.27Hz]
+[01.28 04:06:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   3%|▋                   |   6/191 [0:00:22<0:11:31, 0.27Hz]
+[01.28 04:06:51] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   4%|▋                   |   7/191 [0:00:26<0:11:48, 0.26Hz]
+[01.28 04:06:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   4%|▊                   |   8/191 [0:00:31<0:11:50, 0.26Hz]
+[01.28 04:07:00] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   5%|▉                   |   9/191 [0:00:35<0:11:55, 0.25Hz]
+[01.28 04:07:04] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   5%|█                   |  10/191 [0:00:40<0:12:04, 0.25Hz]
+[01.28 04:07:09] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   6%|█▏                  |  11/191 [0:00:45<0:12:18, 0.24Hz]
+[01.28 04:07:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   6%|█▎                  |  12/191 [0:00:50<0:12:29, 0.24Hz]
+[01.28 04:07:19] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   7%|█▎                  |  13/191 [0:00:54<0:12:28, 0.24Hz]
+[01.28 04:07:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   7%|█▍                  |  14/191 [0:01:00<0:12:40, 0.23Hz]
+[01.28 04:07:29] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   8%|█▌                  |  15/191 [0:01:04<0:12:34, 0.23Hz]
+[01.28 04:07:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   8%|█▋                  |  16/191 [0:01:09<0:12:38, 0.23Hz]
+[01.28 04:07:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▊                  |  17/191 [0:01:13<0:12:30, 0.23Hz]
+[01.28 04:07:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▉                  |  18/191 [0:01:18<0:12:35, 0.23Hz]
+[01.28 04:07:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  10%|█▉                  |  19/191 [0:01:22<0:12:30, 0.23Hz]
+[01.28 04:07:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  10%|██                  |  20/191 [0:01:27<0:12:29, 0.23Hz]
+[01.28 04:07:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  11%|██▏                 |  21/191 [0:01:32<0:12:25, 0.23Hz]
+[01.28 04:08:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  12%|██▎                 |  22/191 [0:01:36<0:12:23, 0.23Hz]
+[01.28 04:08:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  12%|██▍                 |  23/191 [0:01:41<0:12:22, 0.23Hz]
+[01.28 04:08:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  13%|██▌                 |  24/191 [0:01:46<0:12:22, 0.22Hz]
+[01.28 04:08:16] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  13%|██▌                 |  25/191 [0:01:51<0:12:22, 0.22Hz]
+[01.28 04:08:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  14%|██▋                 |  26/191 [0:01:56<0:12:21, 0.22Hz]
+[01.28 04:08:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  14%|██▊                 |  27/191 [0:02:01<0:12:20, 0.22Hz]
+[01.28 04:08:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  15%|██▉                 |  28/191 [0:02:07<0:12:19, 0.22Hz]
+[01.28 04:08:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  15%|███                 |  29/191 [0:02:12<0:12:18, 0.22Hz]
+[01.28 04:08:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  16%|███▏                |  30/191 [0:02:17<0:12:15, 0.22Hz]
+[01.28 04:08:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  16%|███▏                |  31/191 [0:02:22<0:12:15, 0.22Hz]
+[01.28 04:08:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  17%|███▎                |  32/191 [0:02:27<0:12:12, 0.22Hz]
+[01.28 04:08:57] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  17%|███▍                |  33/191 [0:02:32<0:12:09, 0.22Hz]
+[01.28 04:09:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▌                |  34/191 [0:02:37<0:12:06, 0.22Hz]
+[01.28 04:09:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▋                |  35/191 [0:02:42<0:12:03, 0.22Hz]
+[01.28 04:09:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  19%|███▊                |  36/191 [0:02:47<0:12:01, 0.21Hz]
+[01.28 04:09:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  19%|███▊                |  37/191 [0:02:52<0:11:58, 0.21Hz]
+[01.28 04:09:23] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  20%|███▉                |  38/191 [0:02:58<0:11:57, 0.21Hz]
+[01.28 04:09:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  20%|████                |  39/191 [0:03:03<0:11:55, 0.21Hz]
+[01.28 04:09:33] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  21%|████▏               |  40/191 [0:03:08<0:11:52, 0.21Hz]
+[01.28 04:09:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  21%|████▎               |  41/191 [0:03:13<0:11:49, 0.21Hz]
+[01.28 04:09:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  22%|████▍               |  42/191 [0:03:19<0:11:46, 0.21Hz]
+[01.28 04:09:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  23%|████▌               |  43/191 [0:03:24<0:11:42, 0.21Hz]
+[01.28 04:09:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  23%|████▌               |  44/191 [0:03:29<0:11:38, 0.21Hz]
+[01.28 04:09:59] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  24%|████▋               |  45/191 [0:03:34<0:11:34, 0.21Hz]
+[01.28 04:10:04] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  24%|████▊               |  46/191 [0:03:39<0:11:32, 0.21Hz]
+[01.28 04:10:09] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  25%|████▉               |  47/191 [0:03:44<0:11:28, 0.21Hz]
+[01.28 04:10:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  25%|█████               |  48/191 [0:03:50<0:11:25, 0.21Hz]
+[01.28 04:10:20] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  26%|█████▏              |  49/191 [0:03:55<0:11:22, 0.21Hz]
+[01.28 04:10:25] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  26%|█████▏              |  50/191 [0:04:00<0:11:18, 0.21Hz]
+[01.28 04:10:30] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▎              |  51/191 [0:04:05<0:11:14, 0.21Hz]
+[01.28 04:10:35] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▍              |  52/191 [0:04:11<0:11:11, 0.21Hz]
+[01.28 04:10:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  28%|█████▌              |  53/191 [0:04:16<0:11:07, 0.21Hz]
+[01.28 04:10:46] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  28%|█████▋              |  54/191 [0:04:21<0:11:03, 0.21Hz]
+[01.28 04:10:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  29%|█████▊              |  55/191 [0:04:26<0:10:57, 0.21Hz]
+[01.28 04:10:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  29%|█████▊              |  56/191 [0:04:31<0:10:53, 0.21Hz]
+[01.28 04:11:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  30%|█████▉              |  57/191 [0:04:36<0:10:49, 0.21Hz]
+[01.28 04:11:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  30%|██████              |  58/191 [0:04:41<0:10:45, 0.21Hz]
+[01.28 04:11:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  31%|██████▏             |  59/191 [0:04:46<0:10:40, 0.21Hz]
+[01.28 04:11:16] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  31%|██████▎             |  60/191 [0:04:51<0:10:37, 0.21Hz]
+[01.28 04:11:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  32%|██████▍             |  61/191 [0:04:56<0:10:32, 0.21Hz]
+[01.28 04:11:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  32%|██████▍             |  62/191 [0:05:01<0:10:26, 0.21Hz]
+[01.28 04:11:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  33%|██████▌             |  63/191 [0:05:06<0:10:22, 0.21Hz]
+[01.28 04:11:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  34%|██████▋             |  64/191 [0:05:11<0:10:27, 0.20Hz]
+[01.28 04:11:40] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  34%|██████▊             |  65/191 [0:05:16<0:10:21, 0.20Hz]
+[01.28 04:11:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  35%|██████▉             |  66/191 [0:05:21<0:10:17, 0.20Hz]
+[01.28 04:11:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  35%|███████             |  67/191 [0:05:24<0:10:09, 0.20Hz]
+[01.28 04:11:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  36%|███████▏            |  69/191 [0:05:26<0:09:48, 0.21Hz]
+[01.28 04:11:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  37%|███████▍            |  71/191 [0:05:28<0:09:25, 0.21Hz]
+[01.28 04:11:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  39%|███████▋            |  74/191 [0:05:30<0:08:50, 0.22Hz]
+[01.28 04:11:58] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  40%|████████            |  77/191 [0:05:33<0:08:15, 0.23Hz]
+[01.28 04:12:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  42%|████████▍           |  80/191 [0:05:36<0:07:44, 0.24Hz]
+[01.28 04:12:03] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  43%|████████▌           |  82/191 [0:05:38<0:07:22, 0.25Hz]
+[01.28 04:12:05] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  44%|████████▊           |  84/191 [0:05:40<0:07:02, 0.25Hz]
+[01.28 04:12:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  45%|█████████           |  86/191 [0:05:43<0:06:42, 0.26Hz]
+[01.28 04:12:10] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  46%|█████████▏          |  88/191 [0:05:45<0:06:22, 0.27Hz]
+[01.28 04:12:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  47%|█████████▍          |  90/191 [0:05:48<0:06:02, 0.28Hz]
+[01.28 04:12:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  48%|█████████▋          |  92/191 [0:05:50<0:05:42, 0.29Hz]
+[01.28 04:12:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  49%|█████████▊          |  94/191 [0:05:52<0:05:23, 0.30Hz]
+[01.28 04:12:19] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  50%|██████████          |  96/191 [0:05:54<0:05:05, 0.31Hz]
+[01.28 04:12:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  51%|██████████▎         |  98/191 [0:05:57<0:04:47, 0.32Hz]
+[01.28 04:12:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  52%|██████████▍         | 100/191 [0:05:59<0:04:30, 0.34Hz]
+[01.28 04:12:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  53%|██████████▋         | 102/191 [0:06:04<0:04:14, 0.35Hz]
+[01.28 04:12:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  54%|██████████▉         | 104/191 [0:06:07<0:03:59, 0.36Hz]
+[01.28 04:12:35] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  55%|███████████         | 106/191 [0:06:10<0:03:44, 0.38Hz]
+[01.28 04:12:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  57%|███████████▎        | 108/191 [0:06:13<0:03:30, 0.39Hz]
+[01.28 04:12:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  58%|███████████▌        | 110/191 [0:06:17<0:03:16, 0.41Hz]
+[01.28 04:12:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  59%|███████████▋        | 112/191 [0:06:20<0:03:01, 0.43Hz]
+[01.28 04:12:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  60%|███████████▉        | 114/191 [0:06:23<0:02:48, 0.46Hz]
+[01.28 04:12:51] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  61%|████████████▏       | 116/191 [0:06:26<0:02:35, 0.48Hz]
+[01.28 04:12:54] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  62%|████████████▎       | 118/191 [0:06:29<0:02:23, 0.51Hz]
+[01.28 04:12:57] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  63%|████████████▌       | 120/191 [0:06:32<0:02:11, 0.54Hz]
+[01.28 04:13:00] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  64%|████████████▊       | 122/191 [0:06:35<0:01:59, 0.58Hz]
+[01.28 04:13:03] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  65%|████████████▉       | 124/191 [0:06:39<0:01:49, 0.61Hz]
+[01.28 04:13:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  66%|█████████████▏      | 126/191 [0:06:42<0:01:38, 0.66Hz]
+[01.28 04:13:10] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  67%|█████████████▍      | 128/191 [0:06:45<0:01:29, 0.70Hz]
+[01.28 04:13:13] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  68%|█████████████▌      | 130/191 [0:06:48<0:01:22, 0.74Hz]
+[01.28 04:13:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  69%|█████████████▊      | 132/191 [0:06:52<0:01:20, 0.73Hz]
+[01.28 04:13:20] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  70%|██████████████      | 134/191 [0:06:55<0:01:19, 0.72Hz]
+[01.28 04:13:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  71%|██████████████▏     | 136/191 [0:06:59<0:01:18, 0.70Hz]
+[01.28 04:13:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  72%|██████████████▍     | 138/191 [0:07:02<0:01:15, 0.70Hz]
+[01.28 04:13:29] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  73%|██████████████▋     | 140/191 [0:07:04<0:01:13, 0.69Hz]
+[01.28 04:13:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  74%|██████████████▊     | 142/191 [0:07:07<0:01:11, 0.69Hz]
+[01.28 04:13:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  75%|███████████████     | 144/191 [0:07:09<0:01:08, 0.68Hz]
+[01.28 04:13:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  76%|███████████████▎    | 146/191 [0:07:12<0:01:06, 0.68Hz]
+[01.28 04:13:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  77%|███████████████▍    | 148/191 [0:07:15<0:01:03, 0.68Hz]
+[01.28 04:13:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  79%|███████████████▋    | 150/191 [0:07:17<0:01:01, 0.67Hz]
+[01.28 04:13:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  80%|███████████████▉    | 152/191 [0:07:20<0:00:57, 0.67Hz]
+[01.28 04:13:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  81%|████████████████▏   | 154/191 [0:07:22<0:00:55, 0.67Hz]
+[01.28 04:13:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  82%|████████████████▎   | 156/191 [0:07:25<0:00:52, 0.67Hz]
+[01.28 04:13:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  83%|████████████████▌   | 158/191 [0:07:28<0:00:49, 0.66Hz]
+[01.28 04:13:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  84%|████████████████▊   | 160/191 [0:07:30<0:00:46, 0.67Hz]
+[01.28 04:13:58] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  85%|████████████████▉   | 162/191 [0:07:33<0:00:43, 0.66Hz]
+[01.28 04:14:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  86%|█████████████████▏  | 164/191 [0:07:36<0:00:40, 0.66Hz]
+[01.28 04:14:04] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  87%|█████████████████▍  | 166/191 [0:07:39<0:00:37, 0.67Hz]
+[01.28 04:14:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  88%|█████████████████▌  | 168/191 [0:07:43<0:00:34, 0.67Hz]
+[01.28 04:14:10] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  89%|█████████████████▊  | 170/191 [0:07:45<0:00:31, 0.67Hz]
+[01.28 04:14:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  90%|██████████████████  | 172/191 [0:07:48<0:00:27, 0.68Hz]
+[01.28 04:14:16] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  91%|██████████████████▏ | 174/191 [0:07:51<0:00:24, 0.68Hz]
+[01.28 04:14:19] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  92%|██████████████████▍ | 176/191 [0:07:54<0:00:22, 0.68Hz]
+[01.28 04:14:22] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  93%|██████████████████▋ | 178/191 [0:07:57<0:00:18, 0.68Hz]
+[01.28 04:14:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  94%|██████████████████▊ | 180/191 [0:07:59<0:00:15, 0.69Hz]
+[01.28 04:14:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  95%|███████████████████ | 182/191 [0:08:02<0:00:12, 0.70Hz]
+[01.28 04:14:29] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  96%|███████████████████▎| 184/191 [0:08:04<0:00:10, 0.70Hz]
+[01.28 04:14:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  97%|███████████████████▍| 186/191 [0:08:07<0:00:07, 0.70Hz]
+[01.28 04:14:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  98%|███████████████████▋| 188/191 [0:08:09<0:00:04, 0.71Hz]
+[01.28 04:14:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  99%|███████████████████▉| 190/191 [0:08:12<0:00:01, 0.72Hz]
+[01.28 04:14:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING] 100%|████████████████████| 191/191 [0:08:16<0:00:00, 0.69Hz]
+[01.28 04:14:47] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    eval_crossner_ai    eval_crossner_literature    eval_crossner_music    eval_crossner_politics    eval_crossner_science    eval_mit-movie    eval_mit-restaurant    eval_AVERAGE    eval_runtime    eval_samples_per_second    eval_steps_per_second
+[01.28 04:14:47] ┇ INFO    ┇             DeepKNLP ┇ >>     35     0.25            0.251301                    0.352905               0.271678                  0.316866                 0.264094           0.75556               0.661195        0.410514          507.21                     11.997                    0.377
+[01.28 04:14:48] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  26%|█████               |  36/141 [0:09:09<0:26:43, 0.07Hz] | (Ep 0.25)
+[01.28 04:14:50] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  27%|█████▍              |  38/141 [0:09:12<0:24:56, 0.07Hz] | (Ep 0.26)
+[01.28 04:14:52] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  28%|█████▋              |  40/141 [0:09:14<0:23:19, 0.07Hz] | (Ep 0.28)
+[01.28 04:14:52] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:14:52] ┇ INFO    ┇             DeepKNLP ┇ >>     40     0.28  0.0527     0.163714      1.70298e-05
+[01.28 04:14:55] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  30%|█████▉              |  42/141 [0:09:16<0:21:52, 0.08Hz] | (Ep 0.29)
+[01.28 04:14:57] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  31%|██████▏             |  44/141 [0:09:19<0:20:32, 0.08Hz] | (Ep 0.30)
+[01.28 04:15:00] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  33%|██████▋             |  47/141 [0:09:22<0:18:44, 0.08Hz] | (Ep 0.32)
+[01.28 04:15:03] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  35%|██████▉             |  49/141 [0:09:24<0:17:40, 0.09Hz] | (Ep 0.34)
+[01.28 04:15:04] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:15:04] ┇ INFO    ┇             DeepKNLP ┇ >>     50     0.35  0.0458     0.157844      1.52002e-05
+[01.28 04:15:05] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  36%|███████▏            |  51/141 [0:09:27<0:16:40, 0.09Hz] | (Ep 0.35)
+[01.28 04:15:07] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  38%|███████▌            |  53/141 [0:09:29<0:15:45, 0.09Hz] | (Ep 0.37)
+[01.28 04:15:09] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  39%|███████▊            |  55/141 [0:09:31<0:14:53, 0.10Hz] | (Ep 0.38)
+[01.28 04:15:12] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  40%|████████            |  57/141 [0:09:33<0:14:05, 0.10Hz] | (Ep 0.40)
+[01.28 04:15:14] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  42%|████████▎           |  59/141 [0:09:36<0:13:20, 0.10Hz] | (Ep 0.41)
+[01.28 04:15:15] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:15:15] ┇ INFO    ┇             DeepKNLP ┇ >>     60     0.42  0.0371    0.0972152      1.30902e-05
+[01.28 04:15:16] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  43%|████████▋           |  61/141 [0:09:38<0:12:38, 0.11Hz] | (Ep 0.42)
+[01.28 04:15:18] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  45%|████████▉           |  63/141 [0:09:40<0:11:58, 0.11Hz] | (Ep 0.44)
+[01.28 04:15:21] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  46%|█████████▏          |  65/141 [0:09:42<0:11:38, 0.11Hz] | (Ep 0.45)
+[01.28 04:15:23] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  48%|█████████▌          |  67/141 [0:09:45<0:11:19, 0.11Hz] | (Ep 0.47)
+[01.28 04:15:25] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  49%|█████████▊          |  69/141 [0:09:47<0:11:00, 0.11Hz] | (Ep 0.48)
+[01.28 04:15:26] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:15:26] ┇ INFO    ┇             DeepKNLP ┇ >>     70     0.49  0.0371     0.114434      1.08136e-05
+[01.28 04:15:26] ┇ INFO    ┇ transformers.trainer ┇ ***** Running Evaluation *****
+[01.28 04:15:26] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 6085
+[01.28 04:15:26] ┇ INFO    ┇ transformers.trainer ┇   Batch size = 8
+[01.28 04:15:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   1%|                    |   1/191 [0:00:00<0:00:00, 71697.50Hz]
+[01.28 04:15:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   1%|▏                   |   2/191 [0:00:04<0:07:09, 0.44Hz]
+[01.28 04:15:40] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   2%|▎                   |   3/191 [0:00:09<0:09:24, 0.33Hz]
+[01.28 04:15:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   2%|▍                   |   4/191 [0:00:14<0:10:59, 0.28Hz]
+[01.28 04:15:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   3%|▌                   |   5/191 [0:00:19<0:11:50, 0.26Hz]
+[01.28 04:15:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   3%|▋                   |   6/191 [0:00:22<0:11:23, 0.27Hz]
+[01.28 04:15:58] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   4%|▋                   |   7/191 [0:00:26<0:11:39, 0.26Hz]
+[01.28 04:16:03] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   4%|▊                   |   8/191 [0:00:31<0:12:09, 0.25Hz]
+[01.28 04:16:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   5%|▉                   |   9/191 [0:00:36<0:12:22, 0.25Hz]
+[01.28 04:16:13] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   5%|█                   |  10/191 [0:00:41<0:12:36, 0.24Hz]
+[01.28 04:16:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   6%|█▏                  |  11/191 [0:00:47<0:12:53, 0.23Hz]
+[01.28 04:16:23] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   6%|█▎                  |  12/191 [0:00:52<0:13:00, 0.23Hz]
+[01.28 04:16:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   7%|█▎                  |  13/191 [0:00:56<0:13:00, 0.23Hz]
+[01.28 04:16:33] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   7%|█▍                  |  14/191 [0:01:01<0:13:01, 0.23Hz]
+[01.28 04:16:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   8%|█▌                  |  15/191 [0:01:05<0:12:50, 0.23Hz]
+[01.28 04:16:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   8%|█▋                  |  16/191 [0:01:10<0:12:53, 0.23Hz]
+[01.28 04:16:46] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▊                  |  17/191 [0:01:14<0:12:46, 0.23Hz]
+[01.28 04:16:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▉                  |  18/191 [0:01:19<0:12:43, 0.23Hz]
+[01.28 04:16:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  10%|█▉                  |  19/191 [0:01:24<0:12:43, 0.23Hz]
+[01.28 04:17:00] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  10%|██                  |  20/191 [0:01:29<0:12:42, 0.22Hz]
+[01.28 04:17:04] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  11%|██▏                 |  21/191 [0:01:33<0:12:36, 0.22Hz]
+[01.28 04:17:09] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  12%|██▎                 |  22/191 [0:01:37<0:12:32, 0.22Hz]
+[01.28 04:17:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  12%|██▍                 |  23/191 [0:01:43<0:12:32, 0.22Hz]
+[01.28 04:17:19] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  13%|██▌                 |  24/191 [0:01:48<0:12:31, 0.22Hz]
+[01.28 04:17:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  13%|██▌                 |  25/191 [0:01:53<0:12:31, 0.22Hz]
+[01.28 04:17:29] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  14%|██▋                 |  26/191 [0:01:58<0:12:29, 0.22Hz]
+[01.28 04:17:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  14%|██▊                 |  27/191 [0:02:03<0:12:28, 0.22Hz]
+[01.28 04:17:40] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  15%|██▉                 |  28/191 [0:02:08<0:12:28, 0.22Hz]
+[01.28 04:17:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  15%|███                 |  29/191 [0:02:13<0:12:28, 0.22Hz]
+[01.28 04:17:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  16%|███▏                |  30/191 [0:02:18<0:12:24, 0.22Hz]
+[01.28 04:17:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  16%|███▏                |  31/191 [0:02:24<0:12:24, 0.21Hz]
+[01.28 04:18:00] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  17%|███▎                |  32/191 [0:02:29<0:12:20, 0.21Hz]
+[01.28 04:18:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  17%|███▍                |  33/191 [0:02:34<0:12:20, 0.21Hz]
+[01.28 04:18:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▌                |  34/191 [0:02:39<0:12:18, 0.21Hz]
+[01.28 04:18:16] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▋                |  35/191 [0:02:44<0:12:15, 0.21Hz]
+[01.28 04:18:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  19%|███▊                |  36/191 [0:02:50<0:12:13, 0.21Hz]
+[01.28 04:18:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  19%|███▊                |  37/191 [0:02:55<0:12:09, 0.21Hz]
+[01.28 04:18:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  20%|███▉                |  38/191 [0:03:00<0:12:06, 0.21Hz]
+[01.28 04:18:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  20%|████                |  39/191 [0:03:05<0:12:02, 0.21Hz]
+[01.28 04:18:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  21%|████▏               |  40/191 [0:03:10<0:11:58, 0.21Hz]
+[01.28 04:18:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  21%|████▎               |  41/191 [0:03:15<0:11:55, 0.21Hz]
+[01.28 04:18:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  22%|████▍               |  42/191 [0:03:20<0:11:52, 0.21Hz]
+[01.28 04:18:57] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  23%|████▌               |  43/191 [0:03:25<0:11:48, 0.21Hz]
+[01.28 04:19:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  23%|████▌               |  44/191 [0:03:30<0:11:44, 0.21Hz]
+[01.28 04:19:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  24%|████▋               |  45/191 [0:03:36<0:11:42, 0.21Hz]
+[01.28 04:19:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  24%|████▊               |  46/191 [0:03:41<0:11:37, 0.21Hz]
+[01.28 04:19:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  25%|████▉               |  47/191 [0:03:46<0:11:35, 0.21Hz]
+[01.28 04:19:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  25%|█████               |  48/191 [0:03:52<0:11:32, 0.21Hz]
+[01.28 04:19:29] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  26%|█████▏              |  49/191 [0:03:57<0:11:29, 0.21Hz]
+[01.28 04:19:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  26%|█████▏              |  50/191 [0:04:02<0:11:25, 0.21Hz]
+[01.28 04:19:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▎              |  51/191 [0:04:07<0:11:20, 0.21Hz]
+[01.28 04:19:44] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▍              |  52/191 [0:04:13<0:11:16, 0.21Hz]
+[01.28 04:19:49] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  28%|█████▌              |  53/191 [0:04:17<0:11:11, 0.21Hz]
+[01.28 04:19:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  28%|█████▋              |  54/191 [0:04:22<0:11:05, 0.21Hz]
+[01.28 04:19:58] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  29%|█████▊              |  55/191 [0:04:27<0:11:00, 0.21Hz]
+[01.28 04:20:03] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  29%|█████▊              |  56/191 [0:04:32<0:10:56, 0.21Hz]
+[01.28 04:20:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  30%|█████▉              |  57/191 [0:04:37<0:10:51, 0.21Hz]
+[01.28 04:20:13] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  30%|██████              |  58/191 [0:04:42<0:10:47, 0.21Hz]
+[01.28 04:20:19] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  31%|██████▏             |  59/191 [0:04:47<0:10:43, 0.21Hz]
+[01.28 04:20:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  31%|██████▎             |  60/191 [0:04:53<0:10:39, 0.20Hz]
+[01.28 04:20:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  32%|██████▍             |  61/191 [0:04:57<0:10:33, 0.21Hz]
+[01.28 04:20:33] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  32%|██████▍             |  62/191 [0:05:01<0:10:28, 0.21Hz]
+[01.28 04:20:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  33%|██████▌             |  63/191 [0:05:07<0:10:23, 0.21Hz]
+[01.28 04:20:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  34%|██████▋             |  64/191 [0:05:11<0:10:28, 0.20Hz]
+[01.28 04:20:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  34%|██████▊             |  65/191 [0:05:16<0:10:24, 0.20Hz]
+[01.28 04:20:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  35%|██████▉             |  66/191 [0:05:21<0:10:20, 0.20Hz]
+[01.28 04:20:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  35%|███████             |  67/191 [0:05:24<0:10:10, 0.20Hz]
+[01.28 04:20:58] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  36%|███████▏            |  69/191 [0:05:26<0:09:49, 0.21Hz]
+[01.28 04:21:00] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  37%|███████▍            |  71/191 [0:05:28<0:09:25, 0.21Hz]
+[01.28 04:21:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  39%|███████▋            |  74/191 [0:05:31<0:08:47, 0.22Hz]
+[01.28 04:21:05] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  40%|████████            |  77/191 [0:05:34<0:08:12, 0.23Hz]
+[01.28 04:21:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  42%|████████▍           |  80/191 [0:05:37<0:07:41, 0.24Hz]
+[01.28 04:21:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  43%|████████▋           |  83/191 [0:05:40<0:07:10, 0.25Hz]
+[01.28 04:21:13] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  45%|████████▉           |  85/191 [0:05:42<0:06:50, 0.26Hz]
+[01.28 04:21:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  46%|█████████           |  87/191 [0:05:44<0:06:30, 0.27Hz]
+[01.28 04:21:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  47%|█████████▎          |  89/191 [0:05:47<0:06:10, 0.28Hz]
+[01.28 04:21:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  48%|█████████▌          |  91/191 [0:05:49<0:05:50, 0.29Hz]
+[01.28 04:21:23] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  49%|█████████▋          |  93/191 [0:05:52<0:05:31, 0.30Hz]
+[01.28 04:21:25] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  50%|█████████▉          |  95/191 [0:05:54<0:05:12, 0.31Hz]
+[01.28 04:21:27] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  51%|██████████▏         |  97/191 [0:05:56<0:04:53, 0.32Hz]
+[01.28 04:21:30] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  52%|██████████▎         |  99/191 [0:05:58<0:04:35, 0.33Hz]
+[01.28 04:21:33] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  53%|██████████▌         | 101/191 [0:06:02<0:04:19, 0.35Hz]
+[01.28 04:21:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  53%|██████████▋         | 102/191 [0:06:04<0:04:13, 0.35Hz]
+[01.28 04:21:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  54%|██████████▉         | 104/191 [0:06:07<0:03:57, 0.37Hz]
+[01.28 04:21:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  55%|███████████         | 106/191 [0:06:11<0:03:42, 0.38Hz]
+[01.28 04:21:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  57%|███████████▎        | 108/191 [0:06:14<0:03:28, 0.40Hz]
+[01.28 04:21:49] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  58%|███████████▌        | 110/191 [0:06:18<0:03:14, 0.42Hz]
+[01.28 04:21:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  59%|███████████▋        | 112/191 [0:06:21<0:03:00, 0.44Hz]
+[01.28 04:21:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  60%|███████████▉        | 114/191 [0:06:24<0:02:47, 0.46Hz]
+[01.28 04:21:59] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  61%|████████████▏       | 116/191 [0:06:27<0:02:34, 0.49Hz]
+[01.28 04:22:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  62%|████████████▎       | 118/191 [0:06:30<0:02:23, 0.51Hz]
+[01.28 04:22:05] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  63%|████████████▌       | 120/191 [0:06:33<0:02:11, 0.54Hz]
+[01.28 04:22:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  64%|████████████▊       | 122/191 [0:06:36<0:01:59, 0.58Hz]
+[01.28 04:22:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  65%|████████████▉       | 124/191 [0:06:39<0:01:49, 0.61Hz]
+[01.28 04:22:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  66%|█████████████▏      | 126/191 [0:06:43<0:01:39, 0.66Hz]
+[01.28 04:22:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  67%|█████████████▍      | 128/191 [0:06:46<0:01:29, 0.70Hz]
+[01.28 04:22:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  68%|█████████████▌      | 130/191 [0:06:49<0:01:22, 0.74Hz]
+[01.28 04:22:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  69%|█████████████▊      | 132/191 [0:06:52<0:01:20, 0.73Hz]
+[01.28 04:22:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  70%|██████████████      | 134/191 [0:06:56<0:01:19, 0.72Hz]
+[01.28 04:22:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  71%|██████████████▏     | 136/191 [0:07:00<0:01:18, 0.70Hz]
+[01.28 04:22:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  72%|██████████████▍     | 138/191 [0:07:03<0:01:16, 0.69Hz]
+[01.28 04:22:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  73%|██████████████▋     | 140/191 [0:07:06<0:01:14, 0.69Hz]
+[01.28 04:22:40] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  74%|██████████████▊     | 142/191 [0:07:08<0:01:11, 0.68Hz]
+[01.28 04:22:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  75%|███████████████     | 144/191 [0:07:10<0:01:09, 0.68Hz]
+[01.28 04:22:44] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  76%|███████████████▎    | 146/191 [0:07:13<0:01:06, 0.67Hz]
+[01.28 04:22:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  77%|███████████████▍    | 148/191 [0:07:16<0:01:04, 0.67Hz]
+[01.28 04:22:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  79%|███████████████▋    | 150/191 [0:07:18<0:01:01, 0.67Hz]
+[01.28 04:22:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  80%|███████████████▉    | 152/191 [0:07:21<0:00:58, 0.67Hz]
+[01.28 04:22:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  81%|████████████████▏   | 154/191 [0:07:23<0:00:55, 0.67Hz]
+[01.28 04:22:57] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  82%|████████████████▎   | 156/191 [0:07:26<0:00:52, 0.67Hz]
+[01.28 04:23:00] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  83%|████████████████▌   | 158/191 [0:07:29<0:00:49, 0.66Hz]
+[01.28 04:23:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  84%|████████████████▊   | 160/191 [0:07:31<0:00:46, 0.67Hz]
+[01.28 04:23:05] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  85%|████████████████▉   | 162/191 [0:07:33<0:00:43, 0.66Hz]
+[01.28 04:23:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  86%|█████████████████▏  | 164/191 [0:07:36<0:00:40, 0.66Hz]
+[01.28 04:23:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  87%|█████████████████▍  | 166/191 [0:07:39<0:00:37, 0.67Hz]
+[01.28 04:23:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  88%|█████████████████▌  | 168/191 [0:07:43<0:00:34, 0.67Hz]
+[01.28 04:23:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  89%|█████████████████▊  | 170/191 [0:07:45<0:00:31, 0.68Hz]
+[01.28 04:23:19] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  90%|██████████████████  | 172/191 [0:07:48<0:00:27, 0.69Hz]
+[01.28 04:23:23] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  91%|██████████████████▏ | 174/191 [0:07:51<0:00:24, 0.69Hz]
+[01.28 04:23:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  92%|██████████████████▍ | 176/191 [0:07:54<0:00:21, 0.69Hz]
+[01.28 04:23:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  93%|██████████████████▋ | 178/191 [0:07:57<0:00:18, 0.69Hz]
+[01.28 04:23:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  94%|██████████████████▊ | 180/191 [0:07:59<0:00:15, 0.69Hz]
+[01.28 04:23:33] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  95%|███████████████████ | 182/191 [0:08:02<0:00:12, 0.70Hz]
+[01.28 04:23:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  96%|███████████████████▎| 184/191 [0:08:04<0:00:09, 0.70Hz]
+[01.28 04:23:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  97%|███████████████████▍| 186/191 [0:08:07<0:00:07, 0.71Hz]
+[01.28 04:23:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  98%|███████████████████▋| 188/191 [0:08:09<0:00:04, 0.72Hz]
+[01.28 04:23:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  99%|███████████████████▉| 190/191 [0:08:12<0:00:01, 0.72Hz]
+[01.28 04:23:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING] 100%|████████████████████| 191/191 [0:08:17<0:00:00, 0.70Hz]
+[01.28 04:23:53] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    eval_crossner_ai    eval_crossner_literature    eval_crossner_music    eval_crossner_politics    eval_crossner_science    eval_mit-movie    eval_mit-restaurant    eval_AVERAGE    eval_runtime    eval_samples_per_second    eval_steps_per_second
+[01.28 04:23:53] ┇ INFO    ┇             DeepKNLP ┇ >>     70     0.49              0.3119                    0.421647               0.474156                  0.474441                 0.336836           0.82505               0.726856        0.510127         507.162                     11.998                    0.377
+[01.28 04:23:55] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  50%|██████████          |  71/141 [0:18:16<0:20:05, 0.06Hz] | (Ep 0.49)
+[01.28 04:23:58] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  52%|██████████▍         |  74/141 [0:18:19<0:19:13, 0.06Hz] | (Ep 0.51)
+[01.28 04:24:00] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  54%|██████████▊         |  76/141 [0:18:22<0:18:39, 0.06Hz] | (Ep 0.53)
+[01.28 04:24:02] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  55%|███████████         |  78/141 [0:18:24<0:18:04, 0.06Hz] | (Ep 0.54)
+[01.28 04:24:04] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  57%|███████████▎        |  80/141 [0:18:26<0:17:30, 0.06Hz] | (Ep 0.56)
+[01.28 04:24:04] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:24:04] ┇ INFO    ┇             DeepKNLP ┇ >>     80     0.56  0.0349     0.100695      8.49314e-06
+[01.28 04:24:07] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  58%|███████████▋        |  82/141 [0:18:28<0:16:55, 0.06Hz] | (Ep 0.57)
+[01.28 04:24:09] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  60%|███████████▉        |  84/141 [0:18:31<0:16:21, 0.06Hz] | (Ep 0.59)
+[01.28 04:24:11] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  61%|████████████▏       |  86/141 [0:18:33<0:15:47, 0.06Hz] | (Ep 0.60)
+[01.28 04:24:14] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  62%|████████████▍       |  88/141 [0:18:35<0:15:13, 0.06Hz] | (Ep 0.61)
+[01.28 04:24:16] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  64%|████████████▊       |  90/141 [0:18:38<0:14:39, 0.06Hz] | (Ep 0.63)
+[01.28 04:24:16] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:24:16] ┇ INFO    ┇             DeepKNLP ┇ >>     90     0.63  0.0333      0.11082      6.25393e-06
+[01.28 04:24:19] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  65%|█████████████       |  92/141 [0:18:41<0:14:04, 0.06Hz] | (Ep 0.64)
+[01.28 04:24:21] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  67%|█████████████▎      |  94/141 [0:18:43<0:13:30, 0.06Hz] | (Ep 0.66)
+[01.28 04:24:24] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  68%|█████████████▌      |  96/141 [0:18:45<0:12:56, 0.06Hz] | (Ep 0.67)
+[01.28 04:24:26] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  70%|█████████████▉      |  98/141 [0:18:48<0:12:21, 0.06Hz] | (Ep 0.68)
+[01.28 04:24:28] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  71%|██████████████▏     | 100/141 [0:18:50<0:06:17, 0.11Hz] | (Ep 0.70)
+[01.28 04:24:28] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:24:28] ┇ INFO    ┇             DeepKNLP ┇ >>    100     0.71  0.0345    0.0880312      4.21668e-06
+[01.28 04:24:31] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  72%|██████████████▍     | 102/141 [0:18:53<0:05:59, 0.11Hz] | (Ep 0.71)
+[01.28 04:24:33] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  74%|██████████████▊     | 104/141 [0:18:55<0:05:40, 0.11Hz] | (Ep 0.73)
+[01.28 04:24:34] ┇ INFO    ┇ transformers.trainer ┇ ***** Running Evaluation *****
+[01.28 04:24:34] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 6085
+[01.28 04:24:34] ┇ INFO    ┇ transformers.trainer ┇   Batch size = 8
+[01.28 04:24:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   1%|                    |   1/191 [0:00:00<0:00:00, 73705.51Hz]
+[01.28 04:24:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   1%|▏                   |   2/191 [0:00:04<0:07:07, 0.44Hz]
+[01.28 04:24:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   2%|▎                   |   3/191 [0:00:09<0:09:24, 0.33Hz]
+[01.28 04:24:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   2%|▍                   |   4/191 [0:00:13<0:10:21, 0.30Hz]
+[01.28 04:24:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   3%|▌                   |   5/191 [0:00:17<0:10:47, 0.29Hz]
+[01.28 04:25:00] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   3%|▋                   |   6/191 [0:00:21<0:10:56, 0.28Hz]
+[01.28 04:25:05] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   4%|▋                   |   7/191 [0:00:25<0:11:14, 0.27Hz]
+[01.28 04:25:10] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   4%|▊                   |   8/191 [0:00:30<0:11:47, 0.26Hz]
+[01.28 04:25:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   5%|▉                   |   9/191 [0:00:35<0:11:52, 0.26Hz]
+[01.28 04:25:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   5%|█                   |  10/191 [0:00:39<0:11:53, 0.25Hz]
+[01.28 04:25:23] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   6%|█▏                  |  11/191 [0:00:44<0:12:01, 0.25Hz]
+[01.28 04:25:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   6%|█▎                  |  12/191 [0:00:49<0:12:13, 0.24Hz]
+[01.28 04:25:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   7%|█▎                  |  13/191 [0:00:54<0:12:30, 0.24Hz]
+[01.28 04:25:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   7%|█▍                  |  14/191 [0:00:59<0:12:34, 0.23Hz]
+[01.28 04:25:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   8%|█▌                  |  15/191 [0:01:03<0:12:25, 0.24Hz]
+[01.28 04:25:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   8%|█▋                  |  16/191 [0:01:08<0:12:31, 0.23Hz]
+[01.28 04:25:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▊                  |  17/191 [0:01:13<0:12:28, 0.23Hz]
+[01.28 04:25:57] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▉                  |  18/191 [0:01:18<0:12:31, 0.23Hz]
+[01.28 04:26:03] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  10%|█▉                  |  19/191 [0:01:23<0:12:36, 0.23Hz]
+[01.28 04:26:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  10%|██                  |  20/191 [0:01:28<0:12:35, 0.23Hz]
+[01.28 04:26:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  11%|██▏                 |  21/191 [0:01:32<0:12:31, 0.23Hz]
+[01.28 04:26:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  12%|██▎                 |  22/191 [0:01:37<0:12:29, 0.23Hz]
+[01.28 04:26:22] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  12%|██▍                 |  23/191 [0:01:42<0:12:29, 0.22Hz]
+[01.28 04:26:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  13%|██▌                 |  24/191 [0:01:47<0:12:28, 0.22Hz]
+[01.28 04:26:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  13%|██▌                 |  25/191 [0:01:52<0:12:27, 0.22Hz]
+[01.28 04:26:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  14%|██▋                 |  26/191 [0:01:57<0:12:26, 0.22Hz]
+[01.28 04:26:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  14%|██▊                 |  27/191 [0:02:02<0:12:25, 0.22Hz]
+[01.28 04:26:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  15%|██▉                 |  28/191 [0:02:07<0:12:23, 0.22Hz]
+[01.28 04:26:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  15%|███                 |  29/191 [0:02:12<0:12:22, 0.22Hz]
+[01.28 04:26:57] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  16%|███▏                |  30/191 [0:02:17<0:12:19, 0.22Hz]
+[01.28 04:27:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  16%|███▏                |  31/191 [0:02:23<0:12:19, 0.22Hz]
+[01.28 04:27:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  17%|███▎                |  32/191 [0:02:28<0:12:15, 0.22Hz]
+[01.28 04:27:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  17%|███▍                |  33/191 [0:02:33<0:12:12, 0.22Hz]
+[01.28 04:27:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▌                |  34/191 [0:02:38<0:12:10, 0.21Hz]
+[01.28 04:27:22] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▋                |  35/191 [0:02:43<0:12:07, 0.21Hz]
+[01.28 04:27:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  19%|███▊                |  36/191 [0:02:48<0:12:05, 0.21Hz]
+[01.28 04:27:33] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  19%|███▊                |  37/191 [0:02:53<0:12:03, 0.21Hz]
+[01.28 04:27:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  20%|███▉                |  38/191 [0:02:58<0:12:00, 0.21Hz]
+[01.28 04:27:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  20%|████                |  39/191 [0:03:03<0:11:56, 0.21Hz]
+[01.28 04:27:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  21%|████▏               |  40/191 [0:03:09<0:11:53, 0.21Hz]
+[01.28 04:27:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  21%|████▎               |  41/191 [0:03:14<0:11:50, 0.21Hz]
+[01.28 04:27:58] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  22%|████▍               |  42/191 [0:03:19<0:11:47, 0.21Hz]
+[01.28 04:28:03] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  23%|████▌               |  43/191 [0:03:24<0:11:43, 0.21Hz]
+[01.28 04:28:09] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  23%|████▌               |  44/191 [0:03:29<0:11:40, 0.21Hz]
+[01.28 04:28:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  24%|████▋               |  45/191 [0:03:34<0:11:36, 0.21Hz]
+[01.28 04:28:19] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  24%|████▊               |  46/191 [0:03:39<0:11:32, 0.21Hz]
+[01.28 04:28:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  25%|████▉               |  47/191 [0:03:44<0:11:28, 0.21Hz]
+[01.28 04:28:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  25%|█████               |  48/191 [0:03:49<0:11:23, 0.21Hz]
+[01.28 04:28:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  26%|█████▏              |  49/191 [0:03:54<0:11:19, 0.21Hz]
+[01.28 04:28:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  26%|█████▏              |  50/191 [0:03:59<0:11:16, 0.21Hz]
+[01.28 04:28:44] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▎              |  51/191 [0:04:05<0:11:13, 0.21Hz]
+[01.28 04:28:49] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▍              |  52/191 [0:04:10<0:11:08, 0.21Hz]
+[01.28 04:28:54] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  28%|█████▌              |  53/191 [0:04:14<0:11:03, 0.21Hz]
+[01.28 04:28:58] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  28%|█████▋              |  54/191 [0:04:19<0:10:57, 0.21Hz]
+[01.28 04:29:03] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  29%|█████▊              |  55/191 [0:04:24<0:10:53, 0.21Hz]
+[01.28 04:29:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  29%|█████▊              |  56/191 [0:04:28<0:10:47, 0.21Hz]
+[01.28 04:29:13] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  30%|█████▉              |  57/191 [0:04:33<0:10:43, 0.21Hz]
+[01.28 04:29:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  30%|██████              |  58/191 [0:04:38<0:10:39, 0.21Hz]
+[01.28 04:29:22] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  31%|██████▏             |  59/191 [0:04:43<0:10:33, 0.21Hz]
+[01.28 04:29:27] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  31%|██████▎             |  60/191 [0:04:48<0:10:29, 0.21Hz]
+[01.28 04:29:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  32%|██████▍             |  61/191 [0:04:53<0:10:24, 0.21Hz]
+[01.28 04:29:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  32%|██████▍             |  62/191 [0:04:57<0:10:19, 0.21Hz]
+[01.28 04:29:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  33%|██████▌             |  63/191 [0:05:02<0:10:14, 0.21Hz]
+[01.28 04:29:46] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  34%|██████▋             |  64/191 [0:05:07<0:10:19, 0.21Hz]
+[01.28 04:29:51] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  34%|██████▊             |  65/191 [0:05:12<0:10:15, 0.20Hz]
+[01.28 04:29:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  35%|██████▉             |  66/191 [0:05:17<0:10:11, 0.20Hz]
+[01.28 04:29:59] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  35%|███████             |  67/191 [0:05:20<0:10:04, 0.21Hz]
+[01.28 04:30:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  36%|███████▏            |  69/191 [0:05:22<0:09:42, 0.21Hz]
+[01.28 04:30:03] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  37%|███████▍            |  71/191 [0:05:24<0:09:18, 0.21Hz]
+[01.28 04:30:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  39%|███████▋            |  74/191 [0:05:27<0:08:45, 0.22Hz]
+[01.28 04:30:09] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  40%|████████            |  77/191 [0:05:30<0:08:09, 0.23Hz]
+[01.28 04:30:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  42%|████████▍           |  80/191 [0:05:32<0:07:37, 0.24Hz]
+[01.28 04:30:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  43%|████████▌           |  82/191 [0:05:34<0:07:14, 0.25Hz]
+[01.28 04:30:16] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  44%|████████▊           |  84/191 [0:05:36<0:06:54, 0.26Hz]
+[01.28 04:30:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  45%|█████████           |  86/191 [0:05:39<0:06:34, 0.27Hz]
+[01.28 04:30:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  46%|█████████▏          |  88/191 [0:05:41<0:06:14, 0.28Hz]
+[01.28 04:30:23] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  47%|█████████▍          |  90/191 [0:05:43<0:05:54, 0.28Hz]
+[01.28 04:30:25] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  48%|█████████▋          |  92/191 [0:05:46<0:05:35, 0.30Hz]
+[01.28 04:30:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  49%|█████████▊          |  94/191 [0:05:48<0:05:16, 0.31Hz]
+[01.28 04:30:30] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  50%|██████████          |  96/191 [0:05:51<0:04:58, 0.32Hz]
+[01.28 04:30:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  51%|██████████▎         |  98/191 [0:05:53<0:04:40, 0.33Hz]
+[01.28 04:30:35] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  52%|██████████▍         | 100/191 [0:05:56<0:04:23, 0.35Hz]
+[01.28 04:30:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  53%|██████████▋         | 102/191 [0:06:00<0:04:09, 0.36Hz]
+[01.28 04:30:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  54%|██████████▉         | 104/191 [0:06:03<0:03:53, 0.37Hz]
+[01.28 04:30:46] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  55%|███████████         | 106/191 [0:06:06<0:03:39, 0.39Hz]
+[01.28 04:30:49] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  57%|███████████▎        | 108/191 [0:06:10<0:03:24, 0.41Hz]
+[01.28 04:30:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  58%|███████████▌        | 110/191 [0:06:13<0:03:11, 0.42Hz]
+[01.28 04:30:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  59%|███████████▋        | 112/191 [0:06:16<0:02:58, 0.44Hz]
+[01.28 04:30:59] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  60%|███████████▉        | 114/191 [0:06:20<0:02:44, 0.47Hz]
+[01.28 04:31:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  61%|████████████▏       | 116/191 [0:06:23<0:02:32, 0.49Hz]
+[01.28 04:31:05] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  62%|████████████▎       | 118/191 [0:06:26<0:02:21, 0.52Hz]
+[01.28 04:31:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  63%|████████████▌       | 120/191 [0:06:29<0:02:10, 0.55Hz]
+[01.28 04:31:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  64%|████████████▊       | 122/191 [0:06:32<0:01:59, 0.58Hz]
+[01.28 04:31:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  65%|████████████▉       | 124/191 [0:06:35<0:01:48, 0.62Hz]
+[01.28 04:31:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  66%|█████████████▏      | 126/191 [0:06:38<0:01:39, 0.65Hz]
+[01.28 04:31:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  67%|█████████████▍      | 128/191 [0:06:42<0:01:30, 0.70Hz]
+[01.28 04:31:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  68%|█████████████▌      | 130/191 [0:06:45<0:01:22, 0.74Hz]
+[01.28 04:31:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  69%|█████████████▊      | 132/191 [0:06:48<0:01:20, 0.73Hz]
+[01.28 04:31:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  70%|██████████████      | 134/191 [0:06:52<0:01:19, 0.72Hz]
+[01.28 04:31:35] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  71%|██████████████▏     | 136/191 [0:06:56<0:01:18, 0.70Hz]
+[01.28 04:31:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  72%|██████████████▍     | 138/191 [0:06:58<0:01:16, 0.69Hz]
+[01.28 04:31:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  73%|██████████████▋     | 140/191 [0:07:01<0:01:14, 0.69Hz]
+[01.28 04:31:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  74%|██████████████▊     | 142/191 [0:07:04<0:01:11, 0.68Hz]
+[01.28 04:31:46] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  75%|███████████████     | 144/191 [0:07:06<0:01:09, 0.68Hz]
+[01.28 04:31:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  76%|███████████████▎    | 146/191 [0:07:09<0:01:06, 0.68Hz]
+[01.28 04:31:51] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  77%|███████████████▍    | 148/191 [0:07:11<0:01:03, 0.67Hz]
+[01.28 04:31:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  79%|███████████████▋    | 150/191 [0:07:14<0:01:01, 0.67Hz]
+[01.28 04:31:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  80%|███████████████▉    | 152/191 [0:07:16<0:00:58, 0.67Hz]
+[01.28 04:31:58] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  81%|████████████████▏   | 154/191 [0:07:19<0:00:55, 0.67Hz]
+[01.28 04:32:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  82%|████████████████▎   | 156/191 [0:07:22<0:00:52, 0.67Hz]
+[01.28 04:32:04] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  83%|████████████████▌   | 158/191 [0:07:24<0:00:49, 0.66Hz]
+[01.28 04:32:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  84%|████████████████▊   | 160/191 [0:07:27<0:00:46, 0.66Hz]
+[01.28 04:32:09] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  85%|████████████████▉   | 162/191 [0:07:29<0:00:43, 0.66Hz]
+[01.28 04:32:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  86%|█████████████████▏  | 164/191 [0:07:32<0:00:40, 0.66Hz]
+[01.28 04:32:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  87%|█████████████████▍  | 166/191 [0:07:36<0:00:37, 0.67Hz]
+[01.28 04:32:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  88%|█████████████████▌  | 168/191 [0:07:39<0:00:34, 0.67Hz]
+[01.28 04:32:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  89%|█████████████████▊  | 170/191 [0:07:41<0:00:31, 0.67Hz]
+[01.28 04:32:23] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  90%|██████████████████  | 172/191 [0:07:44<0:00:27, 0.68Hz]
+[01.28 04:32:27] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  91%|██████████████████▏ | 174/191 [0:07:47<0:00:24, 0.68Hz]
+[01.28 04:32:30] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  92%|██████████████████▍ | 176/191 [0:07:50<0:00:21, 0.68Hz]
+[01.28 04:32:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  93%|██████████████████▋ | 178/191 [0:07:53<0:00:18, 0.69Hz]
+[01.28 04:32:35] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  94%|██████████████████▊ | 180/191 [0:07:55<0:00:15, 0.69Hz]
+[01.28 04:32:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  95%|███████████████████ | 182/191 [0:07:57<0:00:12, 0.70Hz]
+[01.28 04:32:39] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  96%|███████████████████▎| 184/191 [0:08:00<0:00:09, 0.70Hz]
+[01.28 04:32:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  97%|███████████████████▍| 186/191 [0:08:03<0:00:07, 0.71Hz]
+[01.28 04:32:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  98%|███████████████████▋| 188/191 [0:08:05<0:00:04, 0.71Hz]
+[01.28 04:32:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  99%|███████████████████▉| 190/191 [0:08:08<0:00:01, 0.72Hz]
+[01.28 04:32:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING] 100%|████████████████████| 191/191 [0:08:12<0:00:00, 0.69Hz]
+[01.28 04:32:57] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    eval_crossner_ai    eval_crossner_literature    eval_crossner_music    eval_crossner_politics    eval_crossner_science    eval_mit-movie    eval_mit-restaurant    eval_AVERAGE    eval_runtime    eval_samples_per_second    eval_steps_per_second
+[01.28 04:32:57] ┇ INFO    ┇             DeepKNLP ┇ >>    105     0.74             0.47227                    0.491294               0.545709                  0.555322                 0.523691          0.846441               0.768457        0.600455         503.076                     12.096                     0.38
+[01.28 04:32:59] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  75%|███████████████     | 106/141 [0:27:20<0:10:01, 0.06Hz] | (Ep 0.74)
+[01.28 04:33:01] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  77%|███████████████▎    | 108/141 [0:27:23<0:09:27, 0.06Hz] | (Ep 0.75)
+[01.28 04:33:03] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  78%|███████████████▌    | 110/141 [0:27:25<0:08:53, 0.06Hz] | (Ep 0.77)
+[01.28 04:33:03] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:33:03] ┇ INFO    ┇             DeepKNLP ┇ >>    110     0.78  0.0329     0.106017       2.4912e-06
+[01.28 04:33:06] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  79%|███████████████▉    | 112/141 [0:27:27<0:08:18, 0.06Hz] | (Ep 0.78)
+[01.28 04:33:08] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  81%|████████████████▏   | 114/141 [0:27:30<0:07:44, 0.06Hz] | (Ep 0.80)
+[01.28 04:33:10] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  82%|████████████████▍   | 116/141 [0:27:32<0:07:09, 0.06Hz] | (Ep 0.81)
+[01.28 04:33:13] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  84%|████████████████▋   | 118/141 [0:27:35<0:06:35, 0.06Hz] | (Ep 0.83)
+[01.28 04:33:15] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  85%|█████████████████   | 120/141 [0:27:37<0:06:01, 0.06Hz] | (Ep 0.84)
+[01.28 04:33:15] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:33:15] ┇ INFO    ┇             DeepKNLP ┇ >>    120     0.85  0.0316    0.0801858      1.17052e-06
+[01.28 04:33:18] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  87%|█████████████████▎  | 122/141 [0:27:39<0:05:26, 0.06Hz] | (Ep 0.85)
+[01.28 04:33:20] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  88%|█████████████████▌  | 124/141 [0:27:42<0:04:52, 0.06Hz] | (Ep 0.87)
+[01.28 04:33:22] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  89%|█████████████████▊  | 126/141 [0:27:44<0:04:18, 0.06Hz] | (Ep 0.88)
+[01.28 04:33:24] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  91%|██████████████████▏ | 128/141 [0:27:46<0:03:43, 0.06Hz] | (Ep 0.90)
+[01.28 04:33:27] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  92%|██████████████████▍ | 130/141 [0:27:48<0:03:09, 0.06Hz] | (Ep 0.91)
+[01.28 04:33:27] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:33:27] ┇ INFO    ┇             DeepKNLP ┇ >>    130     0.92  0.0341     0.110414      3.25848e-07
+[01.28 04:33:29] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  94%|██████████████████▋ | 132/141 [0:27:51<0:02:34, 0.06Hz] | (Ep 0.92)
+[01.28 04:33:32] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  96%|███████████████████▏| 135/141 [0:27:54<0:00:54, 0.11Hz] | (Ep 0.95)
+[01.28 04:33:35] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  97%|███████████████████▍| 137/141 [0:27:56<0:00:36, 0.11Hz] | (Ep 0.96)
+[01.28 04:33:37] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  99%|███████████████████▋| 139/141 [0:27:59<0:00:18, 0.11Hz] | (Ep 0.97)
+[01.28 04:33:38] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.28 04:33:38] ┇ INFO    ┇             DeepKNLP ┇ >>    140     0.99   0.031    0.0892524      2.70759e-09
+[01.28 04:33:38] ┇ INFO    ┇ transformers.trainer ┇ ***** Running Evaluation *****
+[01.28 04:33:38] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 6085
+[01.28 04:33:38] ┇ INFO    ┇ transformers.trainer ┇   Batch size = 8
+[01.28 04:33:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   1%|                    |   1/191 [0:00:00<0:00:00, 73433.31Hz]
+[01.28 04:33:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   1%|▏                   |   2/191 [0:00:04<0:07:07, 0.44Hz]
+[01.28 04:33:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   2%|▎                   |   3/191 [0:00:09<0:09:25, 0.33Hz]
+[01.28 04:33:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   2%|▍                   |   4/191 [0:00:13<0:10:21, 0.30Hz]
+[01.28 04:34:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   3%|▌                   |   5/191 [0:00:18<0:11:19, 0.27Hz]
+[01.28 04:34:05] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   3%|▋                   |   6/191 [0:00:22<0:11:22, 0.27Hz]
+[01.28 04:34:10] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   4%|▋                   |   7/191 [0:00:26<0:11:37, 0.26Hz]
+[01.28 04:34:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   4%|▊                   |   8/191 [0:00:31<0:12:07, 0.25Hz]
+[01.28 04:34:19] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   5%|▉                   |   9/191 [0:00:36<0:12:10, 0.25Hz]
+[01.28 04:34:23] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   5%|█                   |  10/191 [0:00:40<0:12:09, 0.25Hz]
+[01.28 04:34:28] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   6%|█▏                  |  11/191 [0:00:44<0:12:16, 0.24Hz]
+[01.28 04:34:33] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   6%|█▎                  |  12/191 [0:00:50<0:12:26, 0.24Hz]
+[01.28 04:34:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   7%|█▎                  |  13/191 [0:00:54<0:12:24, 0.24Hz]
+[01.28 04:34:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   7%|█▍                  |  14/191 [0:00:59<0:12:28, 0.24Hz]
+[01.28 04:34:46] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   8%|█▌                  |  15/191 [0:01:03<0:12:19, 0.24Hz]
+[01.28 04:34:51] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   8%|█▋                  |  16/191 [0:01:08<0:12:25, 0.23Hz]
+[01.28 04:34:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▊                  |  17/191 [0:01:12<0:12:21, 0.23Hz]
+[01.28 04:35:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▉                  |  18/191 [0:01:17<0:12:25, 0.23Hz]
+[01.28 04:35:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  10%|█▉                  |  19/191 [0:01:22<0:12:30, 0.23Hz]
+[01.28 04:35:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  10%|██                  |  20/191 [0:01:27<0:12:30, 0.23Hz]
+[01.28 04:35:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  11%|██▏                 |  21/191 [0:01:32<0:12:26, 0.23Hz]
+[01.28 04:35:20] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  12%|██▎                 |  22/191 [0:01:36<0:12:24, 0.23Hz]
+[01.28 04:35:25] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  12%|██▍                 |  23/191 [0:01:41<0:12:23, 0.23Hz]
+[01.28 04:35:30] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  13%|██▌                 |  24/191 [0:01:46<0:12:22, 0.22Hz]
+[01.28 04:35:35] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  13%|██▌                 |  25/191 [0:01:51<0:12:22, 0.22Hz]
+[01.28 04:35:40] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  14%|██▋                 |  26/191 [0:01:56<0:12:21, 0.22Hz]
+[01.28 04:35:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  14%|██▊                 |  27/191 [0:02:02<0:12:21, 0.22Hz]
+[01.28 04:35:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  15%|██▉                 |  28/191 [0:02:07<0:12:20, 0.22Hz]
+[01.28 04:35:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  15%|███                 |  29/191 [0:02:12<0:12:19, 0.22Hz]
+[01.28 04:36:00] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  16%|███▏                |  30/191 [0:02:17<0:12:16, 0.22Hz]
+[01.28 04:36:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  16%|███▏                |  31/191 [0:02:22<0:12:16, 0.22Hz]
+[01.28 04:36:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  17%|███▎                |  32/191 [0:02:27<0:12:13, 0.22Hz]
+[01.28 04:36:16] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  17%|███▍                |  33/191 [0:02:32<0:12:10, 0.22Hz]
+[01.28 04:36:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▌                |  34/191 [0:02:37<0:12:08, 0.22Hz]
+[01.28 04:36:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▋                |  35/191 [0:02:42<0:12:05, 0.21Hz]
+[01.28 04:36:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  19%|███▊                |  36/191 [0:02:48<0:12:03, 0.21Hz]
+[01.28 04:36:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  19%|███▊                |  37/191 [0:02:53<0:12:01, 0.21Hz]
+[01.28 04:36:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  20%|███▉                |  38/191 [0:02:58<0:11:58, 0.21Hz]
+[01.28 04:36:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  20%|████                |  39/191 [0:03:03<0:11:55, 0.21Hz]
+[01.28 04:36:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  21%|████▏               |  40/191 [0:03:08<0:11:51, 0.21Hz]
+[01.28 04:36:57] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  21%|████▎               |  41/191 [0:03:13<0:11:48, 0.21Hz]
+[01.28 04:37:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  22%|████▍               |  42/191 [0:03:19<0:11:45, 0.21Hz]
+[01.28 04:37:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  23%|████▌               |  43/191 [0:03:23<0:11:42, 0.21Hz]
+[01.28 04:37:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  23%|████▌               |  44/191 [0:03:29<0:11:38, 0.21Hz]
+[01.28 04:37:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  24%|████▋               |  45/191 [0:03:34<0:11:35, 0.21Hz]
+[01.28 04:37:22] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  24%|████▊               |  46/191 [0:03:39<0:11:31, 0.21Hz]
+[01.28 04:37:27] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  25%|████▉               |  47/191 [0:03:44<0:11:27, 0.21Hz]
+[01.28 04:37:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  25%|█████               |  48/191 [0:03:48<0:11:22, 0.21Hz]
+[01.28 04:37:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  26%|█████▏              |  49/191 [0:03:54<0:11:18, 0.21Hz]
+[01.28 04:37:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  26%|█████▏              |  50/191 [0:03:59<0:11:15, 0.21Hz]
+[01.28 04:37:47] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▎              |  51/191 [0:04:04<0:11:10, 0.21Hz]
+[01.28 04:37:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▍              |  52/191 [0:04:09<0:11:06, 0.21Hz]
+[01.28 04:37:57] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  28%|█████▌              |  53/191 [0:04:13<0:11:01, 0.21Hz]
+[01.28 04:38:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  28%|█████▋              |  54/191 [0:04:18<0:10:55, 0.21Hz]
+[01.28 04:38:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  29%|█████▊              |  55/191 [0:04:23<0:10:51, 0.21Hz]
+[01.28 04:38:10] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  29%|█████▊              |  56/191 [0:04:27<0:10:44, 0.21Hz]
+[01.28 04:38:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  30%|█████▉              |  57/191 [0:04:32<0:10:40, 0.21Hz]
+[01.28 04:38:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  30%|██████              |  58/191 [0:04:37<0:10:36, 0.21Hz]
+[01.28 04:38:25] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  31%|██████▏             |  59/191 [0:04:42<0:10:31, 0.21Hz]
+[01.28 04:38:30] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  31%|██████▎             |  60/191 [0:04:46<0:10:26, 0.21Hz]
+[01.28 04:38:35] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  32%|██████▍             |  61/191 [0:04:51<0:10:22, 0.21Hz]
+[01.28 04:38:40] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  32%|██████▍             |  62/191 [0:04:56<0:10:16, 0.21Hz]
+[01.28 04:38:44] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  33%|██████▌             |  63/191 [0:05:01<0:10:12, 0.21Hz]
+[01.28 04:38:49] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  34%|██████▋             |  64/191 [0:05:06<0:10:17, 0.21Hz]
+[01.28 04:38:54] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  34%|██████▊             |  65/191 [0:05:10<0:10:12, 0.21Hz]
+[01.28 04:38:59] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  35%|██████▉             |  66/191 [0:05:16<0:10:09, 0.21Hz]
+[01.28 04:39:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  35%|███████             |  67/191 [0:05:19<0:10:01, 0.21Hz]
+[01.28 04:39:04] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  36%|███████▏            |  69/191 [0:05:21<0:09:39, 0.21Hz]
+[01.28 04:39:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  37%|███████▍            |  71/191 [0:05:23<0:09:15, 0.22Hz]
+[01.28 04:39:09] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  39%|███████▋            |  74/191 [0:05:25<0:08:41, 0.22Hz]
+[01.28 04:39:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  40%|████████            |  77/191 [0:05:28<0:08:08, 0.23Hz]
+[01.28 04:39:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  42%|████████▍           |  80/191 [0:05:31<0:07:36, 0.24Hz]
+[01.28 04:39:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  43%|████████▋           |  83/191 [0:05:34<0:07:03, 0.26Hz]
+[01.28 04:39:20] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  45%|████████▉           |  85/191 [0:05:36<0:06:43, 0.26Hz]
+[01.28 04:39:22] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  46%|█████████           |  87/191 [0:05:39<0:06:23, 0.27Hz]
+[01.28 04:39:25] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  47%|█████████▎          |  89/191 [0:05:41<0:06:03, 0.28Hz]
+[01.28 04:39:27] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  48%|█████████▌          |  91/191 [0:05:43<0:05:43, 0.29Hz]
+[01.28 04:39:29] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  49%|█████████▋          |  93/191 [0:05:46<0:05:25, 0.30Hz]
+[01.28 04:39:32] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  50%|█████████▉          |  95/191 [0:05:48<0:05:06, 0.31Hz]
+[01.28 04:39:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  51%|██████████▏         |  97/191 [0:05:51<0:04:48, 0.33Hz]
+[01.28 04:39:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  52%|██████████▎         |  99/191 [0:05:53<0:04:30, 0.34Hz]
+[01.28 04:39:40] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  53%|██████████▌         | 101/191 [0:05:56<0:04:14, 0.35Hz]
+[01.28 04:39:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  53%|██████████▋         | 102/191 [0:05:59<0:04:08, 0.36Hz]
+[01.28 04:39:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  54%|██████████▉         | 104/191 [0:06:02<0:03:52, 0.37Hz]
+[01.28 04:39:49] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  55%|███████████         | 106/191 [0:06:05<0:03:38, 0.39Hz]
+[01.28 04:39:52] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  57%|███████████▎        | 108/191 [0:06:08<0:03:23, 0.41Hz]
+[01.28 04:39:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  58%|███████████▌        | 110/191 [0:06:12<0:03:10, 0.42Hz]
+[01.28 04:39:59] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  59%|███████████▋        | 112/191 [0:06:15<0:02:57, 0.44Hz]
+[01.28 04:40:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  60%|███████████▉        | 114/191 [0:06:19<0:02:44, 0.47Hz]
+[01.28 04:40:05] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  61%|████████████▏       | 116/191 [0:06:22<0:02:32, 0.49Hz]
+[01.28 04:40:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  62%|████████████▎       | 118/191 [0:06:25<0:02:21, 0.52Hz]
+[01.28 04:40:11] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  63%|████████████▌       | 120/191 [0:06:28<0:02:10, 0.54Hz]
+[01.28 04:40:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  64%|████████████▊       | 122/191 [0:06:31<0:01:59, 0.58Hz]
+[01.28 04:40:17] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  65%|████████████▉       | 124/191 [0:06:34<0:01:48, 0.62Hz]
+[01.28 04:40:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  66%|█████████████▏      | 126/191 [0:06:37<0:01:39, 0.66Hz]
+[01.28 04:40:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  67%|█████████████▍      | 128/191 [0:06:40<0:01:29, 0.70Hz]
+[01.28 04:40:27] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  68%|█████████████▌      | 130/191 [0:06:44<0:01:22, 0.74Hz]
+[01.28 04:40:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  69%|█████████████▊      | 132/191 [0:06:47<0:01:20, 0.73Hz]
+[01.28 04:40:34] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  70%|██████████████      | 134/191 [0:06:51<0:01:19, 0.72Hz]
+[01.28 04:40:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  71%|██████████████▏     | 136/191 [0:06:55<0:01:18, 0.70Hz]
+[01.28 04:40:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  72%|██████████████▍     | 138/191 [0:06:57<0:01:16, 0.69Hz]
+[01.28 04:40:44] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  73%|██████████████▋     | 140/191 [0:07:00<0:01:14, 0.69Hz]
+[01.28 04:40:46] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  74%|██████████████▊     | 142/191 [0:07:02<0:01:11, 0.68Hz]
+[01.28 04:40:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  75%|███████████████     | 144/191 [0:07:05<0:01:09, 0.68Hz]
+[01.28 04:40:51] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  76%|███████████████▎    | 146/191 [0:07:07<0:01:06, 0.68Hz]
+[01.28 04:40:53] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  77%|███████████████▍    | 148/191 [0:07:10<0:01:03, 0.67Hz]
+[01.28 04:40:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  79%|███████████████▋    | 150/191 [0:07:13<0:01:01, 0.67Hz]
+[01.28 04:40:59] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  80%|███████████████▉    | 152/191 [0:07:15<0:00:58, 0.67Hz]
+[01.28 04:41:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  81%|████████████████▏   | 154/191 [0:07:18<0:00:55, 0.67Hz]
+[01.28 04:41:04] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  82%|████████████████▎   | 156/191 [0:07:21<0:00:52, 0.66Hz]
+[01.28 04:41:07] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  83%|████████████████▌   | 158/191 [0:07:23<0:00:49, 0.66Hz]
+[01.28 04:41:09] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  84%|████████████████▊   | 160/191 [0:07:25<0:00:46, 0.66Hz]
+[01.28 04:41:12] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  85%|████████████████▉   | 162/191 [0:07:28<0:00:43, 0.66Hz]
+[01.28 04:41:15] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  86%|█████████████████▏  | 164/191 [0:07:31<0:00:40, 0.66Hz]
+[01.28 04:41:18] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  87%|█████████████████▍  | 166/191 [0:07:34<0:00:37, 0.67Hz]
+[01.28 04:41:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  88%|█████████████████▌  | 168/191 [0:07:38<0:00:34, 0.67Hz]
+[01.28 04:41:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  89%|█████████████████▊  | 170/191 [0:07:40<0:00:31, 0.67Hz]
+[01.28 04:41:26] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  90%|██████████████████  | 172/191 [0:07:43<0:00:27, 0.68Hz]
+[01.28 04:41:30] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  91%|██████████████████▏ | 174/191 [0:07:46<0:00:24, 0.68Hz]
+[01.28 04:41:33] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  92%|██████████████████▍ | 176/191 [0:07:49<0:00:22, 0.68Hz]
+[01.28 04:41:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  93%|██████████████████▋ | 178/191 [0:07:52<0:00:18, 0.69Hz]
+[01.28 04:41:38] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  94%|██████████████████▊ | 180/191 [0:07:54<0:00:15, 0.69Hz]
+[01.28 04:41:40] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  95%|███████████████████ | 182/191 [0:07:57<0:00:12, 0.70Hz]
+[01.28 04:41:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  96%|███████████████████▎| 184/191 [0:07:59<0:00:10, 0.70Hz]
+[01.28 04:41:45] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  97%|███████████████████▍| 186/191 [0:08:02<0:00:07, 0.70Hz]
+[01.28 04:41:48] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  98%|███████████████████▋| 188/191 [0:08:04<0:00:04, 0.71Hz]
+[01.28 04:41:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  99%|███████████████████▉| 190/191 [0:08:07<0:00:01, 0.72Hz]
+[01.28 04:41:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING] 100%|████████████████████| 191/191 [0:08:12<0:00:00, 0.69Hz]
+[01.28 04:42:01] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    eval_crossner_ai    eval_crossner_literature    eval_crossner_music    eval_crossner_politics    eval_crossner_science    eval_mit-movie    eval_mit-restaurant    eval_AVERAGE    eval_runtime    eval_samples_per_second    eval_steps_per_second
+[01.28 04:42:01] ┇ INFO    ┇             DeepKNLP ┇ >>    140     0.99            0.491349                    0.510684               0.571658                   0.57502                 0.532096          0.850781               0.768841        0.614347         502.692                     12.105                     0.38
+[01.28 04:42:02] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING] 100%|████████████████████| 141/141 [0:36:24<0:00:00, 0.06Hz] | (Ep 0.99)
+[01.28 04:42:02] ┇ INFO    ┇ transformers.trainer ┇ 
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+[01.28 04:42:02] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    train_runtime    train_samples_per_second    train_steps_per_second    total_flos    train_loss
+[01.28 04:42:02] ┇ INFO    ┇             DeepKNLP ┇ >>    141     0.99          2184.39                       8.302                     0.065   4.48307e+16      0.110191
+[01.28 04:42:02] ┇ INFO    ┇             DeepKNLP ┇ Train result: TrainOutput(global_step=141, training_loss=0.11019106114164312, metrics={'train_runtime': 2184.3878, 'train_samples_per_second': 8.302, 'train_steps_per_second': 0.065, 'total_flos': 4.483070918498714e+16, 'train_loss': 0.11019106114164312, 'epoch': 0.9947089947089947})
+[01.28 04:42:02] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[01.28 04:42:02] ┇ INFO    ┇       chrisbase.data ┇ [EXIT] python task2-nerG-trainer2.py --accelerate_deepspeed --generation_max_length=640 --run_version EAGLE-1B-debug-acc1 ($=00:36:44.473)
+[01.28 04:42:02] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
