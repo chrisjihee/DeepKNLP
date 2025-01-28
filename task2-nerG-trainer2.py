@@ -311,9 +311,9 @@ def preprocess_dataset(
 
     # Prepare a progress bar
     with ProgIter(
-            total=len(dataset),
-            stream=LoggerWriter(logger),
             verbose=2,
+            stream=LoggerWriter(logger),
+            total=len(dataset),
             desc=f"Preprocess {dataset_name}:"
     ) as pbar:
         # Disable the default progress bar in datasets
