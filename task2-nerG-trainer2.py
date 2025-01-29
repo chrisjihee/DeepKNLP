@@ -78,6 +78,7 @@ class CustomProgressCallback(TrainerCallback):
         self.epoch_optimization_steps = len(self.train_dataloader) // args.gradient_accumulation_steps
         if state.is_world_process_zero:
             self.training_iter = ProgIter(
+                time_thresh=5.0,
                 verbose=2,
                 stream=LoggerWriter(logger),
                 total=state.max_steps,
@@ -131,6 +132,7 @@ class CustomProgressCallback(TrainerCallback):
         if state.is_world_process_zero and has_length(eval_dataloader):
             if self.prediction_iter is None:
                 self.prediction_iter = ProgIter(
+                    time_thresh=5.0,
                     verbose=2,
                     stream=LoggerWriter(logger),
                     total=len(eval_dataloader),
@@ -350,6 +352,7 @@ def preprocess_dataset(
 
     # Prepare a progress bar
     with ProgIter(
+            time_thresh=2.0,
             verbose=2,
             stream=LoggerWriter(logger),
             total=len(dataset),
@@ -389,7 +392,8 @@ def preprocess_dataset(
     return dataset
 
 
-def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None, save_suffix=None):
+def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None,
+                        save_suffix=None):
     preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
     decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
     if not is_encoder_decoder:
@@ -440,12 +444,15 @@ def main(
         pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-100.jsonl",
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
-        ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
+        ignore_pad_token_for_loss: Annotated[
+            bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
-        report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
-        gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
+        report_to: Annotated[str, typer.Option("--report_to")] = "none",
+        # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
+        gradient_checkpointing: Annotated[
+            bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 32,
@@ -461,7 +468,8 @@ def main(
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         # for DeepSpeed
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,  # for deepspeed.launcher.runner
-        accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,  # for accelerate.commands.launch
+        accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,
+        # for accelerate.commands.launch
 ):
     # Setup project environment
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
