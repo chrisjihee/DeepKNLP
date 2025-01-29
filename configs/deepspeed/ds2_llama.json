@@ -1,4 +1,7 @@
 {
+    "fp16": {
+        "enabled": "auto"
+    },
     "bf16": {
         "enabled": "auto"
     },
