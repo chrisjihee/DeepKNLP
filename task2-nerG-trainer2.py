@@ -55,7 +55,7 @@ logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 class CustomProgressCallback(TrainerCallback):
 
-    def __init__(self, output_path: str | Path):
+    def __init__(self, output_path: str | Path, logging_ratio: float, eval_ratio: float, save_ratio: float):
         super().__init__()
         self.training_iter: Optional[ProgIter] = None
         self.prediction_iter: Optional[ProgIter] = None
@@ -64,6 +64,9 @@ class CustomProgressCallback(TrainerCallback):
         self.metrics_table: pd.DataFrame = pd.DataFrame()
         self.train_dataloader: Optional[DataLoader] = None
         self.epoch_optimization_steps: Optional[int] = None
+        self.logging_ratio = logging_ratio if 0 < logging_ratio <= 1 else -1
+        self.eval_ratio = eval_ratio if 0 < eval_ratio <= 1 else -1
+        self.save_ratio = save_ratio if 0 < save_ratio <= 1 else -1
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         self.train_dataloader: DataLoader = kwargs["train_dataloader"]
@@ -84,11 +87,22 @@ class CustomProgressCallback(TrainerCallback):
 
     def on_step_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if self.training_iter is not None:
-            self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3)})")
+            self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3):.3f})")
             self.training_iter.step(state.global_step - self.current_step)
             self.current_step = state.global_step
+        logger.info(f"self.epoch_by_step(state)={self.epoch_by_step(state)}")
+        logger.info(f"self.logging_ratio={self.logging_ratio}")
+        logger.info(f"self.epoch_by_step(state) % self.logging_ratio={self.epoch_by_step(state) % self.logging_ratio}")
+        logger.info(self.epoch_optimization_steps * self.logging_ratio)
+        logger.info("--------------------")
+        if 0 < self.logging_ratio <= 1 and self.epoch_by_step(state) % self.logging_ratio == 0:
+            control.should_log = True
+
+    def on_epoch_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        control.should_log = True
 
     def on_train_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        control.should_log = True
         if self.training_iter is not None:
             self.training_iter.end()
             self.training_iter = None
@@ -371,7 +385,7 @@ def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_di
     results = compute_metrics(all_examples, tokenizer=tokenizer, detailed=False)
     if output_dir is not None and save_prefix is not None:
         suffix = f"_{save_suffix}" if save_suffix else ""
-        file_name = f"{save_prefix}_text_generations{suffix}.jsonl"
+        file_name = f"{save_prefix}-text_generations{suffix}.jsonl"
         with open(os.path.join(output_dir, file_name), "w") as fout:
             for example in all_examples:
                 fout.write(json.dumps(example) + "\n")
@@ -419,10 +433,10 @@ def main(
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 4,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 1.0,
-        logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = -1,
-        logging_steps: Annotated[int, typer.Option("--logging_steps")] = 10,
-        eval_ratio: Annotated[float, typer.Option("--eval_ratio")] = -1,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = 0,
+        logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = 1 / 100,
+        logging_steps: Annotated[int, typer.Option("--logging_steps")] = -1,
+        eval_ratio: Annotated[float, typer.Option("--eval_ratio")] = 1 / 10,
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_ratio: Annotated[float, typer.Option("--save_ratio")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
@@ -497,12 +511,12 @@ def main(
             eval_accumulation_steps=eval_accumulation_steps,
             num_train_epochs=num_train_epochs,
             max_steps=max_steps,
-            logging_strategy="steps" if 0 < logging_ratio < 1 or logging_steps > 0 else "epoch" if logging_steps == 0 else "no",
-            eval_strategy="steps" if 0 < eval_ratio < 1 or eval_steps > 0 else "epoch" if eval_steps == 0 else "no",
-            save_strategy="steps" if 0 < save_ratio < 1 or save_steps > 0 else "epoch" if save_steps == 0 else "no",
-            logging_steps=logging_ratio if 0 < logging_ratio < 1 else logging_steps if logging_steps >= 0 else sys.maxsize,
-            eval_steps=eval_ratio if 0 < eval_ratio < 1 else eval_steps if eval_steps >= 0 else sys.maxsize,
-            save_steps=save_ratio if 0 < save_ratio < 1 else save_steps if save_steps >= 0 else sys.maxsize,
+            logging_strategy="steps" if logging_steps > 0 else "epoch" if logging_steps == 0 else "no",
+            eval_strategy="steps" if eval_steps > 0 else "epoch" if eval_steps == 0 else "no",
+            save_strategy="steps" if save_steps > 0 else "epoch" if save_steps == 0 else "no",
+            logging_steps=logging_ratio if 0 < logging_ratio <= 1 else logging_steps if logging_steps >= 1 else sys.maxsize,
+            eval_steps=eval_ratio if 0 < eval_ratio <= 1 else eval_steps if eval_steps >= 1 else sys.maxsize,
+            save_steps=save_ratio if 0 < save_ratio <= 1 else save_steps if save_steps >= 1 else sys.maxsize,
             learning_rate=learning_rate,
             lr_scheduler_type="cosine",
             warmup_ratio=0.04,
@@ -648,10 +662,16 @@ def main(
         )
 
         # Initialize trainer
+        progress_callback = CustomProgressCallback(
+            output_path=args.env.output_dir / args.env.output_file,
+            logging_ratio=logging_ratio,
+            eval_ratio=eval_ratio,
+            save_ratio=save_ratio,
+        )
         trainer = GNERTrainer(
             args=args.train,
             model=model,
-            callbacks=[CustomProgressCallback(args.env.output_dir / args.env.output_file)],
+            callbacks=[progress_callback],
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
@@ -678,4 +698,24 @@ def main(
 
 
 if __name__ == "__main__":
-    AppTyper.run(main)
+    lst = list(range(1, 142))  # 1부터 141까지의 숫자 리스트
+    length = len(lst)  # 총 길이
+    n = 1 / 3  # 1/3 간격
+    accepted = []
+
+    # 1/3, 2/3, 3/3 위치의 인덱스 계산
+    indices = [round(n * length * i) - 1 for i in range(1, 4)]
+
+    # 리스트에서 해당 인덱스의 값 선택
+    accepted = [lst[i] for i in indices]
+
+    # 결과 출력
+    print("Accepted values:", accepted)
+    print("Accepted 개수:", len(accepted))
+    exit(1)
+
+    # 예제 리스트
+    numbers = list(range(1, 101))  # 1부터 100까지의 숫자 리스트
+    print_percentile_values(numbers, 3)
+
+    # AppTyper.run(main)

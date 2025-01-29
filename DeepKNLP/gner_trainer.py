@@ -14,7 +14,7 @@ class GNERTrainer(Seq2SeqTrainer):
             description: str,
             prediction_loss_only: Optional[bool] = None,
             ignore_keys: Optional[List[str]] = None,
-            metric_key_prefix: str = "eval",
+            metric_key_prefix: str = "E",
     ) -> EvalLoopOutput:
         """
         Prediction/evaluation loop, shared by `Trainer.evaluate()` and `Trainer.predict()`.
@@ -201,7 +201,7 @@ class GNERTrainer(Seq2SeqTrainer):
         # Metrics!
         if self.compute_metrics is not None and all_preds is not None:
             metrics = self.compute_metrics(dataset=eval_dataset, preds=all_preds,
-                                           tokenizer=self.tokenizer, is_encoder_decoder=self.is_encoder_decoder,
+                                           tokenizer=self.processing_class, is_encoder_decoder=self.is_encoder_decoder,
                                            output_dir=args.output_dir, save_prefix=metric_key_prefix, save_suffix=f"{self.state.global_step}")
         else:
             metrics = {}
