@@ -350,6 +350,28 @@ def preprocess_dataset(
     return dataset
 
 
+def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None, save_suffix=None):
+    preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
+    decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+    if not is_encoder_decoder:
+        match_pattern = "[/INST]"
+        for i, preds in enumerate(decoded_preds):
+            decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
+
+    all_examples = [example.copy() for example in dataset]
+    for idx, decoded_pred in enumerate(decoded_preds):
+        all_examples[idx]["prediction"] = decoded_pred
+
+    results = compute_metrics(all_examples, tokenizer=tokenizer, detailed=False)
+    if output_dir is not None and save_prefix is not None:
+        suffix = f"_{save_suffix}" if save_suffix else ""
+        file_name = f"{save_prefix}_text_generations{suffix}.jsonl"
+        with open(os.path.join(output_dir, file_name), "w") as fout:
+            for example in all_examples:
+                fout.write(json.dumps(example) + "\n")
+    return results
+
+
 # Reference for implementation
 # [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm.py
 # [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation.py
@@ -375,15 +397,15 @@ def main(
         # for CustomDataArguments
         pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
-        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev.jsonl",
-        pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-min.jsonl",
+        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev-100.jsonl",
+        pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test.jsonl",
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
-        report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # tensorboard --bind_all --logdir output/GNER
+        report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
@@ -625,27 +647,6 @@ def main(
             return_tensors="pt",
         )
 
-        def compute_ner_metrics(dataset, preds, save_prefix=None, save_suffix=None):
-            preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
-            decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
-            if not is_encoder_decoder:
-                match_pattern = "[/INST]"
-                for i, preds in enumerate(decoded_preds):
-                    decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
-
-            all_examples = [example.copy() for example in dataset]
-            for idx, decoded_pred in enumerate(decoded_preds):
-                all_examples[idx]["prediction"] = decoded_pred
-
-            results = compute_metrics(all_examples, tokenizer=tokenizer, detailed=False)
-            if save_prefix is not None:
-                suffix = f"_{save_suffix}" if save_suffix else ""
-                file_name = f"{save_prefix}_text_generations{suffix}.jsonl"
-                with open(os.path.join(args.train.output_dir, file_name), "w") as fout:
-                    for example in all_examples:
-                        fout.write(json.dumps(example) + "\n")
-            return results
-
         # Initialize trainer
         trainer = GNERTrainer(
             args=args.train,
@@ -656,6 +657,7 @@ def main(
             processing_class=tokenizer,
             data_collator=data_collator,
             compute_metrics=compute_ner_metrics if args.train.predict_with_generate else None,
+            is_encoder_decoder=is_encoder_decoder,
         )
         trainer.remove_callback(PrinterCallback)
         if accelerator.is_main_process:

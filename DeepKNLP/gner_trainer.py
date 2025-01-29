@@ -1,18 +1,20 @@
-import torch
-from transformers import is_torch_xla_available
-from transformers.trainer_seq2seq import Seq2SeqTrainer
 from transformers.trainer import *
+from transformers.trainer_seq2seq import Seq2SeqTrainer
 
 
 class GNERTrainer(Seq2SeqTrainer):
 
+    def __init__(self, *args, **kwargs):
+        self.is_encoder_decoder = kwargs.pop("is_encoder_decoder", False)
+        super().__init__(*args, **kwargs)
+
     def evaluation_loop(
-        self,
-        dataloader: DataLoader,
-        description: str,
-        prediction_loss_only: Optional[bool] = None,
-        ignore_keys: Optional[List[str]] = None,
-        metric_key_prefix: str = "eval",
+            self,
+            dataloader: DataLoader,
+            description: str,
+            prediction_loss_only: Optional[bool] = None,
+            ignore_keys: Optional[List[str]] = None,
+            metric_key_prefix: str = "eval",
     ) -> EvalLoopOutput:
         """
         Prediction/evaluation loop, shared by `Trainer.evaluate()` and `Trainer.predict()`.
@@ -135,9 +137,9 @@ class GNERTrainer(Seq2SeqTrainer):
 
             # Gather all tensors and put them back on the CPU if we have done enough accumulation steps.
             if (
-                args.eval_accumulation_steps is not None
-                and (step + 1) % args.eval_accumulation_steps == 0
-                and (self.accelerator.sync_gradients or version.parse(accelerate_version) > version.parse("0.20.3"))
+                    args.eval_accumulation_steps is not None
+                    and (step + 1) % args.eval_accumulation_steps == 0
+                    and (self.accelerator.sync_gradients or version.parse(accelerate_version) > version.parse("0.20.3"))
             ):
                 if losses_host is not None:
                     losses = nested_numpify(losses_host)
@@ -198,7 +200,9 @@ class GNERTrainer(Seq2SeqTrainer):
 
         # Metrics!
         if self.compute_metrics is not None and all_preds is not None:
-            metrics = self.compute_metrics(dataset=eval_dataset, preds=all_preds, save_prefix=metric_key_prefix, save_suffix=f"{self.state.global_step}")
+            metrics = self.compute_metrics(dataset=eval_dataset, preds=all_preds,
+                                           tokenizer=self.tokenizer, is_encoder_decoder=self.is_encoder_decoder,
+                                           output_dir=args.output_dir, save_prefix=metric_key_prefix, save_suffix=f"{self.state.global_step}")
         else:
             metrics = {}
 
