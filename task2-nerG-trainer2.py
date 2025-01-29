@@ -1,5 +1,6 @@
 import json
 import logging
+import math
 import os
 import sys
 from pathlib import Path
@@ -64,9 +65,12 @@ class CustomProgressCallback(TrainerCallback):
         self.metrics_table: pd.DataFrame = pd.DataFrame()
         self.train_dataloader: Optional[DataLoader] = None
         self.epoch_optimization_steps: Optional[int] = None
-        self.logging_ratio = logging_ratio if 0 < logging_ratio <= 1 else -1
-        self.eval_ratio = eval_ratio if 0 < eval_ratio <= 1 else -1
-        self.save_ratio = save_ratio if 0 < save_ratio <= 1 else -1
+        self.logging_ratio = logging_ratio if 0 < logging_ratio < 1 else -1
+        self.eval_ratio = eval_ratio if 0 < eval_ratio < 1 else -1
+        self.save_ratio = save_ratio if 0 < save_ratio < 1 else -1
+        self.logging_steps = []
+        self.save_steps = []
+        self.eval_steps = []
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         self.train_dataloader: DataLoader = kwargs["train_dataloader"]
@@ -80,6 +84,21 @@ class CustomProgressCallback(TrainerCallback):
             )
             self.training_iter.begin()
         self.current_step = 0
+        if 0 < self.logging_ratio < 1:
+            logging_times = math.floor(1 / self.logging_ratio)
+            self.logging_steps = set([round(self.epoch_optimization_steps * self.logging_ratio * (i + 1)) for i in range(logging_times)])
+            assert len(self.logging_steps) <= logging_times
+            assert max(self.logging_steps) <= self.epoch_optimization_steps
+        if 0 < self.save_ratio < 1:
+            save_times = math.floor(1 / self.save_ratio)
+            self.save_steps = set([round(self.epoch_optimization_steps * self.save_ratio * (i + 1)) for i in range(save_times)])
+            assert len(self.save_steps) <= save_times
+            assert max(self.save_steps) <= self.epoch_optimization_steps
+        if 0 < self.eval_ratio < 1:
+            eval_times = math.floor(1 / self.eval_ratio)
+            self.eval_steps = set([round(self.epoch_optimization_steps * self.eval_ratio * (i + 1)) for i in range(eval_times)])
+            assert len(self.eval_steps) <= eval_times
+            assert max(self.eval_steps) <= self.epoch_optimization_steps
 
     def epoch_by_step(self, state: TrainerState):
         state.epoch = state.global_step / self.epoch_optimization_steps
@@ -89,14 +108,13 @@ class CustomProgressCallback(TrainerCallback):
         if self.training_iter is not None:
             self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3):.3f})")
             self.training_iter.step(state.global_step - self.current_step)
-            self.current_step = state.global_step
-        logger.info(f"self.epoch_by_step(state)={self.epoch_by_step(state)}")
-        logger.info(f"self.logging_ratio={self.logging_ratio}")
-        logger.info(f"self.epoch_by_step(state) % self.logging_ratio={self.epoch_by_step(state) % self.logging_ratio}")
-        logger.info(self.epoch_optimization_steps * self.logging_ratio)
-        logger.info("--------------------")
-        if 0 < self.logging_ratio <= 1 and self.epoch_by_step(state) % self.logging_ratio == 0:
+        self.current_step = state.global_step
+        if self.current_step in self.logging_steps:
             control.should_log = True
+        if self.current_step in self.save_steps:
+            control.should_save = True
+        if self.current_step in self.eval_steps:
+            control.should_evaluate = True
 
     def on_epoch_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         control.should_log = True
@@ -433,12 +451,12 @@ def main(
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 4,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 1.0,
-        logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = 1 / 100,
+        logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = 1 / 10,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = -1,
-        eval_ratio: Annotated[float, typer.Option("--eval_ratio")] = 1 / 10,
-        eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_ratio: Annotated[float, typer.Option("--save_ratio")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
+        eval_ratio: Annotated[float, typer.Option("--eval_ratio")] = 1 / 3,
+        eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         # for DeepSpeed
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,  # for deepspeed.launcher.runner
@@ -512,11 +530,11 @@ def main(
             num_train_epochs=num_train_epochs,
             max_steps=max_steps,
             logging_strategy="steps" if logging_steps > 0 else "epoch" if logging_steps == 0 else "no",
-            eval_strategy="steps" if eval_steps > 0 else "epoch" if eval_steps == 0 else "no",
             save_strategy="steps" if save_steps > 0 else "epoch" if save_steps == 0 else "no",
-            logging_steps=logging_ratio if 0 < logging_ratio <= 1 else logging_steps if logging_steps >= 1 else sys.maxsize,
-            eval_steps=eval_ratio if 0 < eval_ratio <= 1 else eval_steps if eval_steps >= 1 else sys.maxsize,
-            save_steps=save_ratio if 0 < save_ratio <= 1 else save_steps if save_steps >= 1 else sys.maxsize,
+            eval_strategy="steps" if eval_steps > 0 else "epoch" if eval_steps == 0 else "no",
+            logging_steps=logging_ratio if 0 < logging_ratio < 1 else logging_steps if logging_steps >= 1 else sys.maxsize,
+            save_steps=save_ratio if 0 < save_ratio < 1 else save_steps if save_steps >= 1 else sys.maxsize,
+            eval_steps=eval_ratio if 0 < eval_ratio < 1 else eval_steps if eval_steps >= 1 else sys.maxsize,
             learning_rate=learning_rate,
             lr_scheduler_type="cosine",
             warmup_ratio=0.04,
@@ -698,24 +716,4 @@ def main(
 
 
 if __name__ == "__main__":
-    lst = list(range(1, 142))  # 1부터 141까지의 숫자 리스트
-    length = len(lst)  # 총 길이
-    n = 1 / 3  # 1/3 간격
-    accepted = []
-
-    # 1/3, 2/3, 3/3 위치의 인덱스 계산
-    indices = [round(n * length * i) - 1 for i in range(1, 4)]
-
-    # 리스트에서 해당 인덱스의 값 선택
-    accepted = [lst[i] for i in indices]
-
-    # 결과 출력
-    print("Accepted values:", accepted)
-    print("Accepted 개수:", len(accepted))
-    exit(1)
-
-    # 예제 리스트
-    numbers = list(range(1, 101))  # 1부터 100까지의 숫자 리스트
-    print_percentile_values(numbers, 3)
-
-    # AppTyper.run(main)
+    AppTyper.run(main)
