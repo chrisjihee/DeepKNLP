@@ -451,7 +451,7 @@ def main(
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 32,
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 1,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
-        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 1.0,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 6,
         logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = 1 / 10,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = -1,
         save_ratio: Annotated[float, typer.Option("--save_ratio")] = -1,
