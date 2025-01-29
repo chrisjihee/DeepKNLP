@@ -1,0 +1,436 @@
+[01.30 00:57:54] ┇ INFO    ┇             DeepKNLP ┇ Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ [INIT] python task2-nerG-trainer2.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds1_llama.json
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   #	TrainingArgumentsForAccelerator              	value
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   1	env.hostname                                 	ptlm3
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   2	env.hostaddr                                 	129.254.121.74
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   3	env.global_rank                              	-1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   4	env.local_rank                               	0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   5	env.node_rank                                	-1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   6	env.world_size                               	4
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   7	env.time_stamp                               	0130.005749
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   8	env.python_path                              	/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇   9	env.current_dir                              	/home/chrisjihee/proj/DeepKNLP
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  10	env.current_file                             	task2-nerG-trainer2.py
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  11	env.command_args                             	['--local_rank=0', '--trainer_deepspeed', 'configs/deepspeed/ds1_llama.json']
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  12	env.output_home                              	output
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  13	env.output_name                              	GNER
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  14	env.run_version                              	EAGLE-1B-debug
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  15	env.output_file                              	train-metrics-0130.005749.csv
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  16	env.logging_file                             	train-loggings-0130.005749.out
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  17	env.logging_level                            	30
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  18	env.logging_format                           	%(asctime)s ┇ %(levelname)-7s ┇ %(name)20s ┇ %(message)s
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  19	env.datetime_format                          	[%m.%d %H:%M:%S]
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  20	env.argument_file                            	train-arguments-0130.005749.json
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  21	env.random_seed                              	7
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  22	env.max_workers                              	4
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  23	env.debugging                                	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  24	env.output_dir                               	output/GNER/EAGLE-1B-debug
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  25	time.t1                                      	2025-01-30 00:57:54.851589
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  26	time.t2                                      	2025-01-30 00:57:49.637615
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  27	time.started                                 	[01.30 00:57:54]
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  28	time.settled
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  29	time.elapsed
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  30	data.pretrained                              	etri-lirs/egpt-1.3b-preview
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  31	data.train_file                              	data/gner/zero-shot-train.jsonl
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  32	data.study_file
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  33	data.eval_file                               	data/gner/zero-shot-dev-100.jsonl
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  34	data.pred_file                               	data/gner/zero-shot-test-100.jsonl
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  35	data.max_train_samples                       	-1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  36	data.max_study_samples                       	-1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  37	data.max_eval_samples                        	-1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  38	data.max_pred_samples                        	-1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  39	data.max_source_length                       	640
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  40	data.max_target_length                       	640
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  41	data.use_cache_data                          	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  42	data.ignore_pad_token_for_loss               	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  43	train.output_dir                             	output/GNER/EAGLE-1B-debug
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  44	train.overwrite_output_dir                   	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  45	train.do_train                               	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  46	train.do_eval                                	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  47	train.do_predict                             	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  48	train.eval_strategy                          	IntervalStrategy.NO
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  49	train.prediction_loss_only                   	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  50	train.per_device_train_batch_size            	8
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  51	train.per_device_eval_batch_size             	16
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  52	train.per_gpu_train_batch_size
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  53	train.per_gpu_eval_batch_size
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  54	train.gradient_accumulation_steps            	4
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  55	train.eval_accumulation_steps                	2
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  56	train.eval_delay                             	0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  57	train.torch_empty_cache_steps
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  58	train.learning_rate                          	2e-05
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  59	train.weight_decay                           	0.0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  60	train.adam_beta1                             	0.9
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  61	train.adam_beta2                             	0.999
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  62	train.adam_epsilon                           	1e-08
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  63	train.max_grad_norm                          	1.0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  64	train.num_train_epochs                       	1.0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  65	train.max_steps                              	-1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  66	train.lr_scheduler_type                      	SchedulerType.COSINE
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  67	train.lr_scheduler_kwargs                    	{}
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  68	train.warmup_ratio                           	0.04
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  69	train.warmup_steps                           	0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  70	train.log_level                              	warning
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  71	train.log_level_replica                      	error
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  72	train.log_on_each_node                       	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  73	train.logging_dir                            	output/GNER/EAGLE-1B-debug/runs/Jan30_00-57-53_ptlm3
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  74	train.logging_strategy                       	IntervalStrategy.NO
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  75	train.logging_first_step                     	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  76	train.logging_steps                          	0.1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  77	train.logging_nan_inf_filter                 	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  78	train.save_strategy                          	SaveStrategy.NO
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  79	train.save_steps                             	9223372036854775807
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  80	train.save_total_limit
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  81	train.save_safetensors                       	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  82	train.save_on_each_node                      	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  83	train.save_only_model                        	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  84	train.restore_callback_states_from_checkpoint	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  85	train.no_cuda                                	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  86	train.use_cpu                                	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  87	train.use_mps_device                         	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  88	train.seed                                   	7
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  89	train.data_seed
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  90	train.jit_mode_eval                          	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  91	train.use_ipex                               	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  92	train.bf16                                   	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  93	train.fp16                                   	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  94	train.fp16_opt_level                         	O1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  95	train.half_precision_backend                 	auto
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  96	train.bf16_full_eval                         	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  97	train.fp16_full_eval                         	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  98	train.tf32                                   	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇  99	train.local_rank                             	0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 100	train.ddp_backend
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 101	train.tpu_num_cores
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 102	train.tpu_metrics_debug                      	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 103	train.debug                                  	[]
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 104	train.dataloader_drop_last                   	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 105	train.eval_steps                             	0.3333333333333333
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 106	train.dataloader_num_workers                 	0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 107	train.dataloader_prefetch_factor
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 108	train.past_index                             	-1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 109	train.run_name                               	output/GNER/EAGLE-1B-debug
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 110	train.disable_tqdm                           	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 111	train.remove_unused_columns                  	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 112	train.label_names
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 113	train.load_best_model_at_end                 	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 114	train.metric_for_best_model
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 115	train.greater_is_better
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 116	train.ignore_data_skip                       	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 117	train.fsdp                                   	[]
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 118	train.fsdp_min_num_params                    	0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 119	train.fsdp_config                            	{'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False}
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 120	train.fsdp_transformer_layer_cls_to_wrap
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 121	train.accelerator_config                     	{'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False}
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 122	train.deepspeed                              	configs/deepspeed/ds1_llama.json
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 123	train.label_smoothing_factor                 	0.0
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 124	train.optim                                  	OptimizerNames.ADAMW_TORCH
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 125	train.optim_args
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 126	train.adafactor                              	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 127	train.group_by_length                        	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 128	train.length_column_name                     	length
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 129	train.report_to                              	[]
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 130	train.ddp_find_unused_parameters
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 131	train.ddp_bucket_cap_mb
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 132	train.ddp_broadcast_buffers
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 133	train.dataloader_pin_memory                  	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 134	train.dataloader_persistent_workers          	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 135	train.skip_memory_metrics                    	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 136	train.use_legacy_prediction_loop             	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 137	train.push_to_hub                            	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 138	train.resume_from_checkpoint
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 139	train.hub_model_id
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 140	train.hub_strategy                           	HubStrategy.EVERY_SAVE
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 141	train.hub_token
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 142	train.hub_private_repo
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 143	train.hub_always_push                        	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 144	train.gradient_checkpointing                 	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 145	train.gradient_checkpointing_kwargs
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 146	train.include_inputs_for_metrics             	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 147	train.include_for_metrics                    	[]
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 148	train.eval_do_concat_batches                 	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 149	train.fp16_backend                           	auto
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 150	train.evaluation_strategy
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 151	train.push_to_hub_model_id
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 152	train.push_to_hub_organization
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 153	train.push_to_hub_token
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 154	train._n_gpu                                 	1
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 155	train.mp_parameters
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 156	train.auto_find_batch_size                   	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 157	train.full_determinism                       	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 158	train.torchdynamo
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 159	train.ray_scope                              	last
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 160	train.ddp_timeout                            	1800
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 161	train.torch_compile                          	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 162	train.torch_compile_backend
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 163	train.torch_compile_mode
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 164	train.dispatch_batches
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 165	train.split_batches
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 166	train.include_tokens_per_second              	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 167	train.include_num_input_tokens_seen          	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 168	train.neftune_noise_alpha
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 169	train.optim_target_modules
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 170	train.batch_eval_metrics                     	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 171	train.eval_on_start                          	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 172	train.use_liger_kernel                       	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 173	train.eval_use_gather_object                 	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 174	train.average_tokens_across_devices          	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 175	train.sortish_sampler                        	False
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 176	train.predict_with_generate                  	True
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 177	train.generation_max_length                  	640
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 178	train.generation_num_beams
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ 179	train.generation_config
+[01.30 00:57:54] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[01.30 00:57:58] ┇ INFO    ┇             DeepKNLP ┇ type(model)=<class 'transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXForCausalLM'>
+[01.30 00:57:58] ┇ INFO    ┇             DeepKNLP ┇ model.generation_config.pad_token_id=0
+[01.30 00:57:58] ┇ INFO    ┇             DeepKNLP ┇ Loaded raw train_dataset (#=18135): data/gner/zero-shot-train.jsonl
+[01.30 00:57:59] ┇ INFO    ┇             DeepKNLP ┇ Completed preprocessing for train_dataset at [01.29 17:08:17]
+[01.30 00:57:59] ┇ INFO    ┇             DeepKNLP ┇ Loaded raw eval_dataset (#=700): data/gner/zero-shot-dev-100.jsonl
+[01.30 00:57:59] ┇ INFO    ┇             DeepKNLP ┇ Completed preprocessing for eval_dataset at [01.29 17:08:21]
+[01.30 00:58:00] ┇ INFO    ┇ transformers.trainer ┇ Using auto half precision backend
+[01.30 00:58:00] ┇ INFO    ┇             DeepKNLP ┇ Using deepspeed configuration:
+{
+  "fp16": {
+    "enabled": false
+  },
+  "bf16": {
+    "enabled": true
+  },
+  "optimizer": {
+    "type": "AdamW",
+    "params": {
+      "lr": 2e-05,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0
+    }
+  },
+  "scheduler": {
+    "type": "WarmupDecayLR",
+    "params": {
+      "warmup_min_lr": 0,
+      "warmup_max_lr": 2e-05,
+      "warmup_num_steps": "auto",
+      "total_num_steps": "auto"
+    }
+  },
+  "zero_optimization": {
+    "stage": 1,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 200000000.0,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 200000000.0,
+    "contiguous_gradients": true
+  },
+  "gradient_accumulation_steps": 4,
+  "gradient_clipping": 1.0,
+  "train_batch_size": 128,
+  "train_micro_batch_size_per_gpu": 8,
+  "steps_per_print": Infinity
+}
+[01.30 00:58:10] ┇ WARNING ┇            DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[01.30 00:58:10] ┇ INFO    ┇ transformers.trainer ┇ ***** Running training *****
+[01.30 00:58:10] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 18,135
+[01.30 00:58:10] ┇ INFO    ┇ transformers.trainer ┇   Num Epochs = 1
+[01.30 00:58:10] ┇ INFO    ┇ transformers.trainer ┇   Instantaneous batch size per device = 8
+[01.30 00:58:10] ┇ INFO    ┇ transformers.trainer ┇   Total train batch size (w. parallel, distributed & accumulation) = 128
+[01.30 00:58:10] ┇ INFO    ┇ transformers.trainer ┇   Gradient Accumulation steps = 4
+[01.30 00:58:10] ┇ INFO    ┇ transformers.trainer ┇   Total optimization steps = 141
+[01.30 00:58:10] ┇ INFO    ┇ transformers.trainer ┇   Number of trainable parameters = 1,341,247,488
+[01.30 00:58:12] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   1%|▏                   |   1/141 [0:00:02<0:06:02, 0.39Hz] | (Ep 0.007)
+[01.30 00:58:15] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   1%|▎                   |   2/141 [0:00:05<0:06:45, 0.34Hz] | (Ep 0.014)
+[01.30 00:58:20] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   3%|▌                   |   4/141 [0:00:09<0:05:41, 0.40Hz] | (Ep 0.028)
+[01.30 00:58:22] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   4%|▋                   |   5/141 [0:00:12<0:05:33, 0.41Hz] | (Ep 0.035)
+[01.30 00:58:24] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   4%|▊                   |   6/141 [0:00:14<0:05:28, 0.41Hz] | (Ep 0.043)
+[01.30 00:58:28] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   6%|█▏                  |   8/141 [0:00:18<0:05:10, 0.43Hz] | (Ep 0.057)
+[01.30 00:58:30] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   6%|█▎                  |   9/141 [0:00:20<0:05:05, 0.43Hz] | (Ep 0.064)
+[01.30 00:58:33] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   7%|█▍                  |  10/141 [0:00:22<0:05:00, 0.44Hz] | (Ep 0.071)
+[01.30 00:58:36] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]   9%|█▋                  |  12/141 [0:00:26<0:04:45, 0.45Hz] | (Ep 0.085)
+[01.30 00:58:40] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  10%|█▉                  |  14/141 [0:00:30<0:04:37, 0.46Hz] | (Ep 0.099)
+[01.30 00:58:40] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 00:58:40] ┇ INFO    ┇             DeepKNLP ┇ >>     14    0.099  0.7257     0.636308       1.8963e-05
+[01.30 00:58:44] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  11%|██▎                 |  16/141 [0:00:34<0:04:29, 0.46Hz] | (Ep 0.113)
+[01.30 00:58:48] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  13%|██▌                 |  18/141 [0:00:38<0:04:21, 0.47Hz] | (Ep 0.128)
+[01.30 00:58:50] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  13%|██▋                 |  19/141 [0:00:40<0:04:19, 0.47Hz] | (Ep 0.135)
+[01.30 00:58:54] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  15%|██▉                 |  21/141 [0:00:44<0:04:14, 0.47Hz] | (Ep 0.149)
+[01.30 00:58:58] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  16%|███▎                |  23/141 [0:00:48<0:04:08, 0.47Hz] | (Ep 0.163)
+[01.30 00:59:02] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  18%|███▌                |  25/141 [0:00:52<0:04:03, 0.48Hz] | (Ep 0.177)
+[01.30 00:59:04] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  18%|███▋                |  26/141 [0:00:54<0:04:01, 0.48Hz] | (Ep 0.184)
+[01.30 00:59:06] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  19%|███▊                |  27/141 [0:00:56<0:03:59, 0.48Hz] | (Ep 0.191)
+[01.30 00:59:08] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  20%|███▉                |  28/141 [0:00:58<0:03:57, 0.48Hz] | (Ep 0.199)
+[01.30 00:59:08] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 00:59:08] ┇ INFO    ┇             DeepKNLP ┇ >>     28    0.199  0.0809     0.167124      1.68889e-05
+[01.30 00:59:11] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  21%|████                |  29/141 [0:01:01<0:03:56, 0.47Hz] | (Ep 0.206)
+[01.30 00:59:13] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  21%|████▎               |  30/141 [0:01:03<0:03:54, 0.47Hz] | (Ep 0.213)
+[01.30 00:59:15] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  22%|████▍               |  31/141 [0:01:05<0:03:52, 0.47Hz] | (Ep 0.220)
+[01.30 00:59:19] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  23%|████▋               |  33/141 [0:01:09<0:03:46, 0.48Hz] | (Ep 0.234)
+[01.30 00:59:23] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  25%|████▉               |  35/141 [0:01:13<0:03:41, 0.48Hz] | (Ep 0.248)
+[01.30 00:59:25] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  26%|█████               |  36/141 [0:01:15<0:03:39, 0.48Hz] | (Ep 0.255)
+[01.30 00:59:27] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  26%|█████▏              |  37/141 [0:01:17<0:03:37, 0.48Hz] | (Ep 0.262)
+[01.30 00:59:29] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  27%|█████▍              |  38/141 [0:01:19<0:03:35, 0.48Hz] | (Ep 0.270)
+[01.30 00:59:33] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  28%|█████▋              |  40/141 [0:01:23<0:03:30, 0.48Hz] | (Ep 0.284)
+[01.30 00:59:37] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  30%|█████▉              |  42/141 [0:01:27<0:03:26, 0.48Hz] | (Ep 0.298)
+[01.30 00:59:37] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 00:59:37] ┇ INFO    ┇             DeepKNLP ┇ >>     42    0.298   0.052     0.182025      1.48148e-05
+[01.30 00:59:40] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  30%|██████              |  43/141 [0:01:30<0:03:25, 0.48Hz] | (Ep 0.305)
+[01.30 00:59:42] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  31%|██████▏             |  44/141 [0:01:32<0:03:23, 0.48Hz] | (Ep 0.312)
+[01.30 00:59:45] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  33%|██████▌             |  46/141 [0:01:35<0:03:17, 0.48Hz] | (Ep 0.326)
+[01.30 00:59:48] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  33%|██████▋             |  47/141 [0:01:38<0:03:16, 0.48Hz] | (Ep 0.333)
+[01.30 00:59:48] ┇ INFO    ┇ transformers.trainer ┇ ***** Running Evaluation *****
+[01.30 00:59:48] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 700
+[01.30 00:59:48] ┇ INFO    ┇ transformers.trainer ┇   Batch size = 16
+[01.30 00:59:54] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▊                  |  1/11 [0:00:00<0:00:00, 100919.14Hz]
+[01.30 01:00:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▋                |  2/11 [0:00:07<0:00:33, 0.27Hz]
+[01.30 01:00:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▍              |  3/11 [0:00:13<0:00:36, 0.22Hz]
+[01.30 01:00:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  36%|███████▎            |  4/11 [0:00:19<0:00:34, 0.20Hz]
+[01.30 01:00:21] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  45%|█████████           |  5/11 [0:00:26<0:00:31, 0.19Hz]
+[01.30 01:00:27] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  55%|██████████▉         |  6/11 [0:00:33<0:00:27, 0.18Hz]
+[01.30 01:00:35] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  64%|████████████▋       |  7/11 [0:00:40<0:00:23, 0.17Hz]
+[01.30 01:00:41] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  73%|██████████████▌     |  8/11 [0:00:46<0:00:17, 0.17Hz]
+[01.30 01:00:44] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  91%|██████████████████▏ | 10/11 [0:00:50<0:00:05, 0.20Hz]
+[01.30 01:00:49] ┇ INFO    ┇             DeepKNLP ┇ [METERING] 100%|████████████████████| 11/11 [0:00:54<0:00:00, 0.20Hz]
+[01.30 01:00:50] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    eval_crossner_ai    eval_crossner_literature    eval_crossner_music    eval_crossner_politics    eval_crossner_science    eval_mit-movie    eval_mit-restaurant    eval_AVERAGE    eval_runtime    eval_samples_per_second    eval_steps_per_second
+[01.30 01:00:50] ┇ INFO    ┇             DeepKNLP ┇ >>     47    0.333            0.243822                      0.4291               0.339163                  0.434944                 0.405244          0.828431               0.686869        0.481082         62.2968                     11.237                    0.177
+[01.30 01:00:53] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  34%|██████▊             |  48/141 [0:02:42<0:05:15, 0.29Hz] | (Ep 0.340)
+[01.30 01:00:55] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  35%|██████▉             |  49/141 [0:02:45<0:05:09, 0.30Hz] | (Ep 0.348)
+[01.30 01:00:57] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  35%|███████             |  50/141 [0:02:47<0:05:04, 0.30Hz] | (Ep 0.355)
+[01.30 01:01:01] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  37%|███████▍            |  52/141 [0:02:51<0:04:53, 0.30Hz] | (Ep 0.369)
+[01.30 01:01:03] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  38%|███████▌            |  53/141 [0:02:53<0:04:48, 0.31Hz] | (Ep 0.376)
+[01.30 01:01:05] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  38%|███████▋            |  54/141 [0:02:55<0:04:43, 0.31Hz] | (Ep 0.383)
+[01.30 01:01:10] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  40%|███████▉            |  56/141 [0:02:59<0:04:33, 0.31Hz] | (Ep 0.397)
+[01.30 01:01:10] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 01:01:10] ┇ INFO    ┇             DeepKNLP ┇ >>     56    0.397  0.0411     0.136252      1.27407e-05
+[01.30 01:01:14] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  41%|████████▏           |  58/141 [0:03:03<0:04:23, 0.32Hz] | (Ep 0.411)
+[01.30 01:01:16] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  42%|████████▎           |  59/141 [0:03:06<0:04:19, 0.32Hz] | (Ep 0.418)
+[01.30 01:01:18] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  43%|████████▌           |  60/141 [0:03:08<0:04:14, 0.32Hz] | (Ep 0.426)
+[01.30 01:01:22] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  44%|████████▊           |  62/141 [0:03:12<0:04:05, 0.32Hz] | (Ep 0.440)
+[01.30 01:01:24] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  45%|████████▉           |  63/141 [0:03:14<0:04:00, 0.32Hz] | (Ep 0.447)
+[01.30 01:01:26] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  45%|█████████           |  64/141 [0:03:16<0:03:57, 0.32Hz] | (Ep 0.454)
+[01.30 01:01:30] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  47%|█████████▎          |  66/141 [0:03:20<0:03:49, 0.33Hz] | (Ep 0.468)
+[01.30 01:01:32] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  48%|█████████▌          |  67/141 [0:03:22<0:03:46, 0.33Hz] | (Ep 0.475)
+[01.30 01:01:34] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  48%|█████████▋          |  68/141 [0:03:24<0:03:43, 0.33Hz] | (Ep 0.482)
+[01.30 01:01:38] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  50%|█████████▉          |  70/141 [0:03:28<0:03:36, 0.33Hz] | (Ep 0.496)
+[01.30 01:01:38] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 01:01:38] ┇ INFO    ┇             DeepKNLP ┇ >>     70    0.496  0.0368     0.159781      1.06667e-05
+[01.30 01:01:40] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  50%|██████████          |  71/141 [0:03:30<0:03:33, 0.33Hz] | (Ep 0.504)
+[01.30 01:01:44] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  52%|██████████▎         |  73/141 [0:03:34<0:03:26, 0.33Hz] | (Ep 0.518)
+[01.30 01:01:46] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  52%|██████████▍         |  74/141 [0:03:36<0:03:23, 0.33Hz] | (Ep 0.525)
+[01.30 01:01:48] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  53%|██████████▋         |  75/141 [0:03:38<0:03:21, 0.33Hz] | (Ep 0.532)
+[01.30 01:01:52] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  55%|██████████▉         |  77/141 [0:03:42<0:03:14, 0.33Hz] | (Ep 0.546)
+[01.30 01:01:54] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  55%|███████████         |  78/141 [0:03:44<0:03:11, 0.33Hz] | (Ep 0.553)
+[01.30 01:01:56] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  56%|███████████▏        |  79/141 [0:03:46<0:03:09, 0.33Hz] | (Ep 0.560)
+[01.30 01:02:01] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  57%|███████████▍        |  81/141 [0:03:50<0:03:03, 0.33Hz] | (Ep 0.574)
+[01.30 01:02:03] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  58%|███████████▋        |  82/141 [0:03:52<0:03:00, 0.33Hz] | (Ep 0.582)
+[01.30 01:02:05] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  59%|███████████▊        |  83/141 [0:03:55<0:02:57, 0.33Hz] | (Ep 0.589)
+[01.30 01:02:07] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  60%|███████████▉        |  84/141 [0:03:57<0:02:54, 0.33Hz] | (Ep 0.596)
+[01.30 01:02:09] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  60%|████████████        |  85/141 [0:03:59<0:02:51, 0.33Hz] | (Ep 0.603)
+[01.30 01:02:09] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 01:02:09] ┇ INFO    ┇             DeepKNLP ┇ >>     85    0.603   0.035      0.10525      8.44444e-06
+[01.30 01:02:11] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  61%|████████████▏       |  86/141 [0:04:01<0:02:48, 0.33Hz] | (Ep 0.610)
+[01.30 01:02:15] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  62%|████████████▍       |  88/141 [0:04:05<0:02:42, 0.33Hz] | (Ep 0.624)
+[01.30 01:02:18] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  63%|████████████▌       |  89/141 [0:04:08<0:02:40, 0.32Hz] | (Ep 0.631)
+[01.30 01:02:21] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  64%|████████████▊       |  90/141 [0:04:10<0:02:37, 0.32Hz] | (Ep 0.638)
+[01.30 01:02:23] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  65%|████████████▉       |  91/141 [0:04:13<0:02:34, 0.32Hz] | (Ep 0.645)
+[01.30 01:02:25] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  65%|█████████████       |  92/141 [0:04:15<0:02:31, 0.32Hz] | (Ep 0.652)
+[01.30 01:02:28] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  66%|█████████████▏      |  93/141 [0:04:18<0:02:28, 0.32Hz] | (Ep 0.660)
+[01.30 01:02:30] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  67%|█████████████▎      |  94/141 [0:04:20<0:02:25, 0.32Hz] | (Ep 0.667)
+[01.30 01:02:30] ┇ INFO    ┇ transformers.trainer ┇ ***** Running Evaluation *****
+[01.30 01:02:30] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 700
+[01.30 01:02:30] ┇ INFO    ┇ transformers.trainer ┇   Batch size = 16
+[01.30 01:02:36] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▊                  |  1/11 [0:00:00<0:00:00, 88012.53Hz]
+[01.30 01:02:42] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▋                |  2/11 [0:00:05<0:00:26, 0.34Hz]
+[01.30 01:02:49] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▍              |  3/11 [0:00:12<0:00:32, 0.24Hz]
+[01.30 01:02:55] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  36%|███████▎            |  4/11 [0:00:18<0:00:32, 0.22Hz]
+[01.30 01:03:01] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  45%|█████████           |  5/11 [0:00:25<0:00:30, 0.20Hz]
+[01.30 01:03:08] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  55%|██████████▉         |  6/11 [0:00:31<0:00:26, 0.19Hz]
+[01.30 01:03:14] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  64%|████████████▋       |  7/11 [0:00:37<0:00:21, 0.19Hz]
+[01.30 01:03:20] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  73%|██████████████▌     |  8/11 [0:00:43<0:00:16, 0.18Hz]
+[01.30 01:03:24] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  91%|██████████████████▏ | 10/11 [0:00:47<0:00:04, 0.21Hz]
+[01.30 01:03:29] ┇ INFO    ┇             DeepKNLP ┇ [METERING] 100%|████████████████████| 11/11 [0:00:52<0:00:00, 0.21Hz]
+[01.30 01:03:30] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    eval_crossner_ai    eval_crossner_literature    eval_crossner_music    eval_crossner_politics    eval_crossner_science    eval_mit-movie    eval_mit-restaurant    eval_AVERAGE    eval_runtime    eval_samples_per_second    eval_steps_per_second
+[01.30 01:03:30] ┇ INFO    ┇             DeepKNLP ┇ >>     94    0.667            0.430577                    0.504028               0.538406                  0.533563                 0.552809           0.86618               0.771084        0.599521         59.9042                     11.685                    0.184
+[01.30 01:03:32] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  67%|█████████████▍      |  95/141 [0:05:22<0:03:06, 0.25Hz] | (Ep 0.674)
+[01.30 01:03:34] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  68%|█████████████▌      |  96/141 [0:05:24<0:03:02, 0.25Hz] | (Ep 0.681)
+[01.30 01:03:36] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  69%|█████████████▊      |  97/141 [0:05:26<0:02:58, 0.25Hz] | (Ep 0.688)
+[01.30 01:03:39] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  70%|█████████████▉      |  98/141 [0:05:28<0:02:54, 0.25Hz] | (Ep 0.695)
+[01.30 01:03:41] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  70%|██████████████      |  99/141 [0:05:30<0:02:50, 0.25Hz] | (Ep 0.702)
+[01.30 01:03:41] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 01:03:41] ┇ INFO    ┇             DeepKNLP ┇ >>     99    0.702  0.0334     0.091726      6.37037e-06
+[01.30 01:03:43] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  71%|██████████████▏     | 100/141 [0:05:33<0:02:46, 0.25Hz] | (Ep 0.709)
+[01.30 01:03:45] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  72%|██████████████▎     | 101/141 [0:05:35<0:02:42, 0.25Hz] | (Ep 0.716)
+[01.30 01:03:48] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  72%|██████████████▍     | 102/141 [0:05:37<0:02:38, 0.25Hz] | (Ep 0.723)
+[01.30 01:03:52] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  74%|██████████████▊     | 104/141 [0:05:42<0:02:30, 0.25Hz] | (Ep 0.738)
+[01.30 01:03:57] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  75%|███████████████     | 106/141 [0:05:47<0:02:22, 0.25Hz] | (Ep 0.752)
+[01.30 01:03:59] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  76%|███████████████▏    | 107/141 [0:05:49<0:02:18, 0.25Hz] | (Ep 0.759)
+[01.30 01:04:01] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  77%|███████████████▎    | 108/141 [0:05:51<0:02:14, 0.24Hz] | (Ep 0.766)
+[01.30 01:04:03] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  77%|███████████████▍    | 109/141 [0:05:53<0:02:10, 0.24Hz] | (Ep 0.773)
+[01.30 01:04:05] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  78%|███████████████▌    | 110/141 [0:05:55<0:02:06, 0.24Hz] | (Ep 0.780)
+[01.30 01:04:08] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  79%|███████████████▋    | 111/141 [0:05:57<0:01:32, 0.32Hz] | (Ep 0.787)
+[01.30 01:04:10] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  79%|███████████████▉    | 112/141 [0:06:00<0:01:29, 0.32Hz] | (Ep 0.794)
+[01.30 01:04:12] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 01:04:12] ┇ INFO    ┇             DeepKNLP ┇ >>    113    0.801  0.0316    0.0676008       4.2963e-06
+[01.30 01:04:14] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  81%|████████████████▏   | 114/141 [0:06:04<0:01:23, 0.32Hz] | (Ep 0.809)
+[01.30 01:04:16] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  82%|████████████████▎   | 115/141 [0:06:06<0:01:20, 0.32Hz] | (Ep 0.816)
+[01.30 01:04:18] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  82%|████████████████▍   | 116/141 [0:06:08<0:01:17, 0.32Hz] | (Ep 0.823)
+[01.30 01:04:21] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  83%|████████████████▌   | 117/141 [0:06:10<0:01:14, 0.32Hz] | (Ep 0.830)
+[01.30 01:04:23] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  84%|████████████████▋   | 118/141 [0:06:13<0:01:11, 0.32Hz] | (Ep 0.837)
+[01.30 01:04:25] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  84%|████████████████▉   | 119/141 [0:06:15<0:01:08, 0.32Hz] | (Ep 0.844)
+[01.30 01:04:27] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  85%|█████████████████   | 120/141 [0:06:17<0:01:05, 0.32Hz] | (Ep 0.851)
+[01.30 01:04:30] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  86%|█████████████████▏  | 121/141 [0:06:19<0:01:02, 0.32Hz] | (Ep 0.858)
+[01.30 01:04:32] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  87%|█████████████████▎  | 122/141 [0:06:22<0:00:59, 0.32Hz] | (Ep 0.865)
+[01.30 01:04:34] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  87%|█████████████████▍  | 123/141 [0:06:24<0:00:56, 0.32Hz] | (Ep 0.872)
+[01.30 01:04:36] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  88%|█████████████████▌  | 124/141 [0:06:26<0:00:52, 0.32Hz] | (Ep 0.879)
+[01.30 01:04:38] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  89%|█████████████████▋  | 125/141 [0:06:28<0:00:49, 0.32Hz] | (Ep 0.887)
+[01.30 01:04:40] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  89%|█████████████████▊  | 126/141 [0:06:30<0:00:46, 0.32Hz] | (Ep 0.894)
+[01.30 01:04:43] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  90%|██████████████████  | 127/141 [0:06:33<0:00:43, 0.32Hz] | (Ep 0.901)
+[01.30 01:04:43] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 01:04:43] ┇ INFO    ┇             DeepKNLP ┇ >>    127    0.901  0.0331    0.0810025      2.22222e-06
+[01.30 01:04:45] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  91%|██████████████████▏ | 128/141 [0:06:35<0:00:40, 0.32Hz] | (Ep 0.908)
+[01.30 01:04:47] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  91%|██████████████████▎ | 129/141 [0:06:37<0:00:37, 0.32Hz] | (Ep 0.915)
+[01.30 01:04:49] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  92%|██████████████████▍ | 130/141 [0:06:39<0:00:34, 0.32Hz] | (Ep 0.922)
+[01.30 01:04:52] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  93%|██████████████████▌ | 131/141 [0:06:41<0:00:31, 0.32Hz] | (Ep 0.929)
+[01.30 01:04:54] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  94%|██████████████████▋ | 132/141 [0:06:44<0:00:28, 0.32Hz] | (Ep 0.936)
+[01.30 01:04:58] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  95%|███████████████████ | 134/141 [0:06:47<0:00:21, 0.32Hz] | (Ep 0.950)
+[01.30 01:05:00] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  96%|███████████████████▏| 135/141 [0:06:50<0:00:18, 0.32Hz] | (Ep 0.957)
+[01.30 01:05:02] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  96%|███████████████████▎| 136/141 [0:06:52<0:00:15, 0.32Hz] | (Ep 0.965)
+[01.30 01:05:04] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  97%|███████████████████▍| 137/141 [0:06:54<0:00:12, 0.32Hz] | (Ep 0.972)
+[01.30 01:05:06] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  98%|███████████████████▌| 138/141 [0:06:56<0:00:09, 0.32Hz] | (Ep 0.979)
+[01.30 01:05:09] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  99%|███████████████████▋| 139/141 [0:06:59<0:00:06, 0.32Hz] | (Ep 0.986)
+[01.30 01:05:11] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING]  99%|███████████████████▊| 140/141 [0:07:01<0:00:03, 0.32Hz] | (Ep 0.993)
+[01.30 01:05:13] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    loss    grad_norm    learning_rate
+[01.30 01:05:13] ┇ INFO    ┇             DeepKNLP ┇ >>    141        1  0.0308    0.0841451      1.48148e-07
+[01.30 01:05:13] ┇ INFO    ┇ transformers.trainer ┇ ***** Running Evaluation *****
+[01.30 01:05:13] ┇ INFO    ┇ transformers.trainer ┇   Num examples = 700
+[01.30 01:05:13] ┇ INFO    ┇ transformers.trainer ┇   Batch size = 16
+[01.30 01:05:20] ┇ INFO    ┇             DeepKNLP ┇ [METERING]   9%|█▊                  |  1/11 [0:00:00<0:00:00, 98424.90Hz]
+[01.30 01:05:25] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  18%|███▋                |  2/11 [0:00:05<0:00:25, 0.35Hz]
+[01.30 01:05:31] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  27%|█████▍              |  3/11 [0:00:11<0:00:30, 0.26Hz]
+[01.30 01:05:37] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  36%|███████▎            |  4/11 [0:00:17<0:00:30, 0.23Hz]
+[01.30 01:05:43] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  45%|█████████           |  5/11 [0:00:23<0:00:28, 0.21Hz]
+[01.30 01:05:50] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  55%|██████████▉         |  6/11 [0:00:29<0:00:24, 0.20Hz]
+[01.30 01:05:56] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  64%|████████████▋       |  7/11 [0:00:36<0:00:20, 0.19Hz]
+[01.30 01:06:02] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  73%|██████████████▌     |  8/11 [0:00:42<0:00:16, 0.19Hz]
+[01.30 01:06:06] ┇ INFO    ┇             DeepKNLP ┇ [METERING]  91%|██████████████████▏ | 10/11 [0:00:46<0:00:04, 0.22Hz]
+[01.30 01:06:10] ┇ INFO    ┇             DeepKNLP ┇ [METERING] 100%|████████████████████| 11/11 [0:00:50<0:00:00, 0.22Hz]
+[01.30 01:06:12] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    eval_crossner_ai    eval_crossner_literature    eval_crossner_music    eval_crossner_politics    eval_crossner_science    eval_mit-movie    eval_mit-restaurant    eval_AVERAGE    eval_runtime    eval_samples_per_second    eval_steps_per_second
+[01.30 01:06:12] ┇ INFO    ┇             DeepKNLP ┇ >>    141        1             0.47006                    0.542955               0.622601                  0.570429                 0.614512          0.882927               0.790476        0.641994         58.5645                     11.953                    0.188
+[01.30 01:06:12] ┇ INFO    ┇ transformers.trainer ┇ 
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+[01.30 01:06:12] ┇ INFO    ┇             DeepKNLP ┇ >>   step    epoch    train_runtime    train_samples_per_second    train_steps_per_second    total_flos    train_loss
+[01.30 01:06:12] ┇ INFO    ┇             DeepKNLP ┇ >>    141        1          481.938                      37.629                     0.293   4.48307e+16      0.109496
+[01.30 01:06:12] ┇ INFO    ┇             DeepKNLP ┇ [TRAINING] 100%|████████████████████| 141/141 [0:07:03<0:00:00, 0.32Hz] | (Ep 1.000)
+[01.30 01:06:12] ┇ INFO    ┇             DeepKNLP ┇ Train result: TrainOutput(global_step=141, training_loss=0.10949630602031735, metrics={'train_runtime': 481.9377, 'train_samples_per_second': 37.629, 'train_steps_per_second': 0.293, 'total_flos': 4.48307099902935e+16, 'train_loss': 0.10949630602031735, 'epoch': 1.0})
+[01.30 01:06:12] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[01.30 01:06:12] ┇ INFO    ┇       chrisbase.data ┇ [EXIT] python task2-nerG-trainer2.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds1_llama.json ($=00:08:17.175)
+[01.30 01:06:12] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================

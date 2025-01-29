@@ -85,20 +85,20 @@ class CustomProgressCallback(TrainerCallback):
             self.training_iter.begin()
         self.current_step = 0
         if 0 < self.logging_ratio < 1:
-            logging_times = math.floor(1 / self.logging_ratio)
-            self.logging_steps = set([round(self.epoch_optimization_steps * self.logging_ratio * (i + 1)) for i in range(logging_times)])
-            assert len(self.logging_steps) <= logging_times
-            assert max(self.logging_steps) <= self.epoch_optimization_steps
+            self.logging_steps = set([
+                round(self.epoch_optimization_steps * self.logging_ratio * (i + 1)) % self.epoch_optimization_steps
+                for i in range(math.floor(1 / self.logging_ratio))
+            ])
         if 0 < self.save_ratio < 1:
-            save_times = math.floor(1 / self.save_ratio)
-            self.save_steps = set([round(self.epoch_optimization_steps * self.save_ratio * (i + 1)) for i in range(save_times)])
-            assert len(self.save_steps) <= save_times
-            assert max(self.save_steps) <= self.epoch_optimization_steps
+            self.save_steps = set([
+                round(self.epoch_optimization_steps * self.save_ratio * (i + 1)) % self.epoch_optimization_steps
+                for i in range(math.floor(1 / self.save_ratio))
+            ])
         if 0 < self.eval_ratio < 1:
-            eval_times = math.floor(1 / self.eval_ratio)
-            self.eval_steps = set([round(self.epoch_optimization_steps * self.eval_ratio * (i + 1)) for i in range(eval_times)])
-            assert len(self.eval_steps) <= eval_times
-            assert max(self.eval_steps) <= self.epoch_optimization_steps
+            self.eval_steps = set([
+                round(self.epoch_optimization_steps * self.eval_ratio * (i + 1)) % self.epoch_optimization_steps
+                for i in range(math.floor(1 / self.eval_ratio))
+            ])
 
     def epoch_by_step(self, state: TrainerState):
         state.epoch = state.global_step / self.epoch_optimization_steps
@@ -109,11 +109,11 @@ class CustomProgressCallback(TrainerCallback):
             self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3):.3f})")
             self.training_iter.step(state.global_step - self.current_step)
         self.current_step = state.global_step
-        if self.current_step in self.logging_steps:
+        if self.current_step % self.epoch_optimization_steps in self.logging_steps:
             control.should_log = True
-        if self.current_step in self.save_steps:
+        if self.current_step % self.epoch_optimization_steps in self.save_steps:
             control.should_save = True
-        if self.current_step in self.eval_steps:
+        if self.current_step % self.epoch_optimization_steps in self.eval_steps:
             control.should_evaluate = True
 
     def on_epoch_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
@@ -447,8 +447,8 @@ def main(
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
-        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 8,
-        eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 4,
+        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 16,
+        eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 2,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 1.0,
         logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = 1 / 10,
