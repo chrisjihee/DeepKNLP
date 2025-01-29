@@ -56,7 +56,8 @@ logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 class CustomProgressCallback(TrainerCallback):
 
-    def __init__(self, output_path: str | Path, logging_ratio: float, eval_ratio: float, save_ratio: float):
+    def __init__(self, output_path: str | Path,
+                 logging_ratio: float, eval_ratio: float, save_ratio: float):
         super().__init__()
         self.training_iter: Optional[ProgIter] = None
         self.prediction_iter: Optional[ProgIter] = None
@@ -447,8 +448,8 @@ def main(
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
-        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 16,
-        eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 2,
+        per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 32,
+        eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 1,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 1.0,
         logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = 1 / 10,
