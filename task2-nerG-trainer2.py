@@ -13,6 +13,7 @@ import typer
 from datasets import load_dataset
 from datasets.formatting.formatting import LazyRow
 from datasets.utils.logging import set_verbosity as datasets_set_verbosity
+from torch.utils.data import DataLoader
 from typing_extensions import Annotated
 
 import transformers
@@ -61,8 +62,12 @@ class CustomProgressCallback(TrainerCallback):
         self.current_step: int = 0
         self.output_path: str | Path = output_path
         self.metrics_table: pd.DataFrame = pd.DataFrame()
+        self.train_dataloader: Optional[DataLoader] = None
+        self.epoch_optimization_steps: Optional[int] = None
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        self.train_dataloader: DataLoader = kwargs["train_dataloader"]
+        self.epoch_optimization_steps = len(self.train_dataloader) // args.gradient_accumulation_steps
         if state.is_world_process_zero:
             self.training_iter = ProgIter(
                 verbose=2,
@@ -73,12 +78,13 @@ class CustomProgressCallback(TrainerCallback):
             self.training_iter.begin()
         self.current_step = 0
 
-    def on_step_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
-        if self.training_iter is not None:
-            self.training_iter.set_extra(f"| (Ep {state.epoch:.2f})")
+    def epoch_by_step(self, state: TrainerState):
+        state.epoch = state.global_step / self.epoch_optimization_steps
+        return state.epoch
 
     def on_step_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if self.training_iter is not None:
+            self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3)})")
             self.training_iter.step(state.global_step - self.current_step)
             self.current_step = state.global_step
 
@@ -114,7 +120,7 @@ class CustomProgressCallback(TrainerCallback):
                logs: Optional[Mapping[str, Any]] = None, exclude_keys=("epoch", "step"), **kwargs):
         metrics = {
             "step": state.global_step,
-            "epoch": round(state.epoch, 2),
+            "epoch": round(self.epoch_by_step(state), 3),
         }
         for k, v in logs.items():
             if k not in exclude_keys:
@@ -398,7 +404,7 @@ def main(
         pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev-100.jsonl",
-        pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test.jsonl",
+        pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-100.jsonl",
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
@@ -452,14 +458,8 @@ def main(
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
         deepspeed_plugin=DeepSpeedPlugin() if accelerate_deepspeed else None,
-        project_dir=env.output_dir,
-        log_with=report_to,
     )
-    logger.warning(f"accelerator.is_main_process={accelerator.is_main_process}")
-    if accelerator.is_main_process:
-        for k in os.environ.keys():
-            logger.info(f"os.environ[{k}]={os.environ[k]}")
-        logger.info(f"accelerator={accelerator} / accelerator.state={accelerator.state}")
+    accelerator.wait_for_everyone()
 
     # Setup training arguments
     level_to_str = {n: s for s, n in transformers.utils.logging.log_levels.items()}
@@ -661,10 +661,14 @@ def main(
         )
         trainer.remove_callback(PrinterCallback)
         if accelerator.is_main_process:
-            logger.warning(f"trainer.accelerator={trainer.accelerator} / "
-                           f"trainer.accelerator.state={trainer.accelerator.state}")
+            if trainer.accelerator.state.deepspeed_plugin:
+                logger.info(
+                    f"Using deepspeed configuration:\n"
+                    f"{json.dumps(trainer.accelerator.state.deepspeed_plugin.deepspeed_config, indent=2)}"
+                )
 
         # Train
+        accelerator.wait_for_everyone()
         if args.train.do_train:
             train_result = trainer.train()
             logger.info(f"Train result: {train_result}")
