@@ -41,7 +41,7 @@ class CustomProgressCallback(TrainerCallback):
             eval_epochs: float,
             save_epochs: float,
             progress_seconds: float = 3.0,
-            display_metrics: Mapping[str, str] | None = None,
+            metric_formats: Mapping[str, str] | None = None,
     ):
         super().__init__()
         self.trainer: Trainer = trainer
@@ -53,7 +53,7 @@ class CustomProgressCallback(TrainerCallback):
         self.prediction_pbar: Optional[ProgIter] = None
         self.current_step: int = 0
         self.metrics_table: pd.DataFrame = pd.DataFrame()
-        self.display_metrics: Mapping[str, str] | None = display_metrics
+        self.metric_formats: Mapping[str, str] | None = metric_formats
 
         self.logging_step_set = set()
         self.eval_step_set = set()
@@ -154,8 +154,8 @@ class CustomProgressCallback(TrainerCallback):
             new_metrics_row = pd.DataFrame([metrics])
             self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
             self.metrics_table.to_csv(self.output_path, index=False)
-            if self.training_pbar is not None and self.display_metrics:
-                formatted_metrics = ', '.join([f'{k}={metrics[k]:{self.display_metrics[k]}}' for k in metrics.keys() if k in self.display_metrics])
+            if self.training_pbar is not None and self.metric_formats:
+                formatted_metrics = ', '.join([f'{k}={metrics[k]:{self.metric_formats[k]}}' for k in self.metric_formats if k in metrics])
                 if formatted_metrics:
                     self.training_pbar.set_extra(f"| {formatted_metrics}")
                     if self.prediction_pbar is None:

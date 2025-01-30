@@ -541,14 +541,13 @@ def main(
             eval_epochs=args.train.eval_epochs,
             save_epochs=args.train.save_epochs,
             progress_seconds=args.data.progress_seconds,
-            display_metrics={
+            metric_formats={
                 "epoch": ".2f",
                 "loss": ".4f",
                 "train_loss": ".4f",
                 "eval_average": ".4f",
                 "train_runtime": ".1f",
-                "total_flos": ".5e",
-                "total_pflos": ".3f",
+                "total_pflos": ".3f PFLOPs",
             },
         ))
         if accelerator.is_main_process:
