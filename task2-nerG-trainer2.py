@@ -18,9 +18,9 @@ from typing_extensions import Annotated
 import transformers
 import transformers.utils.logging
 from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments, ExSeq2SeqTrainingArguments
-from DeepKNLP.gner_collator import DataCollatorForGNER
-from DeepKNLP.gner_evaluator import compute_metrics
-from DeepKNLP.gner_trainer import GNERTrainer, CustomProgressCallback
+from DeepKNLP.gner.collator import DataCollatorForGNER
+from DeepKNLP.gner.evaluator import compute_metrics
+from DeepKNLP.gner.trainer import GNERTrainer, CustomProgressCallback
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
 from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, new_path, convert_all_events_in_dir
 from chrisbase.time import from_timestamp, now_stamp
@@ -320,7 +320,7 @@ def main(
         output_name=output_name,
         run_version=run_version,
         logging_level=logging.WARNING,
-        logging_format=LoggingFormat.CHECK_20,
+        logging_format=LoggingFormat.CHECK_24,
         output_file=new_path(output_file, post=from_timestamp(stamp, fmt='%m%d-%H%M%S')),
         logging_file=new_path(logging_file, post=from_timestamp(stamp, fmt='%m%d-%H%M%S')),
         argument_file=new_path(argument_file, post=from_timestamp(stamp, fmt='%m%d-%H%M%S')),
@@ -404,8 +404,8 @@ def main(
     set_verbosity_info("c10d-NullHandler-default")
     if accelerator.is_main_process:
         set_verbosity_info(
-            "transformers.trainer",
-            "chrisbase.data",
+            # "transformers.trainer",
+            "chrisbase",
             "DeepKNLP",
         )
 
@@ -475,7 +475,7 @@ def main(
             max_workers=args.env.max_workers,
             local_rank=args.train.local_rank,
             cache_path_func=args.data.cache_train_path,
-            progress_seconds=args.data.progress_seconds,
+            progress_seconds=args.data.progress_seconds / 5,
         )
         accelerator.wait_for_everyone()
 
@@ -491,7 +491,7 @@ def main(
             max_workers=args.env.max_workers,
             local_rank=args.train.local_rank,
             cache_path_func=args.data.cache_eval_path,
-            progress_seconds=args.data.progress_seconds,
+            progress_seconds=args.data.progress_seconds / 5,
         )
         accelerator.wait_for_everyone()
 
@@ -507,7 +507,7 @@ def main(
             max_workers=args.env.max_workers,
             local_rank=args.train.local_rank,
             cache_path_func=args.data.cache_pred_path,
-            progress_seconds=args.data.progress_seconds,
+            progress_seconds=args.data.progress_seconds / 5,
         )
         accelerator.wait_for_everyone()
 

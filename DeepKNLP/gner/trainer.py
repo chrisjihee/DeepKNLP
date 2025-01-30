@@ -7,6 +7,8 @@ from transformers import Trainer
 from transformers.trainer import *
 from transformers.trainer_seq2seq import Seq2SeqTrainer
 
+logger = logging.get_logger(__name__)
+
 
 class TrainingValues(BaseModel):
     num_train_epochs: float
@@ -69,22 +71,22 @@ class CustomProgressCallback(TrainerCallback):
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if state.is_world_process_zero:
             logger.info(hr(c='-'))
-            logger.info(f"===== Beginning Training =====")
-            logger.info(f" > Train Epochs       = {self.trainer.args.num_train_epochs}")
-            logger.info(f" > Train Examples     = {self.training_values.num_examples:,}")
-            logger.info(f" > Train Batch Size   = {self.training_values.total_train_batch_size:,}"
+            logger.info(f"***** Beginning Training *****")
+            logger.info(f"  - Train Epochs       = {self.trainer.args.num_train_epochs}")
+            logger.info(f"  - Train Examples     = {self.training_values.num_examples:,}")
+            logger.info(f"  - Train Batch Size   = {self.training_values.total_train_batch_size:,}"
                         f" = {self.trainer._train_batch_size} * {self.trainer.args.gradient_accumulation_steps} * {self.trainer.args.world_size}")
-            logger.info(f" > Train Optim Steps  = {self.training_values.max_steps:,}")
-            logger.info(f" > Train Model Params = {get_model_param_count(self.trainer.model, trainable_only=True):,}")
-            logger.info(f" > Eval Examples      = {len(self.trainer.eval_dataset):,}")
-            logger.info(f" > Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
+            logger.info(f"  - Train Optim Steps  = {self.training_values.max_steps:,}")
+            logger.info(f"  - Train Model Params = {get_model_param_count(self.trainer.model, trainable_only=True):,}")
+            logger.info(f"  - Eval Examples      = {len(self.trainer.eval_dataset):,}")
+            logger.info(f"  - Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
                         f" = {self.trainer.args.per_device_eval_batch_size} * {self.trainer.args.world_size}")
             self.training_pbar = ProgIter(
                 time_thresh=self.progress_seconds,
                 verbose=3,
                 stream=LoggerWriter(logger),
                 total=state.max_steps,
-                desc="[TRAINING]",
+                desc="[training]",
             )
             self.training_pbar.begin()
         self.current_step = 0
@@ -117,7 +119,7 @@ class CustomProgressCallback(TrainerCallback):
                         verbose=3,
                         stream=LoggerWriter(logger),
                         total=len(eval_dataloader),
-                        desc="[METERING]",
+                        desc="[checking]",
                     )
                     self.prediction_pbar.begin()
                 if self.prediction_pbar is not None:
@@ -215,12 +217,12 @@ class GNERTrainer(Seq2SeqTrainer):
 
         batch_size = self.args.eval_batch_size
 
-        logger.info(f"***** Running {description} *****")
-        if has_length(dataloader):
-            logger.info(f"  Num examples = {self.num_examples(dataloader)}")
-        else:
-            logger.info("  Num examples: Unknown")
-        logger.info(f"  Batch size = {batch_size}")
+        # logger.info(f"***** Running {description} *****")
+        # if has_length(dataloader):
+        #     logger.info(f"  Num examples = {self.num_examples(dataloader)}")
+        # else:
+        #     logger.info("  Num examples: Unknown")
+        # logger.info(f"  Batch size = {batch_size}")
 
         model.eval()
 

@@ -1,8 +1,8 @@
-import random
+import json
 import logging
 import os
+import random
 import sys
-import json
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -11,6 +11,9 @@ import numpy as np
 from datasets import load_dataset
 
 import transformers
+from DeepKNLP.gner.collator import DataCollatorForGNER
+from DeepKNLP.gner.evaluator import compute_metrics
+from DeepKNLP.gner.trainer import GNERTrainer
 from transformers import (
     AutoConfig,
     AutoModelForCausalLM,
@@ -18,16 +21,8 @@ from transformers import (
     AutoTokenizer,
     HfArgumentParser,
     Seq2SeqTrainingArguments,
-    DataCollatorForSeq2Seq,
     set_seed,
 )
-from transformers.trainer_utils import get_last_checkpoint
-from transformers.utils import check_min_version, is_offline_mode, send_example_telemetry
-from transformers.utils.versions import require_version
-
-from DeepKNLP.gner_trainer import GNERTrainer
-from DeepKNLP.gner_collator import DataCollatorForGNER
-from DeepKNLP.gner_evaluator import compute_metrics
 
 # off wandb
 os.environ['WANDB_DISABLED'] = "True"
