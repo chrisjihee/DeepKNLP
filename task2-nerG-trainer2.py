@@ -547,7 +547,7 @@ def main(
                 "loss": ".4f",
                 "train_loss": ".4f",
                 "eval_average": ".4f",
-                "total_pflos": ".3f PFLOPs",
+                "total_pflos": ".3f",
             },
         ))
         if accelerator.is_main_process:
