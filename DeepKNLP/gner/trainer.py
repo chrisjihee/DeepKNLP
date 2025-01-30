@@ -180,7 +180,6 @@ class GNERTrainer(Seq2SeqTrainer):
         Works both with or without labels.
         """
         args = self.args
-
         prediction_loss_only = prediction_loss_only if prediction_loss_only is not None else args.prediction_loss_only
 
         # if eval is called w/o train, handle model prep here
@@ -216,14 +215,6 @@ class GNERTrainer(Seq2SeqTrainer):
                 model = model.to(dtype=torch.bfloat16, device=args.device)
 
         batch_size = self.args.eval_batch_size
-
-        # logger.info(f"***** Running {description} *****")
-        # if has_length(dataloader):
-        #     logger.info(f"  Num examples = {self.num_examples(dataloader)}")
-        # else:
-        #     logger.info("  Num examples: Unknown")
-        # logger.info(f"  Batch size = {batch_size}")
-
         model.eval()
 
         self.callback_handler.eval_dataloader = dataloader
