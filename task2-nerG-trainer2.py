@@ -145,8 +145,8 @@ class CustomProgressCallback(TrainerCallback):
             self.training_pbar = None
 
     def on_prediction_step(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, eval_dataloader=None, **kwargs):
-        if eval_dataloader and has_length(eval_dataloader):
-            if state.is_world_process_zero:
+        if state.is_world_process_zero:
+            if eval_dataloader and has_length(eval_dataloader):
                 if self.prediction_pbar is None:
                     self.prediction_pbar = ProgIter(
                         time_thresh=self.progress_seconds,
@@ -175,22 +175,23 @@ class CustomProgressCallback(TrainerCallback):
 
     def on_log(self, args: TrainingArguments, state: TrainerState, control: TrainerControl,
                logs: Optional[Mapping[str, Any]] = None, exclude_keys=("epoch", "step"), **kwargs):
-        metrics = {
-            "step": state.global_step,
-            "epoch": round(self.epoch_by_step(state), 3),
-        }
-        for k, v in logs.items():
-            if k not in exclude_keys:
-                metrics[k] = v
-        new_metrics_row = pd.DataFrame([metrics])
-        self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
-        self.metrics_table.to_csv(self.output_path, index=False)
-        if self.training_pbar is not None and self.display_metrics:
-            formatted_metrics = ', '.join([f'{k}={metrics[k]:{self.display_metrics[k]}}' for k in metrics.keys() if k in self.display_metrics])
-            if formatted_metrics:
-                self.training_pbar.set_extra(f"| {formatted_metrics}")
-                if self.prediction_pbar is None:
-                    self.training_pbar.display_message()
+        if state.is_world_process_zero:
+            metrics = {
+                "step": state.global_step,
+                "epoch": round(self.epoch_by_step(state), 3),
+            }
+            for k, v in logs.items():
+                if k not in exclude_keys:
+                    metrics[k] = v
+            new_metrics_row = pd.DataFrame([metrics])
+            self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
+            self.metrics_table.to_csv(self.output_path, index=False)
+            if self.training_pbar is not None and self.display_metrics:
+                formatted_metrics = ', '.join([f'{k}={metrics[k]:{self.display_metrics[k]}}' for k in metrics.keys() if k in self.display_metrics])
+                if formatted_metrics:
+                    self.training_pbar.set_extra(f"| {formatted_metrics}")
+                    if self.prediction_pbar is None:
+                        self.training_pbar.display_message()
 
 
 def update_progress(
@@ -694,7 +695,7 @@ def main(
         trainer.remove_callback(PrinterCallback)
         trainer.add_callback(CustomProgressCallback(
             trainer=trainer,
-            output_path=args.env.output_dir / new_path(args.env.output_file, post=args.train.local_rank),
+            output_path=args.env.output_dir / args.env.output_file,
             logging_epochs=args.train.logging_epochs,
             eval_epochs=args.train.eval_epochs,
             save_epochs=args.train.save_epochs,
