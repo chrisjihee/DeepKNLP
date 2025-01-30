@@ -11,6 +11,8 @@ import numpy as np
 import pandas as pd
 import torch
 import typer
+from accelerate import Accelerator, DeepSpeedPlugin
+from accelerate.utils import gather_object
 from datasets import load_dataset
 from datasets.formatting.formatting import LazyRow
 from datasets.utils.logging import set_verbosity as datasets_set_verbosity
@@ -23,11 +25,8 @@ from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArgume
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
-from accelerate import Accelerator
-from accelerate import DeepSpeedPlugin
-from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, new_path, convert_all_events_in_dir
+from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, new_path, convert_all_events_in_dir, hr
 from chrisbase.time import from_timestamp, now_stamp
 from chrisdata.ner import GenNERSampleWrapper
 from progiter import ProgIter
@@ -46,6 +45,7 @@ from transformers import (
     TrainingArguments,
     set_seed,
 )
+from transformers.trainer_pt_utils import get_model_param_count
 from transformers.trainer_utils import has_length
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
 from transformers.utils.logging import set_verbosity as transformers_set_verbosity
@@ -62,17 +62,17 @@ class TrainingValues(BaseModel):
     epoch_based: bool
     len_dataloader: int
     max_steps: int
+    total_train_batch_size: int
 
     @classmethod
     def from_trainer(cls, trainer: Trainer):
+        total_train_batch_size = trainer.args.world_size * trainer._train_batch_size * trainer.args.gradient_accumulation_steps
         values = trainer.set_initial_training_values(
             args=trainer.args,
             dataloader=trainer.get_train_dataloader(),
-            total_train_batch_size=trainer.args.world_size *
-                                   trainer._train_batch_size *
-                                   trainer.args.gradient_accumulation_steps
+            total_train_batch_size=total_train_batch_size
         )
-        return cls(**dict(zip(cls.__annotations__.keys(), values)))
+        return cls(**dict(zip(cls.__annotations__.keys(), list(values) + [total_train_batch_size])))
 
 
 class CustomProgressCallback(TrainerCallback):
@@ -114,8 +114,17 @@ class CustomProgressCallback(TrainerCallback):
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if state.is_world_process_zero:
-            # TODO: suppress transformers.trainer's message (***** Running training *****)
-            # - using transformers.trainer_pt_utils.get_model_param_count(self.trainer.model, trainable_only=True)
+            logger.info(hr(c='-'))
+            logger.info(f"===== Beginning Training =====")
+            logger.info(f" > Train Epochs       = {self.trainer.args.num_train_epochs}")
+            logger.info(f" > Train Examples     = {self.training_values.num_examples:,}")
+            logger.info(f" > Train Batch Size   = {self.training_values.total_train_batch_size:,}"
+                        f" = {self.trainer._train_batch_size} * {self.trainer.args.gradient_accumulation_steps} * {self.trainer.args.world_size}")
+            logger.info(f" > Train Optim Steps  = {self.training_values.max_steps:,}")
+            logger.info(f" > Train Model Params = {get_model_param_count(self.trainer.model, trainable_only=True):,}")
+            logger.info(f" > Eval Examples      = {len(self.trainer.eval_dataset):,}")
+            logger.info(f" > Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
+                        f" = {self.trainer.args.per_device_eval_batch_size} * {self.trainer.args.world_size}")
             self.training_pbar = ProgIter(
                 time_thresh=self.progress_seconds,
                 verbose=3,
@@ -143,6 +152,7 @@ class CustomProgressCallback(TrainerCallback):
         if self.training_pbar is not None:
             self.training_pbar.end()
             self.training_pbar = None
+            logger.info(hr(c='-'))
 
     def on_prediction_step(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, eval_dataloader=None, **kwargs):
         if state.is_world_process_zero:
