@@ -2,6 +2,7 @@
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch>2.5.0
 lightning>=2.5.0
+accelerate>=1.3.0
 sentencepiece
 scikit-learn
 torchmetrics
