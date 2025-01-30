@@ -19,7 +19,7 @@ from typing_extensions import Annotated
 
 import transformers
 import transformers.utils.logging
-from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments
+from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments, ExSeq2SeqTrainingArguments
 from DeepKNLP.gner_collator import DataCollatorForGNER
 from DeepKNLP.gner_evaluator import compute_metrics
 from DeepKNLP.gner_trainer import GNERTrainer
@@ -59,7 +59,7 @@ class TrainingValues(BaseModel):
     num_train_epochs: float
     num_update_steps_per_epoch: int
     num_examples: int
-    num_train_samples: int
+    num_train_samples: float
     epoch_based: bool
     len_dataloader: int
     max_steps: int
@@ -82,9 +82,9 @@ class CustomProgressCallback(TrainerCallback):
             self,
             trainer: Trainer,
             output_path: str | Path,
-            logging_ratio: float,
-            eval_ratio: float,
-            save_ratio: float,
+            logging_epochs: float,
+            eval_epochs: float,
+            save_epochs: float,
     ):
         super().__init__()
         self.trainer: Trainer = trainer
@@ -96,18 +96,18 @@ class CustomProgressCallback(TrainerCallback):
         self.current_step: int = 0
         self.metrics_table: pd.DataFrame = pd.DataFrame()
 
-        self.logging_steps = set()
-        self.save_steps = set()
-        self.eval_steps = set()
-        if 0 < logging_ratio < 1:
-            for i in range(int(math.ceil(self.training_values.num_train_epochs) / logging_ratio)):
-                self.logging_steps.add(round(self.training_values.num_update_steps_per_epoch * logging_ratio * (i + 1)))
-        if 0 < eval_ratio < 1:
-            for i in range(int(math.ceil(self.training_values.num_train_epochs) / eval_ratio)):
-                self.eval_steps.add(round(self.training_values.num_update_steps_per_epoch * eval_ratio * (i + 1)))
-        if 0 < save_ratio < 1:
-            for i in range(int(math.ceil(self.training_values.num_train_epochs) / save_ratio)):
-                self.save_steps.add(round(self.training_values.num_update_steps_per_epoch * save_ratio * (i + 1)))
+        self.logging_step_set = set()
+        self.eval_step_set = set()
+        self.save_step_set = set()
+        if 0 < logging_epochs:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / logging_epochs)):
+                self.logging_step_set.add(round(self.training_values.num_update_steps_per_epoch * logging_epochs * (i + 1)))
+        if 0 < eval_epochs:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / eval_epochs)):
+                self.eval_step_set.add(round(self.training_values.num_update_steps_per_epoch * eval_epochs * (i + 1)))
+        if 0 < save_epochs:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / save_epochs)):
+                self.save_step_set.add(round(self.training_values.num_update_steps_per_epoch * save_epochs * (i + 1)))
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if state.is_world_process_zero:
@@ -130,12 +130,12 @@ class CustomProgressCallback(TrainerCallback):
             self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3):.3f})")
             self.training_iter.step(state.global_step - self.current_step)
         self.current_step = state.global_step
-        if self.current_step in self.logging_steps:
+        if self.current_step in self.logging_step_set:
             control.should_log = True
-        if self.current_step in self.save_steps:
-            control.should_save = True
-        if self.current_step in self.eval_steps:
+        if self.current_step in self.eval_step_set:
             control.should_evaluate = True
+        if self.current_step in self.save_step_set:
+            control.should_save = True
 
     def on_train_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         control.should_log = True
@@ -143,19 +143,20 @@ class CustomProgressCallback(TrainerCallback):
             self.training_iter.end()
             self.training_iter = None
 
-    def on_prediction_step(self, args: TrainingArguments, state: TrainerState, control: TrainerControl,
-                           eval_dataloader=None, **kwargs):
-        if state.is_world_process_zero and has_length(eval_dataloader):
-            if self.prediction_iter is None:
-                self.prediction_iter = ProgIter(
-                    time_thresh=5.0,
-                    verbose=2,
-                    stream=LoggerWriter(logger),
-                    total=len(eval_dataloader),
-                    desc="[METERING]",
-                )
-                self.prediction_iter.begin()
-            self.prediction_iter.step()
+    def on_prediction_step(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, eval_dataloader=None, **kwargs):
+        if eval_dataloader and has_length(eval_dataloader):
+            if state.is_world_process_zero:
+                if self.prediction_iter is None:
+                    self.prediction_iter = ProgIter(
+                        time_thresh=5.0,
+                        verbose=2,
+                        stream=LoggerWriter(logger),
+                        total=len(eval_dataloader),
+                        desc="[METERING]",
+                    )
+                    self.prediction_iter.begin()
+                if self.prediction_iter is not None:
+                    self.prediction_iter.step()
 
     def on_evaluate(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if self.prediction_iter is not None:
@@ -408,8 +409,7 @@ def preprocess_dataset(
     return dataset
 
 
-def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None,
-                        save_suffix=None):
+def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None, save_suffix=None):
     preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
     decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
     if not is_encoder_decoder:
@@ -458,34 +458,30 @@ def main(
         train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/zero-shot-train.jsonl",
         eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev-100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-100.jsonl",
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
-        ignore_pad_token_for_loss: Annotated[
-            bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
+        ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
-        report_to: Annotated[str, typer.Option("--report_to")] = "none",
-        # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
-        gradient_checkpointing: Annotated[
-            bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
+        report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
+        gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 8,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 4,
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 32,
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 1,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
-        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 6,
-        logging_ratio: Annotated[float, typer.Option("--logging_ratio")] = 1 / 10,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 2.5,
+        logging_epochs: Annotated[float, typer.Option("--logging_epochs")] = 2.5 / 10,
+        eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 2.5 / 5,
+        save_epochs: Annotated[float, typer.Option("--save_epochs")] = -1,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = -1,
-        save_ratio: Annotated[float, typer.Option("--save_ratio")] = -1,
-        save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
-        eval_ratio: Annotated[float, typer.Option("--eval_ratio")] = 1 / 3,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
+        save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         # for DeepSpeed
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,  # for deepspeed.launcher.runner
-        accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,
-        # for accelerate.commands.launch
+        accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,  # for accelerate.commands.launch
 ):
     # Setup project environment
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
@@ -529,12 +525,12 @@ def main(
             train_file=train_file,
             eval_file=eval_file,
             pred_file=pred_file,
+            use_cache_data=use_cache_data,
             max_source_length=max_source_length,
             max_target_length=max_target_length,
             ignore_pad_token_for_loss=ignore_pad_token_for_loss,
-            use_cache_data=use_cache_data,
         ),
-        train=Seq2SeqTrainingArguments(
+        train=ExSeq2SeqTrainingArguments(
             disable_tqdm=True,
             predict_with_generate=True,
             generation_max_length=generation_max_length,
@@ -554,12 +550,15 @@ def main(
             eval_accumulation_steps=eval_accumulation_steps,
             num_train_epochs=num_train_epochs,
             max_steps=max_steps,
-            logging_strategy="steps" if logging_steps > 0 else "epoch" if logging_steps == 0 else "no",
-            save_strategy="steps" if save_steps > 0 else "epoch" if save_steps == 0 else "no",
-            eval_strategy="steps" if eval_steps > 0 else "epoch" if eval_steps == 0 else "no",
-            logging_steps=logging_ratio if 0 < logging_ratio < 1 else logging_steps if logging_steps >= 1 else sys.maxsize,
-            save_steps=save_ratio if 0 < save_ratio < 1 else save_steps if save_steps >= 1 else sys.maxsize,
-            eval_steps=eval_ratio if 0 < eval_ratio < 1 else eval_steps if eval_steps >= 1 else sys.maxsize,
+            logging_strategy="steps" if logging_steps >= 1 else "epoch" if logging_epochs == 1 else "no",
+            eval_strategy="steps" if eval_steps >= 1 else "epoch" if eval_epochs == 1 else "no",
+            save_strategy="steps" if save_steps >= 1 else "epoch" if save_epochs == 1 else "no",
+            logging_steps=logging_steps if logging_steps >= 1 else sys.maxsize,
+            eval_steps=eval_steps if eval_steps >= 1 else sys.maxsize,
+            save_steps=save_steps if save_steps >= 1 else sys.maxsize,
+            logging_epochs=logging_epochs,
+            eval_epochs=eval_epochs,
+            save_epochs=save_epochs,
             learning_rate=learning_rate,
             lr_scheduler_type="cosine",
             warmup_ratio=0.04,
@@ -719,9 +718,9 @@ def main(
         trainer.add_callback(CustomProgressCallback(
             trainer=trainer,
             output_path=args.env.output_dir / args.env.output_file,
-            logging_ratio=logging_ratio,
-            eval_ratio=eval_ratio,
-            save_ratio=save_ratio,
+            logging_epochs=args.train.logging_epochs,
+            eval_epochs=args.train.eval_epochs,
+            save_epochs=args.train.save_epochs,
         ))
         if accelerator.is_main_process:
             if trainer.accelerator.state.deepspeed_plugin:
