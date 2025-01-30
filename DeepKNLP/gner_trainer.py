@@ -1,5 +1,161 @@
+import pandas as pd
+from pydantic import BaseModel
+
+from chrisbase.io import LoggerWriter, hr
+from progiter import ProgIter
+from transformers import Trainer
 from transformers.trainer import *
 from transformers.trainer_seq2seq import Seq2SeqTrainer
+
+
+class TrainingValues(BaseModel):
+    num_train_epochs: float
+    num_update_steps_per_epoch: int
+    num_examples: int
+    num_train_samples: float
+    epoch_based: bool
+    len_dataloader: int
+    max_steps: int
+    total_train_batch_size: int
+
+    @classmethod
+    def from_trainer(cls, trainer: Trainer):
+        total_train_batch_size = trainer.args.world_size * trainer._train_batch_size * trainer.args.gradient_accumulation_steps
+        values = trainer.set_initial_training_values(
+            args=trainer.args,
+            dataloader=trainer.get_train_dataloader(),
+            total_train_batch_size=total_train_batch_size
+        )
+        return cls(**dict(zip(cls.__annotations__.keys(), list(values) + [total_train_batch_size])))
+
+
+class CustomProgressCallback(TrainerCallback):
+
+    def __init__(
+            self,
+            trainer: Trainer,
+            output_path: str | Path,
+            logging_epochs: float,
+            eval_epochs: float,
+            save_epochs: float,
+            progress_seconds: float = 3.0,
+            display_metrics: Mapping[str, str] | None = None,
+    ):
+        super().__init__()
+        self.trainer: Trainer = trainer
+        self.output_path: str | Path = output_path
+        self.training_values: TrainingValues = TrainingValues.from_trainer(trainer)
+        self.progress_seconds: float = progress_seconds
+
+        self.training_pbar: Optional[ProgIter] = None
+        self.prediction_pbar: Optional[ProgIter] = None
+        self.current_step: int = 0
+        self.metrics_table: pd.DataFrame = pd.DataFrame()
+        self.display_metrics: Mapping[str, str] | None = display_metrics
+
+        self.logging_step_set = set()
+        self.eval_step_set = set()
+        self.save_step_set = set()
+        if 0 < logging_epochs:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / logging_epochs)):
+                self.logging_step_set.add(round(self.training_values.num_update_steps_per_epoch * logging_epochs * (i + 1)))
+        if 0 < eval_epochs:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / eval_epochs)):
+                self.eval_step_set.add(round(self.training_values.num_update_steps_per_epoch * eval_epochs * (i + 1)))
+        if 0 < save_epochs:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / save_epochs)):
+                self.save_step_set.add(round(self.training_values.num_update_steps_per_epoch * save_epochs * (i + 1)))
+
+    def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if state.is_world_process_zero:
+            logger.info(hr(c='-'))
+            logger.info(f"===== Beginning Training =====")
+            logger.info(f" > Train Epochs       = {self.trainer.args.num_train_epochs}")
+            logger.info(f" > Train Examples     = {self.training_values.num_examples:,}")
+            logger.info(f" > Train Batch Size   = {self.training_values.total_train_batch_size:,}"
+                        f" = {self.trainer._train_batch_size} * {self.trainer.args.gradient_accumulation_steps} * {self.trainer.args.world_size}")
+            logger.info(f" > Train Optim Steps  = {self.training_values.max_steps:,}")
+            logger.info(f" > Train Model Params = {get_model_param_count(self.trainer.model, trainable_only=True):,}")
+            logger.info(f" > Eval Examples      = {len(self.trainer.eval_dataset):,}")
+            logger.info(f" > Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
+                        f" = {self.trainer.args.per_device_eval_batch_size} * {self.trainer.args.world_size}")
+            self.training_pbar = ProgIter(
+                time_thresh=self.progress_seconds,
+                verbose=3,
+                stream=LoggerWriter(logger),
+                total=state.max_steps,
+                desc="[TRAINING]",
+            )
+            self.training_pbar.begin()
+        self.current_step = 0
+
+    def epoch_by_step(self, state: TrainerState):
+        state.epoch = state.global_step / self.training_values.num_update_steps_per_epoch
+        return state.epoch
+
+    def on_step_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if self.training_pbar is not None:
+            self.training_pbar.step(state.global_step - self.current_step, display=False)
+        self.current_step = state.global_step
+        control.should_log = control.should_log or self.current_step in self.logging_step_set
+        control.should_save = control.should_save or self.current_step in self.save_step_set
+        control.should_evaluate = control.should_evaluate or self.current_step in self.eval_step_set
+
+    def on_train_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        control.should_log = True
+        if self.training_pbar is not None:
+            self.training_pbar.end()
+            self.training_pbar = None
+            logger.info(hr(c='-'))
+
+    def on_prediction_step(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, eval_dataloader=None, **kwargs):
+        if state.is_world_process_zero:
+            if eval_dataloader and has_length(eval_dataloader):
+                if self.prediction_pbar is None:
+                    self.prediction_pbar = ProgIter(
+                        time_thresh=self.progress_seconds,
+                        verbose=3,
+                        stream=LoggerWriter(logger),
+                        total=len(eval_dataloader),
+                        desc="[METERING]",
+                    )
+                    self.prediction_pbar.begin()
+                if self.prediction_pbar is not None:
+                    self.prediction_pbar.step()
+
+    def on_evaluate(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if self.prediction_pbar is not None:
+            self.prediction_pbar.end()
+            self.prediction_pbar = None
+            if self.training_pbar is not None:
+                self.training_pbar.display_message()
+
+    def on_predict(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if self.prediction_pbar is not None:
+            self.prediction_pbar.end()
+            self.prediction_pbar = None
+            if self.training_pbar is not None:
+                self.training_pbar.display_message()
+
+    def on_log(self, args: TrainingArguments, state: TrainerState, control: TrainerControl,
+               logs: Optional[Mapping[str, Any]] = None, exclude_keys=("epoch", "step"), **kwargs):
+        if state.is_world_process_zero:
+            metrics = {
+                "step": state.global_step,
+                "epoch": round(self.epoch_by_step(state), 3),
+            }
+            for k, v in logs.items():
+                if k not in exclude_keys:
+                    metrics[k] = v
+            new_metrics_row = pd.DataFrame([metrics])
+            self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
+            self.metrics_table.to_csv(self.output_path, index=False)
+            if self.training_pbar is not None and self.display_metrics:
+                formatted_metrics = ', '.join([f'{k}={metrics[k]:{self.display_metrics[k]}}' for k in metrics.keys() if k in self.display_metrics])
+                if formatted_metrics:
+                    self.training_pbar.set_extra(f"| {formatted_metrics}")
+                    if self.prediction_pbar is None:
+                        self.training_pbar.display_message()
 
 
 class GNERTrainer(Seq2SeqTrainer):
