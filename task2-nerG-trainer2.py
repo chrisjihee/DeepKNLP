@@ -14,7 +14,7 @@ import typer
 from datasets import load_dataset
 from datasets.formatting.formatting import LazyRow
 from datasets.utils.logging import set_verbosity as datasets_set_verbosity
-from torch.utils.data import DataLoader
+from pydantic import BaseModel
 from typing_extensions import Annotated
 
 import transformers
@@ -38,13 +38,14 @@ from transformers import (
     AutoModelForSeq2SeqLM,
     PreTrainedTokenizerBase,
     BatchEncoding,
+    Trainer,
     TrainerState,
     TrainerControl,
+    TrainerCallback,
+    PrinterCallback,
     TrainingArguments,
     Seq2SeqTrainingArguments,
     set_seed,
-    TrainerCallback,
-    PrinterCallback,
 )
 from transformers.trainer_utils import has_length
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
@@ -54,28 +55,61 @@ from transformers.utils.logging import set_verbosity as transformers_set_verbosi
 logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 
+class TrainingValues(BaseModel):
+    num_train_epochs: float
+    num_update_steps_per_epoch: int
+    num_examples: int
+    num_train_samples: int
+    epoch_based: bool
+    len_dataloader: int
+    max_steps: int
+
+    @classmethod
+    def from_trainer(cls, trainer: Trainer):
+        values = trainer.set_initial_training_values(
+            args=trainer.args,
+            dataloader=trainer.get_train_dataloader(),
+            total_train_batch_size=trainer.args.world_size *
+                                   trainer._train_batch_size *
+                                   trainer.args.gradient_accumulation_steps
+        )
+        return cls(**dict(zip(cls.__annotations__.keys(), values)))
+
+
 class CustomProgressCallback(TrainerCallback):
 
-    def __init__(self, output_path: str | Path,
-                 logging_ratio: float, eval_ratio: float, save_ratio: float):
+    def __init__(
+            self,
+            trainer: Trainer,
+            output_path: str | Path,
+            logging_ratio: float,
+            eval_ratio: float,
+            save_ratio: float,
+    ):
         super().__init__()
+        self.trainer: Trainer = trainer
+        self.output_path: str | Path = output_path
+        self.training_values: TrainingValues = TrainingValues.from_trainer(trainer)
+
         self.training_iter: Optional[ProgIter] = None
         self.prediction_iter: Optional[ProgIter] = None
         self.current_step: int = 0
-        self.output_path: str | Path = output_path
         self.metrics_table: pd.DataFrame = pd.DataFrame()
-        self.train_dataloader: Optional[DataLoader] = None
-        self.epoch_optimization_steps: Optional[int] = None
-        self.logging_ratio = logging_ratio if 0 < logging_ratio < 1 else -1
-        self.eval_ratio = eval_ratio if 0 < eval_ratio < 1 else -1
-        self.save_ratio = save_ratio if 0 < save_ratio < 1 else -1
-        self.logging_steps = []
-        self.save_steps = []
-        self.eval_steps = []
+
+        self.logging_steps = set()
+        self.save_steps = set()
+        self.eval_steps = set()
+        if 0 < logging_ratio < 1:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / logging_ratio)):
+                self.logging_steps.add(round(self.training_values.num_update_steps_per_epoch * logging_ratio * (i + 1)))
+        if 0 < eval_ratio < 1:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / eval_ratio)):
+                self.eval_steps.add(round(self.training_values.num_update_steps_per_epoch * eval_ratio * (i + 1)))
+        if 0 < save_ratio < 1:
+            for i in range(int(math.ceil(self.training_values.num_train_epochs) / save_ratio)):
+                self.save_steps.add(round(self.training_values.num_update_steps_per_epoch * save_ratio * (i + 1)))
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
-        self.train_dataloader: DataLoader = kwargs["train_dataloader"]
-        self.epoch_optimization_steps = len(self.train_dataloader) // args.gradient_accumulation_steps
         if state.is_world_process_zero:
             self.training_iter = ProgIter(
                 time_thresh=5.0,
@@ -86,24 +120,9 @@ class CustomProgressCallback(TrainerCallback):
             )
             self.training_iter.begin()
         self.current_step = 0
-        if 0 < self.logging_ratio < 1:
-            self.logging_steps = set([
-                round(self.epoch_optimization_steps * self.logging_ratio * (i + 1)) % self.epoch_optimization_steps
-                for i in range(math.floor(1 / self.logging_ratio))
-            ])
-        if 0 < self.save_ratio < 1:
-            self.save_steps = set([
-                round(self.epoch_optimization_steps * self.save_ratio * (i + 1)) % self.epoch_optimization_steps
-                for i in range(math.floor(1 / self.save_ratio))
-            ])
-        if 0 < self.eval_ratio < 1:
-            self.eval_steps = set([
-                round(self.epoch_optimization_steps * self.eval_ratio * (i + 1)) % self.epoch_optimization_steps
-                for i in range(math.floor(1 / self.eval_ratio))
-            ])
 
     def epoch_by_step(self, state: TrainerState):
-        state.epoch = state.global_step / self.epoch_optimization_steps
+        state.epoch = state.global_step / self.training_values.num_update_steps_per_epoch
         return state.epoch
 
     def on_step_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
@@ -111,15 +130,12 @@ class CustomProgressCallback(TrainerCallback):
             self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3):.3f})")
             self.training_iter.step(state.global_step - self.current_step)
         self.current_step = state.global_step
-        if self.current_step % self.epoch_optimization_steps in self.logging_steps:
+        if self.current_step in self.logging_steps:
             control.should_log = True
-        if self.current_step % self.epoch_optimization_steps in self.save_steps:
+        if self.current_step in self.save_steps:
             control.should_save = True
-        if self.current_step % self.epoch_optimization_steps in self.eval_steps:
+        if self.current_step in self.eval_steps:
             control.should_evaluate = True
-
-    def on_epoch_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
-        control.should_log = True
 
     def on_train_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         control.should_log = True
@@ -689,16 +705,9 @@ def main(
         )
 
         # Initialize trainer
-        progress_callback = CustomProgressCallback(
-            output_path=args.env.output_dir / args.env.output_file,
-            logging_ratio=logging_ratio,
-            eval_ratio=eval_ratio,
-            save_ratio=save_ratio,
-        )
         trainer = GNERTrainer(
             args=args.train,
             model=model,
-            callbacks=[progress_callback],
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
@@ -707,12 +716,22 @@ def main(
             is_encoder_decoder=is_encoder_decoder,
         )
         trainer.remove_callback(PrinterCallback)
+        trainer.add_callback(CustomProgressCallback(
+            trainer=trainer,
+            output_path=args.env.output_dir / args.env.output_file,
+            logging_ratio=logging_ratio,
+            eval_ratio=eval_ratio,
+            save_ratio=save_ratio,
+        ))
         if accelerator.is_main_process:
             if trainer.accelerator.state.deepspeed_plugin:
                 logger.info(
                     f"Using deepspeed configuration:\n"
                     f"{json.dumps(trainer.accelerator.state.deepspeed_plugin.deepspeed_config, indent=2)}"
                 )
+            logger.info("Using callbacks:")
+            for x in trainer.callback_handler.callbacks:
+                logger.info(f"  - {type(x).__module__}.{type(x).__name__}()")
 
         # Train
         accelerator.wait_for_everyone()
