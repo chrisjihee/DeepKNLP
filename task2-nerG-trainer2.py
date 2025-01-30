@@ -556,6 +556,7 @@ def main(
         ),
     )
     args.env.local_rank = args.train.local_rank
+    accelerator.wait_for_everyone()
 
     # Setup logging
     process_log_level = args.train.get_process_log_level()
@@ -569,14 +570,6 @@ def main(
             "chrisbase.data",
             "DeepKNLP",
         )
-
-    # Log on each process
-    logger.info(
-        f"Process rank: {args.train.local_rank}, device: {args.train.device}, n_gpu: {args.train.n_gpu}, "
-        f"distributed training: {args.train.parallel_mode.value == 'distributed'}, "
-        f"16-bits training: {args.train.fp16 or args.train.bf16}"
-    )
-    accelerator.wait_for_everyone()
 
     # Set random seed
     set_seed(args.train.seed)
