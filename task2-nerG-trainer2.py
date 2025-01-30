@@ -36,6 +36,7 @@ from transformers import (
     PrinterCallback,
     set_seed,
 )
+from transformers.trainer_utils import TrainOutput
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
 from transformers.utils.logging import set_verbosity as transformers_set_verbosity
 
@@ -546,7 +547,6 @@ def main(
                 "loss": ".4f",
                 "train_loss": ".4f",
                 "eval_average": ".4f",
-                "train_runtime": ".1f",
                 "total_pflos": ".3f PFLOPs",
             },
         ))
@@ -563,8 +563,8 @@ def main(
         # Train
         accelerator.wait_for_everyone()
         if args.train.do_train:
-            train_result = trainer.train()
-            logger.info(f"Train result: {train_result}")
+            train_result: TrainOutput = trainer.train()
+            logger.info(f"Train output metrics: {train_result.metrics}")
             convert_all_events_in_dir(args.train.output_dir)
 
     accelerator.end_training()
