@@ -93,8 +93,8 @@ class CustomProgressCallback(TrainerCallback):
         self.training_values: TrainingValues = TrainingValues.from_trainer(trainer)
         self.progress_seconds: float = progress_seconds
 
-        self.training_iter: Optional[ProgIter] = None
-        self.prediction_iter: Optional[ProgIter] = None
+        self.training_pbar: Optional[ProgIter] = None
+        self.prediction_pbar: Optional[ProgIter] = None
         self.current_step: int = 0
         self.metrics_table: pd.DataFrame = pd.DataFrame()
         self.display_metrics: Mapping[str, str] | None = display_metrics
@@ -116,14 +116,14 @@ class CustomProgressCallback(TrainerCallback):
         if state.is_world_process_zero:
             # TODO: suppress transformers.trainer's message (***** Running training *****)
             # - using transformers.trainer_pt_utils.get_model_param_count(self.trainer.model, trainable_only=True)
-            self.training_iter = ProgIter(
+            self.training_pbar = ProgIter(
                 time_thresh=self.progress_seconds,
                 verbose=3,
                 stream=LoggerWriter(logger),
                 total=state.max_steps,
                 desc="[TRAINING]",
             )
-            self.training_iter.begin()
+            self.training_pbar.begin()
         self.current_step = 0
 
     def epoch_by_step(self, state: TrainerState):
@@ -131,8 +131,8 @@ class CustomProgressCallback(TrainerCallback):
         return state.epoch
 
     def on_step_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
-        if self.training_iter is not None:
-            self.training_iter.step(state.global_step - self.current_step, display=False)
+        if self.training_pbar is not None:
+            self.training_pbar.step(state.global_step - self.current_step, display=False)
         self.current_step = state.global_step
         control.should_log = control.should_log or self.current_step in self.logging_step_set
         control.should_save = control.should_save or self.current_step in self.save_step_set
@@ -140,34 +140,38 @@ class CustomProgressCallback(TrainerCallback):
 
     def on_train_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         control.should_log = True
-        if self.training_iter is not None:
-            self.training_iter.end()
-            self.training_iter = None
+        if self.training_pbar is not None:
+            self.training_pbar.end()
+            self.training_pbar = None
 
     def on_prediction_step(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, eval_dataloader=None, **kwargs):
         if eval_dataloader and has_length(eval_dataloader):
             if state.is_world_process_zero:
-                if self.prediction_iter is None:
-                    self.prediction_iter = ProgIter(
+                if self.prediction_pbar is None:
+                    self.prediction_pbar = ProgIter(
                         time_thresh=self.progress_seconds,
                         verbose=3,
                         stream=LoggerWriter(logger),
                         total=len(eval_dataloader),
                         desc="[METERING]",
                     )
-                    self.prediction_iter.begin()
-                if self.prediction_iter is not None:
-                    self.prediction_iter.step()
+                    self.prediction_pbar.begin()
+                if self.prediction_pbar is not None:
+                    self.prediction_pbar.step()
 
     def on_evaluate(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
-        if self.prediction_iter is not None:
-            self.prediction_iter.end()
-            self.prediction_iter = None
+        if self.prediction_pbar is not None:
+            self.prediction_pbar.end()
+            self.prediction_pbar = None
+            if self.training_pbar is not None:
+                self.training_pbar.display_message()
 
     def on_predict(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
-        if self.prediction_iter is not None:
-            self.prediction_iter.end()
-            self.prediction_iter = None
+        if self.prediction_pbar is not None:
+            self.prediction_pbar.end()
+            self.prediction_pbar = None
+            if self.training_pbar is not None:
+                self.training_pbar.display_message()
 
     def on_log(self, args: TrainingArguments, state: TrainerState, control: TrainerControl,
                logs: Optional[Mapping[str, Any]] = None, exclude_keys=("epoch", "step"), **kwargs):
@@ -181,11 +185,12 @@ class CustomProgressCallback(TrainerCallback):
         new_metrics_row = pd.DataFrame([metrics])
         self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
         self.metrics_table.to_csv(self.output_path, index=False)
-        if self.training_iter is not None and self.display_metrics:
+        if self.training_pbar is not None and self.display_metrics:
             formatted_metrics = ', '.join([f'{k}={metrics[k]:{self.display_metrics[k]}}' for k in metrics.keys() if k in self.display_metrics])
             if formatted_metrics:
-                self.training_iter.set_extra(f"| {formatted_metrics}")
-                self.training_iter.display_message()
+                self.training_pbar.set_extra(f"| {formatted_metrics}")
+                if self.prediction_pbar is None:
+                    self.training_pbar.display_message()
 
 
 def update_progress(
