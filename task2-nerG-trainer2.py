@@ -430,7 +430,7 @@ def main(
         world_size: Annotated[int, typer.Option("--world_size")] = -1,
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
-        run_version: Annotated[Optional[str], typer.Option("--run_version")] = "EAGLE-1B-debug",
+        run_version: Annotated[Optional[str], typer.Option("--run_version")] = "EAGLE-1B-supervised",
         output_file: Annotated[str, typer.Option("--output_file")] = "train-metrics.csv",
         logging_file: Annotated[str, typer.Option("--logging_file")] = "train-loggings.out",
         argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
