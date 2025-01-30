@@ -32,6 +32,7 @@ class CustomDataArguments(BaseModel):
     max_eval_samples: int = Field(default=-1)
     max_pred_samples: int = Field(default=-1)
     use_cache_data: bool = Field(default=True)
+    progress_seconds: float = Field(default=2.0)
     max_source_length: int = Field(default=512)
     max_target_length: int = Field(default=512)
     ignore_pad_token_for_loss: bool = Field(default=True)

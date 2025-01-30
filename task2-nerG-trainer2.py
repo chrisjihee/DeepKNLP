@@ -44,7 +44,6 @@ from transformers import (
     TrainerCallback,
     PrinterCallback,
     TrainingArguments,
-    Seq2SeqTrainingArguments,
     set_seed,
 )
 from transformers.trainer_utils import has_length
@@ -85,11 +84,13 @@ class CustomProgressCallback(TrainerCallback):
             logging_epochs: float,
             eval_epochs: float,
             save_epochs: float,
+            progress_seconds: float = 3.0,
     ):
         super().__init__()
         self.trainer: Trainer = trainer
         self.output_path: str | Path = output_path
         self.training_values: TrainingValues = TrainingValues.from_trainer(trainer)
+        self.progress_seconds: float = progress_seconds
 
         self.training_iter: Optional[ProgIter] = None
         self.prediction_iter: Optional[ProgIter] = None
@@ -111,9 +112,11 @@ class CustomProgressCallback(TrainerCallback):
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if state.is_world_process_zero:
+            #TODO: suppress transformers.trainer's message (***** Running training *****)
+            # - using transformers.trainer_pt_utils.get_model_param_count(self.trainer.model, trainable_only=True)
             self.training_iter = ProgIter(
-                time_thresh=5.0,
-                verbose=2,
+                time_thresh=self.progress_seconds,
+                verbose=3,
                 stream=LoggerWriter(logger),
                 total=state.max_steps,
                 desc="[TRAINING]",
@@ -130,12 +133,9 @@ class CustomProgressCallback(TrainerCallback):
             self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3):.3f})")
             self.training_iter.step(state.global_step - self.current_step)
         self.current_step = state.global_step
-        if self.current_step in self.logging_step_set:
-            control.should_log = True
-        if self.current_step in self.eval_step_set:
-            control.should_evaluate = True
-        if self.current_step in self.save_step_set:
-            control.should_save = True
+        control.should_log = control.should_log or self.current_step in self.logging_step_set
+        control.should_save = control.should_save or self.current_step in self.save_step_set
+        control.should_evaluate = control.should_evaluate or self.current_step in self.eval_step_set
 
     def on_train_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         control.should_log = True
@@ -148,8 +148,8 @@ class CustomProgressCallback(TrainerCallback):
             if state.is_world_process_zero:
                 if self.prediction_iter is None:
                     self.prediction_iter = ProgIter(
-                        time_thresh=5.0,
-                        verbose=2,
+                        time_thresh=self.progress_seconds,
+                        verbose=3,
                         stream=LoggerWriter(logger),
                         total=len(eval_dataloader),
                         desc="[METERING]",
@@ -178,9 +178,10 @@ class CustomProgressCallback(TrainerCallback):
             if k not in exclude_keys:
                 metrics[k] = v
         new_metrics_row = pd.DataFrame([metrics])
-        log_table(logger, new_metrics_row, tablefmt="plain", left=">> ", showindex=False)
         self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
         self.metrics_table.to_csv(self.output_path, index=False)
+        # TODO: use self.training_iter.set_extra() and self.training_iter.display_message()
+        log_table(logger, new_metrics_row, tablefmt="plain", left=">> ", showindex=False)
 
 
 def update_progress(
@@ -188,9 +189,6 @@ def update_progress(
         rank: int = -1,
         pbar: Optional[ProgIter] = None,
 ):
-    """
-    Updates a global counter and an optional progress bar.
-    """
     count = counter.inc()
     if pbar and rank == 0:
         # Ensure the progress bar does not exceed its total.
@@ -207,22 +205,6 @@ def preprocess_row(
         counter: Counter,
         update: Optional[Callable[[Counter, int], None]] = None,
 ) -> BatchEncoding:
-    """
-    A unified preprocessing function for both encoder-decoder and decoder-only models.
-
-    Args:
-        row (LazyRow): A single row from the dataset.
-        rank (int): The process rank (for distributed processing).
-        is_encoder_decoder (bool): True for encoder-decoder models, False otherwise.
-        max_source_length (int): Maximum token length for the input (source).
-        max_target_length (int): Maximum token length for the output (target).
-        tokenizer (PreTrainedTokenizerBase): Pretrained tokenizer.
-        counter (Counter): A counter to track the number of processed samples.
-        update (Callable, optional): A callback function used for updating progress.
-
-    Returns:
-        BatchEncoding: The tokenized sample.
-    """
     sample = GenNERSampleWrapper.model_validate(row)
 
     # Construct decoder-only prompt and instruction text
@@ -339,27 +321,8 @@ def preprocess_dataset(
         max_workers: int,
         local_rank: int,
         cache_path_func: Optional[Callable[[int], str]] = None,
+        progress_seconds: float = 2.0,
 ) -> Optional[datasets.Dataset]:
-    """
-    Loads a JSON dataset from `file_path` and applies tokenization via `preprocess_row`.
-    This function is intended to handle train, eval, or predict splits in a uniform way.
-
-    Args:
-        file_path (Optional[str]): Path to the dataset file. If None, returns None immediately.
-        dataset_name (str): A descriptive name for logging purposes (e.g., "train_dataset").
-        is_encoder_decoder (bool): Indicates if the model is an encoder-decoder type.
-        max_source_length (int): Maximum token length for the input.
-        max_target_length (int): Maximum token length for the output.
-        tokenizer (PreTrainedTokenizerBase): The tokenizer to use.
-        use_cache_data (bool): If True, loads from cached results if available.
-        max_workers (int): Number of worker processes to use for dataset.map().
-        local_rank (int): The local rank for distributed training.
-        cache_path_func (Callable[[int], str], optional): A function that, given the dataset length,
-            returns the path to the cache file.
-
-    Returns:
-        Optional[datasets.Dataset]: The processed dataset, or None if `file_path` was None.
-    """
     if file_path is None:
         return None
 
@@ -369,8 +332,8 @@ def preprocess_dataset(
 
     # Prepare a progress bar
     with ProgIter(
-            time_thresh=2.0,
-            verbose=2,
+            time_thresh=progress_seconds,
+            verbose=3,
             stream=LoggerWriter(logger),
             total=len(dataset),
             desc=f"Preprocess {dataset_name}:"
@@ -459,6 +422,7 @@ def main(
         eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev-100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-100.jsonl",
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
+        progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 3.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
@@ -526,6 +490,7 @@ def main(
             eval_file=eval_file,
             pred_file=pred_file,
             use_cache_data=use_cache_data,
+            progress_seconds=progress_seconds,
             max_source_length=max_source_length,
             max_target_length=max_target_length,
             ignore_pad_token_for_loss=ignore_pad_token_for_loss,
@@ -659,6 +624,7 @@ def main(
             max_workers=args.env.max_workers,
             local_rank=args.train.local_rank,
             cache_path_func=args.data.cache_train_path,
+            progress_seconds=args.data.progress_seconds,
         )
         accelerator.wait_for_everyone()
 
@@ -674,6 +640,7 @@ def main(
             max_workers=args.env.max_workers,
             local_rank=args.train.local_rank,
             cache_path_func=args.data.cache_eval_path,
+            progress_seconds=args.data.progress_seconds,
         )
         accelerator.wait_for_everyone()
 
@@ -689,6 +656,7 @@ def main(
             max_workers=args.env.max_workers,
             local_rank=args.train.local_rank,
             cache_path_func=args.data.cache_pred_path,
+            progress_seconds=args.data.progress_seconds,
         )
         accelerator.wait_for_everyone()
 
@@ -721,6 +689,7 @@ def main(
             logging_epochs=args.train.logging_epochs,
             eval_epochs=args.train.eval_epochs,
             save_epochs=args.train.save_epochs,
+            progress_seconds=args.data.progress_seconds,
         ))
         if accelerator.is_main_process:
             if trainer.accelerator.state.deepspeed_plugin:
