@@ -294,7 +294,7 @@ def main(
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 32,
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 1,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
-        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 2.5,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 6,
         logging_epochs: Annotated[float, typer.Option("--logging_epochs")] = -1,
         eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 1 / 3,
         save_epochs: Annotated[float, typer.Option("--save_epochs")] = -1,
