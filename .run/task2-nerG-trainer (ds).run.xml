@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="task2-nerG-trainer2 (ds)" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="task2-nerG-trainer (ds)" type="PythonConfigurationType" factoryName="Python">
     <module name="DeepKNLP" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -14,7 +14,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="deepspeed.launcher.runner" />
-    <option name="PARAMETERS" value="--include=localhost:0,1,2,3 --master_port 30000 task2-nerG-trainer2.py --trainer_deepspeed configs/deepspeed/ds1_llama.json" />
+    <option name="PARAMETERS" value="--include=localhost:0,1,2,3 --master_port 30000 task2-nerG-trainer.py --trainer_deepspeed configs/deepspeed/ds1_llama.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="true" />
