@@ -31,9 +31,9 @@ class CustomDataArguments(BaseModel):
     max_study_samples: int = Field(default=-1)
     max_eval_samples: int = Field(default=-1)
     max_pred_samples: int = Field(default=-1)
+    use_cache_data: bool = Field(default=True)
     max_source_length: int = Field(default=512)
     max_target_length: int = Field(default=512)
-    use_cache_data: bool = Field(default=True)
     ignore_pad_token_for_loss: bool = Field(default=True)
 
     @model_validator(mode='after')
@@ -98,10 +98,26 @@ class CustomDataArguments(BaseModel):
             return non_empty_files(self.cache_pred_dir / f"{self.pred_file.stem}={size}*.tmp")
 
 
+@dataclass
+class ExSeq2SeqTrainingArguments(Seq2SeqTrainingArguments):
+    logging_epochs: float = field(
+        default=0.1,
+        metadata={"help": "Log every X epochs."},
+    )
+    eval_epochs: float = field(
+        default=0.1,
+        metadata={"help": "Run an evaluation every X epochs."},
+    )
+    save_epochs: float = field(
+        default=0.1,
+        metadata={"help": "Save checkpoint every X epochs."},
+    )
+
+
 class TrainingArgumentsForAccelerator(NewCommonArguments):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     data: CustomDataArguments = Field(default=None)
-    train: Seq2SeqTrainingArguments = Field(default=None)
+    train: ExSeq2SeqTrainingArguments = Field(default=None)
 
     def dataframe(self, columns=None) -> pd.DataFrame:
         if not columns:
@@ -109,7 +125,7 @@ class TrainingArgumentsForAccelerator(NewCommonArguments):
         df = pd.concat([
             super().dataframe(columns=columns),
             to_dataframe(columns=columns, raw=self.data, data_prefix="data"),
-            to_dataframe(columns=columns, raw=self.train, data_prefix="train"),
+            to_dataframe(columns=columns, raw=self.train, data_prefix="train", sorted_keys=True),
         ]).reset_index(drop=True)
         return df
 
