@@ -544,7 +544,11 @@ def main(
             display_metrics={
                 "epoch": ".2f",
                 "loss": ".4f",
+                "train_loss": ".4f",
                 "eval_average": ".4f",
+                "train_runtime": ".1f",
+                "total_flos": ".5e",
+                "total_pflos": ".3f",
             },
         ))
         if accelerator.is_main_process:

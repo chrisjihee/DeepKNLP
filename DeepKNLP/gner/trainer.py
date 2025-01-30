@@ -149,6 +149,8 @@ class CustomProgressCallback(TrainerCallback):
             for k, v in logs.items():
                 if k not in exclude_keys:
                     metrics[k] = v
+                    if k.endswith("_flos"):
+                        metrics[k.replace("_flos", "_pflos")] = v / 1e15
             new_metrics_row = pd.DataFrame([metrics])
             self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
             self.metrics_table.to_csv(self.output_path, index=False)
