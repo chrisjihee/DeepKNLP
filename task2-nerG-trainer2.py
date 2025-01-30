@@ -27,7 +27,7 @@ from accelerate import Accelerator
 from accelerate import DeepSpeedPlugin
 from accelerate.utils import gather_object
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
-from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, log_table, new_path, convert_all_events_in_dir
+from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, new_path, convert_all_events_in_dir
 from chrisbase.time import from_timestamp, now_stamp
 from chrisdata.ner import GenNERSampleWrapper
 from progiter import ProgIter
@@ -85,6 +85,7 @@ class CustomProgressCallback(TrainerCallback):
             eval_epochs: float,
             save_epochs: float,
             progress_seconds: float = 3.0,
+            display_metrics: Mapping[str, str] | None = None,
     ):
         super().__init__()
         self.trainer: Trainer = trainer
@@ -96,6 +97,7 @@ class CustomProgressCallback(TrainerCallback):
         self.prediction_iter: Optional[ProgIter] = None
         self.current_step: int = 0
         self.metrics_table: pd.DataFrame = pd.DataFrame()
+        self.display_metrics: Mapping[str, str] | None = display_metrics
 
         self.logging_step_set = set()
         self.eval_step_set = set()
@@ -112,7 +114,7 @@ class CustomProgressCallback(TrainerCallback):
 
     def on_train_begin(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if state.is_world_process_zero:
-            #TODO: suppress transformers.trainer's message (***** Running training *****)
+            # TODO: suppress transformers.trainer's message (***** Running training *****)
             # - using transformers.trainer_pt_utils.get_model_param_count(self.trainer.model, trainable_only=True)
             self.training_iter = ProgIter(
                 time_thresh=self.progress_seconds,
@@ -130,8 +132,7 @@ class CustomProgressCallback(TrainerCallback):
 
     def on_step_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if self.training_iter is not None:
-            self.training_iter.set_extra(f"| (Ep {round(self.epoch_by_step(state), 3):.3f})")
-            self.training_iter.step(state.global_step - self.current_step)
+            self.training_iter.step(state.global_step - self.current_step, display=False)
         self.current_step = state.global_step
         control.should_log = control.should_log or self.current_step in self.logging_step_set
         control.should_save = control.should_save or self.current_step in self.save_step_set
@@ -180,8 +181,11 @@ class CustomProgressCallback(TrainerCallback):
         new_metrics_row = pd.DataFrame([metrics])
         self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
         self.metrics_table.to_csv(self.output_path, index=False)
-        # TODO: use self.training_iter.set_extra() and self.training_iter.display_message()
-        log_table(logger, new_metrics_row, tablefmt="plain", left=">> ", showindex=False)
+        if self.training_iter is not None and self.display_metrics:
+            formatted_metrics = ', '.join([f'{k}={metrics[k]:{self.display_metrics[k]}}' for k in metrics.keys() if k in self.display_metrics])
+            if formatted_metrics:
+                self.training_iter.set_extra(f"| {formatted_metrics}")
+                self.training_iter.display_message()
 
 
 def update_progress(
@@ -384,7 +388,7 @@ def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_di
     for idx, decoded_pred in enumerate(decoded_preds):
         all_examples[idx]["prediction"] = decoded_pred
 
-    results = compute_metrics(all_examples, tokenizer=tokenizer, detailed=False)
+    results = compute_metrics(all_examples, tokenizer=tokenizer, detailed=False, average_key="average")
     if output_dir is not None and save_prefix is not None:
         suffix = f"_{save_suffix}" if save_suffix else ""
         file_name = f"{save_prefix}-text_generations{suffix}.jsonl"
@@ -422,7 +426,7 @@ def main(
         eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/zero-shot-dev-100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/zero-shot-test-100.jsonl",
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
-        progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 3.0,
+        progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
@@ -436,10 +440,10 @@ def main(
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 1,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 2.5,
-        logging_epochs: Annotated[float, typer.Option("--logging_epochs")] = 2.5 / 10,
-        eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 2.5 / 5,
+        logging_epochs: Annotated[float, typer.Option("--logging_epochs")] = -1,
+        eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 1 / 3,
         save_epochs: Annotated[float, typer.Option("--save_epochs")] = -1,
-        logging_steps: Annotated[int, typer.Option("--logging_steps")] = -1,
+        logging_steps: Annotated[int, typer.Option("--logging_steps")] = 5,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
@@ -455,7 +459,7 @@ def main(
     stamp = now_stamp()
     stamp = sorted(gather_object([stamp]))[0]
     env = NewProjectEnv(
-        time_stamp=from_timestamp(stamp, fmt='%m%d.%H%M%S'),
+        time_stamp=from_timestamp(stamp, fmt='%m%d-%H%M%S'),
         local_rank=local_rank,
         world_size=world_size,
         output_home=output_home,
@@ -463,9 +467,9 @@ def main(
         run_version=run_version,
         logging_level=logging.WARNING,
         logging_format=LoggingFormat.CHECK_20,
-        output_file=new_path(output_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
-        logging_file=new_path(logging_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
-        argument_file=new_path(argument_file, post=from_timestamp(stamp, fmt='%m%d.%H%M%S')),
+        output_file=new_path(output_file, post=from_timestamp(stamp, fmt='%m%d-%H%M%S')),
+        logging_file=new_path(logging_file, post=from_timestamp(stamp, fmt='%m%d-%H%M%S')),
+        argument_file=new_path(argument_file, post=from_timestamp(stamp, fmt='%m%d-%H%M%S')),
         random_seed=random_seed,
         max_workers=1 if debugging else max(max_workers, 1),
         debugging=debugging,
@@ -685,11 +689,18 @@ def main(
         trainer.remove_callback(PrinterCallback)
         trainer.add_callback(CustomProgressCallback(
             trainer=trainer,
-            output_path=args.env.output_dir / args.env.output_file,
+            output_path=args.env.output_dir / new_path(args.env.output_file, post=args.train.local_rank),
             logging_epochs=args.train.logging_epochs,
             eval_epochs=args.train.eval_epochs,
             save_epochs=args.train.save_epochs,
             progress_seconds=args.data.progress_seconds,
+            display_metrics={
+                "epoch": ".2f",
+                "loss": ".4f",
+                "eval_average": ".4f",
+                "eval_runtime": ".1f",
+                "train_runtime": ".1f"
+            },
         ))
         if accelerator.is_main_process:
             if trainer.accelerator.state.deepspeed_plugin:

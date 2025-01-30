@@ -224,7 +224,7 @@ class NEREvaluator:
         }
 
 
-def compute_metrics(examples, tokenizer=None, average_key="AVERAGE", detailed=False) -> dict[str, float]:
+def compute_metrics(examples, tokenizer=None, average_key="average", detailed=False) -> dict[str, float]:
     all_examples = defaultdict(list)
     for example in examples:
         all_examples[example['dataset']].append(example)
