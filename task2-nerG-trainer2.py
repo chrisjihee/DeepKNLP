@@ -704,8 +704,6 @@ def main(
                 "epoch": ".2f",
                 "loss": ".4f",
                 "eval_average": ".4f",
-                "eval_runtime": ".1f",
-                "train_runtime": ".1f"
             },
         ))
         if accelerator.is_main_process:
