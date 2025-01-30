@@ -33,23 +33,19 @@ Transformer-based Korean Natural Language Processing
 4. Install the required packages
     ```bash
     pip install -r requirements.txt
-    DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed
-    pip list | grep -E "torch|lightn|trans|accel|speed|numpy|piece|chris|prog|pydantic"; ds_report
-    ```
-5. Install some packages as editable
-    ```bash
+    DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
     rm -rf transformers; git clone git@github.com:chrisjihee/transformers.git; pip install -U -e transformers
     rm -rf chrisbase;    git clone git@github.com:chrisjihee/chrisbase.git;    pip install -U -e chrisbase
     rm -rf chrisdata;    git clone git@github.com:chrisjihee/chrisdata.git;    pip install -U -e chrisdata
     rm -rf progiter;     git clone git@github.com:chrisjihee/progiter.git;     pip install -U -e progiter
     pip list | grep -E "torch|lightn|trans|accel|speed|numpy|piece|chris|prog|pydantic"
     ```
-6. Log in to Huggingface
+5. Log in to Huggingface
     ```bash
     huggingface-cli whoami
     huggingface-cli login
     ```
-7. Link huggingface cache (optional)
+6. Link huggingface cache (optional)
     ```bash
     ln -s ~/.cache/huggingface ./.cache_hf
     ```
