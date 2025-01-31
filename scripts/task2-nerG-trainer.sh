@@ -1,63 +1,57 @@
-set -x
+#!/bin/bash
+
+set -x  # Enable debug mode to print each command before execution
+
 CUDA_VISIBLE_DEVICES=0,1,2,3
 port=$(shuf -i25000-30000 -n1)
-trainer_deepspeed="configs/deepspeed/ds1_llama.json"
+num_train_epochs=12
+eval_epochs=0.5
+trainer_deepspeed="configs/deepspeed/ds2_llama.json"
 
-pretrained="etri-lirs/egpt-1.3b-preview"
-run_version="EAGLE-1B-supervised"
+# List of pretrained models and their corresponding run versions
+declare -A models
+models=(
+  ["google/flan-t5-large"]="FLAN-T5-Large-base"
+  ["google/flan-t5-xl"]="FLAN-T5-3B-base"
+  ["meta-llama/Llama-3.2-1B"]="Llama-3.2-1B-base"
+  ["meta-llama/Llama-3.2-3B"]="Llama-3.2-3B-base"
+  ["etri-lirs/egpt-1.3b-preview"]="EAGLE-1B-base"
+  ["etri-lirs/eagle-3b-preview"]="EAGLE-3B-base"
+  ["microsoft/Phi-3.5-mini-instruct"]="Phi-3.5-mini-base"
+)
 
-python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
-              task2-nerG-trainer.py "data/gner/each/crossner_ai-train.jsonl" \
-                        --eval_file "data/gner/each-sampled/crossner_ai-dev=100.jsonl" \
-                       --pretrained $pretrained \
-                      --run_version $run_version \
-      --per_device_train_batch_size 1 \
-                --trainer_deepspeed $trainer_deepspeed
+# List of datasets
+datasets=(
+  "crossner_ai"
+  "crossner_literature"
+  "crossner_music"
+  "crossner_politics"
+  "crossner_science"
+  "mit-movie"
+  "mit-restaurant"
+)
 
-python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
-              task2-nerG-trainer.py "data/gner/each/crossner_literature-train.jsonl" \
-                        --eval_file "data/gner/each-sampled/crossner_literature-dev=100.jsonl" \
-                       --pretrained $pretrained \
-                      --run_version $run_version \
-      --per_device_train_batch_size 1 \
-                --trainer_deepspeed $trainer_deepspeed
+# Loop through each model and dataset
+for pretrained in "${!models[@]}"; do
+  run_version=${models[$pretrained]}
 
-python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
-              task2-nerG-trainer.py "data/gner/each/crossner_music-train.jsonl" \
-                        --eval_file "data/gner/each-sampled/crossner_music-dev=100.jsonl" \
-                       --pretrained $pretrained \
-                      --run_version $run_version \
-      --per_device_train_batch_size 1 \
-                --trainer_deepspeed $trainer_deepspeed
+  for dataset in "${datasets[@]}"; do
+    if [[ "$dataset" == "mit-movie" || "$dataset" == "mit-restaurant" ]]; then
+      batch_size=8
+    else
+      batch_size=1
+    fi
 
-python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
-              task2-nerG-trainer.py "data/gner/each/crossner_politics-train.jsonl" \
-                        --eval_file "data/gner/each-sampled/crossner_politics-dev=100.jsonl" \
-                       --pretrained $pretrained \
-                      --run_version $run_version \
-      --per_device_train_batch_size 1 \
-                --trainer_deepspeed $trainer_deepspeed
-
-python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
-              task2-nerG-trainer.py "data/gner/each/crossner_science-train.jsonl" \
-                        --eval_file "data/gner/each-sampled/crossner_science-dev=100.jsonl" \
-                       --pretrained $pretrained \
-                      --run_version $run_version \
-      --per_device_train_batch_size 1 \
-                --trainer_deepspeed $trainer_deepspeed
-
-python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
-              task2-nerG-trainer.py "data/gner/each/mit-movie-train.jsonl" \
-                        --eval_file "data/gner/each-sampled/mit-movie-dev=100.jsonl" \
-                       --pretrained $pretrained \
-                      --run_version $run_version \
-      --per_device_train_batch_size 8 \
-                --trainer_deepspeed $trainer_deepspeed
-
-python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
-              task2-nerG-trainer.py "data/gner/each/mit-restaurant-train.jsonl" \
-                        --eval_file "data/gner/each-sampled/mit-restaurant-dev=100.jsonl" \
-                       --pretrained $pretrained \
-                      --run_version $run_version \
-      --per_device_train_batch_size 8 \
-                --trainer_deepspeed $trainer_deepspeed
+    python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
+      task2-nerG-trainer.py "data/gner/each/${dataset}-train.jsonl" \
+      --eval_file "data/gner/each-sampled/${dataset}-dev=100.jsonl" \
+      --pretrained $pretrained \
+      --run_version $run_version \
+      --eval_epochs $eval_epochs \
+      --num_train_epochs $num_train_epochs \
+      --per_device_train_batch_size $batch_size \
+      --logging_file "train-loggings-${dataset}-${num_train_epochs}ep.out" \
+      --output_file "train-metrics-${dataset}-${num_train_epochs}ep.csv" \
+      --trainer_deepspeed $trainer_deepspeed
+  done
+done
