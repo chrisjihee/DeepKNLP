@@ -16,13 +16,13 @@ trainer_deepspeed="configs/deepspeed/ds2_llama.json"
 # List of pretrained models and their corresponding run versions
 declare -A models
 models=(
-  ["google/flan-t5-large"]="FLAN-T5-Large-base"
-  ["google/flan-t5-xl"]="FLAN-T5-3B-base"
-  ["meta-llama/Llama-3.2-1B"]="Llama-3.2-1B-base"
-  ["meta-llama/Llama-3.2-3B"]="Llama-3.2-3B-base"
-  ["etri-lirs/egpt-1.3b-preview"]="EAGLE-1B-base"
-  ["etri-lirs/eagle-3b-preview"]="EAGLE-3B-base"
-  ["microsoft/Phi-3.5-mini-instruct"]="Phi-3.5-mini-base"
+  ["google/flan-t5-large"]="FLAN-T5-Large"
+  ["google/flan-t5-xl"]="FLAN-T5-3B"
+  ["meta-llama/Llama-3.2-1B"]="Llama-3-1B"
+  ["meta-llama/Llama-3.2-3B"]="Llama-3-3B"
+  ["etri-lirs/egpt-1.3b-preview"]="EAGLE-1B"
+  ["etri-lirs/eagle-3b-preview"]="EAGLE-3B"
+  ["microsoft/Phi-3.5-mini-instruct"]="Phi-3.5-mini"
 )
 
 # List of datasets
@@ -38,7 +38,7 @@ datasets=(
 
 # Loop through each model and dataset
 for pretrained in "${!models[@]}"; do
-  run_version=${models[$pretrained]}
+  run_version="${models[$pretrained]}-Baseline"
 
   for dataset in "${datasets[@]}"; do
     if [[ "$dataset" == "mit-movie" || "$dataset" == "mit-restaurant" ]]; then
