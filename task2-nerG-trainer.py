@@ -243,11 +243,10 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
         all_examples[idx].instance.prediction_output = decoded_pred
 
     if all_examples[0].instance.group is not None and all_examples[0].instance.target_label is not None:
-        grouped_examples = {k: list(vs) for k, vs in grouped(all_examples, key=lambda x: x.instance.group)}
         final_examples = []
-        for group, examples in grouped_examples.items():
-            predicted_labels = ['O' for _ in examples[0].instance.labels]
-            for i, example in enumerate(examples):
+        for group, group_examples in {k: list(vs) for k, vs in grouped(all_examples, key=lambda x: x.instance.group)}.items():
+            predicted_labels = ['O' for _ in group_examples[0].instance.labels]
+            for i, example in enumerate(group_examples):
                 example: GenNERSampleWrapper = example
                 entities: List[GenNERSampleEntitySpan] = []
                 try:
@@ -260,14 +259,14 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
                 for entity_span in entities:
                     span_words = [x for i, x in enumerate(example.instance.words) if i in entity_span.span]
                     if entity_span.entity != ' '.join(span_words):
-                        entity_span.span = find_sublist_range(example.instance.words, entity_span.entity.split())
+                        entity_span.span = find_sublist_range(example.instance.words, entity_span.entity.split(), case_sensitive=False)
                     if accelerator and accelerator.is_main_process:
                         print(f" - entity={entity_span.entity} / span={entity_span.span}")
                     for j, idx in enumerate(entity_span.span):
                         bi_tag = "B" if j == 0 else "I"
                         predicted_labels[idx] = f"{bi_tag}-{example.instance.target_label}"
 
-            final_example: GenNERSampleWrapper = examples[0]
+            final_example: GenNERSampleWrapper = group_examples[0]
             final_example.instance.prediction_output = GenNERSample.get_prompt_labels(final_example.instance.words, predicted_labels)
             final_examples.append(final_example)
         all_examples = final_examples
@@ -303,18 +302,18 @@ def main(
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
-        per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 5,
+        per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 1,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 1,
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 25,
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 1,
-        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 10,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 12,
         logging_epochs: Annotated[float, typer.Option("--logging_epochs")] = -1,
         eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 1 / 5,
         save_epochs: Annotated[float, typer.Option("--save_epochs")] = -1,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 1,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
-        eval_delay: Annotated[float, typer.Option("--eval_delay")] = 3.0,
+        eval_delay: Annotated[float, typer.Option("--eval_delay")] = 1.0,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
