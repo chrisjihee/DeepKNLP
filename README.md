@@ -43,7 +43,7 @@ Transformer-based Korean Natural Language Processing
     ```
 5. Unzip some archived data
     ```bash
-    cd data/gner; unzip each-EQ.zip; unzip each-sampled-EQ.zip; cd ../..;
+    cd data/gner; tar zxf each-EQ.tar.gz; tar zxf each-sampled-EQ.tar.gz; cd ../..;
     ```
 6. Log in to Huggingface
     ```bash
