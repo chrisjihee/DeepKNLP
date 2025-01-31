@@ -41,12 +41,16 @@ Transformer-based Korean Natural Language Processing
     rm -rf progiter;     git clone git@github.com:chrisjihee/progiter.git;     pip install -U -e progiter
     pip list | grep -E "torch|lightn|trans|accel|speed|numpy|piece|chris|prog|pydantic"
     ```
-5. Log in to Huggingface
+5. Unzip some archived data
+    ```bash
+    cd data/gner; unzip each-EQ.zip; unzip each-sampled-EQ.zip; cd ../..;
+    ```
+6. Log in to Huggingface
     ```bash
     huggingface-cli whoami
     huggingface-cli login
     ```
-6. Link huggingface cache (optional)
+7. Link huggingface cache (optional)
     ```bash
     ln -s ~/.cache/huggingface ./.cache_hf
     ```
