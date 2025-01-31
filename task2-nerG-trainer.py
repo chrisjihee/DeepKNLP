@@ -559,9 +559,9 @@ def main(
             logger.info("Using callbacks:")
             for x in trainer.callback_handler.callbacks:
                 logger.info(f"  - {type(x).__module__}.{type(x).__name__}()")
+        accelerator.wait_for_everyone()
 
         # Train
-        accelerator.wait_for_everyone()
         if args.train.do_train:
             train_result: TrainOutput = trainer.train()
             logger.info(f"Train output metrics: {train_result.metrics}")
