@@ -255,11 +255,8 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
 # [1]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_clm.py
 # [2]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/translation/run_translation.py
 # [3]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/summarization/run_summarization.py
-# [4]: https://huggingface.co/docs/accelerate/en/quicktour
-# [5]: https://huggingface.co/docs/accelerate/en/basic_tutorials/migration
-# [6]: https://huggingface.co/docs/accelerate/en/basic_tutorials/execution
-# [7]: https://huggingface.co/docs/transformers/en/main_classes/logging
-# [8]: https://huggingface.co/docs/transformers/en/main_classes/trainer
+# [4]: https://huggingface.co/docs/transformers/en/main_classes/trainer
+# [5]: https://huggingface.co/docs/transformers/en/main_classes/logging
 def main(
         # for CustomDataArguments
         train_file: Annotated[str, typer.Argument()] = ...,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
