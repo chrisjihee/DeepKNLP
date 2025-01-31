@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import sys
-from typing import Callable, Optional
+from typing import Callable, Optional, List
 
 import datasets
 import numpy as np
@@ -22,7 +22,8 @@ from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArgume
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
 from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, new_path, convert_all_events_in_dir
 from chrisbase.time import from_timestamp, now_stamp
-from chrisdata.ner import GenNERSampleWrapper
+from chrisbase.util import grouped
+from chrisdata.ner import GenNERSampleWrapper, GenNERSampleEntitySpan, GenNERSample
 from progiter import ProgIter
 from transformers import (
     AutoConfig,
@@ -237,9 +238,34 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
         for i, preds in enumerate(decoded_preds):
             decoded_preds[i] = preds[preds.find(match_pattern) + len(match_pattern):].strip()
 
-    all_examples = [example.copy() for example in dataset]
+    all_examples: List[GenNERSampleWrapper] = [GenNERSampleWrapper.model_validate(example) for example in dataset]
     for idx, decoded_pred in enumerate(decoded_preds):
-        all_examples[idx]["prediction"] = decoded_pred
+        all_examples[idx].instance.prediction_output = decoded_pred
+
+    if all_examples[0].instance.group is not None and all_examples[0].instance.target_label is not None:
+        grouped_examples = {k: list(vs) for k, vs in grouped(all_examples, key=lambda x: x.instance.group)}
+        final_examples = []
+        for group, examples in grouped_examples.items():
+            predicted_label_map = {}
+            for i, example in enumerate(examples):
+                example: GenNERSampleWrapper = example
+                entities: List[GenNERSampleEntitySpan] = []
+                try:
+                    entities = [GenNERSampleEntitySpan.model_validate(x) for x in json.loads(example.instance.prediction_output)]
+                except json.JSONDecodeError:
+                    pass
+                print(f"example.instance.prediction_output={example.instance.prediction_output} / entities={entities}")
+                for entity_span in entities:
+                    span_words = [x for i, x in enumerate(example.instance.words) if i in entity_span.span]
+                    if entity_span.entity == ' '.join(span_words):
+                        for j, idx in enumerate(entity_span.span):
+                            bi_tag = "B" if j == 0 else "I"
+                            predicted_label_map[idx] = f"{bi_tag}-{example.instance.target_label}"
+            final_example: GenNERSampleWrapper = examples[0]
+            predicted_labels = ['O' if i not in predicted_label_map else predicted_label_map[i] for i in range(len(final_example.instance.labels))]
+            final_example.instance.prediction_output = GenNERSample.get_prompt_labels(final_example.instance.words, predicted_labels)
+            final_examples.append(final_example)
+        all_examples = final_examples
 
     results = gner.compute_metrics(all_examples, tokenizer=tokenizer, detailed=False, average_key="average")
     if write_predictions and output_dir is not None and save_prefix is not None:
@@ -263,7 +289,7 @@ def main(
         eval_file: Annotated[str, typer.Option("--eval_file")] = None,  # "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/each-sampled/crossner_ai-test=100.jsonl",
         pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
@@ -283,7 +309,7 @@ def main(
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 1,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
-        eval_delay: Annotated[float, typer.Option("--eval_delay")] = 5.0,
+        eval_delay: Annotated[float, typer.Option("--eval_delay")] = 3.0,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
@@ -547,7 +573,7 @@ def main(
             progress_seconds=args.data.progress_seconds,
             metric_formats={
                 "epoch": ".2f",
-                "loss": ".4f",
+                "loss": ".6f",
                 "train_loss": ".4f",
                 "eval_average": ".4f",
                 "total_pflos": ".3f",
