@@ -72,19 +72,19 @@ class CustomProgressCallback(TrainerCallback):
         if state.is_world_process_zero:
             logger.info(hr(c='-'))
             logger.info(f"***** Beginning Training *****")
-            logger.info(f"  - Train Epochs       = {self.trainer.args.num_train_epochs}")
-            logger.info(f"  - Train Examples     = {self.training_values.num_examples:,}")
-            logger.info(f"  - Train Batch Size   = {self.training_values.total_train_batch_size:,}"
+            logger.info(f">> Train Epochs       = {self.trainer.args.num_train_epochs}")
+            logger.info(f">> Train Examples     = {self.training_values.num_examples:,}")
+            logger.info(f">> Train Batch Size   = {self.training_values.total_train_batch_size:,}"
                         f" = {self.trainer._train_batch_size} * {self.trainer.args.gradient_accumulation_steps} * {self.trainer.args.world_size}")
-            logger.info(f"  - Train Optim Steps  = {self.training_values.max_steps:,}"
+            logger.info(f">> Train Optim Steps  = {self.training_values.max_steps:,}"
                         f" = {self.training_values.num_update_steps_per_epoch:,} * {self.trainer.args.num_train_epochs}")
-            logger.info(f"  - Train Model Params = {get_model_param_count(self.trainer.model, trainable_only=True):,}")
-            logger.info(f"  - Eval Examples      = {len(self.trainer.eval_dataset):,}")
-            logger.info(f"  - Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
+            logger.info(f">> Train Model Params = {get_model_param_count(self.trainer.model, trainable_only=True):,}")
+            logger.info(f">> Eval Examples      = {len(self.trainer.eval_dataset):,}")
+            logger.info(f">> Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
                         f" = {self.trainer.args.per_device_eval_batch_size} * {self.trainer.args.world_size}")
-            logger.info(f"  - Trainer Callbacks: {', '.join(f'{type(x).__module__}.{type(x).__name__}' for x in self.trainer.callback_handler.callbacks)}")
+            logger.info(f">> Trainer Callbacks  = {', '.join(type(x).__name__ for x in self.trainer.callback_handler.callbacks)}")
             if self.trainer.accelerator.state.deepspeed_plugin:
-                logger.info(f"  - Deepspeed Configuration of Zero Optimization:\n{json.dumps(self.trainer.accelerator.state.deepspeed_plugin.deepspeed_config['zero_optimization'], indent=2)}")
+                logger.info(f">> Zero Optim Stage   = {self.trainer.accelerator.state.deepspeed_plugin.deepspeed_config['zero_optimization']['stage']}")
             self.training_pbar = ProgIter(
                 time_thresh=self.progress_seconds,
                 verbose=3,
