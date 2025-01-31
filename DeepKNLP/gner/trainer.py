@@ -79,9 +79,10 @@ class CustomProgressCallback(TrainerCallback):
             logger.info(f">> Train Optim Steps  = {self.training_values.max_steps:,}"
                         f" = {self.training_values.num_update_steps_per_epoch:,} * {self.trainer.args.num_train_epochs}")
             logger.info(f">> Train Model Params = {get_model_param_count(self.trainer.model, trainable_only=True):,}")
-            logger.info(f">> Eval Examples      = {len(self.trainer.eval_dataset):,}")
-            logger.info(f">> Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
-                        f" = {self.trainer.args.per_device_eval_batch_size} * {self.trainer.args.world_size}")
+            if self.trainer.eval_dataset:
+                logger.info(f">> Eval Examples      = {len(self.trainer.eval_dataset):,}")
+                logger.info(f">> Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
+                            f" = {self.trainer.args.per_device_eval_batch_size} * {self.trainer.args.world_size}")
             logger.info(f">> Trainer Callbacks  = {', '.join(type(x).__name__ for x in self.trainer.callback_handler.callbacks)}")
             if self.trainer.accelerator.state.deepspeed_plugin:
                 logger.info(f">> Zero Optim Stage   = {self.trainer.accelerator.state.deepspeed_plugin.deepspeed_config['zero_optimization']['stage']}")
