@@ -405,11 +405,7 @@ def main(
     transformers_set_verbosity(process_log_level)
     set_verbosity_info("c10d-NullHandler-default")
     if accelerator.is_main_process:
-        set_verbosity_info(
-            # "transformers.trainer",
-            "chrisbase",
-            "DeepKNLP",
-        )
+        set_verbosity_info("DeepKNLP", "chrisbase")
 
     # Set random seed
     set_seed(args.train.seed)
