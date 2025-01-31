@@ -23,6 +23,7 @@ Transformer-based Korean Natural Language Processing
     ```
 3. Create a new environment
     ```bash
+    conda update -n base -c conda-forge conda
     conda create -n DeepKNLP python=3.12 -y; conda activate DeepKNLP
     conda install cuda-libraries=11.8 cuda-libraries-dev=11.8 cuda-cudart=11.8 cuda-cudart-dev=11.8 \
                   cuda-nvrtc=11.8 cuda-nvrtc-dev=11.8 cuda-driver-dev=11.8 \
