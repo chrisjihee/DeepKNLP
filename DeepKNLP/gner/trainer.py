@@ -76,7 +76,8 @@ class CustomProgressCallback(TrainerCallback):
             logger.info(f"  - Train Examples     = {self.training_values.num_examples:,}")
             logger.info(f"  - Train Batch Size   = {self.training_values.total_train_batch_size:,}"
                         f" = {self.trainer._train_batch_size} * {self.trainer.args.gradient_accumulation_steps} * {self.trainer.args.world_size}")
-            logger.info(f"  - Train Optim Steps  = {self.training_values.max_steps:,}")
+            logger.info(f"  - Train Optim Steps  = {self.training_values.max_steps:,}"
+                        f" = {self.training_values.num_update_steps_per_epoch:,} * {self.trainer.args.num_train_epochs}")
             logger.info(f"  - Train Model Params = {get_model_param_count(self.trainer.model, trainable_only=True):,}")
             logger.info(f"  - Eval Examples      = {len(self.trainer.eval_dataset):,}")
             logger.info(f"  - Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
