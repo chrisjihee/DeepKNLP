@@ -255,13 +255,14 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
                 except json.JSONDecodeError:
                     pass
                 if accelerator and accelerator.is_main_process:
-                    print(f"example.instance.prediction_output={example.instance.prediction_output} / entities={entities}")
+                    if entities:
+                        print(f"* prediction_output={example.instance.prediction_output} / words={example.instance.words}")
                 for entity_span in entities:
                     span_words = [x for i, x in enumerate(example.instance.words) if i in entity_span.span]
                     if entity_span.entity != ' '.join(span_words):
                         entity_span.span = find_sublist_range(example.instance.words, entity_span.entity.split())
                     if accelerator and accelerator.is_main_process:
-                        print(f" - entity_span.span={entity_span.span}")
+                        print(f" - entity={entity_span.entity} / span={entity_span.span}")
                     for j, idx in enumerate(entity_span.span):
                         bi_tag = "B" if j == 0 else "I"
                         predicted_labels[idx] = f"{bi_tag}-{example.instance.target_label}"
