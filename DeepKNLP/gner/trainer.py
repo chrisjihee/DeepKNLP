@@ -36,7 +36,7 @@ class CustomProgressCallback(TrainerCallback):
     def __init__(
             self,
             trainer: Trainer,
-            output_path: str | Path,
+            metric_file: str | Path,
             logging_epochs: float,
             eval_epochs: float,
             save_epochs: float,
@@ -45,7 +45,7 @@ class CustomProgressCallback(TrainerCallback):
     ):
         super().__init__()
         self.trainer: Trainer = trainer
-        self.output_path: str | Path = output_path
+        self.metric_file: str | Path = metric_file
         self.training_values: TrainingValues = TrainingValues.from_trainer(trainer)
         self.progress_seconds: float = progress_seconds
 
@@ -154,7 +154,7 @@ class CustomProgressCallback(TrainerCallback):
                         metrics[k.replace("_flos", "_pflos")] = v / 1e15
             new_metrics_row = pd.DataFrame([metrics])
             self.metrics_table = pd.concat([self.metrics_table, new_metrics_row], ignore_index=True)
-            self.metrics_table.to_csv(self.output_path, index=False)
+            self.metrics_table.to_csv(self.metric_file, index=False)
             if self.training_pbar is not None and self.metric_formats:
                 formatted_metrics = ', '.join([f'{k}={metrics[k]:{self.metric_formats[k]}}' for k in self.metric_formats if k in metrics])
                 if formatted_metrics:

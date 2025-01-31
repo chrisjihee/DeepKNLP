@@ -22,11 +22,11 @@ logger = logging.getLogger(__name__)
 
 
 class CustomDataArguments(BaseModel):
-    pretrained: str | Path = Field(default=None)
     train_file: str | Path | None = Field(default=None)
     study_file: str | Path | None = Field(default=None)
     eval_file: str | Path | None = Field(default=None)
     pred_file: str | Path | None = Field(default=None)
+    pretrained: str | Path = Field(default=None)
     max_train_samples: int = Field(default=-1)
     max_study_samples: int = Field(default=-1)
     max_eval_samples: int = Field(default=-1)

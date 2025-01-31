@@ -263,23 +263,11 @@ def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_di
 # [7]: https://huggingface.co/docs/transformers/en/main_classes/logging
 # [8]: https://huggingface.co/docs/transformers/en/main_classes/trainer
 def main(
-        # for NewProjectEnv
-        local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
-        world_size: Annotated[int, typer.Option("--world_size")] = -1,
-        output_home: Annotated[str, typer.Option("--output_home")] = "output",
-        output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
-        run_version: Annotated[Optional[str], typer.Option("--run_version")] = "EAGLE-1B-supervised",
-        output_file: Annotated[str, typer.Option("--output_file")] = "train-metrics.csv",
-        logging_file: Annotated[str, typer.Option("--logging_file")] = "train-loggings.out",
-        argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
-        random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
-        max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
-        debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
         # for CustomDataArguments
+        train_file: Annotated[str, typer.Argument()] = ...,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
+        eval_file: Annotated[str, typer.Option("--eval_file")] = None,  # "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
+        pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/each-sampled/crossner_ai-test=100.jsonl",
         pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
-        train_file: Annotated[str, typer.Option("--train_file")] = "data/gner/each-sampled/crossner_ai-train=100.jsonl",
-        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
-        pred_file: Annotated[str, typer.Option("--pred_file")] = "data/gner/each-sampled/crossner_ai-test=100.jsonl",
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
@@ -287,24 +275,36 @@ def main(
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
-        report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 1,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 1,
         per_device_eval_batch_size: Annotated[int, typer.Option("--per_device_eval_batch_size")] = 5,
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 1,
-        max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
-        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 6,
+        num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 12,
         logging_epochs: Annotated[float, typer.Option("--logging_epochs")] = -1,
-        eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 1 / 3,
+        eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 1 / 4,
         save_epochs: Annotated[float, typer.Option("--save_epochs")] = -1,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 1,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
+        max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
+        report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
         # for DeepSpeed
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,  # for deepspeed.launcher.runner
         accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,  # for accelerate.commands.launch
+        # for ProjectEnv
+        output_home: Annotated[str, typer.Option("--output_home")] = "output",
+        output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
+        run_version: Annotated[str, typer.Option("--run_version")] = "EAGLE-1B-supervised",
+        output_file: Annotated[str, typer.Option("--output_file")] = "train-metrics.csv",
+        logging_file: Annotated[str, typer.Option("--logging_file")] = "train-loggings.out",
+        argument_file: Annotated[str, typer.Option("--argument_file")] = "train-arguments.json",
+        random_seed: Annotated[int, typer.Option("--random_seed")] = 7,
+        max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
+        world_size: Annotated[int, typer.Option("--world_size")] = -1,
+        local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
+        debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
 ):
     # Setup project environment
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
@@ -344,10 +344,10 @@ def main(
     args = TrainingArgumentsForAccelerator(
         env=env,
         data=CustomDataArguments(
-            pretrained=pretrained,
             train_file=train_file,
             eval_file=eval_file,
             pred_file=pred_file,
+            pretrained=pretrained,
             use_cache_data=use_cache_data,
             progress_seconds=progress_seconds,
             max_source_length=max_source_length,
@@ -355,16 +355,14 @@ def main(
             ignore_pad_token_for_loss=ignore_pad_token_for_loss,
         ),
         train=ExSeq2SeqTrainingArguments(
-            disable_tqdm=True,
-            predict_with_generate=True,
             generation_max_length=generation_max_length,
+            predict_with_generate=True,
             remove_unused_columns=False,
             overwrite_output_dir=True,
             output_dir=str(env.output_dir),
             report_to=report_to,
             log_level=log_level_str,
             log_level_replica=log_level_rep_str,
-            seed=env.random_seed,
             do_train=True,
             do_eval=True,
             gradient_checkpointing=gradient_checkpointing,
@@ -373,16 +371,16 @@ def main(
             per_device_eval_batch_size=per_device_eval_batch_size,
             eval_accumulation_steps=eval_accumulation_steps,
             num_train_epochs=num_train_epochs,
-            max_steps=max_steps,
+            logging_epochs=logging_epochs,
+            eval_epochs=eval_epochs,
+            save_epochs=save_epochs,
             logging_strategy="steps" if logging_steps >= 1 else "epoch" if logging_epochs == 1 else "no",
             eval_strategy="steps" if eval_steps >= 1 else "epoch" if eval_epochs == 1 else "no",
             save_strategy="steps" if save_steps >= 1 else "epoch" if save_epochs == 1 else "no",
             logging_steps=logging_steps if logging_steps >= 1 else sys.maxsize,
             eval_steps=eval_steps if eval_steps >= 1 else sys.maxsize,
             save_steps=save_steps if save_steps >= 1 else sys.maxsize,
-            logging_epochs=logging_epochs,
-            eval_epochs=eval_epochs,
-            save_epochs=save_epochs,
+            max_steps=max_steps,
             learning_rate=learning_rate,
             lr_scheduler_type="cosine",
             warmup_ratio=0.04,
@@ -392,6 +390,8 @@ def main(
             bf16_full_eval=is_torch_bf16_gpu_available(),
             local_rank=env.local_rank,
             deepspeed=trainer_deepspeed,
+            seed=env.random_seed,
+            disable_tqdm=True,
         ),
     )
     args.env.local_rank = args.train.local_rank
@@ -537,7 +537,7 @@ def main(
         trainer.remove_callback(PrinterCallback)
         trainer.add_callback(CustomProgressCallback(
             trainer=trainer,
-            output_path=args.env.output_dir / args.env.output_file,
+            metric_file=args.env.output_dir / args.env.output_file,
             logging_epochs=args.train.logging_epochs,
             eval_epochs=args.train.eval_epochs,
             save_epochs=args.train.save_epochs,
