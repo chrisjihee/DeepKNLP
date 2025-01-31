@@ -19,7 +19,7 @@ import DeepKNLP.gner as gner
 import transformers
 import transformers.utils.logging
 from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments, ExSeq2SeqTrainingArguments
-from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
+from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv, find_sublist_range
 from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, new_path, convert_all_events_in_dir
 from chrisbase.time import from_timestamp, now_stamp
 from chrisbase.util import grouped
@@ -230,7 +230,7 @@ def preprocess_dataset(
     return dataset
 
 
-def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None, save_suffix=None, write_predictions=False):
+def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None, save_suffix=None, write_predictions=False, accelerator=None):
     preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
     decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
     if not is_encoder_decoder:
@@ -246,7 +246,7 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
         grouped_examples = {k: list(vs) for k, vs in grouped(all_examples, key=lambda x: x.instance.group)}
         final_examples = []
         for group, examples in grouped_examples.items():
-            predicted_label_map = {}
+            predicted_labels = ['O' for _ in examples[0].instance.labels]
             for i, example in enumerate(examples):
                 example: GenNERSampleWrapper = example
                 entities: List[GenNERSampleEntitySpan] = []
@@ -254,15 +254,19 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
                     entities = [GenNERSampleEntitySpan.model_validate(x) for x in json.loads(example.instance.prediction_output)]
                 except json.JSONDecodeError:
                     pass
-                print(f"example.instance.prediction_output={example.instance.prediction_output} / entities={entities}")
+                if accelerator and accelerator.is_main_process:
+                    print(f"example.instance.prediction_output={example.instance.prediction_output} / entities={entities}")
                 for entity_span in entities:
                     span_words = [x for i, x in enumerate(example.instance.words) if i in entity_span.span]
-                    if entity_span.entity == ' '.join(span_words):
-                        for j, idx in enumerate(entity_span.span):
-                            bi_tag = "B" if j == 0 else "I"
-                            predicted_label_map[idx] = f"{bi_tag}-{example.instance.target_label}"
+                    if entity_span.entity != ' '.join(span_words):
+                        entity_span.span = find_sublist_range(example.instance.words, entity_span.entity.split())
+                    if accelerator and accelerator.is_main_process:
+                        print(f" - entity_span.span={entity_span.span}")
+                    for j, idx in enumerate(entity_span.span):
+                        bi_tag = "B" if j == 0 else "I"
+                        predicted_labels[idx] = f"{bi_tag}-{example.instance.target_label}"
+
             final_example: GenNERSampleWrapper = examples[0]
-            predicted_labels = ['O' if i not in predicted_label_map else predicted_label_map[i] for i in range(len(final_example.instance.labels))]
             final_example.instance.prediction_output = GenNERSample.get_prompt_labels(final_example.instance.words, predicted_labels)
             final_examples.append(final_example)
         all_examples = final_examples
@@ -289,7 +293,7 @@ def main(
         eval_file: Annotated[str, typer.Option("--eval_file")] = None,  # "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/each-sampled/crossner_ai-test=100.jsonl",
         pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
@@ -549,7 +553,7 @@ def main(
 
         # Set compute_metrics function
         compute_metrics = lambda *vs, **ws: eval_predictions(
-            *vs, **ws, write_predictions=args.data.write_predictions
+            *vs, **ws, write_predictions=args.data.write_predictions, accelerator=accelerator,
         ) if args.train.predict_with_generate else None
 
         # Initialize trainer
