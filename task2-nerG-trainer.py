@@ -411,10 +411,8 @@ def main(
     set_seed(args.train.seed)
     torch.set_float32_matmul_precision('high')
 
-    with JobTimer(
-            name=f"python {args.env.current_file} {' '.join(args.env.command_args)}",
-            rt=1, rb=1, rc='=', verbose=verbose, args=args,
-    ):
+    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}",
+                  rt=1, rb=1, rc='=', verbose=verbose, args=args):
         accelerator.wait_for_everyone()
 
         # Load config and tokenizer
