@@ -16,9 +16,6 @@ trainer_deepspeed="configs/deepspeed/ds2_llama.json"
 # List of pretrained models and their corresponding run versions
 declare -A models
 models=(
-  ["google/flan-t5-large"]="FLAN-T5-Large"
-  ["google/flan-t5-xl"]="FLAN-T5-3B"
-  ["meta-llama/Llama-3.2-1B"]="Llama-3-1B"
   ["meta-llama/Llama-3.2-3B"]="Llama-3-3B"
   ["etri-lirs/egpt-1.3b-preview"]="EAGLE-1B"
   ["etri-lirs/eagle-3b-preview"]="EAGLE-3B"
