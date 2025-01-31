@@ -1,3 +1,3 @@
-from collator import *
-from evaluator import *
-from trainer import *
+from .collator import *
+from .evaluator import *
+from .trainer import *
