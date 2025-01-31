@@ -283,6 +283,7 @@ def main(
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 1,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
+        eval_delay: Annotated[float, typer.Option("--eval_delay")] = 1,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
         report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
         learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
@@ -378,6 +379,7 @@ def main(
             logging_steps=logging_steps if logging_steps >= 1 else sys.maxsize,
             eval_steps=eval_steps if eval_steps >= 1 else sys.maxsize,
             save_steps=save_steps if save_steps >= 1 else sys.maxsize,
+            eval_delay=eval_delay,
             max_steps=max_steps,
             learning_rate=learning_rate,
             lr_scheduler_type="cosine",

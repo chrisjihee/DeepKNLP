@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 from chrisbase.io import LoggerWriter, hr
 from progiter import ProgIter
-from transformers import Trainer
+from transformers import Trainer, IntervalStrategy
 from transformers.trainer import *
 from transformers.trainer_seq2seq import Seq2SeqTrainer
 
@@ -37,6 +37,7 @@ class CustomProgressCallback(TrainerCallback):
             self,
             trainer: Trainer,
             metric_file: str | Path,
+            logging_epochs: float = -1,
             eval_epochs: float = -1,
             save_epochs: float = -1,
             progress_seconds: float = 3.0,
@@ -105,7 +106,9 @@ class CustomProgressCallback(TrainerCallback):
         self.current_step = state.global_step
         control.should_log = control.should_log or self.current_step in self.logging_step_set
         control.should_save = control.should_save or self.current_step in self.save_step_set
-        control.should_evaluate = control.should_evaluate or self.current_step in self.eval_step_set
+        should_not_evaluate = ((args.eval_strategy == IntervalStrategy.STEPS and state.global_step < args.eval_delay) or
+                               (args.eval_strategy != IntervalStrategy.STEPS and self.epoch_by_step(state) < args.eval_delay))
+        control.should_evaluate = not should_not_evaluate and (control.should_evaluate or self.current_step in self.eval_step_set)
 
     def on_train_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         control.should_log = True
