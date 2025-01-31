@@ -15,12 +15,10 @@ from datasets.formatting.formatting import LazyRow
 from datasets.utils.logging import set_verbosity as datasets_set_verbosity
 from typing_extensions import Annotated
 
+import DeepKNLP.gner as gner
 import transformers
 import transformers.utils.logging
 from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments, ExSeq2SeqTrainingArguments
-from DeepKNLP.gner.collator import DataCollatorForGNER
-from DeepKNLP.gner.evaluator import compute_metrics
-from DeepKNLP.gner.trainer import GNERTrainer, CustomProgressCallback
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv
 from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, new_path, convert_all_events_in_dir
 from chrisbase.time import from_timestamp, now_stamp
@@ -231,7 +229,7 @@ def preprocess_dataset(
     return dataset
 
 
-def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None, save_suffix=None):
+def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None, save_suffix=None, write_predictions=False):
     preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
     decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
     if not is_encoder_decoder:
@@ -243,8 +241,8 @@ def compute_ner_metrics(dataset, preds, tokenizer, is_encoder_decoder, output_di
     for idx, decoded_pred in enumerate(decoded_preds):
         all_examples[idx]["prediction"] = decoded_pred
 
-    results = compute_metrics(all_examples, tokenizer=tokenizer, detailed=False, average_key="average")
-    if output_dir is not None and save_prefix is not None:
+    results = gner.compute_metrics(all_examples, tokenizer=tokenizer, detailed=False, average_key="average")
+    if write_predictions and output_dir is not None and save_prefix is not None:
         suffix = f"_{save_suffix}" if save_suffix else ""
         file_name = f"{save_prefix}-text_generations{suffix}.jsonl"
         with open(os.path.join(output_dir, file_name), "w") as fout:
@@ -272,6 +270,7 @@ def main(
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
+        write_predictions: Annotated[bool, typer.Option("--write_predictions/--no_write_predictions")] = False,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
@@ -352,6 +351,7 @@ def main(
             progress_seconds=progress_seconds,
             max_source_length=max_source_length,
             max_target_length=max_target_length,
+            write_predictions=write_predictions,
             ignore_pad_token_for_loss=ignore_pad_token_for_loss,
         ),
         train=ExSeq2SeqTrainingArguments(
@@ -514,7 +514,7 @@ def main(
 
         # Data collator
         label_pad_token_id = -100 if args.data.ignore_pad_token_for_loss else tokenizer.pad_token_id
-        data_collator = DataCollatorForGNER(
+        data_collator = gner.DataCollatorForGNER(
             tokenizer=tokenizer,
             model=model,
             padding=True,
@@ -523,19 +523,24 @@ def main(
             return_tensors="pt",
         )
 
+        # Set compute_metrics function
+        compute_metrics = lambda *vs, **ws: eval_predictions(
+            *vs, **ws, write_predictions=args.data.write_predictions
+        ) if args.train.predict_with_generate else None
+
         # Initialize trainer
-        trainer = GNERTrainer(
+        trainer = gner.GNERTrainer(
             args=args.train,
             model=model,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
             processing_class=tokenizer,
             data_collator=data_collator,
-            compute_metrics=compute_ner_metrics if args.train.predict_with_generate else None,
+            compute_metrics=compute_metrics,
             is_encoder_decoder=is_encoder_decoder,
         )
         trainer.remove_callback(PrinterCallback)
-        trainer.add_callback(CustomProgressCallback(
+        trainer.add_callback(gner.CustomProgressCallback(
             trainer=trainer,
             metric_file=args.env.output_dir / args.env.output_file,
             logging_epochs=args.train.logging_epochs,
@@ -550,15 +555,6 @@ def main(
                 "total_pflos": ".3f",
             },
         ))
-        if accelerator.is_main_process:
-            if trainer.accelerator.state.deepspeed_plugin:
-                logger.info(
-                    f"Using deepspeed configuration:\n"
-                    f"{json.dumps(trainer.accelerator.state.deepspeed_plugin.deepspeed_config, indent=2)}"
-                )
-            logger.info("Using callbacks:")
-            for x in trainer.callback_handler.callbacks:
-                logger.info(f"  - {type(x).__module__}.{type(x).__name__}()")
         accelerator.wait_for_everyone()
 
         # Train

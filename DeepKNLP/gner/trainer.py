@@ -82,6 +82,9 @@ class CustomProgressCallback(TrainerCallback):
             logger.info(f"  - Eval Examples      = {len(self.trainer.eval_dataset):,}")
             logger.info(f"  - Eval Batch Size    = {self.trainer.args.per_device_eval_batch_size * self.trainer.args.world_size:,}"
                         f" = {self.trainer.args.per_device_eval_batch_size} * {self.trainer.args.world_size}")
+            logger.info(f"  - Trainer Callbacks: {', '.join(f'{type(x).__module__}.{type(x).__name__}' for x in self.trainer.callback_handler.callbacks)}")
+            if self.trainer.accelerator.state.deepspeed_plugin:
+                logger.info(f"  - Deepspeed Configuration of Zero Optimization:\n{json.dumps(self.trainer.accelerator.state.deepspeed_plugin.deepspeed_config['zero_optimization'], indent=2)}")
             self.training_pbar = ProgIter(
                 time_thresh=self.progress_seconds,
                 verbose=3,

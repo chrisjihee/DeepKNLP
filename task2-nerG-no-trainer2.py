@@ -24,8 +24,7 @@ from transformers import AutoTokenizer, AutoConfig, AutoModelForSeq2SeqLM, AutoM
 from typing_extensions import Annotated
 
 from DeepKNLP.arguments import TrainingArgumentsForFabric
-from DeepKNLP.gner_collator import DataCollatorForGNER
-from DeepKNLP.gner_evaluator import compute_metrics
+from DeepKNLP.gner import DataCollatorForGNER, compute_metrics
 from progiter import ProgIter
 
 # Global settings
