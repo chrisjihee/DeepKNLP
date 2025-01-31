@@ -302,6 +302,7 @@ def main(
         world_size: Annotated[int, typer.Option("--world_size")] = -1,
         local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
         debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
+        verbose: Annotated[int, typer.Option("--verbose")] = 1,
 ):
     # Setup project environment
     if local_rank < 0 and "LOCAL_RANK" in os.environ:
@@ -416,7 +417,7 @@ def main(
 
     with JobTimer(
             name=f"python {args.env.current_file} {' '.join(args.env.command_args)}",
-            rt=1, rb=1, rc='=', verbose=True, args=args,
+            rt=1, rb=1, rc='=', verbose=verbose, args=args,
     ):
         accelerator.wait_for_everyone()
 
