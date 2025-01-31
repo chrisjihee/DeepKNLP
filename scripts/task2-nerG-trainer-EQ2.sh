@@ -3,7 +3,7 @@
 set -x  # Enable debug mode to print each command before execution
 
 # Set CUDA devices
-export CUDA_VISIBLE_DEVICES=0,1,2,3
+export CUDA_VISIBLE_DEVICES=4,5,6,7
 
 # Generate a random port for distributed training
 port=$(shuf -i 25000-30000 -n1)
@@ -16,10 +16,9 @@ trainer_deepspeed="configs/deepspeed/ds2_llama.json"
 # List of pretrained models and their corresponding run versions
 declare -A models
 models=(
-  ["google/flan-t5-large"]="FLAN-T5-Large"
-  ["google/flan-t5-xl"]="FLAN-T5-3B"
-  ["meta-llama/Llama-3.2-1B"]="Llama-3-1B"
-  ["meta-llama/Llama-3.2-3B"]="Llama-3-3B"
+  ["etri-lirs/egpt-1.3b-preview"]="EAGLE-1B"
+  ["etri-lirs/eagle-3b-preview"]="EAGLE-3B"
+  ["microsoft/Phi-3.5-mini-instruct"]="Phi-3.5-mini"
 )
 
 # List of datasets
