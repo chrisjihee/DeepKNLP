@@ -360,9 +360,9 @@ def main(
             report_to=report_to,
             log_level=log_level_str,
             log_level_replica=log_level_rep_str,
-            do_train=train_file is not None,
-            do_eval=eval_file is not None,
-            do_predict=pred_file is not None,
+            do_train=bool(train_file),
+            do_eval=bool(eval_file),
+            do_predict=bool(pred_file),
             gradient_checkpointing=gradient_checkpointing,
             per_device_train_batch_size=per_device_train_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
@@ -476,6 +476,7 @@ def main(
             cache_path_func=args.data.cache_train_path,
             progress_seconds=args.data.progress_seconds / 5,
         )
+        args.train.do_train = bool(train_dataset)
         accelerator.wait_for_everyone()
 
         # Preprocess evaluation dataset (if do_eval)
@@ -492,6 +493,7 @@ def main(
             cache_path_func=args.data.cache_eval_path,
             progress_seconds=args.data.progress_seconds / 5,
         )
+        args.train.do_eval = bool(eval_dataset)
         accelerator.wait_for_everyone()
 
         # Preprocess prediction dataset (if do_predict)
@@ -508,6 +510,7 @@ def main(
             cache_path_func=args.data.cache_pred_path,
             progress_seconds=args.data.progress_seconds / 5,
         )
+        args.train.do_predict = bool(pred_dataset)
         accelerator.wait_for_everyone()
 
         # Data collator
@@ -542,7 +545,7 @@ def main(
             trainer=trainer,
             metric_file=args.env.output_dir / args.env.output_file,
             logging_epochs=args.train.logging_epochs,
-            eval_epochs=args.train.eval_epochs,
+            eval_epochs=args.train.eval_epochs if args.train.do_eval else 0,
             save_epochs=args.train.save_epochs,
             progress_seconds=args.data.progress_seconds,
             metric_formats={

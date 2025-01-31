@@ -37,9 +37,8 @@ class CustomProgressCallback(TrainerCallback):
             self,
             trainer: Trainer,
             metric_file: str | Path,
-            logging_epochs: float,
-            eval_epochs: float,
-            save_epochs: float,
+            eval_epochs: float = -1,
+            save_epochs: float = -1,
             progress_seconds: float = 3.0,
             metric_formats: Mapping[str, str] | None = None,
     ):
