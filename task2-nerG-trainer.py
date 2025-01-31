@@ -308,7 +308,7 @@ def main(
         eval_accumulation_steps: Annotated[int, typer.Option("--eval_accumulation_steps")] = 1,
         num_train_epochs: Annotated[float, typer.Option("--num_train_epochs")] = 12,
         logging_epochs: Annotated[float, typer.Option("--logging_epochs")] = -1,
-        eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 1 / 5,
+        eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = 1 / 2,
         save_epochs: Annotated[float, typer.Option("--save_epochs")] = -1,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 1,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
