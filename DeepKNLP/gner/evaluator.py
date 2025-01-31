@@ -3,7 +3,9 @@ import json
 import re
 import string
 from collections import defaultdict
+from typing import List
 
+from chrisdata.ner import GenNERSampleWrapper
 from transformers import AutoTokenizer
 
 
@@ -138,16 +140,16 @@ def hierarchical_matching(raw_words, words, labels, tokenizer=None):
 
 
 # convert the unstructured texts into structured entities
-def extract_predictions(example, tokenizer=None):
-    pred_words, pred_labels = extract(example['prediction'].strip())
+def extract_predictions(example: GenNERSampleWrapper, tokenizer=None):
+    pred_words, pred_labels = extract(example.instance.prediction_output.strip())
     valid_labels = []
-    for label in example['label_list']:
+    for label in example.label_list:
         valid_labels.extend([f'B-{label}', f'I-{label}'])
     for i, label in enumerate(pred_labels):
         if label not in valid_labels:
             pred_labels[i] = "O"
-    predictions = hierarchical_matching(example['instance']['words'], pred_words, pred_labels, tokenizer=tokenizer)
-    assert len(predictions) == len(example['instance']['labels'])
+    predictions = hierarchical_matching(example.instance.words, pred_words, pred_labels, tokenizer=tokenizer)
+    assert len(predictions) == len(example.instance.labels)
     return predictions
 
 
@@ -201,11 +203,11 @@ def parser(words, labels):
 # compute F1 score
 # modified from https://github.com/universal-ner/universal-ner/blob/main/src/eval/evaluate.py
 class NEREvaluator:
-    def evaluate(self, examples: list, tokenizer) -> dict[str, float]:
+    def evaluate(self, examples: List[GenNERSampleWrapper], tokenizer) -> dict[str, float]:
         n_correct, n_pos_gold, n_pos_pred = 0, 0, 0
         for example in examples:
-            words = example['instance']['words']
-            labels = example['instance']['labels']
+            words = example.instance.words
+            labels = example.instance.labels
             predictions = extract_predictions(example, tokenizer)
             gold_tuples = parser(words, labels)
             pred_tuples = parser(words, predictions)
@@ -224,10 +226,10 @@ class NEREvaluator:
         }
 
 
-def compute_metrics(examples, tokenizer=None, average_key="average", detailed=False) -> dict[str, float]:
+def compute_metrics(examples: List[GenNERSampleWrapper], tokenizer=None, average_key="average", detailed=False) -> dict[str, float]:
     all_examples = defaultdict(list)
     for example in examples:
-        all_examples[example['dataset']].append(example)
+        all_examples[example.dataset].append(example)
 
     # evaluate
     evaluator = NEREvaluator()
