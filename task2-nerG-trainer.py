@@ -65,13 +65,11 @@ def preprocess_function(example, is_encoder_decoder, max_source_length, max_targ
                 add_special_tokens=True,
             )['input_ids']
     else:
-        prompt = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
-        full_instruction = f"{prompt} {example['instance']['prompt_labels']}"
-        max_length = max_source_length + max_target_length
+        prompt_input = f"[INST] {example['instance']['instruction_inputs']} [/INST]"
         if inference:
             model_inputs = tokenizer(
-                text=prompt,
-                max_length=max_length,
+                text=prompt_input,
+                max_length=max_source_length + max_target_length,
                 truncation=True,
                 padding=False,
                 return_tensors=None,
@@ -83,8 +81,8 @@ def preprocess_function(example, is_encoder_decoder, max_source_length, max_targ
                 model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
         else:
             model_inputs = tokenizer(
-                text=full_instruction,
-                max_length=max_length,
+                text=f"{prompt_input} {example['instance']['prompt_labels']}",
+                max_length=max_source_length + max_target_length,
                 truncation=True,
                 padding=False,
                 return_tensors=None,
@@ -98,9 +96,9 @@ def preprocess_function(example, is_encoder_decoder, max_source_length, max_targ
             model_inputs["labels"] = model_inputs["input_ids"].copy()
 
             # Find the prompt length
-            prompt = tokenizer(
-                text=prompt,
-                max_length=max_length,
+            prompt_input = tokenizer(
+                text=prompt_input,
+                max_length=max_source_length + max_target_length,
                 truncation=True,
                 padding=False,
                 return_tensors=None,
@@ -108,16 +106,16 @@ def preprocess_function(example, is_encoder_decoder, max_source_length, max_targ
             )["input_ids"]
 
             # Remove the last token if it is an eos token
-            if prompt[-1] == tokenizer.eos_token_id:
-                prompt = prompt[:-1]
+            if prompt_input[-1] == tokenizer.eos_token_id:
+                prompt_input = prompt_input[:-1]
 
-            if len(prompt) > len(model_inputs["labels"]):
+            if len(prompt_input) > len(model_inputs["labels"]):
                 raise ValueError(
-                    f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
+                    f"Prompt is longer than the input, something went wrong. Prompt: {prompt_input}, input:"
                     f" {model_inputs['input_ids']}"
                 )
 
-            for i in range(len(prompt)):
+            for i in range(len(prompt_input)):
                 model_inputs["labels"][i] = -100
 
     return model_inputs
@@ -143,36 +141,30 @@ def preprocess_row(
         counter: Counter,
         update: Optional[Callable[[Counter, int], None]] = None,
 ) -> BatchEncoding:
-    sample = GenNERSampleWrapper.model_validate(row)
-
-    # Construct decoder-only prompt and instruction text
-    prompt_input = f"[INST] {sample.instance.instruction_inputs} [/INST]"
-    full_instruction = f"{prompt_input} {sample.instance.prompt_labels}"
+    example = GenNERSampleWrapper.model_validate(row)
 
     def tokenize_encoder_decoder_train():
         model_inputs = tokenizer(
-            text=sample.instance.instruction_inputs,
+            text=example.instance.instruction_inputs,
             max_length=max_source_length,
             truncation=True,
             padding=False,
             return_tensors=None,
             add_special_tokens=True,
         )
-        with tokenizer.as_target_tokenizer():
-            labels = tokenizer(
-                text=sample.instance.prompt_labels,
-                max_length=max_target_length,
-                truncation=True,
-                padding=False,
-                return_tensors=None,
-                add_special_tokens=True,
-            )["input_ids"]
-        model_inputs["labels"] = labels
+        model_inputs["labels"] = tokenizer(
+            text_target=example.instance.prompt_labels,
+            max_length=max_target_length,
+            truncation=True,
+            padding=False,
+            return_tensors=None,
+            add_special_tokens=True,
+        )['input_ids']
         return model_inputs
 
     def tokenize_encoder_decoder_infer():
         model_inputs = tokenizer(
-            text=sample.instance.instruction_inputs,
+            text=example.instance.instruction_inputs,
             max_length=max_source_length,
             truncation=True,
             padding=False,
@@ -182,8 +174,9 @@ def preprocess_row(
         return model_inputs
 
     def tokenize_decoder_only_train():
+        prompt_input = f"[INST] {example.instance.instruction_inputs} [/INST]"
         model_inputs = tokenizer(
-            text=full_instruction,
+            text=f"{prompt_input} {example.instance.prompt_labels}",
             max_length=max_source_length + max_target_length,
             truncation=True,
             padding=False,
@@ -207,12 +200,20 @@ def preprocess_row(
         if prompt_tokens[-1] == tokenizer.eos_token_id:
             prompt_tokens = prompt_tokens[:-1]
 
+        # TODO: Compare with original version
+        # if len(prompt_input) > len(model_inputs["labels"]):
+        #     raise ValueError(
+        #         f"Prompt is longer than the input, something went wrong. Prompt: {prompt_input}, input:"
+        #         f" {model_inputs['input_ids']}"
+        #     )
+
         for i in range(len(prompt_tokens)):
             model_inputs["labels"][i] = -100
 
         return model_inputs
 
     def tokenize_decoder_only_infer():
+        prompt_input = f"[INST] {example.instance.instruction_inputs} [/INST]"
         model_inputs = tokenizer(
             text=prompt_input,
             max_length=max_source_length + max_target_length,
@@ -227,7 +228,7 @@ def preprocess_row(
         return model_inputs
 
     # Check if this row belongs to the training split
-    is_train = (sample.split == "train")
+    is_train = (example.split == "train")
 
     if is_encoder_decoder:
         if is_train:
@@ -245,6 +246,7 @@ def preprocess_row(
         update(counter=counter, rank=rank)
 
     tokenized_sample["time_stamp"] = now_stamp()
+    tokenized_sample["tokenizer_name"] = tokenizer.name_or_path
     return tokenized_sample
 
 
@@ -258,7 +260,7 @@ def preprocess_dataset(
         use_cache_data: bool,
         max_workers: int,
         local_rank: int,
-        cache_path_func: Optional[Callable[[int], str]] = None,
+        cache_path_func: Optional[Callable[[str], str]] = None,
         progress_seconds: float = 2.0,
 ) -> Optional[datasets.Dataset]:
     if file_path is None:
@@ -296,16 +298,18 @@ def preprocess_dataset(
                 ),
             },
             load_from_cache_file=use_cache_data,
-            cache_file_name=cache_path_func(tokenizer.name_or_path, len(dataset)) if cache_path_func else None,
+            cache_file_name=cache_path_func(f"{tokenizer.name_or_path.replace('/', '--')}={len(dataset)}") if cache_path_func else None,
             num_proc=max_workers,
         )
+
         # Re-enable datasets progress bars
         datasets.enable_progress_bars()
 
     # Log the last timestamp recorded (if any) in the dataset
-    if len(dataset) > 0 and "time_stamp" in dataset.column_names:
-        timestamp_str = from_timestamp(max(dataset['time_stamp']))
-        logger.info(f"Completed preprocessing for {dataset_name} at {timestamp_str}")
+    if len(dataset) > 0 and "time_stamp" in dataset.column_names and "tokenizer_name" in dataset.column_names:
+        timestamp_str = from_timestamp(max(dataset["time_stamp"]))
+        tokenizer_name = dataset["tokenizer_name"][-1]
+        logger.info(f"Completed preprocessing for {dataset_name} by {tokenizer_name} at {timestamp_str}")
 
     return dataset
 
