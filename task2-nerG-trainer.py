@@ -296,7 +296,7 @@ def preprocess_dataset(
                 ),
             },
             load_from_cache_file=use_cache_data,
-            cache_file_name=cache_path_func(len(dataset)) if cache_path_func else None,
+            cache_file_name=cache_path_func(tokenizer.name_or_path, len(dataset)) if cache_path_func else None,
             num_proc=max_workers,
         )
         # Re-enable datasets progress bars
@@ -578,7 +578,7 @@ def main(
         }
 
         # Preprocess training dataset (if do_train)
-        version = 1
+        version = 2
         # (1) Original implementation
         if version == 1:
             train_dataset = load_dataset("json", data_files=str(args.data.train_file), split="train")

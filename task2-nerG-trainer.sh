@@ -1,5 +1,5 @@
 set -x
-CUDA_VISIBLE_DEVICES=0,1,2,3
+CUDA_VISIBLE_DEVICES=0,1
 port=$(shuf -i25000-30000 -n1)
 
 python -m deepspeed.launcher.runner --include="localhost:$CUDA_VISIBLE_DEVICES" --master_port $port \
