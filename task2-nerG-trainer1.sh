@@ -2,8 +2,8 @@ set -x
 port=$(shuf -i25000-30000 -n1)
 TRAIN_JSON_DIR="data/gner/each/crossner_ai-train.jsonl"
 VALID_JSON_DIR="data/gner/each-sampled/crossner_ai-dev=100.jsonl"
-MODEL_NAME_OR_PATH="google/flan-t5-large"
-OUTPUT_DIR="output/GNER/FLAN-T5-Large"
+MODEL_NAME_OR_PATH="meta-llama/Llama-3.2-1B"
+OUTPUT_DIR="output/GNER/Llama-3-1B"
 DEEPSPEED_CONFIG="configs/deepspeed/ds2_llama.json"
 
 python -m deepspeed.launcher.runner --include="localhost:0,1" --master_port $port task2-nerG-trainer1.py \

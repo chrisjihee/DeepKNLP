@@ -14,7 +14,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="deepspeed.launcher.runner" />
-    <option name="PARAMETERS" value="--include=localhost:0,1,2,3 --master_port 30000 task2-nerG-trainer.py --trainer_deepspeed configs/deepspeed/ds1_llama.json" />
+    <option name="PARAMETERS" value="--include=localhost:0,1 --master_port 26973 task2-nerG-trainer.py data/gner/each/crossner_ai-train.jsonl --eval_file data/gner/each-sampled/crossner_ai-dev=100.jsonl --pretrained meta-llama/Llama-3.2-1B --run_version Llama-3-1B --per_device_train_batch_size 1 --trainer_deepspeed configs/deepspeed/ds2_llama.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="true" />
