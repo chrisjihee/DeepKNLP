@@ -1,20 +1,18 @@
 set -x
 port=$(shuf -i25000-30000 -n1)
-TRAIN_JSON_DIR=data/gner/each/crossner_ai-train.jsonl
-VALID_JSON_DIR=data/gner/each-sampled/crossner_ai-dev=100.jsonl
-MODEL_NAME_OR_PATH=etri-lirs/egpt-1.3b-preview
-OUTPUT_DIR=output/GNER/EAGLE-1B-supervised
-RUN_NAME=train_eagle_1b_supervised-base
-DEEPSPEED_CONFIG=configs/deepspeed/ds2_t5.json
+TRAIN_JSON_DIR="data/gner/each/crossner_ai-train.jsonl"
+VALID_JSON_DIR="data/gner/each-sampled/crossner_ai-dev=100.jsonl"
+MODEL_NAME_OR_PATH="google/flan-t5-large"
+OUTPUT_DIR="output/GNER/FLAN-T5-Large"
+DEEPSPEED_CONFIG="configs/deepspeed/ds2_llama.json"
 
-~/miniforge3/envs/DeepKNLP/bin/python -m deepspeed.launcher.runner --include="localhost:0,1,2,3" --master_port $port task2-nerG-trainer1.py \
+python -m deepspeed.launcher.runner --include="localhost:0,1" --master_port $port task2-nerG-trainer1.py \
     --do_train --do_eval --predict_with_generate \
+    --no_load_gner_customized_datasets \
     --train_json_dir $TRAIN_JSON_DIR \
     --valid_json_dir $VALID_JSON_DIR \
-    --no_load_gner_customized_datasets \
     --model_name_or_path $MODEL_NAME_OR_PATH \
     --output_dir $OUTPUT_DIR \
-    --run_name $RUN_NAME \
     --preprocessing_num_workers 4 \
     --per_device_eval_batch_size 8 \
     --per_device_train_batch_size 1 \
