@@ -138,6 +138,5 @@ deepspeed*
 *.tmp
 pretrained*
 finetuning*
-output*
 data/**/pile-ner*
 data/**/KG-generation*
