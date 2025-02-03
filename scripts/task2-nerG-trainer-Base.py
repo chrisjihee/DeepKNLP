@@ -20,10 +20,10 @@ run_suffix = "Baseline"
 # List of pretrained models and their corresponding run versions
 models = [
     ("google/flan-t5-large", "FLAN-T5-Large"),
-    ("google/flan-t5-xl", "FLAN-T5-3B"),
     ("meta-llama/Llama-3.2-1B", "Llama-3-1B"),
-    ("meta-llama/Llama-3.2-3B", "Llama-3-3B"),
     ("etri-lirs/egpt-1.3b-preview", "EAGLE-1B"),
+    ("google/flan-t5-xl", "FLAN-T5-3B"),
+    ("meta-llama/Llama-3.2-3B", "Llama-3-3B"),
     ("etri-lirs/eagle-3b-preview", "EAGLE-3B"),
     ("microsoft/Phi-3.5-mini-instruct", "Phi-3_5-mini"),
 ]
@@ -40,7 +40,7 @@ datasets = [
 ]
 
 # Loop through each model and dataset
-for pretrained, run_version in models:
+for pretrained, run_version in reversed(models):
     run_version = f"{run_version}-{run_suffix}"
 
     for dataset in datasets:
