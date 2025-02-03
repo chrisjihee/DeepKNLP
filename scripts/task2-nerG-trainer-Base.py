@@ -25,7 +25,6 @@ models = [
     ("google/flan-t5-xl", "FLAN-T5-3B"),
     ("meta-llama/Llama-3.2-3B", "Llama-3-3B"),
     ("etri-lirs/eagle-3b-preview", "EAGLE-3B"),
-    ("microsoft/Phi-3.5-mini-instruct", "Phi-3_5-mini"),
 ]
 
 # List of datasets
