@@ -22,7 +22,7 @@ models=(
   ["meta-llama/Llama-3.2-3B"]="Llama-3-3B"
   ["etri-lirs/egpt-1.3b-preview"]="EAGLE-1B"
   ["etri-lirs/eagle-3b-preview"]="EAGLE-3B"
-  ["microsoft/Phi-3.5-mini-instruct"]="Phi-3.5-mini"
+  ["microsoft/Phi-3.5-mini-instruct"]="Phi-3_5-mini"
 )
 
 # List of datasets
