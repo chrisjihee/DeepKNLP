@@ -5,9 +5,7 @@ import typer
 from typing_extensions import Annotated
 
 from chrisbase.data import AppTyper, JobTimer, NewProjectEnv
-from chrisbase.data import FileOption, FileStreamer
 from chrisbase.io import files, dirs
-from chrisbase.io import new_path
 
 # Global settings
 main = AppTyper()
