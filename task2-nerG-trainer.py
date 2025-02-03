@@ -490,6 +490,7 @@ def main(
                 config=config,
                 trust_remote_code=True,
             )
+        accelerator.wait_for_everyone()
         logger.info(f"type(model)={type(model)}")
         model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
         logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
