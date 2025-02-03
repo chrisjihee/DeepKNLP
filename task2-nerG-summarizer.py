@@ -14,7 +14,7 @@ logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 @main.command("summarize")
 def summarize(
-        input_dirs: Annotated[str, typer.Argument()] = ...,  # "output/GNER-Baseline/*",
+        input_dirs: Annotated[str, typer.Argument()] = ...,  # "output/GNER-Baseline/*", "output/GNER-MR_EQ/*"
         csv_filename: Annotated[str, typer.Option("--csv_filename")] = "train-metrics-*.csv",
         logging_level: Annotated[int, typer.Option("--logging_level")] = logging.INFO,
 ):
