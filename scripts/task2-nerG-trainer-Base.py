@@ -52,12 +52,12 @@ for pretrained, run_version in models:
                     --include=localhost:{os.environ['CUDA_VISIBLE_DEVICES']}
                     --master_port={port}
                 task2-nerG-trainer.py
-                    data/gner/each/{dataset}-train.jsonl
-                    --eval_file data/gner/each-sampled/{dataset}-dev=100.jsonl
                     --pretrained {pretrained}
                     --run_version {run_version}
-                    --eval_epochs {eval_epochs}
+                    --train_file data/gner/each/{dataset}-train.jsonl
+                    --eval_file data/gner/each-sampled/{dataset}-dev=100.jsonl
                     --num_train_epochs {num_train_epochs}
+                    --eval_epochs {eval_epochs}
                     --per_device_train_batch_size {batch_size}
                     --output_file train-metrics-{dataset}-{num_train_epochs}ep.csv
                     --logging_file train-loggings-{dataset}-{num_train_epochs}ep.out

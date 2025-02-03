@@ -294,10 +294,10 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
 # [5]: https://huggingface.co/docs/transformers/en/main_classes/logging
 def main(
         # for CustomDataArguments
-        train_file: Annotated[str, typer.Argument()] = ...,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
+        pretrained: Annotated[str, typer.Option("--pretrained")] = ...,  # "google/flan-t5-large",
+        train_file: Annotated[str, typer.Option("--train_file")] = ...,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
         eval_file: Annotated[str, typer.Option("--eval_file")] = None,  # "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/each-sampled/crossner_ai-test=100.jsonl",
-        pretrained: Annotated[str, typer.Option("--pretrained")] = "etri-lirs/egpt-1.3b-preview",
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
@@ -326,7 +326,7 @@ def main(
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,  # for deepspeed.launcher.runner
         accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,  # for accelerate.commands.launch
         # for ProjectEnv
-        run_version: Annotated[str, typer.Option("--run_version")] = "EAGLE-1B-supervised",
+        run_version: Annotated[str, typer.Option("--run_version")] = None,
         output_name: Annotated[str, typer.Option("--output_name")] = "GNER",
         output_home: Annotated[str, typer.Option("--output_home")] = "output",
         output_file: Annotated[str, typer.Option("--output_file")] = "train-metrics.csv",
