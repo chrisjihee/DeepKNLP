@@ -66,21 +66,21 @@ class CustomDataArguments(BaseModel):
         if self.pred_file:
             return self.pred_file.parent / ".cache"
 
-    def cache_train_path(self, tokenizer_name:str, data_size: int) -> Optional[str]:
+    def cache_train_path(self, suffix: str) -> Optional[str]:
         if self.train_file:
-            return str(self.cache_train_dir / f"{self.train_file.stem}={tokenizer_name.replace('/', '--')}={data_size}.tmp")
+            return str(self.cache_train_dir / f"{self.train_file.stem}={suffix}.tmp")
 
-    def cache_study_path(self, tokenizer_name:str, data_size: int) -> Optional[str]:
+    def cache_study_path(self, suffix: str) -> Optional[str]:
         if self.study_file:
-            return str(self.cache_study_dir / f"{self.study_file.stem}={tokenizer_name.replace('/', '--')}={data_size}.tmp")
+            return str(self.cache_study_dir / f"{self.study_file.stem}={suffix}.tmp")
 
-    def cache_eval_path(self, tokenizer_name:str, data_size: int) -> Optional[str]:
+    def cache_eval_path(self, suffix: str) -> Optional[str]:
         if self.eval_file:
-            return str(self.cache_eval_dir / f"{self.eval_file.stem}={tokenizer_name.replace('/', '--')}={data_size}.tmp")
+            return str(self.cache_eval_dir / f"{self.eval_file.stem}={suffix}.tmp")
 
-    def cache_pred_path(self, tokenizer_name:str, data_size: int) -> Optional[str]:
+    def cache_pred_path(self, suffix: str) -> Optional[str]:
         if self.pred_file:
-            return str(self.cache_pred_dir / f"{self.pred_file.stem}={tokenizer_name.replace('/', '--')}={data_size}.tmp")
+            return str(self.cache_pred_dir / f"{self.pred_file.stem}={suffix}.tmp")
 
 
 @dataclass
@@ -173,21 +173,21 @@ class TrainingArgumentsForFabric(NewCommonArguments):
             if self.test_file:
                 return self.test_file.parent / ".cache"
 
-        def cache_train_path(self, tokenizer_name: str, data_size: int) -> Optional[str]:
+        def cache_train_path(self, suffix: str) -> Optional[str]:
             if self.train_file:
-                return str(self.cache_train_dir / f"{self.train_file.stem}={tokenizer_name.replace('/', '--')}={data_size}.tmp")
+                return str(self.cache_train_dir / f"{self.train_file.stem}={suffix}.tmp")
 
-        def cache_study_path(self, tokenizer_name: str, data_size: int) -> Optional[str]:
+        def cache_study_path(self, suffix: str) -> Optional[str]:
             if self.study_file:
-                return str(self.cache_study_dir / f"{self.study_file.stem}={tokenizer_name.replace('/', '--')}={data_size}.tmp")
+                return str(self.cache_study_dir / f"{self.study_file.stem}={suffix}.tmp")
 
-        def cache_eval_path(self, tokenizer_name: str, data_size: int) -> Optional[str]:
+        def cache_eval_path(self, suffix: str) -> Optional[str]:
             if self.eval_file:
-                return str(self.cache_eval_dir / f"{self.eval_file.stem}={tokenizer_name.replace('/', '--')}={data_size}.tmp")
+                return str(self.cache_eval_dir / f"{self.eval_file.stem}={suffix}.tmp")
 
-        def cache_pred_path(self, tokenizer_name: str, data_size: int) -> Optional[str]:
+        def cache_pred_path(self, suffix: str) -> Optional[str]:
             if self.pred_file:
-                return str(self.cache_pred_dir / f"{self.pred_file.stem}={tokenizer_name.replace('/', '--')}={data_size}.tmp")
+                return str(self.cache_pred_dir / f"{self.pred_file.stem}={suffix}.tmp")
 
     class LearnOption(BaseModel):
         output_home: str | Path | None = Field(default=None)
