@@ -200,12 +200,11 @@ def preprocess_row(
         if prompt_tokens[-1] == tokenizer.eos_token_id:
             prompt_tokens = prompt_tokens[:-1]
 
-        # TODO: Compare with original version
-        # if len(prompt_input) > len(model_inputs["labels"]):
-        #     raise ValueError(
-        #         f"Prompt is longer than the input, something went wrong. Prompt: {prompt_input}, input:"
-        #         f" {model_inputs['input_ids']}"
-        #     )
+        if len(prompt_tokens) > len(model_inputs["labels"]):
+            raise ValueError(
+                f"Prompt is longer than the input, something went wrong. Prompt: {prompt_tokens}, input:"
+                f" {model_inputs['input_ids']}"
+            )
 
         for i in range(len(prompt_tokens)):
             model_inputs["labels"][i] = -100
