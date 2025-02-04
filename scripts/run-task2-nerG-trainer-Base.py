@@ -10,10 +10,12 @@ port = random.randint(25000, 30000)
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 
 # Training parameters
-num_train_epochs = 12
+train_epochs = 12
 eval_epochs = 0.5
 trainer_deepspeed = "configs/deepspeed/ds2_llama.json"
 run_suffix = "Baseline"
+train_dir = "data/gner/each"
+eval_dir = "data/gner/each-sampled"
 
 # List of datasets
 datasets = [
@@ -83,14 +85,14 @@ for pretrained, run_version in models:
                 task2-nerG-trainer.py
                     --pretrained {pretrained}
                     --run_version {run_version}
-                    --train_file data/gner/each/{dataset}-train.jsonl
-                    --eval_file data/gner/each-sampled/{dataset}-dev=100.jsonl
-                    --num_train_epochs {num_train_epochs}
-                    --eval_epochs {eval_epochs}
-                    --per_device_train_batch_size {batch_size}
-                    --output_file train-metrics-{dataset}-{num_train_epochs}ep.csv
-                    --logging_file train-loggings-{dataset}-{num_train_epochs}ep.out
                     --trainer_deepspeed {trainer_deepspeed}
+                    --eval_epochs {eval_epochs}
+                    --num_train_epochs {train_epochs}
+                    --per_device_train_batch_size {batch_size}
+                    --eval_file {eval_dir}/{dataset}-dev=100.jsonl
+                    --train_file {train_dir}/{dataset}-train.jsonl
+                    --output_file train-metrics-{dataset}-{train_epochs}ep.csv
+                    --logging_file train-loggings-{dataset}-{train_epochs}ep.out
         """
         command = command.strip().split()
         print("*" * 120)
