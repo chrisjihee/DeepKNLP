@@ -35,12 +35,12 @@ Transformer-based Korean Natural Language Processing
     ```bash
     pip install -r requirements.txt
     DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
-    MAX_JOBS=40 pip install --no-build-isolation flash-attn;  # for Phi family models
+    MAX_JOBS=40 pip install --no-build-isolation --upgrade flash-attn;  # for Micorsoft's Phi models
     rm -rf transformers; git clone git@github.com:chrisjihee/transformers.git; pip install -U -e transformers
     rm -rf chrisbase;    git clone git@github.com:chrisjihee/chrisbase.git;    pip install -U -e chrisbase
     rm -rf chrisdata;    git clone git@github.com:chrisjihee/chrisdata.git;    pip install -U -e chrisdata
     rm -rf progiter;     git clone git@github.com:chrisjihee/progiter.git;     pip install -U -e progiter
-    pip list | grep -E "torch|lightn|trans|accel|speed|numpy|piece|chris|prog|pydantic"
+    pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|prog|pydantic"
     ```
 5. Unzip some archived data
     ```bash
