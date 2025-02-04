@@ -18,13 +18,13 @@ train_dir = "data/gner/each"
 
 # List of datasets
 datasets = [
-    "mit-movie",
-    "mit-restaurant",
+    # "mit-movie",
+    # "mit-restaurant",
     "crossner_ai",
-    "crossner_music",
-    "crossner_science",
-    "crossner_politics",
-    "crossner_literature",
+    # "crossner_music",
+    # "crossner_science",
+    # "crossner_politics",
+    # "crossner_literature",
 ]
 
 # List of pretrained models
@@ -42,9 +42,7 @@ models_4B_or_less = [
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
 
-    ("configs/deepspeed/ds2_llama.json", "Phi3_5-4B", "microsoft/Phi-3.5-mini-instruct"),  # modeling_phi3.py must be changed: get_max_length() -> get_max_cache_shape()
-    # ("configs/deepspeed/ds2_llama.json", "Phi3_0-4B", "microsoft/Phi-3-mini-4k-instruct"),
-
+    ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3.5-mini-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
     # ("configs/deepspeed/ds2_llama.json", "Gemma2-2B", "google/gemma-2-2b"),
     # ("configs/deepspeed/ds2_llama.json", "Ministral-3B", "ministral/Ministral-3b-instruct"),
     # ("configs/deepspeed/ds2_llama.json", "Ministral-4B", "ministral/Ministral-4b-instruct"),
@@ -80,6 +78,7 @@ for ds_config, run_version, pretrained in models:
 
     for dataset in datasets:
         grad_steps = 8 if dataset in ["mit-movie", "mit-restaurant"] else 1
+
 
         command = f"""
             python -m
