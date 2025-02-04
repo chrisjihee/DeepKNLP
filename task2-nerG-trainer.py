@@ -440,7 +440,7 @@ def main(
     args.env.setup_logger(process_log_level)
     datasets_set_verbosity(process_log_level)
     transformers_set_verbosity(process_log_level)
-    set_verbosity_info("c10d-NullHandler-default")
+    set_verbosity_info("c10d-NullHandler-default", "torch.__trace")
     if accelerator.is_main_process:
         set_verbosity_info("DeepKNLP", "chrisbase")
 
