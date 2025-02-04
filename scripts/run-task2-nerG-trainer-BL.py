@@ -42,32 +42,29 @@ models_4B_or_less = [
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
     ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3.5-mini-instruct"),
+    ("configs/deepspeed/ds2_llama.json", "Gemma2-2B", "google/gemma-2-2b"),
+    ("configs/deepspeed/ds2_llama.json", "Ministral-3B", "ministral/Ministral-3b-instruct"),
+    ("configs/deepspeed/ds2_llama.json", "Ministral-4B", "ministral/Ministral-4b-instruct"),
 ]
 models_7B_or_more = [
     # ("configs/deepspeed/ds2_llama.json", "Llama3-8B", "meta-llama/Llama-3.1-8B"),
-    # ("configs/deepspeed/ds2_llama.json", "Qwen2-7B", "Qwen/Qwen2.5-7B"),
+    ("configs/deepspeed/ds2_llama.json", "Gemma2-9B", "google/gemma-2-9b"),
+    ("configs/deepspeed/ds2_llama.json", "Ministral-8B", "mistralai/Ministral-8B-Instruct-2410"),
+    ("configs/deepspeed/ds2_llama.json", "Qwen2-7B", "Qwen/Qwen2.5-7B"),
     ("configs/deepspeed/ds2_llama.json", "Phi3-7B", "microsoft/Phi-3-small-8k-instruct"),
-
-    # ("configs/deepspeed/ds2_llama.json", "Ministral-8B", "mistralai/Ministral-8B-Instruct-2410"),
-    # ("configs/deepspeed/ds2_llama.json", "Mistral-7B", "mistralai/Mistral-7B-Instruct-v0.3"),
+    ("configs/deepspeed/ds2_llama.json", "Gemma-7B", "google/gemma-7b"),
+    ("configs/deepspeed/ds2_llama.json", "Mistral-7B", "mistralai/Mistral-7B-Instruct-v0.3"),
 
     # ("configs/deepspeed/ds2_llama.json", "Alpaca-7B", "allenai/open-instruct-stanford-alpaca-7b"),
     # ("configs/deepspeed/ds2_llama.json", "Llama2-7B", "meta-llama/Llama-2-7b-hf"),
-    # ("configs/deepspeed/ds2_llama.json", "CodeLlama-7B", "meta-llama/CodeLlama-7b-hf"),
 
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-11B", "google/flan-t5-xxl"),
     # ("configs/deepspeed/ds3_llama.json", "Llama3-11B", "meta-llama/Llama-3.2-11B-Vision"),
-
+    # ("configs/deepspeed/ds3_llama.json", "Mistral-12B", "mistralai/Mistral-Nemo-Instruct-2407"),
     # ("configs/deepspeed/ds3_llama.json", "Phi3-14B", "microsoft/phi-4"),
     # ("configs/deepspeed/ds3_llama.json", "Qwen2-14B", "Qwen/Qwen2.5-14B"),
-
     # ("configs/deepspeed/ds3_llama.json", "DeepSeek2-Lite-16B", "deepseek-ai/DeepSeek-V2-Lite"),
-    # ("configs/deepspeed/ds3_llama.json", "DeepSeek-Coder2-16B", "deepseek-ai/DeepSeek-Coder-V2-Lite-Base"),
     # ("configs/deepspeed/ds3_llama.json", "Mistral-22B", "mistralai/Mistral-Small-Instruct-2409"),
-
-    # ("configs/deepspeed/ds2_llama.json", "DeepSeekR1-8B", "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"),
-    # ("configs/deepspeed/ds2_llama.json", "DeepSeekR1-7B", "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"),
-    # ("configs/deepspeed/ds3_llama.json", "DeepSeekR1-14B", "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"),
 ]
 if hostname == "lirs-b1":
     models = models_7B_or_more
