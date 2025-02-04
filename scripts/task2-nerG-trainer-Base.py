@@ -33,14 +33,20 @@ models_up_to_3B = [
 ]
 
 models_up_to_11B = [
-    ("Qwen/Qwen2.5-7B", "Qwen2-7B"),
-    # ("meta-llama/Llama-3.1-8B", "Llama-3-8B"),
+    ("meta-llama/Llama-3.1-8B", "Llama-3-8B"),
+    # ("Qwen/Qwen2.5-7B", "Qwen2-7B"),
     # ("meta-llama/Llama-2-7b-hf", "Llama-2-7B"),
     # ("meta-llama/CodeLlama-7b-hf", "CodeLlama-7B"),
     # ("allenai/open-instruct-stanford-alpaca-7b", "Stanford-Alpaca-7B"),
     # ("deepseek-ai/DeepSeek-R1-Distill-Qwen-7B", "DeepSeek-R1-7B"),
     # ("deepseek-ai/DeepSeek-R1-Distill-Llama-8B", "DeepSeek-R1-8B"),
+    # ("mistralai/Mistral-7B-Instruct-v0.3", "Mistral-7B"),
+    # ("mistralai/Ministral-8B-Instruct-2410", "Ministral-8B"),
     # ("google/flan-t5-xxl", "FLAN-T5-11B"),
+    # ("meta-llama/Llama-3.2-11B-Vision", "Llama-3-11B-Vision"),
+    # ("deepseek-ai/DeepSeek-V2-Lite", "DeepSeek-V2-Lite-16B"),
+    # ("deepseek-ai/DeepSeek-Coder-V2-Lite-Base", "DeepSeek-Coder-V2-16B"),
+    # ("mistralai/Mistral-Small-Instruct-2409", "Mistral-22B"),
 ]
 
 # List of datasets
