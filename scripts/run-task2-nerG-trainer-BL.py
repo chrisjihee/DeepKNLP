@@ -53,11 +53,10 @@ models_7B_or_more = [
     ("configs/deepspeed/ds2_llama.json", "Ministral-8B", "mistralai/Ministral-8B-Instruct-2410"),
 
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-11B", "google/flan-t5-xxl"),
-    # ("configs/deepspeed/ds3_llama.json", "Llama3-11B", "meta-llama/Llama-3.2-11B-Vision"),
     # ("configs/deepspeed/ds3_llama.json", "Mistral-12B", "mistralai/Mistral-Nemo-Instruct-2407"),
+    # ("configs/deepspeed/ds3_llama.json", "Llama2-13B", "meta-llama/Llama-2-13b-hf"),
     # ("configs/deepspeed/ds3_llama.json", "Phi4-14B", "microsoft/phi-4"),
     # ("configs/deepspeed/ds3_llama.json", "Qwen2-14B", "Qwen/Qwen2.5-14B"),
-    # ("configs/deepspeed/ds3_llama.json", "Mistral-22B", "mistralai/Mistral-Small-Instruct-2409"),
 ]
 if hostname == "lirs-b1":
     models = models_7B_or_more
