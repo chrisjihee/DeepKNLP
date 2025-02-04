@@ -35,7 +35,7 @@ Transformer-based Korean Natural Language Processing
     ```bash
     pip install -r requirements.txt
     DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
-    MAX_JOBS=12 pip install flash-attn==2.0.4 --no-build-isolation;
+    MAX_JOBS=12 pip install flash-attn==2.0.4 --no-build-isolation;  # for Phi family models
     rm -rf transformers; git clone git@github.com:chrisjihee/transformers.git; pip install -U -e transformers
     rm -rf chrisbase;    git clone git@github.com:chrisjihee/chrisbase.git;    pip install -U -e chrisbase
     rm -rf chrisdata;    git clone git@github.com:chrisjihee/chrisdata.git;    pip install -U -e chrisdata
