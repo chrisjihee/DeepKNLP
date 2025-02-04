@@ -78,7 +78,7 @@ for ds_config, run_version, pretrained in models:
 
     for dataset in datasets:
         grad_steps = 8 if dataset in ["mit-movie", "mit-restaurant"] else 1
-
+        no_use_flash_attention = not pretrained.startswith("microsoft/Phi")
 
         command = f"""
             python -m
@@ -96,6 +96,7 @@ for ds_config, run_version, pretrained in models:
                     --train_file {train_dir}/{dataset}-train.jsonl
                     --output_file train-metrics-{dataset}-{train_epochs}ep.csv
                     --logging_file train-loggings-{dataset}-{train_epochs}ep.out
+                    --{'no' if no_use_flash_attention else ''}use_flash_attention
         """
         command = command.strip().split()
         print("*" * 120)
