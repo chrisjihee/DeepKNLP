@@ -30,6 +30,7 @@ Transformer-based Korean Natural Language Processing
                   cuda-nvcc=11.8 cuda-cccl=11.8 cuda-runtime=11.8 cuda-version=11.8 \
                   libcusparse=11 libcusparse-dev=11 libcublas=11 libcublas-dev=11 \
                   -c nvidia -c pytorch -y
+    pip list; conda list
     ```
 4. Install the required packages
     ```bash
@@ -70,5 +71,8 @@ Transformer-based Korean Natural Language Processing
 * Word Sequence Labelling (GenerativeNER) [no-trainer]:
   - `python task2-nerG-no-trainer.py --help`
   - `python task2-nerG-no-trainer.py train --help`
+* Word Sequence Labelling (GenerativeNER) [trainer]:
+  - `python task2-nerG-trainer.py --help`
+  - `python scripts/run-task2-nerG-trainer-BL.py`
 * [Not Yet Provided] Sentence Pair Classification: https://ratsgo.github.io/nlpbook/docs/pair_cls/overview/
 * [Not Yet Provided] Extractive Question Answering: https://ratsgo.github.io/nlpbook/docs/qa/overview/
