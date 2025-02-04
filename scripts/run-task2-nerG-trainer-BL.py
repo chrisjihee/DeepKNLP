@@ -18,13 +18,13 @@ train_dir = "data/gner/each"
 
 # List of datasets
 datasets = [
-    # "mit-movie",
-    # "mit-restaurant",
     "crossner_ai",
-    # "crossner_music",
-    # "crossner_science",
-    # "crossner_politics",
-    # "crossner_literature",
+    "crossner_music",
+    "crossner_science",
+    "crossner_politics",
+    "crossner_literature",
+    "mit-movie",
+    "mit-restaurant",
 ]
 
 # List of pretrained models
