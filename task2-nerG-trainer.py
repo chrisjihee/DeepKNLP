@@ -306,7 +306,7 @@ def main(
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
-        use_flash_attention: Annotated[bool, typer.Option("--use_flash_attention/--no_use_flash_attention")] = True,
+        use_flash_attention: Annotated[bool, typer.Option("--use_flash_attention/--no_use_flash_attention")] = False,
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 1,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 1,
@@ -491,8 +491,8 @@ def main(
                 args.data.pretrained,
                 from_tf=bool(".ckpt" in str(args.data.pretrained)),
                 config=config,
-                device_map="cuda",
-                torch_dtype="auto",
+                device_map="cuda" if args.train.use_flash_attention else None,
+                torch_dtype="auto" if args.train.use_flash_attention else None,
                 attn_implementation="flash_attention_2" if args.train.use_flash_attention else config._attn_implementation,
                 trust_remote_code=True,
             )
