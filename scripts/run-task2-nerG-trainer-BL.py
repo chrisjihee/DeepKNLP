@@ -10,7 +10,7 @@ port = random.randint(25000, 30000)
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 
 # Training parameters
-run_suffix = "Baseline"
+run_suffix = "BL"
 eval_epochs = 0.5
 train_epochs = 12
 eval_dir = "data/gner/each-sampled"
