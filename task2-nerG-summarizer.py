@@ -24,7 +24,7 @@ def summarize(
     ):
         no_interest_columns = ['eval_average', 'eval_runtime', 'eval_samples_per_second', 'eval_steps_per_second']
         for input_dir in dirs(input_dirs):
-            output_file = input_dir.with_name(input_dir.name + "-eval.csv")
+            output_file = input_dir.with_suffix(".csv")
             logger.info("[input_dir] %s", input_dir)
             dfs = []
             for input_file in files(input_dir / csv_filename):
@@ -42,9 +42,9 @@ def summarize(
                 merged_df["eval_average"] = merged_df[eval_columns].mean(axis=1)
                 merged_df = merged_df[["epoch", "eval_average"] + eval_columns]
                 merged_df.to_csv(output_file, index=False)
-                logger.info(f">> {len(dfs)} files are merged into {output_file}")
+                logger.info(f"            >> {len(dfs)} files are merged into {output_file}")
             else:
-                logger.info(f">> No files or no evaluation output in input folder")
+                logger.info(f"            >> No files or no evaluation output in input folder")
 
 
 if __name__ == "__main__":
