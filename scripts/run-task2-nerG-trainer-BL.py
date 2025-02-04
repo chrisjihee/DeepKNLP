@@ -29,30 +29,23 @@ datasets = [
 
 # List of pretrained models
 models_4B_or_less = [
-    # ("configs/deepspeed/ds2_llama.json", "FlanT5-Small", "google/flan-t5-small"),
-    # ("configs/deepspeed/ds2_llama.json", "FlanT5-Base", "google/flan-t5-base"),
-    # ("configs/deepspeed/ds2_llama.json", "FlanT5-1B", "google/flan-t5-large"),
-    # ("configs/deepspeed/ds2_llama.json", "FlanT5-3B", "google/flan-t5-xl"),
+    # ("configs/deepspeed/ds3_t5.json", "FlanT5-Small", "google/flan-t5-small"),
+    # ("configs/deepspeed/ds3_t5.json", "FlanT5-Base", "google/flan-t5-base"),
+    # ("configs/deepspeed/ds3_t5.json", "FlanT5-1B", "google/flan-t5-large"),
+    # ("configs/deepspeed/ds3_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
 
     # ("configs/deepspeed/ds2_llama.json", "EAGLE-1B", "etri-lirs/egpt-1.3b-preview"),
     # ("configs/deepspeed/ds2_llama.json", "EAGLE-3B", "etri-lirs/eagle-3b-preview"),
 
     # ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
     # ("configs/deepspeed/ds2_llama.json", "Llama3-3B", "meta-llama/Llama-3.2-3B"),
-
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
-    # ("configs/deepspeed/ds2_llama.json", "DeepSeekR1-1B", "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"),
-
     ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3.5-mini-instruct"),
 ]
 models_7B_or_more = [
     # ("configs/deepspeed/ds2_llama.json", "Llama3-8B", "meta-llama/Llama-3.1-8B"),
-    # ("configs/deepspeed/ds2_llama.json", "DeepSeekR1-8B", "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"),
-
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-7B", "Qwen/Qwen2.5-7B"),
-    # ("configs/deepspeed/ds2_llama.json", "DeepSeekR1-7B", "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"),
-
     ("configs/deepspeed/ds2_llama.json", "Phi3-7B", "microsoft/Phi-3-small-8k-instruct"),
 
     # ("configs/deepspeed/ds2_llama.json", "Ministral-8B", "mistralai/Ministral-8B-Instruct-2410"),
@@ -64,10 +57,17 @@ models_7B_or_more = [
 
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-11B", "google/flan-t5-xxl"),
     # ("configs/deepspeed/ds3_llama.json", "Llama3-11B", "meta-llama/Llama-3.2-11B-Vision"),
-    # ("configs/deepspeed/ds3_llama.json", "DeepSeekR1-14B", "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"),
+
+    # ("configs/deepspeed/ds3_llama.json", "Phi3-14B", "microsoft/phi-4"),
+    # ("configs/deepspeed/ds3_llama.json", "Qwen2-14B", "Qwen/Qwen2.5-14B"),
+
     # ("configs/deepspeed/ds3_llama.json", "DeepSeek2-Lite-16B", "deepseek-ai/DeepSeek-V2-Lite"),
     # ("configs/deepspeed/ds3_llama.json", "DeepSeek-Coder2-16B", "deepseek-ai/DeepSeek-Coder-V2-Lite-Base"),
     # ("configs/deepspeed/ds3_llama.json", "Mistral-22B", "mistralai/Mistral-Small-Instruct-2409"),
+
+    # ("configs/deepspeed/ds2_llama.json", "DeepSeekR1-8B", "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"),
+    # ("configs/deepspeed/ds2_llama.json", "DeepSeekR1-7B", "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"),
+    # ("configs/deepspeed/ds3_llama.json", "DeepSeekR1-14B", "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"),
 ]
 if hostname == "lirs-b1":
     models = models_7B_or_more
