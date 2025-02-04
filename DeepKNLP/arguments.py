@@ -97,6 +97,10 @@ class ExSeq2SeqTrainingArguments(Seq2SeqTrainingArguments):
         default=0.1,
         metadata={"help": "Save checkpoint every X epochs."},
     )
+    use_flash_attention: bool = field(
+        default=False,
+        metadata={"help": "Use Flash Attention 2."},
+    )
 
 
 class TrainingArgumentsForAccelerator(NewCommonArguments):

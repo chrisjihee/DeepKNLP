@@ -28,7 +28,7 @@ datasets = [
 ]
 
 # List of pretrained models
-models_3B_or_less = [
+models_4B_or_less = [
     # ("configs/deepspeed/ds2_llama.json", "FlanT5-Small", "google/flan-t5-small"),
     # ("configs/deepspeed/ds2_llama.json", "FlanT5-Base", "google/flan-t5-base"),
     # ("configs/deepspeed/ds2_llama.json", "FlanT5-1B", "google/flan-t5-large"),
@@ -44,9 +44,7 @@ models_3B_or_less = [
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
     # ("configs/deepspeed/ds2_llama.json", "DeepSeekR1-1B", "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"),
 
-    ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3-mini-4k-instruct"),
-    ("configs/deepspeed/ds2_llama.json", "Phi3_5-4B", "microsoft/Phi-3.5-mini-instruct"),
-    ("configs/deepspeed/ds2_llama.json", "Phi2-3B", "microsoft/phi-2"),
+    ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3.5-mini-instruct"),
 ]
 models_7B_or_more = [
     # ("configs/deepspeed/ds2_llama.json", "Llama3-8B", "meta-llama/Llama-3.1-8B"),
@@ -74,7 +72,7 @@ models_7B_or_more = [
 if hostname == "lirs-b1":
     models = models_7B_or_more
 else:
-    models = models_3B_or_less
+    models = models_4B_or_less
 
 # Loop through each model and dataset
 for ds_config, run_version, pretrained in models:

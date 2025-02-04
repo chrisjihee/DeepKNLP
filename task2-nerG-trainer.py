@@ -306,6 +306,7 @@ def main(
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
+        use_flash_attention: Annotated[bool, typer.Option("--use_flash_attention/--no_use_flash_attention")] = True,
         gradient_checkpointing: Annotated[bool, typer.Option("--gradient_checkpointing/--no_gradient_checkpointing")] = True,
         per_device_train_batch_size: Annotated[int, typer.Option("--per_device_train_batch_size")] = 1,
         gradient_accumulation_steps: Annotated[int, typer.Option("--gradient_accumulation_steps")] = 1,
@@ -400,6 +401,7 @@ def main(
             do_train=bool(train_file),
             do_eval=bool(eval_file),
             do_predict=bool(pred_file),
+            use_flash_attention=use_flash_attention,
             gradient_checkpointing=gradient_checkpointing,
             per_device_train_batch_size=per_device_train_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
@@ -445,20 +447,19 @@ def main(
     # Set random seed
     set_seed(args.train.seed)
     torch.set_float32_matmul_precision('high')
+    accelerator.wait_for_everyone()
 
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}",
                   rt=1, rb=1, rc='=', verbose=verbose, args=args):
-        accelerator.wait_for_everyone()
-
-        # Load config and tokenizer
+        # Load pretrained config
         config = AutoConfig.from_pretrained(
             args.data.pretrained,
-            trust_remote_code=True,
             use_cache=not args.train.gradient_checkpointing,
+            trust_remote_code=True,
         )
         is_encoder_decoder = config.is_encoder_decoder
 
-        # Initialize tokenizer
+        # Load pretrained tokenizer
         if is_encoder_decoder:
             tokenizer = AutoTokenizer.from_pretrained(
                 args.data.pretrained,
@@ -467,15 +468,17 @@ def main(
         else:  # https://github.com/Vision-CAIR/MiniGPT-4/issues/129
             tokenizer = AutoTokenizer.from_pretrained(
                 args.data.pretrained,
-                trust_remote_code=True,
+                padding_side="left",
                 add_eos_token=True,
                 add_bos_token=True,
-                padding_side="left",
+                trust_remote_code=True,
             )
         if tokenizer.pad_token is None:
             # tokenizer.pad_token = tokenizer.eos_token  # https://medium.com/@rschaeffer23/how-to-fine-tune-llama-3-1-8b-instruct-bf0a84af7795
             tokenizer.pad_token = tokenizer.unk_token if tokenizer.unk_token else tokenizer.eos_token  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
             # tokenizer.add_special_tokens({'pad_token': "<pad>"})  # https://stackoverflow.com/questions/70544129/transformers-asking-to-pad-but-the-tokenizer-does-not-have-a-padding-token
+
+        # Load pretrained model
         if is_encoder_decoder:
             model = AutoModelForSeq2SeqLM.from_pretrained(
                 args.data.pretrained,
@@ -488,12 +491,16 @@ def main(
                 args.data.pretrained,
                 from_tf=bool(".ckpt" in str(args.data.pretrained)),
                 config=config,
+                device_map="cuda",
+                torch_dtype="auto",
+                attn_implementation="flash_attention_2" if args.train.use_flash_attention else config._attn_implementation,
                 trust_remote_code=True,
             )
-        accelerator.wait_for_everyone()
-        logger.info(f"type(model)={type(model)}")
         model.generation_config.pad_token_id = tokenizer.pad_token_id  # https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id
-        logger.info(f"model.generation_config.pad_token_id={model.generation_config.pad_token_id}")
+        accelerator.wait_for_everyone()
+        logger.info(f"model type: {type(model)}")
+        logger.info(f"model attn_implementation: '{config._attn_implementation}' -> '{model.config._attn_implementation}'")
+        logger.info(f"model generation_config.pad_token_id={model.generation_config.pad_token_id}")
 
         # Preprocess training dataset (if do_train)
         train_dataset = preprocess_dataset(
