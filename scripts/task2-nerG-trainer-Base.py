@@ -26,6 +26,7 @@ models = [
     ("meta-llama/Llama-3.1-8B", "Llama-3-8B"),
     # ("meta-llama/Llama-2-7b-hf", "Llama-2-7B"),
     # ("meta-llama/CodeLlama-7b-hf", "CodeLlama-7B"),
+    # ("allenai/open-instruct-stanford-alpaca-7b", "Stanford-Alpaca-7B"),
     # ("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", "DeepSeek-R1-1_5B"),
     # ("deepseek-ai/DeepSeek-R1-Distill-Qwen-7B", "DeepSeek-R1-7B"),
     # ("deepseek-ai/DeepSeek-R1-Distill-Llama-8B", "DeepSeek-R1-8B"),
