@@ -19,13 +19,13 @@ eval_dir = "data/gner/each-sampled"
 
 # List of datasets
 datasets = [
-    "crossner_ai",
-    "crossner_literature",
-    "crossner_music",
-    "crossner_politics",
-    "crossner_science",
     "mit-movie",
     "mit-restaurant",
+    "crossner_ai",
+    "crossner_music",
+    "crossner_science",
+    "crossner_politics",
+    "crossner_literature",
 ]
 
 # List of pretrained models
