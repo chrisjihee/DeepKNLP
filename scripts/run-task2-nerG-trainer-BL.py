@@ -45,11 +45,11 @@ models_3B_or_less = [
     ("Qwen/Qwen2.5-3B", "Qwen2-3B"),
 ]
 models_7B_or_more = [
-    # ("google/flan-t5-xxl", "FLAN-T5-11B"),
+    ("google/flan-t5-xxl", "FLAN-T5-11B"),
 
     # ("meta-llama/Llama-2-7b-hf", "Llama-2-7B"),
     # ("meta-llama/CodeLlama-7b-hf", "CodeLlama-7B"),
-    ("meta-llama/Llama-3.1-8B", "Llama-3-8B"),
+    # ("meta-llama/Llama-3.1-8B", "Llama-3-8B"),
     # ("meta-llama/Llama-3.2-11B-Vision", "Llama-3-11B-Vision"),
     # ("deepseek-ai/DeepSeek-R1-Distill-Llama-8B", "DeepSeek-R1-8B"),
     # ("deepseek-ai/DeepSeek-R1-Distill-Qwen-14B", "DeepSeek-R1-14B"),
