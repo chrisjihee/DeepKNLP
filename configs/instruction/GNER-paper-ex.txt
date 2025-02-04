@@ -1,0 +1,9 @@
+Please analyze the sentence provided, identifying the type of entity for each word on a token-by-token basis.
+Output format is: word_1(label_1), word_2(label_2), ...
+We'll use the BIO-format to label the entities, where:
+1. B- (Begin) indicates the start of a named entity.
+2. I- (Inside) is used for words within a named entity but are not the first word.
+3. O (Outside) denotes words that are not part of a named entity.
+
+Use the specific entity tags: organization, field, researcher, person, university, location, programming language, product, algorithm, task, metric, country, conference and O.
+Sentence: Here , accuracy is measured by error rate , which is defined as :

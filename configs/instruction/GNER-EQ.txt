@@ -1,0 +1,10 @@
+Please analyze the sentence provided and extract all entities of type '{entity_type}' on a token-by-token basis.
+Use the BIO-format for labeling, where:
+1. B- (Begin) indicates the start of a named entity.
+2. I- (Inside) is used for words within a named entity but are not the first word.
+3. O (Outside) denotes words that are not part of the specified entity type.
+
+Sentence: {sentence}
+
+Identify and label only entities of type '{entity_type}'.
+Provide the output in the format: word_1(label_1), word_2(label_2), ...

@@ -1,0 +1,9 @@
+Please analyze the sentence provided and determine the BIO-format label for the given word at the specified position.
+We'll use the BIO-format to label the entities, where:
+1. B- (Begin) indicates the start of a named entity.
+2. I- (Inside) is used for words within a named entity but are not the first word.
+3. O (Outside) denotes words that are not part of a named entity.
+
+Use the specific entity tags: {label_list}.
+Sentence: {sentence}
+What is the BIO label for the word '{word}' at position {position} in the sentence?
