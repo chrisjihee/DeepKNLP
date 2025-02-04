@@ -19,12 +19,21 @@ run_suffix = "Baseline"
 
 # List of pretrained models and their corresponding run versions
 models = [
-    ("google/flan-t5-large", "FLAN-T5-Large"),
-    ("meta-llama/Llama-3.2-1B", "Llama-3-1B"),
-    ("etri-lirs/egpt-1.3b-preview", "EAGLE-1B"),
-    ("google/flan-t5-xl", "FLAN-T5-3B"),
-    ("meta-llama/Llama-3.2-3B", "Llama-3-3B"),
-    ("etri-lirs/eagle-3b-preview", "EAGLE-3B"),
+    # ("etri-lirs/egpt-1.3b-preview", "EAGLE-1B"),
+    # ("etri-lirs/eagle-3b-preview", "EAGLE-3B"),
+    # ("meta-llama/Llama-3.2-1B", "Llama-3-1B"),
+    # ("meta-llama/Llama-3.2-3B", "Llama-3-3B"),
+    ("meta-llama/Llama-3.1-8B", "Llama-3-8B"),
+    # ("meta-llama/Llama-2-7b-hf", "Llama-2-7B"),
+    # ("meta-llama/CodeLlama-7b-hf", "CodeLlama-7B"),
+    # ("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", "DeepSeek-R1-1_5B"),
+    # ("deepseek-ai/DeepSeek-R1-Distill-Qwen-7B", "DeepSeek-R1-7B"),
+    # ("deepseek-ai/DeepSeek-R1-Distill-Llama-8B", "DeepSeek-R1-8B"),
+    # ("google/flan-t5-small", "FLAN-T5-Small"),
+    # ("google/flan-t5-base", "FLAN-T5-Base"),
+    # ("google/flan-t5-large", "FLAN-T5-Large"),
+    # ("google/flan-t5-xl", "FLAN-T5-3B"),
+    # ("google/flan-t5-xxl", "FLAN-T5-11B"),
 ]
 
 # List of datasets
@@ -39,7 +48,7 @@ datasets = [
 ]
 
 # Loop through each model and dataset
-for pretrained, run_version in reversed(models):
+for pretrained, run_version in models:
     run_version = f"{run_version}-{run_suffix}"
 
     for dataset in datasets:
