@@ -12,10 +12,13 @@ cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "4,5,6,7")
 run_suffix = "-WQ"
 file_suffix = "-WQ"
 eval_epochs = 0.5
+train_batch = 4
 train_epochs = 12
+logging_steps = 2
+generation_max_length = 240
 eval_dir = f"data/gner/each-sampled{file_suffix}"
 train_dir = f"data/gner/each{file_suffix}"
-no_debugging = False
+no_debugging = True
 
 # List of datasets
 datasets = [
@@ -64,8 +67,8 @@ else:
     models = models_7B_or_more
 
 # Loop through each model and dataset
-for dataset in datasets:
-    for ds_config, run_version, pretrained in models:
+for ds_config, run_version, pretrained in models:
+    for dataset in datasets:
         run_version = f"{run_version}{run_suffix}"
         grad_steps = 8 if dataset in ["mit-movie", "mit-restaurant"] else 1
         no_use_flash_attention = not pretrained.startswith("microsoft/Phi")
@@ -80,8 +83,11 @@ for dataset in datasets:
                     --run_version {run_version}
                     --pretrained {pretrained}
                     --eval_epochs {eval_epochs}
+                    --logging_steps {logging_steps}
                     --num_train_epochs {train_epochs}
+                    --per_device_train_batch_size {train_batch}
                     --gradient_accumulation_steps {grad_steps}
+                    --generation_max_length {generation_max_length}
                     --eval_file {eval_dir}/{dataset}-dev=100{file_suffix}.jsonl
                     --train_file {train_dir}/{dataset}-train{file_suffix}.jsonl
                     --output_file train-metrics-{dataset}-{train_epochs}ep.csv
