@@ -40,9 +40,7 @@ models_4B_or_less = [
     # ("configs/deepspeed/ds2_llama.json", "Llama3-3B", "meta-llama/Llama-3.2-3B"),
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
-
     ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3-mini-4k-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
-    ("configs/deepspeed/ds2_llama.json", "Phi3_5-4B", "microsoft/Phi-3.5-mini-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
 ]
 models_7B_or_more = [
     ("configs/deepspeed/ds2_llama.json", "Phi3-7B", "microsoft/Phi-3-small-8k-instruct"),
