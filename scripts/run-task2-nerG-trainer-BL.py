@@ -4,10 +4,9 @@ import subprocess
 import socket
 
 # Environment variables
-debug = True
 hostname = socket.gethostname()
 port = random.randint(25000, 30000)
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
+cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3")
 
 # Training parameters
 run_suffix = "-BL"
@@ -73,7 +72,7 @@ for ds_config, run_version, pretrained in models:
         command = f"""
             python -m
                 deepspeed.launcher.runner
-                    --include=localhost:{os.environ['CUDA_VISIBLE_DEVICES']}
+                    --include=localhost:{cuda_devices}
                     --master_port={port}
                 task2-nerG-trainer.py
                     --trainer_deepspeed {ds_config}
