@@ -22,4 +22,27 @@
     <option name="INPUT_FILE" value="" />
     <method v="2" />
   </configuration>
+  <configuration default="false" name="task2-nerG-trainer (WQ)" type="PythonConfigurationType" factoryName="Python">
+    <module name="DeepKNLP" />
+    <option name="ENV_FILES" value="" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1" />
+    </envs>
+    <option name="SDK_HOME" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="IS_MODULE_SDK" value="true" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="true" />
+    <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+    <option name="SCRIPT_NAME" value="deepspeed.launcher.runner" />
+    <option name="PARAMETERS" value="--include=localhost:0,1 --master_port=25350 task2-nerG-trainer.py --trainer_deepspeed configs/deepspeed/ds2_llama.json --run_version Llama3-1B-WQ --pretrained meta-llama/Llama-3.2-1B --eval_epochs 0.5 --num_train_epochs 12 --gradient_accumulation_steps 1 --eval_file data/gner/each-sampled-WQ/crossner_ai-dev=100-WQ.jsonl --train_file data/gner/each-WQ/crossner_ai-train-WQ.jsonl --output_file train-metrics-crossner_ai-12ep.csv --logging_file train-loggings-crossner_ai-12ep.out --no_use_flash_attention" />
+    <option name="SHOW_COMMAND_LINE" value="false" />
+    <option name="EMULATE_TERMINAL" value="false" />
+    <option name="MODULE_MODE" value="true" />
+    <option name="REDIRECT_INPUT" value="false" />
+    <option name="INPUT_FILE" value="" />
+    <method v="2" />
+  </configuration>
 </component>
