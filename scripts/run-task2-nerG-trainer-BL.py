@@ -10,7 +10,7 @@ port = random.randint(25000, 30000)
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 
 # Training parameters
-run_suffix = "BL"
+run_suffix = "-BL"
 file_suffix = ""
 eval_epochs = 0.5
 train_epochs = 12
@@ -64,7 +64,7 @@ else:
 
 # Loop through each model and dataset
 for ds_config, run_version, pretrained in models:
-    run_version = f"{run_version}-{run_suffix}"
+    run_version = f"{run_version}{run_suffix}"
 
     for dataset in datasets:
         grad_steps = 8 if dataset in ["mit-movie", "mit-restaurant"] else 1

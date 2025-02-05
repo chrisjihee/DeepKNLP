@@ -10,8 +10,8 @@ port = random.randint(25000, 30000)
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 
 # Training parameters
-run_suffix = "WQ"
-file_suffix = "WQ"
+run_suffix = "-WQ"
+file_suffix = "-WQ"
 eval_epochs = 0.5
 train_epochs = 12
 eval_dir = f"data/gner/each-sampled{file_suffix}"
@@ -37,9 +37,9 @@ models_4B_or_less = [
 
     # ("configs/deepspeed/ds2_llama.json", "EAGLE-1B", "etri-lirs/egpt-1.3b-preview"),
     # ("configs/deepspeed/ds2_llama.json", "EAGLE-3B", "etri-lirs/eagle-3b-preview"),
-    # ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
+    ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
     # ("configs/deepspeed/ds2_llama.json", "Llama3-3B", "meta-llama/Llama-3.2-3B"),
-    ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
+    # ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
     # ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
     # ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3-mini-4k-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
 ]
@@ -64,7 +64,7 @@ else:
 
 # Loop through each model and dataset
 for ds_config, run_version, pretrained in models:
-    run_version = f"{run_version}-{run_suffix}"
+    run_version = f"{run_version}{run_suffix}"
 
     for dataset in datasets:
         grad_steps = 8 if dataset in ["mit-movie", "mit-restaurant"] else 1
