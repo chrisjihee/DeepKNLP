@@ -11,10 +11,11 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 
 # Training parameters
 run_suffix = "BL"
+file_suffix = ""
 eval_epochs = 0.5
 train_epochs = 12
-eval_dir = "data/gner/each-sampled"
-train_dir = "data/gner/each"
+eval_dir = f"data/gner/each-sampled{file_suffix}"
+train_dir = f"data/gner/each{file_suffix}"
 
 # List of datasets
 datasets = [
@@ -81,8 +82,8 @@ for ds_config, run_version, pretrained in models:
                     --eval_epochs {eval_epochs}
                     --num_train_epochs {train_epochs}
                     --gradient_accumulation_steps {grad_steps}
-                    --eval_file {eval_dir}/{dataset}-dev=100.jsonl
-                    --train_file {train_dir}/{dataset}-train.jsonl
+                    --eval_file {eval_dir}/{dataset}-dev=100{file_suffix}.jsonl
+                    --train_file {train_dir}/{dataset}-train{file_suffix}.jsonl
                     --output_file train-metrics-{dataset}-{train_epochs}ep.csv
                     --logging_file train-loggings-{dataset}-{train_epochs}ep.out
                     --{'no_' if no_use_flash_attention else ''}use_flash_attention
