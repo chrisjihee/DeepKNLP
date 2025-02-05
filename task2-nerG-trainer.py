@@ -236,6 +236,9 @@ def preprocess_dataset(
 
 
 def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=None, save_prefix=None, save_suffix=None, write_predictions=False, accelerator=None):
+    num_samples = len(dataset)
+    assert num_samples > 0, f"eval dataset is empty"
+    assert num_samples == len(preds), f"dataset(={num_samples}) != preds(={len(preds)})"
     preds = np.where(preds != -100, preds, tokenizer.pad_token_id)
     decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
     if not is_encoder_decoder:
@@ -247,34 +250,60 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
     for idx, decoded_pred in enumerate(decoded_preds):
         all_examples[idx].instance.prediction_output = decoded_pred
 
-    if all_examples[0].instance.group is not None and all_examples[0].instance.target_label is not None:
-        final_examples = []
-        for group, group_examples in {k: list(vs) for k, vs in grouped(all_examples, key=lambda x: x.instance.group)}.items():
-            predicted_labels = ['O' for _ in group_examples[0].instance.labels]
-            for i, example in enumerate(group_examples):
-                example: GenNERSampleWrapper = example
-                entities: List[GenNERSampleEntitySpan] = []
-                try:
-                    entities = [GenNERSampleEntitySpan.model_validate(x) for x in json.loads(example.instance.prediction_output)]
-                except json.JSONDecodeError:
-                    pass
-                if accelerator and accelerator.is_main_process:
-                    if entities:
-                        print(f"* prediction_output={example.instance.prediction_output} / words={example.instance.words}")
-                for entity_span in entities:
-                    span_words = [x for i, x in enumerate(example.instance.words) if i in entity_span.span]
-                    if entity_span.entity != ' '.join(span_words):
-                        entity_span.span = find_sublist_range(example.instance.words, entity_span.entity.split(), case_sensitive=False)
-                    if accelerator and accelerator.is_main_process:
-                        print(f" - entity={entity_span.entity} / span={entity_span.span}")
-                    for j, idx in enumerate(entity_span.span):
-                        bi_tag = "B" if j == 0 else "I"
-                        predicted_labels[idx] = f"{bi_tag}-{example.instance.target_label}"
+    if all_examples[0].instance.group is not None:
+        grouped_examples = {k: list(vs) for k, vs in grouped(all_examples, key=lambda x: x.instance.group)}
+        merged_examples = []
 
-            final_example: GenNERSampleWrapper = group_examples[0]
-            final_example.instance.prediction_output = GenNERSample.get_prompt_labels(final_example.instance.words, predicted_labels)
-            final_examples.append(final_example)
-        all_examples = final_examples
+        if all_examples[0].instance.target_index is not None:
+            for group, group_examples in grouped_examples.items():
+                group_examples: List[GenNERSampleWrapper] = group_examples
+                merged_example = GenNERSampleWrapper.model_validate(group_examples[0].model_dump())
+                pred_labels = ['O' for _ in merged_example.instance.labels]
+
+                for i, example in enumerate(group_examples):
+                    pred_labels[example.instance.target_index] = example.instance.prediction_output
+
+                merged_example.instance.prediction_output = GenNERSample.get_prompt_labels(merged_example.instance.words, pred_labels)
+                merged_examples.append(merged_example)
+                if accelerator and accelerator.is_main_process:
+                    logger.debug(f"* words={merged_example.instance.words}")
+                    logger.debug(f"  labels={merged_example.instance.labels}")
+                    logger.debug(f"  prediction_output={merged_example.instance.prediction_output}")
+
+        if all_examples[0].instance.target_label is not None:
+            for group, group_examples in grouped_examples.items():
+                group_examples: List[GenNERSampleWrapper] = group_examples
+                merged_example = GenNERSampleWrapper.model_validate(group_examples[0].model_dump())
+                pred_labels = ['O' for _ in group_examples[0].instance.labels]
+
+                for i, example in enumerate(group_examples):
+                    entities: List[GenNERSampleEntitySpan] = []
+                    try:
+                        entities = [GenNERSampleEntitySpan.model_validate(x) for x in json.loads(example.instance.prediction_output)]
+                    except json.JSONDecodeError:
+                        pass
+                    if accelerator and accelerator.is_main_process:
+                        if entities:
+                            logger.debug(f"* prediction_output={example.instance.prediction_output} / words={example.instance.words}")
+                    for entity_span in entities:
+                        span_words = [x for i, x in enumerate(example.instance.words) if i in entity_span.span]
+                        if entity_span.entity != ' '.join(span_words):
+                            entity_span.span = find_sublist_range(example.instance.words, entity_span.entity.split(), case_sensitive=False)
+                        if accelerator and accelerator.is_main_process:
+                            logger.debug(f" - entity={entity_span.entity} / span={entity_span.span}")
+                        for j, idx in enumerate(entity_span.span):
+                            bi_tag = 'B' if j == 0 else 'I'
+                            pred_labels[idx] = f"{bi_tag}-{example.instance.target_label}"
+
+                merged_example.instance.prediction_output = GenNERSample.get_prompt_labels(merged_example.instance.words, pred_labels)
+                merged_examples.append(merged_example)
+                if accelerator and accelerator.is_main_process:
+                    logger.debug(f"* words={merged_example.instance.words}")
+                    logger.debug(f"  labels={merged_example.instance.labels}")
+                    logger.debug(f"  prediction_output={merged_example.instance.prediction_output}")
+
+        all_examples = merged_examples
+        assert len(all_examples) > 0 and len(all_examples) == len(grouped_examples)
 
     results = gner.compute_metrics(all_examples, tokenizer=tokenizer, detailed=False, average_key="average")
     if write_predictions and output_dir is not None and save_prefix is not None:
