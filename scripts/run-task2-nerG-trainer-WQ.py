@@ -20,12 +20,12 @@ train_dir = f"data/gner/each{file_suffix}"
 # List of datasets
 datasets = [
     "crossner_ai",
-    # "crossner_music",
-    # "crossner_science",
-    # "crossner_politics",
-    # "crossner_literature",
-    # "mit-movie",
-    # "mit-restaurant",
+    "crossner_music",
+    "crossner_science",
+    "crossner_politics",
+    "crossner_literature",
+    "mit-movie",
+    "mit-restaurant",
 ]
 
 # List of pretrained models
@@ -35,13 +35,15 @@ models_4B_or_less = [
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-1B", "google/flan-t5-large"),
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
 
+    ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
+    ("configs/deepspeed/ds2_llama.json", "Llama3-3B", "meta-llama/Llama-3.2-3B"),
+    ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
+    ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
+    ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3-mini-4k-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
+
     # ("configs/deepspeed/ds2_llama.json", "EAGLE-1B", "etri-lirs/egpt-1.3b-preview"),
     # ("configs/deepspeed/ds2_llama.json", "EAGLE-3B", "etri-lirs/eagle-3b-preview"),
-    ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
-    # ("configs/deepspeed/ds2_llama.json", "Llama3-3B", "meta-llama/Llama-3.2-3B"),
-    # ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
-    # ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
-    # ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3-mini-4k-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
+
 ]
 models_7B_or_more = [
     # ("configs/deepspeed/ds2_llama.json", "Phi3-7B", "microsoft/Phi-3-small-8k-instruct"),
