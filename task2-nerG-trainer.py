@@ -366,7 +366,7 @@ def main(
         max_workers: Annotated[int, typer.Option("--max_workers")] = 4,
         world_size: Annotated[int, typer.Option("--world_size")] = -1,
         local_rank: Annotated[int, typer.Option("--local_rank")] = -1,
-        debugging: Annotated[bool, typer.Option("--debugging/--no-debugging")] = False,
+        debugging: Annotated[bool, typer.Option("--debugging/--no_debugging")] = False,
         verbose: Annotated[int, typer.Option("--verbose")] = 1,
 ):
     # Setup project environment
