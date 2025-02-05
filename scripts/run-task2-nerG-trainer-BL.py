@@ -29,7 +29,6 @@ datasets = [
 
 # List of pretrained models
 models_4B_or_less = [
-    # ("configs/deepspeed/ds3_t5.json", "FlanT5-Small", "google/flan-t5-small"),
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-Base", "google/flan-t5-base"),
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-1B", "google/flan-t5-large"),
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
