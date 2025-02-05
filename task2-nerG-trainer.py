@@ -20,7 +20,7 @@ import transformers
 import transformers.utils.logging
 from DeepKNLP.arguments import TrainingArgumentsForAccelerator, CustomDataArguments, ExSeq2SeqTrainingArguments
 from chrisbase.data import AppTyper, JobTimer, Counter, NewProjectEnv, find_sublist_range
-from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, new_path, convert_all_events_in_dir
+from chrisbase.io import LoggingFormat, LoggerWriter, set_verbosity_info, set_verbosity_debug, new_path, convert_all_events_in_dir
 from chrisbase.time import from_timestamp, now_stamp
 from chrisbase.util import grouped
 from chrisdata.ner import GenNERSampleWrapper, GenNERSampleEntitySpan, GenNERSample
@@ -471,7 +471,10 @@ def main(
     transformers_set_verbosity(process_log_level)
     set_verbosity_info("c10d-NullHandler-default", "torch")
     if accelerator.is_main_process:
-        set_verbosity_info("DeepKNLP", "chrisbase")
+        if debugging:
+            set_verbosity_debug("DeepKNLP", "chrisdata")
+        else:
+            set_verbosity_info("DeepKNLP", "chrisbase")
 
     # Set random seed
     set_seed(args.train.seed)
