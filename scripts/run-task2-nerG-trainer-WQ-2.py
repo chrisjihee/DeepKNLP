@@ -64,10 +64,9 @@ else:
     models = models_7B_or_more
 
 # Loop through each model and dataset
-for ds_config, run_version, pretrained in models:
-    run_version = f"{run_version}{run_suffix}"
-
-    for dataset in datasets:
+for dataset in datasets:
+    for ds_config, run_version, pretrained in models:
+        run_version = f"{run_version}{run_suffix}"
         grad_steps = 8 if dataset in ["mit-movie", "mit-restaurant"] else 1
         no_use_flash_attention = not pretrained.startswith("microsoft/Phi")
 
