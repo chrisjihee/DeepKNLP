@@ -15,6 +15,7 @@ eval_epochs = 0.5
 train_epochs = 12
 eval_dir = f"data/gner/each-sampled{file_suffix}"
 train_dir = f"data/gner/each{file_suffix}"
+no_debugging = False
 
 # List of datasets
 datasets = [
@@ -87,6 +88,7 @@ for ds_config, run_version, pretrained in models:
                     --output_file train-metrics-{dataset}-{train_epochs}ep.csv
                     --logging_file train-loggings-{dataset}-{train_epochs}ep.out
                     --{'no_' if no_use_flash_attention else ''}use_flash_attention
+                    --{'no_' if no_debugging else ''}debugging
         """
         command = command.strip().split()
         print("*" * 120)
