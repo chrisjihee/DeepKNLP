@@ -260,32 +260,75 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
             for group, group_examples in grouped_examples.items():
                 group_examples: List[GenNERSampleWrapper] = group_examples
                 merged_example = GenNERSampleWrapper.model_validate(group_examples[0].model_dump())
-                pred_labels = ['O' for _ in merged_example.instance.labels]
+                merged_labels = ['O' for _ in merged_example.instance.labels]
+                predictable = ['O']
+                logger.debug(f"  -----")
+                logger.debug(f"* label_list : {merged_example.label_list}")
+                for entity_type in merged_example.label_list:
+                    predictable.extend([f'B-{entity_type}', f'I-{entity_type}'])
+                if accelerator and accelerator.is_main_process:
+                    logger.debug(f"  -----")
+                    logger.debug(f"* predictable : {predictable}")
 
                 for i, example in enumerate(group_examples):
-                    if example.instance.prompt_labels.split() == 1:
-                        pred_label = example.instance.prediction_output.rsplit('(', 1)[-1]
-                    else:
-                        pred_words = example.instance.prediction_output.split()
-                        if len(example.instance.words) == len(pred_words):
-                            pred_label = pred_words[example.instance.target_index].rsplit('(', 1)[-1]
-                        else:
-                            word = example.instance.words[example.instance.target_index]
-                            target_index = sorted([i for i, x in enumerate(pred_words) if word in x], key=lambda x: abs(example.instance.target_index - x))[0]
-                            pred_label = pred_words[target_index].rsplit('(', 1)[-1]
                     if accelerator and accelerator.is_main_process:
-                        logger.debug(f"* words[{example.instance.target_index}]={example.instance.words[example.instance.target_index]}")
-                        logger.debug(f"  words[{example.instance.target_index}].prompt_labels={example.instance.prompt_labels}")
-                        logger.debug(f"  words[{example.instance.target_index}].prediction_output={example.instance.prediction_output}")
-                        logger.debug(f"  words[{example.instance.target_index}].pred_label={pred_label}")
-                    pred_labels[example.instance.target_index] = pred_label
+                        logger.debug(f"  -----")
+                        logger.debug(f"* words[{example.instance.target_index}].word              : {example.instance.words[example.instance.target_index]}")
+                        logger.debug(f"  words[{example.instance.target_index}].prompt_labels     : {example.instance.prompt_labels}")
+                        logger.debug(f"  words[{example.instance.target_index}].prediction_output : {example.instance.prediction_output}")
+                    gold_words, gold_labels = GenNERSample.extract(example.instance.prompt_labels)
+                    pred_words, pred_labels = GenNERSample.extract(example.instance.prediction_output)
+                    if len(gold_words) == 0:
+                        pred_label = example.instance.prediction_output.rsplit('(', 1)[-1].rsplit(')', 1)[0]
+                        if accelerator and accelerator.is_main_process:
+                            logger.debug(f"  words[{example.instance.target_index}].pred_label(1)     : {pred_label}")
+                    elif len(gold_words) == 1:
+                        if len(pred_labels) == 1:
+                            pred_label = pred_labels[0]
+                        else:
+                            pred_label = example.instance.prediction_output.rsplit('(', 1)[-1].rsplit(')', 1)[0]
+                        if accelerator and accelerator.is_main_process:
+                            logger.debug(f"  words[{example.instance.target_index}].pred_label(2)     : {pred_label}")
+                    else:
+                        assert len(pred_words) == len(pred_labels), f"pred_words(={len(pred_words)}) != pred_labels(={len(pred_labels)})"
+                        # pred_words = example.instance.prediction_output.split()
+                        if len(example.instance.words) == len(pred_words):
+                            # pred_label = pred_words[example.instance.target_index].rsplit('(', 1)[-1].rsplit(')', 1)[0]
+                            pred_label = pred_labels[example.instance.target_index]
+                            if accelerator and accelerator.is_main_process:
+                                logger.debug(f"  words[{example.instance.target_index}].pred_label(3)     : {pred_label}")
+                        else:
+                            target_word = example.instance.words[example.instance.target_index]
+                            target_indices = [i for i, pred_word in enumerate(pred_words) if target_word in pred_word]
+                            if len(target_indices) > 0:
+                                near_index = sorted(target_indices, key=lambda x: abs(example.instance.target_index - x))[0]
+                                # pred_label = pred_words[near_index].rsplit('(', 1)[-1].rsplit(')', 1)[0]
+                                pred_label = pred_labels[near_index]
+                                if accelerator and accelerator.is_main_process:
+                                    logger.debug(f"  words[{example.instance.target_index}].pred_label(4)     : {pred_label}")
+                            else:
+                                pred_label = 'O'
+                                if accelerator and accelerator.is_main_process:
+                                    logger.debug(f"  words[{example.instance.target_index}].pred_label(5)     : {pred_label}")
+                    pred_label = pred_label if pred_label in predictable else 'O'
+                    merged_labels[example.instance.target_index] = pred_label
+                    if accelerator and accelerator.is_main_process:
+                        logger.debug(f"  words[{example.instance.target_index}].pred_label(F)     : {pred_label}")
 
-                merged_example.instance.prediction_output = GenNERSample.get_prompt_labels(merged_example.instance.words, pred_labels)
+                merged_example.instance.prediction_output = GenNERSample.get_prompt_labels(merged_example.instance.words, merged_labels)
                 merged_examples.append(merged_example)
                 if accelerator and accelerator.is_main_process:
-                    logger.debug(f"* words={merged_example.instance.words}")
-                    logger.debug(f"  labels={merged_example.instance.labels}")
-                    logger.debug(f"  merged.prediction_output={merged_example.instance.prediction_output}")
+                    logger.debug(f"  -----")
+                    logger.debug(f"* merged.words                : {merged_example.instance.words}")
+                    logger.debug(f"  merged.labels               : {merged_example.instance.labels}")
+                    # if len(merged_example.instance.prompt_labels.split()) == 1:
+                    if len(GenNERSample.extract(merged_example.instance.prompt_labels)[0]) <= 1:
+                        logger.debug(f"  merged.prediction_output(1) : {[x.instance.prediction_output for x in group_examples]}")
+                    else:
+                        logger.debug(f"  merged.prediction_output(1) :\n{'\n'.join([x.instance.prediction_output for x in group_examples])}")
+                    logger.debug(f"  merged.prediction_output(2) : {merged_example.instance.prediction_output}")
+                    logger.debug(f"================================")
+            exit(0)
         exit(0)
 
         # EntityType Query Prediction
