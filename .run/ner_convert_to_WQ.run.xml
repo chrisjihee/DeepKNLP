@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="cli (ner) (convert_to_WQ)" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="ner_convert_to_WQ" type="PythonConfigurationType" factoryName="Python">
     <module name="DeepKNLP" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -13,11 +13,11 @@
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="chrisdata.cli" />
-    <option name="PARAMETERS" value="ner convert_to_WQ data/gner/each/crossner_ai-train.jsonl data/gner/each-WQ --label_level_main 2" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/chrisdata/scripts/ner_convert_to_WQ.py" />
+    <option name="PARAMETERS" value="" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
-    <option name="MODULE_MODE" value="true" />
+    <option name="MODULE_MODE" value="false" />
     <option name="REDIRECT_INPUT" value="false" />
     <option name="INPUT_FILE" value="" />
     <method v="2" />
