@@ -276,13 +276,12 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
                         logger.debug(f"* words[{example.instance.target_index}].word              : {example.instance.words[example.instance.target_index]}")
                         logger.debug(f"  words[{example.instance.target_index}].prompt_labels     : {example.instance.prompt_labels}")
                         logger.debug(f"  words[{example.instance.target_index}].prediction_output : {example.instance.prediction_output}")
-                    gold_words, gold_labels = GenNERSample.extract(example.instance.prompt_labels)
                     pred_words, pred_labels = GenNERSample.extract(example.instance.prediction_output)
-                    if len(gold_words) == 0:
+                    if len(pred_words) == 0:
                         pred_label = example.instance.prediction_output.rsplit('(', 1)[-1].rsplit(')', 1)[0]
                         if accelerator and accelerator.is_main_process:
                             logger.debug(f"  words[{example.instance.target_index}].pred_label(1)     : {pred_label}")
-                    elif len(gold_words) == 1:
+                    elif len(pred_words) == 1:
                         if len(pred_labels) == 1:
                             pred_label = pred_labels[0]
                         else:
@@ -321,15 +320,8 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
                     logger.debug(f"  -----")
                     logger.debug(f"* merged.words                : {merged_example.instance.words}")
                     logger.debug(f"  merged.labels               : {merged_example.instance.labels}")
-                    # if len(merged_example.instance.prompt_labels.split()) == 1:
-                    if len(GenNERSample.extract(merged_example.instance.prompt_labels)[0]) <= 1:
-                        logger.debug(f"  merged.prediction_output(1) : {[x.instance.prediction_output for x in group_examples]}")
-                    else:
-                        logger.debug(f"  merged.prediction_output(1) :\n{'\n'.join([x.instance.prediction_output for x in group_examples])}")
-                    logger.debug(f"  merged.prediction_output(2) : {merged_example.instance.prediction_output}")
+                    logger.debug(f"  merged.prediction_output(F) : {merged_example.instance.prediction_output}")
                     logger.debug(f"================================")
-            exit(0)
-        exit(0)
 
         # EntityType Query Prediction
         if all_examples[0].instance.target_label is not None:
