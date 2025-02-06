@@ -4,20 +4,21 @@ import socket
 import subprocess
 
 # Environment variables
+debugging = False  # TODO: False
 port = random.randint(25000, 30000)
 hostname = socket.gethostname()
-cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3")
+cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3" if not debugging else "0,1")
 large_machines = ["lirs-b1", "dl026"]
 
 # Training arguments
 eval_epochs = 0.5
-train_batch = 8
+eval_batch = 50
+train_batch = 8 if not debugging else 16
 train_epochs = 12
 logging_steps = 5
 generation_max_length = 640
 small_grad_steps = 1
 large_grad_steps = 4
-debugging = False
 
 # List of pretrained models
 models_4B_or_less = [
@@ -26,10 +27,10 @@ models_4B_or_less = [
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-1B", "google/flan-t5-large"),
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
 
-    ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
-    ("configs/deepspeed/ds2_llama.json", "Llama3-3B", "meta-llama/Llama-3.2-3B"),
-    ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
-    ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
+    # ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
+    # ("configs/deepspeed/ds2_llama.json", "Llama3-3B", "meta-llama/Llama-3.2-3B"),
+    # ("configs/deepspeed/ds2_llama.json", "Qwen2-1B", "Qwen/Qwen2.5-1.5B"),
+    # ("configs/deepspeed/ds2_llama.json", "Qwen2-3B", "Qwen/Qwen2.5-3B"),
     ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3-mini-4k-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
 
     # ("configs/deepspeed/ds2_llama.json", "EAGLE-1B", "etri-lirs/egpt-1.3b-preview"),
@@ -103,6 +104,7 @@ for ds_config, run_prefix, pretrained in models:
                         --eval_epochs {eval_epochs}
                         --logging_steps {logging_steps}
                         --num_train_epochs {train_epochs}
+                        --per_device_eval_batch_size {eval_batch}
                         --per_device_train_batch_size {train_batch}
                         --gradient_accumulation_steps {grad_steps}
                         --generation_max_length {generation_max_length}
@@ -118,6 +120,7 @@ for ds_config, run_prefix, pretrained in models:
             print("[COMMAND]", " ".join(command))
             print("*" * 120)
 
-            # subprocess.run(command)
-            # print("\n" * 3)
+            subprocess.run(command)
+            print("\n" * 3)
+            exit(0)
         exit(0)
