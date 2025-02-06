@@ -250,10 +250,12 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
     for idx, decoded_pred in enumerate(decoded_preds):
         all_examples[idx].instance.prediction_output = decoded_pred
 
+    # Multi-Round Prediction
     if all_examples[0].instance.group is not None:
         grouped_examples = {k: list(vs) for k, vs in grouped(all_examples, key=lambda x: x.instance.group)}
         merged_examples = []
 
+        # Word Query Prediction
         if all_examples[0].instance.target_index is not None:
             for group, group_examples in grouped_examples.items():
                 group_examples: List[GenNERSampleWrapper] = group_examples
@@ -261,15 +263,32 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
                 pred_labels = ['O' for _ in merged_example.instance.labels]
 
                 for i, example in enumerate(group_examples):
-                    pred_labels[example.instance.target_index] = example.instance.prediction_output
+                    if example.instance.prompt_labels.split() == 1:
+                        pred_label = example.instance.prediction_output.rsplit('(', 1)[-1]
+                    else:
+                        pred_words = example.instance.prediction_output.split()
+                        if len(example.instance.words) == len(pred_words):
+                            pred_label = pred_words[example.instance.target_index].rsplit('(', 1)[-1]
+                        else:
+                            word = example.instance.words[example.instance.target_index]
+                            target_index = sorted([i for i, x in enumerate(pred_words) if word in x], key=lambda x: abs(example.instance.target_index - x))[0]
+                            pred_label = pred_words[target_index].rsplit('(', 1)[-1]
+                    if accelerator and accelerator.is_main_process:
+                        logger.debug(f"* words[{example.instance.target_index}]={example.instance.words[example.instance.target_index]}")
+                        logger.debug(f"  words[{example.instance.target_index}].prompt_labels={example.instance.prompt_labels}")
+                        logger.debug(f"  words[{example.instance.target_index}].prediction_output={example.instance.prediction_output}")
+                        logger.debug(f"  words[{example.instance.target_index}].pred_label={pred_label}")
+                    pred_labels[example.instance.target_index] = pred_label
 
                 merged_example.instance.prediction_output = GenNERSample.get_prompt_labels(merged_example.instance.words, pred_labels)
                 merged_examples.append(merged_example)
                 if accelerator and accelerator.is_main_process:
                     logger.debug(f"* words={merged_example.instance.words}")
                     logger.debug(f"  labels={merged_example.instance.labels}")
-                    logger.debug(f"  prediction_output={merged_example.instance.prediction_output}")
+                    logger.debug(f"  merged.prediction_output={merged_example.instance.prediction_output}")
+        exit(0)
 
+        # EntityType Query Prediction
         if all_examples[0].instance.target_label is not None:
             for group, group_examples in grouped_examples.items():
                 group_examples: List[GenNERSampleWrapper] = group_examples
