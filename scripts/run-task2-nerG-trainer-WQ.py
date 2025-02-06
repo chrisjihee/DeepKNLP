@@ -124,5 +124,3 @@ for ds_config, run_prefix, pretrained in models:
 
             subprocess.run(command)
             print("\n" * 3)
-            exit(0)
-        exit(0)
