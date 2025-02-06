@@ -1,24 +1,27 @@
 import os
 import random
-import subprocess
 import socket
+import subprocess
 
 # Environment variables
-hostname = socket.gethostname()
 port = random.randint(25000, 30000)
+hostname = socket.gethostname()
 cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3")
+large_machines = ["lirs-b1", "dl026"]
 
 # Training parameters
 run_suffix = "-WQ"
 file_suffix = "-WQ"
 eval_epochs = 0.5
-train_batch = 4
+train_batch = 8
 train_epochs = 12
-logging_steps = 2
-generation_max_length = 240
+logging_steps = 5
+generation_max_length = 640
+small_grad_steps = 1
+large_grad_steps = 4
 eval_dir = f"data/gner/each-sampled{file_suffix}"
 train_dir = f"data/gner/each{file_suffix}"
-no_debugging = True
+debugging = False
 
 # List of datasets
 datasets = [
@@ -27,6 +30,10 @@ datasets = [
     "crossner_science",
     "crossner_politics",
     "crossner_literature",
+    "mit-movie",
+    "mit-restaurant",
+]
+large_datasets = [
     "mit-movie",
     "mit-restaurant",
 ]
@@ -61,17 +68,17 @@ models_7B_or_more = [
     # ("configs/deepspeed/ds3_llama.json", "Phi4-14B", "microsoft/phi-4"),
     # ("configs/deepspeed/ds3_llama.json", "Qwen2-14B", "Qwen/Qwen2.5-14B"),
 ]
-if hostname != "lirs-b1":
+if hostname not in large_machines:
     models = models_4B_or_less
 else:
     models = models_7B_or_more
 
 # Loop through each model and dataset
-for ds_config, run_version, pretrained in models:
+for ds_config, run_prefix, pretrained in models:
     for dataset in datasets:
-        run_version = f"{run_version}{run_suffix}"
-        grad_steps = 8 if dataset in ["mit-movie", "mit-restaurant"] else 1
-        no_use_flash_attention = not pretrained.startswith("microsoft/Phi")
+        run_version = f"{run_prefix}{run_suffix}"
+        grad_steps = large_grad_steps if dataset in large_datasets else small_grad_steps
+        use_flash_attention = pretrained.startswith("microsoft/Phi")
 
         command = f"""
             python -m
@@ -92,8 +99,8 @@ for ds_config, run_version, pretrained in models:
                     --train_file {train_dir}/{dataset}-train{file_suffix}.jsonl
                     --output_file train-metrics-{dataset}-{train_epochs}ep.csv
                     --logging_file train-loggings-{dataset}-{train_epochs}ep.out
-                    --{'no_' if no_use_flash_attention else ''}use_flash_attention
-                    --{'no_' if no_debugging else ''}debugging
+                    --{'' if use_flash_attention else 'no_'}use_flash_attention
+                    --{'' if debugging else 'no_'}debugging
         """
         command = command.strip().split()
         print("*" * 120)
