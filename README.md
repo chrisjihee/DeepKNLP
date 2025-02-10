@@ -18,7 +18,8 @@ Transformer-based Korean Natural Language Processing
 2. Clone the repository
     ```bash
     rm -rf DeepKNLP*
-    git clone git@github.com:chrisjihee/DeepKNLP.git
+    git clone https://github.com/chrisjihee/DeepKNLP.git
+    #git clone git@github.com:chrisjihee/DeepKNLP.git
     cd DeepKNLP*
     ```
 3. Create a new environment
@@ -38,10 +39,14 @@ Transformer-based Korean Natural Language Processing
     DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
     MAX_JOBS=40 pip install --no-cache --no-build-isolation --upgrade flash-attn;  # for Micorsoft's Phi models
     pip install tiktoken pytest;  # for Micorsoft's Phi models
-    rm -rf transformers; git clone git@github.com:chrisjihee/transformers.git; pip install -U -e transformers
-    rm -rf chrisbase;    git clone git@github.com:chrisjihee/chrisbase.git;    pip install -U -e chrisbase
-    rm -rf chrisdata;    git clone git@github.com:chrisjihee/chrisdata.git;    pip install -U -e chrisdata
-    rm -rf progiter;     git clone git@github.com:chrisjihee/progiter.git;     pip install -U -e progiter
+    rm -rf transformers; git clone https://github.com/chrisjihee/transformers.git; pip install -U -e transformers
+    #rm -rf transformers; git clone git@github.com:chrisjihee/transformers.git;     pip install -U -e transformers
+    rm -rf chrisbase;    git clone https://github.com/chrisjihee/chrisbase.git;    pip install -U -e chrisbase 
+    #rm -rf chrisbase;    git clone git@github.com:chrisjihee/chrisbase.git;        pip install -U -e chrisbase
+    rm -rf chrisdata;    git clone https://github.com/chrisjihee/chrisdata.git;    pip install -U -e chrisdata
+    #rm -rf chrisdata;    git clone git@github.com:chrisjihee/chrisdata.git;        pip install -U -e chrisdata
+    rm -rf progiter;     git clone https://github.com/chrisjihee/progiter.git;     pip install -U -e progiter
+    #rm -rf progiter;     git clone git@github.com:chrisjihee/progiter.git;         pip install -U -e progiter
     pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|prog|pydantic"
     ```
 5. Unzip some archived data
