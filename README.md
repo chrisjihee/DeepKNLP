@@ -36,7 +36,7 @@ Transformer-based Korean Natural Language Processing
 4. Install the required packages
     ```bash
     pip install -r requirements.txt
-    DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
+    export CUDA_HOME=""; DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
     MAX_JOBS=40 pip install --no-cache --no-build-isolation --upgrade flash-attn;  # for Micorsoft's Phi models
     pip install tiktoken pytest;  # for Micorsoft's Phi models
     rm -rf transformers; git clone https://github.com/chrisjihee/transformers.git; pip install -U -e transformers
@@ -88,5 +88,6 @@ Transformer-based Korean Natural Language Processing
 * Word Sequence Labelling (GenerativeNER) [trainer]:
   - `python task2-nerG-trainer.py --help`
   - `python scripts/run-task2-nerG-trainer-BL.py`
+  - `python scripts/run-task2-nerG-trainer-WQ.py`
 * [Not Yet Provided] Sentence Pair Classification: https://ratsgo.github.io/nlpbook/docs/pair_cls/overview/
 * [Not Yet Provided] Extractive Question Answering: https://ratsgo.github.io/nlpbook/docs/qa/overview/
