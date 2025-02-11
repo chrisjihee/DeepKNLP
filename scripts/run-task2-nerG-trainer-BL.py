@@ -97,8 +97,8 @@ for ds_config, run_prefix, pretrained in models:
                     --per_device_train_batch_size {train_batch}
                     --gradient_accumulation_steps {grad_steps}
                     --generation_max_length {generation_max_length}
-                    --eval_file {eval_dir}/{dataset}-dev=100{suffix}.jsonl
-                    --train_file {train_dir}/{dataset}-train{suffix}.jsonl
+                    --eval_file {eval_dir}/{dataset}-dev=100.jsonl
+                    --train_file {train_dir}/{dataset}-train.jsonl
                     --output_file train-metrics-{dataset}-{train_epochs}ep.csv
                     --logging_file train-loggings-{dataset}-{train_epochs}ep.out
                     --{'' if use_flash_attention else 'no_'}use_flash_attention
