@@ -10,6 +10,10 @@ seqeval
 datasets
 tensorboard
 
+# Micorsoft's Phi models
+tiktoken
+pytest
+
 # Utils
 pydantic
 importlib-metadata
