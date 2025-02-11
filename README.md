@@ -59,7 +59,6 @@ Transformer-based Korean Natural Language Processing
     cd data/gner; tar zxf each-WQ=4,2.tar.gz; tar zxf each-sampled-WQ=4,2.tar.gz; cd ../..;
     cd data/gner; tar zxf each-WQ=4,3.tar.gz; tar zxf each-sampled-WQ=4,3.tar.gz; cd ../..;
     cd data/gner; tar zxf each-WQ=5.tar.gz; tar zxf each-sampled-WQ=5.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-WQ.tar.gz; tar zxf each-sampled-WQ.tar.gz; cd ../..;
     cd data/gner; tar zxf each-EQ.tar.gz; tar zxf each-sampled-EQ.tar.gz; cd ../..;
     ```
 6. Log in to Huggingface
