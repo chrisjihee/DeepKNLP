@@ -33,10 +33,9 @@ models_4B_or_less = [
 
     # ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3-mini-4k-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
 
-    # ("configs/deepspeed/ds3_t5.json", "FlanT5-Small", "google/flan-t5-small"),
-    #("configs/deepspeed/ds3_t5.json", "FlanT5-Base", "google/flan-t5-base"),
-    ("configs/deepspeed/ds3_t5.json", "FlanT5-1B", "google/flan-t5-large"),
-    # ("configs/deepspeed/ds3_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
+    ("configs/deepspeed/ds2_t5.json", "FlanT5-Base", "google/flan-t5-base"),
+    ("configs/deepspeed/ds2_t5.json", "FlanT5-1B", "google/flan-t5-large"),
+    # ("configs/deepspeed/ds2_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
 ]
 models_7B_or_more = [
     # ("configs/deepspeed/ds2_llama.json", "Phi3-7B", "microsoft/Phi-3-small-8k-instruct"),
