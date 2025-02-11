@@ -8,7 +8,7 @@ debugging = False
 port = random.randint(25000, 30000)
 hostname = socket.gethostname()
 cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3" if not debugging else "0,1")
-large_machines = ["lirs-b1", "dl026"]
+large_machines = []
 
 # Training arguments
 eval_epochs = 0.5
@@ -34,7 +34,7 @@ models_4B_or_less = [
     # ("configs/deepspeed/ds2_llama.json", "Phi3-4B", "microsoft/Phi-3-mini-4k-instruct"),  # modeling_phi3.py: get_max_length -> get_max_cache_shape
 
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-Small", "google/flan-t5-small"),
-    ("configs/deepspeed/ds3_t5.json", "FlanT5-Base", "google/flan-t5-base"),
+    #("configs/deepspeed/ds3_t5.json", "FlanT5-Base", "google/flan-t5-base"),
     ("configs/deepspeed/ds3_t5.json", "FlanT5-1B", "google/flan-t5-large"),
     # ("configs/deepspeed/ds3_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
 ]
