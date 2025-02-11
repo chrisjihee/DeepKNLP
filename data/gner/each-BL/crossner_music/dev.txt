@@ -1,0 +1,15971 @@
+As	O
+part	O
+of	O
+the	O
+2010	O
+leg	O
+of	O
+the	O
+My	B-event
+Christmas	I-event
+Tour	I-event
+,	O
+Bocelli	B-musical artist
+gave	O
+two	O
+concerts	O
+in	O
+The	B-location
+O2	I-location
+Arena	I-location
+,	O
+in	O
+London	B-location
+,	O
+and	O
+the	O
+Manchester	B-location
+Arena	I-location
+,	O
+in	O
+Manchester	B-location
+,	O
+and	O
+a	O
+concert	O
+at	O
+3Arena	B-location
+,	O
+in	O
+Dublin	B-location
+,	O
+in	O
+late	O
+November	O
+2010	O
+.	O
+
+Squarepusher	B-musical artist
+continues	O
+to	O
+push	O
+new	O
+boundaries	O
+to	O
+this	O
+day	O
+,	O
+where	O
+he	O
+still	O
+calls	O
+Warp	B-organization
+Records	I-organization
+his	O
+home	O
+,	O
+having	O
+released	O
+numerous	O
+albums	O
+to	O
+critical	O
+acclaim	O
+in	O
+the	O
+years	O
+to	O
+follow	O
+,	O
+such	O
+as	O
+Go	B-album
+Plastic	I-album
+,	O
+Do	B-album
+You	I-album
+Know	I-album
+Squarepusher	I-album
+,	O
+Ultravisitor	B-album
+,	O
+Hello	B-album
+Everything	I-album
+,	O
+Just	B-album
+a	I-album
+Souvenir	I-album
+,	O
+Solo	B-album
+Electric	I-album
+Bass	I-album
+1	I-album
+,	O
+Ufabulum	B-album
+and	O
+Damogen	B-album
+Furies	I-album
+.	O
+
+During	O
+the	O
+1990s	O
+,	O
+many	O
+releases	O
+included	O
+recordings	O
+of	O
+classical	O
+compositions	O
+:	O
+Pictures	B-song
+at	I-song
+an	I-song
+Exhibition	I-song
+(	O
+on	O
+Turn	B-album
+of	I-album
+the	I-album
+Tides	I-album
+)	O
+,	O
+Largo	B-song
+(	O
+from	O
+Xerxes	O
+)	O
+(	O
+on	O
+Tyranny	B-album
+of	I-album
+Beauty	I-album
+)	O
+,	O
+Symphony	B-song
+in	I-song
+A	I-song
+Minor	I-song
+(	O
+by	O
+J.	B-musical artist
+S.	I-musical artist
+Bach	I-musical artist
+)	O
+,	O
+and	O
+Concerto	B-song
+in	I-song
+A	I-song
+Major	I-song
+/	I-song
+Adagio	I-song
+(	O
+by	O
+Wolfgang	B-musical artist
+Amadeus	I-musical artist
+Mozart	I-musical artist
+)	O
+(	O
+both	O
+on	O
+Ambient	B-album
+Monkeys	I-album
+)	O
+.	O
+
+He	O
+has	O
+also	O
+won	O
+three	O
+Grammy	B-award
+Awards	I-award
+,	O
+14	O
+Academy	B-award
+of	I-award
+Country	I-award
+Music	I-award
+awards	I-award
+,	O
+11	O
+Country	B-award
+Music	I-award
+Association	I-award
+(	I-award
+CMA	I-award
+)	I-award
+awards	I-award
+,	O
+10	O
+American	B-award
+Music	I-award
+Awards	I-award
+,	O
+and	O
+three	O
+People	B-award
+'s	I-award
+Choice	I-award
+Awards	I-award
+.	O
+
+ABBA	B-band
+were	O
+soon	O
+recognised	O
+and	O
+embraced	O
+by	O
+other	O
+acts	O
+:	O
+Evan	B-musical artist
+Dando	I-musical artist
+of	O
+the	B-band
+Lemonheads	I-band
+recorded	O
+a	O
+cover	O
+version	O
+of	O
+Knowing	B-song
+Me	I-song
+,	I-song
+Knowing	I-song
+You	I-song
+;	O
+Sinéad	B-musical artist
+O	I-musical artist
+'Connor	I-musical artist
+and	O
+Boyzone	B-band
+'s	O
+Stephen	B-musical artist
+Gately	I-musical artist
+have	O
+recorded	O
+Chiquitita	B-song
+;	O
+Tanita	B-musical artist
+Tikaram	I-musical artist
+,	O
+Blancmange	B-band
+and	O
+Steven	B-musical artist
+Wilson	I-musical artist
+paid	O
+tribute	O
+to	O
+The	B-song
+Day	I-song
+Before	I-song
+You	I-song
+Came	I-song
+.	O
+
+His	O
+style	O
+incorporates	O
+elements	O
+of	O
+Rock	B-music genre
+music	I-music genre
+,	O
+blues	B-music genre
+,	O
+Soul	B-music genre
+music	I-music genre
+,	O
+R	B-music genre
+&	I-music genre
+B	I-music genre
+,	O
+funk	B-music genre
+,	O
+jazz	B-music genre
+,	O
+reggae	B-music genre
+,	O
+hard	B-music genre
+rock	I-music genre
+,	O
+Psychedelic	B-music genre
+rock	I-music genre
+,	O
+Pop	B-music genre
+music	I-music genre
+,	O
+Folk	B-music genre
+music	I-music genre
+,	O
+and	O
+ballads	B-music genre
+.	O
+
+Hildy	B-person
+tempts	O
+him	O
+into	O
+taking	O
+a	O
+tour	O
+of	O
+the	O
+city	O
+,	O
+but	O
+all	O
+the	O
+places	O
+he	O
+wants	O
+to	O
+go	O
+(	O
+New	B-location
+York	I-location
+Hippodrome	I-location
+,	O
+the	O
+Forrest	B-location
+Theatre	I-location
+to	O
+see	O
+Tobacco	B-location
+Road	I-location
+,	O
+the	O
+New	B-location
+York	I-location
+City	I-location
+Aquarium	I-location
+,	O
+and	O
+the	O
+Woolworth	B-location
+Building	I-location
+)	O
+are	O
+either	O
+no	O
+longer	O
+in	O
+existence	O
+or	O
+no	O
+longer	O
+notable	O
+.	O
+
+It	O
+was	O
+Recording	B-organization
+Industry	I-organization
+Association	I-organization
+of	I-organization
+America	I-organization
+triple	O
+platinum	O
+in	O
+America	B-country
+,	O
+Two	O
+more	O
+singles	O
+from	O
+the	O
+album	O
+-	O
+Policy	B-song
+of	I-song
+Truth	I-song
+and	O
+World	B-song
+in	I-song
+My	I-song
+Eyes	I-song
+-	O
+were	O
+hits	O
+in	O
+the	O
+UK	B-country
+,	O
+with	O
+the	O
+former	O
+also	O
+charting	O
+in	O
+the	O
+US	B-country
+.	O
+
+The	O
+album	O
+was	O
+certified	O
+seven-times	O
+platinum	O
+in	O
+Australia	B-country
+by	O
+the	O
+Australian	B-organization
+Recording	I-organization
+Industry	I-organization
+Association	I-organization
+(	O
+ARIA	B-organization
+)	O
+,	O
+five-times	O
+platinum	O
+in	O
+the	O
+UK	B-country
+by	O
+the	O
+British	B-organization
+Phonographic	I-organization
+Industry	I-organization
+(	O
+BPI	B-organization
+)	O
+,	O
+and	O
+platinum	O
+in	O
+the	O
+US	B-country
+by	O
+the	O
+Recording	B-organization
+Industry	I-organization
+Association	I-organization
+of	I-organization
+America	I-organization
+(	O
+RIAA	B-organization
+)	O
+.	O
+
+Ernest	B-musical artist
+Jennings	I-musical artist
+Ford	I-musical artist
+(	O
+February	O
+13	O
+,	O
+1919	O
+-	O
+October	O
+17	O
+,	O
+1991	O
+)	O
+,	O
+known	O
+professionally	O
+as	O
+Tennessee	B-musical artist
+Ernie	I-musical artist
+Ford	I-musical artist
+,	O
+was	O
+an	O
+American	O
+singer	O
+and	O
+television	O
+host	O
+who	O
+enjoyed	O
+success	O
+in	O
+the	O
+Country	B-music genre
+music	I-music genre
+,	O
+Pop	B-music genre
+music	I-music genre
+,	O
+and	O
+Gospel	B-music genre
+music	I-music genre
+musical	O
+genres	O
+.	O
+
+South	B-country
+Africa	I-country
+'s	O
+Cape	B-organization
+Town	I-organization
+Opera	I-organization
+has	O
+frequently	O
+performed	O
+Porgy	O
+and	O
+Bess	O
+abroad	O
+,	O
+most	O
+notably	O
+with	O
+the	O
+Welsh	B-organization
+National	I-organization
+Opera	I-organization
+,	O
+NorrlandsOperan	B-organization
+,	O
+Deutsche	B-organization
+Oper	I-organization
+Berlin	I-organization
+and	O
+at	O
+the	O
+Wales	B-location
+Millennium	I-location
+Centre	I-location
+,	O
+Royal	B-location
+Festival	I-location
+Hall	I-location
+and	O
+Edinburgh	B-location
+Festival	I-location
+Theatre	I-location
+.	O
+
+Some	O
+of	O
+his	O
+most	O
+celebrated	O
+designs	O
+adorned	O
+the	O
+sleeves	O
+of	O
+albums	O
+such	O
+as	O
+Midnight	B-album
+Blue	I-album
+,	O
+Out	B-album
+to	I-album
+Lunch	I-album
+!	I-album
+,	O
+Unity	B-album
+,	O
+Somethin	B-album
+'	I-album
+Else	I-album
+,	O
+Let	B-album
+Freedom	I-album
+Ring	I-album
+,	O
+Hub-Tones	B-album
+,	O
+No	B-album
+Room	I-album
+for	I-album
+Squares	I-album
+,	O
+Cool	B-album
+Struttin	I-album
+'	I-album
+,	O
+and	O
+The	B-album
+Sidewinder	I-album
+.	O
+
+Pop	B-music genre
+'s	O
+music	O
+has	O
+encompassed	O
+a	O
+number	O
+of	O
+styles	O
+over	O
+the	O
+course	O
+of	O
+his	O
+career	O
+,	O
+including	O
+garage	B-music genre
+rock	I-music genre
+,	O
+punk	B-music genre
+rock	I-music genre
+,	O
+hard	B-music genre
+rock	I-music genre
+,	O
+Heavy	B-music genre
+metal	I-music genre
+music	I-music genre
+,	O
+art	B-music genre
+rock	I-music genre
+,	O
+New	B-music genre
+wave	I-music genre
+music	I-music genre
+,	O
+jazz	B-music genre
+,	O
+blues	B-music genre
+,	O
+and	O
+Electronic	B-music genre
+music	I-music genre
+.	O
+
+Although	O
+his	O
+bandmate	O
+Martin	B-musical artist
+Gore	I-musical artist
+continues	O
+to	O
+be	O
+the	O
+main	O
+songwriter	O
+for	O
+Depeche	B-band
+Mode	I-band
+,	O
+Gahan	B-musical artist
+has	O
+contributed	O
+a	O
+number	O
+of	O
+songs	O
+to	O
+the	O
+albums	O
+Playing	B-album
+the	I-album
+Angel	I-album
+(	O
+2005	O
+)	O
+,	O
+Sounds	B-album
+of	I-album
+the	I-album
+Universe	I-album
+(	O
+2009	O
+)	O
+,	O
+Delta	B-album
+Machine	I-album
+(	O
+2013	O
+)	O
+and	O
+Spirit	B-album
+(	O
+2017	O
+)	O
+.	O
+
+Phoenix	B-band
+has	O
+long	O
+been	O
+a	O
+social	O
+activist	O
+,	O
+lending	O
+his	O
+support	O
+to	O
+a	O
+number	O
+of	O
+charities	O
+and	O
+humanitarian	O
+organizations	O
+,	O
+such	O
+as	O
+Amnesty	B-organization
+International	I-organization
+,	O
+The	B-organization
+Art	I-organization
+of	I-organization
+Elysium	I-organization
+,	O
+HEART	B-organization
+,	O
+and	O
+the	O
+Peace	B-organization
+Alliance	I-organization
+(	O
+which	O
+campaigns	O
+for	O
+a	O
+United	B-country
+States	I-country
+Department	B-organization
+of	I-organization
+Peace	I-organization
+)	O
+.	O
+
+The	O
+best-selling	O
+album	O
+in	O
+the	O
+band	O
+'s	O
+catalog	O
+,	O
+I	O
+Against	B-album
+I	O
+is	O
+an	O
+album	O
+that	O
+mixes	O
+American	O
+hardcore	B-music genre
+punk	I-music genre
+with	O
+funk	B-music genre
+,	O
+Soul	B-music genre
+music	I-music genre
+,	O
+reggae	B-music genre
+and	O
+Heavy	B-music genre
+metal	I-music genre
+music	I-music genre
+.	O
+
+Since	O
+the	O
+introduction	O
+of	O
+the	O
+50	O
+/	O
+50	O
+voting	O
+system	O
+in	O
+2009	O
+,	O
+the	O
+juries	O
+and	O
+the	O
+voters	O
+have	O
+disagreed	O
+on	O
+the	O
+winner	O
+on	O
+five	O
+occasions	O
+,	O
+in	O
+Eurovision	B-event
+Song	I-event
+Contest	I-event
+2011	I-event
+,	O
+Eurovision	B-event
+Song	I-event
+Contest	I-event
+2015	I-event
+,	O
+Eurovision	B-event
+Song	I-event
+Contest	I-event
+2016	I-event
+,	O
+Eurovision	B-event
+Song	I-event
+Contest	I-event
+2018	I-event
+and	O
+Eurovision	B-event
+Song	I-event
+Contest	I-event
+2019	I-event
+.	O
+
+Artists	O
+from	O
+outside	O
+California	B-location
+who	O
+were	O
+associated	O
+with	O
+early	O
+alternative	B-music genre
+country	I-music genre
+included	O
+singer-songwriters	O
+such	O
+as	O
+Lucinda	B-musical artist
+Williams	I-musical artist
+,	O
+Lyle	B-musical artist
+Lovett	I-musical artist
+and	O
+Steve	B-musical artist
+Earle	I-musical artist
+,	O
+the	O
+Nashville	O
+country	O
+rock	O
+band	O
+Jason	B-band
+and	I-band
+the	I-band
+Scorchers	I-band
+and	O
+the	O
+British	O
+post-punk	B-music genre
+band	O
+The	B-band
+Mekons	I-band
+.	O
+
+Andrews	B-person
+has	O
+won	O
+an	O
+Academy	B-award
+Award	I-award
+,	O
+a	O
+BAFTA	B-award
+,	O
+five	O
+Golden	B-award
+Globes	I-award
+,	O
+three	O
+Grammy	B-award
+Award	I-award
+,	O
+two	O
+Emmy	B-award
+Award	I-award
+,	O
+the	O
+AFI	B-award
+Life	I-award
+Achievement	I-award
+Award	I-award
+,	O
+the	O
+Screen	B-award
+Actors	I-award
+Guild	I-award
+Life	I-award
+Achievement	I-award
+Award	I-award
+,	O
+the	O
+Kennedy	B-award
+Center	I-award
+Honors	I-award
+Award	I-award
+,	O
+and	O
+the	O
+Disney	B-award
+Legends	I-award
+Award	I-award
+.	O
+
+The	O
+film	O
+was	O
+nominated	O
+for	O
+the	O
+Academy	B-award
+Awards	I-award
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+,	O
+as	O
+well	O
+as	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Production	I-award
+Design	I-award
+(	O
+Carroll	B-person
+Clark	I-person
+and	O
+Van	B-person
+Nest	I-person
+Polglase	I-person
+)	O
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Original	I-award
+Song	I-award
+(	O
+Irving	B-musical artist
+Berlin	I-musical artist
+for	O
+Cheek	B-song
+to	I-song
+Cheek	I-song
+)	O
+,	O
+and	O
+Dance	B-award
+Direction	I-award
+(	O
+Hermes	B-person
+Pan	I-person
+for	O
+Piccolino	O
+and	O
+Top	O
+Hat	O
+)	O
+.	O
+
+It	O
+received	O
+14	O
+nominations	O
+at	O
+the	O
+89th	B-award
+Academy	I-award
+Awards	I-award
+,	O
+tying	O
+the	O
+record	O
+for	O
+most	O
+nominations	O
+with	O
+All	O
+About	O
+Eve	O
+(	O
+1950	O
+)	O
+and	O
+Titanic	O
+(	O
+1997	O
+)	O
+,	O
+and	O
+won	O
+the	O
+awards	O
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Director	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Actress	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Cinematography	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Original	I-award
+Score	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Original	I-award
+Song	I-award
+,	O
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Production	I-award
+Design	I-award
+.	O
+
+Western	B-music genre
+music	I-music genre
+artists	O
+such	O
+as	O
+Michael	B-musical artist
+Martin	I-musical artist
+Murphey	I-musical artist
+,	O
+and	O
+artists	O
+within	O
+the	O
+aforementioned	O
+styles	O
+and	O
+genres	O
+,	O
+have	O
+seen	O
+continued	O
+success	O
+throughout	O
+their	O
+respective	O
+fields	O
+,	O
+including	O
+the	O
+likes	O
+of	O
+The	B-band
+Great	I-band
+Divide	I-band
+,	O
+Lorenzo	B-musical artist
+Antonio	I-musical artist
+,	O
+Sparx	B-band
+,	O
+Pat	B-musical artist
+Green	I-musical artist
+,	O
+and	O
+Jack	B-musical artist
+Ingram	I-musical artist
+.	O
+
+The	O
+band	O
+have	O
+received	O
+seven	O
+Grammy	B-award
+Award	I-award
+s	O
+,	O
+four	O
+Brit	B-award
+Awards	I-award
+,	O
+an	O
+Academy	B-award
+Award	I-award
+(	O
+for	O
+Best	B-award
+Original	I-award
+Song	I-award
+Score	I-award
+for	O
+the	O
+1970	O
+film	O
+Let	O
+It	O
+Be	O
+)	O
+and	O
+fifteen	O
+Ivor	B-award
+Novello	I-award
+Awards	I-award
+.	O
+
+She	O
+rose	O
+to	O
+stardom	O
+in	O
+the	O
+romantic	O
+comedy	O
+Roman	O
+Holiday	O
+(	O
+1953	O
+)	O
+,	O
+alongside	O
+Gregory	B-person
+Peck	I-person
+,	O
+for	O
+which	O
+she	O
+was	O
+the	O
+first	O
+actress	O
+to	O
+win	O
+an	O
+Academy	B-award
+Awards	I-award
+,	O
+a	O
+Golden	B-award
+Globe	I-award
+Awards	I-award
+,	O
+and	O
+a	O
+British	B-award
+Academy	I-award
+Film	I-award
+Awards	I-award
+for	O
+a	O
+single	O
+performance	O
+.	O
+
+Within	O
+the	O
+mainline	O
+United	B-country
+States	I-country
+drum	B-event
+and	I-event
+bugle	I-event
+corps	I-event
+can	O
+trace	O
+their	O
+origins	O
+to	O
+the	O
+many	O
+Veterans	B-organization
+of	I-organization
+Foreign	I-organization
+Wars	I-organization
+(	O
+VFW	B-organization
+)	O
+and	O
+American	B-organization
+Legion	I-organization
+(	O
+AL	B-organization
+)	O
+meeting	O
+halls	O
+,	O
+where	O
+First	B-event
+World	I-event
+War	I-event
+and	O
+Spanish-American	B-event
+War	I-event
+veterans	O
+met	O
+and	O
+formed	O
+musical	O
+ensemble	O
+s	O
+to	O
+entertain	O
+their	O
+communities	O
+.	O
+
+Western	B-music genre
+music	I-music genre
+'s	O
+influence	O
+would	O
+continue	O
+to	O
+grow	O
+within	O
+the	O
+country	B-music genre
+music	I-music genre
+sphere	O
+,	O
+Western	B-music genre
+musicians	O
+like	O
+Michael	B-musical artist
+Martin	I-musical artist
+Murphey	I-musical artist
+,	O
+New	B-music genre
+Mexico	I-music genre
+music	I-music genre
+artists	O
+Al	B-musical artist
+Hurricane	I-musical artist
+and	O
+Antonia	B-person
+Apodaca	I-person
+,	O
+Tejano	B-music genre
+music	I-music genre
+performer	O
+Little	B-musical artist
+Joe	I-musical artist
+,	O
+and	O
+even	O
+folk	O
+revivalist	O
+John	B-musical artist
+Denver	I-musical artist
+,	O
+all	O
+first	O
+rose	O
+to	O
+prominence	O
+during	O
+this	O
+time	O
+.	O
+
+Special	O
+guests	O
+were	O
+Pete	B-musical artist
+Seeger	I-musical artist
+,	O
+Bonnie	B-musical artist
+Raitt	I-musical artist
+,	O
+David	B-musical artist
+Bromberg	I-musical artist
+and	O
+Jerry	B-musical artist
+Jeff	I-musical artist
+Walker	I-musical artist
+.	O
+
+Under	O
+the	O
+current	O
+voting	O
+system	O
+,	O
+in	O
+place	O
+since	O
+2016	O
+,	O
+the	O
+highest-scoring	O
+winner	O
+is	O
+Salvador	B-musical artist
+Sobral	I-musical artist
+of	O
+Portugal	B-country
+who	O
+won	O
+the	O
+Eurovision	B-event
+Song	I-event
+Contest	I-event
+2017	I-event
+in	O
+Kiev	B-location
+,	O
+Ukraine	B-country
+,	O
+with	O
+758	O
+points	O
+;	O
+under	O
+the	O
+previous	O
+system	O
+,	O
+the	O
+highest-scoring	O
+winner	O
+was	O
+Alexander	B-musical artist
+Rybak	I-musical artist
+of	O
+Norway	B-country
+with	O
+387	O
+points	O
+in	O
+Eurovision	B-event
+Song	I-event
+Contest	I-event
+2009	I-event
+.	O
+
+The	O
+band	O
+'s	O
+biggest	O
+hit	O
+singles	O
+are	O
+Sentimental	B-music genre
+ballad	I-music genre
+such	O
+as	O
+Easy	B-song
+,	O
+Three	B-song
+Times	I-song
+a	I-song
+Lady	I-song
+,	O
+and	O
+Nightshift	B-song
+;	O
+and	O
+funk	O
+y	O
+dance	O
+hits	O
+which	O
+include	O
+Brick	B-song
+House	I-song
+,	O
+Fancy	B-song
+Dancer	I-song
+,	O
+Lady	B-song
+(	I-song
+You	I-song
+Bring	I-song
+Me	I-song
+Up	I-song
+)	I-song
+,	O
+and	O
+Too	B-song
+Hot	I-song
+ta	I-song
+Trot	I-song
+.	O
+
+In	O
+central	B-location
+Europe	I-location
+,	O
+Italo	B-music genre
+disco	I-music genre
+(	O
+a.k.a.	O
+1980s	O
+Euro	B-music genre
+disco	I-music genre
+)	O
+and	O
+Euro	B-music genre
+house	I-music genre
+were	O
+the	O
+predominant	O
+attempts	O
+by	O
+young	O
+musicians	O
+to	O
+have	O
+a	O
+hit	O
+record	O
+in	O
+and	O
+beyond	O
+the	O
+borders	O
+of	O
+their	O
+own	O
+country	O
+.	O
+
+Some	O
+modern	O
+artists	O
+that	O
+primarily	O
+or	O
+entirely	O
+produce	O
+country	B-music genre
+pop	I-music genre
+music	I-music genre
+include	O
+Kacey	B-musical artist
+Musgraves	I-musical artist
+,	O
+Maren	B-musical artist
+Morris	I-musical artist
+,	O
+Kelsea	B-musical artist
+Ballerini	I-musical artist
+,	O
+Sam	B-musical artist
+Hunt	I-musical artist
+,	O
+Kane	B-musical artist
+Brown	I-musical artist
+,	O
+Chris	B-musical artist
+Lane	I-musical artist
+,	O
+and	O
+Dan	B-band
++	I-band
+Shay	I-band
+.	O
+
+In	O
+the	O
+summer	O
+of	O
+2004	O
+,	O
+Diab	B-musical artist
+,	O
+having	O
+left	O
+Alam	B-organization
+El	I-organization
+Phan	I-organization
+,	O
+released	O
+his	O
+first	O
+album	O
+with	O
+Rotana	B-organization
+Records	I-organization
+,	O
+Leily	B-album
+Nahary	I-album
+,	O
+which	O
+he	O
+followed	O
+up	O
+with	O
+the	O
+hugely	O
+successful	O
+Kammel	B-album
+Kalamak	I-album
+(	O
+2005	O
+)	O
+,	O
+and	O
+El	B-album
+Lilady	I-album
+(	O
+2007	O
+)	O
+.	O
+
+Four	O
+singles	O
+-	O
+Until	B-song
+It	I-song
+Sleeps	I-song
+,	O
+Hero	B-song
+of	I-song
+the	I-song
+Day	I-song
+,	O
+Mama	B-song
+Said	I-song
+,	O
+and	O
+King	B-song
+Nothing	I-song
+-	O
+were	O
+released	O
+as	O
+part	O
+of	O
+the	O
+marketing	O
+campaign	O
+for	O
+the	O
+album	O
+.	O
+
+In	O
+2007	O
+,	O
+Standing	B-album
+on	I-album
+the	I-album
+Outside	I-album
+:	I-album
+The	I-album
+Songs	I-album
+of	I-album
+Cold	I-album
+Chisel	I-album
+was	O
+released	O
+,	O
+featuring	O
+a	O
+collection	O
+of	O
+the	O
+band	O
+'s	O
+songs	O
+as	O
+performed	O
+by	O
+artists	O
+including	O
+The	B-band
+Living	I-band
+End	I-band
+,	O
+Evermore	B-band
+,	O
+Something	B-band
+for	I-band
+Kate	I-band
+,	O
+Pete	B-band
+Murray	I-band
+,	O
+Katie	B-musical artist
+Noonan	I-musical artist
+,	O
+You	B-band
+Am	I-band
+I	I-band
+,	O
+Paul	B-musical artist
+Kelly	I-musical artist
+,	O
+Alex	B-band
+Lloyd	I-band
+,	O
+Thirsty	B-band
+Merc	I-band
+and	O
+Ben	B-musical artist
+Lee	I-musical artist
+,	O
+
+Heard	B-musical artist
+released	O
+five	O
+albums	O
+for	O
+the	O
+label	O
+;	O
+1981	O
+'s	O
+Stop	B-album
+the	I-album
+Dominoes	I-album
+,	O
+1982	O
+'s	O
+Victims	B-album
+of	I-album
+the	I-album
+Age	I-album
+;	O
+1983	O
+'s	O
+Eye	B-album
+of	I-album
+the	I-album
+Storm	I-album
+;	O
+1984	O
+'s	O
+Ashes	B-album
+and	I-album
+Light	I-album
+;	O
+and	O
+1985	O
+'s	O
+Mosaics	B-album
+.	O
+
+Construction	O
+commenced	O
+in	O
+1975	O
+and	O
+the	O
+venue	O
+opened	O
+ahead	O
+of	O
+the	O
+1978	B-event
+Commonwealth	I-event
+Games	I-event
+(	O
+hence	O
+its	O
+name	O
+)	O
+,	O
+replacing	O
+the	O
+adjacent	O
+Clarke	B-location
+Stadium	I-location
+as	O
+the	O
+Eskimos	O
+home	O
+.	O
+
+Rocks	B-album
+and	I-album
+Honey	I-album
+was	O
+released	O
+in	O
+2013	O
+and	O
+features	O
+the	O
+single	O
+Believe	B-song
+in	I-song
+Me	I-song
+which	O
+she	O
+performed	O
+representing	O
+the	O
+United	B-country
+Kingdom	I-country
+at	O
+the	O
+Eurovision	B-album
+Song	I-album
+Contest	I-album
+2013	I-album
+in	O
+Malmö	B-location
+,	O
+Sweden	B-country
+.	O
+
+Several	O
+albums	O
+that	O
+continued	O
+this	O
+style	O
+,	O
+which	O
+had	O
+come	O
+to	O
+be	O
+known	O
+as	O
+technical	B-music genre
+thrash	I-music genre
+metal	I-music genre
+,	O
+were	O
+released	O
+in	O
+1991	O
+,	O
+such	O
+as	O
+Overkill	B-band
+'s	O
+Horrorscope	B-album
+,	O
+Heathen	B-band
+'	O
+s	O
+Victims	B-album
+of	I-album
+Deception	I-album
+,	O
+Dark	B-band
+Angel	I-band
+'	O
+s	O
+Time	B-album
+Does	I-album
+Not	I-album
+Heal	I-album
+,	O
+Sepultura	B-band
+'s	O
+Arise	B-album
+,	O
+and	O
+Coroner	B-band
+'s	O
+Mental	B-album
+Vortex	I-album
+.	O
+
+Burton	B-person
+'s	O
+work	O
+on	O
+Sweeney	O
+Todd	O
+won	O
+the	O
+National	B-award
+Board	I-award
+of	I-award
+Review	I-award
+Award	I-award
+for	I-award
+Best	I-award
+Director	I-award
+,	O
+and	O
+won	O
+an	O
+Academy	B-award
+Awards	I-award
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Production	I-award
+Design	I-award
+.	O
+
+It	O
+received	O
+a	O
+total	O
+of	O
+13	O
+Academy	B-award
+Awards	I-award
+nominations	O
+,	O
+including	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+-	O
+a	O
+record	O
+for	O
+any	O
+film	O
+released	O
+by	O
+Walt	B-organization
+Disney	I-organization
+Studios	I-organization
+-	O
+and	O
+won	O
+five	O
+:	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Actress	I-award
+for	O
+Andrews	B-person
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Film	I-award
+Editing	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Original	I-award
+Score	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Visual	I-award
+Effects	I-award
+,	O
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Original	I-award
+Song	I-award
+for	O
+Chim	B-song
+Chim	I-song
+Cher-ee	I-song
+.	O
+
+Notable	O
+rockabilly	B-music genre
+revivalists	O
+and	O
+psychobilly	B-music genre
+performers	O
+from	O
+the	O
+1990s	O
+and	O
+first	O
+decade	O
+of	O
+the	O
+21st	O
+century	O
+include	O
+Scott	B-musical artist
+Owen	I-musical artist
+(	O
+from	O
+the	O
+Australian	O
+band	O
+The	B-band
+Living	I-band
+End	I-band
+)	O
+,	O
+Jimbo	B-musical artist
+Wallace	I-musical artist
+(	O
+from	O
+the	O
+US	B-country
+band	O
+Reverend	B-band
+Horton	I-band
+Heat	I-band
+)	O
+,	O
+Kim	B-musical artist
+Nekroman	I-musical artist
+(	O
+Nekromantix	B-band
+)	O
+,	O
+Patricia	B-musical artist
+Day	I-musical artist
+(	O
+HorrorPops	B-band
+)	O
+,	O
+Geoff	B-musical artist
+Kresge	I-musical artist
+(	O
+Tiger	B-band
+Army	I-band
+,	O
+ex-	O
+AFI	B-band
+)	O
+.	O
+
+In	O
+2009	O
+,	O
+Paltrow	B-musical artist
+received	O
+a	O
+Grammy	B-award
+Award	I-award
+nomination	O
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Spoken	I-award
+Word	I-award
+Album	I-award
+for	I-award
+Children	I-award
+for	O
+the	O
+children	O
+'s	O
+audiobook	O
+Brown	O
+Bear	O
+and	O
+Friends	O
+and	O
+won	O
+the	O
+Primetime	B-award
+Emmy	I-award
+Award	I-award
+for	I-award
+Outstanding	I-award
+Guest	I-award
+Actress	I-award
+in	I-award
+a	I-award
+Comedy	I-award
+Series	I-award
+for	O
+her	O
+guest	O
+role	O
+as	O
+Holly	B-person
+Holliday	I-person
+on	O
+the	O
+Fox	O
+musical	O
+comedy-drama	O
+television	O
+series	O
+Glee	O
+in	O
+2011	O
+.	O
+
+In	O
+1956	O
+,	O
+the	O
+arrival	O
+of	O
+rockabilly	O
+was	O
+underlined	O
+by	O
+the	O
+success	O
+of	O
+songs	O
+like	O
+Folsom	B-song
+Prison	I-song
+Blues	I-song
+by	O
+Johnny	B-musical artist
+Cash	I-musical artist
+,	O
+Blue	B-song
+Suede	I-song
+Shoes	I-song
+by	O
+Perkins	B-musical artist
+and	O
+the	O
+No.	O
+1	O
+hit	O
+Heartbreak	B-song
+Hotel	I-song
+by	O
+Presley	B-musical artist
+.	O
+
+Olympia	B-album
+71	I-album
+,	O
+Olympia	B-album
+74	I-album
+,	O
+and	O
+Olympia	B-album
+77	I-album
+are	O
+live	O
+albums	O
+.	O
+
+There	O
+are	O
+many	O
+kinds	O
+of	O
+bubens	B-musical instrument
+,	O
+including	O
+def	B-musical instrument
+,	O
+daf	B-musical instrument
+,	O
+or	O
+qaval	B-musical instrument
+(	O
+Azerbaijan	B-country
+)	O
+,	O
+daf	B-musical instrument
+or	O
+khaval	B-musical instrument
+(	O
+Armenia	B-country
+)	O
+,	O
+daira	B-musical instrument
+(	O
+Georgia	B-country
+)	O
+,	O
+doira	B-musical instrument
+(	O
+Uzbekistan	B-country
+and	O
+Tajikistan	B-country
+)	O
+,	O
+daire	B-musical instrument
+or	O
+def	B-musical instrument
+(	O
+Iran	B-country
+)	O
+,	O
+bendeir	B-musical instrument
+(	O
+Arab	O
+countries	O
+)	O
+,	O
+pandero	B-musical instrument
+(	O
+Spain	B-country
+)	O
+.	O
+
+The	O
+venue	O
+hosted	O
+Badminton	B-event
+at	I-event
+the	I-event
+2012	I-event
+Summer	I-event
+Olympics	I-event
+and	O
+Gymnastics	B-event
+at	I-event
+the	I-event
+2012	I-event
+Summer	I-event
+Olympics	I-event
+at	O
+the	O
+2012	B-event
+Summer	I-event
+Olympics	I-event
+.	O
+
+The	O
+group	O
+gave	O
+two	O
+particularly	O
+noteworthy	O
+concerts	O
+in	O
+New	B-location
+York	I-location
+City	I-location
+:	O
+once	O
+in	O
+2000	O
+at	O
+the	O
+Zee	B-award
+Gold	I-award
+Bollywood	I-award
+Awards	I-award
+in	O
+the	O
+Nassau	B-location
+Coliseum	I-location
+,	O
+and	O
+again	O
+in	O
+2002	O
+at	O
+the	O
+Bollywood	B-award
+Music	I-award
+Awards	I-award
+in	O
+the	O
+Hammerstein	B-location
+Ballroom	I-location
+.	O
+
+One	O
+of	O
+the	O
+main	O
+differences	O
+between	O
+American	O
+and	O
+European	O
+pop	B-music genre
+is	O
+that	O
+Europop	B-music genre
+is	O
+generally	O
+more	O
+Dance	B-music genre
+music	I-music genre
+and	O
+Trance	B-music genre
+music	I-music genre
+oriented	O
+.	O
+
+All	O
+ten	O
+of	O
+Cannibal	B-band
+Corpse	I-band
+'s	O
+albums	O
+,	O
+the	O
+live	O
+album	O
+Live	B-album
+Cannibalism	I-album
+,	O
+the	O
+boxed	O
+set	O
+15	B-album
+Year	I-album
+Killing	I-album
+Spree	I-album
+,	O
+the	O
+EP	O
+Worm	B-album
+Infested	I-album
+,	O
+and	O
+the	O
+single	O
+Hammer	B-song
+Smashed	I-song
+Face	I-song
+were	O
+re-released	O
+in	O
+Australia	B-country
+between	O
+2006	O
+and	O
+2007	O
+,	O
+finally	O
+classified	O
+by	O
+ARIA	B-organization
+and	O
+allowed	O
+for	O
+sale	O
+in	O
+Australia	B-country
+.	O
+
+Material	O
+from	O
+the	O
+1966-1968	O
+sessions	O
+was	O
+released	O
+on	O
+Miles	B-album
+Smiles	I-album
+(	O
+1966	O
+)	O
+,	O
+Sorcerer	B-album
+(	O
+1967	O
+)	O
+,	O
+Nefertiti	B-album
+(	O
+1967	O
+)	O
+,	O
+Miles	B-album
+in	I-album
+the	I-album
+Sky	I-album
+(	O
+1968	O
+)	O
+,	O
+and	O
+Filles	B-album
+de	I-album
+Kilimanjaro	I-album
+(	O
+1968	O
+)	O
+.	O
+
+Castellano	B-musical artist
+switched	O
+to	O
+rhythm	B-musical instrument
+guitar	I-musical instrument
+and	O
+keyboards	B-musical instrument
+(	O
+Castellano	B-musical artist
+also	O
+filled	O
+in	O
+on	O
+lead	O
+guitar	B-musical instrument
+and	O
+vocals	O
+for	O
+an	O
+ailing	O
+Buck	B-musical artist
+Dharma	I-musical artist
+in	O
+two	O
+shows	O
+in	O
+2005	O
+)	O
+,	O
+and	O
+the	O
+position	O
+of	O
+bassist	O
+was	O
+taken	O
+up	O
+by	O
+Rudy	B-musical artist
+Sarzo	I-musical artist
+(	O
+previously	O
+a	O
+member	O
+of	O
+Quiet	B-band
+Riot	I-band
+,	O
+Whitesnake	B-band
+,	O
+Ozzy	B-musical artist
+Osbourne	I-musical artist
+and	O
+Dio	B-musical artist
+)	O
+,	O
+with	O
+the	O
+band	O
+employing	O
+Danny	B-musical artist
+Miranda	I-musical artist
+and	O
+Jon	B-musical artist
+Rogers	I-musical artist
+as	O
+guest	O
+bassists	O
+to	O
+fill	O
+in	O
+when	O
+Sarzo	B-musical artist
+was	O
+unavailable	O
+.	O
+
+This	O
+album	O
+featured	O
+vocal	O
+contributions	O
+by	O
+Vicotnik	B-musical artist
+of	O
+Ved	B-band
+Buens	I-band
+Ende	I-band
+and	O
+Dødheimsgard	B-band
+and	O
+Aldrahn	B-musical artist
+of	O
+Dødheimsgard	B-band
+and	O
+Zyklon-B	B-band
+.	O
+
+Originally	O
+based	O
+in	O
+West	B-country
+Germany	I-country
+,	O
+the	O
+four	O
+original	O
+members	O
+of	O
+the	O
+group	O
+'s	O
+official	O
+line-up	O
+were	O
+Liz	B-musical artist
+Mitchell	I-musical artist
+and	O
+Marcia	B-musical artist
+Barrett	I-musical artist
+from	O
+Jamaica	B-country
+,	O
+Maizie	B-musical artist
+Williams	I-musical artist
+from	O
+Montserrat	B-location
+and	O
+Bobby	B-musical artist
+Farrell	I-musical artist
+,	O
+a	O
+performing	O
+artist	O
+from	O
+Aruba	B-country
+.	O
+
+Morricone	B-musical artist
+'s	O
+best-known	O
+compositions	O
+include	O
+The	B-song
+Ecstasy	I-song
+of	I-song
+Gold	I-song
+,	O
+Se	B-song
+Telefonando	I-song
+,	O
+Man	B-song
+with	I-song
+a	I-song
+Harmonica	I-song
+,	O
+Here	B-song
+'s	I-song
+to	I-song
+You	I-song
+,	O
+the	O
+UK	B-country
+No.	O
+2	O
+single	O
+Chi	B-song
+Mai	I-song
+,	O
+Gabriel	B-song
+'s	I-song
+Oboe	I-song
+and	O
+E	B-song
+Più	I-song
+Ti	I-song
+Penso	I-song
+.	O
+
+After	O
+the	O
+festival	O
+,	O
+the	O
+Experience	O
+was	O
+booked	O
+for	O
+five	O
+concerts	O
+at	O
+Bill	B-person
+Graham	I-person
+'s	O
+The	B-location
+Fillmore	I-location
+,	O
+with	O
+Big	B-band
+Brother	I-band
+and	I-band
+the	I-band
+Holding	I-band
+Company	I-band
+and	O
+Jefferson	B-band
+Airplane	I-band
+.	O
+
+The	O
+film	O
+won	O
+Academy	B-award
+Awards	I-award
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Actor	I-award
+(	O
+James	B-person
+Cagney	I-person
+)	O
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Original	I-award
+Score	I-award
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Sound	I-award
+Mixing	I-award
+(	O
+Nathan	B-musical artist
+Levinson	I-musical artist
+)	O
+.	O
+
+Subsequent	O
+releases	O
+,	O
+such	O
+as	O
+The	B-album
+Force	I-album
+Behind	I-album
+the	I-album
+Power	I-album
+(	O
+1991	O
+)	O
+,	O
+Take	B-album
+Me	I-album
+Higher	I-album
+(	O
+1995	O
+)	O
+,	O
+and	O
+Every	B-album
+Day	I-album
+Is	I-album
+a	I-album
+New	I-album
+Day	I-album
+(	O
+1999	O
+)	O
+produced	O
+similar	O
+results	O
+.	O
+
+The	O
+arena	B-organization
+also	O
+hosted	O
+the	O
+Ice	B-event
+hockey	I-event
+at	I-event
+the	I-event
+2010	I-event
+Winter	I-event
+Olympics	I-event
+events	O
+at	O
+the	O
+2010	B-event
+Winter	I-event
+Olympics	I-event
+.	O
+
+Since	O
+the	O
+early	O
+1980s	O
+,	O
+the	O
+Zulu	B-band
+Nation	I-band
+has	O
+since	O
+established	O
+(	O
+autonomous	O
+)	O
+branches	O
+in	O
+Japanese	B-music genre
+hip	I-music genre
+hop	I-music genre
+,	O
+France	B-country
+,	O
+the	O
+British	B-music genre
+hip	I-music genre
+hop	I-music genre
+,	O
+Australian	B-music genre
+hip	I-music genre
+hop	I-music genre
+,	O
+Canada	B-country
+,	O
+Korean	B-music genre
+hip	I-music genre
+hop	I-music genre
+and	O
+the	O
+Cape	B-location
+Flats	I-location
+in	O
+Cape	B-location
+Town	I-location
+South	B-country
+Africa	I-country
+.	O
+
+Since	O
+TG	B-band
+has	O
+permanently	O
+disbanded	O
+following	O
+the	O
+death	O
+of	O
+Christopherson	B-musical artist
+,	O
+the	O
+label	O
+'s	O
+plan	O
+is	O
+to	O
+re-release	O
+the	O
+original	O
+TG	B-band
+albums	O
+(	O
+The	B-album
+Second	I-album
+Annual	I-album
+Report	I-album
+,	O
+D.o.A	B-album
+:	I-album
+The	I-album
+Third	I-album
+and	I-album
+Final	I-album
+Report	I-album
+,	O
+20	B-album
+Jazz	I-album
+Funk	I-album
+Greats	I-album
+,	O
+Heathen	B-album
+Earth	I-album
+and	O
+Greatest	B-album
+Hits	I-album
+)	O
+on	O
+the	O
+label	O
+.	O
+
+Boogie	B-band
+Down	I-band
+and	O
+KRS	B-musical artist
+retorted	O
+angrily	O
+with	O
+songs	O
+such	O
+as	O
+The	B-song
+Bridge	I-song
+is	I-song
+Over	I-song
+and	O
+South	B-song
+Bronx	I-song
+,	O
+which	O
+started	O
+one	O
+of	O
+the	O
+first	O
+notable	O
+hip	B-music genre
+hop	I-music genre
+wars	O
+as	O
+MC	B-musical artist
+Shan	I-musical artist
+,	O
+Marley	B-musical artist
+Marl	I-musical artist
+,	O
+Roxanne	B-musical artist
+Shanté	I-musical artist
+and	O
+Blaq	B-musical artist
+Poet	I-musical artist
+all	O
+released	O
+songs	O
+featuring	O
+verses	O
+personally	O
+attacking	O
+KRS	B-musical artist
+and	O
+Scott	B-musical artist
+La	I-musical artist
+Rock	I-musical artist
+.	O
+
+Other	O
+top-10	O
+entries	O
+from	O
+2015	O
+like	O
+Mark	B-musical artist
+Ronson	I-musical artist
+'	O
+s	O
+disco	B-song
+groove-infused	I-song
+Uptown	B-song
+Funk	I-song
+,	O
+Maroon	B-band
+5	I-band
+'	O
+s	O
+Sugar	B-song
+,	O
+the	B-band
+Weeknd	I-band
+'	O
+s	O
+Can	B-song
+'t	I-song
+Feel	I-song
+My	I-song
+Face	I-song
+and	O
+Jason	B-musical artist
+Derulo	I-musical artist
+'	O
+s	O
+Want	B-song
+to	I-song
+Want	I-song
+Me	I-song
+also	O
+ascended	O
+the	O
+charts	O
+and	O
+have	O
+a	O
+strong	O
+disco	B-music genre
+influence	O
+.	O
+
+142	O
+He	O
+returned	O
+to	O
+the	O
+stage	O
+on	O
+8	O
+September	O
+2005	O
+,	O
+appearing	O
+with	O
+Arcade	B-band
+Fire	I-band
+for	O
+the	O
+US	B-country
+nationally	O
+televised	O
+event	O
+Fashion	B-event
+Rocks	I-event
+,	O
+and	O
+performed	O
+with	O
+the	O
+Canadian	O
+band	O
+for	O
+the	O
+second	O
+time	O
+a	O
+week	O
+later	O
+during	O
+the	O
+CMJ	B-event
+Music	I-event
+Marathon	I-event
+.	O
+Thompson	B-musical artist
+(	O
+2006	O
+)	O
+:	O
+pp.	O
+291-92	O
+He	O
+contributed	O
+backing	O
+vocals	O
+on	O
+TV	B-band
+on	I-band
+the	I-band
+Radio	I-band
+'	O
+s	O
+song	O
+Province	B-song
+for	O
+their	O
+album	O
+Return	B-album
+to	I-album
+Cookie	I-album
+Mountain	I-album
+,	O
+
+In	O
+December	O
+2011	O
+the	O
+band	O
+announced	O
+they	O
+would	O
+be	O
+performing	O
+Tellin	B-album
+'	I-album
+Stories	I-album
+in	O
+its	O
+entirety	O
+at	O
+London	B-location
+'s	O
+HMV	B-location
+Hammersmith	I-location
+Apollo	I-location
+,	O
+O2	B-location
+Apollo	I-location
+Manchester	I-location
+and	O
+Glasgow	B-location
+'s	O
+Barrowland	B-location
+Ballroom	I-location
+in	O
+June	O
+2012	O
+.	O
+
+One	O
+of	O
+the	O
+best-selling	O
+music	O
+groups	O
+of	O
+the	O
+1960s	O
+,	O
+their	O
+biggest	O
+hits	O
+-	O
+including	O
+The	B-song
+Sound	I-song
+of	I-song
+Silence	I-song
+(	O
+1965	O
+)	O
+,	O
+Mrs.	B-song
+Robinson	I-song
+(	O
+1968	O
+)	O
+,	O
+The	B-song
+Boxer	I-song
+(	O
+1969	O
+)	O
+,	O
+and	O
+Bridge	B-album
+over	I-album
+Troubled	I-album
+Water	I-album
+(	O
+1970	O
+)	O
+-	O
+reached	O
+number	O
+one	O
+on	O
+singles	O
+charts	O
+worldwide	O
+.	O
+
+The	O
+Eurasian	B-organization
+Economic	I-organization
+Union	I-organization
+,	O
+the	O
+Gulf	B-organization
+Cooperation	I-organization
+Council	I-organization
+,	O
+CARICOM	B-organization
+and	O
+the	O
+European	B-organization
+Union	I-organization
+are	O
+current	O
+examples	O
+of	O
+single	O
+markets	O
+,	O
+although	O
+the	O
+Gulf	B-organization
+Cooperation	I-organization
+Council	I-organization
+'	O
+s	O
+single	O
+market	O
+has	O
+been	O
+described	O
+as	O
+malfunctioning	O
+in	O
+2014	O
+.	O
+
+In	O
+1984	O
+,	O
+Loverboy	B-band
+recorded	O
+the	O
+United	B-country
+States	I-country
+at	O
+the	O
+1984	B-event
+Summer	I-event
+Olympics	I-event
+theme	O
+for	O
+the	O
+1984	B-event
+Summer	I-event
+Olympics	I-event
+,	O
+Nothing	B-song
+'s	I-song
+Gonna	I-song
+Stop	I-song
+You	I-song
+Now	I-song
+.	O
+
+In	O
+1990	O
+,	O
+he	O
+appeared	O
+on	O
+Kool	B-song
+Thing	I-song
+,	O
+a	O
+song	O
+by	O
+the	O
+alternative	B-music genre
+rock	I-music genre
+band	O
+Sonic	B-band
+Youth	I-band
+,	O
+and	O
+along	O
+with	O
+Flavor	B-musical artist
+Flav	I-musical artist
+,	O
+he	O
+sang	O
+on	O
+George	B-musical artist
+Clinton	I-musical artist
+'	O
+s	O
+song	O
+Tweakin	B-song
+'	O
+,	O
+which	O
+appears	O
+on	O
+his	O
+1989	O
+album	O
+The	B-album
+Cinderella	I-album
+Theory	I-album
+.	O
+
+They	O
+also	O
+visited	O
+South	B-location
+America	I-location
+for	O
+the	O
+second	O
+time	O
+(	O
+the	O
+first	O
+time	O
+being	O
+in	O
+1999	O
+)	O
+,	O
+arriving	O
+at	O
+Chile	B-country
+,	O
+Argentina	B-country
+,	O
+and	O
+Brazil	B-country
+.	O
+
+With	O
+the	O
+eventual	O
+commercial	O
+dominance	O
+of	O
+West	B-music genre
+Coast	I-music genre
+hip	I-music genre
+hop	I-music genre
+gangsta	I-music genre
+rap	I-music genre
+,	O
+particularly	O
+the	O
+emergence	O
+of	O
+the	O
+relaxed	O
+sounds	O
+of	O
+G-funk	B-music genre
+by	O
+the	O
+early	O
+nineties	O
+,	O
+the	O
+East	B-event
+Coast	I-event
+hip	I-event
+hop	I-event
+new	I-event
+school	I-event
+/	O
+golden	O
+age	O
+can	O
+be	O
+said	O
+to	O
+have	O
+ended	O
+,	O
+with	O
+hardcore	O
+rappers	O
+such	O
+as	O
+the	O
+Wu-Tang	B-band
+Clan	I-band
+and	O
+gangsta	O
+rappers	O
+such	O
+as	O
+Nas	B-musical artist
+and	O
+The	B-musical artist
+Notorious	I-musical artist
+B.I.G.	I-musical artist
+coming	O
+to	O
+dominate	O
+the	O
+East	B-music genre
+Coast	I-music genre
+scene	O
+.	O
+
+Alexander	B-musical artist
+has	O
+had	O
+an	O
+active	O
+career	O
+on	O
+stage	O
+,	O
+appearing	O
+in	O
+several	O
+Broadway	B-organization
+musicals	O
+including	O
+Jerome	O
+Robbins	O
+'	O
+Broadway	O
+in	O
+1989	O
+,	O
+for	O
+which	O
+he	O
+won	O
+the	O
+Tony	B-award
+Award	I-award
+as	O
+Best	B-award
+Leading	I-award
+Actor	I-award
+in	I-award
+a	I-award
+Musical	I-award
+and	O
+a	O
+Grammy	B-award
+Award	I-award
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Musical	I-award
+Theater	I-award
+Album	I-award
+.	O
+
+The	O
+Bee	B-band
+Gees	I-band
+used	O
+Barry	B-musical artist
+Gibb	I-musical artist
+'	O
+s	O
+falsetto	B-song
+to	O
+garner	O
+hits	O
+such	O
+as	O
+You	B-song
+Should	I-song
+Be	I-song
+Dancing	I-song
+,	O
+Stayin	B-song
+'	I-song
+Alive	I-song
+,	O
+Night	B-song
+Fever	I-song
+,	O
+More	B-song
+Than	I-song
+A	I-song
+Woman	I-song
+and	O
+Love	B-song
+You	I-song
+Inside	I-song
+Out	I-song
+.	O
+
+They	O
+were	O
+accompanied	O
+by	O
+a	O
+varying	O
+number	O
+of	O
+session	O
+musicians	O
+and	O
+some	O
+relatively	O
+consistent	O
+band	O
+members	O
+such	O
+as	O
+guitarist	O
+Ian	B-musical artist
+Bairnson	I-musical artist
+,	O
+arranger	O
+Andrew	B-musical artist
+Powell	I-musical artist
+,	O
+bassist	O
+and	O
+vocalist	O
+David	B-musical artist
+Paton	I-musical artist
+,	O
+drummer	O
+Stuart	B-musical artist
+Elliott	I-musical artist
+,	O
+and	O
+vocalists	O
+Lenny	B-musical artist
+Zakatek	I-musical artist
+and	O
+Chris	B-musical artist
+Rainbow	I-musical artist
+.	O
+
+His	O
+13	O
+Grammy	B-award
+Award	I-award
+nominations	O
+have	O
+resulted	O
+in	O
+2	O
+awards	O
+won	O
+,	O
+along	O
+with	O
+Billboard	B-award
+Music	I-award
+Award	I-award
+s	O
+,	O
+Country	B-award
+Music	I-award
+Association	I-award
+Awards	I-award
+,	O
+and	O
+many	O
+others	O
+.	O
+
+In	O
+2019	O
+,	O
+Fonsi	B-musical artist
+performed	O
+Right	B-song
+Where	I-song
+I	I-song
+'m	I-song
+Supposed	I-song
+to	I-song
+Be	I-song
+as	O
+the	O
+Official	O
+Song	O
+of	O
+the	O
+2019	B-event
+Special	I-event
+Olympics	I-event
+World	I-event
+Summer	I-event
+Games	I-event
+in	O
+Abu	B-location
+Dhabi	I-location
+,	O
+United	B-country
+Arab	I-country
+Emirates	I-country
+in	O
+collaboration	O
+with	O
+Ryan	B-musical artist
+Tedder	I-musical artist
+,	O
+Avril	B-musical artist
+Lavigne	I-musical artist
+Hussain	B-musical artist
+Al	I-musical artist
+Jassmi	I-musical artist
+,	O
+Assala	B-musical artist
+Nasri	I-musical artist
+and	O
+Tamer	B-musical artist
+Hosny	I-musical artist
+.	O
+
+Among	O
+the	O
+songs	O
+Johnson	B-musical artist
+recorded	O
+in	O
+San	B-location
+Antonio	I-location
+were	O
+Come	B-song
+On	I-song
+in	I-song
+My	I-song
+Kitchen	I-song
+,	O
+Kind	B-song
+Hearted	I-song
+Woman	I-song
+Blues	I-song
+,	O
+Dust	B-song
+My	I-song
+Broom	I-song
+and	O
+Cross	B-song
+Road	I-song
+Blues	I-song
+.	O
+
+It	O
+comprises	O
+the	O
+music	B-music genre
+of	I-music genre
+Bosnia	I-music genre
+and	I-music genre
+Herzegovina	I-music genre
+,	O
+Bulgaria	B-country
+,	O
+Croatia	B-country
+,	O
+Music	B-music genre
+of	I-music genre
+Greece	I-music genre
+,	O
+Montenegro	B-country
+,	O
+Serbia	B-country
+,	O
+Romania	B-country
+,	O
+Republic	B-country
+of	I-country
+Macedonia	I-country
+,	O
+Albania	B-country
+,	O
+some	O
+of	O
+the	O
+historical	O
+states	O
+of	O
+Yugoslavia	B-country
+or	O
+the	O
+State	B-country
+Union	I-country
+of	I-country
+Serbia	I-country
+and	I-country
+Montenegro	I-country
+and	O
+geographical	O
+regions	O
+such	O
+as	O
+Thrace	B-location
+.	O
+
+Schmidt	B-person
+was	O
+born	O
+in	O
+Pozsony	B-location
+(	O
+known	O
+in	O
+German	O
+as	O
+Pressburg	B-location
+)	O
+,	O
+in	O
+the	O
+Hungary	B-country
+part	O
+of	O
+the	O
+Austria-Hungary	B-location
+(	O
+the	O
+city	O
+is	O
+now	O
+Bratislava	B-location
+,	O
+capital	O
+of	O
+Slovakia	B-country
+)	O
+.	O
+
+In	O
+2005	O
+Jamieson	B-musical artist
+won	O
+Best	O
+Male	O
+Performer	O
+in	O
+the	O
+second	B-award
+annual	I-award
+Jack	I-award
+Awards	I-award
+,	O
+Jamieson	B-musical artist
+showcased	O
+the	O
+sounds	O
+of	O
+Grinspoon	B-band
+to	O
+millions	O
+of	O
+viewers	O
+in	O
+March	O
+2006	O
+,	O
+playing	O
+live	O
+at	O
+Melbourne	B-location
+Cricket	I-location
+Ground	I-location
+as	O
+part	O
+of	O
+the	O
+closing	O
+ceremony	O
+of	O
+the	O
+2006	B-event
+Commonwealth	I-event
+Games	I-event
+.	O
+
+Funds	O
+raised	O
+by	O
+the	O
+project	O
+will	O
+go	O
+to	O
+Amazon	B-organization
+Watch	I-organization
+and	O
+Extinction	B-organization
+Rebellion	I-organization
+.	O
+
+This	O
+is	O
+the	O
+method	O
+used	O
+by	O
+Bands	B-organization
+of	I-organization
+America	I-organization
+,	O
+the	O
+Indiana	B-organization
+State	I-organization
+School	I-organization
+Music	I-organization
+Association	I-organization
+,	O
+Kentucky	B-organization
+Music	I-organization
+Educators	I-organization
+Association	I-organization
+and	O
+the	O
+University	B-organization
+Interscholastic	I-organization
+League	I-organization
+.	O
+
+Featuring	O
+LaLonde	B-musical artist
+and	O
+Alexander	B-musical artist
+,	O
+Primus	B-band
+recorded	O
+the	O
+live	O
+album	O
+Suck	B-album
+on	I-album
+This	I-album
+in	O
+1989	O
+,	O
+followed	O
+by	O
+four	O
+studio	O
+albums	O
+:	O
+Frizzle	B-album
+Fry	I-album
+,	O
+Sailing	B-album
+the	I-album
+Seas	I-album
+of	I-album
+Cheese	I-album
+,	O
+Pork	B-album
+Soda	I-album
+,	O
+and	O
+Tales	B-album
+from	I-album
+the	I-album
+Punchbowl	I-album
+.	O
+
+In	O
+1977	O
+Summer	O
+,	O
+Moroder	B-musical artist
+and	O
+Bellotte	B-musical artist
+further	O
+released	O
+I	B-song
+Feel	I-song
+Love	I-song
+,	O
+as	O
+the	O
+B-side	O
+of	O
+Can	B-song
+'t	I-song
+We	I-song
+Just	I-song
+Sit	I-song
+Down	I-song
+(	O
+And	B-song
+Talk	I-song
+It	I-song
+Over	I-song
+)	O
+,	O
+which	O
+revolutionized	O
+dance	O
+music	O
+with	O
+its	O
+mostly	O
+Electronic	B-music genre
+music	I-music genre
+production	O
+and	O
+was	O
+a	O
+massive	O
+worldwide	O
+success	O
+,	O
+spawning	O
+the	O
+Hi-NRG	B-music genre
+subgenre	O
+.	O
+
+The	O
+film	O
+drew	O
+many	O
+of	O
+the	O
+biggest	O
+living	O
+influencers	O
+of	O
+the	O
+rhythm	B-music genre
+and	I-music genre
+blues	I-music genre
+genre	O
+together	O
+,	O
+such	O
+as	O
+Ray	B-musical artist
+Charles	I-musical artist
+,	O
+James	B-musical artist
+Brown	I-musical artist
+,	O
+Cab	B-musical artist
+Calloway	I-musical artist
+,	O
+Aretha	B-musical artist
+Franklin	I-musical artist
+,	O
+and	O
+John	B-musical artist
+Lee	I-musical artist
+Hooker	I-musical artist
+.	O
+
+Other	O
+acts	O
+who	O
+became	O
+prominent	O
+in	O
+the	O
+alt-country	B-music genre
+genre	I-music genre
+during	O
+the	O
+1990s	O
+and	O
+2000s	O
+included	O
+The	B-band
+Bottle	I-band
+Rockets	I-band
+,	O
+The	B-band
+Handsome	I-band
+Family	I-band
+,	O
+Blue	B-band
+Mountain	I-band
+,	O
+Robbie	B-band
+Fulks	I-band
+,	O
+Blood	B-band
+Oranges	I-band
+,	O
+Bright	B-band
+Eyes	I-band
+,	O
+Drive-By	B-band
+Truckers	I-band
+,	O
+Old	B-band
+97	I-band
+'s	I-band
+,	O
+Old	B-band
+Crow	I-band
+Medicine	I-band
+Show	I-band
+,	O
+Nickel	B-band
+Creek	I-band
+,	O
+Neko	B-musical artist
+Case	I-musical artist
+,	O
+and	O
+Whiskeytown	B-band
+,	O
+whose	O
+lead	O
+singer	O
+Ryan	B-musical artist
+Adams	I-musical artist
+later	O
+had	O
+a	O
+successful	O
+solo-career	O
+.	O
+
+The	O
+West	O
+Side	O
+sound	O
+had	O
+strong	O
+rhythmic	O
+support	O
+from	O
+a	O
+rhythm	B-musical instrument
+guitar	I-musical instrument
+,	O
+bass	B-musical instrument
+guitar	I-musical instrument
+and	O
+drums	B-musical instrument
+and	O
+as	O
+perfected	O
+by	O
+Guy	B-band
+,	O
+Freddie	B-musical artist
+King	I-musical artist
+,	O
+Magic	B-musical artist
+Slim	I-musical artist
+and	O
+Luther	B-musical artist
+Allison	I-musical artist
+was	O
+dominated	O
+by	O
+amplified	O
+electric	B-musical instrument
+lead	I-musical instrument
+guitar	I-musical instrument
+.	O
+
+Other	O
+early	O
+examples	O
+include	O
+the	O
+Mercury	B-award
+Music	I-award
+Prize	I-award
+winning	O
+albums	O
+New	B-album
+Forms	I-album
+(	O
+1997	O
+)	O
+from	O
+Reprazent	B-band
+and	O
+OK	B-band
+(	O
+1998	O
+)	O
+from	O
+Talvin	B-musical artist
+Singh	I-musical artist
+,	O
+4hero	B-band
+'	O
+s	O
+Mercury-nominated	O
+Two	B-album
+Pages	I-album
+from	O
+1998	O
+,	O
+and	O
+Pendulum	B-band
+'	O
+s	O
+Hold	B-album
+Your	I-album
+Colour	I-album
+in	O
+2005	O
+(	O
+the	O
+best	O
+selling	O
+drum	B-musical instrument
+and	O
+bass	B-musical instrument
+album	O
+of	O
+all	O
+time	O
+)	O
+.	O
+
+Florida	B-music genre
+breaks	I-music genre
+was	O
+heavily	O
+influenced	O
+by	O
+Miami	B-music genre
+bass	I-music genre
+in	O
+addition	O
+to	O
+elements	O
+of	O
+House	B-music genre
+music	I-music genre
+,	O
+and	O
+deep	O
+bass	O
+that	O
+eventually	O
+created	O
+The	B-music genre
+Orlando	I-music genre
+Sound	I-music genre
+.	O
+
+Miles	B-musical artist
+Davis	I-musical artist
+on	O
+the	O
+roster	O
+,	O
+and	O
+his	O
+late	O
+1960s	O
+recordings	O
+,	O
+In	B-album
+a	I-album
+Silent	I-album
+Way	I-album
+and	O
+Bitches	B-album
+Brew	I-album
+,	O
+pioneered	O
+a	O
+Jazz	B-music genre
+fusion	I-music genre
+.	O
+
+Ullman	B-musical artist
+and	O
+the	O
+show	O
+went	O
+on	O
+to	O
+receive	O
+a	O
+slew	O
+of	O
+awards	O
+including	O
+six	O
+Emmy	B-award
+Awards	I-award
+,	O
+two	O
+CableAce	B-award
+Awards	I-award
+,	O
+three	O
+American	B-award
+Comedy	I-award
+Awards	I-award
+,	O
+two	O
+GLAAD	B-award
+Media	I-award
+Award	I-award
+s	O
+,	O
+as	O
+well	O
+as	O
+a	O
+Screen	B-award
+Actors	I-award
+Guild	I-award
+Awards	I-award
+in	O
+1999	O
+for	O
+Screen	B-award
+Actors	I-award
+Guild	I-award
+Award	I-award
+for	I-award
+Outstanding	I-award
+Performance	I-award
+by	I-award
+a	I-award
+Female	I-award
+Actor	I-award
+in	I-award
+a	I-award
+Comedy	I-award
+Series	I-award
+.	O
+
+Electropop	B-music genre
+pioneers	O
+Haruomi	B-musical artist
+Hosono	I-musical artist
+and	O
+Ryuichi	B-musical artist
+Sakamoto	I-musical artist
+of	O
+the	O
+Yellow	B-band
+Magic	I-band
+Orchestra	I-band
+produced	O
+a	O
+1978	O
+Electronic	B-music genre
+music	I-music genre
+album	O
+,	O
+Cochin	B-album
+Moon	I-album
+,	O
+based	O
+on	O
+an	O
+experimental	O
+fusion	O
+of	O
+electronic	B-music genre
+music	I-music genre
+and	O
+Bollywood-inspired	B-music genre
+Indian	I-music genre
+music	I-music genre
+.	O
+
+Black	B-album
+Holes	I-album
+and	I-album
+Revelations	I-album
+(	O
+2006	O
+)	O
+incorporated	O
+Electronic	B-music genre
+music	I-music genre
+and	O
+Pop	B-music genre
+music	I-music genre
+elements	O
+,	O
+displayed	O
+in	O
+singles	O
+such	O
+as	O
+Supermassive	B-song
+Black	I-song
+Hole	I-song
+,	O
+Their	O
+seventh	O
+album	O
+,	O
+Drones	B-album
+(	O
+2015	O
+)	O
+,	O
+was	O
+a	O
+concept	O
+album	O
+about	O
+drone	B-album
+warfare	I-album
+and	O
+returned	O
+to	O
+a	O
+harder	O
+rock	B-music genre
+sound	O
+.	O
+
+The	B-band
+5th	I-band
+Dimension	I-band
+is	O
+an	O
+United	B-country
+States	I-country
+popular	B-music genre
+music	I-music genre
+vocal	O
+group	O
+,	O
+whose	O
+repertoire	O
+includes	O
+Pop	B-music genre
+music	I-music genre
+,	O
+Rhythm	B-music genre
+and	I-music genre
+blues	I-music genre
+,	O
+Soul	B-music genre
+music	I-music genre
+,	O
+jazz	B-music genre
+,	O
+light	B-music genre
+opera	I-music genre
+,	O
+and	O
+Broadway	B-music genre
+-	O
+the	O
+melange	O
+was	O
+coined	O
+as	O
+Champagne	B-music genre
+Soul	I-music genre
+.	O
+
+Barney	B-person
+Bubbles	I-person
+directed	O
+several	O
+videos	O
+,	O
+including	O
+the	B-band
+Specials	I-band
+'	O
+Ghost	B-song
+Town	I-song
+,	O
+Squeeze	B-band
+'	O
+s	O
+Is	B-song
+That	I-song
+Love	I-song
+and	O
+Tempted	B-song
+,	O
+Elvis	B-musical artist
+Costello	I-musical artist
+'	O
+s	O
+Clubland	B-song
+and	O
+New	B-song
+Lace	I-song
+Sleeves	I-song
+,	O
+and	O
+Fun	B-band
+Boy	I-band
+Three	I-band
+'	O
+s	O
+The	B-song
+Lunatics	I-song
+Have	I-song
+Taken	I-song
+Over	I-song
+the	I-song
+Asylum	I-song
+.	O
+
+Their	O
+first	O
+album	O
+,	O
+Let	B-album
+Them	I-album
+Eat	I-album
+Bingo	I-album
+,	O
+included	O
+the	O
+number	O
+one	O
+single	O
+Dub	B-song
+Be	I-song
+Good	I-song
+to	I-song
+Me	I-song
+,	O
+which	O
+caused	O
+a	O
+legal	O
+dispute	O
+revolving	O
+around	O
+allegations	O
+of	O
+infringement	O
+of	O
+copyright	O
+through	O
+the	O
+liberal	O
+use	O
+of	O
+unauthorised	O
+samples	O
+:	O
+the	O
+bassline	B-music genre
+was	O
+a	O
+note-for-note	O
+lift	O
+from	O
+The	B-song
+Guns	I-song
+of	I-song
+Brixton	I-song
+by	O
+The	B-band
+Clash	I-band
+and	O
+the	O
+lyrics	O
+borrowed	O
+heavily	O
+from	O
+Just	B-song
+Be	I-song
+Good	I-song
+to	I-song
+Me	I-song
+by	O
+The	B-band
+S.O.S.	I-band
+Band	I-band
+.	O
+
+In	O
+June	O
+1932	O
+he	O
+joined	O
+the	O
+British	B-organization
+Astronomical	I-organization
+Association	I-organization
+,	O
+in	O
+November	O
+of	O
+the	O
+same	O
+year	O
+he	O
+became	O
+a	O
+Fellow	B-award
+of	I-award
+the	I-award
+Royal	I-award
+Astronomical	I-award
+Society	I-award
+.	O
+
+These	O
+were	O
+finished	O
+by	O
+early	O
+1984	O
+,	O
+with	O
+all	O
+night	O
+games	O
+in	O
+Adelaide	B-location
+moving	O
+from	O
+the	O
+suburban	O
+grounds	O
+(	O
+Norwood	B-location
+Oval	I-location
+and	O
+Thebarton	B-location
+Oval	I-location
+)	O
+to	O
+league	O
+headquarters	O
+for	O
+the	O
+next	O
+16	O
+years	O
+.	O
+
+A	O
+more	O
+extensive	O
+tribute	O
+was	O
+given	O
+later	O
+that	O
+year	O
+in	O
+December	O
+at	O
+the	O
+Southbank	B-location
+Centre	I-location
+in	O
+the	O
+Queen	B-location
+Elizabeth	I-location
+Hall	I-location
+called	O
+The	B-event
+Lady	I-event
+:	I-event
+A	I-event
+Tribute	I-event
+to	I-event
+Sandy	I-event
+Denny	I-event
+with	O
+a	O
+band	O
+composed	O
+of	O
+members	O
+of	O
+Bellowhead	B-band
+,	O
+the	O
+evening	O
+featured	O
+a	O
+mix	O
+of	O
+young	O
+folk	O
+acts	O
+like	O
+Jim	B-musical artist
+Moray	I-musical artist
+and	O
+Lisa	B-musical artist
+Knapp	I-musical artist
+alongside	O
+those	O
+that	O
+had	O
+known	O
+and	O
+worked	O
+with	O
+Denny	B-musical artist
+such	O
+as	O
+Dave	B-musical artist
+Swarbrick	I-musical artist
+and	O
+Jerry	B-musical artist
+Donahue	I-musical artist
+.	O
+
+Lynn	B-musical artist
+has	O
+received	O
+numerous	O
+awards	O
+and	O
+other	O
+accolades	O
+for	O
+her	O
+groundbreaking	O
+role	O
+in	O
+country	B-music genre
+music	I-music genre
+,	O
+including	O
+awards	O
+from	O
+both	O
+the	O
+Country	B-organization
+Music	I-organization
+Association	I-organization
+and	O
+Academy	B-organization
+of	I-organization
+Country	I-organization
+Music	I-organization
+as	O
+a	O
+duet	O
+partner	O
+and	O
+an	O
+individual	O
+artist	O
+.	O
+
+Phish	B-band
+,	O
+Soul	B-band
+Rebels	I-band
+Brass	I-band
+Band	I-band
+,	O
+Galactic	B-band
+,	O
+and	O
+Soulive	B-band
+are	O
+all	O
+examples	O
+of	O
+funk	B-music genre
+bands	O
+that	O
+play	O
+funk	B-music genre
+jam	I-music genre
+.	O
+
+Taylor	B-musical artist
+Momsen	I-musical artist
+,	O
+Marcus	B-band
+Durant	I-band
+,	O
+Brandi	B-musical artist
+Carlile	I-musical artist
+and	O
+Taylor	B-musical artist
+Hawkins	I-musical artist
+contributed	O
+vocals	O
+to	O
+Soundgarden	B-band
+,	O
+who	O
+performed	O
+Rusty	B-song
+Cage	I-song
+,	O
+Flower	B-song
+,	O
+Outshined	B-song
+,	O
+Drawing	B-song
+Flies	I-song
+,	O
+Loud	B-song
+Love	I-song
+,	O
+I	B-song
+Awake	I-song
+,	O
+The	B-song
+Day	I-song
+I	I-song
+Tried	I-song
+to	I-song
+Live	I-song
+and	O
+Black	B-song
+Hole	I-song
+Sun	I-song
+,	O
+making	O
+this	O
+their	O
+only	O
+performance	O
+since	O
+Cornell	B-musical artist
+'s	O
+death	O
+.	O
+
+The	O
+film	O
+received	O
+several	O
+Golden	B-award
+Globe	I-award
+Awards	I-award
+and	O
+Academy	B-award
+Awards	I-award
+nominations	O
+,	O
+and	O
+earned	O
+Kidman	O
+a	O
+fourth	O
+Screen	B-award
+Actors	I-award
+Guild	I-award
+Award	I-award
+nomination	O
+,	O
+as	O
+part	O
+of	O
+the	O
+Screen	B-award
+Actors	I-award
+Guild	I-award
+Award	I-award
+for	I-award
+Outstanding	I-award
+Performance	I-award
+by	I-award
+a	I-award
+Cast	I-award
+in	I-award
+a	I-award
+Motion	I-award
+Picture	I-award
+.	O
+
+Steve	B-musical artist
+Young	I-musical artist
+,	O
+David	B-musical artist
+Allan	I-musical artist
+Coe	I-musical artist
+,	O
+John	B-musical artist
+Prine	I-musical artist
+,	O
+Billy	B-musical artist
+Joe	I-musical artist
+Shaver	I-musical artist
+,	O
+Gary	B-musical artist
+Stewart	I-musical artist
+,	O
+Townes	B-musical artist
+Van	I-musical artist
+Zandt	I-musical artist
+,	O
+Kris	B-musical artist
+Kristofferson	I-musical artist
+,	O
+Michael	B-musical artist
+Martin	I-musical artist
+Murphey	I-musical artist
+,	O
+Tompall	B-musical artist
+Glaser	I-musical artist
+,	O
+Steve	B-musical artist
+Earle	I-musical artist
+,	O
+and	O
+the	O
+later	O
+career	O
+renaissance	O
+of	O
+Johnny	B-musical artist
+Cash	I-musical artist
+,	O
+along	O
+with	O
+a	O
+few	O
+female	O
+vocalists	O
+such	O
+as	O
+Jessi	B-musical artist
+Colter	I-musical artist
+,	O
+Sammi	B-musical artist
+Smith	I-musical artist
+,	O
+Tanya	B-musical artist
+Tucker	I-musical artist
+,	O
+and	O
+Rosanne	B-musical artist
+Cash	I-musical artist
+.	O
+
+New	B-location
+York	I-location
+'s	O
+rock	B-music genre
+scene	O
+includes	O
+clubs	O
+such	O
+as	O
+Irving	B-location
+Plaza	I-location
+,	O
+while	O
+the	O
+city	O
+'s	O
+avant-garde	O
+downtown	O
+scene	O
+includes	O
+The	B-location
+Kitchen	I-location
+,	O
+Roulette	B-location
+,	O
+and	O
+Knitting	B-location
+Factory	I-location
+.	O
+
+He	O
+has	O
+chaired	O
+the	O
+Southern	B-organization
+Growth	I-organization
+Policies	I-organization
+Board	I-organization
+,	O
+the	O
+Southern	B-organization
+Regional	I-organization
+Education	I-organization
+Board	I-organization
+,	O
+the	O
+Southern	B-organization
+Technology	I-organization
+Council	I-organization
+,	O
+the	O
+Interstate	B-organization
+Oil	I-organization
+and	I-organization
+Gas	I-organization
+Compact	I-organization
+Commission	I-organization
+,	O
+and	O
+the	O
+Education	B-organization
+Commission	I-organization
+of	I-organization
+the	I-organization
+States	I-organization
+.	O
+
+The	O
+group	O
+'s	O
+evolution	O
+can	O
+be	O
+traced	O
+through	O
+the	O
+albums	O
+The	B-album
+John	I-album
+Coltrane	I-album
+Quartet	I-album
+Plays	I-album
+,	O
+Living	B-album
+Space	I-album
+,	O
+Transition	B-album
+,	O
+New	B-album
+Thing	I-album
+at	I-album
+Newport	I-album
+,	O
+Sun	B-album
+Ship	I-album
+,	O
+and	O
+First	B-album
+Meditations	I-album
+.	O
+
+It	O
+is	O
+based	O
+on	O
+the	O
+classic	O
+song	O
+The	B-song
+Guns	I-song
+of	I-song
+Brixton	I-song
+on	O
+The	B-band
+Clash	I-band
+'	O
+s	O
+London	B-album
+Calling	I-album
+and	O
+has	O
+proven	O
+to	O
+be	O
+a	O
+success	O
+on	O
+the	O
+modern	B-music genre
+rock	I-music genre
+charts	O
+.	O
+
+1995	O
+saw	O
+the	O
+release	O
+of	O
+Tri	B-album
+Repetae	I-album
+,	O
+their	O
+third	O
+album	O
+,	O
+as	O
+well	O
+as	O
+the	O
+EPs	O
+Anvil	B-album
+Vapre	I-album
+and	O
+Garbage	B-album
+,	O
+featuring	O
+a	O
+monochrome	O
+cover	O
+designed	O
+by	O
+The	B-organization
+Designers	I-organization
+Republic	I-organization
+,	O
+with	O
+whom	O
+Autechre	B-band
+have	O
+long	O
+held	O
+a	O
+close	O
+association	O
+.	O
+
+The	O
+accordion	B-musical instrument
+has	O
+been	O
+used	O
+by	O
+tropipop	B-music genre
+musicians	O
+such	O
+as	O
+Carlos	B-musical artist
+Vives	I-musical artist
+,	O
+Andrés	B-musical artist
+Cabas	I-musical artist
+,	O
+Fonseca	B-musical artist
+(	O
+singer	O
+)	O
+and	O
+Bacilos	B-band
+,	O
+as	O
+well	O
+as	O
+rock	B-music genre
+musicians	O
+such	O
+as	O
+Juanes	B-musical artist
+and	O
+pop	B-music genre
+musicians	O
+as	O
+Shakira	B-musical artist
+.	O
+
+First	O
+,	O
+they	O
+played	O
+a	O
+series	O
+of	O
+concerts	O
+at	O
+the	O
+Glór	B-location
+Theatre	I-location
+in	O
+Ennis	B-location
+,	O
+County	B-location
+Clare	B-location
+(	O
+on	O
+23	O
+&	O
+amp	O
+;	O
+24	O
+January	O
+2004	O
+)	O
+and	O
+at	O
+Vicar	B-location
+Street	I-location
+in	O
+Dublin	B-location
+(	O
+on	O
+30	O
+&	O
+amp	O
+;	O
+31	O
+January	O
+and	O
+on	O
+4	O
+&	O
+amp	O
+;	O
+5	O
+,	O
+11	O
+&	O
+amp	O
+;	O
+12	O
+February	O
+2004	O
+)	O
+,	O
+which	O
+were	O
+recorded	O
+and	O
+from	O
+which	O
+selected	O
+material	O
+was	O
+released	O
+on	O
+the	O
+CD	O
+Live	B-album
+2004	I-album
+and	O
+its	O
+associated	O
+DVD	O
+.	O
+
+Further	O
+nominations	O
+at	O
+the	O
+46th	B-award
+Academy	I-award
+Awards	I-award
+included	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Director	I-award
+(	O
+George	B-person
+Lucas	I-person
+)	O
+,	O
+Best	B-award
+Original	I-award
+Screenplay	I-award
+(	O
+Lucas	B-person
+,	O
+Willard	B-person
+Huyck	I-person
+and	O
+Gloria	B-person
+Katz	I-person
+)	O
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Supporting	I-award
+Actress	I-award
+(	O
+Candy	B-person
+Clark	I-person
+)	O
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Film	I-award
+Editing	I-award
+(	O
+Verna	B-person
+Fields	I-person
+and	O
+Marcia	B-person
+Lucas	I-person
+)	O
+.	O
+
+British	O
+genres	O
+such	O
+as	O
+Lovers	B-music genre
+rock	I-music genre
+,	O
+Ragga	B-music genre
+jungle	I-music genre
+and	O
+grime	B-music genre
+are	O
+also	O
+influenced	O
+by	O
+Jamaican	O
+music	O
+.	O
+
+some	O
+of	O
+his	O
+performances	O
+will	O
+finish	O
+without	O
+some	O
+blues	B-music genre
+and	O
+Tejano	B-music genre
+music	I-music genre
+tunes	O
+playing	O
+as	O
+well	O
+as	O
+Surf	B-music genre
+music	I-music genre
+instrumentals	O
+.	O
+
+They	O
+have	O
+won	O
+two	O
+Grammy	B-award
+Award	I-award
+s	O
+,	O
+six	O
+American	B-award
+Music	I-award
+Awards	I-award
+,	O
+two	O
+Billboard	B-award
+Music	I-award
+Award	I-award
+,	O
+four	O
+MTV	B-award
+Video	I-award
+Music	I-award
+Award	I-award
+s	O
+,	O
+10	O
+MTV	B-award
+Europe	I-award
+Music	I-award
+Award	I-award
+and	O
+three	O
+World	B-award
+Music	I-award
+Awards	I-award
+.	O
+
+With	O
+the	O
+continued	O
+success	O
+of	O
+Backstreet	B-band
+Boys	I-band
+and	O
+NSYNC	B-band
+,	O
+American	O
+and	O
+British	O
+groups	O
+like	O
+98	B-band
+Degrees	I-band
+,	O
+Westlife	B-band
+,	O
+O-Town	B-band
+,	O
+A1	B-band
+,	O
+Blue	B-band
+,	O
+and	O
+Busted	B-band
+gained	O
+quick	O
+popularity	O
+both	O
+domestically	O
+and	O
+internationally	O
+.	O
+
+The	O
+Coliseum	B-location
+played	O
+host	O
+to	O
+Figure	B-event
+skating	I-event
+at	I-event
+the	I-event
+2010	I-event
+Winter	I-event
+Olympics	I-event
+and	O
+Short	B-event
+track	I-event
+speed	I-event
+skating	I-event
+at	I-event
+the	I-event
+2010	I-event
+Winter	I-event
+Olympics	I-event
+events	O
+for	O
+the	O
+XXI	B-event
+Olympic	I-event
+Winter	I-event
+Games	I-event
+in	O
+Vancouver	B-location
+,	O
+from	O
+February	O
+12	O
+to	O
+28	O
+,	O
+2010	O
+.	O
+
+I	B-song
+Don	I-song
+'t	I-song
+Stand	I-song
+a	I-song
+Ghost	I-song
+of	I-song
+a	I-song
+Chance	I-song
+With	I-song
+You	I-song
+was	O
+his	O
+most	O
+successful	O
+composition	O
+,	O
+recorded	O
+by	O
+Duke	B-musical artist
+Ellington	I-musical artist
+,	O
+Frank	B-musical artist
+Sinatra	I-musical artist
+,	O
+Thelonious	B-musical artist
+Monk	I-musical artist
+,	O
+Billie	B-musical artist
+Holiday	I-musical artist
+,	O
+and	O
+Mildred	B-musical artist
+Bailey	I-musical artist
+,	O
+among	O
+others	O
+.	O
+
+Jones	B-musical artist
+supports	O
+a	O
+number	O
+of	O
+other	O
+charities	O
+,	O
+including	O
+the	O
+NAACP	B-organization
+,	O
+GLAAD	B-organization
+,	O
+Peace	B-organization
+Games	I-organization
+,	O
+AmfAR	B-organization
+,	O
+and	O
+the	O
+Maybach	B-organization
+Foundation	I-organization
+.	O
+
+Urban	O
+male	O
+performers	O
+included	O
+popular	O
+black	O
+musicians	O
+of	O
+the	O
+era	O
+,	O
+such	O
+as	O
+Tampa	B-musical artist
+Red	I-musical artist
+,	O
+Big	B-musical artist
+Bill	I-musical artist
+Broonzy	I-musical artist
+and	O
+Leroy	B-musical artist
+Carr	I-musical artist
+.	O
+
+The	O
+group	O
+had	O
+since	O
+released	O
+seven	O
+more	O
+albums	O
+:	O
+Paul	B-album
+'s	I-album
+Boutique	I-album
+(	O
+1989	O
+)	O
+,	O
+Check	B-album
+Your	I-album
+Head	I-album
+(	O
+1992	O
+)	O
+,	O
+Ill	B-album
+Communication	I-album
+(	O
+1994	O
+)	O
+,	O
+Hello	B-album
+Nasty	I-album
+(	O
+1998	O
+)	O
+,	O
+To	B-album
+the	I-album
+5	I-album
+Boroughs	I-album
+(	O
+2004	O
+)	O
+,	O
+The	B-album
+Mix-Up	I-album
+(	O
+2007	O
+)	O
+,	O
+and	O
+Hot	B-album
+Sauce	I-album
+Committee	I-album
+Part	I-album
+Two	I-album
+(	O
+2011	O
+)	O
+.	O
+
+Spears	O
+has	O
+earned	O
+numerous	O
+awards	O
+and	O
+accolades	O
+,	O
+including	O
+a	O
+Grammy	B-award
+Award	I-award
+;	O
+seven	O
+Guinness	B-award
+World	I-award
+Records	I-award
+;	O
+six	O
+MTV	B-award
+Video	I-award
+Music	I-award
+Awards	I-award
+,	O
+including	O
+the	O
+Michael	B-award
+Jackson	I-award
+Video	I-award
+Vanguard	I-award
+Award	I-award
+;	O
+seven	O
+Billboard	B-award
+Music	I-award
+Awards	I-award
+,	O
+including	O
+the	O
+Millennium	B-award
+Award	I-award
+;	O
+the	O
+inaugural	B-award
+Radio	I-award
+Disney	I-award
+Icon	I-award
+Award	I-award
+;	O
+the	O
+GLAAD	B-award
+Media	I-award
+Award	I-award
+'	O
+s	O
+Vanguard	B-award
+Award	I-award
+and	O
+a	O
+star	O
+on	O
+the	O
+Hollywood	B-location
+Walk	I-location
+of	I-location
+Fame	I-location
+.	O
+
+The	O
+venue	O
+was	O
+the	O
+site	O
+of	O
+several	O
+Commonwealth	O
+Games	O
+sports	O
+in	O
+1978	B-event
+Commonwealth	I-event
+Games	I-event
+,	O
+and	O
+part	O
+of	O
+Universiade	B-event
+(	O
+the	O
+World	B-event
+University	I-event
+Games	I-event
+)	O
+in	O
+1983	O
+.	O
+
+Kraftwerk	B-musical artist
+'s	O
+musical	O
+style	O
+and	O
+image	O
+can	O
+be	O
+heard	O
+and	O
+seen	O
+in	O
+1980s	O
+synthpop	B-music genre
+groups	O
+such	O
+as	O
+Gary	B-musical artist
+Numan	I-musical artist
+,	O
+Ultravox	B-band
+,	O
+John	B-musical artist
+Foxx	I-musical artist
+,	O
+Orchestral	B-band
+Manoeuvres	I-band
+in	I-band
+the	I-band
+Dark	I-band
+,	O
+Human	B-band
+League	I-band
+,	O
+Depeche	B-band
+Mode	I-band
+,	O
+Visage	B-band
+,	O
+and	O
+Soft	B-band
+Cell	I-band
+.	O
+
+Styles	O
+like	O
+Rock	B-music genre
+music	I-music genre
+,	O
+Heavy	B-music genre
+metal	I-music genre
+music	I-music genre
+,	O
+Pop	B-music genre
+rock	I-music genre
+,	O
+Folk	B-music genre
+rock	I-music genre
+,	O
+Neo-Romantic	B-music genre
+,	O
+Pop	B-music genre
+and	O
+some	O
+experimental	O
+styles	O
+(	O
+e.g.	O
+Cantorock	B-music genre
+)	O
+were	O
+introduced	O
+.	O
+
+High-pitched	O
+screaming	O
+is	O
+occasionally	O
+utilized	O
+in	O
+death	B-music genre
+metal	I-music genre
+,	O
+being	O
+heard	O
+in	O
+songs	O
+by	O
+Death	B-band
+,	O
+Aborted	B-band
+,	O
+Exhumed	B-band
+,	O
+Dying	B-band
+Fetus	I-band
+,	O
+Cannibal	B-band
+Corpse	I-band
+,	O
+and	O
+Deicide	B-band
+.	O
+
+Rodgers	B-musical artist
+was	O
+the	O
+first	O
+person	O
+to	O
+win	O
+what	O
+is	O
+considered	O
+the	O
+top	O
+American	O
+entertainment	O
+awards	O
+in	O
+television	O
+,	O
+recording	O
+,	O
+movies	O
+,	O
+and	O
+Broadway	B-organization
+-	O
+an	O
+Emmy	B-award
+Award	I-award
+,	O
+a	O
+Grammy	B-award
+Award	I-award
+,	O
+an	O
+Academy	B-award
+Awards	I-award
+,	O
+and	O
+a	O
+Tony	B-award
+Award	I-award
+-	O
+now	O
+known	O
+collectively	O
+as	O
+an	O
+EGOT	O
+.	O
+
+During	O
+his	O
+musical	O
+career	O
+,	O
+Tankian	B-musical artist
+has	O
+released	O
+five	O
+albums	O
+with	O
+System	B-band
+of	I-band
+a	I-band
+Down	I-band
+,	O
+one	O
+with	O
+Arto	B-musical artist
+Tunçboyacıyan	I-musical artist
+(	O
+Serart	B-album
+)	O
+,	O
+as	O
+well	O
+as	O
+the	O
+five	O
+solo	O
+albums	O
+Elect	B-album
+the	I-album
+Dead	I-album
+,	O
+Imperfect	B-album
+Harmonies	I-album
+,	O
+Harakiri	B-album
+,	O
+Orca	B-album
+Symphony	I-album
+No.	I-album
+1	I-album
+,	O
+and	O
+Jazz-Iz-Christ	B-album
+.	O
+
+This	O
+period	O
+on	O
+the	O
+RCA	B-organization
+label	I-organization
+(	O
+1971-75	O
+)	O
+produced	O
+Muswell	B-album
+Hillbillies	I-album
+,	O
+Everybody	B-album
+'s	I-album
+in	I-album
+Show-Biz	I-album
+,	O
+Preservation	B-album
+Act	I-album
+1	I-album
+and	O
+Preservation	B-album
+Act	I-album
+2	I-album
+,	O
+Soap	B-album
+Opera	I-album
+and	O
+Schoolboys	B-album
+in	I-album
+Disgrace	I-album
+.	O
+
+They	O
+restarted	O
+to	O
+perform	O
+live	O
+regularly	O
+,	O
+touring	O
+the	O
+world	O
+with	O
+rapturous	O
+feedbacks	O
+:	O
+they	O
+brought	O
+their	O
+distinguishable	O
+sound	O
+in	O
+great	O
+venues	O
+such	O
+as	O
+the	O
+Kings	B-location
+Place	I-location
+in	O
+London	B-location
+,	O
+the	O
+Soma	B-event
+Festival	I-event
+in	O
+Belfast	B-location
+,	O
+the	O
+Bolshoi	B-location
+Theatre	I-location
+in	O
+Moscow	B-location
+and	O
+the	O
+Star	B-location
+Pine	I-location
+'s	I-location
+cafe	I-location
+in	O
+Tokyo	B-location
+.	O
+
+The	O
+Hall	O
+is	O
+flanked	O
+by	O
+The	O
+Royal	B-location
+Lyceum	I-location
+Theatre	I-location
+on	O
+the	O
+right	O
+and	O
+The	O
+Traverse	B-location
+Theatre	I-location
+on	O
+the	O
+left	O
+.	O
+
+Following	O
+the	O
+number-one	O
+success	O
+of	O
+MARRS	B-band
+'	O
+Pump	B-song
+Up	I-song
+The	I-song
+Volume	I-song
+in	O
+October	O
+,	O
+in	O
+1987	O
+to	O
+1989	O
+,	O
+UK	B-country
+acts	O
+such	O
+as	O
+The	B-band
+Beatmasters	I-band
+,	O
+Krush	B-band
+,	O
+Coldcut	B-band
+,	O
+Yazz	B-band
+,	O
+Bomb	B-band
+The	I-band
+Bass	I-band
+,	O
+S-Express	B-band
+,	O
+and	O
+Italy	B-country
+'s	O
+Black	B-band
+Box	I-band
+opened	O
+the	O
+doors	O
+to	O
+house	B-music genre
+music	I-music genre
+success	O
+on	O
+the	O
+UK	B-country
+charts	O
+.	O
+
+Organised	O
+by	O
+the	O
+European	B-organization
+Broadcasting	I-organization
+Union	I-organization
+(	O
+EBU	B-organization
+)	O
+and	O
+host	O
+broadcaster	O
+Eesti	B-organization
+Televisioon	I-organization
+(	O
+ETV	B-organization
+)	O
+,	O
+the	O
+contest	O
+was	O
+held	O
+at	O
+the	O
+Saku	B-location
+Suurhall	I-location
+,	O
+with	O
+the	O
+final	O
+on	O
+25	O
+May	O
+2002	O
+.	O
+
+Since	O
+Between	B-album
+the	I-album
+Buttons	I-album
+(	O
+1967	O
+)	O
+,	O
+he	O
+has	O
+sung	O
+lead	O
+or	O
+co-lead	O
+on	O
+at	O
+least	O
+one	O
+track	O
+(	O
+see	O
+list	O
+below	O
+)	O
+of	O
+every	O
+Rolling	B-band
+Stones	I-band
+studio	O
+album	O
+except	O
+Their	B-album
+Satanic	I-album
+Majesties	I-album
+Request	I-album
+,	O
+Sticky	B-album
+Fingers	I-album
+,	O
+It	B-album
+'s	I-album
+Only	I-album
+Rock	I-album
+'	I-album
+n	I-album
+Roll	I-album
+,	O
+and	O
+Blue	B-album
+&	I-album
+Lonesome	I-album
+.	O
+
+In	O
+2006	O
+,	O
+the	O
+Doha	B-organization
+Asian	I-organization
+Games	I-organization
+Organising	I-organization
+Committee	I-organization
+has	O
+named	O
+Gary	B-musical artist
+Valenciano	I-musical artist
+the	O
+official	O
+performer	O
+of	O
+the	O
+2006	B-event
+Asian	I-event
+Games	I-event
+'	O
+theme	O
+song	O
+,	O
+Side	B-song
+By	I-song
+Side	I-song
+.	O
+
+DC	B-band
+Talk	I-band
+(	O
+stylized	O
+as	O
+dc	B-band
+Talk	I-band
+)	O
+is	O
+a	O
+Christian	B-music genre
+hip	I-music genre
+hop	I-music genre
+and	O
+Christian	B-music genre
+rock	I-music genre
+trio	O
+.	O
+
+Well-known	O
+disco	B-music genre
+artists	O
+include	O
+Donna	B-musical artist
+Summer	I-musical artist
+,	O
+Gloria	B-musical artist
+Gaynor	I-musical artist
+,	O
+the	O
+Bee	B-band
+Gees	I-band
+,	O
+Chic	B-band
+,	O
+KC	B-band
+and	I-band
+the	I-band
+Sunshine	I-band
+Band	I-band
+,	O
+Thelma	B-musical artist
+Houston	I-musical artist
+,	O
+Sister	B-band
+Sledge	I-band
+,	O
+The	B-band
+Trammps	I-band
+,	O
+the	O
+Village	B-band
+People	I-band
+and	O
+Michael	B-person
+Jackson	I-person
+.	O
+
+Dalida	B-musical artist
+employed	O
+various	O
+musical	O
+styles	O
+ranging	O
+from	O
+Pop	B-music genre
+music	I-music genre
+and	O
+easy	B-music genre
+listening	I-music genre
+to	O
+disco	B-music genre
+and	O
+adult	B-music genre
+contemporary	I-music genre
+,	O
+employing	O
+even	O
+Folk	B-music genre
+music	I-music genre
+and	O
+Rock	B-music genre
+music	I-music genre
+.	O
+
+Weir	B-musical artist
+is	O
+on	O
+the	O
+board	O
+of	O
+directors	O
+of	O
+the	O
+Rex	B-organization
+Foundation	I-organization
+,	O
+the	O
+Furthur	B-organization
+Foundation	I-organization
+,	O
+and	O
+HeadCount	B-organization
+..	O
+He	O
+is	O
+also	O
+on	O
+the	O
+honorary	O
+board	O
+of	O
+directors	O
+of	O
+Little	B-organization
+Kids	I-organization
+Rock	I-organization
+,	O
+a	O
+non-profit	O
+organization	O
+that	O
+provides	O
+free	O
+musical	O
+instruments	O
+and	O
+instruction	O
+to	O
+children	O
+in	O
+under-served	O
+public	O
+schools	O
+throughout	O
+the	O
+U.S	B-country
+.	O
+
+He	O
+has	O
+appeared	O
+as	O
+a	O
+featured	O
+artist	O
+on	O
+many	O
+other	O
+songs	O
+and	O
+albums	O
+,	O
+having	O
+collaborated	O
+with	O
+artists	O
+such	O
+as	O
+Janet	B-musical artist
+Jackson	I-musical artist
+,	O
+Kool	B-musical artist
+Moe	I-musical artist
+Dee	I-musical artist
+,	O
+The	B-band
+Dope	I-band
+Poet	I-band
+Society	I-band
+,	O
+Run-D.M.C.	B-band
+,	O
+Ice	B-person
+Cube	I-person
+,	O
+Boom	B-band
+Boom	I-band
+Satellites	I-band
+,	O
+Rage	B-band
+Against	I-band
+the	I-band
+Machine	I-band
+,	O
+Anthrax	B-band
+,	O
+John	B-musical artist
+Mellencamp	I-musical artist
+and	O
+many	O
+others	O
+.	O
+
+For	O
+the	O
+majority	O
+of	O
+its	O
+existence	O
+,	O
+the	O
+group	O
+was	O
+composed	O
+of	O
+Mike	B-musical artist
+D	I-musical artist
+(	O
+vocals	O
+,	O
+drums	B-musical instrument
+)	O
+,	O
+Adam	B-musical artist
+Yauch	I-musical artist
+(	O
+vocals	O
+,	O
+bass	B-musical instrument
+)	O
+and	O
+Ad-Rock	B-musical artist
+(	O
+vocals	O
+,	O
+guitar	B-musical instrument
+,	O
+programming	O
+)	O
+.	O
+
+Black	B-music genre
+metal	I-music genre
+album	O
+covers	O
+are	O
+typically	O
+dark	O
+and	O
+tend	O
+to	O
+be	O
+atmospheric	O
+or	O
+provocative	O
+;	O
+some	O
+feature	O
+natural	O
+or	O
+fantasy	O
+landscapes	O
+(	O
+for	O
+example	O
+Burzum	B-band
+'	O
+s	O
+Filosofem	B-album
+and	O
+Emperor	B-band
+'s	O
+In	B-album
+the	I-album
+Nightside	I-album
+Eclipse	I-album
+)	O
+while	O
+others	O
+are	O
+violent	O
+,	O
+sexually	O
+transgressive	O
+,	O
+sacrilegious	O
+,	O
+or	O
+iconoclastic	O
+(	O
+for	O
+example	O
+Marduk	B-band
+'	O
+s	O
+Fuck	B-album
+Me	I-album
+Jesus	I-album
+and	O
+Dimmu	B-band
+Borgir	I-band
+'	O
+s	O
+In	B-album
+Sorte	I-album
+Diaboli	I-album
+)	O
+.	O
+
+Parliament-Funkadelic	B-band
+'s	O
+musical	O
+influence	O
+can	O
+also	O
+be	O
+heard	O
+in	O
+rhythm	B-music genre
+and	I-music genre
+blues	I-music genre
+,	O
+Soul	B-music genre
+music	I-music genre
+,	O
+electronica	B-music genre
+,	O
+Gospel	B-music genre
+music	I-music genre
+,	O
+jazz	B-music genre
+,	O
+and	O
+New	B-music genre
+wave	I-music genre
+music	I-music genre
+.	O
+
+The	O
+set	O
+includes	O
+the	O
+first	O
+round	O
+of	O
+the	O
+remastered	O
+series	O
+plus	O
+the	O
+long-awaited	O
+remastered	O
+versions	O
+of	O
+On	B-album
+Your	I-album
+Feet	I-album
+or	I-album
+on	I-album
+Your	I-album
+Knees	I-album
+(	O
+1975	O
+)	O
+,	O
+Mirrors	B-album
+,	O
+Cultösaurus	B-album
+Erectus	I-album
+,	O
+Fire	B-album
+Of	I-album
+Unknown	I-album
+Origin	I-album
+,	O
+Extraterrestrial	B-album
+Live	I-album
+,	O
+The	B-album
+Revölution	I-album
+by	I-album
+Night	I-album
+,	O
+Club	B-album
+Ninja	I-album
+and	O
+Imaginos	B-album
+.	O
+
+In	O
+1994	O
+,	O
+Yauch	B-musical artist
+and	O
+activist	O
+Erin	B-musical artist
+Potts	I-musical artist
+The	O
+events	O
+became	O
+annual	O
+,	O
+and	O
+shortly	O
+after	O
+went	O
+international	O
+with	O
+acts	O
+such	O
+as	O
+Live	B-band
+,	O
+Mike	B-musical artist
+Mills	I-musical artist
+and	O
+Michael	B-musical artist
+Stipe	I-musical artist
+of	O
+R.E.M.	B-band
+,	O
+Rage	B-band
+Against	I-band
+the	I-band
+Machine	I-band
+,	O
+The	B-band
+Smashing	I-band
+Pumpkins	I-band
+,	O
+and	O
+U2	B-band
+.	O
+
+Dimmu	B-band
+Borgir	I-band
+'s	O
+older	O
+releases	O
+(	O
+since	O
+1994	O
+to	O
+1999	O
+)	O
+are	O
+,	O
+according	O
+to	O
+Allmusic	O
+journalist	O
+Bradley	B-musical artist
+Torreano	I-musical artist
+,	O
+strongly	O
+influenced	O
+by	O
+Darkthrone	B-band
+,	O
+Mayhem	B-band
+,	O
+Bathory	B-band
+,	O
+Emperor	B-band
+,	O
+Celtic	B-band
+Frost	I-band
+,	O
+Immortal	B-band
+,	O
+Venom	B-band
+,	O
+and	O
+Iron	B-band
+Maiden	I-band
+.	O
+
+UK	B-country
+Christmas	B-event
+hit	O
+singles	O
+;	O
+Merry	B-song
+Xmas	I-song
+Everybody	I-song
+by	O
+Slade	B-band
+,	O
+I	B-song
+Wish	I-song
+It	I-song
+Could	I-song
+Be	I-song
+Christmas	I-song
+Everyday	I-song
+by	O
+Wizzard	B-band
+and	O
+Lonely	B-song
+This	I-song
+Christmas	I-song
+by	O
+Mud	B-band
+,	O
+all	O
+of	O
+which	O
+have	O
+remained	O
+hugely	O
+popular	O
+..	O
+14	O
+December	O
+2012	O
+PRS	B-organization
+press	O
+release	O
+.	O
+
+Major	O
+artists	O
+who	O
+have	O
+been	O
+influenced	O
+by	O
+Costello	B-musical artist
+include	O
+Green	B-band
+Day	I-band
+,	O
+Prince	B-band
+,	O
+Billy	B-musical artist
+Bragg	I-musical artist
+,	O
+Goldfinger	B-band
+,	O
+the	B-band
+Pogues	I-band
+,	O
+Radiohead	B-band
+,	O
+Dexys	B-band
+Midnight	I-band
+Runners	I-band
+,	O
+Pulp	B-band
+,	O
+Crowded	B-band
+House	I-band
+,	O
+James	B-band
+,	O
+Suzanne	B-musical artist
+Vega	I-musical artist
+,	O
+Less	B-band
+than	I-band
+Jake	I-band
+,	O
+and	O
+Foo	B-band
+Fighters	I-band
+.	O
+
+Western	B-music genre
+music	I-music genre
+,	O
+influenced	O
+by	O
+the	O
+cowboy	O
+ballads	O
+,	O
+New	B-music genre
+Mexico	I-music genre
+music	I-music genre
+,	O
+Texas	B-music genre
+country	I-music genre
+music	I-music genre
+and	O
+Tejano	B-music genre
+music	I-music genre
+rhythms	O
+of	O
+the	O
+Southwestern	B-location
+United	I-location
+States	I-location
+and	O
+Northern	B-location
+Mexico	I-location
+,	O
+reached	O
+its	O
+peak	O
+in	O
+popularity	O
+in	O
+the	O
+late	O
+1950s	O
+,	O
+most	O
+notably	O
+with	O
+the	O
+song	O
+El	B-song
+Paso	I-song
+,	O
+first	O
+recorded	O
+by	O
+Marty	B-musical artist
+Robbins	I-musical artist
+in	O
+September	O
+1959	O
+.	O
+
+In	O
+the	O
+1990s	O
+,	O
+country	B-music genre
+music	I-music genre
+became	O
+a	O
+worldwide	O
+phenomenon	O
+thanks	O
+to	O
+Garth	B-musical artist
+Brooks	I-musical artist
+,	O
+Other	O
+artists	O
+that	O
+experienced	O
+success	O
+during	O
+this	O
+time	O
+included	O
+Clint	B-musical artist
+Black	I-musical artist
+,	O
+Sammy	B-musical artist
+Kershaw	I-musical artist
+,	O
+Aaron	B-musical artist
+Tippin	I-musical artist
+,	O
+Travis	B-musical artist
+Tritt	I-musical artist
+,	O
+Alan	B-musical artist
+Jackson	I-musical artist
+and	O
+the	O
+newly	O
+formed	O
+duo	O
+of	O
+Brooks	B-band
+&	I-band
+amp	I-band
+;	I-band
+Dunn	I-band
+;	O
+George	B-musical artist
+Strait	I-musical artist
+,	O
+whose	O
+career	O
+began	O
+in	O
+the	O
+1980s	O
+,	O
+also	O
+continued	O
+to	O
+have	O
+widespread	O
+success	O
+in	O
+this	O
+decade	O
+and	O
+beyond	O
+.	O
+
+Sidney	B-musical artist
+Simien	I-musical artist
+(	O
+April	O
+9	O
+,	O
+1938	O
+-	O
+February	O
+25	O
+,	O
+1998	O
+)	O
+,	O
+known	O
+as	O
+Rockin	B-musical artist
+'	I-musical artist
+Sidney	I-musical artist
+and	O
+Count	B-musical artist
+Rockin	I-musical artist
+'	I-musical artist
+Sidney	I-musical artist
+,	O
+was	O
+an	O
+American	O
+Rhythm	B-music genre
+and	I-music genre
+blues	I-music genre
+,	O
+zydeco	B-music genre
+,	O
+and	O
+Soul	B-music genre
+music	I-music genre
+musician	O
+who	O
+began	O
+recording	O
+in	O
+the	O
+late	O
+1950s	O
+and	O
+continued	O
+performing	O
+until	O
+his	O
+death	O
+.	O
+
+These	O
+included	O
+depictions	O
+of	O
+local	O
+Civil	O
+Defence	O
+during	O
+World	B-event
+War	I-event
+II	I-event
+including	O
+St.	B-organization
+John	I-organization
+Ambulance	I-organization
+,	O
+the	O
+British	B-organization
+Red	I-organization
+Cross	I-organization
+and	O
+the	O
+fire	O
+services	O
+along	O
+with	O
+air	O
+raid	O
+wardens	O
+,	O
+police	O
+officers	O
+,	O
+the	O
+Home	B-organization
+Guard	I-organization
+and	O
+the	O
+Royal	B-organization
+Voluntary	I-organization
+Service	I-organization
+.	O
+
+Drawing	O
+influences	O
+from	O
+hip	B-music genre
+hop	I-music genre
+,	O
+dub	B-music genre
+,	O
+pop	B-music genre
+,	O
+Gorillaz	B-band
+released	O
+their	O
+self-titled	O
+debut	O
+album	O
+in	O
+2001	O
+to	O
+worldwide	O
+success	O
+,	O
+spawning	O
+successful	O
+follow-ups	O
+Demon	B-album
+Days	I-album
+(	O
+2005	O
+)	O
+,	O
+Plastic	B-album
+Beach	I-album
+,	O
+The	B-album
+Fall	I-album
+(	O
+both	O
+released	O
+in	O
+2010	O
+)	O
+,	O
+Humanz	B-album
+(	O
+2017	O
+)	O
+,	O
+and	O
+The	B-album
+Now	I-album
+Now	I-album
+(	O
+2018	O
+)	O
+.	O
+
+The	O
+Academy	O
+sought	O
+to	O
+promote	O
+country	B-music genre
+/	I-music genre
+western	I-music genre
+music	I-music genre
+in	O
+the	O
+western	O
+states	O
+;	O
+this	O
+was	O
+in	O
+contrast	O
+to	O
+the	O
+Country	B-organization
+Music	I-organization
+Association	I-organization
+,	O
+based	O
+in	O
+Nashville	B-location
+,	O
+Tennessee	B-location
+(	O
+then	O
+the	O
+center	O
+of	O
+the	O
+pop-oriented	O
+Nashville	B-music genre
+sound	I-music genre
+)	O
+.	O
+
+Muggs	B-musical artist
+released	O
+Soul	O
+Assassins	O
+:	O
+Chapter	O
+1	O
+featuring	O
+contributions	O
+from	O
+Dr.	B-musical artist
+Dre	I-musical artist
+,	O
+KRS-One	B-musical artist
+,	O
+Wyclef	B-musical artist
+Jean	I-musical artist
+and	O
+Mobb	B-band
+Deep	I-band
+.	O
+
+In	O
+recognition	O
+of	O
+her	O
+film	O
+career	O
+,	O
+she	O
+received	O
+BAFTA	B-award
+'s	I-award
+Lifetime	I-award
+Achievement	I-award
+Award	I-award
+,	O
+the	O
+Golden	B-award
+Globe	I-award
+Cecil	I-award
+B.	I-award
+DeMille	I-award
+Award	I-award
+,	O
+the	O
+Screen	B-award
+Actors	I-award
+Guild	I-award
+Life	I-award
+Achievement	I-award
+Award	I-award
+,	O
+and	O
+the	O
+Special	B-award
+Tony	I-award
+Award	I-award
+.	O
+
+It	O
+also	O
+produced	O
+the	O
+Top	O
+5	O
+single	O
+Rage	B-song
+Hard	I-song
+(	O
+#	O
+1	O
+in	O
+Germany	B-country
+)	O
+,	O
+Top	O
+20	O
+single	O
+Warriors	B-song
+of	I-song
+the	I-song
+Wasteland	I-song
+and	O
+Top	O
+30	O
+single	O
+Watching	B-song
+the	I-song
+Wildlife	I-song
+.	O
+
+His	O
+best-known	O
+songs	O
+include	O
+I	B-song
+Ain	I-song
+'t	I-song
+Marching	I-song
+Anymore	I-song
+,	O
+Changes	B-song
+,	O
+Crucifixion	B-song
+,	O
+Draft	B-song
+Dodger	I-song
+Rag	I-song
+,	O
+Love	B-song
+Me	I-song
+,	I-song
+I	I-song
+'m	I-song
+a	I-song
+Liberal	I-song
+,	O
+Outside	B-song
+of	I-song
+a	I-song
+Small	I-song
+Circle	I-song
+of	I-song
+Friends	I-song
+,	O
+Power	B-song
+and	I-song
+the	I-song
+Glory	I-song
+,	O
+There	B-song
+but	I-song
+for	I-song
+Fortune	I-song
+,	O
+and	O
+The	B-song
+War	I-song
+Is	I-song
+Over	I-song
+.	O
+
+In	O
+the	O
+2010s	O
+,	O
+the	O
+alt-country	B-music genre
+genre	I-music genre
+saw	O
+an	O
+increase	O
+in	O
+its	O
+critical	O
+and	O
+commercial	O
+popularity	O
+,	O
+owing	O
+to	O
+the	O
+success	O
+of	O
+artists	O
+such	O
+as	O
+The	B-band
+Civil	I-band
+Wars	I-band
+,	O
+Chris	B-musical artist
+Stapleton	I-musical artist
+,	O
+Sturgill	B-musical artist
+Simpson	I-musical artist
+,	O
+Jason	B-musical artist
+Isbell	I-musical artist
+,	O
+Lydia	B-band
+Loveless	I-band
+and	O
+Margo	B-musical artist
+Price	I-musical artist
+.	O
+
+At	O
+the	O
+51st	B-award
+Academy	I-award
+Awards	I-award
+,	O
+it	O
+was	O
+nominated	O
+for	O
+nine	O
+Academy	B-award
+Awards	I-award
+,	O
+and	O
+won	O
+five	O
+:	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Director	I-award
+for	O
+Cimino	B-person
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Supporting	I-award
+Actor	I-award
+for	O
+Walken	B-person
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Sound	I-award
+Mixing	I-award
+,	O
+and	O
+Best	B-award
+Film	I-award
+Editing	I-award
+.	O
+
+Biafra	B-musical artist
+was	O
+also	O
+working	O
+with	O
+a	O
+band	O
+known	O
+as	O
+Jello	B-band
+Biafra	I-band
+and	I-band
+the	I-band
+Guantanamo	I-band
+School	I-band
+of	I-band
+Medicine	I-band
+,	O
+which	O
+included	O
+Ralph	B-musical artist
+Spight	I-musical artist
+of	O
+Victims	B-band
+Family	I-band
+on	O
+guitar	B-musical instrument
+and	O
+Billy	B-musical artist
+Gould	I-musical artist
+of	O
+Faith	B-band
+No	I-band
+More	I-band
+on	O
+bass	B-musical instrument
+.	O
+
+The	O
+album	O
+also	O
+features	O
+appearances	O
+by	O
+Damian	B-musical artist
+Marley	I-musical artist
+,	O
+son	O
+of	O
+Bob	B-person
+Marley	I-person
+,	O
+Prodigy	B-musical artist
+of	O
+Mobb	B-band
+Deep	I-band
+and	O
+producers	O
+the	B-musical artist
+Alchemist	I-musical artist
+and	O
+Fredwreck	B-musical artist
+.	O
+
+The	O
+three	O
+venues	O
+regarded	O
+as	O
+the	O
+most	O
+important	O
+in	O
+this	O
+decade	O
+were	O
+the	O
+Golden	B-location
+Torch	I-location
+in	O
+Tunstall	B-location
+,	O
+Stoke-on-Trent	B-location
+(	O
+1971	O
+to	O
+1972	O
+)	O
+,	O
+Blackpool	B-location
+Mecca	I-location
+(	O
+1971	O
+to	O
+1979	O
+)	O
+and	O
+Wigan	B-location
+Casino	I-location
+(	O
+1973	O
+to	O
+1981	O
+)	O
+.	O
+
+Rebana	B-musical instrument
+is	O
+a	O
+Malay	B-musical instrument
+tambourine	I-musical instrument
+that	O
+is	O
+used	O
+in	O
+Islamic	B-music genre
+devotional	I-music genre
+music	I-music genre
+in	O
+Southeast	B-location
+Asia	B-location
+,	O
+particularly	O
+in	O
+Indonesia	B-country
+,	O
+Malaysia	B-country
+,	O
+Brunei	B-country
+,	O
+and	O
+Singapore	B-country
+.	O
+
+Minogue	B-musical artist
+has	O
+sold	O
+70	O
+million	O
+records	O
+worldwide	O
+and	O
+has	O
+earned	O
+numerous	O
+awards	O
+and	O
+accolades	O
+,	O
+including	O
+a	O
+Grammy	B-award
+Award	I-award
+,	O
+three	O
+Brit	B-award
+Awards	I-award
+,	O
+17	O
+ARIA	B-award
+Music	I-award
+Awards	I-award
+,	O
+two	O
+MTV	B-award
+Europe	I-award
+Music	I-award
+Award	I-award
+and	O
+two	O
+MTV	B-award
+Video	I-award
+Music	I-award
+Award	I-award
+.	O
+
+The	O
+festival	O
+features	O
+bands	O
+from	O
+different	O
+places	O
+in	O
+Argentina	B-country
+,	O
+as	O
+well	O
+as	O
+international	O
+artists	O
+from	O
+Brazil	B-country
+,	O
+Uruguay	B-country
+,	O
+Chile	B-country
+,	O
+Peru	B-country
+and	O
+the	O
+United	B-country
+States	I-country
+.	O
+
+Top	O
+artists	O
+included	O
+Tammy	B-musical artist
+Wynette	I-musical artist
+,	O
+Lynn	B-musical artist
+Anderson	I-musical artist
+and	O
+Charlie	B-musical artist
+Rich	I-musical artist
+,	O
+as	O
+well	O
+as	O
+such	O
+former	O
+hard	B-music genre
+country	I-music genre
+artists	O
+as	O
+Ray	B-musical artist
+Price	I-musical artist
+and	O
+Marty	B-musical artist
+Robbins	I-musical artist
+.	O
+
+A	O
+critical	O
+and	O
+commercial	O
+success	O
+upon	O
+release	O
+and	O
+nominated	O
+for	O
+four	O
+Academy	B-award
+Awards	I-award
+,	O
+including	O
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Actor	I-award
+(	O
+for	O
+De	B-person
+Niro	I-person
+)	O
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Supporting	I-award
+Actress	I-award
+(	O
+for	O
+Foster	B-person
+)	O
+,	O
+Taxi	O
+Driver	O
+won	O
+the	O
+Palme	B-award
+d	I-award
+'Or	I-award
+at	O
+the	O
+1976	B-event
+Cannes	I-event
+Film	I-event
+Festival	I-event
+.	O
+
+It	O
+is	O
+generally	O
+divided	O
+into	O
+two	O
+major	O
+subgenres	O
+,	O
+with	O
+the	O
+jazz	B-music genre
+-influenced	O
+New	B-music genre
+Orleans	I-music genre
+blues	I-music genre
+based	O
+on	O
+the	O
+musical	O
+traditions	O
+of	O
+that	O
+city	O
+and	O
+the	O
+slower	O
+tempo	O
+swamp	B-music genre
+blues	I-music genre
+incorporating	O
+influences	O
+from	O
+zydeco	B-music genre
+and	O
+Cajun	B-music genre
+music	I-music genre
+from	O
+around	O
+Baton	B-location
+Rouge	I-location
+.	O
+
+The	O
+album	O
+was	O
+certified	O
+gold	O
+by	O
+both	O
+British	B-organization
+Phonographic	I-organization
+Industry	I-organization
+and	O
+the	O
+Recording	B-organization
+Industry	I-organization
+Association	I-organization
+of	I-organization
+America	I-organization
+in	O
+December	O
+2007	O
+.	O
+
+The	O
+total	O
+playing	O
+time	O
+covered	O
+three	O
+sides	O
+of	O
+an	O
+LP	O
+,	O
+so	O
+they	O
+decided	O
+to	O
+expand	O
+it	O
+into	O
+a	O
+double	O
+by	O
+including	O
+previously	O
+unreleased	O
+tracks	O
+from	O
+the	O
+sessions	O
+for	O
+the	O
+earlier	O
+albums	O
+Led	B-album
+Zeppelin	I-album
+III	I-album
+,	O
+Led	B-album
+Zeppelin	I-album
+IV	I-album
+and	O
+Houses	B-album
+of	I-album
+the	I-album
+Holy	I-album
+.	O
+
+Some	O
+of	O
+the	O
+early	O
+stars	O
+on	O
+the	O
+Opry	B-location
+were	O
+Uncle	B-musical artist
+Dave	I-musical artist
+Macon	I-musical artist
+,	O
+Roy	B-musical artist
+Acuff	I-musical artist
+and	O
+African	O
+American	O
+harmonica	B-musical instrument
+player	O
+DeFord	B-musical artist
+Bailey	I-musical artist
+.	O
+
+Juliana	B-musical artist
+Hatfield	I-musical artist
+is	O
+an	O
+American	O
+musician	O
+and	O
+singer-songwriter	O
+from	O
+the	O
+Boston	B-location
+area	I-location
+,	O
+formerly	O
+of	O
+the	O
+indie	O
+rock	B-music genre
+bands	O
+Blake	B-band
+Babies	I-band
+,	O
+Some	B-band
+Girls	I-band
+,	O
+and	O
+The	B-band
+Lemonheads	I-band
+.	O
+
+Bands	O
+like	O
+Flogging	B-band
+Molly	I-band
+,	O
+Black	B-band
+47	I-band
+,	O
+Dropkick	B-band
+Murphys	I-band
+,	O
+The	B-band
+Young	I-band
+Dubliners	I-band
+,	O
+The	B-band
+Tossers	I-band
+introduced	O
+a	O
+hybrid	O
+of	O
+Celtic	B-music genre
+rock	I-music genre
+,	O
+Punk	B-music genre
+rock	I-music genre
+,	O
+reggae	B-music genre
+,	O
+Hardcore	B-music genre
+punk	I-music genre
+and	O
+other	O
+elements	O
+in	O
+the	O
+1990s	O
+that	O
+has	O
+become	O
+popular	O
+with	O
+Irish-American	O
+youth	O
+.	O
+
+Their	O
+eighth	O
+album	O
+,	O
+Hesitation	B-album
+Marks	I-album
+(	O
+2013	O
+)	O
+,	O
+was	O
+followed	O
+by	O
+a	O
+trilogy	O
+consisting	O
+of	O
+the	O
+EPs	O
+Not	B-album
+the	I-album
+Actual	I-album
+Events	I-album
+(	O
+2016	O
+)	O
+and	O
+Add	B-album
+Violence	I-album
+(	O
+2017	O
+)	O
+and	O
+their	O
+ninth	O
+album	O
+Bad	B-album
+Witch	I-album
+(	O
+2018	O
+)	O
+.	O
+
+He	O
+has	O
+appeared	O
+as	O
+a	O
+featured	O
+artist	O
+on	O
+many	O
+other	O
+songs	O
+and	O
+albums	O
+,	O
+having	O
+collaborated	O
+with	O
+artists	O
+such	O
+as	O
+Janet	B-musical artist
+Jackson	I-musical artist
+,	O
+Kool	B-musical artist
+Moe	I-musical artist
+Dee	I-musical artist
+,	O
+The	B-band
+Dope	I-band
+Poet	I-band
+Society	I-band
+,	O
+Run-D.M.C.	B-band
+,	O
+Ice	B-musical artist
+Cube	I-musical artist
+,	O
+Boom	B-band
+Boom	I-band
+Satellites	I-band
+,	O
+Rage	B-band
+Against	I-band
+the	I-band
+Machine	I-band
+,	O
+Anthrax	B-band
+,	O
+John	B-musical artist
+Mellencamp	I-musical artist
+and	O
+many	O
+others	O
+.	O
+
+Dimmu	B-band
+Borgir	I-band
+'s	O
+following	O
+full-length	O
+albums	O
+Spiritual	B-album
+Black	I-album
+Dimensions	I-album
+in	O
+1999	O
+and	O
+2001	O
+'s	O
+Puritanical	B-album
+Euphoric	I-album
+Misanthropia	I-album
+,	O
+both	O
+met	O
+critical	O
+acclaim.	O
+only	O
+to	O
+be	O
+replaced	O
+with	O
+Nicholas	B-musical artist
+Barker	I-musical artist
+of	O
+Cradle	B-band
+of	I-band
+Filth	I-band
+.	O
+
+Besides	O
+fronting	O
+his	O
+own	O
+band	O
+and	O
+rap	B-music genre
+projects	O
+,	O
+Ice-T	B-musical artist
+has	O
+also	O
+collaborated	O
+with	O
+other	O
+hard	B-music genre
+rock	I-music genre
+and	O
+metal	B-music genre
+bands	O
+,	O
+such	O
+as	O
+Icepick	B-band
+,	O
+Motörhead	B-band
+,	O
+Slayer	B-band
+,	O
+Pro-Pain	B-band
+,	O
+and	O
+Six	B-band
+Feet	I-band
+Under	I-band
+.	O
+
+Alexander	B-musical artist
+von	I-musical artist
+Meilenwald	I-musical artist
+from	O
+German	O
+band	O
+Nagelfar	B-band
+considers	O
+Ungod	B-album
+'	O
+s	O
+1993	O
+debut	O
+Circle	B-album
+of	I-album
+the	I-album
+Seven	I-album
+Infernal	I-album
+Pacts	I-album
+,	O
+Desaster	B-band
+'	O
+s	O
+1994	O
+demo	O
+Lost	B-album
+in	I-album
+the	I-album
+Ages	I-album
+,	O
+Tha-Norr	B-band
+'	O
+s	O
+1995	O
+album	O
+Wolfenzeitalter	B-album
+,	O
+Lunar	B-band
+Aurora	I-band
+'	O
+s	O
+1996	O
+debut	O
+Weltengänger	B-album
+and	O
+Katharsis	B-band
+'	O
+s	O
+2000	O
+debut	O
+666	B-album
+Alexander	B-musical artist
+von	I-musical artist
+Meilenwald	I-musical artist
+:	O
+5	B-album
+Klassiker	I-album
+.	O
+
+Depeche	B-band
+Mode	O
+'s	O
+releases	O
+have	O
+been	O
+nominated	O
+for	O
+five	O
+Grammy	B-award
+Awards	I-award
+:	O
+Devotional	B-song
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Music	I-award
+Film	I-award
+;	O
+I	B-song
+Feel	I-song
+Loved	I-song
+and	O
+Suffer	B-song
+Well	I-song
+,	O
+both	O
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Dance	I-award
+Recording	I-award
+;	O
+Sounds	B-album
+of	I-album
+the	I-album
+Universe	I-album
+for	O
+Best	B-award
+Alternative	I-award
+Album	I-award
+;	O
+and	O
+Wrong	B-song
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Music	I-award
+Video	I-award
+.	O
+
+He	O
+also	O
+collected	O
+in	O
+Moldavia	B-country
+,	O
+Wallachia	B-country
+,	O
+and	O
+(	O
+in	O
+1913	O
+)	O
+Algeria	B-country
+.	O
+
+Alexander	B-musical artist
+von	I-musical artist
+Meilenwald	I-musical artist
+from	O
+German	B-country
+band	O
+Nagelfar	B-band
+considers	O
+Ungod	B-band
+'	O
+s	O
+1993	O
+debut	O
+Circle	B-album
+of	I-album
+the	I-album
+Seven	I-album
+Infernal	I-album
+Pacts	I-album
+,	O
+Desaster	B-band
+'	O
+s	O
+1994	O
+demo	O
+Lost	B-album
+in	I-album
+the	I-album
+Ages	I-album
+,	O
+Tha-Norr	B-band
+'	O
+s	O
+1995	O
+album	O
+Wolfenzeitalter	B-album
+,	O
+Lunar	B-band
+Aurora	I-band
+'	O
+s	O
+1996	O
+debut	O
+Weltengänger	B-album
+and	O
+Katharsis	B-band
+'	O
+s	O
+2000	O
+debut	O
+666	B-album
+Alexander	B-musical artist
+von	I-musical artist
+Meilenwald	I-musical artist
+:	O
+5	O
+Klassiker	O
+.	O
+
+The	O
+festival	O
+features	O
+bands	O
+from	O
+different	O
+places	O
+in	O
+Argentina	B-country
+,	O
+as	O
+well	O
+as	O
+international	O
+artists	O
+from	O
+Brazil	B-country
+,	O
+Uruguay	B-country
+,	O
+Chile	B-country
+,	O
+Peru	B-country
+and	O
+the	O
+United	B-country
+States	I-country
+.	O
+
+In	O
+the	O
+early	O
+1990s	O
+,	O
+the	O
+rise	O
+of	O
+melodic	B-music genre
+death	I-music genre
+metal	I-music genre
+was	O
+recognized	O
+,	O
+with	O
+Swedish	O
+bands	O
+such	O
+as	O
+Dark	B-band
+Tranquillity	I-band
+,	O
+At	B-band
+the	I-band
+Gates	I-band
+,	O
+and	O
+In	B-band
+Flames	I-band
+.	O
+
+In	O
+February	O
+1984	O
+,	O
+Queen	B-band
+released	O
+their	O
+eleventh	O
+studio	O
+album	O
+,	O
+The	B-album
+Works	I-album
+,	O
+which	O
+included	O
+the	O
+successful	O
+singles	O
+Radio	B-song
+Ga	I-song
+Ga	I-song
+,	O
+Hammer	B-song
+to	I-song
+Fall	I-song
+and	O
+I	B-song
+Want	I-song
+to	I-song
+Break	I-song
+Free	I-song
+.	O
+
+The	O
+album	O
+Jazz	B-album
+from	I-album
+Hell	I-album
+,	O
+released	O
+in	O
+1986	O
+,	O
+earned	O
+Zappa	B-musical artist
+his	O
+first	O
+Grammy	B-award
+Award	I-award
+in	O
+1988	O
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Rock	I-award
+Instrumental	I-award
+Performance	I-award
+.	O
+
+Switchfoot	B-band
+has	O
+been	O
+involved	O
+in	O
+a	O
+number	O
+of	O
+humanitarian	O
+causes	O
+,	O
+including	O
+DATA	B-organization
+,	O
+the	O
+ONE	B-organization
+Campaign	I-organization
+,	O
+the	O
+Keep	B-organization
+A	I-organization
+Breast	I-organization
+Foundation	I-organization
+,	O
+Habitat	B-organization
+for	I-organization
+Humanity	I-organization
+,	O
+Invisible	B-organization
+Children	I-organization
+,	O
+and	O
+To	B-organization
+Write	I-organization
+Love	I-organization
+on	I-organization
+Her	I-organization
+Arms	I-organization
+.	O
+
+Nova	B-person
+was	O
+selected	O
+as	O
+the	O
+official	O
+voice	O
+of	O
+the	O
+2013	B-event
+Central	I-event
+American	I-event
+Games	I-event
+,	O
+San	B-location
+José	I-location
+2013	O
+,	O
+with	O
+the	O
+song	O
+Arriba	B-song
+Arriba	I-song
+(	O
+Get	B-song
+Up	I-song
+,	I-song
+Get	I-song
+Up	I-song
+)	O
+and	O
+was	O
+also	O
+invited	O
+to	O
+participate	O
+in	O
+the	O
+TEDx	B-organization
+Joven	O
+Pura	O
+Vida	O
+(	O
+Youth	O
+Pure	O
+Life	O
+)	O
+conference	O
+,	O
+where	O
+she	O
+shared	O
+her	O
+story	O
+,	O
+her	O
+music	O
+and	O
+encouraged	O
+young	O
+people	O
+to	O
+follow	O
+their	O
+dreams	O
+.	O
+
+Fredriksson	B-musical artist
+returned	O
+in	O
+2006	O
+with	O
+an	O
+album	O
+of	O
+Swedish	O
+cover	O
+songs	O
+,	O
+titled	O
+Min	B-album
+bäste	I-album
+vän	I-album
+(	O
+My	B-album
+Best	I-album
+Friend	I-album
+)	O
+,	O
+while	O
+Gessle	B-musical artist
+recorded	O
+two	O
+more	O
+solo	O
+albums	O
+,	O
+En	B-album
+händig	I-album
+man	I-album
+(	O
+A	B-album
+Handy	I-album
+Man	I-album
+)	O
+(	O
+2007	O
+)	O
+and	O
+Party	B-album
+Crasher	I-album
+(	O
+2008	O
+)	O
+.	O
+
+They	O
+were	O
+inducted	O
+by	O
+Chuck	B-musical artist
+D	I-musical artist
+and	O
+LL	B-musical artist
+Cool	I-musical artist
+J	I-musical artist
+on	O
+April	O
+14	O
+,	O
+2012	O
+therefore	O
+the	O
+group	O
+didn	O
+'t	O
+perform	O
+;	O
+instead	O
+Black	B-musical artist
+Thought	I-musical artist
+,	O
+Travie	B-musical artist
+from	O
+Gym	B-band
+Class	I-band
+Heroes	I-band
+and	O
+Kid	B-musical artist
+Rock	I-musical artist
+performed	O
+a	O
+medley	O
+of	O
+their	O
+songs	O
+.	O
+
+Following	O
+in	O
+the	O
+footsteps	O
+of	O
+Gene	B-musical artist
+Autry	I-musical artist
+,	O
+Lydia	B-musical artist
+Mendoza	I-musical artist
+,	O
+Roy	B-person
+Rogers	I-person
+,	O
+and	O
+Patsy	B-musical artist
+Montana	I-musical artist
+.	O
+
+It	O
+was	O
+nominated	O
+for	O
+four	O
+Academy	B-award
+Awards	I-award
+,	O
+including	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Actor	I-award
+(	O
+De	B-person
+Niro	I-person
+)	O
+,	O
+and	O
+received	O
+the	O
+Palme	B-award
+d	I-award
+'Or	I-award
+at	O
+the	O
+1976	B-event
+Cannes	I-event
+Film	I-event
+Festival	I-event
+.	O
+
+It	O
+was	O
+designed	O
+by	O
+Kenzo	B-person
+Tange	I-person
+and	O
+built	O
+between	O
+1961	O
+and	O
+1964	O
+to	O
+house	O
+Swimming	O
+at	O
+the	O
+1964	B-event
+Summer	I-event
+Olympics	I-event
+and	O
+Diving	O
+at	O
+the	O
+1964	B-event
+Summer	I-event
+Olympics	I-event
+events	O
+in	O
+the	O
+1964	B-event
+Summer	I-event
+Olympics	I-event
+.	O
+
+Grunge	B-music genre
+began	O
+as	O
+a	O
+mixture	O
+of	O
+Heavy	B-music genre
+metal	I-music genre
+music	I-music genre
+,	O
+punk	B-music genre
+rock	I-music genre
+and	O
+indie	B-music genre
+rock	I-music genre
+in	O
+the	O
+1980s	O
+and	O
+gained	O
+mainstream	O
+prominence	O
+in	O
+the	O
+early	O
+1990s	O
+.	O
+
+Of	O
+the	O
+other	O
+seven	O
+songs	O
+that	O
+were	O
+on	O
+the	O
+British	O
+release	O
+,	O
+two	O
+were	O
+released	O
+on	O
+the	O
+US	B-country
+version	O
+of	O
+the	O
+next	O
+Beatles	B-band
+album	O
+,	O
+Rubber	B-album
+Soul	I-album
+,	O
+two	O
+were	O
+back-to-back	O
+on	O
+the	O
+next	O
+US	B-country
+single	O
+and	O
+then	O
+appeared	O
+on	O
+Yesterday	B-album
+and	I-album
+Today	I-album
+,	O
+and	O
+three	O
+had	O
+already	O
+been	O
+on	O
+Beatles	B-album
+VI	I-album
+.	O
+
+He	O
+was	O
+the	O
+guitarist	O
+for	O
+the	O
+1980s	O
+Hi-NRG	B-music genre
+,	O
+Synth-pop	B-music genre
+band	O
+,	O
+Frankie	B-band
+Goes	I-band
+to	I-band
+Hollywood	I-band
+.	O
+
+In	O
+Legends	O
+of	O
+Guitar	O
+(	O
+filmed	O
+live	O
+in	O
+Spain	B-country
+in	O
+1991	O
+)	O
+,	O
+with	O
+B.B.	B-musical artist
+King	I-musical artist
+,	O
+Les	B-musical artist
+Paul	I-musical artist
+,	O
+Albert	B-musical artist
+Collins	I-musical artist
+,	O
+and	O
+George	B-musical artist
+Benson	I-musical artist
+,	O
+among	O
+others	O
+.	O
+
+In	O
+July	O
+2010	O
+,	O
+Dayne	B-musical artist
+released	O
+Facing	B-song
+a	I-song
+Miracle	I-song
+,	O
+the	O
+official	O
+theme	O
+song	O
+to	O
+the	O
+2010	B-event
+Gay	I-event
+Games	I-event
+.	O
+
+Mercury	B-musical artist
+wrote	O
+numerous	O
+hits	O
+for	O
+Queen	B-band
+,	O
+including	O
+Killer	B-song
+Queen	I-song
+,	O
+Bohemian	B-song
+Rhapsody	I-song
+,	O
+Somebody	B-song
+to	I-song
+Love	I-song
+,	O
+We	B-song
+Are	I-song
+the	I-song
+Champions	I-song
+,	O
+Don	B-song
+'t	I-song
+Stop	I-song
+Me	I-song
+Now	I-song
+,	O
+and	O
+Crazy	B-song
+Little	I-song
+Thing	I-song
+Called	I-song
+Love	I-song
+.	O
+
+Also	O
+,	O
+Bon	B-band
+Jovi	I-band
+had	O
+a	O
+hit	O
+single	O
+,	O
+Who	B-song
+Says	I-song
+You	I-song
+Can	I-song
+'t	I-song
+Go	I-song
+Home	I-song
+,	O
+with	O
+Jennifer	B-musical artist
+Nettles	I-musical artist
+of	O
+Sugarland	B-band
+.	O
+
+Scandinavia	B-country
+n	O
+punk	B-music genre
+was	O
+propelled	O
+early	O
+on	O
+by	O
+tour	O
+dates	O
+by	O
+bands	O
+such	O
+as	O
+the	O
+Clash	B-band
+and	O
+the	O
+Ramones	B-band
+(	O
+both	O
+in	O
+Stockholm	B-location
+in	O
+May	O
+1977	O
+)	O
+,	O
+and	O
+the	O
+Sex	B-band
+Pistols	I-band
+'	O
+tour	O
+through	O
+Denmark	B-country
+,	O
+Sweden	B-country
+and	O
+Norway	B-country
+in	O
+July	O
+the	O
+same	O
+year	O
+.	O
+
+Brooks	B-band
+and	I-band
+Dunn	I-band
+have	O
+more	O
+Country	B-award
+Music	I-award
+Association	I-award
+awards	I-award
+and	O
+Academy	B-award
+of	I-award
+Country	I-award
+Music	I-award
+awards	I-award
+than	O
+any	O
+act	O
+in	O
+the	O
+history	O
+of	O
+country	B-music genre
+music	I-music genre
+.	O
+
+They	O
+collaborated	O
+with	O
+producer	O
+Brian	B-musical artist
+Eno	I-musical artist
+on	O
+a	O
+trio	O
+of	O
+experimental	O
+and	O
+critically	O
+acclaimed	O
+releases	O
+:	O
+More	B-album
+Songs	I-album
+About	I-album
+Buildings	I-album
+and	I-album
+Food	I-album
+(	O
+1978	O
+)	O
+,	O
+Fear	B-album
+of	I-album
+Music	I-album
+(	O
+1979	O
+)	O
+,	O
+and	O
+Remain	B-album
+in	I-album
+Light	I-album
+(	O
+1980	O
+)	O
+.	O
+
+During	O
+the	O
+1948	B-event
+Summer	I-event
+Olympics	I-event
+,	O
+the	O
+venue	O
+hosted	O
+the	O
+Olympic	B-event
+boxing	I-event
+,	O
+Diving	B-event
+at	I-event
+the	I-event
+1948	I-event
+Summer	I-event
+Olympics	I-event
+,	O
+Swimming	B-event
+at	I-event
+the	I-event
+1948	I-event
+Summer	I-event
+Olympics	I-event
+,	O
+and	O
+Water	B-event
+polo	I-event
+at	I-event
+the	I-event
+1948	I-event
+Summer	I-event
+Olympics	I-event
+events.	O
+pp.	O
+43	O
+,	O
+49	O
+.	O
+
+Brad	B-person
+Shoup	I-person
+of	O
+Stereogum	B-organization
+surmised	O
+that	O
+,	O
+thanks	O
+to	O
+the	O
+Ramones	B-band
+'	O
+praise	O
+for	O
+the	O
+group	O
+,	O
+many	O
+punk	B-music genre
+,	O
+pop	B-music genre
+punk	I-music genre
+,	O
+or	O
+punk-adjacent	B-music genre
+artists	O
+showed	O
+influence	O
+from	O
+the	O
+Beach	B-band
+Boys	I-band
+,	O
+noting	O
+cover	O
+versions	O
+of	O
+the	O
+band	O
+'s	O
+songs	O
+recorded	O
+by	O
+Slickee	B-band
+Boys	I-band
+,	O
+Agent	B-band
+Orange	I-band
+,	O
+Bad	B-band
+Religion	I-band
+,	O
+Shonen	B-band
+Knife	I-band
+,	O
+the	B-band
+Queers	I-band
+,	O
+Hi-Standard	B-band
+,	O
+the	B-band
+Descendents	I-band
+,	O
+the	B-band
+Donnas	I-band
+,	O
+M.O.D.	B-band
+,	O
+and	O
+the	B-band
+Vandals	I-band
+.	O
+
+The	O
+music	O
+of	O
+Honduras	B-country
+varies	O
+from	O
+Punta	B-music genre
+and	O
+Paranda	B-music genre
+(	O
+the	O
+local	O
+genre	O
+of	O
+the	O
+Garifunas	O
+)	O
+to	O
+Caribbean	B-music genre
+music	I-music genre
+such	O
+as	O
+Salsa	B-music genre
+music	I-music genre
+,	O
+Merengue	B-music genre
+music	I-music genre
+,	O
+reggae	B-music genre
+and	O
+reggaeton	B-music genre
+(	O
+all	O
+widely	O
+heard	O
+,	O
+especially	O
+in	O
+the	O
+north	O
+)	O
+.	O
+
+The	O
+elements	O
+of	O
+Cali-Style	B-music genre
+Salsa	I-music genre
+were	O
+strongly	O
+influenced	O
+by	O
+dances	O
+to	O
+Caribbean	B-music genre
+rhythms	I-music genre
+which	O
+preceded	O
+salsa	B-music genre
+,	O
+such	O
+as	O
+Pachanga	B-music genre
+and	O
+Boogaloo	B-music genre
+.	O
+
+B-Real	B-musical artist
+appeared	O
+with	O
+Busta	B-musical artist
+Rhymes	I-musical artist
+,	O
+Coolio	B-musical artist
+,	O
+LL	B-musical artist
+Cool	I-musical artist
+J	I-musical artist
+and	O
+Method	B-musical artist
+Man	I-musical artist
+on	O
+Hit	B-song
+Em	I-song
+High	I-song
+from	O
+the	O
+multi-platinum	O
+Space	O
+Jam	O
+Soundtrack	O
+.	O
+
+In	O
+the	O
+twentieth	O
+century	O
+,	O
+Christian	B-music genre
+music	I-music genre
+has	O
+developed	O
+to	O
+reflect	O
+the	O
+emergence	O
+of	O
+a	O
+diverse	O
+array	O
+of	O
+musical	O
+genres	O
+including	O
+Rock	B-music genre
+music	I-music genre
+,	O
+metal	B-music genre
+,	O
+Pop	B-music genre
+music	I-music genre
+,	O
+jazz	B-music genre
+,	O
+Contemporary	B-music genre
+Christian	I-music genre
+music	I-music genre
+,	O
+rap	B-music genre
+,	O
+spiritual	B-music genre
+,	O
+Country	B-music genre
+music	I-music genre
+,	O
+blues	B-music genre
+,	O
+and	O
+Gospel	B-music genre
+music	I-music genre
+.	O
+
+The	O
+song	O
+'s	O
+popularity	O
+resulted	O
+in	O
+its	O
+being	O
+covered	O
+by	O
+other	O
+musicians	O
+,	O
+such	O
+as	O
+The	B-band
+Disposable	I-band
+Heroes	I-band
+of	I-band
+Hiphoprisy	I-band
+(	O
+who	O
+rewrote	O
+the	O
+lyrics	O
+to	O
+parody	O
+Pete	B-person
+Wilson	I-person
+)	O
+,	O
+John	B-musical artist
+Linnell	I-musical artist
+of	O
+They	B-band
+Might	I-band
+Be	I-band
+Giants	I-band
+and	O
+Six	B-band
+Feet	I-band
+Under	I-band
+on	O
+their	O
+Graveyard	B-album
+Classics	I-album
+album	O
+of	O
+cover	O
+versions	O
+.	O
+
+On	O
+30	O
+January	O
+,	O
+Nick	B-person
+Grimshaw	I-person
+,	O
+Rita	B-person
+Ora	I-person
+and	O
+Paolo	B-person
+Nutini	I-person
+announced	O
+that	O
+the	O
+2014	O
+event	O
+would	O
+be	O
+held	O
+in	O
+Glasgow	B-location
+to	O
+celebrate	O
+the	O
+2014	B-event
+Commonwealth	I-event
+Games	I-event
+.	O
+
+69-70.	O
+with	O
+hundreds	O
+of	O
+performances	O
+each	O
+year	O
+throughout	O
+the	O
+world	O
+in	O
+venues	O
+including	O
+Carnegie	B-location
+Hall	I-location
+,	O
+Lincoln	B-location
+Center	I-location
+,	O
+Kennedy	B-location
+Center	I-location
+,	O
+Walt	B-location
+Disney	I-location
+Concert	I-location
+Hall	I-location
+,	O
+Vatican	B-country
+City	I-country
+,	O
+Sydney	B-location
+Opera	I-location
+House	I-location
+and	O
+Westminster	B-location
+Abbey	I-location
+.	O
+
+Sometimes	O
+the	O
+most	O
+successful	O
+solo	O
+star	O
+from	O
+a	O
+band	O
+is	O
+not	O
+the	O
+most	O
+popular	O
+member	O
+such	O
+as	O
+Robbie	B-musical artist
+Williams	I-musical artist
+as	O
+opposed	O
+to	O
+lead	O
+singer	O
+Gary	B-musical artist
+Barlow	I-musical artist
+from	O
+Take	B-band
+That	I-band
+.	O
+
+The	O
+film	O
+won	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Director	I-award
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Adapted	I-award
+Screenplay	I-award
+,	O
+and	O
+Hopkins	B-person
+also	O
+picked	O
+up	O
+his	O
+first	O
+BAFTA	B-award
+for	I-award
+Best	I-award
+Actor	I-award
+.	O
+
+Welsh	B-country
+singer	O
+Bonnie	B-musical artist
+Tyler	I-musical artist
+initially	O
+started	O
+her	O
+career	O
+making	O
+country	B-music genre
+albums	O
+and	O
+was	O
+even	O
+nominated	O
+for	O
+Top	O
+New	O
+Female	O
+Vocalist	O
+at	O
+the	O
+Academy	B-award
+of	I-award
+Country	I-award
+Music	I-award
+Awards	I-award
+before	O
+her	O
+huge	O
+crossover	O
+hit	O
+Total	B-song
+Eclipse	I-song
+of	I-song
+the	I-song
+Heart	I-song
+lead	O
+her	O
+towards	O
+more	O
+commercial	B-music genre
+pop	I-music genre
+and	O
+rock	B-music genre
+.	O
+
+British	B-music genre
+psychedelic	I-music genre
+/	O
+progressive	B-music genre
+rock	I-music genre
+band	O
+Knifeworld	B-band
+features	O
+the	O
+bassoon	B-musical instrument
+playing	O
+of	O
+Chloe	B-musical artist
+Herrington	I-musical artist
+,	O
+who	O
+also	O
+plays	O
+for	O
+experimental	O
+Baroque	B-music genre
+pop	I-music genre
+orchestra	O
+Chrome	B-band
+Hoof	I-band
+.	O
+
+That	O
+year	O
+,	O
+she	O
+also	O
+recorded	O
+a	O
+duet	O
+with	O
+singer	O
+Randy	B-musical artist
+Stonehill	I-musical artist
+for	O
+his	O
+Love	B-album
+Beyond	I-album
+Reason	I-album
+album	O
+,	O
+titled	O
+I	B-song
+Could	I-song
+Never	I-song
+Say	I-song
+Goodbye	I-song
+,	O
+and	O
+recorded	O
+The	B-album
+Animals	I-album
+'	I-album
+Christmas	I-album
+with	O
+Art	B-musical artist
+Garfunkel	I-musical artist
+.	O
+
+In	O
+addition	O
+to	O
+being	O
+named	O
+Top	B-award
+Female	I-award
+Vocalist	I-award
+by	O
+the	O
+Academy	B-organization
+of	I-organization
+Country	I-organization
+Music	I-organization
+(	O
+ACM	B-organization
+)	O
+twice	O
+and	O
+Female	B-award
+Vocalist	I-award
+of	I-award
+the	I-award
+Year	I-award
+by	O
+the	O
+Country	B-organization
+Music	I-organization
+Association	I-organization
+(	O
+CMA	B-organization
+)	O
+,	O
+she	O
+also	O
+won	O
+a	O
+Grammy	B-award
+Award	I-award
+(	O
+earning	O
+seven	O
+nominations	O
+)	O
+,	O
+People	B-award
+'s	I-award
+Choice	I-award
+Award	I-award
+and	O
+an	O
+American	B-award
+Music	I-award
+Award	I-award
+(	O
+AMA	B-award
+)	O
+.	O
+
+Philanthropy	O
+and	O
+charity	O
+work	O
+are	O
+very	O
+important	O
+to	O
+Tyler	B-person
+,	O
+and	O
+she	O
+regularly	O
+does	O
+volunteer	O
+work	O
+for	O
+the	O
+American	B-organization
+Red	I-organization
+Cross	I-organization
+,	O
+The	B-organization
+Trust	I-organization
+for	I-organization
+Public	I-organization
+Land	I-organization
+,	O
+Planned	B-organization
+Parenthood	I-organization
+Federation	I-organization
+of	I-organization
+America	I-organization
+,	O
+and	O
+the	O
+International	B-organization
+Rescue	I-organization
+Committee	I-organization
+.	O
+
+139	O
+with	O
+Curley	B-musical artist
+Weaver	I-musical artist
+,	O
+Tampa	B-musical artist
+Red	I-musical artist
+,	O
+Barbecue	B-musical artist
+Bob	I-musical artist
+and	O
+Kokomo	B-musical artist
+Arnold	I-musical artist
+as	O
+representatives	O
+of	O
+this	O
+style	O
+.	O
+
+In	O
+1968	O
+,	O
+three	O
+of	O
+the	O
+genre	O
+'s	O
+most	O
+famous	O
+pioneers	O
+,	O
+Led	B-band
+Zeppelin	I-band
+,	O
+Black	B-band
+Sabbath	I-band
+and	O
+Deep	B-band
+Purple	I-band
+were	O
+founded	O
+.	O
+
+The	O
+instrument	O
+is	O
+played	O
+in	O
+Guinea	B-country
+,	O
+Guinea-Bissau	B-country
+,	O
+Mali	B-country
+,	O
+Senegal	B-country
+,	O
+Burkina	B-country
+Faso	I-country
+and	O
+the	B-country
+Gambia	I-country
+.	O
+
+BBC	O
+Radio	O
+4	O
+-	O
+The	O
+Reunion	O
+-	O
+Four	O
+Weddings	O
+and	O
+a	O
+Funeral	O
+,	O
+13	O
+April	O
+2014	O
+and	O
+became	O
+an	O
+unexpected	O
+success	O
+and	O
+the	O
+highest-grossing	O
+British	O
+film	O
+in	O
+history	O
+at	O
+the	O
+time	O
+,	O
+with	O
+worldwide	O
+box	O
+office	O
+in	O
+excess	O
+of	O
+$	O
+245.7	O
+million	O
+!	O
+--infobox	O
+says	O
+pounds--	O
+,	O
+and	O
+receiving	O
+Academy	B-award
+Awards	I-award
+nominations	O
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Original	I-award
+Screenplay	I-award
+.	O
+
+Music	O
+critic	O
+Richie	B-person
+Unterberger	I-person
+has	O
+noted	O
+that	O
+the	O
+commercial	O
+success	O
+of	O
+the	O
+Byrds	B-band
+'	O
+cover	O
+version	O
+of	O
+Dylan	B-musical artist
+'s	O
+Mr.	B-song
+Tambourine	I-song
+Man	I-song
+,	O
+along	O
+with	O
+Dylan	B-musical artist
+'s	O
+own	O
+contributions	O
+to	O
+the	O
+genre	O
+on	O
+the	O
+albums	O
+Bringing	B-album
+It	I-album
+All	I-album
+Back	I-album
+Home	I-album
+,	O
+Highway	B-album
+61	I-album
+Revisited	I-album
+,	O
+and	O
+Blonde	B-album
+on	I-album
+Blonde	I-album
+,	O
+initiated	O
+an	O
+explosion	O
+of	O
+emulators	O
+and	O
+imitators	O
+.	O
+
+ZZ	B-band
+Top	I-band
+'s	O
+music	O
+videos	O
+won	O
+multiple	O
+MTV	B-award
+Video	I-award
+Music	I-award
+Award	I-award
+awards	O
+during	O
+the	O
+1980s	O
+,	O
+topping	O
+the	O
+categories	O
+of	O
+Best	B-award
+Group	I-award
+Video	I-award
+,	O
+MTV	B-award
+Video	I-award
+Music	I-award
+Award	I-award
+for	I-award
+Best	I-award
+Direction	I-award
+,	O
+and	O
+MTV	B-award
+Video	I-award
+Music	I-award
+Award	I-award
+for	I-award
+Best	I-award
+Art	I-award
+Direction	I-award
+for	O
+Legs	B-song
+,	O
+Sharp	B-song
+Dressed	I-song
+Man	I-song
+and	O
+Rough	B-song
+Boy	I-song
+,	O
+respectively.	O
+and	O
+induction	O
+into	O
+the	O
+Rock	B-location
+and	I-location
+Roll	I-location
+Hall	I-location
+of	I-location
+Fame	I-location
+in	O
+2004	O
+.	O
+
+Organised	O
+by	O
+the	O
+European	B-organization
+Broadcasting	I-organization
+Union	I-organization
+(	O
+EBU	B-organization
+)	O
+and	O
+host	O
+broadcaster	O
+Turkish	B-organization
+Radio	I-organization
+and	I-organization
+Television	I-organization
+Corporation	I-organization
+(	O
+TRT	B-organization
+)	O
+,	O
+the	O
+contest	O
+was	O
+held	O
+at	O
+the	O
+Abdi	B-location
+İpekçi	I-location
+Arena	I-location
+,	O
+and	O
+(	O
+for	O
+the	O
+first	O
+time	O
+)	O
+consisted	O
+of	O
+a	O
+semi-final	O
+on	O
+12	O
+May	O
+,	O
+and	O
+the	O
+final	O
+on	O
+15	O
+May	O
+2004	O
+.	O
+
+That	O
+year	O
+,	O
+he	O
+produced	O
+Death	O
+Row	O
+labelmate	O
+Snoop	B-musical artist
+Doggy	I-musical artist
+Dogg	I-musical artist
+'	O
+s	O
+quadruple	O
+platinum	O
+debut	O
+Doggystyle	B-album
+,	O
+and	O
+mentored	O
+producers	O
+such	O
+as	O
+his	O
+step-brother	O
+Warren	B-musical artist
+G	I-musical artist
+(	O
+leading	O
+to	O
+the	O
+multi-platinum	O
+debut	O
+Regulate	B-album
+...	I-album
+G	I-album
+Funk	I-album
+Era	I-album
+in	O
+1994	O
+)	O
+and	O
+Snoop	B-musical artist
+Dogg	I-musical artist
+'s	O
+cousin	O
+Daz	B-musical artist
+Dillinger	I-musical artist
+(	O
+leading	O
+to	O
+the	O
+double-platinum	O
+debut	O
+Dogg	B-album
+Food	I-album
+by	O
+Tha	B-band
+Dogg	I-band
+Pound	I-band
+in	O
+1995	O
+)	O
+.	O
+
+The	O
+album	O
+features	O
+covers	O
+of	O
+songs	O
+originally	O
+performed	O
+by	O
+The	B-band
+Who	I-band
+,	O
+Liz	B-musical artist
+Phair	I-musical artist
+,	O
+Creedence	B-band
+Clearwater	I-band
+Revival	I-band
+,	O
+Ryan	B-musical artist
+Adams	I-musical artist
+,	O
+I	B-band
+Blame	I-band
+Coco	I-band
+,	O
+and	O
+Led	B-band
+Zeppelin	I-band
+.	O
+
+Following	O
+two	O
+albums	O
+with	O
+Dio	B-band
+,	O
+Black	B-band
+Sabbath	I-band
+endured	O
+many	O
+personnel	O
+changes	O
+in	O
+the	O
+1980s	O
+and	O
+1990s	O
+that	O
+included	O
+vocalists	O
+Ian	B-musical artist
+Gillan	I-musical artist
+,	O
+Glenn	B-musical artist
+Hughes	I-musical artist
+,	O
+Ray	B-musical artist
+Gillen	I-musical artist
+and	O
+Tony	B-musical artist
+Martin	I-musical artist
+,	O
+as	O
+well	O
+as	O
+several	O
+drummers	O
+and	O
+bassists	O
+.	O
+
+Popular	O
+contemporary	O
+performers	O
+of	O
+Australian	B-music genre
+country	I-music genre
+music	I-music genre
+include	O
+John	B-musical artist
+Williamson	I-musical artist
+(	O
+who	O
+wrote	O
+the	O
+iconic	O
+TRUE	B-song
+Blue	I-song
+)	O
+,	O
+Lee	B-musical artist
+Kernaghan	I-musical artist
+(	O
+whose	O
+hits	O
+include	O
+Boys	B-song
+from	I-song
+the	I-song
+Bush	I-song
+and	O
+The	B-album
+Outback	I-album
+Club	I-album
+)	O
+,	O
+Gina	B-musical artist
+Jeffreys	I-musical artist
+,	O
+Forever	B-band
+Road	I-band
+and	O
+Sara	B-musical artist
+Storer	I-musical artist
+.	O
+
+She	O
+,	O
+and	O
+her	O
+partner	O
+Constanța	B-person
+Burcică	I-person
+took	O
+the	O
+gold	O
+medal	O
+,	O
+at	O
+the	O
+Rowing	O
+at	O
+the	O
+2000	B-event
+Summer	I-event
+Olympics	I-event
+and	O
+2004	B-event
+Olympic	I-event
+Games	I-event
+in	O
+the	O
+women	B-event
+'s	I-event
+lightweight	I-event
+double	I-event
+sculls	I-event
+event	I-event
+.	O
+
+Michael	B-musical artist
+won	O
+numerous	O
+music	O
+awards	O
+throughout	O
+his	O
+30-year	O
+career	O
+,	O
+including	O
+three	O
+Brit	B-award
+Awards	I-award
+-	O
+winning	O
+Best	B-award
+British	I-award
+Male	I-award
+twice	O
+,	O
+four	O
+MTV	B-award
+Video	I-award
+Music	I-award
+Award	I-award
+s	I-award
+,	O
+four	O
+Ivor	B-award
+Novello	I-award
+Awards	I-award
+,	O
+three	O
+American	B-award
+Music	I-award
+Award	I-award
+s	I-award
+(	O
+including	O
+two	O
+in	O
+the	O
+traditionally-black	O
+Soul	O
+/	O
+R	B-music genre
+&	I-music genre
+B	I-music genre
+category	O
+
+Soca	B-music genre
+is	O
+an	O
+offshoot	O
+of	O
+kaiso	B-music genre
+/	O
+Calypso	B-music genre
+music	I-music genre
+,	O
+with	O
+influences	O
+from	O
+Music	B-music genre
+of	I-music genre
+Latin	I-music genre
+America	I-music genre
+,	O
+Cadence	B-music genre
+rampa	I-music genre
+,	O
+funk	B-music genre
+and	O
+Soul	B-music genre
+music	I-music genre
+.	O
+
+Examples	O
+of	O
+this	O
+include	O
+Michael	B-musical artist
+Jackson	I-musical artist
+from	O
+The	B-band
+Jackson	I-band
+5	I-band
+,	O
+Donny	B-musical artist
+Osmond	I-musical artist
+from	O
+The	B-band
+Osmonds	I-band
+,	O
+Ricky	B-musical artist
+Martin	I-musical artist
+from	O
+Menudo	B-band
+,	O
+Justin	B-musical artist
+Timberlake	I-musical artist
+from	O
+*	O
+NSYNC	B-band
+,	O
+and	O
+Ronan	B-musical artist
+Keating	I-musical artist
+from	O
+Boyzone	B-band
+.	O
+
+Imported	O
+styles	O
+of	O
+popular	O
+music	O
+with	O
+a	O
+distinctively	O
+Latin	B-location
+flavor	O
+include	O
+Latin	B-music genre
+jazz	I-music genre
+,	O
+Argentine	O
+and	O
+Uruguayan	O
+rock	B-music genre
+and	O
+Cuban	O
+and	O
+Mexican	O
+hip	B-music genre
+hop	I-music genre
+,	O
+all	O
+influenced	O
+by	O
+styles	O
+from	O
+the	B-country
+United	I-country
+States	I-country
+(	O
+jazz	B-music genre
+,	O
+rock	B-music genre
+and	I-music genre
+roll	I-music genre
+and	O
+hip	B-music genre
+hop	I-music genre
+)	O
+.	O
+
+Bonnie	B-musical artist
+received	O
+two	O
+Grammy	B-award
+Award	I-award
+nominations	O
+-	O
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Female	I-award
+Pop	I-award
+Vocal	I-award
+Performance	I-award
+and	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Female	I-award
+Rock	I-award
+Vocal	I-award
+Performance	I-award
+.	O
+
+With	O
+Parsons	B-musical artist
+and	O
+Woolfson	B-musical artist
+,	O
+the	O
+Project	O
+consisted	O
+of	O
+the	O
+group	O
+Pilot	B-band
+,	O
+with	O
+Ian	B-musical artist
+Bairnson	I-musical artist
+(	O
+guitar	O
+)	O
+,	O
+David	B-musical artist
+Paton	I-musical artist
+(	O
+bass	O
+)	O
+and	O
+Stuart	B-musical artist
+Tosh	I-musical artist
+(	O
+drums	O
+)	O
+.	O
+
+Country	B-music genre
+music	I-music genre
+,	O
+also	O
+known	O
+as	O
+country	B-music genre
+and	O
+western	B-music genre
+(	O
+or	O
+simply	O
+country	B-music genre
+)	O
+,	O
+and	O
+hillbilly	B-music genre
+music	I-music genre
+,	O
+is	O
+a	O
+genre	O
+of	O
+popular	B-music genre
+music	I-music genre
+that	O
+takes	O
+its	O
+roots	O
+from	O
+genres	O
+such	O
+as	O
+blues	B-music genre
+and	O
+old-time	B-music genre
+music	I-music genre
+,	O
+and	O
+various	O
+types	O
+of	O
+American	B-music genre
+folk	I-music genre
+music	I-music genre
+including	O
+Appalachian	B-music genre
+music	I-music genre
+,	O
+Cajun	B-music genre
+music	I-music genre
+,	O
+and	O
+the	O
+cowboy	B-music genre
+Western	I-music genre
+music	I-music genre
+styles	O
+of	O
+Red	B-music genre
+Dirt	I-music genre
+,	O
+New	B-music genre
+Mexico	I-music genre
+music	I-music genre
+,	O
+Texas	B-music genre
+country	I-music genre
+music	I-music genre
+,	O
+and	O
+Tejano	B-music genre
+music	I-music genre
+.	O
+
+The	B-album
+Spectral	I-album
+Sorrows	I-album
+,	O
+Until	B-album
+Eternity	I-album
+Ends	I-album
+,	O
+and	O
+Purgatory	B-album
+Afterglow	I-album
+continued	O
+the	O
+trend	O
+,	O
+so	O
+that	O
+by	O
+the	O
+release	O
+of	O
+Crimson	B-album
+(	O
+1996	O
+)	O
+,	O
+Edge	B-band
+of	I-band
+Sanity	I-band
+was	O
+a	O
+progressive	B-music genre
+metal	I-music genre
+band	O
+.	O
+
+This	O
+was	O
+followed	O
+by	O
+Our	B-album
+Little	I-album
+Secret	I-album
+(	O
+1997	O
+)	O
+,	O
+Heaven	B-album
+Is	I-album
+an	I-album
+Orgasm	I-album
+(	O
+1998	O
+)	O
+and	O
+Expand	B-album
+Your	I-album
+Head	I-album
+(	O
+1999	O
+)	O
+.	O
+
+The	O
+album	O
+was	O
+certified	O
+gold	O
+by	O
+the	O
+British	B-organization
+Phonographic	I-organization
+Industry	I-organization
+on	O
+1	O
+October	O
+1987	O
+and	O
+also	O
+by	O
+the	O
+Recording	B-organization
+Industry	I-organization
+Association	I-organization
+of	I-organization
+America	I-organization
+on	O
+19	O
+September	O
+1990	O
+.	O
+
+She	O
+has	O
+garnered	O
+ten	O
+Grammy	B-award
+Award	I-award
+s	O
+,	O
+two	O
+Academy	B-award
+Awards	I-award
+nominations	O
+,	O
+ten	O
+Country	B-award
+Music	I-award
+Association	I-award
+Awards	I-award
+,	O
+seven	O
+Academy	B-award
+of	I-award
+Country	I-award
+Music	I-award
+Awards	I-award
+,	O
+three	O
+American	B-award
+Music	I-award
+Awards	I-award
+,	O
+and	O
+is	O
+one	O
+of	O
+only	O
+seven	O
+female	O
+artists	O
+to	O
+win	O
+the	O
+Country	B-award
+Music	I-award
+Association	I-award
+'s	I-award
+Entertainer	I-award
+of	I-award
+the	I-award
+Year	I-award
+Award	I-award
+.	O
+
+On	O
+19	O
+July	O
+2014	O
+,	O
+Il	B-band
+Divo	I-band
+performed	O
+before	O
+a	O
+capacity	O
+crowd	O
+at	O
+Edinburgh	B-location
+Castle	I-location
+esplanade	I-location
+where	O
+a	O
+pop	B-event
+festival	I-event
+took	O
+place	O
+ahead	O
+of	O
+the	O
+2014	B-event
+Commonwealth	I-event
+Games	I-event
+.	O
+
+Bedrock	B-organization
+Records	I-organization
+is	O
+an	O
+English	O
+record	O
+label	O
+for	O
+trance	B-music genre
+,	O
+house	B-music genre
+and	O
+techno	B-music genre
+started	O
+by	O
+Nick	B-musical artist
+Muir	I-musical artist
+and	O
+John	B-musical artist
+Digweed	I-musical artist
+.	O
+
+Gilmour	B-musical artist
+has	O
+supported	O
+charities	O
+including	O
+Oxfam	B-organization
+,	O
+the	O
+European	B-organization
+Union	I-organization
+Mental	I-organization
+Health	I-organization
+and	I-organization
+Illness	I-organization
+Association	I-organization
+,	O
+Greenpeace	B-organization
+,	O
+Amnesty	B-organization
+International	I-organization
+,	O
+
+The	O
+Jawaharlal	B-location
+Nehru	I-location
+Stadium	I-location
+was	O
+constructed	O
+by	O
+the	O
+Government	B-organization
+of	I-organization
+India	I-organization
+to	O
+host	O
+the	O
+athletic	O
+events	O
+and	O
+ceremonies	O
+of	O
+the	O
+1982	B-event
+Asian	I-event
+Games	I-event
+.	O
+
+In	O
+the	O
+1970s	O
+and	O
+1980s	O
+,	O
+tension	O
+and	O
+conflict	O
+emerged	O
+between	O
+Southern	B-music genre
+gospel	I-music genre
+and	O
+the	O
+newer	O
+developments	O
+of	O
+Jesus	B-music genre
+music	I-music genre
+and	O
+Contemporary	B-music genre
+Christian	I-music genre
+music	I-music genre
+.	O
+
+It	O
+was	O
+not	O
+until	O
+1997	O
+and	O
+the	O
+change	O
+to	O
+pop-oriented	O
+groups	O
+such	O
+as	O
+Backstreet	B-band
+Boys	I-band
+,	O
+98	B-band
+Degrees	I-band
+,	O
+NSYNC	B-band
+,	O
+The	B-band
+Moffatts	I-band
+,	O
+and	O
+Hanson	B-band
+that	O
+boy	O
+bands	O
+exploded	O
+commercially	O
+and	O
+dominated	O
+the	O
+market	O
+in	O
+the	O
+United	B-country
+States	I-country
+.	O
+
+However	O
+,	O
+much	O
+of	O
+his	O
+output	O
+,	O
+which	O
+included	O
+A	B-album
+Poke	I-album
+in	I-album
+the	I-album
+Eye	I-album
+...	I-album
+With	I-album
+a	I-album
+Sharp	I-album
+Stick	I-album
+!	I-album
+,	O
+Praise	B-album
+the	I-album
+Lard	I-album
+,	O
+A	B-album
+Stroll	I-album
+in	I-album
+the	I-album
+Pork	I-album
+and	O
+The	B-album
+Swining	I-album
+,	O
+was	O
+scattered	O
+across	O
+numerous	O
+labels	O
+around	O
+the	O
+world	O
+and	O
+often	O
+proved	O
+difficult	O
+to	O
+find	O
+.	O
+
+Fellow	O
+blues	B-music genre
+artist	O
+B.B.	B-musical artist
+King	I-musical artist
+credited	O
+Jefferson	B-musical artist
+as	O
+one	O
+of	O
+his	O
+biggest	O
+musical	O
+influences	O
+,	O
+next	O
+to	O
+Lonnie	B-musical artist
+Johnson	I-musical artist
+,	O
+Louis	B-musical artist
+Jordan	I-musical artist
+and	O
+T-Bone	B-musical artist
+Walker	I-musical artist
+.	O
+
+The	O
+Family	B-event
+Values	I-event
+Tour	I-event
+was	O
+created	O
+by	O
+the	O
+American	O
+nu	B-music genre
+metal	I-music genre
+band	O
+Korn	B-band
+in	O
+1998	O
+to	O
+be	O
+an	O
+annual	O
+Rock	B-music genre
+music	I-music genre
+and	O
+Hip	B-music genre
+hop	I-music genre
+music	I-music genre
+tour	O
+.	O
+
+Autechre	B-band
+released	O
+three	O
+records	O
+in	O
+1997	O
+:	O
+the	O
+full	O
+length	O
+Chiastic	B-album
+Slide	I-album
+,	O
+and	O
+the	O
+EPs	O
+Envane	B-album
+,	O
+and	O
+Cichlisuite	B-album
+(	O
+pronounced	O
+sickly	O
+sweet	O
+)	O
+.	O
+
+Three	O
+albums	O
+,	O
+which	O
+again	O
+saw	O
+Moorcock	B-musical artist
+contributing	O
+lyrics	O
+and	O
+vocals	O
+,	O
+were	O
+recorded	O
+for	O
+RCA	B-album
+/	I-album
+Active	I-album
+:	O
+Sonic	B-album
+Attack	I-album
+,	O
+the	O
+electronic	O
+Church	B-album
+of	I-album
+Hawkwind	I-album
+and	O
+Choose	B-album
+Your	I-album
+Masques	I-album
+.	O
+
+He	O
+liked	O
+to	O
+surround	O
+himself	O
+with	O
+jazz	B-music genre
+musicians	O
+such	O
+as	O
+John	B-musical artist
+McLaughlin	I-musical artist
+and	O
+Binky	B-musical artist
+McKenzie	I-musical artist
+and	O
+often	O
+performed	O
+with	O
+a	O
+horn	B-musical instrument
+section	O
+drawn	O
+from	O
+a	O
+pool	O
+that	O
+included	O
+,	O
+among	O
+others	O
+,	O
+saxophone	B-musical instrument
+players	O
+Art	B-musical artist
+Themen	I-musical artist
+,	O
+Mel	B-musical artist
+Collins	I-musical artist
+,	O
+Dick	B-musical artist
+Heckstall-Smith	I-musical artist
+,	O
+Lol	B-musical artist
+Coxhill	I-musical artist
+,	O
+Dick	B-musical artist
+Morrissey	I-musical artist
+,	O
+John	B-musical artist
+Surman	I-musical artist
+and	O
+trombonist	O
+Mike	B-musical artist
+Zwerin	I-musical artist
+.	O
+
+Iommi	B-musical artist
+called	O
+vocalist	O
+Dave	B-musical artist
+Walker	I-musical artist
+,	O
+a	O
+longtime	O
+friend	O
+of	O
+the	O
+band	O
+,	O
+who	O
+had	O
+previously	O
+been	O
+a	O
+member	O
+of	O
+Fleetwood	B-band
+Mac	I-band
+and	O
+Savoy	B-band
+Brown	I-band
+,	O
+and	O
+informed	O
+him	O
+that	O
+Osbourne	B-musical artist
+had	O
+left	O
+the	O
+band	O
+.	O
+
+He	O
+is	O
+the	O
+only	O
+person	O
+ever	O
+to	O
+have	O
+won	O
+Academy	B-award
+Awards	I-award
+,	O
+Emmy	B-award
+Award	I-award
+,	O
+and	O
+Tony	B-award
+Award	I-award
+awards	O
+in	O
+the	O
+same	O
+year	O
+(	O
+1973	O
+)	O
+.	O
+
+Since	O
+2001	O
+,	O
+the	O
+dominance	O
+of	O
+traditional	O
+boy	O
+bands	O
+on	O
+pop	B-music genre
+charts	O
+began	O
+to	O
+fade	O
+in	O
+the	O
+western	O
+hemisphere	O
+,	O
+although	O
+Gil	B-musical artist
+Kaufman	I-musical artist
+of	O
+MTV	O
+has	O
+described	O
+new	O
+boy	O
+bands	O
+that	O
+are	O
+more	O
+likely	O
+to	O
+resemble	O
+My	B-band
+Chemical	I-band
+Romance	I-band
+,	O
+Sum	B-band
+41	I-band
+,	O
+and	O
+Simple	B-band
+Plan	I-band
+.	O
+
+Western	B-music genre
+music	I-music genre
+,	O
+influenced	O
+by	O
+the	O
+cowboy	B-music genre
+ballads	I-music genre
+,	O
+New	B-music genre
+Mexico	I-music genre
+music	I-music genre
+,	O
+Texas	B-music genre
+country	I-music genre
+music	I-music genre
+and	O
+Tejano	B-music genre
+music	I-music genre
+rhythms	O
+of	O
+the	O
+Southwestern	B-location
+United	I-location
+States	I-location
+and	O
+Northern	B-location
+Mexico	I-location
+,	O
+reached	O
+its	O
+peak	O
+in	O
+popularity	O
+in	O
+the	O
+late	O
+1950s	O
+,	O
+most	O
+notably	O
+with	O
+the	O
+song	O
+El	B-song
+Paso	I-song
+,	O
+first	O
+recorded	O
+by	O
+Marty	B-musical artist
+Robbins	I-musical artist
+in	O
+September	O
+1959	O
+.	O
+
+Schoolly	B-musical artist
+D	I-musical artist
+'s	O
+debut	O
+album	O
+,	O
+Schoolly	B-album
+D	I-album
+,	O
+and	O
+especially	O
+the	O
+song	O
+P.S.K.	B-song
+What	I-song
+Does	I-song
+It	I-song
+Mean	I-song
+?	I-song
+,	O
+would	O
+heavily	O
+influence	O
+not	O
+only	O
+Ice-T	B-musical artist
+,	O
+but	O
+also	O
+Eazy-E	B-musical artist
+and	O
+N.W.A	B-band
+(	O
+most	O
+notably	O
+in	O
+the	O
+song	O
+Boyz-n-the-Hood	B-song
+)	O
+as	O
+well	O
+as	O
+the	O
+Beastie	B-band
+Boys	I-band
+on	O
+their	O
+seminal	O
+hardcore	O
+hip	B-music genre
+hop	I-music genre
+inspired	O
+album	O
+Licensed	B-album
+to	I-album
+Ill	I-album
+(	O
+1986	O
+)	O
+.	O
+
+It	O
+features	O
+songs	O
+from	O
+both	O
+The	B-album
+Better	I-album
+Life	I-album
+and	O
+Away	B-album
+from	I-album
+the	I-album
+Sun	I-album
+,	O
+and	O
+even	O
+some	O
+early	O
+sketches	O
+of	O
+It	B-song
+'s	I-song
+Not	I-song
+Me	I-song
+and	O
+Father	B-song
+'s	I-song
+Son	I-song
+,	O
+which	O
+were	O
+both	O
+eventually	O
+released	O
+on	O
+Seventeen	B-album
+Days	I-album
+.	O
+
+On	O
+December	O
+21	O
+,	O
+2013	O
+,	O
+Jones	B-person
+defeated	O
+Zine	B-person
+Eddine	I-person
+Benmakhlouf	I-person
+(	O
+17-3-1	O
+,	O
+8	O
+KOs	O
+)	O
+by	O
+unanimous	O
+decision	O
+for	O
+the	O
+vacant	O
+World	B-organization
+Boxing	I-organization
+Union	I-organization
+cruiserweight	O
+title	O
+at	O
+the	O
+Krylatskoye	B-location
+Sports	I-location
+Palace	I-location
+in	O
+Moscow	B-location
+,	O
+Russia	B-country
+.	O
+
+He	O
+later	O
+also	O
+became	O
+an	O
+ambassador	O
+for	O
+the	O
+2010	B-event
+Shanghai	I-event
+Expo	I-event
+and	O
+the	O
+2010	B-event
+Asian	I-event
+Games	I-event
+.	O
+
+In	O
+2014	O
+,	O
+he	O
+performed	O
+in	O
+the	O
+opening	O
+ceremony	O
+of	O
+the	O
+2014	B-event
+Commonwealth	I-event
+Games	I-event
+in	O
+Glasgow	B-location
+,	O
+Scotland	B-country
+.	O
+
+He	O
+won	O
+seven	O
+Grammy	B-award
+Award	I-award
+s	O
+,	O
+seven	O
+Brit	B-award
+Awards	I-award
+,	O
+six	O
+American	B-award
+Music	I-award
+Awards	I-award
+,	O
+four	O
+MTV	B-award
+Video	I-award
+Music	I-award
+Award	I-award
+s	O
+,	O
+an	O
+Academy	B-award
+Award	I-award
+,	O
+and	O
+a	O
+Golden	B-award
+Globe	I-award
+Award	I-award
+.	O
+
+!	O
+--as	O
+per	O
+MOS	O
+:	O
+BIO	O
+;	O
+became	O
+notable	O
+as	O
+Welsh	O
+,	O
+and	O
+self	O
+identifies	O
+as	O
+Welsh	O
+;	O
+2012	B-event
+Guardian	I-event
+interview	I-event
+;	O
+I	O
+suppose	O
+it	O
+'s	O
+because	O
+we	O
+are	O
+both	O
+Welsh	O
+--	O
+He	O
+won	O
+the	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Actor	I-award
+in	O
+1992	O
+and	O
+has	O
+also	O
+received	O
+three	O
+British	B-award
+Academy	I-award
+Film	I-award
+Awards	I-award
+s	O
+,	O
+two	O
+Emmy	B-award
+Award	I-award
+and	O
+the	O
+Golden	B-award
+Globe	I-award
+Cecil	I-award
+B.	I-award
+DeMille	I-award
+Award	I-award
+.	O
+
+Brooks	B-musical artist
+is	O
+one	O
+of	O
+the	O
+few	O
+people	O
+who	O
+have	O
+received	O
+an	O
+Academy	B-award
+Awards	I-award
+,	O
+an	O
+Emmy	B-award
+Award	I-award
+,	O
+a	O
+Tony	B-award
+Award	I-award
+,	O
+and	O
+a	O
+Grammy	B-award
+Award	I-award
+.	O
+
+The	O
+game	O
+features	O
+the	O
+full	O
+albums	O
+of	O
+Dookie	B-album
+,	O
+American	B-album
+Idiot	I-album
+,	O
+and	O
+21st	B-album
+Century	I-album
+Breakdown	I-album
+as	O
+well	O
+as	O
+select	O
+songs	O
+from	O
+the	O
+rest	O
+of	O
+Green	B-band
+Day	I-band
+'s	O
+discography	O
+.	O
+
+Country	B-music genre
+influences	O
+combined	O
+with	O
+Punk	B-music genre
+rock	I-music genre
+and	O
+alternative	B-music genre
+rock	I-music genre
+to	O
+forge	O
+the	O
+cowpunk	B-music genre
+scene	O
+in	O
+Southern	B-location
+California	I-location
+during	O
+the	O
+1980s	O
+,	O
+which	O
+included	O
+bands	O
+such	O
+as	O
+The	B-band
+Long	I-band
+Ryders	I-band
+,	O
+Lone	B-band
+Justice	I-band
+and	O
+The	B-band
+Beat	I-band
+Farmers	I-band
+,	O
+as	O
+well	O
+as	O
+the	O
+established	O
+punk	B-music genre
+group	O
+X	B-band
+,	O
+whose	O
+music	O
+had	O
+begun	O
+to	O
+include	O
+country	B-music genre
+and	O
+rockabilly	B-music genre
+influences	O
+.	O
+
+Released	O
+on	O
+March	O
+8	O
+,	O
+1994	O
+,	O
+Superunknown	B-album
+became	O
+the	O
+band	O
+'s	O
+breakthrough	O
+album	O
+,	O
+driven	O
+by	O
+the	O
+singles	O
+Spoonman	B-song
+,	O
+The	B-song
+Day	I-song
+I	I-song
+Tried	I-song
+to	I-song
+Live	I-song
+,	O
+Black	B-song
+Hole	I-song
+Sun	I-song
+,	O
+My	B-song
+Wave	I-song
+,	O
+and	O
+Fell	B-song
+on	I-song
+Black	I-song
+Days	I-song
+;	O
+Superunknown	B-album
+debuted	O
+at	O
+number	O
+one	O
+on	O
+the	O
+Billboard	O
+200	O
+album	O
+chart	O
+.	O
+
+In	O
+April	O
+2005	O
+,	O
+members	O
+of	O
+the	O
+band	O
+visited	O
+Israel	B-country
+and	O
+the	O
+Palestinian	B-location
+territories	I-location
+with	O
+the	O
+UK	B-country
+charity	O
+War	B-organization
+on	I-organization
+Want	I-organization
+;	O
+
+In	O
+the	O
+mid-	O
+and	O
+late	O
+1990s	O
+came	O
+a	O
+new	O
+wave	O
+of	O
+U.S.	B-country
+metal	B-music genre
+groups	O
+inspired	O
+by	O
+the	O
+alternative	O
+metal	B-music genre
+bands	O
+and	O
+their	O
+mix	O
+of	O
+genres.Christe	O
+(	O
+2003	O
+)	O
+,	O
+pp.	O
+324-25	O
+Dubbed	O
+nu	B-music genre
+metal	I-music genre
+,	O
+bands	O
+such	O
+as	O
+Slipknot	B-band
+,	O
+Linkin	B-band
+Park	I-band
+,	O
+Limp	B-band
+Bizkit	I-band
+,	O
+Papa	B-band
+Roach	I-band
+,	O
+P.O.D.	B-band
+,	O
+Korn	B-band
+and	O
+Disturbed	B-band
+incorporated	O
+elements	O
+ranging	O
+from	O
+death	B-music genre
+metal	I-music genre
+to	O
+hip	B-music genre
+hop	I-music genre
+,	O
+often	O
+including	O
+DJ	O
+s	O
+and	O
+rap	B-music genre
+-style	O
+vocals	O
+.	O
+
+In	O
+1974	O
+he	O
+returned	O
+to	O
+the	O
+No.	O
+1	O
+spot	O
+on	O
+the	O
+R	B-music genre
+&	I-music genre
+B	I-music genre
+charts	O
+with	O
+The	B-album
+Payback	I-album
+,	O
+with	O
+the	O
+The	B-album
+Payback	I-album
+reaching	O
+the	O
+same	O
+spot	O
+on	O
+the	O
+album	O
+charts	O
+;	O
+he	O
+would	O
+reach	O
+No.	O
+1	O
+two	O
+more	O
+times	O
+in	O
+1974	O
+,	O
+with	O
+My	B-song
+Thang	I-song
+and	O
+Papa	B-song
+Don	I-song
+'t	I-song
+Take	I-song
+No	I-song
+Mess	I-song
+.	O
+
+This	O
+was	O
+followed	O
+by	O
+the	O
+multi-million	O
+selling	O
+albums	O
+Shepherd	B-album
+Moons	I-album
+(	O
+1991	O
+)	O
+,	O
+The	B-album
+Memory	I-album
+of	I-album
+Trees	I-album
+(	O
+1995	O
+)	O
+and	O
+A	B-album
+Day	I-album
+Without	I-album
+Rain	I-album
+(	O
+2000	O
+)	O
+.	O
+
+Their	O
+first	O
+three	O
+black	O
+metal	O
+albums	O
+-	O
+A	B-album
+Blaze	I-album
+in	I-album
+the	I-album
+Northern	I-album
+Sky	I-album
+(	O
+1992	O
+)	O
+,	O
+Under	B-album
+a	I-album
+Funeral	I-album
+Moon	I-album
+(	O
+1993	O
+)	O
+and	O
+Transilvanian	B-album
+Hunger	I-album
+(	O
+1994	O
+)	O
+-	O
+are	O
+sometimes	O
+dubbed	O
+the	O
+Unholy	O
+Trinity	O
+.	O
+
+This	O
+was	O
+followed	O
+by	O
+performances	O
+at	O
+the	O
+Teatro	B-location
+Valli	I-location
+in	O
+Reggio	B-location
+Emilia	I-location
+,	O
+Italy	B-country
+;	O
+the	O
+Barbican	B-location
+Centre	I-location
+,	O
+London	B-location
+;	O
+the	O
+Sony	B-location
+Centre	I-location
+for	I-location
+the	I-location
+Performing	I-location
+Arts	I-location
+,	O
+Toronto	B-location
+;	O
+the	O
+Brooklyn	B-location
+Academy	I-location
+of	I-location
+Music	I-location
+Brooklyn	B-location
+,	O
+New	B-location
+York	I-location
+;	O
+Zellerbach	B-location
+Hall	I-location
+at	O
+the	O
+University	B-location
+of	I-location
+California	I-location
+,	O
+Berkeley	B-location
+,	O
+California	B-location
+;	O
+the	O
+Teatro	B-location
+del	I-location
+Palacio	I-location
+de	I-location
+Bellas	I-location
+Artes	I-location
+,	O
+Mexico	B-location
+City	I-location
+:	O
+in	O
+2013	O
+,	O
+at	O
+Het	B-location
+Muziektheater	I-location
+/	O
+De	B-location
+Nederlandse	I-location
+Opera	I-location
+,	O
+Amsterdam	B-location
+;	O
+
+Comprising	O
+25	O
+albums	O
+,	O
+the	O
+series	O
+includes	O
+music	O
+from	O
+regions	O
+that	O
+span	O
+the	O
+globe	O
+,	O
+including	O
+the	O
+Sudan	B-country
+,	O
+Nigeria	B-country
+,	O
+Tibet	B-location
+,	O
+Indonesia	B-country
+,	O
+Latvia	B-country
+,	O
+and	O
+Brazil	B-country
+.	O
+
+Phillips	B-musical artist
+was	O
+signed	O
+as	O
+a	O
+solo	O
+artist	O
+with	O
+Myrrh	B-organization
+Records	I-organization
+under	O
+her	O
+given	O
+name	O
+and	O
+recorded	O
+four	O
+Christian	O
+pop	O
+albums	O
+:	O
+Beyond	B-album
+Saturday	I-album
+Night	I-album
+,	O
+Dancing	B-album
+with	I-album
+Danger	I-album
+,	O
+Black	B-album
+and	I-album
+White	I-album
+in	I-album
+a	I-album
+Grey	I-album
+World	I-album
+and	O
+,	O
+The	B-album
+Turning	I-album
+.	O
+
+During	O
+this	O
+period	O
+he	O
+designed	O
+album	O
+sleeves	O
+and	O
+additional	O
+material	O
+for	O
+such	O
+acts	O
+as	O
+the	O
+Sutherland	B-band
+Brothers	I-band
+,	O
+Kevin	B-musical artist
+Coyne	I-musical artist
+,	O
+Edgar	B-band
+Broughton	I-band
+Band	I-band
+,	O
+Chilli	B-band
+Willi	I-band
+and	I-band
+the	I-band
+Red	I-band
+Hot	I-band
+Peppers	I-band
+,	O
+Quiver	B-band
+,	O
+the	B-band
+Kursaal	I-band
+Flyers	I-band
+and	O
+Michael	B-band
+Moorcock	I-band
+and	I-band
+the	I-band
+Deep	I-band
+Fix	I-band
+.	O
+
+Cobain	B-musical artist
+was	O
+also	O
+a	O
+fan	O
+of	O
+protopunk	B-music genre
+acts	O
+like	O
+the	B-band
+Stooges	I-band
+,	O
+whose	O
+1973	O
+album	O
+Raw	B-album
+Power	I-album
+he	O
+listed	O
+as	O
+his	O
+favorite	O
+of	O
+all	O
+time	O
+in	O
+his	O
+journals	O
+,	O
+and	O
+The	B-band
+Velvet	I-band
+Underground	I-band
+,	O
+whose	O
+1968	O
+song	O
+Here	B-song
+She	I-song
+Comes	I-song
+Now	I-song
+the	O
+band	O
+covered	O
+both	O
+live	O
+and	O
+in	O
+the	O
+studio	O
+.	O
+
+Notable	O
+examples	O
+are	O
+Judas	B-band
+Priest	I-band
+'	O
+s	O
+Unleashed	B-album
+in	I-album
+the	I-album
+East	I-album
+,	O
+Deep	B-band
+Purple	I-band
+'	O
+s	O
+Made	B-album
+in	I-album
+Japan	I-album
+,	O
+Iron	B-band
+Maiden	I-band
+'	O
+s	O
+Maiden	B-album
+Japan	I-album
+,	O
+Michael	B-band
+Schenker	I-band
+Group	I-band
+'	O
+s	O
+One	B-album
+Night	I-album
+at	I-album
+Budokan	I-album
+and	O
+Dream	B-band
+Theater	I-band
+'	O
+s	O
+Live	B-album
+at	I-album
+Budokan	I-album
+.	O
+
+He	O
+received	O
+the	O
+Grammy	B-award
+Award	I-award
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Album	I-award
+of	I-award
+the	I-award
+Year	I-award
+in	O
+1987	O
+and	O
+also	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Record	I-award
+of	I-award
+the	I-award
+Year	I-award
+for	O
+the	O
+title	O
+track	O
+one	O
+year	O
+later	O
+.	O
+
+Larner	B-musical artist
+had	O
+previously	O
+played	O
+koto	B-musical instrument
+with	O
+John	B-musical artist
+Fahey	I-musical artist
+,	O
+Jim	B-musical artist
+O	I-musical artist
+'Rourke	I-musical artist
+,	O
+and	O
+members	O
+of	O
+indie	O
+rock	B-music genre
+groups	O
+including	O
+Camper	B-band
+Van	I-band
+Beethoven	I-band
+,	O
+Deerhoof	B-band
+,	O
+Jackie	B-band
+O	I-band
+Motherfucker	I-band
+,	O
+and	O
+Mr.	B-band
+Bungle	I-band
+.	O
+
+Their	O
+musical	O
+style	O
+is	O
+eclectic	B-music genre
+,	O
+covering	O
+styles	O
+such	O
+as	O
+Hip	B-music genre
+hop	I-music genre
+music	I-music genre
+,	O
+Rock	B-music genre
+music	I-music genre
+,	O
+blues	B-music genre
+,	O
+jazz	B-music genre
+,	O
+R	B-music genre
+&	I-music genre
+amp	I-music genre
+;	I-music genre
+B	I-music genre
+,	O
+Punk	B-music genre
+rock	I-music genre
+,	O
+and	O
+funk	B-music genre
+.	O
+
+Beginning	O
+after	O
+World	B-event
+War	I-event
+I	I-event
+through	O
+the	O
+1970s	O
+,	O
+corps	O
+and	O
+competitions	O
+were	O
+often	O
+sponsored	O
+by	O
+the	O
+Veterans	B-organization
+of	I-organization
+Foreign	I-organization
+Wars	I-organization
+,	O
+Scout	B-organization
+troop	I-organization
+s	O
+,	O
+churches	O
+,	O
+the	O
+Royal	B-organization
+Canadian	I-organization
+Legion	I-organization
+,	O
+and	O
+the	O
+American	B-organization
+Legion	I-organization
+.	O
+
+A	O
+number	O
+of	O
+musicians	O
+from	O
+a	O
+variety	O
+of	O
+genres	O
+have	O
+joined	O
+Guthrie	B-musical artist
+onstage	O
+,	O
+including	O
+Pete	B-musical artist
+Seeger	I-musical artist
+,	O
+David	B-musical artist
+Bromberg	I-musical artist
+,	O
+Cyril	B-musical artist
+Neville	I-musical artist
+,	O
+Emmylou	B-musical artist
+Harris	I-musical artist
+,	O
+Willie	B-musical artist
+Nelson	I-musical artist
+,	O
+Judy	B-musical artist
+Collins	I-musical artist
+,	O
+John	B-musical artist
+Prine	I-musical artist
+,	O
+Wesley	B-musical artist
+Gray	I-musical artist
+,	O
+Josh	B-musical artist
+Ritter	I-musical artist
+,	O
+and	O
+others	O
+.	O
+
+Wills	B-musical artist
+favored	O
+jazz-like	O
+arrangements	O
+and	O
+the	O
+band	O
+found	O
+national	O
+popularity	O
+into	O
+the	O
+1940s	O
+with	O
+such	O
+hits	O
+as	O
+Steel	B-song
+Guitar	I-song
+Rag	I-song
+,	O
+New	B-song
+San	I-song
+Antonio	I-song
+Rose	I-song
+,	O
+Smoke	B-song
+On	I-song
+The	I-song
+Water	I-song
+,	O
+Stars	B-song
+And	I-song
+Stripes	I-song
+On	I-song
+Iwo	I-song
+Jima	I-song
+,	O
+and	O
+New	B-song
+Spanish	I-song
+Two	I-song
+Step	I-song
+.	O
+
+Flush	O
+with	O
+artistic	O
+freedom	O
+,	O
+'	O
+N	B-band
+Sync	I-band
+heads	O
+straight	O
+for	O
+the	O
+past	O
+:	O
+specifically	O
+the	O
+1980s	O
+Rhythm	B-music genre
+and	I-music genre
+blues	I-music genre
+that	O
+sought	O
+to	O
+balance	O
+pretty	O
+melody	O
+atop	O
+Hip	B-music genre
+hop	I-music genre
+music	I-music genre
+'	O
+s	O
+street-level	O
+beat	O
+.	O
+
+Ivan	B-person
+Mladina	I-person
+(	O
+born	O
+July	O
+20	O
+,	O
+1980	O
+in	O
+Split	B-location
+)	O
+is	O
+a	O
+freestyle	O
+swimmer	O
+from	O
+Croatia	B-country
+,	O
+who	O
+made	O
+his	O
+Olympic	O
+debut	O
+for	O
+his	O
+native	O
+country	O
+at	O
+the	O
+Swimming	O
+at	O
+the	O
+2000	B-event
+Summer	I-event
+Olympics	I-event
+in	O
+Sydney	B-location
+,	O
+Australia	B-country
+.	O
+
+The	O
+subgenre	O
+was	O
+popularized	O
+by	O
+the	O
+Big	O
+Four	O
+of	O
+Thrash	O
+:	O
+Metallica	B-band
+,	O
+Anthrax	B-band
+,	O
+Megadeth	B-band
+,	O
+and	O
+Slayer	B-band
+.	O
+Walser	B-person
+(	O
+1993	O
+)	O
+,	O
+p.14	O
+Three	O
+German	O
+bands	O
+,	O
+Kreator	B-band
+,	O
+Sodom	B-band
+,	O
+and	O
+Destruction	B-band
+,	O
+played	O
+a	O
+central	O
+role	O
+in	O
+bringing	O
+the	O
+style	O
+to	O
+Europe	B-location
+.	O
+
+Underground	O
+scenes	O
+produced	O
+an	O
+array	O
+of	O
+more	O
+aggressive	O
+styles	O
+:	O
+thrash	B-music genre
+metal	I-music genre
+broke	O
+into	O
+the	O
+mainstream	O
+with	O
+bands	O
+such	O
+as	O
+Metallica	B-band
+,	O
+Slayer	B-band
+,	O
+Megadeth	B-band
+,	O
+and	O
+Anthrax	B-band
+,	O
+while	O
+other	O
+extreme	O
+subgenres	O
+of	O
+heavy	B-music genre
+metal	I-music genre
+such	O
+as	O
+death	B-music genre
+metal	I-music genre
+and	O
+black	B-music genre
+metal	I-music genre
+remain	O
+subcultural	O
+phenomena	O
+.	O
+
+The	O
+success	O
+of	O
+this	O
+performance	O
+lead	O
+to	O
+them	O
+embarking	O
+on	O
+a	O
+string	O
+of	O
+other	O
+live	O
+performances	O
+in	O
+2009	O
+and	O
+2010	O
+,	O
+selling	O
+out	O
+prestigious	O
+venues	O
+,	O
+such	O
+as	O
+the	O
+Queen	B-location
+Elizabeth	I-location
+Hall	I-location
+in	O
+London	B-location
+,	O
+Volksbühne	B-location
+in	O
+Berlin	B-band
+and	O
+La	B-location
+Cigale	I-location
+in	O
+Paris	B-location
+before	O
+they	O
+returned	O
+to	O
+their	O
+homeland	O
+for	O
+their	O
+performance	O
+at	O
+The	B-location
+Norwegian	I-location
+Opera	I-location
+House	I-location
+.	O
+
+The	O
+three	O
+then	O
+made	O
+a	O
+creative	O
+decision	O
+to	O
+change	O
+the	O
+musical	O
+style	O
+of	O
+the	O
+project	O
+from	O
+Hip	B-music genre
+house	I-music genre
+to	O
+Eurodance	B-music genre
+and	O
+Pop	B-music genre
+music	I-music genre
+.	O
+
+Phoenix	B-band
+is	O
+a	O
+member	O
+of	O
+In	B-organization
+Defense	I-organization
+of	I-organization
+Animals	I-organization
+and	O
+People	B-organization
+for	I-organization
+the	I-organization
+Ethical	I-organization
+Treatment	I-organization
+of	I-organization
+Animals	I-organization
+and	O
+has	O
+campaigned	O
+for	O
+both	O
+.	O
+
+Satriani	B-musical artist
+is	O
+credited	O
+on	O
+many	O
+other	O
+albums	O
+,	O
+including	O
+guitar	O
+duties	O
+on	O
+shock	B-music genre
+rock	I-music genre
+er	O
+Alice	B-musical artist
+Cooper	I-musical artist
+'	O
+s	O
+1991	O
+album	O
+Hey	B-album
+Stoopid	I-album
+,	O
+Spinal	B-band
+Tap	I-band
+'	O
+s	O
+1992	O
+album	O
+Break	B-album
+Like	I-album
+the	I-album
+Wind	I-album
+,	O
+Blue	B-band
+Öyster	I-band
+Cult	I-band
+'	O
+s	O
+1988	O
+album	O
+Imaginos	B-album
+,	O
+and	O
+band	O
+members	O
+Stu	B-musical artist
+Hamm	I-musical artist
+and	O
+Gregg	B-musical artist
+Bissonette	I-musical artist
+'	O
+s	O
+solo	O
+albums	O
+.	O
+
+He	O
+has	O
+performed	O
+at	O
+venues	O
+including	O
+Lincoln	B-location
+Center	I-location
+,	O
+Carnegie	B-location
+Hall	I-location
+,	O
+CBGB	B-location
+'	O
+s	O
+and	O
+Madison	B-location
+Square	I-location
+Garden	I-location
+.	O
+
+In	O
+April	O
+2018	O
+,	O
+Roach	B-musical artist
+performed	O
+at	O
+the	O
+2018	B-event
+Commonwealth	I-event
+Games	I-event
+Closing	I-event
+Ceremony	I-event
+on	O
+the	O
+Gold	B-location
+Coast	I-location
+with	O
+Amy	B-musical artist
+Shark	I-musical artist
+.	O
+
+He	O
+was	O
+an	O
+immediate	O
+success	O
+at	O
+the	O
+Charing	B-location
+Cross	I-location
+Music	I-location
+Hall	I-location
+and	O
+the	O
+London	B-location
+Pavilion	I-location
+,	O
+venues	O
+at	O
+which	O
+the	O
+theatrical	O
+paper	O
+The	O
+Era	O
+reported	O
+that	O
+he	O
+had	O
+generated	O
+great	O
+furore	O
+among	O
+his	O
+audiences	O
+with	O
+three	O
+of	O
+his	O
+self-composed	O
+songs	O
+.	O
+
+In	O
+addition	O
+to	O
+Woolfson	B-musical artist
+,	O
+vocalists	O
+Chris	B-musical artist
+Rainbow	I-musical artist
+,	O
+Lenny	B-musical artist
+Zakatek	I-musical artist
+,	O
+John	B-musical artist
+Miles	I-musical artist
+,	O
+David	B-musical artist
+Paton	I-musical artist
+,	O
+and	O
+Colin	B-musical artist
+Blunstone	I-musical artist
+are	O
+regulars	O
+.	O
+
+With	O
+the	O
+continued	O
+success	O
+of	O
+Backstreet	B-band
+Boys	I-band
+and	O
+NSYNC	B-band
+,	O
+American	O
+and	O
+British	O
+groups	O
+like	O
+98	B-band
+Degrees	I-band
+,	O
+Westlife	B-band
+,	O
+O-Town	B-band
+,	O
+A1	B-band
+,	O
+Blue	B-band
+,	O
+and	O
+Busted	B-band
+gained	O
+quick	O
+popularity	O
+both	O
+domestically	O
+and	O
+internationally	O
+.	O
+
+Mostly	O
+well	O
+received	O
+by	O
+critics	O
+,	O
+and	O
+with	O
+a	O
+special	O
+mention	O
+to	O
+Elfman	B-musical artist
+'s	O
+gothic	O
+score	O
+,	O
+the	O
+film	O
+won	O
+an	O
+Academy	B-award
+Awards	I-award
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Production	I-award
+Design	I-award
+,	O
+as	O
+well	O
+as	O
+two	O
+British	B-award
+Academy	I-award
+of	I-award
+Film	I-award
+and	I-award
+Television	I-award
+Arts	I-award
+s	I-award
+for	I-award
+Best	I-award
+Costume	I-award
+Design	I-award
+and	I-award
+Best	I-award
+Production	I-award
+Design	I-award
+.	O
+
+Tim	B-person
+Burton	I-person
+appeared	O
+at	O
+the	O
+2009	B-event
+Comic-Con	I-event
+in	O
+San	B-location
+Diego	I-location
+,	O
+California	B-location
+,	O
+to	O
+promote	O
+both	O
+9	O
+and	O
+Alice	O
+in	O
+Wonderland	O
+,	O
+the	O
+latter	O
+won	O
+two	O
+Academy	B-award
+Awards	I-award
+,	O
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Production	I-award
+Design	I-award
+and	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Costume	I-award
+Design	I-award
+.	O
+
+The	O
+first	O
+Paris	O
+music	O
+call	O
+built	O
+specially	O
+for	O
+that	O
+purpose	O
+was	O
+the	O
+Folies-Bergere	B-location
+(	O
+1869	O
+)	O
+;	O
+it	O
+was	O
+followed	O
+by	O
+the	O
+Moulin	B-location
+Rouge	I-location
+(	O
+1889	O
+)	O
+,	O
+the	O
+Alhambra-Maurice	B-location
+Chevalier	I-location
+(	O
+1866	O
+)	O
+,	O
+the	O
+first	O
+to	O
+be	O
+called	O
+a	O
+music	O
+hall	O
+,	O
+and	O
+the	O
+Olympia	B-location
+(	O
+1893	O
+)	O
+.	O
+
+He	O
+was	O
+the	O
+direct	O
+inspiration	O
+for	O
+three	O
+Beatles	B-band
+'	O
+songs	O
+:	O
+Lucy	B-song
+in	I-song
+the	I-song
+Sky	I-song
+with	I-song
+Diamonds	I-song
+(	O
+1967	O
+)	O
+,	O
+Hey	B-song
+Jude	I-song
+(	O
+1968	O
+)	O
+,	O
+and	O
+Good	B-song
+Night	I-song
+(	O
+1968	O
+)	O
+.	O
+
+Notably	O
+,	O
+American	O
+figure	O
+skater	O
+Evan	B-person
+Lysacek	I-person
+used	O
+Scheherazade	B-song
+in	O
+his	O
+free	O
+skate	O
+and	O
+won	O
+the	O
+gold	O
+medal	O
+at	O
+Figure	O
+skating	O
+at	O
+the	O
+2010	B-event
+Winter	I-event
+Olympics	I-event
+in	O
+Vancouver	B-location
+.	O
+
+After	O
+Nas	B-musical artist
+blamed	O
+Southern	B-music genre
+hip	I-music genre
+hop	I-music genre
+as	O
+the	O
+cause	O
+of	O
+the	O
+perceived	O
+artistic	O
+decline	O
+of	O
+the	O
+genre	O
+on	O
+his	O
+2006	O
+single	O
+Hip	B-song
+Hop	I-song
+Is	I-song
+Dead	I-song
+,	O
+from	O
+the	O
+Hip	B-album
+Hop	I-album
+Is	I-album
+Dead	I-album
+,	O
+his	O
+then-	O
+Def	B-organization
+Jam	I-organization
+labelmate	O
+Young	B-musical artist
+Jeezy	I-musical artist
+took	O
+offense	O
+by	O
+claiming	O
+that	O
+Nas	B-musical artist
+had	O
+no	O
+street	O
+credibility	O
+and	O
+vowing	O
+his	O
+album	O
+The	B-album
+Inspiration	I-album
+would	O
+outsell	O
+Hip	B-album
+Hop	I-album
+is	I-album
+Dead	I-album
+,	O
+which	O
+were	O
+released	O
+one	O
+week	O
+apart	O
+from	O
+each	O
+other	O
+in	O
+December	O
+2006	O
+.	O
+
+Schayes	B-person
+played	O
+on	O
+the	O
+US	B-organization
+basketball	I-organization
+team	I-organization
+that	O
+won	O
+a	O
+gold	O
+medal	O
+at	O
+the	O
+1977	B-event
+Maccabiah	I-event
+Games	I-event
+in	O
+Tel	B-location
+Aviv	I-location
+,	O
+Israel	B-country
+;	O
+he	O
+also	O
+played	O
+for	O
+Team	B-organization
+USA	I-organization
+at	O
+the	O
+1981	B-event
+Maccabiah	I-event
+Games	I-event
+,	O
+which	O
+won	O
+a	O
+gold	O
+medal	O
+.	O
+
+Touring	O
+in	O
+support	O
+of	O
+Cross	B-album
+Purposes	I-album
+began	O
+in	O
+February	O
+with	O
+Morbid	B-band
+Angel	I-band
+and	O
+Motörhead	B-band
+in	O
+the	O
+U.S.	B-country
+The	O
+band	O
+filmed	O
+a	O
+live	O
+performance	O
+at	O
+the	O
+Hammersmith	B-location
+Apollo	I-location
+on	O
+13	O
+April	O
+1994	O
+,	O
+which	O
+was	O
+released	O
+on	O
+VHS	O
+accompanied	O
+by	O
+a	O
+CD	O
+,	O
+titled	O
+Cross	B-album
+Purposes	I-album
+Live	I-album
+.	O
+
+Gurney	B-musical artist
+spent	O
+the	O
+last	O
+15	O
+years	O
+of	O
+his	O
+life	O
+in	O
+psychiatric	O
+hospital	O
+s	O
+,	O
+first	O
+for	O
+a	O
+short	O
+period	O
+at	O
+Barnwood	B-location
+House	I-location
+Hospital	I-location
+in	O
+Gloucester	B-location
+,	O
+and	O
+then	O
+at	O
+the	O
+Stone	B-location
+House	I-location
+Hospital	I-location
+,	O
+Dartford	B-location
+,	O
+where	O
+he	O
+was	O
+diagnosed	O
+as	O
+suffering	O
+from	O
+delusional	O
+insanity	O
+(	O
+systematised	O
+)	O
+.	O
+
+McEntire	B-musical artist
+'s	O
+music	O
+has	O
+been	O
+described	O
+to	O
+not	O
+only	O
+be	O
+built	O
+upon	O
+traditional	O
+country	B-music genre
+music	I-music genre
+,	O
+but	O
+also	O
+expand	O
+into	O
+the	O
+genres	O
+of	O
+country	B-music genre
+pop	I-music genre
+,	O
+Pop	B-music genre
+music	I-music genre
+,	O
+Soul	B-music genre
+music	I-music genre
+,	O
+and	O
+R	B-music genre
+&	I-music genre
+B	I-music genre
+.	O
+
+Singer	O
+Marcia	B-musical artist
+Barrett	I-musical artist
+(	O
+from	O
+Jamaica	B-country
+)	O
+joined	O
+the	O
+group	O
+,	O
+who	O
+brought	O
+in	O
+Liz	B-musical artist
+Mitchell	I-musical artist
+,	O
+a	O
+former	O
+member	O
+of	O
+the	O
+Les	B-band
+Humphries	I-band
+Singers	I-band
+and	O
+Boney	B-band
+M.	I-band
+was	O
+finalised	O
+.	O
+
+On	O
+26	O
+March	O
+2006	O
+,	O
+Lee	B-musical artist
+performed	O
+We	B-song
+'re	I-song
+All	I-song
+in	I-song
+This	I-song
+Together	I-song
+from	O
+Awake	B-album
+Is	I-album
+the	I-album
+New	I-album
+Sleep	I-album
+at	O
+the	O
+closing	O
+ceremony	O
+of	O
+the	O
+2006	B-event
+Commonwealth	I-event
+Games	I-event
+.	O
+
+Sangeet	B-organization
+Natak	I-organization
+Akademi	I-organization
+is	O
+the	O
+national	O
+level	O
+academy	O
+for	O
+performing	O
+arts	O
+set	O
+up	O
+by	O
+the	O
+Government	O
+of	O
+India	B-country
+in	O
+1952	O
+,	O
+which	O
+bestows	O
+Sangeet	B-award
+Natak	I-award
+Akademi	I-award
+Award	I-award
+as	O
+the	O
+highest	O
+official	O
+Indian	O
+goernment	O
+'s	O
+recognition	O
+given	O
+to	O
+practicing	O
+artists	O
+,	O
+Sattriya	B-organization
+Centre	I-organization
+,	O
+Kathak	B-organization
+Kendra	I-organization
+(	O
+National	B-organization
+Institute	I-organization
+of	I-organization
+Kathak	I-organization
+Dance	I-organization
+)	O
+at	O
+New	B-location
+Delhi	I-location
+,	O
+Centre	B-organization
+for	I-organization
+Kutiyattam	I-organization
+at	O
+Thiruvananthapuram	B-location
+,	O
+Chhau	B-organization
+Centre	I-organization
+at	O
+Baripada	B-location
+in	O
+Jamshedpur	B-location
+,	O
+and	O
+the	O
+Northeast	B-organization
+Centre	I-organization
+.	O
+
+She	O
+was	O
+at	O
+the	O
+March	B-event
+on	I-event
+Washington	I-event
+and	O
+spoke	O
+and	O
+performed	O
+on	O
+behalf	O
+of	O
+the	O
+NAACP	B-organization
+,	O
+Student	B-organization
+Nonviolent	I-organization
+Coordinating	I-organization
+Committee	I-organization
+,	O
+and	O
+the	O
+National	B-organization
+Council	I-organization
+of	I-organization
+Negro	I-organization
+Women	I-organization
+.	O
+
+Pioneered	O
+by	O
+black-doom	B-music genre
+bands	O
+like	O
+Ophthalamia	B-band
+,	O
+Katatonia	B-band
+,	O
+Bethlehem	B-band
+,	O
+Forgotten	B-band
+Tomb	I-band
+and	O
+Shining	B-band
+,	O
+depressive	B-music genre
+suicidal	I-music genre
+black	I-music genre
+metal	I-music genre
+,	O
+also	O
+known	O
+as	O
+suicidal	B-music genre
+black	I-music genre
+metal	I-music genre
+,	O
+depressive	B-music genre
+black	I-music genre
+metal	I-music genre
+or	O
+DSBM	B-music genre
+,	O
+is	O
+a	O
+style	O
+that	O
+melds	O
+the	O
+second	O
+wave	O
+-style	O
+of	O
+black	B-music genre
+metal	I-music genre
+with	O
+doom	B-music genre
+metal	I-music genre
+,	O
+
+Buckley	B-musical artist
+played	O
+solo	O
+in	O
+the	O
+meantime	O
+with	O
+concerts	O
+at	O
+Sin-é	B-location
+and	O
+a	O
+New	O
+Year	O
+'s	O
+Eve	O
+concert	O
+at	O
+Mercury	B-location
+Lounge	I-location
+in	O
+New	B-location
+York	I-location
+.	O
+
+The	O
+series	O
+Nashville	O
+Star	O
+,	O
+while	O
+not	O
+nearly	O
+as	O
+successful	O
+as	O
+Idol	O
+,	O
+did	O
+manage	O
+to	O
+bring	O
+Miranda	B-musical artist
+Lambert	I-musical artist
+,	O
+Kacey	B-musical artist
+Musgraves	I-musical artist
+and	O
+Chris	B-musical artist
+Young	I-musical artist
+to	O
+mainstream	O
+success	O
+,	O
+also	O
+launching	O
+the	O
+careers	O
+of	O
+lower-profile	O
+musicians	O
+such	O
+as	O
+Buddy	B-musical artist
+Jewell	I-musical artist
+,	O
+Sean	B-musical artist
+Patrick	I-musical artist
+McGraw	I-musical artist
+,	O
+and	O
+Canadian	O
+musician	O
+George	B-musical artist
+Canyon	I-musical artist
+.	O
+
+In	O
+subsequent	O
+years	O
+,	O
+Te	B-musical artist
+Kanawa	I-musical artist
+performed	O
+at	O
+the	O
+Lyric	B-location
+Opera	I-location
+of	I-location
+Chicago	I-location
+,	O
+Paris	B-location
+Opera	I-location
+,	O
+Sydney	B-location
+Opera	I-location
+House	I-location
+,	O
+the	O
+Vienna	B-location
+State	I-location
+Opera	I-location
+,	O
+La	B-location
+Scala	I-location
+,	O
+San	B-location
+Francisco	I-location
+Opera	I-location
+,	O
+Munich	B-location
+and	O
+Cologne	B-location
+,	O
+adding	O
+to	O
+her	O
+repertoire	O
+the	O
+Mozart	B-musical artist
+roles	O
+of	O
+Donna	O
+Elvira	O
+,	O
+Pamina	O
+,	O
+and	O
+Fiordiligi	O
+to	O
+Italian	O
+roles	O
+such	O
+as	O
+Mimi	O
+in	O
+Puccini	B-musical artist
+'	O
+s	O
+La	O
+bohème	O
+.	O
+
+It	O
+was	O
+nominated	O
+for	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Supporting	I-award
+Actor	I-award
+(	O
+Walter	B-person
+Huston	I-person
+)	O
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Director	I-award
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Film	I-award
+Editing	I-award
+for	O
+George	B-person
+Amy	I-person
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+and	O
+Best	B-award
+Writing	I-award
+,	O
+Original	B-award
+Story	I-award
+.	O
+
+The	O
+album	O
+entered	O
+the	O
+UK	O
+Albums	O
+Chart	O
+at	O
+number	O
+one	O
+and	O
+has	O
+been	O
+certified	O
+platinum	O
+by	O
+the	O
+British	B-organization
+Phonographic	I-organization
+Industry	I-organization
+(	O
+BPI	B-organization
+)	O
+and	O
+gold	O
+by	O
+the	O
+Recording	B-organization
+Industry	I-organization
+Association	I-organization
+of	I-organization
+America	I-organization
+(	O
+RIAA	B-organization
+)	O
+.	O
+
+Brooks	B-band
+&	I-band
+amp	I-band
+;	I-band
+Dunn	I-band
+has	O
+17	O
+Country	B-award
+Music	I-award
+Association	I-award
+awards	I-award
+,	O
+26	O
+Academy	B-award
+of	I-award
+Country	I-award
+Music	I-award
+awards	I-award
+and	O
+2	O
+Grammy	B-award
+Award	I-award
+s	O
+.	O
+
+Three	O
+more	O
+albums	O
+followed	O
+:	O
+1985	O
+'s	O
+Little	B-album
+Creatures	I-album
+(	O
+which	O
+featured	O
+the	O
+hit	O
+singles	O
+And	B-song
+She	I-song
+Was	I-song
+and	O
+Road	B-song
+to	I-song
+Nowhere	I-song
+)	O
+,	O
+During	O
+that	O
+time	O
+,	O
+the	O
+group	O
+was	O
+falling	O
+increasingly	O
+under	O
+David	B-musical artist
+Byrne	I-musical artist
+'s	O
+control	O
+and	O
+,	O
+after	O
+Naked	B-album
+,	O
+the	O
+band	O
+went	O
+on	O
+hiatus	O
+.	O
+
+Etta	B-musical artist
+James	I-musical artist
+(	O
+born	O
+Jamesetta	B-musical artist
+Hawkins	I-musical artist
+;	O
+January	O
+25	O
+,	O
+1938	O
+-	O
+January	O
+20	O
+,	O
+2012	O
+)	O
+was	O
+an	O
+American	O
+singer	O
+who	O
+performed	O
+in	O
+various	O
+genres	O
+,	O
+including	O
+blues	B-music genre
+,	O
+Rhythm	B-music genre
+and	I-music genre
+blues	I-music genre
+,	O
+Soul	B-music genre
+music	I-music genre
+,	O
+rock	B-music genre
+and	I-music genre
+roll	I-music genre
+,	O
+jazz	B-music genre
+and	O
+Gospel	B-music genre
+music	I-music genre
+.	O
+
+During	O
+his	O
+early	O
+childhood	O
+,	O
+Holley	B-musical artist
+was	O
+influenced	O
+by	O
+the	O
+music	O
+of	O
+Hank	B-musical artist
+Williams	I-musical artist
+,	O
+Jimmie	B-musical artist
+Rodgers	I-musical artist
+,	O
+Hank	B-musical artist
+Snow	I-musical artist
+,	O
+Bob	B-musical artist
+Wills	I-musical artist
+,	O
+and	O
+the	O
+Carter	B-band
+Family	I-band
+.	O
+
+He	O
+popularized	O
+what	O
+he	O
+called	O
+Cosmic	B-music genre
+American	I-music genre
+Music	I-music genre
+,	O
+a	O
+hybrid	O
+of	O
+country	B-music genre
+,	O
+rhythm	B-music genre
+and	I-music genre
+blues	I-music genre
+,	O
+Soul	B-music genre
+music	I-music genre
+,	O
+Folk	B-music genre
+music	I-music genre
+,	O
+and	O
+Rock	B-music genre
+music	I-music genre
+.	O
+
+Pinnick	B-musical artist
+recorded	O
+two	O
+solo	O
+albums	O
+under	O
+the	O
+name	O
+of	O
+Poundhound	B-musical artist
+,	O
+Massive	B-album
+Grooves	I-album
+from	I-album
+the	I-album
+Electric	I-album
+Church	I-album
+of	I-album
+Psychofunkadelic	I-album
+Grungelism	I-album
+Rock	I-album
+Music	I-album
+(	O
+1997	O
+)	O
+and	O
+Pineappleskunk	B-album
+(	O
+2001	O
+)	O
+,	O
+while	O
+his	O
+subsequent	O
+releases	O
+Emotional	B-album
+Animal	I-album
+(	O
+2005	O
+)	O
+,	O
+Strum	B-album
+Sum	I-album
+Up	I-album
+(	O
+2007	O
+)	O
+and	O
+Naked	B-album
+(	O
+2013	O
+)	O
+were	O
+credited	O
+as	O
+dUg	B-musical artist
+Pinnick	I-musical artist
+.	O
+
+The	O
+show	O
+began	O
+at	O
+Melbourne	B-location
+'s	O
+Rod	B-location
+Laver	I-location
+Arena	I-location
+and	O
+proceeded	O
+to	O
+Sydney	B-location
+Entertainment	I-location
+Centre	I-location
+,	O
+Brisbane	B-location
+Entertainment	I-location
+Centre	I-location
+,	O
+the	O
+Adelaide	B-location
+Entertainment	I-location
+Centre	I-location
+,	O
+and	O
+the	O
+Perth	B-location
+Arena	I-location
+.	O
+
+Stock	B-band
+Aitken	I-band
+Waterman	I-band
+(	O
+SAW	B-band
+)	O
+expensively-produced	O
+productions	O
+for	O
+Mel	B-band
+and	I-band
+Kim	I-band
+,	O
+including	O
+the	O
+number-one	O
+hit	O
+Respectable	B-song
+,	O
+added	O
+elements	O
+of	O
+house	B-music genre
+to	O
+their	O
+previous	O
+Europop	B-music genre
+sound	O
+.	O
+
+He	O
+owned	O
+trophies	O
+for	O
+Male	B-award
+Vocalist	I-award
+of	I-award
+the	I-award
+Year	I-award
+from	O
+both	O
+the	O
+Country	B-organization
+Music	I-organization
+Association	I-organization
+(	O
+CMA	B-organization
+)	O
+and	O
+the	O
+Academy	B-organization
+of	I-organization
+Country	I-organization
+Music	I-organization
+(	O
+ACM	B-organization
+)	O
+,	O
+and	O
+took	O
+the	O
+CMA	B-organization
+'s	O
+top	O
+award	O
+as	O
+1968	O
+Entertainer	B-award
+of	I-award
+the	I-award
+Year	I-award
+.	O
+
+They	O
+take	O
+as	O
+an	O
+example	O
+Sabbath	B-musical artist
+'s	O
+second	O
+album	O
+Paranoid	B-album
+(	O
+1970	O
+)	O
+,	O
+which	O
+included	O
+songs	O
+dealing	O
+with	O
+personal	O
+trauma	O
+-	O
+'	O
+Paranoid	B-song
+'	O
+and	O
+'	O
+Fairies	B-song
+Wear	I-song
+Boots	I-song
+'	O
+(	O
+which	O
+described	O
+the	O
+unsavoury	O
+side	O
+effects	O
+of	O
+drug-taking	O
+)	O
+-	O
+as	O
+well	O
+as	O
+those	O
+confronting	O
+wider	O
+issues	O
+,	O
+such	O
+as	O
+the	O
+self-explanatory	O
+'	O
+War	B-song
+Pigs	I-song
+'	O
+and	O
+'	O
+Hand	B-song
+of	I-song
+Doom	I-song
+'	O
+.	O
+
+The	O
+album	O
+downplayed	O
+the	O
+disco	B-music genre
+style	O
+and	O
+was	O
+inspired	O
+by	O
+1980s	O
+artists	O
+such	O
+as	O
+Scritti	B-band
+Politti	I-band
+,	O
+The	B-band
+Human	I-band
+League	I-band
+,	O
+Adam	B-band
+and	I-band
+the	I-band
+Ants	I-band
+and	O
+Prince	B-band
+,	O
+blending	O
+their	O
+styles	O
+with	O
+elements	O
+of	O
+hip	B-music genre
+hop	I-music genre
+.	O
+
+Jimmie	B-musical artist
+Rodgers	I-musical artist
+,	O
+Moon	B-musical artist
+Mullican	I-musical artist
+,	O
+Bob	B-musical artist
+Wills	I-musical artist
+,	O
+Bill	B-musical artist
+Monroe	I-musical artist
+and	O
+Hank	B-musical artist
+Williams	I-musical artist
+have	O
+all	O
+described	O
+themselves	O
+as	O
+blues	B-music genre
+singers	O
+and	O
+their	O
+music	O
+has	O
+a	O
+blues	O
+feel	O
+that	O
+is	O
+different	O
+,	O
+at	O
+first	O
+glance	O
+at	O
+least	O
+,	O
+from	O
+the	O
+later	O
+country	B-music genre
+pop	I-music genre
+of	O
+artists	O
+like	O
+Eddy	B-musical artist
+Arnold	I-musical artist
+.	O
+
+Some	O
+famous	O
+uses	O
+of	O
+the	O
+talkbox	O
+include	O
+Bon	B-band
+Jovi	I-band
+'	O
+s	O
+Livin	B-song
+'	I-song
+on	I-song
+a	I-song
+Prayer	I-song
+,	O
+Songs	B-album
+in	I-album
+the	I-album
+Key	I-album
+of	I-album
+Life	I-album
+'	O
+s	O
+Black	B-song
+Man	I-song
+,	O
+Mötley	B-band
+Crüe	I-band
+'	O
+s	O
+Kickstart	B-song
+My	I-song
+Heart	I-song
+,	O
+Joe	B-musical artist
+Walsh	I-musical artist
+'	O
+s	O
+Rocky	B-song
+Mountain	I-song
+Way	I-song
+,	O
+Alice	B-band
+in	I-band
+Chains	I-band
+'	O
+s	O
+Man	B-song
+in	I-song
+the	I-song
+box	I-song
+and	O
+Peter	B-musical artist
+Frampton	I-musical artist
+'	O
+s	O
+Show	B-song
+Me	I-song
+the	I-song
+Way	I-song
+.	O
+
+In	O
+1973	O
+,	O
+he	O
+and	O
+Peter	B-musical artist
+Thorup	I-musical artist
+formed	O
+another	O
+group	O
+,	O
+Snape	B-band
+,	O
+with	O
+Boz	B-musical artist
+Burrell	I-musical artist
+,	O
+Mel	B-musical artist
+Collins	I-musical artist
+,	O
+and	O
+Ian	B-musical artist
+Wallace	I-musical artist
+,	O
+who	O
+were	O
+previously	O
+together	O
+in	O
+King	B-band
+Crimson	I-band
+.	O
+
+After	O
+releasing	O
+four	O
+albums	O
+,	O
+Crowded	B-album
+House	I-album
+,	O
+Temple	B-album
+of	I-album
+Low	I-album
+Men	I-album
+,	O
+Woodface	B-album
+,	O
+and	O
+Together	B-album
+Alone	I-album
+,	O
+the	O
+group	O
+broke	O
+up	O
+in	O
+1996	O
+,	O
+and	O
+followed	O
+this	O
+action	O
+by	O
+releasing	O
+a	O
+greatest	O
+hits	O
+album	O
+Recurring	B-album
+Dream	I-album
+.	O
+
+It	O
+won	O
+Gabriel	B-musical artist
+a	O
+Grammy	B-award
+Award	I-award
+for	O
+Grammy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+New	I-award
+Age	I-award
+Album	I-award
+and	O
+a	O
+nomination	O
+for	O
+a	O
+Golden	B-award
+Globe	I-award
+for	O
+Golden	B-award
+Globe	I-award
+Award	I-award
+for	I-award
+Best	I-award
+Original	I-award
+Score	I-award
+.	O
+
+During	O
+the	O
+20th	O
+century	O
+,	O
+many	O
+styles	O
+were	O
+influenced	O
+by	O
+the	O
+music	O
+of	O
+the	B-country
+United	I-country
+States	I-country
+giving	O
+rise	O
+to	O
+genres	O
+such	O
+as	O
+Latin	B-music genre
+pop	I-music genre
+,	O
+Latin	B-music genre
+rock	I-music genre
+,	O
+Latin	B-music genre
+jazz	I-music genre
+,	O
+hip	B-music genre
+hop	I-music genre
+,	O
+and	O
+reggaeton	B-music genre
+.	O
+
+In	O
+addition	O
+to	O
+Underwood	B-musical artist
+,	O
+American	O
+Idol	O
+launched	O
+the	O
+careers	O
+of	O
+Kellie	B-musical artist
+Pickler	I-musical artist
+,	O
+Josh	B-musical artist
+Gracin	I-musical artist
+,	O
+Bucky	B-musical artist
+Covington	I-musical artist
+,	O
+Kristy	B-musical artist
+Lee	I-musical artist
+Cook	I-musical artist
+,	O
+Danny	B-musical artist
+Gokey	I-musical artist
+,	O
+Lauren	B-musical artist
+Alaina	I-musical artist
+and	O
+Scotty	B-musical artist
+McCreery	I-musical artist
+(	O
+as	O
+well	O
+as	O
+that	O
+of	O
+occasional	O
+country	B-music genre
+singer	O
+Kelly	B-musical artist
+Clarkson	I-musical artist
+)	O
+in	O
+the	O
+decade	O
+,	O
+and	O
+would	O
+continue	O
+to	O
+launch	O
+country	O
+careers	O
+in	O
+the	O
+2010s	O
+.	O
+
+As	O
+a	O
+film-score	O
+composer	O
+,	O
+Sakamoto	B-musical artist
+has	O
+won	O
+an	O
+Academy	B-award
+Awards	I-award
+,	O
+a	O
+British	B-award
+Academy	I-award
+Film	I-award
+Awards	I-award
+,	O
+a	O
+Grammy	B-award
+Award	I-award
+,	O
+and	O
+2	O
+Golden	B-award
+Globe	I-award
+Award	I-award
+s	O
+.	O
+
+Other	O
+groups	O
+in	O
+the	O
+British	O
+grindcore	B-music genre
+scene	O
+,	O
+such	O
+as	O
+Heresy	B-band
+and	O
+Unseen	B-band
+Terror	I-band
+,	O
+have	O
+emphasized	O
+the	O
+influence	O
+of	O
+American	O
+hardcore	B-music genre
+punk	I-music genre
+,	O
+including	O
+Septic	B-band
+Death	I-band
+,	O
+as	O
+well	O
+as	O
+Swedish	O
+D-beat	B-music genre
+.	O
+
+In	O
+2014	O
+he	O
+received	O
+the	O
+Golden	B-award
+Globe	I-award
+Cecil	I-award
+B.	I-award
+DeMille	I-award
+Award	I-award
+for	I-award
+Lifetime	I-award
+Achievement	I-award
+and	O
+a	O
+Tony	B-award
+Award	I-award
+nomination	O
+for	O
+Tony	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Book	I-award
+of	I-award
+a	I-award
+Musical	I-award
+for	O
+Bullets	O
+over	O
+Broadway	O
+.	O
+
+Lengthy	O
+sleeve	O
+notes	O
+are	O
+included	O
+with	O
+the	O
+albums	O
+Black	B-album
+Seeds	I-album
+of	I-album
+Vengeance	I-album
+,	O
+In	B-album
+Their	I-album
+Darkened	I-album
+Shrines	I-album
+,	O
+Annihilation	B-album
+of	I-album
+the	I-album
+Wicked	I-album
+,	O
+Those	B-album
+Whom	I-album
+the	I-album
+Gods	I-album
+Detest	I-album
+,	O
+At	B-album
+the	I-album
+Gate	I-album
+of	I-album
+Sethu	I-album
+,	O
+and	O
+What	B-album
+Should	I-album
+Not	I-album
+Be	I-album
+Unearthed	I-album
+,	O
+explaining	O
+the	O
+inspiration	O
+or	O
+source	O
+for	O
+the	O
+lyrics	O
+of	O
+each	O
+song	O
+.	O
+
+Rodgers	B-musical artist
+and	O
+Hammerstein	B-musical artist
+musicals	O
+earned	O
+a	O
+total	O
+of	O
+37	O
+Tony	B-award
+Award	I-award
+s	O
+,	O
+15	O
+Academy	B-award
+Awards	I-award
+,	O
+two	O
+Pulitzer	B-award
+Prize	I-award
+s	O
+,	O
+two	O
+Grammy	B-award
+Award	I-award
+s	O
+,	O
+and	O
+two	O
+Emmy	B-award
+Award	I-award
+s	O
+.	O
+
+A	O
+favorite	O
+technique	O
+of	O
+contemporary	B-music genre
+jazz	I-music genre
+writers	O
+,	O
+ostinati	O
+are	O
+often	O
+used	O
+in	O
+Modal	B-music genre
+jazz	I-music genre
+and	O
+Latin	B-music genre
+jazz	I-music genre
+and	O
+traditional	O
+African	B-music genre
+music	I-music genre
+including	O
+Gnawa	B-music genre
+music	I-music genre
+.	O
+
+During	O
+the	O
+'	O
+90s	O
+,	O
+Southern	B-location
+California	I-location
+Chicano	O
+artists	O
+,	O
+such	O
+as	O
+Kid	B-musical artist
+Frost	I-musical artist
+,	O
+A.L.T.	B-musical artist
+,	O
+A	B-band
+Lighter	I-band
+Shade	I-band
+of	I-band
+Brown	I-band
+,	O
+B-Real	B-musical artist
+,	O
+Psycho	B-band
+Realm	I-band
+,	O
+Gunter	B-musical artist
+,	O
+Delinquent	B-band
+Habits	I-band
+and	O
+Jonny	B-musical artist
+Z	I-musical artist
+received	O
+mainstream	O
+success	O
+.	O
+
+Through	O
+extensive	O
+promoting	O
+,	O
+including	O
+appearances	O
+on	O
+1999	O
+MTV	B-award
+VMA	I-award
+(	O
+including	O
+a	O
+performance	O
+alongside	O
+Aerosmith	B-band
+and	O
+Run-DMC	B-band
+)	O
+and	O
+performing	O
+at	O
+Woodstock	B-event
+1999	I-event
+,	O
+Devil	B-album
+Without	I-album
+a	I-album
+Cause	I-album
+sold	O
+14	O
+million	O
+copies	O
+,	O
+the	O
+album	O
+'s	O
+success	O
+spurred	O
+by	O
+Kid	B-musical artist
+Rock	I-musical artist
+'s	O
+breakthrough	O
+hit	O
+single	O
+Bawitdaba	B-song
+.	O
+
+The	O
+genre	O
+has	O
+influenced	O
+many	O
+other	O
+genres	O
+like	O
+hip	B-music genre
+hop	I-music genre
+,	O
+big	B-music genre
+beat	I-music genre
+,	O
+house	B-music genre
+music	I-music genre
+,	O
+trip	B-music genre
+hop	I-music genre
+,	O
+ambient	B-music genre
+music	I-music genre
+,	O
+techno	B-music genre
+,	O
+rock	B-music genre
+and	O
+pop	B-music genre
+,	O
+with	O
+artists	O
+such	O
+as	O
+Bill	B-musical artist
+Laswell	I-musical artist
+,	O
+Incubus	B-band
+,	O
+Pitchshifter	B-band
+,	O
+Linkin	B-band
+Park	I-band
+,	O
+The	B-band
+Roots	I-band
+,	O
+Talvin	B-musical artist
+Singh	I-musical artist
+,	O
+MIDIval	B-band
+Punditz	I-band
+,	O
+Missy	B-musical artist
+Elliott	I-musical artist
+,	O
+The	B-band
+Freestylers	I-band
+,	O
+Bowery	B-band
+Electric	I-band
+,	O
+Nine	B-band
+Inch	I-band
+Nails	I-band
+,	O
+David	B-musical artist
+Bowie	I-musical artist
+(	O
+the	O
+last	O
+two	O
+both	O
+using	O
+elements	O
+of	O
+Goldie	B-musical artist
+'s	O
+Timeless	B-album
+)	O
+
+225	O
+Other	O
+influential	O
+bands	O
+identified	O
+with	O
+metal	B-music genre
+emerged	O
+in	O
+the	O
+U.S.	B-country
+,	O
+such	O
+as	O
+Sir	B-band
+Lord	I-band
+Baltimore	I-band
+(	O
+Kingdom	B-album
+Come	I-album
+,	O
+1970	O
+)	O
+,	O
+Blue	B-band
+Öyster	I-band
+Cult	I-band
+(	O
+Blue	B-album
+Öyster	I-album
+Cult	I-album
+,	O
+1972	O
+)	O
+,	O
+Aerosmith	B-band
+(	O
+Aerosmith	B-album
+,	O
+1973	O
+)	O
+and	O
+Kiss	B-band
+(	O
+Kiss	B-album
+,	O
+1974	O
+)	O
+.	O
+
+Roots	B-musical artist
+Manuva	I-musical artist
+'s	O
+album	O
+releases	O
+have	O
+been	O
+integral	O
+to	O
+the	O
+label	O
+,	O
+including	O
+Brand	B-album
+New	I-album
+Second	I-album
+Hand	I-album
+,	O
+Run	B-album
+Come	I-album
+Save	I-album
+Me	I-album
+,	O
+Awfully	B-album
+Deep	I-album
+,	O
+Slime	B-album
+&	I-album
+amp	I-album
+;	I-album
+Reason	I-album
+and	O
+4everevolution	B-album
+.	O
+
+Norwegian	O
+jazz	B-music genre
+accordionists	O
+include	O
+Asmund	B-musical artist
+Bjørken	I-musical artist
+,	O
+Stian	B-musical artist
+Carstensen	I-musical artist
+,	O
+Gabriel	B-musical artist
+Fliflet	I-musical artist
+,	O
+Frode	B-musical artist
+Haltli	I-musical artist
+,	O
+and	O
+Eivin	B-musical artist
+One	I-musical artist
+Pedersen	I-musical artist
+.	O
+
+Artists	O
+popularizing	O
+more	O
+traditional	B-music genre
+country	I-music genre
+music	I-music genre
+in	O
+Sweden	B-country
+have	O
+been	O
+Ann-Louise	B-musical artist
+Hanson	I-musical artist
+,	O
+Hasse	B-musical artist
+Andersson	I-musical artist
+,	O
+Kikki	B-musical artist
+Danielsson	I-musical artist
+,	O
+Elisabeth	B-musical artist
+Andreassen	I-musical artist
+and	O
+Jill	B-musical artist
+Johnson	I-musical artist
+.	O
+
+In	O
+the	O
+days	O
+following	O
+his	O
+death	O
+,	O
+tributes	O
+were	O
+paid	O
+by	O
+then-President	O
+George	B-person
+W.	I-person
+Bush	I-person
+,	O
+the	O
+United	O
+States	O
+House	O
+of	O
+Representatives	O
+,	O
+and	O
+many	O
+musicians	O
+and	O
+performers	O
+,	O
+including	O
+B.	B-musical artist
+B.	I-musical artist
+King	I-musical artist
+,	O
+Ronnie	B-musical artist
+Hawkins	I-musical artist
+,	O
+Mick	B-musical artist
+Jagger	I-musical artist
+,	O
+Ronnie	B-musical artist
+Wood	I-musical artist
+,	O
+George	B-musical artist
+Thorogood	I-musical artist
+,	O
+Eric	B-musical artist
+Clapton	I-musical artist
+,	O
+Tom	B-musical artist
+Petty	I-musical artist
+,	O
+Robert	B-musical artist
+Plant	I-musical artist
+,	O
+Elvis	B-musical artist
+Costello	I-musical artist
+,	O
+Bonnie	B-musical artist
+Raitt	I-musical artist
+,	O
+Robert	B-band
+Randolph	I-band
+and	I-band
+the	I-band
+Family	I-band
+Band	I-band
+and	O
+Eric	B-musical artist
+Burdon	I-musical artist
+.	O
+
+The	O
+Nordic	O
+countries	O
+are	O
+generally	O
+taken	O
+to	O
+include	O
+Iceland	B-country
+,	O
+Norway	B-country
+,	O
+Finland	B-country
+,	O
+Sweden	B-country
+and	O
+Denmark	B-country
+.	O
+
+The	O
+company	O
+has	O
+performed	O
+on	O
+stages	O
+around	O
+the	O
+world	O
+,	O
+including	O
+the	O
+Sydney	B-location
+Opera	I-location
+House	I-location
+in	O
+Australia	B-country
+,	O
+the	O
+Joyce	B-location
+Theater	I-location
+in	O
+New	B-location
+York	I-location
+,	O
+the	O
+Shanghai	B-location
+Grand	I-location
+Theatre	I-location
+,	O
+and	O
+the	O
+Stanislavsky	B-location
+Theatre	I-location
+in	O
+Moscow	B-location
+.	O
+
+Tens	O
+of	O
+thousands	O
+of	O
+medieval	O
+tombstones	O
+called	O
+Stećci	O
+are	O
+found	O
+in	O
+Bosnia	B-country
+and	I-country
+Hercegovina	I-country
+and	O
+neighboring	O
+areas	O
+in	O
+Montenegro	B-country
+,	O
+Serbia	B-country
+and	O
+Croatia	B-country
+.	O
+
+Sokol	B-organization
+Omaha	I-organization
+sent	O
+Phil	B-person
+Cahoy	I-person
+and	O
+James	B-person
+Hartung	I-person
+as	O
+members	O
+of	O
+the	O
+1980	B-organization
+Olympic	I-organization
+team	I-organization
+;	O
+Hartung	B-person
+competed	O
+again	O
+in	O
+United	B-event
+States	I-event
+at	I-event
+the	I-event
+1984	I-event
+Summer	I-event
+Olympics	I-event
+.	O
+
+Holly	B-musical artist
+was	O
+unhappy	O
+with	O
+the	O
+results	O
+of	O
+his	O
+time	O
+with	O
+Decca	B-organization
+;	O
+he	O
+was	O
+inspired	O
+by	O
+the	O
+success	O
+of	O
+Buddy	B-musical artist
+Knox	I-musical artist
+'	O
+s	O
+Party	B-song
+Doll	I-song
+and	O
+Jimmy	B-musical artist
+Bowen	I-musical artist
+'	O
+s	O
+I	B-song
+'m	I-song
+Stickin	I-song
+'	I-song
+with	I-song
+You	I-song
+,	O
+and	O
+visited	O
+Norman	B-musical artist
+Petty	I-musical artist
+,	O
+who	O
+had	O
+produced	O
+and	O
+promoted	O
+both	O
+records	O
+.	O
+
+While	O
+he	O
+was	O
+working	O
+at	O
+Friends	B-organization
+,	O
+Bubbles	B-person
+formed	O
+an	O
+association	O
+with	O
+Hawkwind	B-band
+and	O
+became	O
+responsible	O
+for	O
+a	O
+run	O
+of	O
+their	O
+album	O
+sleeves	O
+,	O
+including	O
+In	B-album
+Search	I-album
+of	I-album
+Space	I-album
+,	O
+Doremi	B-album
+Fasol	I-album
+Latido	I-album
+and	O
+Space	B-album
+Ritual	I-album
+.	O
+
+In	O
+Ireland	B-country
+,	O
+The	B-band
+Clancy	I-band
+Brothers	I-band
+and	I-band
+Tommy	I-band
+Makem	I-band
+(	O
+although	O
+its	O
+members	O
+were	O
+all	O
+Irish-born	O
+,	O
+the	O
+group	O
+became	O
+famous	O
+while	O
+based	O
+in	O
+New	B-location
+York	I-location
+'s	I-location
+Greenwich	I-location
+Village	I-location
+)	O
+,	O
+The	B-band
+Dubliners	I-band
+,	O
+Clannad	B-band
+,	O
+Planxty	B-band
+,	O
+The	B-band
+Chieftains	I-band
+,	O
+The	B-band
+Pogues	I-band
+,	O
+The	B-band
+Corrs	I-band
+,	O
+The	B-band
+Irish	I-band
+Rovers	I-band
+,	O
+and	O
+a	O
+variety	O
+of	O
+other	O
+folk	O
+bands	O
+have	O
+done	O
+much	O
+over	O
+the	O
+past	O
+few	O
+decades	O
+to	O
+revitalise	O
+and	O
+re-popularise	O
+Irish	B-music genre
+traditional	I-music genre
+music	I-music genre
+.	O
+
+Buckingham	B-musical artist
+'s	O
+Go	B-song
+Your	I-song
+Own	I-song
+Way	I-song
+was	O
+the	O
+lead	O
+single	O
+,	O
+soaring	O
+into	O
+the	O
+US	O
+Top	O
+Ten	O
+;	O
+also	O
+on	O
+the	O
+album	O
+were	O
+Buckingham	B-musical artist
+'s	O
+Second	B-song
+Hand	I-song
+News	I-song
+and	O
+Never	B-song
+Going	I-song
+Back	I-song
+Again	I-song
+.	O
+
+The	B-band
+Elephant	I-band
+6	I-band
+Recording	I-band
+Company	I-band
+(	O
+or	O
+simply	O
+Elephant	B-band
+6	I-band
+)	O
+is	O
+a	O
+collective	O
+of	O
+American	O
+musicians	O
+that	O
+spawned	O
+many	O
+notable	O
+independent	O
+bands	O
+of	O
+the	O
+1990s	O
+,	O
+including	O
+the	B-band
+Apples	I-band
+in	I-band
+Stereo	I-band
+,	O
+the	B-band
+Olivia	I-band
+Tremor	I-band
+Control	I-band
+,	O
+Neutral	B-band
+Milk	I-band
+Hotel	I-band
+,	O
+Beulah	B-band
+,	O
+Elf	B-band
+Power	I-band
+,	O
+of	B-band
+Montreal	I-band
+,	O
+The	B-band
+Minders	I-band
+and	O
+Circulatory	B-band
+System	I-band
+.	O
+
+In	O
+2012	O
+,	O
+the	O
+song	O
+topped	O
+an	O
+ITV	O
+poll	O
+in	O
+the	O
+UK	B-country
+to	O
+find	O
+The	O
+Nation	B-award
+'s	I-award
+Favourite	I-award
+Number	I-award
+One	I-award
+over	O
+60	O
+years	O
+of	O
+music	O
+,	O
+ahead	O
+of	O
+Michael	B-musical artist
+Jackson	I-musical artist
+'	O
+s	O
+Billie	B-song
+Jean	I-song
+(	O
+No.	O
+2	O
+)	O
+,	O
+Adele	B-musical artist
+'	O
+s	O
+Someone	B-song
+like	I-song
+You	I-song
+(	O
+No.	O
+3	O
+)	O
+,	O
+Oasis	B-song
+'	O
+Don	B-song
+'t	I-song
+Look	I-song
+Back	I-song
+in	I-song
+Anger	I-song
+(	O
+No.	O
+4	O
+)	O
+and	O
+The	B-band
+Beatles	I-band
+'	O
+Hey	B-song
+Jude	I-song
+(	O
+No.	O
+5	O
+)	O
+.	O
+
+In	O
+1998	O
+,	O
+Siti	B-musical artist
+was	O
+chosen	O
+to	O
+perform	O
+during	O
+the	O
+closing	O
+ceremony	O
+of	O
+1998	B-event
+Commonwealth	I-event
+Games	I-event
+in	O
+front	O
+of	O
+Queen	B-person
+Elizabeth	I-person
+II	I-person
+and	O
+her	O
+consort	O
+,	O
+Prince	B-person
+Philip	I-person
+,	O
+among	O
+other	O
+dignitaries	O
+and	O
+officials	O
+from	O
+70	O
+countries	O
+including	O
+those	O
+from	O
+the	O
+Commonwealth	B-organization
+of	I-organization
+Nations	I-organization
+.	O
+
+Featuring	O
+West	B-music genre
+Coast	I-music genre
+hip	I-music genre
+hop	I-music genre
+,	O
+G-funk	B-music genre
+and	O
+horrorcore	B-music genre
+musical	O
+styles	O
+,	O
+the	O
+majority	O
+of	O
+The	B-album
+Slim	I-album
+Shady	I-album
+LP	I-album
+nowiki	O
+/	O
+'	O
+s	O
+lyrical	O
+content	O
+is	O
+written	O
+from	O
+the	O
+perspective	O
+of	O
+Eminem	B-musical artist
+'s	O
+alter	O
+ego	O
+Slim	B-musical artist
+Shady	I-musical artist
+,	O
+whom	O
+he	O
+created	O
+on	O
+the	O
+Slim	B-album
+Shady	I-album
+EP	I-album
+(	O
+1997	O
+)	O
+.	O
+
+In	O
+2013	O
+Blood	O
+Brothers	O
+was	O
+produced	O
+by	O
+the	O
+Harvest	B-location
+Rain	I-location
+Theatre	I-location
+Company	I-location
+of	O
+Brisbane	B-location
+playing	O
+the	O
+Cremorne	B-location
+Theatre	I-location
+August	O
+3-17	O
+:	O
+directed	O
+by	O
+Tim	B-person
+O	I-person
+'Connor	I-person
+,	O
+the	O
+production	O
+featured	O
+Amanda	B-person
+Muggleton	I-person
+in	O
+the	O
+role	O
+of	O
+Mrs.	O
+Johnstone.2011	O
+.	O
+
+She	O
+rose	O
+to	O
+fame	O
+portraying	O
+Jamie	B-person
+Buchman	I-person
+in	O
+the	O
+sitcom	O
+Mad	O
+About	O
+You	O
+(	O
+1992-1999	O
+,	O
+2019-present	O
+)	O
+,	O
+for	O
+which	O
+she	O
+won	O
+three	O
+Golden	B-award
+Globe	I-award
+Awards	I-award
+for	I-award
+Best	I-award
+Actress	I-award
+in	I-award
+a	I-award
+Television	I-award
+Series	I-award
+-	I-award
+Musical	I-award
+or	I-award
+Comedy	I-award
+and	O
+four	O
+Emmy	B-award
+Award	I-award
+s	I-award
+Primetime	B-award
+Emmy	I-award
+Award	I-award
+for	I-award
+Outstanding	I-award
+Lead	I-award
+Actress	I-award
+in	I-award
+a	I-award
+Comedy	I-award
+Series	I-award
+.	O
+
+Blue	B-band
+Öyster	I-band
+Cult	I-band
+'s	O
+longest-lasting	O
+and	O
+most	O
+commercially	O
+successful	O
+lineup	O
+included	O
+Buck	B-musical artist
+Dharma	I-musical artist
+(	O
+lead	O
+guitar	B-musical instrument
+,	O
+vocals	O
+)	O
+,	O
+Eric	B-musical artist
+Bloom	I-musical artist
+(	O
+lead	O
+vocals	O
+,	O
+stun	B-musical instrument
+guitar	I-musical instrument
+,	O
+keyboards	B-musical instrument
+,	O
+synthesizers	B-musical instrument
+)	O
+,	O
+Allen	B-musical artist
+Lanier	I-musical artist
+(	O
+keyboards	B-musical instrument
+,	O
+rhythm	B-musical artist
+guitar	I-musical artist
+,	O
+backing	O
+vocals	O
+)	O
+,	O
+Joe	B-musical artist
+Bouchard	I-musical artist
+(	O
+bass	B-musical instrument
+,	O
+vocals	O
+)	O
+,	O
+and	O
+Albert	B-musical artist
+Bouchard	I-musical artist
+(	O
+drums	B-musical instrument
+,	O
+percussion	B-musical instrument
+,	O
+vocals	O
+)	O
+.	O
+
+Leading	O
+artists	O
+in	O
+this	O
+genre	O
+included	O
+Jim	B-musical artist
+Reeves	I-musical artist
+,	O
+Skeeter	B-musical artist
+Davis	I-musical artist
+,	O
+Connie	B-person
+Smith	I-person
+,	O
+The	B-band
+Browns	I-band
+,	O
+The	B-music genre
+Nashville	I-music genre
+Sound	I-music genre
+collapsed	O
+in	O
+mainstream	O
+popularity	O
+in	O
+1964	O
+,	O
+a	O
+victim	O
+of	O
+both	O
+the	O
+British	O
+Invasion	O
+and	O
+the	O
+deaths	O
+of	O
+Reeves	B-musical artist
+and	O
+Cline	B-musical artist
+in	O
+separate	O
+airplane	O
+crashes	O
+.	O
+
+blues	B-music genre
+-	O
+,	O
+Rock	B-music genre
+music	I-music genre
+-	O
+and	O
+Pop	B-music genre
+music	I-music genre
+-musicians	O
+such	O
+as	O
+
+Lindsey	B-musical artist
+Buckingham	I-musical artist
+issued	O
+Go	B-album
+Insane	I-album
+in	O
+1984	O
+,	O
+the	O
+same	O
+year	O
+that	O
+Christine	B-musical artist
+McVie	I-musical artist
+made	O
+an	O
+eponymous	B-album
+album	O
+(	O
+yielding	O
+the	O
+Top	O
+10	O
+hit	O
+Got	B-song
+a	I-song
+Hold	I-song
+on	I-song
+Me	I-song
+and	O
+the	O
+Top	O
+40	O
+hit	O
+Love	B-song
+Will	I-song
+Show	I-song
+Us	I-song
+How	I-song
+)	O
+.	O
+
+He	O
+created	O
+a	O
+prodigious	O
+output	O
+by	O
+working	O
+for	O
+such	O
+bands	O
+,	O
+musicians	O
+and	O
+performers	O
+as	O
+Vivian	B-musical artist
+Stanshall	I-musical artist
+,	O
+Generation	B-band
+X	I-band
+,	O
+Big	B-band
+Star	I-band
+,	O
+Johnny	B-band
+Moped	I-band
+,	O
+Whirlwind	B-band
+,	O
+Billy	B-musical artist
+Bragg	I-musical artist
+,	O
+Clover	B-band
+,	O
+the	B-band
+Sinceros	I-band
+,	O
+Roger	B-musical artist
+Chapman	I-musical artist
+,	O
+Phillip	B-musical artist
+Goodhand-Tait	I-musical artist
+,	O
+Dr.	B-band
+Feelgood	I-band
+,	O
+Inner	B-band
+City	I-band
+Unit	I-band
+and	O
+the	B-band
+Psychedelic	I-band
+Furs	I-band
+.	O
+
+Bachchan	B-person
+has	O
+won	O
+numerous	O
+accolades	O
+in	O
+his	O
+career	O
+,	O
+including	O
+four	O
+National	B-award
+Film	I-award
+Awards	I-award
+as	O
+National	B-award
+Film	I-award
+Award	I-award
+for	I-award
+Best	I-award
+Actor	I-award
+,	O
+Dadasaheb	B-award
+Phalke	I-award
+Award	I-award
+as	O
+lifetime	B-award
+achievement	I-award
+award	I-award
+and	O
+many	O
+awards	O
+at	O
+international	B-event
+film	I-event
+festivals	I-event
+and	O
+award	O
+ceremonies	O
+.	O
+
+In	O
+the	O
+many	O
+styles	O
+of	O
+blues	B-music genre
+,	O
+especially	O
+Chicago	B-music genre
+blues	I-music genre
+and	O
+(	O
+more	O
+recently	O
+)	O
+West	B-music genre
+Coast	I-music genre
+blues	I-music genre
+,	O
+some	O
+pianists	O
+and	O
+guitarists	O
+were	O
+influenced	O
+by	O
+,	O
+and	O
+employed	O
+,	O
+the	O
+traditional	O
+boogie-woogie	B-music genre
+styles	O
+.	O
+
+In	O
+2019	O
+,	O
+Netherlands	B-country
+placed	O
+third	O
+with	O
+the	O
+juries	O
+(	O
+North	B-country
+Macedonia	I-country
+first	O
+,	O
+Sweden	B-country
+second	O
+)	O
+and	O
+second	O
+with	O
+the	O
+televote	O
+(	O
+Norway	B-country
+first	O
+)	O
+.	O
+
+In	O
+the	O
+late	O
+1950s	O
+,	O
+a	O
+new	O
+blues	B-music genre
+style	I-music genre
+emerged	O
+on	O
+Chicago	B-location
+'s	I-location
+West	I-location
+Side	I-location
+pioneered	O
+by	O
+Magic	B-musical artist
+Sam	I-musical artist
+,	O
+Buddy	B-musical artist
+Guy	I-musical artist
+and	O
+Otis	B-musical artist
+Rush	I-musical artist
+on	O
+Cobra	B-organization
+Records	I-organization
+.	O
+
+It	O
+won	O
+three	O
+Academy	B-award
+Awards	I-award
+,	O
+including	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Picture	I-award
+for	O
+producer	O
+Hunt	B-person
+Stromberg	I-person
+,	O
+Academy	B-award
+Award	I-award
+for	I-award
+Best	I-award
+Actress	I-award
+for	O
+Luise	B-person
+Rainer	I-person
+,	O
+and	O
+Best	B-award
+Dance	I-award
+Direction	I-award
+for	O
+Seymour	B-person
+Felix	I-person
+,	O
+and	O
+was	O
+nominated	O
+for	O
+four	O
+others	O
+.	O
+
+The	B-band
+Hives	I-band
+have	O
+released	O
+five	O
+studio	O
+albums	O
+:	O
+Barely	B-album
+Legal	I-album
+(	O
+1997	O
+)	O
+,	O
+Veni	B-album
+Vidi	I-album
+Vicious	I-album
+(	O
+2000	O
+)	O
+,	O
+Tyrannosaurus	B-album
+Hives	I-album
+(	O
+2004	O
+)	O
+,	O
+The	B-album
+Black	I-album
+and	I-album
+White	I-album
+Album	I-album
+(	O
+2007	O
+)	O
+and	O
+Lex	B-album
+Hives	I-album
+(	O
+2012	O
+)	O
+.	O
+
+Justincase	B-band
+was	O
+an	O
+American	O
+Alternative	B-music genre
+rock	I-music genre
+-	O
+Pop	B-music genre
+music	I-music genre
+band	O
+from	O
+Charlotte	B-location
+,	O
+North	B-location
+Carolina	I-location
+,	O
+best	O
+known	O
+for	O
+their	O
+2002	O
+single	O
+Don	B-song
+'t	I-song
+Cry	I-song
+for	I-song
+Us	I-song
+,	O
+which	O
+was	O
+co-written	O
+by	O
+Michelle	B-musical artist
+Branch	I-musical artist
+,	O
+who	O
+was	O
+one	O
+of	O
+the	O
+band	O
+'s	O
+early	O
+champions	O
+.	O
+
+Critics	O
+noted	O
+the	O
+album	O
+'s	O
+hybrid	O
+of	O
+various	O
+styles	O
+including	O
+Rock	B-music genre
+music	I-music genre
+,	O
+Hip	B-music genre
+hop	I-music genre
+music	I-music genre
+,	O
+Folk	B-music genre
+music	I-music genre
+,	O
+blues	B-music genre
+,	O
+psychedelia	B-music genre
+,	O
+and	O
+Country	B-music genre
+music	I-music genre
+,	O
+
+In	O
+2001	O
+,	O
+he	O
+released	O
+Word	B-album
+of	I-album
+Mouf	I-album
+,	O
+followed	O
+by	O
+Chicken-n-Beer	B-album
+in	O
+2003	O
+and	O
+The	B-album
+Red	I-album
+Light	I-album
+District	I-album
+in	O
+2004	O
+.	O
+
+The	O
+duo	O
+released	O
+the	O
+double	O
+platinum	O
+,	O
+The	B-album
+Jerky	I-album
+Boys	I-album
+2	I-album
+in	O
+1994	O
+,	O
+followed	O
+by	O
+The	B-album
+Jerky	I-album
+Boys	I-album
+3	I-album
+in	O
+1996	O
+,	O
+The	B-album
+Jerky	I-album
+Boys	I-album
+4	I-album
+in	O
+1997	O
+,	O
+Stop	B-album
+Staring	I-album
+at	I-album
+Me	I-album
+!	I-album
+in	O
+1999	O
+,	O
+and	O
+The	B-album
+Jerky	I-album
+Tapes	I-album
+in	O
+2001	O
+.	O
+
+Mambo	B-music genre
+was	O
+developed	O
+as	O
+an	O
+offshoot	O
+of	O
+danzón	B-music genre
+,	O
+the	O
+national	O
+dance	O
+of	O
+Cuba	B-country
+,	O
+in	O
+the	O
+late	O
+1930s	O
+by	O
+Orestes	B-musical artist
+López	I-musical artist
+and	O
+his	O
+brother	O
+Cachao	B-musical artist
+,	O
+of	O
+Arcaño	B-band
+y	I-band
+sus	I-band
+Maravillas	I-band
+.	O
+

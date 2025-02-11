@@ -1,0 +1,16 @@
+university
+event
+astronomical object
+person
+protein
+enzyme
+scientist
+chemical element
+discipline
+award
+organization
+location
+chemical compound
+country
+academic journal
+theory

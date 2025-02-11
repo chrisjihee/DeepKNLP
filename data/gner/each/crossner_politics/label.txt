@@ -1,8 +1,0 @@
-political party
-election
-politician
-location
-organization
-country
-event
-person

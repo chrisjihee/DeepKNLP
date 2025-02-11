@@ -51,6 +51,7 @@ Transformer-based Korean Natural Language Processing
     ```
 5. Unzip some archived data
     ```bash
+    cd data/gner; tar zxf each-BL.tar.gz; tar zxf each-sampled-BL.tar.gz; cd ../..;
     cd data/gner; tar zxf each-WQ=1.tar.gz; tar zxf each-sampled-WQ=1.tar.gz; cd ../..;
     cd data/gner; tar zxf each-WQ=2.tar.gz; tar zxf each-sampled-WQ=2.tar.gz; cd ../..;
     cd data/gner; tar zxf each-WQ=3.tar.gz; tar zxf each-sampled-WQ=3.tar.gz; cd ../..;
