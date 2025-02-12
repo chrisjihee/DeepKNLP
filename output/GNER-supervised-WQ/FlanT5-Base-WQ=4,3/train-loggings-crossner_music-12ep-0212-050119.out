@@ -1,0 +1,779 @@
+[02.12 05:01:22] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
+[02.12 05:01:22] ┇ INFO    ┇           chrisbase.data ┇ [INIT] python task2-nerG-trainer.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds2_t5.json --run_version FlanT5-Base-WQ=4,3 --pretrained google/flan-t5-base --eval_epochs 0.5 --logging_steps 5 --num_train_epochs 12 --per_device_eval_batch_size 50 --per_device_train_batch_size 8 --gradient_accumulation_steps 1 --generation_max_length 640 --eval_file data/gner/each-sampled-WQ=4,3/crossner_music-dev=100-WQ=4,3.jsonl --train_file data/gner/each-WQ=4,3/crossner_music-train-WQ=4,3.jsonl --output_file train-metrics-crossner_music-12ep.csv --logging_file train-loggings-crossner_music-12ep.out --no_use_flash_attention --no_debugging
+[02.12 05:01:22] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   #	TrainingArgumentsForAccelerator              	value
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   1	env.hostname                                 	ptlm3
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   2	env.hostaddr                                 	129.254.121.74
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   3	env.global_rank                              	-1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   4	env.local_rank                               	0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   5	env.node_rank                                	-1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   6	env.world_size                               	4
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   7	env.time_stamp                               	0212-050119
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   8	env.python_path                              	/home/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇   9	env.current_dir                              	/home/chrisjihee/proj/DeepKNLP
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  10	env.current_file                             	task2-nerG-trainer.py
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  11	env.command_args                             	['--local_rank=0', '--trainer_deepspeed', 'configs/deepspeed/ds2_t5.json', '--run_version', 'FlanT5-Base-WQ=4,3', '--pretrained', 'google/flan-t5-base', '--eval_epochs', '0.5', '--logging_steps', '5', '--num_train_epochs', '12', '--per_device_eval_batch_size', '50', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '1', '--generation_max_length', '640', '--eval_file', 'data/gner/each-sampled-WQ=4,3/crossner_music-dev=100-WQ=4,3.jsonl', '--train_file', 'data/gner/each-WQ=4,3/crossner_music-train-WQ=4,3.jsonl', '--output_file', 'train-metrics-crossner_music-12ep.csv', '--logging_file', 'train-loggings-crossner_music-12ep.out', '--no_use_flash_attention', '--no_debugging']
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  12	env.output_home                              	output
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  13	env.output_name                              	GNER
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  14	env.run_version                              	FlanT5-Base-WQ=4,3
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  15	env.output_file                              	train-metrics-crossner_music-12ep-0212-050119.csv
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  16	env.logging_file                             	train-loggings-crossner_music-12ep-0212-050119.out
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  17	env.logging_level                            	30
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  18	env.logging_format                           	%(asctime)s ┇ %(levelname)-7s ┇ %(name)24s ┇ %(message)s
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  19	env.datetime_format                          	[%m.%d %H:%M:%S]
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  20	env.argument_file                            	train-arguments-0212-050119.json
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  21	env.random_seed                              	7
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  22	env.max_workers                              	4
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  23	env.debugging                                	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  24	env.output_dir                               	output/GNER/FlanT5-Base-WQ=4,3
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  25	time.t1                                      	2025-02-12 05:01:23.122141
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  26	time.t2                                      	2025-02-12 05:01:15.815807
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  27	time.started                                 	[02.12 05:01:23]
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  28	time.settled
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  29	time.elapsed
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  30	data.train_file                              	data/gner/each-WQ=4,3/crossner_music-train-WQ=4,3.jsonl
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  31	data.study_file
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  32	data.eval_file                               	data/gner/each-sampled-WQ=4,3/crossner_music-dev=100-WQ=4,3.jsonl
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  33	data.pred_file
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  34	data.pretrained                              	google/flan-t5-base
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  35	data.max_train_samples                       	-1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  36	data.max_study_samples                       	-1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  37	data.max_eval_samples                        	-1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  38	data.max_pred_samples                        	-1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  39	data.use_cache_data                          	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  40	data.progress_seconds                        	10.0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  41	data.max_source_length                       	640
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  42	data.max_target_length                       	640
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  43	data.write_predictions                       	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  44	data.ignore_pad_token_for_loss               	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  45	train._n_gpu                                 	1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  46	train.accelerator_config                     	{'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False}
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  47	train.adafactor                              	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  48	train.adam_beta1                             	0.9
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  49	train.adam_beta2                             	0.999
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  50	train.adam_epsilon                           	1e-08
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  51	train.auto_find_batch_size                   	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  52	train.average_tokens_across_devices          	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  53	train.batch_eval_metrics                     	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  54	train.bf16                                   	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  55	train.bf16_full_eval                         	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  56	train.data_seed
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  57	train.dataloader_drop_last                   	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  58	train.dataloader_num_workers                 	0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  59	train.dataloader_persistent_workers          	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  60	train.dataloader_pin_memory                  	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  61	train.dataloader_prefetch_factor
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  62	train.ddp_backend
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  63	train.ddp_broadcast_buffers
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  64	train.ddp_bucket_cap_mb
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  65	train.ddp_find_unused_parameters
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  66	train.ddp_timeout                            	1800
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  67	train.debug                                  	[]
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  68	train.deepspeed                              	configs/deepspeed/ds2_t5.json
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  69	train.disable_tqdm                           	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  70	train.dispatch_batches
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  71	train.do_eval                                	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  72	train.do_predict                             	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  73	train.do_train                               	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  74	train.eval_accumulation_steps                	1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  75	train.eval_delay                             	0.0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  76	train.eval_do_concat_batches                 	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  77	train.eval_epochs                            	0.5
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  78	train.eval_on_start                          	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  79	train.eval_steps                             	9223372036854775807
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  80	train.eval_strategy                          	IntervalStrategy.NO
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  81	train.eval_use_gather_object                 	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  82	train.evaluation_strategy
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  83	train.fp16                                   	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  84	train.fp16_backend                           	auto
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  85	train.fp16_full_eval                         	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  86	train.fp16_opt_level                         	O1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  87	train.fsdp                                   	[]
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  88	train.fsdp_config                            	{'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False}
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  89	train.fsdp_min_num_params                    	0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  90	train.fsdp_transformer_layer_cls_to_wrap
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  91	train.full_determinism                       	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  92	train.generation_config
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  93	train.generation_max_length                  	640
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  94	train.generation_num_beams
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  95	train.gradient_accumulation_steps            	1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  96	train.gradient_checkpointing                 	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  97	train.gradient_checkpointing_kwargs
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  98	train.greater_is_better
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇  99	train.group_by_length                        	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 100	train.half_precision_backend                 	auto
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 101	train.hub_always_push                        	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 102	train.hub_model_id
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 103	train.hub_private_repo
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 104	train.hub_strategy                           	HubStrategy.EVERY_SAVE
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 105	train.hub_token
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 106	train.ignore_data_skip                       	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 107	train.include_for_metrics                    	[]
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 108	train.include_inputs_for_metrics             	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 109	train.include_num_input_tokens_seen          	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 110	train.include_tokens_per_second              	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 111	train.jit_mode_eval                          	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 112	train.label_names
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 113	train.label_smoothing_factor                 	0.0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 114	train.learning_rate                          	2e-05
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 115	train.length_column_name                     	length
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 116	train.load_best_model_at_end                 	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 117	train.local_rank                             	0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 118	train.log_level                              	warning
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 119	train.log_level_replica                      	error
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 120	train.log_on_each_node                       	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 121	train.logging_dir                            	output/GNER/FlanT5-Base-WQ=4,3/runs/Feb12_05-01-21_ptlm3
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 122	train.logging_epochs                         	-1.0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 123	train.logging_first_step                     	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 124	train.logging_nan_inf_filter                 	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 125	train.logging_steps                          	5
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 126	train.logging_strategy                       	IntervalStrategy.STEPS
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 127	train.lr_scheduler_kwargs                    	{}
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 128	train.lr_scheduler_type                      	SchedulerType.COSINE
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 129	train.max_grad_norm                          	1.0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 130	train.max_steps                              	-1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 131	train.metric_for_best_model
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 132	train.mp_parameters
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 133	train.neftune_noise_alpha
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 134	train.no_cuda                                	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 135	train.num_train_epochs                       	12.0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 136	train.optim                                  	OptimizerNames.ADAMW_TORCH
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 137	train.optim_args
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 138	train.optim_target_modules
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 139	train.output_dir                             	output/GNER/FlanT5-Base-WQ=4,3
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 140	train.overwrite_output_dir                   	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 141	train.past_index                             	-1
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 142	train.per_device_eval_batch_size             	50
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 143	train.per_device_train_batch_size            	8
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 144	train.per_gpu_eval_batch_size
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 145	train.per_gpu_train_batch_size
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 146	train.predict_with_generate                  	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 147	train.prediction_loss_only                   	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 148	train.push_to_hub                            	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 149	train.push_to_hub_model_id
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 150	train.push_to_hub_organization
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 151	train.push_to_hub_token
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 152	train.ray_scope                              	last
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 153	train.remove_unused_columns                  	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 154	train.report_to                              	[]
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 155	train.restore_callback_states_from_checkpoint	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 156	train.resume_from_checkpoint
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 157	train.run_name                               	output/GNER/FlanT5-Base-WQ=4,3
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 158	train.save_epochs                            	-1.0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 159	train.save_on_each_node                      	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 160	train.save_only_model                        	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 161	train.save_safetensors                       	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 162	train.save_steps                             	9223372036854775807
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 163	train.save_strategy                          	SaveStrategy.NO
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 164	train.save_total_limit
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 165	train.seed                                   	7
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 166	train.skip_memory_metrics                    	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 167	train.sortish_sampler                        	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 168	train.split_batches
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 169	train.tf32                                   	True
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 170	train.torch_compile                          	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 171	train.torch_compile_backend
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 172	train.torch_compile_mode
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 173	train.torch_empty_cache_steps
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 174	train.torchdynamo
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 175	train.tpu_metrics_debug                      	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 176	train.tpu_num_cores
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 177	train.use_cpu                                	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 178	train.use_flash_attention                    	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 179	train.use_ipex                               	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 180	train.use_legacy_prediction_loop             	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 181	train.use_liger_kernel                       	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 182	train.use_mps_device                         	False
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 183	train.warmup_ratio                           	0.04
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 184	train.warmup_steps                           	0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ 185	train.weight_decay                           	0.0
+[02.12 05:01:23] ┇ INFO    ┇           chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 05:01:25] ┇ INFO    ┇                 DeepKNLP ┇ model type: <class 'transformers.models.t5.modeling_t5.T5ForConditionalGeneration'>
+[02.12 05:01:25] ┇ INFO    ┇                 DeepKNLP ┇ model pad_token_id: 0
+[02.12 05:01:25] ┇ INFO    ┇                 DeepKNLP ┇ Loaded raw train_dataset (#=3909): data/gner/each-WQ=4,3/crossner_music-train-WQ=4,3.jsonl
+[02.12 05:01:26] ┇ INFO    ┇                 DeepKNLP ┇ Preprocess train_dataset:   0%|                    |    4/3909 [0:00:00<0:04:14, 15.36Hz]
+[02.12 05:01:26] ┇ INFO    ┇                 DeepKNLP ┇ Preprocess train_dataset: 100%|████████████████████| 3909/3909 [0:00:01<0:00:00, 5391.60Hz]
+[02.12 05:01:27] ┇ INFO    ┇                 DeepKNLP ┇ Completed preprocessing for train_dataset by google/flan-t5-base at [02.12 05:01:26]
+[02.12 05:01:27] ┇ INFO    ┇                 DeepKNLP ┇ Loaded raw eval_dataset (#=4182): data/gner/each-sampled-WQ=4,3/crossner_music-dev=100-WQ=4,3.jsonl
+[02.12 05:01:27] ┇ INFO    ┇                 DeepKNLP ┇ Preprocess eval_dataset:   0%|                    |    4/4182 [0:00:00<0:04:09, 16.75Hz]
+[02.12 05:01:28] ┇ INFO    ┇                 DeepKNLP ┇ Preprocess eval_dataset: 100%|████████████████████| 4182/4182 [0:00:01<0:00:00, 1755.20Hz]
+[02.12 05:01:28] ┇ INFO    ┇                 DeepKNLP ┇ Completed preprocessing for eval_dataset by google/flan-t5-base at [02.12 05:01:28]
+[02.12 05:01:31] ┇ INFO    ┇ torch.distributed.distributed_c10d ┇ Using backend config: {'cuda': 'nccl'}
+[02.12 05:01:31] ┇ INFO    ┇ torch.distributed.distributed_c10d ┇ Using backend config: {'cuda': 'nccl'}
+[02.12 05:01:31] ┇ INFO    ┇ torch.distributed.distributed_c10d ┇ Using backend config: {'cuda': 'nccl'}
+[02.12 05:01:32] ┇ INFO    ┇ torch.distributed.distributed_c10d ┇ Using backend config: {'cuda': 'nccl'}
+[02.12 05:01:36] ┇ WARNING ┇                DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ ***** Beginning Training *****
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Epochs       = 12.0
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Examples     = 3,909
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Batch Size   = 32 = 8 * 1 * 4
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Optim Steps  = 1,476 = 123 * 12.0
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Model Params = 247,577,856
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Trainer Callbacks  = DefaultFlowCallback, CustomProgressCallback
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Zero Optim Stage   = 2
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Eval Examples      = 4,182
+[02.12 05:01:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Eval Batch Size    = 200 = 50 * 4
+[02.12 05:01:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   0%|                    |    5/1476 [0:00:02<0:10:04, 2.43Hz] | epoch=0.04, loss=2.609400
+[02.12 05:01:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   1%|▏                   |   10/1476 [0:00:03<0:07:58, 3.06Hz] | epoch=0.08, loss=2.561700
+[02.12 05:01:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   1%|▏                   |   15/1476 [0:00:05<0:08:10, 2.98Hz] | epoch=0.12, loss=2.055900
+[02.12 05:01:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   1%|▎                   |   20/1476 [0:00:06<0:08:10, 2.97Hz] | epoch=0.16, loss=1.524200
+[02.12 05:01:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   2%|▎                   |   25/1476 [0:00:08<0:07:52, 3.07Hz] | epoch=0.20, loss=1.167000
+[02.12 05:01:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   2%|▍                   |   30/1476 [0:00:09<0:07:32, 3.20Hz] | epoch=0.24, loss=0.888300
+[02.12 05:01:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   2%|▍                   |   35/1476 [0:00:10<0:07:18, 3.29Hz] | epoch=0.28, loss=0.697100
+[02.12 05:01:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   3%|▌                   |   40/1476 [0:00:11<0:07:05, 3.38Hz] | epoch=0.33, loss=0.535400
+[02.12 05:01:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   3%|▌                   |   45/1476 [0:00:13<0:07:00, 3.41Hz] | epoch=0.37, loss=0.431200
+[02.12 05:01:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   3%|▋                   |   50/1476 [0:00:14<0:06:52, 3.46Hz] | epoch=0.41, loss=0.333900
+[02.12 05:01:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   4%|▋                   |   55/1476 [0:00:15<0:06:50, 3.46Hz] | epoch=0.45, loss=0.293100
+[02.12 05:01:53] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   4%|▊                   |   60/1476 [0:00:17<0:06:42, 3.51Hz] | epoch=0.49, loss=0.252400
+[02.12 05:01:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 84445.20Hz]
+[02.12 05:02:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:50, 0.33Hz]
+[02.12 05:02:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  29%|█████▋              |  6/21 [0:00:25<0:01:04, 0.23Hz]
+[02.12 05:02:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  43%|████████▌           |  9/21 [0:00:37<0:00:49, 0.24Hz]
+[02.12 05:02:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  57%|███████████▍        | 12/21 [0:00:47<0:00:35, 0.25Hz]
+[02.12 05:02:57] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  71%|██████████████▎     | 15/21 [0:00:59<0:00:23, 0.25Hz]
+[02.12 05:03:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  86%|█████████████████▏  | 18/21 [0:01:10<0:00:11, 0.26Hz]
+[02.12 05:03:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:21<0:00:00, 0.26Hz]
+[02.12 05:03:22] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   4%|▊                   |   62/1476 [0:01:45<0:40:08, 0.59Hz] | epoch=0.50, eval_average=0.0000
+[02.12 05:03:23] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   4%|▉                   |   65/1476 [0:01:46<0:38:28, 0.61Hz] | epoch=0.53, loss=0.223300
+[02.12 05:03:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   5%|▉                   |   70/1476 [0:01:47<0:36:00, 0.65Hz] | epoch=0.57, loss=0.203900
+[02.12 05:03:25] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   5%|█                   |   75/1476 [0:01:48<0:33:52, 0.69Hz] | epoch=0.61, loss=0.183900
+[02.12 05:03:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   5%|█                   |   80/1476 [0:01:50<0:32:00, 0.73Hz] | epoch=0.65, loss=0.169400
+[02.12 05:03:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   6%|█▏                  |   85/1476 [0:01:51<0:30:21, 0.76Hz] | epoch=0.69, loss=0.161000
+[02.12 05:03:29] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   6%|█▏                  |   90/1476 [0:01:52<0:28:52, 0.80Hz] | epoch=0.73, loss=0.156700
+[02.12 05:03:30] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   6%|█▎                  |   95/1476 [0:01:53<0:27:33, 0.84Hz] | epoch=0.77, loss=0.148800
+[02.12 05:03:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   7%|█▎                  |  100/1476 [0:01:54<0:26:21, 0.87Hz] | epoch=0.81, loss=0.142200
+[02.12 05:03:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   7%|█▍                  |  105/1476 [0:01:56<0:25:17, 0.90Hz] | epoch=0.85, loss=0.129900
+[02.12 05:03:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   7%|█▍                  |  110/1476 [0:01:57<0:24:18, 0.94Hz] | epoch=0.89, loss=0.137600
+[02.12 05:03:35] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   8%|█▌                  |  115/1476 [0:01:58<0:23:23, 0.97Hz] | epoch=0.94, loss=0.131500
+[02.12 05:03:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   8%|█▋                  |  120/1476 [0:01:59<0:22:34, 1.00Hz] | epoch=0.98, loss=0.124800
+[02.12 05:03:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 93536.61Hz]
+[02.12 05:03:53] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.34Hz]
+[02.12 05:04:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.31Hz]
+[02.12 05:04:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:04:29] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:04:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:13, 0.29Hz]
+[02.12 05:04:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:11<0:00:03, 0.28Hz]
+[02.12 05:04:57] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:04:57] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   8%|█▋                  |  123/1476 [0:03:21<0:36:51, 0.61Hz] | epoch=1.00, eval_average=0.0000
+[02.12 05:04:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   8%|█▋                  |  125/1476 [0:03:21<0:36:17, 0.62Hz] | epoch=1.02, loss=0.124400
+[02.12 05:04:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   9%|█▊                  |  130/1476 [0:03:22<0:34:58, 0.64Hz] | epoch=1.06, loss=0.126200
+[02.12 05:05:00] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   9%|█▊                  |  135/1476 [0:03:23<0:33:45, 0.66Hz] | epoch=1.10, loss=0.114600
+[02.12 05:05:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   9%|█▉                  |  140/1476 [0:03:25<0:32:38, 0.68Hz] | epoch=1.14, loss=0.112200
+[02.12 05:05:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  10%|█▉                  |  145/1476 [0:03:26<0:31:35, 0.70Hz] | epoch=1.18, loss=0.112400
+[02.12 05:05:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  10%|██                  |  150/1476 [0:03:27<0:30:35, 0.72Hz] | epoch=1.22, loss=0.110700
+[02.12 05:05:05] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  11%|██                  |  155/1476 [0:03:28<0:29:40, 0.74Hz] | epoch=1.26, loss=0.109900
+[02.12 05:05:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  11%|██▏                 |  160/1476 [0:03:30<0:28:48, 0.76Hz] | epoch=1.30, loss=0.110600
+[02.12 05:05:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  11%|██▏                 |  165/1476 [0:03:31<0:27:59, 0.78Hz] | epoch=1.34, loss=0.101700
+[02.12 05:05:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  12%|██▎                 |  170/1476 [0:03:32<0:27:13, 0.80Hz] | epoch=1.38, loss=0.097600
+[02.12 05:05:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  12%|██▎                 |  175/1476 [0:03:33<0:26:30, 0.82Hz] | epoch=1.42, loss=0.100100
+[02.12 05:05:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  12%|██▍                 |  180/1476 [0:03:35<0:25:49, 0.84Hz] | epoch=1.46, loss=0.100300
+[02.12 05:05:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 87780.48Hz]
+[02.12 05:05:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.35Hz]
+[02.12 05:05:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.31Hz]
+[02.12 05:05:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:06:05] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:06:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:14, 0.29Hz]
+[02.12 05:06:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:11<0:00:03, 0.28Hz]
+[02.12 05:06:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:06:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  12%|██▍                 |  184/1476 [0:04:56<0:34:43, 0.62Hz] | epoch=1.50, eval_average=0.0000
+[02.12 05:06:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  13%|██▌                 |  185/1476 [0:04:57<0:34:32, 0.62Hz] | epoch=1.50, loss=0.092600
+[02.12 05:06:35] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  13%|██▌                 |  190/1476 [0:04:58<0:33:38, 0.64Hz] | epoch=1.54, loss=0.097100
+[02.12 05:06:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  13%|██▋                 |  195/1476 [0:04:59<0:32:47, 0.65Hz] | epoch=1.58, loss=0.099100
+[02.12 05:06:37] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  14%|██▋                 |  200/1476 [0:05:00<0:31:58, 0.67Hz] | epoch=1.63, loss=0.088400
+[02.12 05:06:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  14%|██▊                 |  205/1476 [0:05:01<0:31:11, 0.68Hz] | epoch=1.67, loss=0.084900
+[02.12 05:06:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  14%|██▊                 |  210/1476 [0:05:03<0:30:27, 0.69Hz] | epoch=1.71, loss=0.088500
+[02.12 05:06:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  15%|██▉                 |  215/1476 [0:05:04<0:29:45, 0.71Hz] | epoch=1.75, loss=0.090500
+[02.12 05:06:42] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  15%|██▉                 |  220/1476 [0:05:05<0:29:04, 0.72Hz] | epoch=1.79, loss=0.085700
+[02.12 05:06:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  15%|███                 |  225/1476 [0:05:06<0:28:25, 0.73Hz] | epoch=1.83, loss=0.087200
+[02.12 05:06:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  16%|███                 |  230/1476 [0:05:08<0:27:49, 0.75Hz] | epoch=1.87, loss=0.082600
+[02.12 05:06:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  16%|███▏                |  235/1476 [0:05:09<0:27:13, 0.76Hz] | epoch=1.91, loss=0.084600
+[02.12 05:06:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  16%|███▎                |  240/1476 [0:05:10<0:26:39, 0.77Hz] | epoch=1.95, loss=0.078100
+[02.12 05:06:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  17%|███▎                |  245/1476 [0:05:11<0:26:06, 0.79Hz] | epoch=1.99, loss=0.081400
+[02.12 05:06:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 95419.33Hz]
+[02.12 05:07:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.35Hz]
+[02.12 05:07:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.32Hz]
+[02.12 05:07:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:07:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:07:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:13, 0.29Hz]
+[02.12 05:08:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:10<0:00:03, 0.28Hz]
+[02.12 05:08:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:08:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  17%|███▎                |  246/1476 [0:06:32<0:32:41, 0.63Hz] | epoch=2.00, eval_average=0.0000
+[02.12 05:08:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  17%|███▍                |  250/1476 [0:06:33<0:32:09, 0.64Hz] | epoch=2.03, loss=0.077600
+[02.12 05:08:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  17%|███▍                |  255/1476 [0:06:34<0:31:29, 0.65Hz] | epoch=2.07, loss=0.076200
+[02.12 05:08:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  18%|███▌                |  260/1476 [0:06:35<0:30:51, 0.66Hz] | epoch=2.11, loss=0.076500
+[02.12 05:08:13] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  18%|███▌                |  265/1476 [0:06:37<0:30:14, 0.67Hz] | epoch=2.15, loss=0.079200
+[02.12 05:08:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  18%|███▋                |  270/1476 [0:06:38<0:29:39, 0.68Hz] | epoch=2.19, loss=0.077200
+[02.12 05:08:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  19%|███▋                |  275/1476 [0:06:39<0:29:05, 0.69Hz] | epoch=2.24, loss=0.077900
+[02.12 05:08:17] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  19%|███▊                |  280/1476 [0:06:40<0:28:32, 0.70Hz] | epoch=2.28, loss=0.079100
+[02.12 05:08:18] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  19%|███▊                |  285/1476 [0:06:42<0:28:00, 0.71Hz] | epoch=2.32, loss=0.072600
+[02.12 05:08:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  20%|███▉                |  290/1476 [0:06:43<0:27:29, 0.72Hz] | epoch=2.36, loss=0.075700
+[02.12 05:08:21] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  20%|███▉                |  295/1476 [0:06:44<0:26:59, 0.73Hz] | epoch=2.40, loss=0.075000
+[02.12 05:08:22] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  20%|████                |  300/1476 [0:06:45<0:26:49, 0.73Hz] | epoch=2.44, loss=0.076200
+[02.12 05:08:23] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  21%|████▏               |  305/1476 [0:06:47<0:26:42, 0.73Hz] | epoch=2.48, loss=0.072000
+[02.12 05:08:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 81879.86Hz]
+[02.12 05:08:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.34Hz]
+[02.12 05:08:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.31Hz]
+[02.12 05:09:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:09:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:09:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:13, 0.29Hz]
+[02.12 05:09:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:10<0:00:03, 0.28Hz]
+[02.12 05:09:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:09:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  21%|████▏               |  308/1476 [0:08:08<0:32:06, 0.61Hz] | epoch=2.50, eval_average=0.0000
+[02.12 05:09:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  21%|████▏               |  310/1476 [0:08:08<0:32:18, 0.60Hz] | epoch=2.52, loss=0.077700
+[02.12 05:09:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  21%|████▎               |  315/1476 [0:08:10<0:32:09, 0.60Hz] | epoch=2.56, loss=0.070600
+[02.12 05:09:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  22%|████▎               |  320/1476 [0:08:11<0:32:00, 0.60Hz] | epoch=2.60, loss=0.075200
+[02.12 05:09:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  22%|████▍               |  325/1476 [0:08:12<0:31:52, 0.60Hz] | epoch=2.64, loss=0.071100
+[02.12 05:09:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  22%|████▍               |  330/1476 [0:08:13<0:31:44, 0.60Hz] | epoch=2.68, loss=0.071300
+[02.12 05:09:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  23%|████▌               |  335/1476 [0:08:14<0:31:35, 0.60Hz] | epoch=2.72, loss=0.070600
+[02.12 05:09:53] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  23%|████▌               |  340/1476 [0:08:16<0:31:27, 0.60Hz] | epoch=2.76, loss=0.069200
+[02.12 05:09:54] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  23%|████▋               |  345/1476 [0:08:17<0:31:17, 0.60Hz] | epoch=2.81, loss=0.069000
+[02.12 05:09:55] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  24%|████▋               |  350/1476 [0:08:18<0:31:09, 0.60Hz] | epoch=2.85, loss=0.067300
+[02.12 05:09:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  24%|████▊               |  355/1476 [0:08:19<0:25:08, 0.74Hz] | epoch=2.89, loss=0.067400
+[02.12 05:09:57] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  24%|████▉               |  360/1476 [0:08:21<0:24:53, 0.75Hz] | epoch=2.93, loss=0.067200
+[02.12 05:09:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  25%|████▉               |  365/1476 [0:08:22<0:24:47, 0.75Hz] | epoch=2.97, loss=0.065500
+[02.12 05:10:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 78963.94Hz]
+[02.12 05:10:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.34Hz]
+[02.12 05:10:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.32Hz]
+[02.12 05:10:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:37, 0.29Hz]
+[02.12 05:10:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:11:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:14, 0.29Hz]
+[02.12 05:11:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:11<0:00:03, 0.28Hz]
+[02.12 05:11:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:11:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  25%|█████               |  369/1476 [0:09:44<0:29:49, 0.62Hz] | epoch=3.00, eval_average=0.0000
+[02.12 05:11:21] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  25%|█████               |  370/1476 [0:09:44<0:30:08, 0.61Hz] | epoch=3.01, loss=0.062000
+[02.12 05:11:22] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  25%|█████               |  375/1476 [0:09:45<0:30:00, 0.61Hz] | epoch=3.05, loss=0.065200
+[02.12 05:11:23] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  26%|█████▏              |  380/1476 [0:09:46<0:29:52, 0.61Hz] | epoch=3.09, loss=0.064300
+[02.12 05:11:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  26%|█████▏              |  385/1476 [0:09:47<0:29:44, 0.61Hz] | epoch=3.13, loss=0.065000
+[02.12 05:11:25] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  26%|█████▎              |  390/1476 [0:09:49<0:29:35, 0.61Hz] | epoch=3.17, loss=0.063400
+[02.12 05:11:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  27%|█████▎              |  395/1476 [0:09:50<0:29:27, 0.61Hz] | epoch=3.21, loss=0.066400
+[02.12 05:11:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  27%|█████▍              |  400/1476 [0:09:51<0:29:19, 0.61Hz] | epoch=3.25, loss=0.064900
+[02.12 05:11:29] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  27%|█████▍              |  405/1476 [0:09:52<0:29:11, 0.61Hz] | epoch=3.29, loss=0.065900
+[02.12 05:11:30] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  28%|█████▌              |  410/1476 [0:09:54<0:29:03, 0.61Hz] | epoch=3.33, loss=0.064600
+[02.12 05:11:32] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  28%|█████▌              |  415/1476 [0:09:55<0:23:52, 0.74Hz] | epoch=3.37, loss=0.060200
+[02.12 05:11:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  28%|█████▋              |  420/1476 [0:09:56<0:23:34, 0.75Hz] | epoch=3.42, loss=0.061500
+[02.12 05:11:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  29%|█████▊              |  425/1476 [0:09:57<0:23:27, 0.75Hz] | epoch=3.46, loss=0.061400
+[02.12 05:11:35] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  29%|█████▊              |  430/1476 [0:09:58<0:23:20, 0.75Hz] | epoch=3.50, loss=0.061900
+[02.12 05:11:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 75046.82Hz]
+[02.12 05:11:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.34Hz]
+[02.12 05:12:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.31Hz]
+[02.12 05:12:14] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:12:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:12:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:14, 0.28Hz]
+[02.12 05:12:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:11<0:00:03, 0.28Hz]
+[02.12 05:12:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:12:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  29%|█████▊              |  430/1476 [0:09:58<0:23:20, 0.75Hz] | epoch=3.50, eval_average=0.0000
+[02.12 05:12:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  29%|█████▉              |  435/1476 [0:11:21<0:28:00, 0.62Hz] | epoch=3.54, loss=0.062200
+[02.12 05:12:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  30%|█████▉              |  440/1476 [0:11:22<0:27:52, 0.62Hz] | epoch=3.58, loss=0.062200
+[02.12 05:13:00] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  30%|██████              |  445/1476 [0:11:23<0:27:44, 0.62Hz] | epoch=3.62, loss=0.061300
+[02.12 05:13:01] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  30%|██████              |  450/1476 [0:11:25<0:27:36, 0.62Hz] | epoch=3.66, loss=0.060700
+[02.12 05:13:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  31%|██████▏             |  455/1476 [0:11:26<0:27:27, 0.62Hz] | epoch=3.70, loss=0.062000
+[02.12 05:13:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  31%|██████▏             |  460/1476 [0:11:27<0:27:19, 0.62Hz] | epoch=3.74, loss=0.061200
+[02.12 05:13:05] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  32%|██████▎             |  465/1476 [0:11:28<0:27:11, 0.62Hz] | epoch=3.78, loss=0.059300
+[02.12 05:13:06] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  32%|██████▎             |  470/1476 [0:11:30<0:27:03, 0.62Hz] | epoch=3.82, loss=0.056700
+[02.12 05:13:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  32%|██████▍             |  475/1476 [0:11:31<0:26:55, 0.62Hz] | epoch=3.86, loss=0.056800
+[02.12 05:13:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  33%|██████▌             |  480/1476 [0:11:32<0:22:11, 0.75Hz] | epoch=3.90, loss=0.059200
+[02.12 05:13:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  33%|██████▌             |  485/1476 [0:11:33<0:21:50, 0.76Hz] | epoch=3.94, loss=0.058900
+[02.12 05:13:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  33%|██████▋             |  490/1476 [0:11:34<0:21:43, 0.76Hz] | epoch=3.98, loss=0.058300
+[02.12 05:13:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 80625.62Hz]
+[02.12 05:13:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.35Hz]
+[02.12 05:13:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.32Hz]
+[02.12 05:13:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:37, 0.29Hz]
+[02.12 05:14:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:14:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:13, 0.29Hz]
+[02.12 05:14:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:11<0:00:03, 0.28Hz]
+[02.12 05:14:32] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:14:32] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  33%|██████▋             |  492/1476 [0:12:56<0:26:19, 0.62Hz] | epoch=4.00, eval_average=0.0000
+[02.12 05:14:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  34%|██████▋             |  495/1476 [0:12:56<0:26:23, 0.62Hz] | epoch=4.02, loss=0.056800
+[02.12 05:14:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  34%|██████▊             |  500/1476 [0:12:58<0:26:15, 0.62Hz] | epoch=4.07, loss=0.058800
+[02.12 05:14:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  34%|██████▊             |  505/1476 [0:12:59<0:26:07, 0.62Hz] | epoch=4.11, loss=0.058100
+[02.12 05:14:37] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  35%|██████▉             |  510/1476 [0:13:00<0:25:59, 0.62Hz] | epoch=4.15, loss=0.055700
+[02.12 05:14:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  35%|██████▉             |  515/1476 [0:13:01<0:25:51, 0.62Hz] | epoch=4.19, loss=0.056700
+[02.12 05:14:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  35%|███████             |  520/1476 [0:13:03<0:25:43, 0.62Hz] | epoch=4.23, loss=0.056900
+[02.12 05:14:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  36%|███████             |  525/1476 [0:13:04<0:25:35, 0.62Hz] | epoch=4.27, loss=0.056700
+[02.12 05:14:42] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  36%|███████▏            |  530/1476 [0:13:05<0:25:27, 0.62Hz] | epoch=4.31, loss=0.055400
+[02.12 05:14:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  36%|███████▏            |  535/1476 [0:13:06<0:25:18, 0.62Hz] | epoch=4.35, loss=0.057900
+[02.12 05:14:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  37%|███████▎            |  540/1476 [0:13:08<0:25:11, 0.62Hz] | epoch=4.39, loss=0.055600
+[02.12 05:14:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  37%|███████▍            |  545/1476 [0:13:09<0:20:36, 0.75Hz] | epoch=4.43, loss=0.053600
+[02.12 05:14:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  37%|███████▍            |  550/1476 [0:13:10<0:20:26, 0.76Hz] | epoch=4.47, loss=0.056000
+[02.12 05:14:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 77434.93Hz]
+[02.12 05:15:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.34Hz]
+[02.12 05:15:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.31Hz]
+[02.12 05:15:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:15:37] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:45<0:00:27, 0.29Hz]
+[02.12 05:15:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:00:55<0:00:17, 0.29Hz]
+[02.12 05:16:00] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:08<0:00:07, 0.28Hz]
+[02.12 05:16:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:15<0:00:00, 0.28Hz]
+[02.12 05:16:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  38%|███████▌            |  554/1476 [0:14:33<0:24:35, 0.62Hz] | epoch=4.50, eval_average=0.0000
+[02.12 05:16:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  38%|███████▌            |  555/1476 [0:14:33<0:24:50, 0.62Hz] | epoch=4.51, loss=0.055900
+[02.12 05:16:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  38%|███████▌            |  560/1476 [0:14:34<0:24:42, 0.62Hz] | epoch=4.55, loss=0.053600
+[02.12 05:16:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  38%|███████▋            |  565/1476 [0:14:35<0:24:34, 0.62Hz] | epoch=4.59, loss=0.053700
+[02.12 05:16:13] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  39%|███████▋            |  570/1476 [0:14:37<0:24:26, 0.62Hz] | epoch=4.63, loss=0.052900
+[02.12 05:16:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  39%|███████▊            |  575/1476 [0:14:38<0:24:18, 0.62Hz] | epoch=4.67, loss=0.057400
+[02.12 05:16:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  39%|███████▊            |  580/1476 [0:14:39<0:24:10, 0.62Hz] | epoch=4.71, loss=0.055100
+[02.12 05:16:17] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  40%|███████▉            |  585/1476 [0:14:40<0:24:02, 0.62Hz] | epoch=4.76, loss=0.050400
+[02.12 05:16:18] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  40%|███████▉            |  590/1476 [0:14:42<0:23:53, 0.62Hz] | epoch=4.80, loss=0.055600
+[02.12 05:16:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  40%|████████            |  595/1476 [0:14:43<0:23:45, 0.62Hz] | epoch=4.84, loss=0.051300
+[02.12 05:16:21] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  41%|████████▏           |  600/1476 [0:14:44<0:23:37, 0.62Hz] | epoch=4.88, loss=0.049400
+[02.12 05:16:22] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  41%|████████▏           |  605/1476 [0:14:45<0:19:25, 0.75Hz] | epoch=4.92, loss=0.052500
+[02.12 05:16:23] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  41%|████████▎           |  610/1476 [0:14:46<0:19:08, 0.75Hz] | epoch=4.96, loss=0.051100
+[02.12 05:16:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  42%|████████▎           |  615/1476 [0:14:48<0:19:02, 0.75Hz] | epoch=5.00, loss=0.054700
+[02.12 05:16:29] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 85019.40Hz]
+[02.12 05:16:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.34Hz]
+[02.12 05:16:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.31Hz]
+[02.12 05:17:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:17:17] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:17:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:13, 0.29Hz]
+[02.12 05:17:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:10<0:00:03, 0.28Hz]
+[02.12 05:17:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:17:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  42%|████████▎           |  615/1476 [0:14:48<0:19:02, 0.75Hz] | epoch=5.00, eval_average=0.0000
+[02.12 05:17:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  42%|████████▍           |  620/1476 [0:16:09<0:22:45, 0.63Hz] | epoch=5.04, loss=0.052900
+[02.12 05:17:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  42%|████████▍           |  625/1476 [0:16:11<0:22:37, 0.63Hz] | epoch=5.08, loss=0.050900
+[02.12 05:17:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  43%|████████▌           |  630/1476 [0:16:12<0:22:29, 0.63Hz] | epoch=5.12, loss=0.049100
+[02.12 05:17:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  43%|████████▌           |  635/1476 [0:16:13<0:22:21, 0.63Hz] | epoch=5.16, loss=0.050000
+[02.12 05:17:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  43%|████████▋           |  640/1476 [0:16:14<0:22:13, 0.63Hz] | epoch=5.20, loss=0.049000
+[02.12 05:17:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  44%|████████▋           |  645/1476 [0:16:16<0:22:06, 0.63Hz] | epoch=5.24, loss=0.052400
+[02.12 05:17:54] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  44%|████████▊           |  650/1476 [0:16:17<0:21:58, 0.63Hz] | epoch=5.29, loss=0.051400
+[02.12 05:17:55] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  44%|████████▉           |  655/1476 [0:16:18<0:21:50, 0.63Hz] | epoch=5.33, loss=0.049900
+[02.12 05:17:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  45%|████████▉           |  660/1476 [0:16:19<0:21:42, 0.63Hz] | epoch=5.37, loss=0.048300
+[02.12 05:17:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  45%|█████████           |  665/1476 [0:16:21<0:21:34, 0.63Hz] | epoch=5.41, loss=0.049400
+[02.12 05:17:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  45%|█████████           |  670/1476 [0:16:22<0:17:46, 0.76Hz] | epoch=5.45, loss=0.051600
+[02.12 05:18:00] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  46%|█████████▏          |  675/1476 [0:16:23<0:17:28, 0.76Hz] | epoch=5.49, loss=0.048800
+[02.12 05:18:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 84588.23Hz]
+[02.12 05:18:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.35Hz]
+[02.12 05:18:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.31Hz]
+[02.12 05:18:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:18:53] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:19:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:14, 0.28Hz]
+[02.12 05:19:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:11<0:00:03, 0.28Hz]
+[02.12 05:19:21] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:19:21] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  46%|█████████▏          |  676/1476 [0:17:44<0:21:13, 0.63Hz] | epoch=5.50, eval_average=0.0000
+[02.12 05:19:22] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  46%|█████████▏          |  680/1476 [0:17:45<0:21:11, 0.63Hz] | epoch=5.53, loss=0.051800
+[02.12 05:19:23] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  46%|█████████▎          |  685/1476 [0:17:47<0:21:03, 0.63Hz] | epoch=5.57, loss=0.049500
+[02.12 05:19:25] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  47%|█████████▎          |  690/1476 [0:17:48<0:20:55, 0.63Hz] | epoch=5.61, loss=0.050300
+[02.12 05:19:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  47%|█████████▍          |  695/1476 [0:17:49<0:20:47, 0.63Hz] | epoch=5.65, loss=0.050600
+[02.12 05:19:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  47%|█████████▍          |  700/1476 [0:17:50<0:20:38, 0.63Hz] | epoch=5.69, loss=0.052000
+[02.12 05:19:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  48%|█████████▌          |  705/1476 [0:17:51<0:20:30, 0.63Hz] | epoch=5.73, loss=0.049700
+[02.12 05:19:29] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  48%|█████████▌          |  710/1476 [0:17:52<0:20:22, 0.63Hz] | epoch=5.77, loss=0.048700
+[02.12 05:19:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  48%|█████████▋          |  715/1476 [0:17:54<0:20:15, 0.63Hz] | epoch=5.81, loss=0.044300
+[02.12 05:19:32] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  49%|█████████▊          |  720/1476 [0:17:55<0:20:07, 0.63Hz] | epoch=5.85, loss=0.048200
+[02.12 05:19:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  49%|█████████▊          |  725/1476 [0:17:56<0:19:59, 0.63Hz] | epoch=5.89, loss=0.047400
+[02.12 05:19:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  49%|█████████▉          |  730/1476 [0:17:57<0:19:51, 0.63Hz] | epoch=5.93, loss=0.046500
+[02.12 05:19:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  50%|█████████▉          |  735/1476 [0:17:59<0:16:22, 0.75Hz] | epoch=5.98, loss=0.046200
+[02.12 05:19:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 73388.76Hz]
+[02.12 05:19:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:48, 0.35Hz]
+[02.12 05:20:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:21<0:00:43, 0.32Hz]
+[02.12 05:20:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:37, 0.29Hz]
+[02.12 05:20:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:20:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:13, 0.29Hz]
+[02.12 05:20:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:10<0:00:03, 0.28Hz]
+[02.12 05:20:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:13<0:00:00, 0.28Hz]
+[02.12 05:20:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  50%|██████████          |  738/1476 [0:19:20<0:19:42, 0.62Hz] | epoch=6.00, eval_average=0.0000
+[02.12 05:20:57] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  50%|██████████          |  740/1476 [0:19:20<0:19:49, 0.62Hz] | epoch=6.02, loss=0.049300
+[02.12 05:20:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  50%|██████████          |  745/1476 [0:19:21<0:19:41, 0.62Hz] | epoch=6.06, loss=0.049600
+[02.12 05:20:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  51%|██████████▏         |  750/1476 [0:19:22<0:19:33, 0.62Hz] | epoch=6.10, loss=0.049100
+[02.12 05:21:01] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  51%|██████████▏         |  755/1476 [0:19:24<0:19:25, 0.62Hz] | epoch=6.14, loss=0.043400
+[02.12 05:21:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  51%|██████████▎         |  760/1476 [0:19:25<0:19:16, 0.62Hz] | epoch=6.18, loss=0.048800
+[02.12 05:21:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  52%|██████████▎         |  765/1476 [0:19:26<0:19:08, 0.62Hz] | epoch=6.22, loss=0.048500
+[02.12 05:21:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  52%|██████████▍         |  770/1476 [0:19:27<0:19:00, 0.62Hz] | epoch=6.26, loss=0.046000
+[02.12 05:21:05] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  53%|██████████▌         |  775/1476 [0:19:29<0:18:52, 0.62Hz] | epoch=6.30, loss=0.048000
+[02.12 05:21:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  53%|██████████▌         |  780/1476 [0:19:30<0:18:44, 0.62Hz] | epoch=6.34, loss=0.050000
+[02.12 05:21:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  53%|██████████▋         |  785/1476 [0:19:31<0:18:36, 0.62Hz] | epoch=6.38, loss=0.047900
+[02.12 05:21:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  54%|██████████▋         |  790/1476 [0:19:32<0:15:12, 0.75Hz] | epoch=6.42, loss=0.045900
+[02.12 05:21:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  54%|██████████▊         |  795/1476 [0:19:33<0:15:01, 0.76Hz] | epoch=6.46, loss=0.047400
+[02.12 05:21:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  54%|██████████▊         |  800/1476 [0:19:35<0:14:54, 0.76Hz] | epoch=6.50, loss=0.047200
+[02.12 05:21:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 85748.43Hz]
+[02.12 05:21:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.35Hz]
+[02.12 05:21:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.32Hz]
+[02.12 05:21:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:37, 0.29Hz]
+[02.12 05:22:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:22:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:13, 0.29Hz]
+[02.12 05:22:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:10<0:00:03, 0.28Hz]
+[02.12 05:22:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:13<0:00:00, 0.28Hz]
+[02.12 05:22:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  54%|██████████▊         |  800/1476 [0:19:35<0:14:54, 0.76Hz] | epoch=6.50, eval_average=0.0000
+[02.12 05:22:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  55%|██████████▉         |  805/1476 [0:20:56<0:17:46, 0.63Hz] | epoch=6.54, loss=0.047600
+[02.12 05:22:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  55%|██████████▉         |  810/1476 [0:20:57<0:17:38, 0.63Hz] | epoch=6.58, loss=0.043700
+[02.12 05:22:35] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  55%|███████████         |  815/1476 [0:20:58<0:17:30, 0.63Hz] | epoch=6.63, loss=0.044800
+[02.12 05:22:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  56%|███████████         |  820/1476 [0:21:00<0:17:23, 0.63Hz] | epoch=6.67, loss=0.043000
+[02.12 05:22:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  56%|███████████▏        |  825/1476 [0:21:01<0:17:14, 0.63Hz] | epoch=6.71, loss=0.046900
+[02.12 05:22:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  56%|███████████▏        |  830/1476 [0:21:02<0:17:06, 0.63Hz] | epoch=6.75, loss=0.045500
+[02.12 05:22:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  57%|███████████▎        |  835/1476 [0:21:03<0:16:59, 0.63Hz] | epoch=6.79, loss=0.048300
+[02.12 05:22:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  57%|███████████▍        |  840/1476 [0:21:04<0:16:50, 0.63Hz] | epoch=6.83, loss=0.045300
+[02.12 05:22:42] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  57%|███████████▍        |  845/1476 [0:21:06<0:16:42, 0.63Hz] | epoch=6.87, loss=0.047600
+[02.12 05:22:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  58%|███████████▌        |  850/1476 [0:21:07<0:16:34, 0.63Hz] | epoch=6.91, loss=0.043400
+[02.12 05:22:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  58%|███████████▌        |  855/1476 [0:21:08<0:13:35, 0.76Hz] | epoch=6.95, loss=0.044400
+[02.12 05:22:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  58%|███████████▋        |  860/1476 [0:21:09<0:13:20, 0.77Hz] | epoch=6.99, loss=0.043600
+[02.12 05:22:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 90325.28Hz]
+[02.12 05:23:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.35Hz]
+[02.12 05:23:13] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:44, 0.32Hz]
+[02.12 05:23:25] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:37, 0.29Hz]
+[02.12 05:23:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:48<0:00:24, 0.29Hz]
+[02.12 05:23:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:00:59<0:00:13, 0.29Hz]
+[02.12 05:24:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:11<0:00:03, 0.28Hz]
+[02.12 05:24:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:14<0:00:00, 0.28Hz]
+[02.12 05:24:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  58%|███████████▋        |  861/1476 [0:22:31<0:16:13, 0.63Hz] | epoch=7.00, eval_average=0.0165
+[02.12 05:24:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  59%|███████████▋        |  865/1476 [0:22:32<0:16:09, 0.63Hz] | epoch=7.03, loss=0.048000
+[02.12 05:24:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  59%|███████████▊        |  870/1476 [0:22:33<0:16:01, 0.63Hz] | epoch=7.07, loss=0.045300
+[02.12 05:24:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  59%|███████████▊        |  875/1476 [0:22:34<0:15:54, 0.63Hz] | epoch=7.11, loss=0.044800
+[02.12 05:24:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  60%|███████████▉        |  880/1476 [0:22:35<0:15:46, 0.63Hz] | epoch=7.15, loss=0.040800
+[02.12 05:24:13] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  60%|███████████▉        |  885/1476 [0:22:37<0:15:38, 0.63Hz] | epoch=7.20, loss=0.041800
+[02.12 05:24:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  60%|████████████        |  890/1476 [0:22:38<0:15:30, 0.63Hz] | epoch=7.24, loss=0.042700
+[02.12 05:24:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  61%|████████████▏       |  895/1476 [0:22:39<0:15:22, 0.63Hz] | epoch=7.28, loss=0.044100
+[02.12 05:24:17] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  61%|████████████▏       |  900/1476 [0:22:40<0:15:14, 0.63Hz] | epoch=7.32, loss=0.043500
+[02.12 05:24:18] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  61%|████████████▎       |  905/1476 [0:22:42<0:15:06, 0.63Hz] | epoch=7.36, loss=0.045000
+[02.12 05:24:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  62%|████████████▎       |  910/1476 [0:22:43<0:14:58, 0.63Hz] | epoch=7.40, loss=0.042800
+[02.12 05:24:21] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  62%|████████████▍       |  915/1476 [0:22:44<0:14:50, 0.63Hz] | epoch=7.44, loss=0.044800
+[02.12 05:24:22] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  62%|████████████▍       |  920/1476 [0:22:45<0:12:13, 0.76Hz] | epoch=7.48, loss=0.042500
+[02.12 05:24:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 74538.23Hz]
+[02.12 05:24:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:49, 0.34Hz]
+[02.12 05:24:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:45, 0.31Hz]
+[02.12 05:25:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:34<0:00:38, 0.29Hz]
+[02.12 05:25:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  67%|█████████████▎      | 14/21 [0:00:49<0:00:24, 0.29Hz]
+[02.12 05:25:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  81%|████████████████▏   | 17/21 [0:01:00<0:00:14, 0.28Hz]
+[02.12 05:25:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  95%|███████████████████ | 20/21 [0:01:12<0:00:03, 0.28Hz]
+[02.12 05:25:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:15<0:00:00, 0.28Hz]
+[02.12 05:25:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  62%|████████████▍       |  922/1476 [0:24:07<0:14:49, 0.62Hz] | epoch=7.50, eval_average=0.0168
+[02.12 05:25:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  63%|████████████▌       |  925/1476 [0:24:08<0:14:49, 0.62Hz] | epoch=7.52, loss=0.041500
+[02.12 05:25:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  63%|████████████▌       |  930/1476 [0:24:10<0:14:41, 0.62Hz] | epoch=7.56, loss=0.043300
+[02.12 05:25:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  63%|████████████▋       |  935/1476 [0:24:11<0:14:33, 0.62Hz] | epoch=7.60, loss=0.040300
+[02.12 05:25:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  64%|████████████▋       |  940/1476 [0:24:12<0:14:25, 0.62Hz] | epoch=7.64, loss=0.039900
+[02.12 05:25:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  64%|████████████▊       |  945/1476 [0:24:13<0:14:17, 0.62Hz] | epoch=7.68, loss=0.042500
+[02.12 05:25:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  64%|████████████▊       |  950/1476 [0:24:15<0:14:09, 0.62Hz] | epoch=7.72, loss=0.044200
+[02.12 05:25:53] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  65%|████████████▉       |  955/1476 [0:24:16<0:14:01, 0.62Hz] | epoch=7.76, loss=0.041300
+[02.12 05:25:54] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  65%|█████████████       |  960/1476 [0:24:17<0:13:53, 0.62Hz] | epoch=7.80, loss=0.037700
+[02.12 05:25:55] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  65%|█████████████       |  965/1476 [0:24:18<0:13:45, 0.62Hz] | epoch=7.85, loss=0.040500
+[02.12 05:25:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  66%|█████████████▏      |  970/1476 [0:24:20<0:13:37, 0.62Hz] | epoch=7.89, loss=0.043800
+[02.12 05:25:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  66%|█████████████▏      |  975/1476 [0:24:21<0:11:04, 0.75Hz] | epoch=7.93, loss=0.040000
+[02.12 05:25:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  66%|█████████████▎      |  980/1476 [0:24:22<0:10:55, 0.76Hz] | epoch=7.97, loss=0.041700
+[02.12 05:26:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 87092.51Hz]
+[02.12 05:26:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:11<0:00:50, 0.34Hz]
+[02.12 05:26:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:22<0:00:45, 0.31Hz]
+[02.12 05:26:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:35<0:00:39, 0.28Hz]
+[02.12 05:26:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:45<0:00:28, 0.28Hz]
+[02.12 05:27:01] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:00:57<0:00:17, 0.28Hz]
+[02.12 05:27:14] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:10<0:00:07, 0.27Hz]
+[02.12 05:27:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:17<0:00:00, 0.27Hz]
+[02.12 05:27:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  67%|█████████████▎      |  984/1476 [0:25:47<0:13:10, 0.62Hz] | epoch=8.00, eval_average=0.0190
+[02.12 05:27:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  67%|█████████████▎      |  985/1476 [0:25:47<0:13:18, 0.61Hz] | epoch=8.01, loss=0.044000
+[02.12 05:27:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  67%|█████████████▍      |  990/1476 [0:25:49<0:13:10, 0.61Hz] | epoch=8.05, loss=0.039500
+[02.12 05:27:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  67%|█████████████▍      |  995/1476 [0:25:50<0:13:02, 0.61Hz] | epoch=8.09, loss=0.039800
+[02.12 05:27:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  68%|█████████████▌      | 1000/1476 [0:25:51<0:12:54, 0.61Hz] | epoch=8.13, loss=0.043000
+[02.12 05:27:29] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  68%|█████████████▌      | 1005/1476 [0:25:52<0:12:46, 0.61Hz] | epoch=8.17, loss=0.039300
+[02.12 05:27:30] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  68%|█████████████▋      | 1010/1476 [0:25:53<0:12:37, 0.61Hz] | epoch=8.21, loss=0.039000
+[02.12 05:27:32] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  69%|█████████████▊      | 1015/1476 [0:25:55<0:12:29, 0.62Hz] | epoch=8.25, loss=0.039600
+[02.12 05:27:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  69%|█████████████▊      | 1020/1476 [0:25:56<0:12:21, 0.61Hz] | epoch=8.29, loss=0.043100
+[02.12 05:27:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  69%|█████████████▉      | 1025/1476 [0:25:57<0:12:13, 0.61Hz] | epoch=8.33, loss=0.038900
+[02.12 05:27:35] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  70%|█████████████▉      | 1030/1476 [0:25:58<0:12:05, 0.61Hz] | epoch=8.37, loss=0.039900
+[02.12 05:27:37] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  70%|██████████████      | 1035/1476 [0:26:00<0:09:54, 0.74Hz] | epoch=8.41, loss=0.041300
+[02.12 05:27:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  70%|██████████████      | 1040/1476 [0:26:01<0:09:42, 0.75Hz] | epoch=8.46, loss=0.040800
+[02.12 05:27:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  71%|██████████████▏     | 1045/1476 [0:26:02<0:09:35, 0.75Hz] | epoch=8.50, loss=0.039000
+[02.12 05:27:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 74040.95Hz]
+[02.12 05:27:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:12<0:00:52, 0.32Hz]
+[02.12 05:28:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:23<0:00:47, 0.29Hz]
+[02.12 05:28:21] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:37<0:00:40, 0.27Hz]
+[02.12 05:28:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:47<0:00:29, 0.27Hz]
+[02.12 05:28:42] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:00:58<0:00:18, 0.27Hz]
+[02.12 05:28:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:12<0:00:07, 0.26Hz]
+[02.12 05:29:06] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:19<0:00:00, 0.26Hz]
+[02.12 05:29:06] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  71%|██████████████▏     | 1046/1476 [0:27:29<0:11:46, 0.61Hz] | epoch=8.50, eval_average=0.0479
+[02.12 05:29:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  71%|██████████████▏     | 1050/1476 [0:27:30<0:11:41, 0.61Hz] | epoch=8.54, loss=0.039000
+[02.12 05:29:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  71%|██████████████▎     | 1055/1476 [0:27:31<0:11:33, 0.61Hz] | epoch=8.58, loss=0.037000
+[02.12 05:29:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  72%|██████████████▎     | 1060/1476 [0:27:32<0:11:25, 0.61Hz] | epoch=8.62, loss=0.037200
+[02.12 05:29:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  72%|██████████████▍     | 1065/1476 [0:27:33<0:11:17, 0.61Hz] | epoch=8.66, loss=0.039700
+[02.12 05:29:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  72%|██████████████▍     | 1070/1476 [0:27:35<0:11:08, 0.61Hz] | epoch=8.70, loss=0.040500
+[02.12 05:29:13] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  73%|██████████████▌     | 1075/1476 [0:27:36<0:11:00, 0.61Hz] | epoch=8.74, loss=0.036300
+[02.12 05:29:14] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  73%|██████████████▋     | 1080/1476 [0:27:37<0:10:52, 0.61Hz] | epoch=8.78, loss=0.038100
+[02.12 05:29:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  74%|██████████████▋     | 1085/1476 [0:27:38<0:10:44, 0.61Hz] | epoch=8.82, loss=0.040800
+[02.12 05:29:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  74%|██████████████▊     | 1090/1476 [0:27:40<0:10:36, 0.61Hz] | epoch=8.86, loss=0.036900
+[02.12 05:29:18] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  74%|██████████████▊     | 1095/1476 [0:27:41<0:10:27, 0.61Hz] | epoch=8.90, loss=0.038300
+[02.12 05:29:19] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  75%|██████████████▉     | 1100/1476 [0:27:42<0:08:37, 0.73Hz] | epoch=8.94, loss=0.037600
+[02.12 05:29:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  75%|██████████████▉     | 1105/1476 [0:27:43<0:08:30, 0.73Hz] | epoch=8.98, loss=0.038400
+[02.12 05:29:25] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 95968.34Hz]
+[02.12 05:29:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:12<0:00:53, 0.32Hz]
+[02.12 05:29:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:24<0:00:48, 0.29Hz]
+[02.12 05:30:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:37<0:00:41, 0.27Hz]
+[02.12 05:30:13] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:47<0:00:29, 0.27Hz]
+[02.12 05:30:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:00:58<0:00:18, 0.27Hz]
+[02.12 05:30:37] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:12<0:00:07, 0.26Hz]
+[02.12 05:30:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:19<0:00:00, 0.26Hz]
+[02.12 05:30:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  75%|███████████████     | 1107/1476 [0:29:10<0:10:21, 0.59Hz] | epoch=9.00, eval_average=0.1145
+[02.12 05:30:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  75%|███████████████     | 1110/1476 [0:29:11<0:10:20, 0.59Hz] | epoch=9.02, loss=0.037800
+[02.12 05:30:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  76%|███████████████     | 1115/1476 [0:29:12<0:10:11, 0.59Hz] | epoch=9.06, loss=0.037300
+[02.12 05:30:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  76%|███████████████▏    | 1120/1476 [0:29:13<0:10:03, 0.59Hz] | epoch=9.11, loss=0.035500
+[02.12 05:30:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  76%|███████████████▏    | 1125/1476 [0:29:15<0:09:54, 0.59Hz] | epoch=9.15, loss=0.037000
+[02.12 05:30:53] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  77%|███████████████▎    | 1130/1476 [0:29:16<0:09:46, 0.59Hz] | epoch=9.19, loss=0.036600
+[02.12 05:30:54] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  77%|███████████████▍    | 1135/1476 [0:29:17<0:09:37, 0.59Hz] | epoch=9.23, loss=0.033000
+[02.12 05:30:55] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  77%|███████████████▍    | 1140/1476 [0:29:18<0:09:29, 0.59Hz] | epoch=9.27, loss=0.037000
+[02.12 05:30:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  78%|███████████████▌    | 1145/1476 [0:29:19<0:09:20, 0.59Hz] | epoch=9.31, loss=0.038800
+[02.12 05:30:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  78%|███████████████▌    | 1150/1476 [0:29:21<0:09:12, 0.59Hz] | epoch=9.35, loss=0.035000
+[02.12 05:30:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  78%|███████████████▋    | 1155/1476 [0:29:22<0:07:29, 0.71Hz] | epoch=9.39, loss=0.035500
+[02.12 05:31:00] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  79%|███████████████▋    | 1160/1476 [0:29:23<0:07:20, 0.72Hz] | epoch=9.43, loss=0.035700
+[02.12 05:31:01] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  79%|███████████████▊    | 1165/1476 [0:29:24<0:07:13, 0.72Hz] | epoch=9.47, loss=0.034400
+[02.12 05:31:06] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 81347.16Hz]
+[02.12 05:31:19] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:12<0:00:54, 0.31Hz]
+[02.12 05:31:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:24<0:00:49, 0.28Hz]
+[02.12 05:31:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:38<0:00:42, 0.26Hz]
+[02.12 05:31:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:49<0:00:30, 0.26Hz]
+[02.12 05:32:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:01:00<0:00:18, 0.26Hz]
+[02.12 05:32:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:14<0:00:07, 0.26Hz]
+[02.12 05:32:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:21<0:00:00, 0.26Hz]
+[02.12 05:32:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  79%|███████████████▊    | 1168/1476 [0:30:54<0:08:45, 0.59Hz] | epoch=9.50, eval_average=0.2197
+[02.12 05:32:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  79%|███████████████▊    | 1170/1476 [0:30:54<0:08:46, 0.58Hz] | epoch=9.51, loss=0.034800
+[02.12 05:32:32] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  80%|███████████████▉    | 1175/1476 [0:30:55<0:08:37, 0.58Hz] | epoch=9.55, loss=0.034900
+[02.12 05:32:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  80%|███████████████▉    | 1180/1476 [0:30:57<0:08:29, 0.58Hz] | epoch=9.59, loss=0.036100
+[02.12 05:32:35] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  80%|████████████████    | 1185/1476 [0:30:58<0:08:20, 0.58Hz] | epoch=9.63, loss=0.035300
+[02.12 05:32:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  81%|████████████████    | 1190/1476 [0:30:59<0:08:12, 0.58Hz] | epoch=9.68, loss=0.035800
+[02.12 05:32:37] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  81%|████████████████▏   | 1195/1476 [0:31:00<0:08:03, 0.58Hz] | epoch=9.71, loss=0.037500
+[02.12 05:32:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  81%|████████████████▎   | 1200/1476 [0:31:02<0:07:54, 0.58Hz] | epoch=9.76, loss=0.035500
+[02.12 05:32:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  82%|████████████████▎   | 1205/1476 [0:31:03<0:07:46, 0.58Hz] | epoch=9.80, loss=0.034000
+[02.12 05:32:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  82%|████████████████▍   | 1210/1476 [0:31:04<0:07:37, 0.58Hz] | epoch=9.84, loss=0.037200
+[02.12 05:32:42] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  82%|████████████████▍   | 1215/1476 [0:31:05<0:06:12, 0.70Hz] | epoch=9.88, loss=0.036400
+[02.12 05:32:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  83%|████████████████▌   | 1220/1476 [0:31:07<0:06:02, 0.71Hz] | epoch=9.92, loss=0.034100
+[02.12 05:32:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  83%|████████████████▌   | 1225/1476 [0:31:08<0:05:55, 0.71Hz] | epoch=9.96, loss=0.033400
+[02.12 05:32:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  83%|████████████████▋   | 1230/1476 [0:31:09<0:05:48, 0.71Hz] | epoch=10.00, loss=0.034000
+[02.12 05:32:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 93544.76Hz]
+[02.12 05:33:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:12<0:00:53, 0.32Hz]
+[02.12 05:33:14] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:24<0:00:48, 0.29Hz]
+[02.12 05:33:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:37<0:00:41, 0.27Hz]
+[02.12 05:33:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:47<0:00:29, 0.27Hz]
+[02.12 05:33:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:00:58<0:00:18, 0.27Hz]
+[02.12 05:34:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:12<0:00:07, 0.26Hz]
+[02.12 05:34:13] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:20<0:00:00, 0.26Hz]
+[02.12 05:34:13] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  83%|████████████████▋   | 1230/1476 [0:31:09<0:05:48, 0.71Hz] | epoch=10.00, eval_average=0.2588
+[02.12 05:34:14] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  84%|████████████████▋   | 1235/1476 [0:32:37<0:06:52, 0.58Hz] | epoch=10.04, loss=0.033500
+[02.12 05:34:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  84%|████████████████▊   | 1240/1476 [0:32:39<0:06:44, 0.58Hz] | epoch=10.08, loss=0.031000
+[02.12 05:34:17] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  84%|████████████████▊   | 1245/1476 [0:32:40<0:06:35, 0.58Hz] | epoch=10.12, loss=0.034100
+[02.12 05:34:18] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  85%|████████████████▉   | 1250/1476 [0:32:41<0:06:27, 0.58Hz] | epoch=10.16, loss=0.034700
+[02.12 05:34:19] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  85%|█████████████████   | 1255/1476 [0:32:42<0:06:18, 0.58Hz] | epoch=10.20, loss=0.031500
+[02.12 05:34:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  85%|█████████████████   | 1260/1476 [0:32:43<0:06:09, 0.58Hz] | epoch=10.24, loss=0.034300
+[02.12 05:34:22] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  86%|█████████████████▏  | 1265/1476 [0:32:45<0:06:01, 0.58Hz] | epoch=10.29, loss=0.034200
+[02.12 05:34:23] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  86%|█████████████████▏  | 1270/1476 [0:32:46<0:05:52, 0.58Hz] | epoch=10.32, loss=0.031800
+[02.12 05:34:24] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  86%|█████████████████▎  | 1275/1476 [0:32:47<0:05:44, 0.58Hz] | epoch=10.37, loss=0.031900
+[02.12 05:34:25] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  87%|█████████████████▎  | 1280/1476 [0:32:49<0:04:38, 0.70Hz] | epoch=10.41, loss=0.032000
+[02.12 05:34:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  87%|█████████████████▍  | 1285/1476 [0:32:50<0:04:28, 0.71Hz] | epoch=10.45, loss=0.032500
+[02.12 05:34:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  87%|█████████████████▍  | 1290/1476 [0:32:51<0:04:21, 0.71Hz] | epoch=10.49, loss=0.036300
+[02.12 05:34:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 89198.81Hz]
+[02.12 05:34:45] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:12<0:00:54, 0.31Hz]
+[02.12 05:34:57] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:24<0:00:48, 0.29Hz]
+[02.12 05:35:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:38<0:00:42, 0.26Hz]
+[02.12 05:35:22] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:49<0:00:30, 0.26Hz]
+[02.12 05:35:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:01:01<0:00:19, 0.26Hz]
+[02.12 05:35:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:14<0:00:07, 0.25Hz]
+[02.12 05:35:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:22<0:00:00, 0.25Hz]
+[02.12 05:35:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  88%|█████████████████▌  | 1292/1476 [0:34:21<0:05:16, 0.58Hz] | epoch=10.50, eval_average=0.4000
+[02.12 05:35:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  88%|█████████████████▌  | 1295/1476 [0:34:22<0:05:13, 0.58Hz] | epoch=10.53, loss=0.032600
+[02.12 05:36:00] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  88%|█████████████████▌  | 1300/1476 [0:34:23<0:05:04, 0.58Hz] | epoch=10.57, loss=0.033300
+[02.12 05:36:01] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  88%|█████████████████▋  | 1305/1476 [0:34:24<0:04:56, 0.58Hz] | epoch=10.61, loss=0.031500
+[02.12 05:36:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  89%|█████████████████▊  | 1310/1476 [0:34:25<0:04:47, 0.58Hz] | epoch=10.65, loss=0.031300
+[02.12 05:36:04] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  89%|█████████████████▊  | 1315/1476 [0:34:27<0:04:38, 0.58Hz] | epoch=10.69, loss=0.031000
+[02.12 05:36:05] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  89%|█████████████████▉  | 1320/1476 [0:34:28<0:04:30, 0.58Hz] | epoch=10.73, loss=0.031900
+[02.12 05:36:06] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  90%|█████████████████▉  | 1325/1476 [0:34:29<0:04:21, 0.58Hz] | epoch=10.77, loss=0.033900
+[02.12 05:36:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  90%|██████████████████  | 1330/1476 [0:34:30<0:04:12, 0.58Hz] | epoch=10.81, loss=0.030900
+[02.12 05:36:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  90%|██████████████████  | 1335/1476 [0:34:32<0:04:04, 0.58Hz] | epoch=10.85, loss=0.031500
+[02.12 05:36:10] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  91%|██████████████████▏ | 1340/1476 [0:34:33<0:03:55, 0.58Hz] | epoch=10.89, loss=0.035100
+[02.12 05:36:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  91%|██████████████████▏ | 1345/1476 [0:34:34<0:03:06, 0.70Hz] | epoch=10.94, loss=0.031900
+[02.12 05:36:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  91%|██████████████████▎ | 1350/1476 [0:34:35<0:02:58, 0.70Hz] | epoch=10.98, loss=0.033000
+[02.12 05:36:17] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 87168.52Hz]
+[02.12 05:36:30] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:12<0:00:55, 0.31Hz]
+[02.12 05:36:42] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:24<0:00:49, 0.28Hz]
+[02.12 05:36:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:38<0:00:42, 0.26Hz]
+[02.12 05:37:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:49<0:00:30, 0.26Hz]
+[02.12 05:37:19] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:01:01<0:00:19, 0.26Hz]
+[02.12 05:37:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:15<0:00:07, 0.25Hz]
+[02.12 05:37:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:23<0:00:00, 0.25Hz]
+[02.12 05:37:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  92%|██████████████████▎ | 1353/1476 [0:36:06<0:03:32, 0.58Hz] | epoch=11.00, eval_average=0.3714
+[02.12 05:37:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  92%|██████████████████▎ | 1355/1476 [0:36:06<0:03:30, 0.57Hz] | epoch=11.02, loss=0.034200
+[02.12 05:37:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  92%|██████████████████▍ | 1360/1476 [0:36:08<0:03:22, 0.57Hz] | epoch=11.06, loss=0.030100
+[02.12 05:37:46] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  92%|██████████████████▍ | 1365/1476 [0:36:09<0:03:13, 0.57Hz] | epoch=11.10, loss=0.030800
+[02.12 05:37:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  93%|██████████████████▌ | 1370/1476 [0:36:10<0:03:04, 0.57Hz] | epoch=11.14, loss=0.030100
+[02.12 05:37:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  93%|██████████████████▋ | 1375/1476 [0:36:11<0:02:55, 0.57Hz] | epoch=11.18, loss=0.030400
+[02.12 05:37:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  93%|██████████████████▋ | 1380/1476 [0:36:12<0:02:47, 0.57Hz] | epoch=11.22, loss=0.031400
+[02.12 05:37:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  94%|██████████████████▊ | 1385/1476 [0:36:14<0:02:38, 0.57Hz] | epoch=11.26, loss=0.032800
+[02.12 05:37:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  94%|██████████████████▊ | 1390/1476 [0:36:15<0:02:29, 0.57Hz] | epoch=11.30, loss=0.028500
+[02.12 05:37:53] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  95%|██████████████████▉ | 1395/1476 [0:36:16<0:02:21, 0.57Hz] | epoch=11.34, loss=0.030200
+[02.12 05:37:54] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  95%|██████████████████▉ | 1400/1476 [0:36:17<0:02:12, 0.57Hz] | epoch=11.38, loss=0.029900
+[02.12 05:37:55] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  95%|███████████████████ | 1405/1476 [0:36:19<0:01:42, 0.70Hz] | epoch=11.42, loss=0.028700
+[02.12 05:37:57] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  96%|███████████████████ | 1410/1476 [0:36:20<0:01:34, 0.70Hz] | epoch=11.46, loss=0.031500
+[02.12 05:38:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 83878.71Hz]
+[02.12 05:38:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:12<0:00:54, 0.31Hz]
+[02.12 05:38:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:24<0:00:49, 0.28Hz]
+[02.12 05:38:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:38<0:00:42, 0.26Hz]
+[02.12 05:38:52] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:49<0:00:30, 0.26Hz]
+[02.12 05:39:03] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:01:01<0:00:19, 0.26Hz]
+[02.12 05:39:17] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:15<0:00:07, 0.25Hz]
+[02.12 05:39:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:23<0:00:00, 0.25Hz]
+[02.12 05:39:27] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  96%|███████████████████▏| 1414/1476 [0:37:51<0:01:47, 0.58Hz] | epoch=11.50, eval_average=0.4828
+[02.12 05:39:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  96%|███████████████████▏| 1415/1476 [0:37:51<0:01:46, 0.57Hz] | epoch=11.50, loss=0.029300
+[02.12 05:39:29] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  96%|███████████████████▏| 1420/1476 [0:37:52<0:01:38, 0.57Hz] | epoch=11.54, loss=0.030000
+[02.12 05:39:30] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  97%|███████████████████▎| 1425/1476 [0:37:53<0:01:29, 0.57Hz] | epoch=11.59, loss=0.030400
+[02.12 05:39:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  97%|███████████████████▍| 1430/1476 [0:37:55<0:01:20, 0.57Hz] | epoch=11.63, loss=0.026300
+[02.12 05:39:33] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  97%|███████████████████▍| 1435/1476 [0:37:56<0:01:11, 0.57Hz] | epoch=11.67, loss=0.029900
+[02.12 05:39:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  98%|███████████████████▌| 1440/1476 [0:37:57<0:01:03, 0.57Hz] | epoch=11.71, loss=0.027000
+[02.12 05:39:35] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  98%|███████████████████▌| 1445/1476 [0:37:59<0:00:54, 0.57Hz] | epoch=11.75, loss=0.028800
+[02.12 05:39:37] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  98%|███████████████████▋| 1450/1476 [0:38:00<0:00:45, 0.57Hz] | epoch=11.79, loss=0.031900
+[02.12 05:39:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  99%|███████████████████▋| 1455/1476 [0:38:01<0:00:36, 0.57Hz] | epoch=11.83, loss=0.031400
+[02.12 05:39:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  99%|███████████████████▊| 1460/1476 [0:38:02<0:00:28, 0.57Hz] | epoch=11.87, loss=0.029400
+[02.12 05:39:40] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  99%|███████████████████▊| 1465/1476 [0:38:03<0:00:15, 0.69Hz] | epoch=11.91, loss=0.029100
+[02.12 05:39:41] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training] 100%|███████████████████▉| 1470/1476 [0:38:05<0:00:08, 0.70Hz] | epoch=11.95, loss=0.029100
+[02.12 05:39:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training] 100%|███████████████████▉| 1475/1476 [0:38:06<0:00:01, 0.70Hz] | epoch=11.99, loss=0.028500
+[02.12 05:39:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]   5%|▉                   |  1/21 [0:00:00<0:00:00, 83173.74Hz]
+[02.12 05:40:00] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  19%|███▊                |  4/21 [0:00:12<0:00:53, 0.32Hz]
+[02.12 05:40:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  33%|██████▋             |  7/21 [0:00:24<0:00:48, 0.29Hz]
+[02.12 05:40:25] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  48%|█████████▌          | 10/21 [0:00:37<0:00:41, 0.27Hz]
+[02.12 05:40:36] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  62%|████████████▍       | 13/21 [0:00:48<0:00:30, 0.27Hz]
+[02.12 05:40:48] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  76%|███████████████▏    | 16/21 [0:01:00<0:00:18, 0.26Hz]
+[02.12 05:41:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  90%|██████████████████  | 19/21 [0:01:14<0:00:07, 0.26Hz]
+[02.12 05:41:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 21/21 [0:01:22<0:00:00, 0.26Hz]
+[02.12 05:41:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training] 100%|████████████████████| 1476/1476 [0:39:35<0:00:00, 0.57Hz] | epoch=12.00, eval_average=0.4889
+[02.12 05:41:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training] 100%|████████████████████| 1476/1476 [0:39:35<0:00:00, 0.57Hz] | epoch=12.00, train_loss=0.0989, total_pflos=16.154
+[02.12 05:41:12] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 05:41:12] ┇ INFO    ┇                 DeepKNLP ┇ Train output metrics: {'train_runtime': 2375.2637, 'train_samples_per_second': 19.749, 'train_steps_per_second': 0.621, 'total_flos': 1.6154067875135488e+16, 'train_loss': 0.098904452026698, 'epoch': 12.0}
+[02.12 05:41:12] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
+[02.12 05:41:12] ┇ INFO    ┇           chrisbase.data ┇ [EXIT] python task2-nerG-trainer.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds2_t5.json --run_version FlanT5-Base-WQ=4,3 --pretrained google/flan-t5-base --eval_epochs 0.5 --logging_steps 5 --num_train_epochs 12 --per_device_eval_batch_size 50 --per_device_train_batch_size 8 --gradient_accumulation_steps 1 --generation_max_length 640 --eval_file data/gner/each-sampled-WQ=4,3/crossner_music-dev=100-WQ=4,3.jsonl --train_file data/gner/each-WQ=4,3/crossner_music-train-WQ=4,3.jsonl --output_file train-metrics-crossner_music-12ep.csv --logging_file train-loggings-crossner_music-12ep.out --no_use_flash_attention --no_debugging ($=00:39:49.157)
+[02.12 05:41:12] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
+[02.12 05:41:13] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
+
+[02.12 05:41:13] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
+
+]
+[02.12 05:41:13] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
+Function    Runtimes (s)
+----------  --------------
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
+[02.12 05:41:13] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
+
+[02.12 05:41:13] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
+
+]
+[02.12 05:41:13] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
+Function    Runtimes (s)
+----------  --------------
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
+[02.12 05:41:13] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
+
+[02.12 05:41:13] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
+
+]
+[02.12 05:41:13] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
+Function    Runtimes (s)
+----------  --------------
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
+[02.12 05:41:13] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
+
+[02.12 05:41:13] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
+
+]
+[02.12 05:41:13] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
+Function    Runtimes (s)
+----------  --------------
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
+[02.12 05:41:13] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
