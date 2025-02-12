@@ -1,0 +1,325 @@
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ [INIT] python task2-nerG-trainer.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds2_llama.json --run_version Llama3-1B-BL --pretrained meta-llama/Llama-3.2-1B --eval_epochs 0.5 --logging_steps 5 --num_train_epochs 12 --per_device_eval_batch_size 50 --per_device_train_batch_size 8 --gradient_accumulation_steps 1 --generation_max_length 640 --eval_file data/gner/each-sampled-BL/crossner_literature-dev=100.jsonl --train_file data/gner/each-BL/crossner_literature-train.jsonl --output_file train-metrics-crossner_literature-12ep.csv --logging_file train-loggings-crossner_literature-12ep.out --no_use_flash_attention --no_debugging
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   #	TrainingArgumentsForAccelerator              	value
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   1	env.hostname                                 	dgx-a100
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   2	env.hostaddr                                 	129.254.23.12
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   3	env.global_rank                              	-1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   4	env.local_rank                               	0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   5	env.node_rank                                	-1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   6	env.world_size                               	4
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   7	env.time_stamp                               	0212-004933
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   8	env.python_path                              	/raid/chrisjihee/miniforge3/envs/DeepKNLP/bin/python
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇   9	env.current_dir                              	/raid/chrisjihee/proj/DeepKNLP
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  10	env.current_file                             	task2-nerG-trainer.py
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  11	env.command_args                             	['--local_rank=0', '--trainer_deepspeed', 'configs/deepspeed/ds2_llama.json', '--run_version', 'Llama3-1B-BL', '--pretrained', 'meta-llama/Llama-3.2-1B', '--eval_epochs', '0.5', '--logging_steps', '5', '--num_train_epochs', '12', '--per_device_eval_batch_size', '50', '--per_device_train_batch_size', '8', '--gradient_accumulation_steps', '1', '--generation_max_length', '640', '--eval_file', 'data/gner/each-sampled-BL/crossner_literature-dev=100.jsonl', '--train_file', 'data/gner/each-BL/crossner_literature-train.jsonl', '--output_file', 'train-metrics-crossner_literature-12ep.csv', '--logging_file', 'train-loggings-crossner_literature-12ep.out', '--no_use_flash_attention', '--no_debugging']
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  12	env.output_home                              	output
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  13	env.output_name                              	GNER
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  14	env.run_version                              	Llama3-1B-BL
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  15	env.output_file                              	train-metrics-crossner_literature-12ep-0212-004933.csv
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  16	env.logging_file                             	train-loggings-crossner_literature-12ep-0212-004933.out
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  17	env.logging_level                            	30
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  18	env.logging_format                           	%(asctime)s ┇ %(levelname)-7s ┇ %(name)24s ┇ %(message)s
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  19	env.datetime_format                          	[%m.%d %H:%M:%S]
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  20	env.argument_file                            	train-arguments-0212-004933.json
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  21	env.random_seed                              	7
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  22	env.max_workers                              	4
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  23	env.debugging                                	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  24	env.output_dir                               	output/GNER/Llama3-1B-BL
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  25	time.t1                                      	2025-02-12 00:49:48.612820
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  26	time.t2                                      	2025-02-12 00:49:30.107192
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  27	time.started                                 	[02.12 00:49:48]
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  28	time.settled
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  29	time.elapsed
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  30	data.train_file                              	data/gner/each-BL/crossner_literature-train.jsonl
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  31	data.study_file
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  32	data.eval_file                               	data/gner/each-sampled-BL/crossner_literature-dev=100.jsonl
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  33	data.pred_file
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  34	data.pretrained                              	meta-llama/Llama-3.2-1B
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  35	data.max_train_samples                       	-1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  36	data.max_study_samples                       	-1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  37	data.max_eval_samples                        	-1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  38	data.max_pred_samples                        	-1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  39	data.use_cache_data                          	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  40	data.progress_seconds                        	10.0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  41	data.max_source_length                       	640
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  42	data.max_target_length                       	640
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  43	data.write_predictions                       	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  44	data.ignore_pad_token_for_loss               	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  45	train._n_gpu                                 	1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  46	train.accelerator_config                     	{'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False}
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  47	train.adafactor                              	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  48	train.adam_beta1                             	0.9
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  49	train.adam_beta2                             	0.999
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  50	train.adam_epsilon                           	1e-08
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  51	train.auto_find_batch_size                   	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  52	train.average_tokens_across_devices          	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  53	train.batch_eval_metrics                     	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  54	train.bf16                                   	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  55	train.bf16_full_eval                         	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  56	train.data_seed
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  57	train.dataloader_drop_last                   	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  58	train.dataloader_num_workers                 	0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  59	train.dataloader_persistent_workers          	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  60	train.dataloader_pin_memory                  	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  61	train.dataloader_prefetch_factor
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  62	train.ddp_backend
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  63	train.ddp_broadcast_buffers
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  64	train.ddp_bucket_cap_mb
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  65	train.ddp_find_unused_parameters
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  66	train.ddp_timeout                            	1800
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  67	train.debug                                  	[]
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  68	train.deepspeed                              	configs/deepspeed/ds2_llama.json
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  69	train.disable_tqdm                           	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  70	train.dispatch_batches
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  71	train.do_eval                                	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  72	train.do_predict                             	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  73	train.do_train                               	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  74	train.eval_accumulation_steps                	1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  75	train.eval_delay                             	0.0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  76	train.eval_do_concat_batches                 	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  77	train.eval_epochs                            	0.5
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  78	train.eval_on_start                          	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  79	train.eval_steps                             	9223372036854775807
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  80	train.eval_strategy                          	IntervalStrategy.NO
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  81	train.eval_use_gather_object                 	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  82	train.evaluation_strategy
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  83	train.fp16                                   	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  84	train.fp16_backend                           	auto
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  85	train.fp16_full_eval                         	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  86	train.fp16_opt_level                         	O1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  87	train.fsdp                                   	[]
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  88	train.fsdp_config                            	{'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False}
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  89	train.fsdp_min_num_params                    	0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  90	train.fsdp_transformer_layer_cls_to_wrap
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  91	train.full_determinism                       	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  92	train.generation_config
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  93	train.generation_max_length                  	640
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  94	train.generation_num_beams
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  95	train.gradient_accumulation_steps            	1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  96	train.gradient_checkpointing                 	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  97	train.gradient_checkpointing_kwargs
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  98	train.greater_is_better
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇  99	train.group_by_length                        	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 100	train.half_precision_backend                 	auto
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 101	train.hub_always_push                        	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 102	train.hub_model_id
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 103	train.hub_private_repo
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 104	train.hub_strategy                           	HubStrategy.EVERY_SAVE
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 105	train.hub_token
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 106	train.ignore_data_skip                       	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 107	train.include_for_metrics                    	[]
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 108	train.include_inputs_for_metrics             	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 109	train.include_num_input_tokens_seen          	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 110	train.include_tokens_per_second              	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 111	train.jit_mode_eval                          	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 112	train.label_names
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 113	train.label_smoothing_factor                 	0.0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 114	train.learning_rate                          	2e-05
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 115	train.length_column_name                     	length
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 116	train.load_best_model_at_end                 	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 117	train.local_rank                             	0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 118	train.log_level                              	warning
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 119	train.log_level_replica                      	error
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 120	train.log_on_each_node                       	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 121	train.logging_dir                            	output/GNER/Llama3-1B-BL/runs/Feb12_00-49-44_dgx-a100
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 122	train.logging_epochs                         	-1.0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 123	train.logging_first_step                     	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 124	train.logging_nan_inf_filter                 	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 125	train.logging_steps                          	5
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 126	train.logging_strategy                       	IntervalStrategy.STEPS
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 127	train.lr_scheduler_kwargs                    	{}
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 128	train.lr_scheduler_type                      	SchedulerType.COSINE
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 129	train.max_grad_norm                          	1.0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 130	train.max_steps                              	-1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 131	train.metric_for_best_model
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 132	train.mp_parameters
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 133	train.neftune_noise_alpha
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 134	train.no_cuda                                	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 135	train.num_train_epochs                       	12.0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 136	train.optim                                  	OptimizerNames.ADAMW_TORCH
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 137	train.optim_args
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 138	train.optim_target_modules
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 139	train.output_dir                             	output/GNER/Llama3-1B-BL
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 140	train.overwrite_output_dir                   	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 141	train.past_index                             	-1
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 142	train.per_device_eval_batch_size             	50
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 143	train.per_device_train_batch_size            	8
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 144	train.per_gpu_eval_batch_size
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 145	train.per_gpu_train_batch_size
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 146	train.predict_with_generate                  	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 147	train.prediction_loss_only                   	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 148	train.push_to_hub                            	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 149	train.push_to_hub_model_id
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 150	train.push_to_hub_organization
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 151	train.push_to_hub_token
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 152	train.ray_scope                              	last
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 153	train.remove_unused_columns                  	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 154	train.report_to                              	[]
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 155	train.restore_callback_states_from_checkpoint	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 156	train.resume_from_checkpoint
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 157	train.run_name                               	output/GNER/Llama3-1B-BL
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 158	train.save_epochs                            	-1.0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 159	train.save_on_each_node                      	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 160	train.save_only_model                        	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 161	train.save_safetensors                       	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 162	train.save_steps                             	9223372036854775807
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 163	train.save_strategy                          	SaveStrategy.NO
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 164	train.save_total_limit
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 165	train.seed                                   	7
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 166	train.skip_memory_metrics                    	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 167	train.sortish_sampler                        	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 168	train.split_batches
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 169	train.tf32                                   	True
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 170	train.torch_compile                          	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 171	train.torch_compile_backend
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 172	train.torch_compile_mode
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 173	train.torch_empty_cache_steps
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 174	train.torchdynamo
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 175	train.tpu_metrics_debug                      	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 176	train.tpu_num_cores
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 177	train.use_cpu                                	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 178	train.use_flash_attention                    	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 179	train.use_ipex                               	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 180	train.use_legacy_prediction_loop             	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 181	train.use_liger_kernel                       	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 182	train.use_mps_device                         	False
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 183	train.warmup_ratio                           	0.04
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 184	train.warmup_steps                           	0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ 185	train.weight_decay                           	0.0
+[02.12 00:49:48] ┇ INFO    ┇           chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 00:49:52] ┇ INFO    ┇                 DeepKNLP ┇ model type: <class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'>
+[02.12 00:49:52] ┇ INFO    ┇                 DeepKNLP ┇ model pad_token_id: 128001
+[02.12 00:49:53] ┇ INFO    ┇                 DeepKNLP ┇ Loaded raw train_dataset (#=100): data/gner/each-BL/crossner_literature-train.jsonl
+[02.12 00:49:54] ┇ INFO    ┇                 DeepKNLP ┇ Preprocess train_dataset:   4%|▊                   |   4/100 [0:00:01<0:00:37, 2.58Hz]
+[02.12 00:49:54] ┇ INFO    ┇                 DeepKNLP ┇ Preprocess train_dataset: 100%|████████████████████| 100/100 [0:00:01<0:00:00, 63.22Hz]
+[02.12 00:49:55] ┇ INFO    ┇                 DeepKNLP ┇ Completed preprocessing for train_dataset by meta-llama/Llama-3.2-1B at [02.12 00:49:55]
+[02.12 00:49:55] ┇ INFO    ┇                 DeepKNLP ┇ Loaded raw eval_dataset (#=100): data/gner/each-sampled-BL/crossner_literature-dev=100.jsonl
+[02.12 00:49:57] ┇ INFO    ┇                 DeepKNLP ┇ Preprocess eval_dataset:   4%|▊                   |   4/100 [0:00:01<0:00:38, 2.46Hz]
+[02.12 00:49:57] ┇ INFO    ┇                 DeepKNLP ┇ Preprocess eval_dataset: 100%|████████████████████| 100/100 [0:00:01<0:00:00, 60.89Hz]
+[02.12 00:49:58] ┇ INFO    ┇                 DeepKNLP ┇ Completed preprocessing for eval_dataset by meta-llama/Llama-3.2-1B at [02.12 00:49:57]
+[02.12 00:50:04] ┇ INFO    ┇ torch.distributed.distributed_c10d ┇ Using backend config: {'cuda': 'nccl'}
+[02.12 00:50:06] ┇ INFO    ┇ torch.distributed.distributed_c10d ┇ Using backend config: {'cuda': 'nccl'}
+[02.12 00:50:07] ┇ INFO    ┇ torch.distributed.distributed_c10d ┇ Using backend config: {'cuda': 'nccl'}
+[02.12 00:50:07] ┇ INFO    ┇ torch.distributed.distributed_c10d ┇ Using backend config: {'cuda': 'nccl'}
+[02.12 00:50:16] ┇ WARNING ┇                DeepSpeed ┇ Attempting to get learning rate from scheduler before it has started
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ ***** Beginning Training *****
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Epochs       = 12.0
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Examples     = 100
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Batch Size   = 32 = 8 * 1 * 4
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Optim Steps  = 48 = 4 * 12.0
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Train Model Params = 1,235,814,400
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Trainer Callbacks  = DefaultFlowCallback, CustomProgressCallback
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Zero Optim Stage   = 2
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Eval Examples      = 100
+[02.12 00:50:16] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ >> Eval Batch Size    = 200 = 50 * 4
+[02.12 00:50:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 46401.98Hz]
+[02.12 00:50:28] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   4%|▊                   |  2/48 [0:00:12<0:04:49, 0.16Hz] | epoch=0.50, eval_average=0.0000
+[02.12 00:50:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 39325.44Hz]
+[02.12 00:50:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]   8%|█▋                  |  4/48 [0:00:22<0:04:02, 0.18Hz] | epoch=1.00, eval_average=0.0000
+[02.12 00:50:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  10%|██                  |  5/48 [0:00:22<0:03:12, 0.22Hz] | epoch=1.25, loss=0.865800
+[02.12 00:50:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 44896.38Hz]
+[02.12 00:50:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  12%|██▌                 |  6/48 [0:00:33<0:03:52, 0.18Hz] | epoch=1.50, eval_average=0.0336
+[02.12 00:50:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 44881.37Hz]
+[02.12 00:50:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  17%|███▎                |  8/48 [0:00:42<0:03:33, 0.19Hz] | epoch=2.00, eval_average=0.1358
+[02.12 00:50:59] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  21%|████▏               | 10/48 [0:00:43<0:02:45, 0.23Hz] | epoch=2.50, loss=0.265900
+[02.12 00:51:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 45160.74Hz]
+[02.12 00:51:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  21%|████▏               | 10/48 [0:00:43<0:02:45, 0.23Hz] | epoch=2.50, eval_average=0.2351
+[02.12 00:51:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 83158.44Hz]
+[02.12 00:51:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  25%|█████               | 12/48 [0:00:58<0:02:56, 0.20Hz] | epoch=3.00, eval_average=0.5191
+[02.12 00:51:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 47435.14Hz]
+[02.12 00:51:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  29%|█████▊              | 14/48 [0:01:09<0:02:49, 0.20Hz] | epoch=3.50, eval_average=0.6117
+[02.12 00:51:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  31%|██████▎             | 15/48 [0:01:10<0:02:34, 0.21Hz] | epoch=3.75, loss=0.069100
+[02.12 00:51:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 75658.25Hz]
+[02.12 00:51:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  33%|██████▋             | 16/48 [0:01:15<0:02:31, 0.21Hz] | epoch=4.00, eval_average=0.6794
+[02.12 00:51:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 58712.92Hz]
+[02.12 00:51:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  38%|███████▌            | 18/48 [0:01:22<0:02:17, 0.22Hz] | epoch=4.50, eval_average=0.6879
+[02.12 00:51:39] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  42%|████████▎           | 20/48 [0:01:23<0:01:56, 0.24Hz] | epoch=5.00, loss=0.014300
+[02.12 00:51:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 96144.50Hz]
+[02.12 00:51:44] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  42%|████████▎           | 20/48 [0:01:23<0:01:56, 0.24Hz] | epoch=5.00, eval_average=0.7162
+[02.12 00:51:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 60787.01Hz]
+[02.12 00:51:50] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  46%|█████████▏          | 22/48 [0:01:34<0:01:51, 0.23Hz] | epoch=5.50, eval_average=0.7212
+[02.12 00:51:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 57284.56Hz]
+[02.12 00:51:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  50%|██████████          | 24/48 [0:01:40<0:01:40, 0.24Hz] | epoch=6.00, eval_average=0.6729
+[02.12 00:51:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  52%|██████████▍         | 25/48 [0:01:40<0:01:32, 0.25Hz] | epoch=6.25, loss=0.005000
+[02.12 00:52:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 91397.84Hz]
+[02.12 00:52:02] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  54%|██████████▊         | 26/48 [0:01:46<0:01:29, 0.24Hz] | epoch=6.50, eval_average=0.7360
+[02.12 00:52:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 88709.67Hz]
+[02.12 00:52:08] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  58%|███████████▋        | 28/48 [0:01:52<0:01:20, 0.25Hz] | epoch=7.00, eval_average=0.7149
+[02.12 00:52:09] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  62%|████████████▌       | 30/48 [0:01:52<0:01:07, 0.27Hz] | epoch=7.50, loss=0.001700
+[02.12 00:52:14] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 59985.58Hz]
+[02.12 00:52:14] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  62%|████████████▌       | 30/48 [0:01:52<0:01:07, 0.27Hz] | epoch=7.50, eval_average=0.7191
+[02.12 00:52:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 64512.25Hz]
+[02.12 00:52:20] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  67%|█████████████▎      | 32/48 [0:02:03<0:01:01, 0.26Hz] | epoch=8.00, eval_average=0.7181
+[02.12 00:52:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 85163.53Hz]
+[02.12 00:52:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  71%|██████████████▏     | 34/48 [0:02:09<0:00:53, 0.26Hz] | epoch=8.50, eval_average=0.7319
+[02.12 00:52:26] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  73%|██████████████▌     | 35/48 [0:02:10<0:00:48, 0.27Hz] | epoch=8.75, loss=0.001100
+[02.12 00:52:31] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 94154.84Hz]
+[02.12 00:52:32] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  75%|███████████████     | 36/48 [0:02:15<0:00:45, 0.27Hz] | epoch=9.00, eval_average=0.7205
+[02.12 00:52:37] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 86258.18Hz]
+[02.12 00:52:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  79%|███████████████▊    | 38/48 [0:02:21<0:00:37, 0.27Hz] | epoch=9.50, eval_average=0.7167
+[02.12 00:52:38] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  83%|████████████████▋   | 40/48 [0:02:22<0:00:28, 0.28Hz] | epoch=10.00, loss=0.000500
+[02.12 00:52:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 51257.49Hz]
+[02.12 00:52:43] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  83%|████████████████▋   | 40/48 [0:02:22<0:00:28, 0.28Hz] | epoch=10.00, eval_average=0.7064
+[02.12 00:52:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 61147.03Hz]
+[02.12 00:52:49] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  88%|█████████████████▌  | 42/48 [0:02:33<0:00:21, 0.27Hz] | epoch=10.50, eval_average=0.7240
+[02.12 00:52:55] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 80297.77Hz]
+[02.12 00:52:55] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  92%|██████████████████▎ | 44/48 [0:02:39<0:00:14, 0.28Hz] | epoch=11.00, eval_average=0.7149
+[02.12 00:52:56] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  94%|██████████████████▊ | 45/48 [0:02:39<0:00:10, 0.28Hz] | epoch=11.25, loss=0.000200
+[02.12 00:53:01] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 90412.75Hz]
+[02.12 00:53:01] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training]  96%|███████████████████▏| 46/48 [0:02:45<0:00:07, 0.28Hz] | epoch=11.50, eval_average=0.7191
+[02.12 00:53:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 1/1 [0:00:00<0:00:00, 61908.55Hz]
+[02.12 00:53:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training] 100%|████████████████████| 48/48 [0:02:51<0:00:00, 0.28Hz] | epoch=12.00, eval_average=0.7223
+[02.12 00:53:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training] 100%|████████████████████| 48/48 [0:02:51<0:00:00, 0.28Hz] | epoch=12.00, train_loss=0.1275, total_pflos=4.026
+[02.12 00:53:07] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.12 00:53:07] ┇ INFO    ┇                 DeepKNLP ┇ Train output metrics: {'train_runtime': 171.2813, 'train_samples_per_second': 7.006, 'train_steps_per_second': 0.28, 'total_flos': 4025555137593344.0, 'train_loss': 0.1274667620770439, 'epoch': 12.0}
+[02.12 00:53:07] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
+[02.12 00:53:07] ┇ INFO    ┇           chrisbase.data ┇ [EXIT] python task2-nerG-trainer.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds2_llama.json --run_version Llama3-1B-BL --pretrained meta-llama/Llama-3.2-1B --eval_epochs 0.5 --logging_steps 5 --num_train_epochs 12 --per_device_eval_batch_size 50 --per_device_train_batch_size 8 --gradient_accumulation_steps 1 --generation_max_length 640 --eval_file data/gner/each-sampled-BL/crossner_literature-dev=100.jsonl --train_file data/gner/each-BL/crossner_literature-train.jsonl --output_file train-metrics-crossner_literature-12ep.csv --logging_file train-loggings-crossner_literature-12ep.out --no_use_flash_attention --no_debugging ($=00:03:18.998)
+[02.12 00:53:07] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
+[02.12 00:53:09] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
+
+[02.12 00:53:09] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
+
+]
+[02.12 00:53:09] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
+Function    Runtimes (s)
+----------  --------------
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
+[02.12 00:53:09] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
+
+[02.12 00:53:09] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
+
+]
+[02.12 00:53:09] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
+Function    Runtimes (s)
+----------  --------------
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
+[02.12 00:53:09] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
+
+[02.12 00:53:09] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
+
+]
+[02.12 00:53:09] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
+Function    Runtimes (s)
+----------  --------------
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
+[02.12 00:53:09] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
+
+[02.12 00:53:09] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
+
+]
+[02.12 00:53:09] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
+Function    Runtimes (s)
+----------  --------------
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
+[02.12 00:53:09] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
