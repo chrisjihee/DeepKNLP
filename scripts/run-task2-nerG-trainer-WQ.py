@@ -11,6 +11,7 @@ cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3" if not debugging else
 large_machines = []
 
 # Training arguments
+experiment_id = "WQ"
 eval_epochs = 0.5
 eval_batch = 50
 train_batch = 8 if not debugging else 16
@@ -84,9 +85,10 @@ label_levels = [
 
 # Loop through each model and dataset
 for ds_config, run_prefix, pretrained in models:
-    for dataset in datasets:
+    actual_dataset = datasets if pretrained != "google/flan-t5-base" else datasets[2:]  # TODO: use original datasets
+    for dataset in actual_dataset:
         for label_level in label_levels:
-            suffix = f"-WQ={label_level}"
+            suffix = f"-{experiment_id}={label_level}"
             eval_dir = f"data/gner/each-sampled{suffix}"
             train_dir = f"data/gner/each{suffix}"
             run_version = f"{run_prefix}{suffix}"
