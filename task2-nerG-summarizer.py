@@ -12,11 +12,22 @@ main = AppTyper()
 logger: logging.Logger = logging.getLogger("DeepKNLP")
 
 
+def normalize_epoch(df: pd.DataFrame, unit_epoch: float = 0.5) -> pd.DataFrame:
+    df["mapped_epoch"] = round(df["epoch"] / unit_epoch) * unit_epoch
+    df["epoch_diff"] = (df["epoch"] - df["mapped_epoch"]).abs()
+    df = df.loc[df.groupby("mapped_epoch")["epoch_diff"].idxmin()].copy()
+    df.drop(columns=["epoch_diff", "epoch"], inplace=True)
+    df.rename(columns={"mapped_epoch": "epoch"}, inplace=True)
+    df["epoch"] = df["epoch"].round(1)
+    return df
+
+
 @main.command("summarize")
 def summarize(
         input_dirs: Annotated[str, typer.Argument()] = ...,  # "output/GNER-Baseline/*", "output/GNER-MR_EQ/*"
         csv_filename: Annotated[str, typer.Option("--csv_filename")] = "train-metrics-*.csv",
         logging_level: Annotated[int, typer.Option("--logging_level")] = logging.INFO,
+        unit_epoch: Annotated[float, typer.Option("--unit_epoch")] = 0.5,
 ):
     env = NewProjectEnv(logging_level=logging_level)
     with (
@@ -33,8 +44,7 @@ def summarize(
                 df = df.dropna(subset=eval_columns, how="all")[["epoch"] + eval_columns]
                 if df.shape[0] == 0:
                     continue
-                df["epoch"] = df["epoch"].round(1)
-                dfs.append(df)
+                dfs.append(normalize_epoch(df, unit_epoch=unit_epoch))
             if dfs:
                 merged_df = pd.concat(dfs, ignore_index=True)
                 merged_df = merged_df.groupby("epoch").first().reset_index()
