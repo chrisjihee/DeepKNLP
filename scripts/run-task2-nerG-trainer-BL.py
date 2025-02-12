@@ -73,7 +73,8 @@ large_datasets = [
 
 # Loop through each model and dataset
 for ds_config, run_prefix, pretrained in models:
-    for dataset in datasets:
+    actual_dataset = datasets if pretrained != "google/flan-t5-base" else datasets[2:]  # TODO: use original datasets
+    for dataset in actual_dataset:
         suffix = f"-BL"
         eval_dir = f"data/gner/each-sampled{suffix}"
         train_dir = f"data/gner/each{suffix}"
