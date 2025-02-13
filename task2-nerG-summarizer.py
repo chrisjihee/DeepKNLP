@@ -5,7 +5,8 @@ import typer
 from typing_extensions import Annotated
 
 from chrisbase.data import AppTyper, JobTimer, NewProjectEnv
-from chrisbase.io import files, dirs
+from chrisbase.io import files, dirs, make_dir
+from chrisbase.util import grouped
 
 # Global settings
 main = AppTyper()
@@ -24,7 +25,7 @@ def normalize_epoch(df: pd.DataFrame, unit_epoch: float = 0.5) -> pd.DataFrame:
 
 @main.command("summarize")
 def summarize(
-        input_dirs: Annotated[str, typer.Argument()] = ...,  # "output/GNER-Baseline/*", "output/GNER-MR_EQ/*"
+        input_dirs: Annotated[str, typer.Argument()] = ...,  # "output/GNER-supervised/*"
         csv_filename: Annotated[str, typer.Option("--csv_filename")] = "train-metrics-*.csv",
         logging_level: Annotated[int, typer.Option("--logging_level")] = logging.INFO,
         unit_epoch: Annotated[float, typer.Option("--unit_epoch")] = 0.5,
@@ -55,6 +56,37 @@ def summarize(
                 logger.info(f"            >> {len(dfs)} files are merged into {output_file}")
             else:
                 logger.info(f"            >> No files or no evaluation output in input folder")
+
+
+@main.command("compare")
+def compare(
+        input_files: Annotated[str, typer.Argument()] = ...,  # "output/GNER-supervised/*.csv"
+        output_dir: Annotated[str, typer.Argument()] = ...,  # "output/GNER-supervised-compare",
+        logging_level: Annotated[int, typer.Option("--logging_level")] = logging.INFO,
+):
+    env = NewProjectEnv(logging_level=logging_level)
+    with (
+        JobTimer(f"python {env.current_file} {' '.join(env.command_args)}", rt=1, rb=1, rc='=', verbose=logging_level <= logging.INFO),
+    ):
+        for group_name, group_evals in grouped(files(input_files), key=lambda x: "-".join(x.stem.split("-")[:-1])):
+            logger.info("[group_name] %s", group_name)
+            best_rows = []
+            for csv_file in group_evals:
+                df = pd.read_csv(csv_file)
+                df["experiment_id"] = csv_file.stem
+                best_idx = df['eval_average'].idxmax()
+                best_row = df.loc[best_idx]
+                best_rows.append(best_row)
+            best_df = pd.DataFrame(best_rows)
+            best_df.reset_index(drop=True, inplace=True)
+            rename_map = {x: x.replace("eval_", "") for x in best_df.columns}
+            rename_map = {k: f"{'best_' if v in ["epoch", "average"] else ''}{v}" for k, v in rename_map.items()}
+            best_df.rename(columns=rename_map, inplace=True)
+            first_columns = ["experiment_id", "best_average", "best_epoch"]
+            new_columns = first_columns + [x for x in best_df.columns if x not in first_columns]
+            best_df = best_df[new_columns]
+            best_df.sort_values(by="experiment_id", inplace=True)
+            best_df.to_csv(make_dir(output_dir) / f"{group_name}-best.csv", index=False)
 
 
 if __name__ == "__main__":
