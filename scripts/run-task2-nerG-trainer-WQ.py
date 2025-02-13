@@ -23,8 +23,8 @@ large_grad_steps = 4
 
 # List of pretrained models
 models_4B_or_less = [
-    # ("configs/deepspeed/ds2_t5.json", "FlanT5-Base", "google/flan-t5-base"),
-    ("configs/deepspeed/ds2_t5.json", "FlanT5-1B", "google/flan-t5-large"),
+    ("configs/deepspeed/ds2_t5.json", "FlanT5-Base", "google/flan-t5-base"),
+    # ("configs/deepspeed/ds2_t5.json", "FlanT5-1B", "google/flan-t5-large"),
     # ("configs/deepspeed/ds2_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
 
     # ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
@@ -63,9 +63,9 @@ datasets = [
     # "crossner_music",
     # "crossner_science",
     # "crossner_politics",
-    "crossner_literature",
-    "mit-movie",
-    # "mit-restaurant",
+    # "crossner_literature",
+    # "mit-movie",
+    "mit-restaurant",
 ]
 large_datasets = [
     "mit-movie",
@@ -74,9 +74,9 @@ large_datasets = [
 
 # Suffix and datafile directories
 label_levels = [
-    "1",
-    "2",
-    "3",
+    # "1",
+    # "2",
+    # "3",
     "4,1",
     "4,2",
     "4,3",
@@ -86,12 +86,12 @@ label_levels = [
 # Loop through each model and dataset
 for ds_config, run_prefix, pretrained in models:
     for dataset in datasets:
-        #TODO: DO NOT USE actual_label_levels
         actual_label_levels = label_levels
-        if dataset == "mit-movie":
-            actual_label_levels = ["1", "5"]
-        elif dataset == "crossner_literature":
-            actual_label_levels = ["4,1", "4,2", "4,3", "5"]
+        #TODO: DO NOT USE actual_label_levels
+        # if dataset == "mit-movie":
+        #     actual_label_levels = ["1", "5"]
+        # elif dataset == "crossner_literature":
+        #     actual_label_levels = ["4,1", "4,2", "4,3", "5"]
 
         for label_level in actual_label_levels:
             suffix = f"-{experiment_id}={label_level}"
