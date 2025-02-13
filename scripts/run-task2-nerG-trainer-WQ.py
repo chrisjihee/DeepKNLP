@@ -23,7 +23,7 @@ large_grad_steps = 4
 
 # List of pretrained models
 models_4B_or_less = [
-    ("configs/deepspeed/ds2_t5.json", "FlanT5-Base", "google/flan-t5-base"),
+    # ("configs/deepspeed/ds2_t5.json", "FlanT5-Base", "google/flan-t5-base"),
     ("configs/deepspeed/ds2_t5.json", "FlanT5-1B", "google/flan-t5-large"),
     # ("configs/deepspeed/ds2_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
 
@@ -59,13 +59,13 @@ else:
 
 # List of datasets
 datasets = [
-    "crossner_ai",
-    "crossner_music",
-    "crossner_science",
-    "crossner_politics",
+    # "crossner_ai",
+    # "crossner_music",
+    # "crossner_science",
+    # "crossner_politics",
     "crossner_literature",
     "mit-movie",
-    "mit-restaurant",
+    # "mit-restaurant",
 ]
 large_datasets = [
     "mit-movie",
@@ -85,9 +85,15 @@ label_levels = [
 
 # Loop through each model and dataset
 for ds_config, run_prefix, pretrained in models:
-    actual_dataset = datasets if pretrained != "google/flan-t5-base" else datasets[2:]  # TODO: use original datasets
-    for dataset in actual_dataset:
-        for label_level in label_levels:
+    for dataset in datasets:
+        #TODO: DO NOT USE actual_label_levels
+        actual_label_levels = label_levels
+        if dataset == "mit-movie":
+            actual_label_levels = ["1", "5"]
+        elif dataset == "crossner_literature":
+            actual_label_levels = ["4,1", "4,2", "4,3", "5"]
+
+        for label_level in actual_label_levels:
             suffix = f"-{experiment_id}={label_level}"
             eval_dir = f"data/gner/each-sampled{suffix}"
             train_dir = f"data/gner/each{suffix}"
