@@ -59,12 +59,12 @@ else:
 
 # List of datasets
 datasets = [
-    # "crossner_ai",
-    # "crossner_music",
-    # "crossner_science",
-    # "crossner_politics",
-    # "crossner_literature",
-    # "mit-movie",
+    "crossner_ai",
+    "crossner_music",
+    "crossner_science",
+    "crossner_politics",
+    "crossner_literature",
+    "mit-movie",
     "mit-restaurant",
 ]
 large_datasets = [
@@ -74,9 +74,9 @@ large_datasets = [
 
 # Suffix and datafile directories
 label_levels = [
-    # "1",
-    # "2",
-    # "3",
+    "1",
+    "2",
+    "3",
     "4,1",
     "4,2",
     "4,3",
@@ -86,14 +86,7 @@ label_levels = [
 # Loop through each model and dataset
 for ds_config, run_prefix, pretrained in models:
     for dataset in datasets:
-        actual_label_levels = label_levels
-        #TODO: DO NOT USE actual_label_levels
-        # if dataset == "mit-movie":
-        #     actual_label_levels = ["1", "5"]
-        # elif dataset == "crossner_literature":
-        #     actual_label_levels = ["4,1", "4,2", "4,3", "5"]
-
-        for label_level in actual_label_levels:
+        for label_level in label_levels:
             suffix = f"-{experiment_id}={label_level}"
             eval_dir = f"data/gner/each-sampled{suffix}"
             train_dir = f"data/gner/each{suffix}"

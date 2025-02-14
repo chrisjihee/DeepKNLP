@@ -24,7 +24,7 @@ large_grad_steps = 4
 # List of pretrained models
 models_4B_or_less = [
     ("configs/deepspeed/ds2_t5.json", "FlanT5-Base", "google/flan-t5-base"),
-    ("configs/deepspeed/ds2_t5.json", "FlanT5-1B", "google/flan-t5-large"),
+    # ("configs/deepspeed/ds2_t5.json", "FlanT5-1B", "google/flan-t5-large"),
     # ("configs/deepspeed/ds2_t5.json", "FlanT5-3B", "google/flan-t5-xl"),
 
     # ("configs/deepspeed/ds2_llama.json", "Llama3-1B", "meta-llama/Llama-3.2-1B"),
@@ -74,8 +74,7 @@ large_datasets = [
 
 # Loop through each model and dataset
 for ds_config, run_prefix, pretrained in models:
-    actual_dataset = datasets if pretrained != "google/flan-t5-base" else datasets[2:]  # TODO: use original datasets
-    for dataset in actual_dataset:
+    for dataset in datasets:
         suffix = f"-{experiment_id}"
         eval_dir = f"data/gner/each-sampled{suffix}"
         train_dir = f"data/gner/each{suffix}"
