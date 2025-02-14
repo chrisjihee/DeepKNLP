@@ -399,6 +399,8 @@ def main(
         logging_epochs: Annotated[float, typer.Option("--logging_epochs")] = -1,
         eval_epochs: Annotated[float, typer.Option("--eval_epochs")] = -1,
         save_epochs: Annotated[float, typer.Option("--save_epochs")] = -1,
+        save_total_limit: Annotated[int, typer.Option("--save_total_limit")] = 3,
+        metric_for_best_model: Annotated[str, typer.Option("--metric_for_best_model")] = None,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 1,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
@@ -494,6 +496,9 @@ def main(
             logging_epochs=logging_epochs,
             eval_epochs=eval_epochs,
             save_epochs=save_epochs,
+            save_total_limit=save_total_limit,
+            metric_for_best_model=metric_for_best_model,
+            load_best_model_at_end=bool(metric_for_best_model),
             logging_strategy="steps" if logging_steps >= 1 else "epoch" if logging_epochs == 1 else "no",
             eval_strategy="steps" if eval_steps >= 1 else "epoch" if eval_epochs == 1 else "no",
             save_strategy="steps" if save_steps >= 1 else "epoch" if save_epochs == 1 else "no",
@@ -688,8 +693,28 @@ def main(
         # Train
         if args.train.do_train:
             train_result: TrainOutput = trainer.train()
-            logger.info(f"Train output metrics: {train_result.metrics}")
             convert_all_events_in_dir(args.train.output_dir)
+            trainer.save_metrics("train", train_result.metrics)
+            trainer.log_metrics("train", train_result.metrics)
+            logger.info(f"Train output metrics: {train_result.metrics}")
+            # trainer.save_model()
+            # trainer.save_state()
+
+        # Evaluate
+        if args.train.do_eval:
+            eval_result = trainer.evaluate()
+            logger.info(f"type(eval_result)={type(eval_result)}")
+            trainer.save_metrics("eval", eval_result)
+            trainer.log_metrics("eval", eval_result)
+            logger.info(f"Eval output metrics: {eval_result}")
+
+        # Test
+        if args.train.do_predict:
+            pred_result = trainer.predict(pred_dataset)
+            logger.info(f"type(pred_result)={type(pred_result)}")
+            trainer.save_metrics("pred", pred_result.metrics)
+            trainer.log_metrics("pred", pred_result.metrics)
+            logger.info(f"Pred output metrics: {pred_result.metrics}")
 
     accelerator.end_training()
 
