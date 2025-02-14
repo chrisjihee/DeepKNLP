@@ -2,7 +2,8 @@ import os
 import random
 import socket
 import subprocess
-from . import model_specs
+
+from scripts import model_specs
 
 # Environment variables
 debugging = False
@@ -19,7 +20,7 @@ eval_file = f"data/gner/{dataset_type}/zero-shot-dev-100.jsonl"
 metric_for_best_model = "eval_average"
 generation_max_length = 640
 save_total_limit = 3
-train_epochs = 1  #TODO: 12
+train_epochs = 1  # TODO: 12
 eval_epochs = 0.5
 save_epochs = 0.5
 logging_steps = 5
