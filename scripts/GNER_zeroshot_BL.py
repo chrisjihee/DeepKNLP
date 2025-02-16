@@ -9,7 +9,7 @@ from base import *
 debugging = False
 port = random.randint(25000, 30000)
 hostname = socket.gethostname()
-cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "4,5,6,7" if not debugging else "0,1")
+cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3" if not debugging else "0,1")
 
 # Training arguments
 experiment_type = "BL"
@@ -23,7 +23,7 @@ generation_max_length = 640
 save_total_limit = 3
 train_epochs = 1  # TODO: 12
 eval_epochs = 0.3
-save_epochs = 0.5
+save_epochs = eval_epochs
 logging_steps = 5
 gradient_steps = 2
 train_batch = 16
