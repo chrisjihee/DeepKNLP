@@ -2340,63 +2340,52 @@
 [02.16 20:56:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training] 100%|████████████████████| 9900/9900 [3:03:50<0:00:00, 0.98Hz] | epoch=12.00, eval_average=0.5556
 [02.16 20:56:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [training] 100%|████████████████████| 9900/9900 [3:03:50<0:00:00, 0.98Hz] | epoch=12.00, train_loss=0.0539, total_pflos=672.393
 [02.16 20:56:15] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ -----------------------------------------------------------------------------------------------------------------------------------------
-[02.16 20:56:15] ┇ INFO    ┇                 DeepKNLP ┇ Train output metrics: {'train_runtime': 11071.3052, 'train_samples_per_second': 114.522, 'train_steps_per_second': 0.894, 'total_flos': 6.723925604376248e+17, 'train_loss': 0.05391833218661222, 'epoch': 12.0}
+
+***** train metrics *****
+  epoch                    =        12.0
+  total_flos               = 626214370GF
+  train_loss               =      0.0539
+  train_runtime            =  3:04:31.30
+  train_samples_per_second =     114.522
+  train_steps_per_second   =       0.894
+
 [02.16 20:56:21] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  14%|██▊                 | 1/7 [0:00:00<0:00:00, 85680.01Hz]
 [02.16 20:56:34] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  43%|████████▌           | 3/7 [0:00:12<0:00:16, 0.24Hz]
 [02.16 20:56:47] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  71%|██████████████▎     | 5/7 [0:00:25<0:00:10, 0.19Hz]
 [02.16 20:56:51] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 7/7 [0:00:29<0:00:00, 0.24Hz]
-[02.16 20:56:51] ┇ INFO    ┇                 DeepKNLP ┇ type(eval_result)=<class 'dict'>
-[02.16 20:56:51] ┇ INFO    ┇                 DeepKNLP ┇ Eval output metrics: {'eval_crossner_ai': 0.5034642031837804, 'eval_crossner_literature': 0.5617715617214528, 'eval_crossner_music': 0.6898470096856505, 'eval_crossner_politics': 0.5714285713785086, 'eval_crossner_science': 0.6381156316415785, 'eval_mit-movie': 0.5573770491306818, 'eval_mit-restaurant': 0.4011799409551606, 'eval_average': 0.5604548525281161, 'eval_runtime': 35.705, 'eval_samples_per_second': 19.605, 'eval_steps_per_second': 0.196, 'epoch': 12.0}
+
+***** eval metrics *****
+  epoch                    =       12.0
+  eval_average             =     0.5605
+  eval_crossner_ai         =     0.5035
+  eval_crossner_literature =     0.5618
+  eval_crossner_music      =     0.6898
+  eval_crossner_politics   =     0.5714
+  eval_crossner_science    =     0.6381
+  eval_mit-movie           =     0.5574
+  eval_mit-restaurant      =     0.4012
+  eval_runtime             = 0:00:35.70
+  eval_samples_per_second  =     19.605
+  eval_steps_per_second    =      0.196
+
 [02.16 20:56:58] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  14%|██▊                 | 1/7 [0:00:00<0:00:00, 79044.60Hz]
 [02.16 20:57:11] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  43%|████████▌           | 3/7 [0:00:13<0:00:17, 0.23Hz]
 [02.16 20:57:25] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking]  71%|██████████████▎     | 5/7 [0:00:27<0:00:10, 0.18Hz]
 [02.16 20:57:29] ┇ INFO    ┇    DeepKNLP.gner.trainer ┇ [checking] 100%|████████████████████| 7/7 [0:00:30<0:00:00, 0.23Hz]
-[02.16 20:57:29] ┇ INFO    ┇                 DeepKNLP ┇ type(pred_result)=<class 'transformers.trainer_utils.PredictionOutput'>
-[02.16 20:57:29] ┇ INFO    ┇                 DeepKNLP ┇ Pred output metrics: {'test_crossner_ai': 0.528735632134092, 'test_crossner_literature': 0.5818181817680739, 'test_crossner_music': 0.6939721792389233, 'test_crossner_politics': 0.6238830218833415, 'test_crossner_science': 0.7040169132692411, 'test_mit-movie': 0.5144508670026094, 'test_mit-restaurant': 0.34146341458706314, 'test_average': 0.569762887126192, 'test_runtime': 38.2428, 'test_samples_per_second': 18.304, 'test_steps_per_second': 0.183}
+
+***** pred metrics *****
+  test_average             =     0.5698
+  test_crossner_ai         =     0.5287
+  test_crossner_literature =     0.5818
+  test_crossner_music      =      0.694
+  test_crossner_politics   =     0.6239
+  test_crossner_science    =      0.704
+  test_mit-movie           =     0.5145
+  test_mit-restaurant      =     0.3415
+  test_runtime             = 0:00:38.24
+  test_samples_per_second  =     18.304
+  test_steps_per_second    =      0.183
+
 [02.16 20:57:30] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
 [02.16 20:57:30] ┇ INFO    ┇           chrisbase.data ┇ [EXIT] python task2-nerG-trainer.py --local_rank=0 --trainer_deepspeed configs/deepspeed/ds2_t5.json --output_name GNER-zeroshot --run_version FlanT5-Base-BL --pretrained google/flan-t5-base --save_epochs 0.5 --eval_epochs 0.5 --logging_steps 5 --num_train_epochs 12 --per_device_eval_batch_size 25 --per_device_train_batch_size 16 --gradient_accumulation_steps 2 --generation_max_length 640 --pred_file data/gner/united/zero-shot-test-100.jsonl --eval_file data/gner/united/zero-shot-dev-100.jsonl --train_file data/gner/united/pile-ner.jsonl --output_file train-metrics-united-12ep.csv --logging_file train-loggings-united-12ep.out --save_total_limit 3 --metric_for_best_model eval_average --no_use_flash_attention --no_debugging ($=03:06:44.014)
 [02.16 20:57:30] ┇ INFO    ┇           chrisbase.data ┇ =========================================================================================================================================
-[02.16 20:57:33] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
-
-[02.16 20:57:33] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
-
-]
-[02.16 20:57:33] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
-Function    Runtimes (s)
-----------  --------------
-[02.16 20:57:33] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
-[02.16 20:57:33] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
-[02.16 20:57:33] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
-[02.16 20:57:33] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
-
-[02.16 20:57:33] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
-
-]
-[02.16 20:57:33] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
-Function    Runtimes (s)
-----------  --------------
-[02.16 20:57:33] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
-[02.16 20:57:33] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
-[02.16 20:57:33] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
-[02.16 20:57:35] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
-
-[02.16 20:57:35] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
-
-]
-[02.16 20:57:35] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
-Function    Runtimes (s)
-----------  --------------
-[02.16 20:57:35] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
-[02.16 20:57:35] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
-[02.16 20:57:35] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
-[02.16 20:57:35] ┇ INFO    ┇ torch._inductor.remote_cache ┇ Cache Metrics: None
-
-[02.16 20:57:35] ┇ INFO    ┇ torch._dynamo.eval_frame ┇ TorchDynamo attempted to trace the following frames: [
-
-]
-[02.16 20:57:35] ┇ INFO    ┇      torch._dynamo.utils ┇ TorchDynamo compilation metrics:
-Function    Runtimes (s)
-----------  --------------
-[02.16 20:57:35] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇ FakeTensor cache stats:
-[02.16 20:57:35] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_hits: 0
-[02.16 20:57:35] ┇ INFO    ┇ torch._subclasses.fake_tensor ┇   cache_misses: 0
