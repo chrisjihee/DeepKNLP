@@ -2,7 +2,8 @@ import json
 import logging
 import os
 import sys
-from typing import Callable, Optional, List
+from typing import Callable, Optional, List, Dict
+from unittest.mock import patch
 
 import datasets
 import numpy as np
@@ -35,7 +36,7 @@ from transformers import (
     PrinterCallback,
     set_seed,
 )
-from transformers.trainer_utils import TrainOutput
+from transformers.trainer_utils import TrainOutput, PredictionOutput
 from transformers.utils import is_torch_tf32_available, is_torch_bf16_gpu_available
 from transformers.utils.logging import set_verbosity as transformers_set_verbosity
 
@@ -694,28 +695,26 @@ def main(
         # Train
         if args.train.do_train:
             train_result: TrainOutput = trainer.train()
-            convert_all_events_in_dir(args.train.output_dir)
+            trainer.save_model()
+            trainer.save_state()
             trainer.save_metrics("train", train_result.metrics)
-            trainer.log_metrics("train", train_result.metrics)
-            logger.info(f"Train output metrics: {train_result.metrics}")
-            # trainer.save_model()
-            # trainer.save_state()
+            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
+                trainer.log_metrics("train", train_result.metrics)
+            convert_all_events_in_dir(args.train.output_dir)
 
         # Evaluate
         if args.train.do_eval:
-            eval_result = trainer.evaluate()
-            logger.info(f"type(eval_result)={type(eval_result)}")
+            eval_result: Dict[str, float] = trainer.evaluate()
             trainer.save_metrics("eval", eval_result)
-            trainer.log_metrics("eval", eval_result)
-            logger.info(f"Eval output metrics: {eval_result}")
+            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
+                trainer.log_metrics("eval", eval_result)
 
         # Test
         if args.train.do_predict:
-            pred_result = trainer.predict(pred_dataset)
-            logger.info(f"type(pred_result)={type(pred_result)}")
+            pred_result: PredictionOutput = trainer.predict(pred_dataset)
             trainer.save_metrics("pred", pred_result.metrics)
-            trainer.log_metrics("pred", pred_result.metrics)
-            logger.info(f"Pred output metrics: {pred_result.metrics}")
+            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
+                trainer.log_metrics("pred", pred_result.metrics)
 
     accelerator.end_training()
 
