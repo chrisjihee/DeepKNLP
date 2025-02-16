@@ -45,16 +45,11 @@ Transformer-based Korean Natural Language Processing
     ```
 5. Unzip some archived data
     ```bash
-    cd data/gner/united; gzip -d -k pile-ner.jsonl.gz; cd ../../..;
-    cd data/gner; tar zxf each-BL.tar.gz; tar zxf each-sampled-BL.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-WQ=1.tar.gz; tar zxf each-sampled-WQ=1.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-WQ=2.tar.gz; tar zxf each-sampled-WQ=2.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-WQ=3.tar.gz; tar zxf each-sampled-WQ=3.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-WQ=4,1.tar.gz; tar zxf each-sampled-WQ=4,1.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-WQ=4,2.tar.gz; tar zxf each-sampled-WQ=4,2.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-WQ=4,3.tar.gz; tar zxf each-sampled-WQ=4,3.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-WQ=5.tar.gz; tar zxf each-sampled-WQ=5.tar.gz; cd ../..;
-    cd data/gner; tar zxf each-EQ.tar.gz; tar zxf each-sampled-EQ.tar.gz; cd ../..;
+    cd data/gner; tar zxf united.tar.gz; cd ../..;
+    cd data/gner; tar zxf each-BL.tar.gz; tar zxf sampled-each-BL.tar.gz; cd ../..;
+    cd data/gner; tar zxf each-WQ=1.tar.gz; tar zxf sampled-each-WQ=1.tar.gz; cd ../..;
+    cd data/gner; tar zxf each-WQ=3.tar.gz; tar zxf sampled-each-WQ=3.tar.gz; cd ../..;
+    cd data/gner; tar zxf each-WQ=5.tar.gz; tar zxf sampled-each-WQ=5.tar.gz; cd ../..;
     ```
 6. Log in to Huggingface
     ```bash
