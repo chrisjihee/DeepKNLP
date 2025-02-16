@@ -366,7 +366,7 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
         file_name = f"{save_prefix}-text_generations{suffix}.jsonl"
         with open(os.path.join(output_dir, file_name), "w") as fout:
             for example in all_examples:
-                fout.write(json.dumps(example) + "\n")
+                fout.write(example.model_dump_json() + "\n")
     return results
 
 
