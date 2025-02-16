@@ -403,7 +403,6 @@ def main(
         save_epochs: Annotated[float, typer.Option("--save_epochs")] = -1,
         save_total_limit: Annotated[int, typer.Option("--save_total_limit")] = 3,
         metric_for_best_model: Annotated[str, typer.Option("--metric_for_best_model")] = None,
-        load_best_model_at_end: Annotated[bool, typer.Option("--load_best_model_at_end/--no_load_best_model_at_end")] = False,
         logging_steps: Annotated[int, typer.Option("--logging_steps")] = 1,
         eval_steps: Annotated[int, typer.Option("--eval_steps")] = -1,
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
@@ -502,7 +501,7 @@ def main(
             save_epochs=save_epochs,
             save_total_limit=save_total_limit,
             metric_for_best_model=metric_for_best_model,
-            load_best_model_at_end=load_best_model_at_end,
+            load_best_model_at_end=bool(metric_for_best_model),
             logging_strategy="steps" if logging_steps >= 1 else "epoch" if logging_epochs == 1 else "no",
             eval_strategy="steps" if eval_steps >= 1 else "epoch" if eval_epochs == 1 else "no",
             save_strategy="steps" if save_steps >= 1 else "epoch" if save_epochs == 1 else "no",
@@ -698,8 +697,6 @@ def main(
         # Train
         if args.train.do_train:
             train_result: TrainOutput = trainer.train()
-            trainer.save_model()
-            trainer.save_state()
             with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
                 trainer.log_metrics("train", train_result.metrics)
                 trainer.save_metrics("train", train_result.metrics)
