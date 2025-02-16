@@ -2,24 +2,25 @@ import os
 import random
 import socket
 import subprocess
+
 from base import *
 
 # Environment variables
 debugging = False
 port = random.randint(25000, 30000)
 hostname = socket.gethostname()
-cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3" if not debugging else "0,1")
+cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3" if not debugging else "0")
 
 # Training arguments
 experiment_type = "WQ"
-eval_epochs = 0.5
-eval_batch = 50
-train_batch = 8 if not debugging else 16
-train_epochs = 12
-logging_steps = 5
 generation_max_length = 640
+train_epochs = 12
+eval_epochs = 0.5
+logging_steps = 5
 small_grad_steps = 1
 large_grad_steps = 4
+train_batch = 16
+eval_batch = 25
 
 # Suffix and datafile directories
 label_levels = [
