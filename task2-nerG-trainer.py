@@ -696,25 +696,25 @@ def main(
         if args.train.do_train:
             train_result: TrainOutput = trainer.train()
             trainer.save_model()
-            trainer.save_state()
-            trainer.save_metrics("train", train_result.metrics)
             with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
                 trainer.log_metrics("train", train_result.metrics)
+                trainer.save_metrics("train", train_result.metrics)
+                trainer.save_state()
             convert_all_events_in_dir(args.train.output_dir)
 
         # Evaluate
         if args.train.do_eval:
-            eval_result: Dict[str, float] = trainer.evaluate()
-            trainer.save_metrics("eval", eval_result)
+            eval_result: Dict[str, float] = trainer.evaluate(metric_key_prefix="last-eval")
             with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
                 trainer.log_metrics("eval", eval_result)
+                trainer.save_metrics("eval", eval_result)
 
         # Test
         if args.train.do_predict:
-            pred_result: PredictionOutput = trainer.predict(pred_dataset)
-            trainer.save_metrics("pred", pred_result.metrics)
+            pred_result: PredictionOutput = trainer.predict(pred_dataset, metric_key_prefix="pred")
             with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
                 trainer.log_metrics("pred", pred_result.metrics)
+                trainer.save_metrics("pred", pred_result.metrics)
 
     accelerator.end_training()
 
