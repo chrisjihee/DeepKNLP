@@ -386,7 +386,7 @@ def main(
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
-        write_predictions: Annotated[bool, typer.Option("--write_predictions/--no_write_predictions")] = False,
+        write_predictions: Annotated[bool, typer.Option("--write_predictions/--no_write_predictions")] = True,
         ignore_pad_token_for_loss: Annotated[bool, typer.Option("--ignore_pad_token_for_loss/--no_ignore_pad_token_for_loss")] = True,
         # for Seq2SeqTrainingArguments
         generation_max_length: Annotated[int, typer.Option("--generation_max_length")] = 640,
@@ -704,10 +704,20 @@ def main(
 
         # Evaluate
         if args.train.do_eval:
-            eval_result: Dict[str, float] = trainer.evaluate(metric_key_prefix="last-eval")
+            eval_result: Dict[str, float] = trainer.evaluate(metric_key_prefix="last-eval-1", num_beams=1)
             with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
-                trainer.log_metrics("eval", eval_result)
-                trainer.save_metrics("eval", eval_result)
+                trainer.log_metrics("eval-1", eval_result)
+                trainer.save_metrics("eval-1", eval_result)
+
+            eval_result: Dict[str, float] = trainer.evaluate(metric_key_prefix="last-eval-2", num_beams=2)
+            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
+                trainer.log_metrics("eval-2", eval_result)
+                trainer.save_metrics("eval-2", eval_result)
+
+            eval_result: Dict[str, float] = trainer.evaluate(metric_key_prefix="last-eval-3", num_beams=3)
+            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
+                trainer.log_metrics("eval-3", eval_result)
+                trainer.save_metrics("eval-3", eval_result)
 
         # Test
         if args.train.do_predict:
