@@ -2,7 +2,8 @@ import os
 import random
 import socket
 import subprocess
-from . import *
+
+from base import *
 
 # Environment variables
 debugging = False

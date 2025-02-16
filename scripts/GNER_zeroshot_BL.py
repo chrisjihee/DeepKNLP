@@ -3,7 +3,7 @@ import random
 import socket
 import subprocess
 
-from base import model_specs
+from base import *
 
 # Environment variables
 debugging = False
