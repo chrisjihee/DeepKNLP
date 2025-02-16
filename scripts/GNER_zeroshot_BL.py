@@ -9,7 +9,7 @@ from base import model_specs
 debugging = False
 port = random.randint(25000, 30000)
 hostname = socket.gethostname()
-cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "0,1,2,3" if not debugging else "0,1")
+cuda_devices = os.getenv("CUDA_VISIBLE_DEVICES", "4,5,6,7" if not debugging else "0,1")
 
 # Training arguments
 experiment_type = "BL"
@@ -21,13 +21,13 @@ pred_file = f"data/gner/{dataset_type}/zero-shot-test-100.jsonl"
 metric_for_best_model = "eval_average"
 generation_max_length = 640
 save_total_limit = 3
-train_epochs = 3  # TODO: 12
-eval_epochs = 0.1
-save_epochs = 0.1
+train_epochs = 12
+eval_epochs = 0.5
+save_epochs = 0.5
 logging_steps = 5
-gradient_steps = 4
-train_batch = 8 if not debugging else 16
-eval_batch = 50
+gradient_steps = 2
+train_batch = 16
+eval_batch = 25
 
 # Loop through each model and dataset
 for ds_config, run_prefix, pretrained in model_specs:
