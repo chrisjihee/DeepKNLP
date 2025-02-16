@@ -696,28 +696,18 @@ def main(
         if args.train.do_train:
             train_result: TrainOutput = trainer.train()
             trainer.save_model()
+            trainer.save_state()
             with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
                 trainer.log_metrics("train", train_result.metrics)
                 trainer.save_metrics("train", train_result.metrics)
-                trainer.save_state()
             convert_all_events_in_dir(args.train.output_dir)
 
         # Evaluate
         if args.train.do_eval:
-            eval_result: Dict[str, float] = trainer.evaluate(metric_key_prefix="last-eval-1", num_beams=1)
+            eval_result: Dict[str, float] = trainer.evaluate(eval_dataset, metric_key_prefix="eval")
             with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
-                trainer.log_metrics("eval-1", eval_result)
-                trainer.save_metrics("eval-1", eval_result)
-
-            eval_result: Dict[str, float] = trainer.evaluate(metric_key_prefix="last-eval-2", num_beams=2)
-            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
-                trainer.log_metrics("eval-2", eval_result)
-                trainer.save_metrics("eval-2", eval_result)
-
-            eval_result: Dict[str, float] = trainer.evaluate(metric_key_prefix="last-eval-3", num_beams=3)
-            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
-                trainer.log_metrics("eval-3", eval_result)
-                trainer.save_metrics("eval-3", eval_result)
+                trainer.log_metrics("eval", eval_result)
+                trainer.save_metrics("eval", eval_result)
 
         # Test
         if args.train.do_predict:
