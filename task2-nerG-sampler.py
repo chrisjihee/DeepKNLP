@@ -383,7 +383,7 @@ def main(
         train_file: Annotated[str, typer.Option("--train_file")] = None,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
         eval_file: Annotated[str, typer.Option("--eval_file")] = None,  # "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/each-sampled/crossner_ai-test=100.jsonl",
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
@@ -651,11 +651,18 @@ def main(
         accelerator.wait_for_everyone()
 
         model = model.to(device=f"cuda:{cuda_device}" if torch.cuda.is_available() else "cpu")
-        print(model.device)
         if train_dataset:
             pass
         if eval_dataset:
-            pass
+            for sample in eval_dataset:
+                # print(sample)
+                input_ids = torch.tensor([sample["input_ids"]]).to(model.device)
+                attention_mask = torch.tensor([sample["attention_mask"]]).to(model.device)
+                outputs = model.generate(input_ids=input_ids, attention_mask=attention_mask, max_new_tokens=640)
+                response = tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
+                print(input_ids.shape, attention_mask.shape, outputs.shape)
+                print(response)
+                exit(1)
         if pred_dataset:
             pass
 
