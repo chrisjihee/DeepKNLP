@@ -14,7 +14,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="chrisdata.cli" />
-    <option name="PARAMETERS" value="ner convert_to_WQ data/gner/each/crossner_ai-train.jsonl data/gner/each-WQ --label_level_main 2" />
+    <option name="PARAMETERS" value="ner convert_to_WQ data/gner/united/pile-ner=5-120,3-12,3-40.jsonl --label_level_main 1" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="true" />
