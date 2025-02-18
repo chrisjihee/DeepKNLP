@@ -383,7 +383,7 @@ def main(
         train_file: Annotated[str, typer.Option("--train_file")] = None,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
         eval_file: Annotated[str, typer.Option("--eval_file")] = None,  # "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/each-sampled/crossner_ai-test=100.jsonl",
-        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = True,
+        use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
         max_target_length: Annotated[int, typer.Option("--max_target_length")] = 640,
@@ -655,14 +655,40 @@ def main(
             pass
         if eval_dataset:
             for sample in eval_dataset:
-                # print(sample)
+                print("=" * 120)
+                print(f"INSTRUCTION: {sample["instance"]["instruction_inputs"].replace('\\n', '\n')}")
+                print(f"     ANSWER: {sample["instance"]["prompt_labels"]}")
+                print(f" LABEL LIST: {sample["label_list"]}")
+
                 input_ids = torch.tensor([sample["input_ids"]]).to(model.device)
                 attention_mask = torch.tensor([sample["attention_mask"]]).to(model.device)
-                outputs = model.generate(input_ids=input_ids, attention_mask=attention_mask, max_new_tokens=640)
-                response = tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
-                print(input_ids.shape, attention_mask.shape, outputs.shape)
-                print(response)
-                exit(1)
+                num_return = 10
+
+                print("=" * 120)
+                outputs = model.generate(input_ids=input_ids, attention_mask=attention_mask,
+                                         max_new_tokens=640, num_return_sequences=num_return,
+                                         do_sample=False, num_beams=num_return)
+                print(f"[Beam Search(b={num_return})] :", input_ids.shape, attention_mask.shape, outputs.shape)
+                print("-" * 120)
+                outputs = sorted(set([tokenizer.decode(x, skip_special_tokens=True).strip() for x in outputs]))
+                for i, output in enumerate(outputs, start=1):
+                    print(f"Output {i:02d}: {output}")
+
+                print("=" * 120)
+                temperature = 2.0
+                top_p = 0.9
+                outputs = model.generate(input_ids=input_ids, attention_mask=attention_mask,
+                                         max_new_tokens=640, num_return_sequences=num_return,
+                                         do_sample=True, num_beams=1, temperature=temperature, top_p=top_p)
+                print(f"[Sampling(b=1, temprature={temperature}, top_p={top_p})] :", input_ids.shape, attention_mask.shape, outputs.shape)
+                print("-" * 120)
+                outputs = sorted(set([tokenizer.decode(x, skip_special_tokens=True).strip() for x in outputs]))
+                for i, output in enumerate(outputs, start=1):
+                    print(f"Output {i:02d}: {output}")
+
+                print("=" * 120)
+                print()
+
         if pred_dataset:
             pass
 
