@@ -37,7 +37,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="deepspeed.launcher.runner" />
-    <option name="PARAMETERS" value="--include=localhost:0 --master_port=27782 task2-nerG-trainer.py --trainer_deepspeed configs/deepspeed/ds2_llama.json --run_version Llama3-1B-WQ=1 --pretrained meta-llama/Llama-3.2-1B --eval_epochs 0.5 --logging_steps 5 --num_train_epochs 12 --per_device_train_batch_size 32 --gradient_accumulation_steps 1 --generation_max_length 640 --eval_file data/gner/each-sampled-WQ=1/crossner_ai-dev=100-WQ=1.jsonl --train_file data/gner/each-WQ=1/crossner_ai-train-WQ=1.jsonl --output_file train-metrics-crossner_ai-12ep.csv --logging_file train-loggings-crossner_ai-12ep.out --no_use_flash_attention --debugging" />
+    <option name="PARAMETERS" value="--include=localhost:0 --master_port 26973 task2-nerG-trainer.py --train_file data/gner/each/crossner_ai-train.jsonl --eval_file data/gner/each-sampled/crossner_ai-dev=100.jsonl --pretrained meta-llama/Llama-3.2-1B --run_version Llama-3-1B --per_device_train_batch_size 1 --trainer_deepspeed configs/deepspeed/ds2_llama.json" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="true" />

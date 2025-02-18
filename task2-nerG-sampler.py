@@ -378,8 +378,9 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
 # [5]: https://huggingface.co/docs/transformers/en/main_classes/logging
 def main(
         # for CustomDataArguments
+        cuda_device: Annotated[int, typer.Option("--cuda_device")] = 0,
         pretrained: Annotated[str, typer.Option("--pretrained")] = ...,  # "google/flan-t5-large",
-        train_file: Annotated[str, typer.Option("--train_file")] = ...,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
+        train_file: Annotated[str, typer.Option("--train_file")] = None,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
         eval_file: Annotated[str, typer.Option("--eval_file")] = None,  # "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
         pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/each-sampled/crossner_ai-test=100.jsonl",
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
@@ -649,72 +650,14 @@ def main(
         args.train.do_predict = bool(pred_dataset)
         accelerator.wait_for_everyone()
 
-        # Data collator
-        label_pad_token_id = -100 if args.data.ignore_pad_token_for_loss else tokenizer.pad_token_id
-        data_collator = gner.DataCollatorForGNER(
-            tokenizer=tokenizer,
-            model=model,
-            padding=True,
-            pad_to_multiple_of=8 if args.train.fp16 else None,
-            label_pad_token_id=label_pad_token_id,
-            return_tensors="pt",
-        )
-
-        # Set compute_metrics function
-        compute_metrics = lambda *vs, **ws: eval_predictions(
-            *vs, **ws, write_predictions=args.data.write_predictions, accelerator=accelerator,
-        ) if args.train.predict_with_generate else None
-
-        # Initialize trainer
-        trainer = gner.GNERTrainer(
-            args=args.train,
-            model=model,
-            train_dataset=train_dataset,
-            eval_dataset=eval_dataset,
-            processing_class=tokenizer,
-            data_collator=data_collator,
-            compute_metrics=compute_metrics,
-            is_encoder_decoder=is_encoder_decoder,
-        )
-        trainer.remove_callback(PrinterCallback)
-        trainer.add_callback(gner.CustomProgressCallback(
-            trainer=trainer,
-            metric_file=args.env.output_dir / args.env.output_file,
-            logging_epochs=args.train.logging_epochs,
-            eval_epochs=args.train.eval_epochs if args.train.do_eval else 0,
-            save_epochs=args.train.save_epochs,
-            progress_seconds=args.data.progress_seconds,
-            metric_formats={
-                "epoch": ".2f",
-                "loss": ".6f",
-                "train_loss": ".4f",
-                "eval_average": ".4f",
-                "total_pflos": ".3f",
-            },
-        ))
-        accelerator.wait_for_everyone()
-
-        # Train
-        if args.train.do_train:
-            train_result: TrainOutput = trainer.train()
-            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
-                trainer.log_metrics("train", train_result.metrics)
-                trainer.save_metrics("train", train_result.metrics)
-            convert_all_events_in_dir(args.train.output_dir)
-
-        # Evaluate
-        if args.train.do_eval:
-            eval_result: Dict[str, float] = trainer.evaluate(eval_dataset, metric_key_prefix="eval")
-            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
-                trainer.log_metrics("eval", eval_result)
-                trainer.save_metrics("eval", eval_result)
-
-        # Test
-        if args.train.do_predict:
-            pred_result: PredictionOutput = trainer.predict(pred_dataset, metric_key_prefix="pred")
-            with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
-                trainer.log_metrics("pred", pred_result.metrics)
-                trainer.save_metrics("pred", pred_result.metrics)
+        model = model.to(device=f"cuda:{cuda_device}" if torch.cuda.is_available() else "cpu")
+        print(model.device)
+        if train_dataset:
+            pass
+        if eval_dataset:
+            pass
+        if pred_dataset:
+            pass
 
     accelerator.end_training()
 
