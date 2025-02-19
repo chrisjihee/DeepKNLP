@@ -376,13 +376,13 @@ def eval_predictions(dataset, preds, tokenizer, is_encoder_decoder, output_dir=N
 # [3]: https://github.com/huggingface/transformers/blob/main/examples/pytorch/summarization/run_summarization.py
 # [4]: https://huggingface.co/docs/transformers/en/main_classes/trainer
 # [5]: https://huggingface.co/docs/transformers/en/main_classes/logging
-def main(
+def main(  # --pretrained output/GNER-zeroshot/FlanT5-Base-BL/checkpoint-8250 --eval_file data/gner/crossner_ai-debug=10.jsonl
         # for CustomDataArguments
         cuda_device: Annotated[int, typer.Option("--cuda_device")] = 0,
-        pretrained: Annotated[str, typer.Option("--pretrained")] = ...,  # "google/flan-t5-large",
-        train_file: Annotated[str, typer.Option("--train_file")] = None,  # "data/gner/each-sampled/crossner_ai-train=100.jsonl",
-        eval_file: Annotated[str, typer.Option("--eval_file")] = None,  # "data/gner/each-sampled/crossner_ai-dev=100.jsonl",
-        pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/each-sampled/crossner_ai-test=100.jsonl",
+        pretrained: Annotated[str, typer.Option("--pretrained")] = "dyyyyyyyy/GNER-T5-large",  # "google/flan-t5-large", "dyyyyyyyy/GNER-T5-large", "dyyyyyyyy/GNER-T5-large-v2", "dyyyyyyyy/GNER-LLaMA-7B"
+        train_file: Annotated[str, typer.Option("--train_file")] = None,  # "data/gner/united/zero-shot-train.jsonl",
+        eval_file: Annotated[str, typer.Option("--eval_file")] = "data/gner/united/zero-shot-dev-100.jsonl",  # "data/gner/united/zero-shot-dev-100.jsonl",
+        pred_file: Annotated[str, typer.Option("--pred_file")] = None,  # "data/gner/united/zero-shot-test-100.jsonl",
         use_cache_data: Annotated[bool, typer.Option("--use_cache_data/--no_use_cache_data")] = False,
         progress_seconds: Annotated[float, typer.Option("--progress_seconds")] = 10.0,
         max_source_length: Annotated[int, typer.Option("--max_source_length")] = 640,
@@ -670,21 +670,19 @@ def main(
                                          do_sample=False, num_beams=num_return)
                 print(f"[Beam Search(b={num_return})] :", input_ids.shape, attention_mask.shape, outputs.shape)
                 print("-" * 120)
-                outputs = sorted(set([tokenizer.decode(x, skip_special_tokens=True).strip() for x in outputs]))
-                for i, output in enumerate(outputs, start=1):
-                    print(f"Output {i:02d}: {output}")
+                outputs = [tokenizer.decode(x, skip_special_tokens=True).strip() for x in outputs]
+                for x in outputs:
+                    print(x)
 
-                print("=" * 120)
-                temperature = 2.0
-                top_p = 0.9
-                outputs = model.generate(input_ids=input_ids, attention_mask=attention_mask,
-                                         max_new_tokens=640, num_return_sequences=num_return,
-                                         do_sample=True, num_beams=1, temperature=temperature, top_p=top_p)
-                print(f"[Sampling(b=1, temprature={temperature}, top_p={top_p})] :", input_ids.shape, attention_mask.shape, outputs.shape)
-                print("-" * 120)
-                outputs = sorted(set([tokenizer.decode(x, skip_special_tokens=True).strip() for x in outputs]))
-                for i, output in enumerate(outputs, start=1):
-                    print(f"Output {i:02d}: {output}")
+                # print("=" * 120)
+                # temperature = 2.0
+                # top_p = 0.9
+                # outputs = model.generate(input_ids=input_ids, attention_mask=attention_mask,
+                #                          max_new_tokens=640, num_return_sequences=num_return,
+                #                          do_sample=True, num_beams=1, temperature=temperature, top_p=top_p)
+                # print(f"[Sampling(b=1, temprature={temperature}, top_p={top_p})] :", input_ids.shape, attention_mask.shape, outputs.shape)
+                # print("-" * 120)
+                # outputs = [tokenizer.decode(x, skip_special_tokens=True).strip() for x in outputs]
 
                 print("=" * 120)
                 print()
