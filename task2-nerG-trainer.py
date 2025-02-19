@@ -408,8 +408,8 @@ def main(
         save_steps: Annotated[int, typer.Option("--save_steps")] = -1,
         eval_delay: Annotated[float, typer.Option("--eval_delay")] = 0.0,
         max_steps: Annotated[int, typer.Option("--max_steps")] = -1,
-        report_to: Annotated[str, typer.Option("--report_to")] = "none",  # "tensorboard",  # tensorboard --bind_all --logdir output/GNER
-        learning_rate: Annotated[float, typer.Option("--learning_rate")] = 2e-5,
+        report_to: Annotated[str, typer.Option("--report_to")] = "tensorboard",  # "tensorboard" or "none",  # tensorboard --bind_all --logdir output/GNER
+        learning_rate: Annotated[float, typer.Option("--learning_rate")] = 5e-5,
         # for DeepSpeed
         trainer_deepspeed: Annotated[str, typer.Option("--trainer_deepspeed")] = None,  # for deepspeed.launcher.runner
         accelerate_deepspeed: Annotated[bool, typer.Option("--accelerate_deepspeed")] = False,  # for accelerate.commands.launch
