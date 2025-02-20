@@ -17,12 +17,11 @@ Transformer-based Korean Natural Language Processing
     ```
 2. Clone the repository
     ```bash
-    rm -rf DeepKNLP*
-    git clone https://github.com/chrisjihee/DeepKNLP.git
-    cd DeepKNLP*
+    rm -rf DeepKNLP*; git clone https://github.com/chrisjihee/DeepKNLP-24.git; cd DeepKNLP*;
     ```
 3. Create a new environment
     ```bash
+    conda search conda -c conda-forge
     conda install -n base -c conda-forge conda=25.1.1 -y;
     conda create -n DeepKNLP python=3.12 -y; conda activate DeepKNLP
     conda install cuda-libraries=11.8 cuda-libraries-dev=11.8 cuda-cudart=11.8 cuda-cudart-dev=11.8 \
@@ -51,13 +50,10 @@ Transformer-based Korean Natural Language Processing
     cd data/gner; tar zxf each-WQ=3.tar.gz; tar zxf sampled-each-WQ=3.tar.gz; cd ../..;
     cd data/gner; tar zxf each-WQ=5.tar.gz; tar zxf sampled-each-WQ=5.tar.gz; cd ../..;
     ```
-6. Log in to Huggingface
+6. Login to Hugging Face and link the cache
     ```bash
     huggingface-cli whoami
     huggingface-cli login
-    ```
-7. Link huggingface cache (optional)
-    ```bash
     ln -s ~/.cache/huggingface ./.cache_hf
     ```
 
