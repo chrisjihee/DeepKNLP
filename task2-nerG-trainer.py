@@ -709,7 +709,7 @@ def main(
                 trainer.log_metrics("eval", eval_result)
                 trainer.save_metrics("eval", eval_result)
 
-        # Test
+        # Predict
         if args.train.do_predict:
             pred_result: PredictionOutput = trainer.predict(pred_dataset, metric_key_prefix="pred")
             with patch("builtins.print", side_effect=lambda *xs: logger.info(*xs)):
