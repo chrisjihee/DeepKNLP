@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="dataset" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="dataset" type="PythonConfigurationType" factoryName="Python" singleton="false">
     <module name="DeepKNLP-25" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
