@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import Optional, List, Dict
 
 from torch.utils.data.dataset import Dataset
-from transformers import PreTrainedTokenizer, BatchEncoding
 
 from chrisbase.io import LoggingFormat, setup_unit_logger
+from transformers import PreTrainedTokenizer, BatchEncoding
 from .arguments import MLArguments
 
 logger = logging.getLogger(__name__)
