@@ -618,9 +618,7 @@ def serve(
         logging_file: str = typer.Option(default="logging.out"),
         argument_file: str = typer.Option(default="arguments.json"),
         # data
-        data_home: str = typer.Option(default="data"),
         data_name: str = typer.Option(default="nsmc"),
-        test_file: str = typer.Option(default="ratings_test.txt"),
         # model
         pretrained: str = typer.Option(default="beomi/KcELECTRA-base"),
         finetuning: str = typer.Option(default="output"),
@@ -649,11 +647,7 @@ def serve(
             message_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
         ),
         data=DataOption(
-            home=data_home,
             name=data_name,
-            files=DataFiles(
-                test=test_file,
-            ),
         ),
         model=ModelOption(
             pretrained=pretrained,
