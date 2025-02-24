@@ -406,12 +406,12 @@ def train(
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
-        num_check: int = typer.Option(default=2),  # TODO: -> 2
+        num_check: int = typer.Option(default=3),
         # model
-        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
-        finetuning: str = typer.Option(default="finetuning"),
+        pretrained: str = typer.Option(default="klue/roberta-base"),
+        finetuning: str = typer.Option(default="output"),
         model_name: str = typer.Option(default=None),
-        seq_len: int = typer.Option(default=64),  # TODO: -> 64, 128, 256, 512
+        seq_len: int = typer.Option(default=128),  # TODO: -> 64, 128, 256, 512
         # hardware
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         train_batch: int = typer.Option(default=50),
@@ -435,7 +435,7 @@ def train(
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_F1c"),
         num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
-        num_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
+        num_epochs: int = typer.Option(default=2),  # TODO: -> 2, 3
         check_rate_on_training: float = typer.Option(default=1 / 5),  # TODO: -> 1/5, 1/10
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}"),
 ):
@@ -587,12 +587,12 @@ def test(
         data_home: str = typer.Option(default="data"),
         data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
-        num_check: int = typer.Option(default=0),  # TODO: -> 2
+        num_check: int = typer.Option(default=3),  # TODO: -> 2
         # model
-        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
-        finetuning: str = typer.Option(default="finetuning"),
+        pretrained: str = typer.Option(default="klue/roberta-base"),
+        finetuning: str = typer.Option(default="output"),
         model_name: str = typer.Option(default="train=*"),
-        seq_len: int = typer.Option(default=64),  # TODO: -> 512
+        seq_len: int = typer.Option(default=128),  # TODO: -> 64, 128, 256, 512
         # hardware
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         infer_batch: int = typer.Option(default=10),
@@ -708,12 +708,12 @@ def serve(
         # data
         data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         # model
-        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
-        finetuning: str = typer.Option(default="finetuning"),
+        pretrained: str = typer.Option(default="klue/roberta-base"),
+        finetuning: str = typer.Option(default="output"),
         model_name: str = typer.Option(default="train=*"),
-        seq_len: int = typer.Option(default=64),  # TODO: -> 512
+        seq_len: int = typer.Option(default=128),  # TODO: -> 512
         # server
-        server_port: int = typer.Option(default=7321),
+        server_port: int = typer.Option(default=9164),
         server_host: str = typer.Option(default="0.0.0.0"),
         server_temp: str = typer.Option(default="templates"),
         server_page: str = typer.Option(default="serve_ner.html"),

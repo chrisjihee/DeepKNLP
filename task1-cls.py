@@ -329,7 +329,7 @@ def train(
         train_batch: int = typer.Option(default=50),
         infer_batch: int = typer.Option(default=50),
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
-        precision: str = typer.Option(default="bf16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
+        precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
         device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
         # printing
@@ -347,7 +347,7 @@ def train(
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_acc"),
         num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
-        num_epochs: int = typer.Option(default=3),  # TODO: -> 2, 3
+        num_epochs: int = typer.Option(default=2),  # TODO: -> 2, 3
         check_rate_on_training: float = typer.Option(default=1 / 5),  # TODO: -> 1/5, 1/10
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
 ):
@@ -625,7 +625,7 @@ def serve(
         model_name: str = typer.Option(default="train=*"),
         seq_len: int = typer.Option(default=128),  # TODO: -> 64, 128, 256, 512
         # server
-        server_port: int = typer.Option(default=7321),
+        server_port: int = typer.Option(default=9164),
         server_host: str = typer.Option(default="0.0.0.0"),
         server_temp: str = typer.Option(default="templates"),
         server_page: str = typer.Option(default="serve_cls.html"),
