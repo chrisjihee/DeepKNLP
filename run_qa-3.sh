@@ -7,7 +7,7 @@ CUDA_VISIBLE_DEVICES=2 python run_qa.py \
   --per_device_train_batch_size 12 \
   --max_seq_length 512 \
   --doc_stride 128 \
-  --num_train_epochs 2 \
+  --num_train_epochs 3 \
   --learning_rate 3e-5 \
   --output_dir output/korquad-kcbert \
   --overwrite_output_dir
