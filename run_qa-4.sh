@@ -1,0 +1,13 @@
+CUDA_VISIBLE_DEVICES=3 python run_qa.py \
+  --model_name_or_path beomi/KcELECTRA-base \
+  --train_file data/korquad/train.jsonl \
+  --validation_file data/korquad/validation.jsonl \
+  --do_train \
+  --do_eval \
+  --per_device_train_batch_size 12 \
+  --max_seq_length 512 \
+  --doc_stride 128 \
+  --num_train_epochs 2 \
+  --learning_rate 3e-5 \
+  --output_dir output/korquad-kcelectra \
+  --overwrite_output_dir
