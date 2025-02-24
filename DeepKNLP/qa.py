@@ -331,47 +331,8 @@ class QADataset(Dataset):
             convert_examples_to_features_fn=_squad_convert_examples_to_features,
     ):
         self.data: KorQuADCorpus = data
-        # if data is not None:
-        #     self.corpus = data
-        # else:
-        #     raise KeyError("corpus is not valid")
-        # if not split in ["train", "val", "test"]:
-        #     raise KeyError(f"mode({mode}) is not a valid split name")
-        # Load data features from cache or dataset file
-        # cached_features_file = os.path.join(
-        #     args.downstream_corpus_root_dir,
-        #     args.downstream_corpus_name,
-        #     "cached_{}_{}_{}_{}_{}_{}_{}".format(
-        #         mode,
-        #         tokenizer.__class__.__name__,
-        #         f"maxlen-{args.max_seq_length}",
-        #         f"maxquerylen-{args.max_query_length}",
-        #         f"docstride-{args.doc_stride}",
-        #         args.downstream_corpus_name,
-        #         "question-answering",
-        #     ),
-        # )
-
-        # Make sure only the first process in distributed training processes the dataset,
-        # and the others will use the cache.
-        # lock_path = cached_features_file + ".lock"
-        # with FileLock(lock_path):
-
-        # corpus_fpath = os.path.join(
-        #     args.downstream_corpus_root_dir,
-        #     args.downstream_corpus_name.lower(),
-        # )
-        # logger.info(f"Creating features from {corpus_fpath}")
         examples: List[QAExample] = self.data.get_examples(split)
         self.features: List[QAFeatures] = convert_examples_to_features_fn(examples, tokenizer, args)
-        # start = time.time()
-        # logger.info(
-        #     "Saving features into cached file, it could take a lot of time..."
-        # )
-        # torch.save(self.features, cached_features_file)
-        # logger.info(
-        #     "Saving features into cached file %s [took %.3f s]", cached_features_file, time.time() - start
-        # )
 
     def __len__(self):
         return len(self.features)
