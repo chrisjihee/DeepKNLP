@@ -5,6 +5,7 @@ import time
 from dataclasses import dataclass
 from functools import partial
 from multiprocessing import Pool, cpu_count
+from pathlib import Path
 from typing import List, Optional
 
 import torch
@@ -40,15 +41,17 @@ class KorQuADCorpus:
         self.train_file = "KorQuAD_v1.0_train.json"
         self.val_file = "KorQuAD_v1.0_dev.json"
 
-    def get_examples(self, corpus_dir, mode):
+    def get_examples(self, split: str):
+        assert self.args.data.home, f"No data_home: {self.args.data.home}"
+        assert self.args.data.name, f"No data_name: {self.args.data.name}"
+        data_file_dict: dict = self.args.data.files.to_dict()
+        assert split in data_file_dict, f"No '{split}' split in data_file: should be one of {list(data_file_dict.keys())}"
+        assert data_file_dict[split], f"No data_file for '{split}' split: {self.args.data.files}"
+        data_path: Path = Path(self.args.data.home) / self.args.data.name / data_file_dict[split]
+        assert data_path.exists() and data_path.is_file(), f"No data_text_path: {data_path}"
+
         examples = []
-        if mode == "train":
-            corpus_fpath = os.path.join(corpus_dir, self.train_file)
-        elif mode == "val":
-            corpus_fpath = os.path.join(corpus_dir, self.val_file)
-        else:
-            raise KeyError(f"mode({mode}) is not a valid split name")
-        json_data = json.load(open(corpus_fpath, "r", encoding="utf-8"))["data"]
+        json_data = json.load(open(data_path, "r", encoding="utf-8"))["data"]
         for entry in tqdm(json_data):
             for paragraph in entry["paragraphs"]:
                 context_text = paragraph["context"]
