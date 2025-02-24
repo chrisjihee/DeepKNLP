@@ -17,6 +17,14 @@ Transformer-based Korean Natural Language Processing
 * KMOU(Korea Maritime and Ocean University) NER: https://huggingface.co/datasets/nlp-kmu/kor_ner | https://github.com/kmounlp/NER
 * KorQuAD(Korean Question Answering Dataset): https://huggingface.co/datasets/KorQuAD/squad_kor_v1 | https://korquad.github.io/category/1.0_KOR.html
 
+## Model Reference
+
+* KPF BERT: https://huggingface.co/jinmang2/kpfbert | https://github.com/KPFBERT/kpfbert
+* KLUE BERT: https://huggingface.co/klue/bert-base | https://github.com/KLUE-benchmark/KLUE
+* KLUE RoBERTa: https://huggingface.co/klue/roberta-base | https://github.com/KLUE-benchmark/KLUE
+* KcBERT: https://huggingface.co/beomi/kcbert-base | https://github.com/Beomi/KcBERT
+* KcELECTRA: https://huggingface.co/beomi/KcELECTRA-base | https://github.com/Beomi/KcELECTRA
+
 ## Installation
 
 1. Install Miniforge
@@ -47,6 +55,7 @@ Transformer-based Korean Natural Language Processing
     rm -rf transformers; git clone https://github.com/chrisjihee/transformers.git; pip install -U -e transformers
     rm -rf chrisbase;    git clone https://github.com/chrisjihee/chrisbase.git;    pip install -U -e chrisbase
     rm -rf chrisdata;    git clone https://github.com/chrisjihee/chrisdata.git;    pip install -U -e chrisdata
+    rm -rf chrislab;     git clone https://github.com/chrisjihee/chrislab.git;     pip install -U -e chrislab
     rm -rf progiter;     git clone https://github.com/chrisjihee/progiter.git;     pip install -U -e progiter
     pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|prog|pydantic"
     ```
