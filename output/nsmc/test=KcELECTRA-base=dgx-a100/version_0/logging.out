@@ -1,0 +1,107 @@
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇ [INIT] python /raid/chrisjihee/proj/DeepKNLP-25/task1-cls.py test
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   #	TesterArguments                	value
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   1	tag                            	test
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   2	env.project                    	DeepKNLP
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   3	env.job_name                   	KcELECTRA-base
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   4	env.job_version                	0
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   5	env.hostname                   	dgx-a100
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   6	env.hostaddr                   	129.254.23.12
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   7	env.time_stamp                 	0224-195147
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   8	env.python_path                	/raid/chrisjihee/miniforge3/envs/DeepKNLP-25/bin/python
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇   9	env.current_dir                	/raid/chrisjihee/proj/DeepKNLP-25
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  10	env.current_file               	/raid/chrisjihee/proj/DeepKNLP-25/task1-cls.py
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  11	env.working_dir                	/raid/chrisjihee/proj/DeepKNLP-25
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  12	env.command_args               	['test']
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  13	env.max_workers                	1
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  14	env.calling_sec                	0.001
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  15	env.waiting_sec                	300.0
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  16	env.debugging                  	False
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  17	env.logging_home               	output/nsmc/test=KcELECTRA-base=dgx-a100/version_0
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  18	env.logging_file               	logging.out
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  19	env.argument_file              	arguments.json
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  20	env.date_format                	[%m.%d %H:%M:%S]
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  21	env.message_level              	20
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  22	env.message_format             	%(asctime)s ┇ %(levelname)-7s ┇ %(name)20s ┇ %(message)s
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  23	time.t1                        	2025-02-24 19:51:53.831245
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  24	time.t2                        	2025-02-24 19:51:47.211077
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  25	time.started                   	[02.24 19:51:53]
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  26	time.settled
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  27	time.elapsed
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  28	prog.tb_logger
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  29	prog.csv_logger                	<lightning.fabric.loggers.csv_logs.CSVLogger object at 0x7f2cfec57da0>
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  30	prog.world_size                	1
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  31	prog.local_rank                	0
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  32	prog.global_rank               	0
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  33	prog.global_step               	0
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  34	prog.global_epoch              	0.0
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  35	data.name                      	nsmc
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  36	data.home                      	/raid/chrisjihee/proj/DeepKNLP-25/data
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  37	data.files                     	{'train': None, 'valid': None, 'test': 'ratings_valid.txt'}
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  38	data.caching                   	False
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  39	data.redownload                	False
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  40	data.num_check                 	3
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  41	model.pretrained               	beomi/KcELECTRA-base
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  42	model.finetuning               	/raid/chrisjihee/proj/DeepKNLP-25/output
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  43	model.name                     	train=*
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  44	model.seq_len                  	128
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  45	hardware.cpu_workers           	10
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  46	hardware.train_batch           	32
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  47	hardware.infer_batch           	10
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  48	hardware.accelerator           	cuda
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  49	hardware.precision
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  50	hardware.strategy              	auto
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  51	hardware.devices               	[0]
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  52	printing.print_rate_on_training	0.1
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  53	printing.print_rate_on_validate	0.1
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  54	printing.print_rate_on_evaluate	0.1
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  55	printing.print_step_on_training	-1
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  56	printing.print_step_on_validate	-1
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  57	printing.print_step_on_evaluate	-1
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  58	printing.tag_format_on_training
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  59	printing.tag_format_on_validate
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇  60	printing.tag_format_on_evaluate	st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}
+[02.24 19:51:53] ┇ INFO    ┇       chrisbase.data ┇ -----------------------------------------------------------------------------------------------------------------------------------------
+[02.24 19:51:56] ┇ INFO    ┇             __main__ ┇ === [after-model] =======================================================================================================================
+[02.24 19:51:56] ┇ INFO    ┇         DeepKNLP.cls ┇ Creating features from /raid/chrisjihee/proj/DeepKNLP-25/data/nsmc/ratings_valid.txt
+[02.24 19:51:56] ┇ INFO    ┇         DeepKNLP.cls ┇ Loaded 50000 examples from /raid/chrisjihee/proj/DeepKNLP-25/data/nsmc/ratings_valid.txt
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   === [Example 1] ===
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = sentence : 굳 ㅋ
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = tokens   : êµ³ Ġãħĭ [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD]
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = label    : 1
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = features : ClassificationFeatures(input_ids=[22269, 1093, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], attention_mask=[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], token_type_ids=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], label=1)
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   === 
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   === [Example 2] ===
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = sentence : GDNTOPCLASSINTHECLUB
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = tokens   : G D N T O P C L A S S I N T H EC L U B [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD]
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = label    : 0
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = features : ClassificationFeatures(input_ids=[41, 38, 48, 54, 49, 50, 37, 46, 35, 53, 53, 43, 48, 54, 42, 13115, 46, 55, 36, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], attention_mask=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], token_type_ids=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], label=0)
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   === 
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   === [Example 3] ===
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = sentence : 뭐야 이 평점들은.... 나쁘진 않지만 10점 짜리는 더더욱 아니잖아
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = tokens   : ëŃĲìķ¼ ĠìĿ´ Ġíıī ìłĲ ëĵ¤ìĿĢ .... ĠëĤĺìģĺ ì§Ħ ĠìķĬì§Ģë§Į Ġ10 ìłĲ Ġì§ľ ë¦¬ëĬĶ ĠëįĶëįĶìļ± ĠìķĦëĭĪìŀĸìķĦ [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD] [PAD]
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = label    : 0
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   = features : ClassificationFeatures(input_ids=[26714, 302, 1141, 1149, 508, 483, 5037, 510, 11047, 1362, 1149, 1766, 1230, 10892, 8205, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], attention_mask=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], token_type_ids=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], label=0)
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇   === 
+[02.24 19:52:00] ┇ INFO    ┇         DeepKNLP.cls ┇ Converted 50000 raw examples to 50000 encoded examples
+[02.24 19:52:00] ┇ INFO    ┇             __main__ ┇ Created test_dataset providing 50000 examples
+[02.24 19:52:00] ┇ INFO    ┇             __main__ ┇ Created test_dataloader providing 5000 batches
+[02.24 19:52:00] ┇ INFO    ┇             __main__ ┇ === [after-test_dataloader] =============================================================================================================
+[02.24 19:52:00] ┇ INFO    ┇             __main__ ┇ Loading model from output/nsmc/train=KcELECTRA-base=dgx-a100/version_0/ep=1.6, loss=0.2697, acc=0.9066.ckpt
+[02.24 19:52:05] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  10%|██                  | 500/5000 [00:04<00:37, 118.91x10b/s]
+[02.24 19:52:09] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  20%|████                | 1000/5000 [00:08<00:33, 117.93x10b/s]
+[02.24 19:52:14] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  30%|██████              | 1500/5000 [00:13<00:29, 117.87x10b/s]
+[02.24 19:52:18] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  40%|████████            | 2000/5000 [00:17<00:25, 118.41x10b/s]
+[02.24 19:52:22] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  50%|██████████          | 2500/5000 [00:21<00:21, 118.27x10b/s]
+[02.24 19:52:26] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  60%|████████████        | 3000/5000 [00:25<00:16, 118.53x10b/s]
+[02.24 19:52:30] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  70%|██████████████      | 3500/5000 [00:30<00:12, 118.01x10b/s]
+[02.24 19:52:35] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  80%|████████████████    | 4000/5000 [00:34<00:08, 117.76x10b/s]
+[02.24 19:52:39] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing:  90%|██████████████████  | 4500/5000 [00:38<00:04, 118.33x10b/s]
+[02.24 19:52:44] ┇ INFO    ┇             __main__ ┇ (Ep 1.60)  testing: 100%|████████████████████| 5000/5000 [00:43<00:00, 92.69x10b/s] | st=4800, ep=1.60, test_loss=0.2697, test_acc=0.9067
+[02.24 19:52:44] ┇ INFO    ┇             __main__ ┇ --- [after-test] ------------------------------------------------------------------------------------------------------------------------
+[02.24 19:52:44] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
+[02.24 19:52:44] ┇ INFO    ┇       chrisbase.data ┇ [EXIT] python /raid/chrisjihee/proj/DeepKNLP-25/task1-cls.py test ($=00:00:50.727)
+[02.24 19:52:44] ┇ INFO    ┇       chrisbase.data ┇ =========================================================================================================================================
