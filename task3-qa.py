@@ -314,7 +314,7 @@ def train(
         test_file: str = typer.Option(default="KorQuAD_v1.0_dev.json"),
         num_check: int = typer.Option(default=3),
         # model
-        pretrained: str = typer.Option(default="klue/roberta-base"),
+        pretrained: str = typer.Option(default="beomi/kcbert-base"),
         finetuning: str = typer.Option(default="output"),
         model_name: str = typer.Option(default=None),
         seq_len: int = typer.Option(default=256),  # TODO: -> 64, 128, 256, 512
@@ -325,7 +325,7 @@ def train(
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="ddp"),
-        device: List[int] = typer.Option(default=[0, 1]),  # TODO: -> [0], [0,1], [0,1,2,3]
+        device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
         print_rate_on_validate: float = typer.Option(default=1 / 2),  # TODO: -> 1/2, 1/3
@@ -495,7 +495,7 @@ def test(
         test_file: str = typer.Option(default="KorQuAD_v1.0_dev.json"),
         num_check: int = typer.Option(default=3),
         # model
-        pretrained: str = typer.Option(default="klue/roberta-base"),
+        pretrained: str = typer.Option(default="beomi/kcbert-base"),
         finetuning: str = typer.Option(default="output"),
         model_name: str = typer.Option(default="train=*"),
         seq_len: int = typer.Option(default=256),  # TODO: -> 64, 128, 256, 512
@@ -505,7 +505,7 @@ def test(
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default=None),  # TODO: -> 32-true, bf16-mixed, 16-mixed
         strategy: str = typer.Option(default="auto"),
-        device: List[int] = typer.Option(default=[0, 1]),
+        device: List[int] = typer.Option(default=[0]),
         # printing
         print_rate_on_evaluate: float = typer.Option(default=1 / 10),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
         print_step_on_evaluate: int = typer.Option(default=-1),
