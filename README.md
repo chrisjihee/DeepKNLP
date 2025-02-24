@@ -1,13 +1,21 @@
 # DeepKNLP
+
 Transformer-based Korean Natural Language Processing
 
-## Reference
-* ratsgo nlpbook: https://ratsgo.github.io/nlpbook
-* ratsgo ratsnlp: https://github.com/ratsgo/ratsnlp
-* HF Datasets: https://huggingface.co/docs/datasets/index
-* HF Accelerate: https://huggingface.co/docs/accelerate/index
-* HF Transformers: https://github.com/huggingface/transformers
-* Lightning Fabric: https://lightning.ai/docs/fabric/stable
+## Code Reference
+
+* ratsgo nlpbook: https://ratsgo.github.io/nlpbook | https://github.com/ratsgo/ratsnlp
+* Pytorch Lightning: https://github.com/Lightning-AI/pytorch-lightning | https://lightning.ai/docs/fabric/stable
+* HF(🤗) Datasets: https://huggingface.co/docs/datasets/index
+* HF(🤗) Accelerate: https://huggingface.co/docs/accelerate/index
+* HF(🤗) Transformers: https://github.com/huggingface/transformers | https://github.com/huggingface/transformers/tree/main/examples/pytorch
+
+## Data Reference
+
+* NSMC(Naver Sentiment Movie Corpus): https://huggingface.co/datasets/e9t/nsmc | https://github.com/e9t/nsmc
+* KLUE(Korean Language Understanding Evaluation): https://huggingface.co/datasets/klue/klue | https://klue-benchmark.com
+* KMOU(Korea Maritime and Ocean University) NER: https://huggingface.co/datasets/nlp-kmu/kor_ner | https://github.com/kmounlp/NER
+* KorQuAD(Korean Question Answering Dataset): https://huggingface.co/datasets/KorQuAD/squad_kor_v1 | https://korquad.github.io/category/1.0_KOR.html
 
 ## Installation
 
@@ -54,16 +62,17 @@ Transformer-based Korean Natural Language Processing
     ```
 
 ## Target Task
+
 * Text Classification: https://ratsgo.github.io/nlpbook/docs/doc_cls
-  - `python task1-cls.py --help`
-  - `python task1-cls.py train --help`
-  - `python task1-cls.py test --help`
-  - `python task1-cls.py serve --help`
+    - `python task1-cls.py --help`
+    - `python task1-cls.py train --help`
+    - `python task1-cls.py test --help`
+    - `python task1-cls.py serve --help`
 * Pair Classification: https://ratsgo.github.io/nlpbook/docs/pair_cls
 * Sequence Labelling: https://ratsgo.github.io/nlpbook/docs/ner
-  - `python task2-ner.py --help`
-  - `python task2-ner.py train --help`
-  - `python task2-ner.py test --help`
-  - `python task2-ner.py serve --help`
+    - `python task2-ner.py --help`
+    - `python task2-ner.py train --help`
+    - `python task2-ner.py test --help`
+    - `python task2-ner.py serve --help`
 * Question Answering: https://ratsgo.github.io/nlpbook/docs/qa
 * Text Generation: https://ratsgo.github.io/nlpbook/docs/generation
