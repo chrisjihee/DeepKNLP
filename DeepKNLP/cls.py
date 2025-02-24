@@ -103,7 +103,7 @@ class NsmcCorpus:
 
 class ClassificationDataset(Dataset):
 
-    def __init__(self, split: str, tokenizer: PreTrainedTokenizer, data: NsmcCorpus):
+    def __init__(self, split: str, data: NsmcCorpus, tokenizer: PreTrainedTokenizer):
         self.data: NsmcCorpus = data
         examples: List[ClassificationExample] = self.data.read_raw_examples(split)
         self.labels: List[str] = self.data.labels

@@ -36,7 +36,7 @@ class KorQuADCorpus:
         self.train_file = "KorQuAD_v1.0_train.json"
         self.val_file = "KorQuAD_v1.0_dev.json"
 
-    def get_examples(self, split: str):
+    def get_examples(self, split: str) -> List[QAExample]:
         assert self.args.data.home, f"No data_home: {self.args.data.home}"
         assert self.args.data.name, f"No data_name: {self.args.data.name}"
         data_file_dict: dict = self.args.data.files.to_dict()
@@ -110,7 +110,7 @@ def _improve_answer_span(doc_tokens, input_start, input_end, tokenizer, orig_ans
     return input_start, input_end
 
 
-def _squad_convert_example_to_features(example, max_seq_length, doc_stride, max_query_length):
+def _squad_convert_example_to_features(example, max_seq_length, doc_stride, max_query_length) -> List[QAFeatures]:
     features = []
 
     doc_tokens, char_to_word_offset = [], []
@@ -286,7 +286,7 @@ def _squad_convert_examples_to_features(
         examples: List[QAExample],
         tokenizer: PreTrainedTokenizer,
         args: MLArguments,
-):
+) -> List[QAFeatures]:
     threads = min(args.env.max_workers, cpu_count())
     with Pool(threads, initializer=_squad_convert_example_to_features_init, initargs=(tokenizer,)) as p:
         annotate_ = partial(
@@ -295,7 +295,7 @@ def _squad_convert_examples_to_features(
             doc_stride=args.data.doc_stride,
             max_query_length=args.data.query_len,
         )
-        features = list(
+        features: List[QAFeatures] = list(
             tqdm(
                 p.imap(annotate_, examples, chunksize=32),
                 total=len(examples),
@@ -326,14 +326,15 @@ class QADataset(Dataset):
             self,
             split: str,
             args: MLArguments,
-            tokenizer: PreTrainedTokenizer,
             data: KorQuADCorpus,
+            tokenizer: PreTrainedTokenizer,
             convert_examples_to_features_fn=_squad_convert_examples_to_features,
     ):
-        if data is not None:
-            self.corpus = data
-        else:
-            raise KeyError("corpus is not valid")
+        self.data: KorQuADCorpus = data
+        # if data is not None:
+        #     self.corpus = data
+        # else:
+        #     raise KeyError("corpus is not valid")
         # if not split in ["train", "val", "test"]:
         #     raise KeyError(f"mode({mode}) is not a valid split name")
         # Load data features from cache or dataset file
@@ -361,8 +362,8 @@ class QADataset(Dataset):
         #     args.downstream_corpus_name.lower(),
         # )
         # logger.info(f"Creating features from {corpus_fpath}")
-        examples = self.corpus.get_examples(split)
-        self.features = convert_examples_to_features_fn(examples, tokenizer, args)
+        examples: List[QAExample] = self.data.get_examples(split)
+        self.features: List[QAFeatures] = convert_examples_to_features_fn(examples, tokenizer, args)
         # start = time.time()
         # logger.info(
         #     "Saving features into cached file, it could take a lot of time..."
