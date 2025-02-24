@@ -1,20 +1,15 @@
 import json
 import logging
-import os
-import time
 from dataclasses import dataclass
 from functools import partial
 from multiprocessing import Pool, cpu_count
 from pathlib import Path
 from typing import List, Optional
 
-import torch
-from filelock import FileLock
 from torch.utils.data.dataset import Dataset
 from tqdm import tqdm
 
 from chrisbase.io import LoggingFormat, setup_unit_logger
-from nlpbook.qa import QATrainArguments
 from transformers import PreTrainedTokenizer
 from .arguments import MLArguments
 
@@ -49,6 +44,8 @@ class KorQuADCorpus:
         assert data_file_dict[split], f"No data_file for '{split}' split: {self.args.data.files}"
         data_path: Path = Path(self.args.data.home) / self.args.data.name / data_file_dict[split]
         assert data_path.exists() and data_path.is_file(), f"No data_text_path: {data_path}"
+        if self.args.prog.local_rank == 0:
+            logger.info(f"Creating features from {data_path}")
 
         examples = []
         json_data = json.load(open(data_path, "r", encoding="utf-8"))["data"]
@@ -288,22 +285,21 @@ def _squad_convert_example_to_features(example, max_seq_length, doc_stride, max_
 def _squad_convert_examples_to_features(
         examples: List[QAExample],
         tokenizer: PreTrainedTokenizer,
-        args: QATrainArguments,
+        args: MLArguments,
 ):
-    threads = min(args.threads, cpu_count())
+    threads = min(args.env.max_workers, cpu_count())
     with Pool(threads, initializer=_squad_convert_example_to_features_init, initargs=(tokenizer,)) as p:
         annotate_ = partial(
             _squad_convert_example_to_features,
-            max_seq_length=args.max_seq_length,
-            doc_stride=args.doc_stride,
-            max_query_length=args.max_query_length,
+            max_seq_length=args.model.seq_len,
+            doc_stride=args.data.doc_stride,
+            max_query_length=args.data.query_len,
         )
         features = list(
             tqdm(
                 p.imap(annotate_, examples, chunksize=32),
                 total=len(examples),
                 desc="convert squad examples to features",
-                disable=not args.tqdm_enabled,
             )
         )
     new_features = []
@@ -328,60 +324,53 @@ class QADataset(Dataset):
 
     def __init__(
             self,
-            args: QATrainArguments,
+            split: str,
+            args: MLArguments,
             tokenizer: PreTrainedTokenizer,
-            corpus: KorQuADCorpus,
-            mode: Optional[str] = "train",
+            data: KorQuADCorpus,
             convert_examples_to_features_fn=_squad_convert_examples_to_features,
     ):
-        if corpus is not None:
-            self.corpus = corpus
+        if data is not None:
+            self.corpus = data
         else:
             raise KeyError("corpus is not valid")
-        if not mode in ["train", "val", "test"]:
-            raise KeyError(f"mode({mode}) is not a valid split name")
+        # if not split in ["train", "val", "test"]:
+        #     raise KeyError(f"mode({mode}) is not a valid split name")
         # Load data features from cache or dataset file
-        cached_features_file = os.path.join(
-            args.downstream_corpus_root_dir,
-            args.downstream_corpus_name,
-            "cached_{}_{}_{}_{}_{}_{}_{}".format(
-                mode,
-                tokenizer.__class__.__name__,
-                f"maxlen-{args.max_seq_length}",
-                f"maxquerylen-{args.max_query_length}",
-                f"docstride-{args.doc_stride}",
-                args.downstream_corpus_name,
-                "question-answering",
-            ),
-        )
+        # cached_features_file = os.path.join(
+        #     args.downstream_corpus_root_dir,
+        #     args.downstream_corpus_name,
+        #     "cached_{}_{}_{}_{}_{}_{}_{}".format(
+        #         mode,
+        #         tokenizer.__class__.__name__,
+        #         f"maxlen-{args.max_seq_length}",
+        #         f"maxquerylen-{args.max_query_length}",
+        #         f"docstride-{args.doc_stride}",
+        #         args.downstream_corpus_name,
+        #         "question-answering",
+        #     ),
+        # )
 
         # Make sure only the first process in distributed training processes the dataset,
         # and the others will use the cache.
-        lock_path = cached_features_file + ".lock"
-        with FileLock(lock_path):
+        # lock_path = cached_features_file + ".lock"
+        # with FileLock(lock_path):
 
-            if os.path.exists(cached_features_file) and not args.overwrite_cache:
-                start = time.time()
-                self.features = torch.load(cached_features_file)
-                logger.info(
-                    f"Loading features from cached file {cached_features_file} [took %.3f s]", time.time() - start
-                )
-            else:
-                corpus_fpath = os.path.join(
-                    args.downstream_corpus_root_dir,
-                    args.downstream_corpus_name.lower(),
-                )
-                logger.info(f"Creating features from {corpus_fpath}")
-                examples = self.corpus.get_examples(corpus_fpath, mode)
-                self.features = convert_examples_to_features_fn(examples, tokenizer, args)
-                start = time.time()
-                logger.info(
-                    "Saving features into cached file, it could take a lot of time..."
-                )
-                torch.save(self.features, cached_features_file)
-                logger.info(
-                    "Saving features into cached file %s [took %.3f s]", cached_features_file, time.time() - start
-                )
+        # corpus_fpath = os.path.join(
+        #     args.downstream_corpus_root_dir,
+        #     args.downstream_corpus_name.lower(),
+        # )
+        # logger.info(f"Creating features from {corpus_fpath}")
+        examples = self.corpus.get_examples(split)
+        self.features = convert_examples_to_features_fn(examples, tokenizer, args)
+        # start = time.time()
+        # logger.info(
+        #     "Saving features into cached file, it could take a lot of time..."
+        # )
+        # torch.save(self.features, cached_features_file)
+        # logger.info(
+        #     "Saving features into cached file %s [took %.3f s]", cached_features_file, time.time() - start
+        # )
 
     def __len__(self):
         return len(self.features)
