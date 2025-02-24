@@ -497,14 +497,14 @@ def test(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
-        test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
-        num_check: int = typer.Option(default=0),  # TODO: -> 2
+        data_name: str = typer.Option(default="nsmc"),
+        test_file: str = typer.Option(default="ratings_valid.txt"),
+        num_check: int = typer.Option(default=3),
         # model
-        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
-        finetuning: str = typer.Option(default="finetuning"),
+        pretrained: str = typer.Option(default="beomi/KcELECTRA-base"),
+        finetuning: str = typer.Option(default="output"),
         model_name: str = typer.Option(default="train=*"),
-        seq_len: int = typer.Option(default=64),  # TODO: -> 512
+        seq_len: int = typer.Option(default=128),  # TODO: -> 64, 128, 256, 512
         # hardware
         cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
         infer_batch: int = typer.Option(default=10),
@@ -619,13 +619,13 @@ def serve(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="nsmc"),  # TODO: -> nsmc
-        test_file: str = typer.Option(default="ratings_valid.txt"),  # TODO: -> "ratings_test.txt"
+        data_name: str = typer.Option(default="nsmc"),
+        test_file: str = typer.Option(default="ratings_test.txt"),
         # model
-        pretrained: str = typer.Option(default="jinmang2/kpfbert"),  # TODO: -> "klue/roberta-base"
-        finetuning: str = typer.Option(default="finetuning"),
+        pretrained: str = typer.Option(default="beomi/KcELECTRA-base"),
+        finetuning: str = typer.Option(default="output"),
         model_name: str = typer.Option(default="train=*"),
-        seq_len: int = typer.Option(default=64),  # TODO: -> 512
+        seq_len: int = typer.Option(default=128),  # TODO: -> 64, 128, 256, 512
         # server
         server_port: int = typer.Option(default=7321),
         server_host: str = typer.Option(default="0.0.0.0"),
