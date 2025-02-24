@@ -9,6 +9,7 @@ torchmetrics
 seqeval
 datasets
 tensorboard
+evaluate
 
 # Utils
 pydantic
