@@ -330,7 +330,7 @@ def train(
         infer_batch: int = typer.Option(default=50),
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
+        strategy: str = typer.Option(default="ddp"),
         device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100

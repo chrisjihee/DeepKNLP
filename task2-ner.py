@@ -402,7 +402,7 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
@@ -418,7 +418,7 @@ def train(
         infer_batch: int = typer.Option(default=50),
         accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
         precision: str = typer.Option(default="16-mixed"),  # TODO: -> 32-true, bf16-mixed, 16-mixed
-        strategy: str = typer.Option(default="ddp"),  # TODO: -> deepspeed
+        strategy: str = typer.Option(default="ddp"),
         device: List[int] = typer.Option(default=[0]),  # TODO: -> [0], [0,1], [0,1,2,3]
         # printing
         print_rate_on_training: float = typer.Option(default=1 / 20),  # TODO: -> 1/10, 1/20, 1/40, 1/100
