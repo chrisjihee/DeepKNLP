@@ -19,11 +19,11 @@ Transformer-based Korean Natural Language Processing
 
 ## Model Reference
 
-* KPF BERT: https://huggingface.co/jinmang2/kpfbert | https://github.com/KPFBERT/kpfbert
-* KLUE BERT: https://huggingface.co/klue/bert-base | https://github.com/KLUE-benchmark/KLUE
-* KLUE RoBERTa: https://huggingface.co/klue/roberta-base | https://github.com/KLUE-benchmark/KLUE
+* KPF-BERT: https://huggingface.co/jinmang2/kpfbert | https://github.com/KPFBERT/kpfbert
+* KLUE-BERT: https://huggingface.co/klue/bert-base | https://github.com/KLUE-benchmark/KLUE
 * KcBERT: https://huggingface.co/beomi/kcbert-base | https://github.com/Beomi/KcBERT
 * KcELECTRA: https://huggingface.co/beomi/KcELECTRA-base | https://github.com/Beomi/KcELECTRA
+* KoELECTRA: https://huggingface.co/monologg/koelectra-base-v3-discriminator | https://github.com/monologg/KoELECTRA
 
 ## Installation
 
