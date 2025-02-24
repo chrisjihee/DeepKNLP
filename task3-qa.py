@@ -479,5 +479,128 @@ def train(
             )
 
 
+@main.command()
+def test(
+        verbose: int = typer.Option(default=2),
+        # env
+        project: str = typer.Option(default="DeepKNLP"),
+        job_name: str = typer.Option(default=None),
+        job_version: int = typer.Option(default=None),
+        debugging: bool = typer.Option(default=False),
+        logging_file: str = typer.Option(default="logging.out"),
+        argument_file: str = typer.Option(default="arguments.json"),
+        # data
+        data_home: str = typer.Option(default="data"),
+        data_name: str = typer.Option(default="korquad"),
+        test_file: str = typer.Option(default="KorQuAD_v1.0_dev.json"),
+        num_check: int = typer.Option(default=3),
+        # model
+        pretrained: str = typer.Option(default="klue/roberta-base"),
+        finetuning: str = typer.Option(default="output"),
+        model_name: str = typer.Option(default="train=*"),
+        seq_len: int = typer.Option(default=256),  # TODO: -> 64, 128, 256, 512
+        # hardware
+        cpu_workers: int = typer.Option(default=min(os.cpu_count() / 2, 10)),
+        infer_batch: int = typer.Option(default=16),
+        accelerator: str = typer.Option(default="cuda"),  # TODO: -> cuda, cpu, mps
+        precision: str = typer.Option(default=None),  # TODO: -> 32-true, bf16-mixed, 16-mixed
+        strategy: str = typer.Option(default="auto"),
+        device: List[int] = typer.Option(default=[0, 1]),
+        # printing
+        print_rate_on_evaluate: float = typer.Option(default=1 / 10),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
+        print_step_on_evaluate: int = typer.Option(default=-1),
+        tag_format_on_evaluate: str = typer.Option(default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}"),
+):
+    torch.set_float32_matmul_precision('high')
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    logging.getLogger("c10d-NullHandler").setLevel(logging.INFO)
+    logging.getLogger("transformers.modeling_utils").setLevel(logging.ERROR)
+    logging.getLogger("lightning.pytorch.utilities.rank_zero").setLevel(logging.WARNING)
+
+    pretrained = Path(pretrained)
+    args = TesterArguments(
+        env=ProjectEnv(
+            project=project,
+            job_name=job_name if job_name else pretrained.name,
+            job_version=job_version,
+            debugging=debugging,
+            message_level=logging.DEBUG if debugging else logging.INFO,
+            message_format=LoggingFormat.DEBUG_20 if debugging else LoggingFormat.CHECK_20,
+        ),
+        data=DataOption(
+            home=data_home,
+            name=data_name,
+            files=DataFiles(
+                test=test_file,
+            ),
+            num_check=num_check,
+        ),
+        model=ModelOption(
+            pretrained=pretrained,
+            finetuning=finetuning,
+            name=model_name,
+            seq_len=seq_len,
+        ),
+        hardware=HardwareOption(
+            cpu_workers=cpu_workers,
+            infer_batch=infer_batch,
+            accelerator=accelerator,
+            precision=precision,
+            strategy=strategy,
+            devices=device,
+        ),
+        printing=PrintingOption(
+            print_rate_on_evaluate=print_rate_on_evaluate,
+            print_step_on_evaluate=print_step_on_evaluate,
+            tag_format_on_evaluate=tag_format_on_evaluate,
+        ),
+    )
+    finetuning_home = Path(f"{finetuning}/{data_name}")
+    output_name = f"{args.tag}={args.env.job_name}={args.env.hostname}"
+    make_dir(finetuning_home / output_name)
+    args.env.job_version = args.env.job_version if args.env.job_version else CSVLogger(finetuning_home, output_name).version
+    args.prog.csv_logger = CSVLogger(finetuning_home, output_name, args.env.job_version, flush_logs_every_n_steps=1)
+    sleep(0.3)
+    fabric = Fabric(
+        devices=args.hardware.devices if args.hardware.accelerator in ["cuda", "gpu"] else args.hardware.cpu_workers if args.hardware.accelerator == "cpu" else "auto",
+        strategy=args.hardware.strategy if args.hardware.accelerator in ["cuda", "gpu"] else "auto",
+        precision=args.hardware.precision if args.hardware.accelerator in ["cuda", "gpu"] else None,
+        accelerator=args.hardware.accelerator,
+    )
+    fabric.launch()
+    fabric.barrier()
+    job_versions = fabric.all_gather(torch.tensor(args.env.job_version))
+    assert job_versions.min() == job_versions.max(), f"Job version must be same across all processes: {job_versions.tolist()}"
+    sleep(fabric.global_rank * 0.3)
+    fabric.print = logger.info if fabric.local_rank == 0 else logger.debug
+    args.env.set_logging_home(args.prog.csv_logger.log_dir)
+    args.env.set_logging_file(logging_file)
+    args.env.set_argument_file(argument_file)
+    args.prog.world_size = fabric.world_size
+    args.prog.local_rank = fabric.local_rank
+    args.prog.global_rank = fabric.global_rank
+    fabric.barrier()
+
+    with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
+                  args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
+                  verbose=verbose > 0 and fabric.local_rank == 0,
+                  mute_warning="lightning.fabric.loggers.csv_logs"):
+        model = KorQuADModel(args=args)
+        model = fabric.setup(model)
+        fabric_barrier(fabric, "[after-model]", c='=')
+
+        assert args.data.files.test, "No test file found"
+        test_dataloader = model.test_dataloader()
+        test_dataloader = fabric.setup_dataloaders(test_dataloader)
+        fabric_barrier(fabric, "[after-test_dataloader]", c='=')
+
+        for checkpoint_path in files(finetuning_home / args.model.name / "**/*.ckpt"):
+            test_loop(
+                model=model,
+                dataloader=test_dataloader,
+                checkpoint_path=checkpoint_path,
+            )
+
+
 if __name__ == "__main__":
     main()

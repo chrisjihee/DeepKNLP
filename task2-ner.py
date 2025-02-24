@@ -679,7 +679,8 @@ def test(
                   args=args if (debugging or verbose > 1) and fabric.local_rank == 0 else None,
                   verbose=verbose > 0 and fabric.local_rank == 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = fabric.setup(NERModel(args=args))
+        model = NERModel(args=args)
+        model = fabric.setup(model)
         fabric_barrier(fabric, "[after-model]", c='=')
 
         assert args.data.files.test, "No test file found"
@@ -770,7 +771,8 @@ def serve(
     with JobTimer(f"python {args.env.current_file} {' '.join(args.env.command_args)}", rt=1, rb=1, rc='=',
                   args=args if (debugging or verbose > 1) else None, verbose=verbose > 0,
                   mute_warning="lightning.fabric.loggers.csv_logs"):
-        model = fabric.setup(NERModel(args=args))
+        model = NERModel(args=args)
+        model = fabric.setup(model)
         model.load_last_checkpoint_file(finetuning_home / args.model.name / "**/*.ckpt")
         fabric_barrier(fabric, "[after-model]", c='=')
 
