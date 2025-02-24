@@ -271,6 +271,8 @@ class DataOption(OptionData):
     caching: bool = field(default=False)
     redownload: bool = field(default=False)
     num_check: int = field(default=0)
+    query_len: int = field(default=32)  # for QA tasks
+    doc_stride: int = field(default=64)  # for QA tasks
 
     def __post_init__(self):
         if self.home:
