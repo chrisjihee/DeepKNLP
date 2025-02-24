@@ -477,3 +477,7 @@ def train(
                 dataloader=test_dataloader,
                 checkpoint_path=checkpoint_saver.best_model_path,
             )
+
+
+if __name__ == "__main__":
+    main()
