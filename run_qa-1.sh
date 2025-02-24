@@ -9,5 +9,5 @@ CUDA_VISIBLE_DEVICES=0 python run_qa.py \
   --doc_stride 128 \
   --num_train_epochs 3 \
   --learning_rate 3e-5 \
-  --output_dir output/korquad-kpfbert \
+  --output_dir output/korquad/train=KPF-BERT=$(hostname) \
   --overwrite_output_dir

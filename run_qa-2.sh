@@ -9,5 +9,5 @@ CUDA_VISIBLE_DEVICES=1 python run_qa.py \
   --doc_stride 128 \
   --num_train_epochs 3 \
   --learning_rate 3e-5 \
-  --output_dir output/korquad-kluebert \
+  --output_dir output/korquad/train=KLUE-BERT=$(hostname) \
   --overwrite_output_dir
