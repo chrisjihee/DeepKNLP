@@ -73,6 +73,7 @@ Transformer-based Korean Natural Language Processing
     rm -rf chrisdata;    git clone https://github.com/chrisjihee/chrisdata.git;    pip install -U -e chrisdata
     rm -rf chrislab;     git clone https://github.com/chrisjihee/chrislab.git;     pip install -U -e chrislab
     rm -rf progiter;     git clone https://github.com/chrisjihee/progiter.git;     pip install -U -e progiter
+    rm -rf ratsnlp;      git clone https://github.com/chrisjihee/ratsnlp.git;      pip install -U -e ratsnlp
     pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|prog|pydantic"
     ```
 5. Unzip some archived data
