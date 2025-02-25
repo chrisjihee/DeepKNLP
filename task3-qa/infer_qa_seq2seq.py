@@ -64,14 +64,14 @@ def answer_question(question, context, max_length=50, num_beams=5):
     # Generate the answer
     with torch.no_grad():
         output_ids = model.generate(
-            input_ids=inputs["input_ids"],
-            attention_mask=inputs["attention_mask"],
+            input_ids="[YOUR CODE HERE]",
+            attention_mask="[YOUR CODE HERE]",
             max_length=max_length,
             num_beams=num_beams
         )
 
     # Decode the generated answer
-    answer = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+    answer = "[YOUR CODE HERE]"
 
     return answer
 
