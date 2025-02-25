@@ -4,7 +4,7 @@ Transformer-based Korean Natural Language Processing
 
 ## Code Reference
 
-* ratsgo nlpbook: https://ratsgo.github.io/nlpbook | https://github.com/ratsgo/ratsnlp
+* ratsgo nlpbook: https://ratsgo.github.io/nlpbook | https://github.com/ratsgo/ratsnlp | https://ratsgo.github.io/nlpbook/docs/tutorial_links
 * Pytorch Lightning: https://github.com/Lightning-AI/pytorch-lightning | https://lightning.ai/docs/fabric/stable
 * HF(🤗) Datasets: https://huggingface.co/docs/datasets/index
 * HF(🤗) Accelerate: https://huggingface.co/docs/accelerate/index
@@ -34,6 +34,10 @@ Transformer-based Korean Natural Language Processing
     - pko-T5: https://huggingface.co/paust/pko-t5-base | https://github.com/paust-team/pko-t5
     - pko-T5: https://huggingface.co/paust/pko-t5-large | https://github.com/paust-team/pko-t5
     - pko-T5: https://huggingface.co/paust/pko-flan-t5-large | https://github.com/paust-team/pko-t5
+    - Finetuned by KorQuAD: https://huggingface.co/models?pipeline_tag=text2text-generation&sort=downloads&search=korquad
+* Decoder: https://huggingface.co/docs/transformers/model_summary#nlp-decoder
+    - KoGPT2: https://huggingface.co/skt/kogpt2-base-v2 | https://github.com/SKT-AI/KoGPT2
+    - kogpt: https://huggingface.co/kakaobrain/kogpt | https://github.com/kakaobrain/kogpt
     - Finetuned by KorQuAD: https://huggingface.co/models?pipeline_tag=text2text-generation&sort=downloads&search=korquad
 
 ## Installation
