@@ -123,7 +123,7 @@ class DataTrainingArguments:
         metadata={"help": "An optional input test data file to evaluate the perplexity on (a text file)."},
     )
     overwrite_cache: bool = field(
-        default=True, metadata={"help": "Overwrite the cached training and evaluation sets"}
+        default=False, metadata={"help": "Overwrite the cached training and evaluation sets"}
     )
     preprocessing_num_workers: Optional[int] = field(
         default=None,
@@ -216,13 +216,13 @@ class DataTrainingArguments:
         else:
             if self.train_file is not None:
                 extension = self.train_file.split(".")[-1]
-                assert extension in ["csv", "json", "jsonl"], "`train_file` should be a csv or a json file."
+                assert extension in ["csv", "json"], "`train_file` should be a csv or a json file."
             if self.validation_file is not None:
                 extension = self.validation_file.split(".")[-1]
-                assert extension in ["csv", "json", "jsonl"], "`validation_file` should be a csv or a json file."
+                assert extension in ["csv", "json"], "`validation_file` should be a csv or a json file."
             if self.test_file is not None:
                 extension = self.test_file.split(".")[-1]
-                assert extension in ["csv", "json", "jsonl"], "`test_file` should be a csv or a json file."
+                assert extension in ["csv", "json"], "`test_file` should be a csv or a json file."
 
 
 def main():
@@ -299,7 +299,7 @@ def main():
         raw_datasets = load_dataset(
             data_args.dataset_name,
             data_args.dataset_config_name,
-            # cache_dir=model_args.cache_dir,
+            cache_dir=model_args.cache_dir,
             token=model_args.token,
             trust_remote_code=model_args.trust_remote_code,
         )
@@ -316,10 +316,10 @@ def main():
             data_files["test"] = data_args.test_file
             extension = data_args.test_file.split(".")[-1]
         raw_datasets = load_dataset(
-            "json",
+            extension,
             data_files=data_files,
-            field=None,
-            # cache_dir=model_args.cache_dir,
+            field="data",
+            cache_dir=model_args.cache_dir,
             token=model_args.token,
         )
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
@@ -332,14 +332,14 @@ def main():
     # download model & vocab.
     config = AutoConfig.from_pretrained(
         model_args.config_name if model_args.config_name else model_args.model_name_or_path,
-        # cache_dir=model_args.cache_dir,
+        cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
         token=model_args.token,
         trust_remote_code=model_args.trust_remote_code,
     )
     tokenizer = AutoTokenizer.from_pretrained(
         model_args.tokenizer_name if model_args.tokenizer_name else model_args.model_name_or_path,
-        # cache_dir=model_args.cache_dir,
+        cache_dir=model_args.cache_dir,
         use_fast=True,
         revision=model_args.model_revision,
         token=model_args.token,
@@ -349,7 +349,7 @@ def main():
         model_args.model_name_or_path,
         from_tf=bool(".ckpt" in model_args.model_name_or_path),
         config=config,
-        # cache_dir=model_args.cache_dir,
+        cache_dir=model_args.cache_dir,
         revision=model_args.model_revision,
         token=model_args.token,
         trust_remote_code=model_args.trust_remote_code,
@@ -483,7 +483,7 @@ def main():
                 batched=True,
                 num_proc=data_args.preprocessing_num_workers,
                 remove_columns=column_names,
-                load_from_cache_file=False,  # not data_args.overwrite_cache,
+                load_from_cache_file=not data_args.overwrite_cache,
                 desc="Running tokenizer on train dataset",
             )
         if data_args.max_train_samples is not None:
@@ -553,7 +553,7 @@ def main():
                 batched=True,
                 num_proc=data_args.preprocessing_num_workers,
                 remove_columns=column_names,
-                load_from_cache_file=False,  # not data_args.overwrite_cache,
+                load_from_cache_file=not data_args.overwrite_cache,
                 desc="Running tokenizer on validation dataset",
             )
         if data_args.max_eval_samples is not None:
@@ -575,7 +575,7 @@ def main():
                 batched=True,
                 num_proc=data_args.preprocessing_num_workers,
                 remove_columns=column_names,
-                load_from_cache_file=False,  # not data_args.overwrite_cache,
+                load_from_cache_file=not data_args.overwrite_cache,
                 desc="Running tokenizer on prediction dataset",
             )
         if data_args.max_predict_samples is not None:
@@ -627,7 +627,7 @@ def main():
         warnings.warn(f"--metric_for_best_model should be set to one of {accepted_best_metrics}")
 
     metric = evaluate.load(
-        "squad_v2" if data_args.version_2_with_negative else "squad",  # cache_dir=model_args.cache_dir
+        "squad_v2" if data_args.version_2_with_negative else "squad", cache_dir=model_args.cache_dir
     )
 
     def compute_metrics(p: EvalPrediction):

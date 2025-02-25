@@ -1,7 +1,7 @@
-CUDA_VISIBLE_DEVICES=1 python run_qa.py \
+CUDA_VISIBLE_DEVICES=0 python task3-qa/train_qa.py \
+  --train_file data/korquad/train.json \
+  --validation_file data/korquad/validation.json \
   --model_name_or_path klue/bert-base \
-  --train_file data/korquad/train.jsonl \
-  --validation_file data/korquad/validation.jsonl \
   --do_train \
   --do_eval \
   --per_device_train_batch_size 12 \
