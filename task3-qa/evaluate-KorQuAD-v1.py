@@ -9,7 +9,8 @@ import sys
 '''KorQuAD v1.0에 대한 공식 평가 스크립트 '''
 '''본 스크립트는 SQuAD v1.1 평가 스크립트 https://rajpurkar.github.io/SQuAD-explorer/ 를 바탕으로 작성됨.'''
 
-def normalize_answer(s):    
+
+def normalize_answer(s):
     def remove_(text):
         ''' 불필요한 기호 제거 '''
         text = re.sub("'", " ", text)
@@ -17,13 +18,13 @@ def normalize_answer(s):
         text = re.sub('《', " ", text)
         text = re.sub('》', " ", text)
         text = re.sub('<', " ", text)
-        text = re.sub('>', " ", text) 
+        text = re.sub('>', " ", text)
         text = re.sub('〈', " ", text)
-        text = re.sub('〉', " ", text)   
-        text = re.sub("\(", " ", text)
-        text = re.sub("\)", " ", text)
+        text = re.sub('〉', " ", text)
+        text = re.sub(r"\(", " ", text)
+        text = re.sub(r"\)", " ", text)
         text = re.sub("‘", " ", text)
-        text = re.sub("’", " ", text)      
+        text = re.sub("’", " ", text)
         return text
 
     def white_space_fix(text):
@@ -42,27 +43,27 @@ def normalize_answer(s):
 def f1_score(prediction, ground_truth):
     prediction_tokens = normalize_answer(prediction).split()
     ground_truth_tokens = normalize_answer(ground_truth).split()
-   
-    #F1 by character
+
+    # F1 by character
     prediction_Char = []
     for tok in prediction_tokens:
         now = [a for a in tok]
         prediction_Char.extend(now)
-        
+
     ground_truth_Char = []
     for tok in ground_truth_tokens:
         now = [a for a in tok]
-        ground_truth_Char.extend(now)   
-        
+        ground_truth_Char.extend(now)
+
     common = Counter(prediction_Char) & Counter(ground_truth_Char)
     num_same = sum(common.values())
     if num_same == 0:
         return 0
-    
+
     precision = 1.0 * num_same / len(prediction_Char)
     recall = 1.0 * num_same / len(ground_truth_Char)
     f1 = (2 * precision * recall) / (precision + recall)
-    
+
     return f1
 
 
