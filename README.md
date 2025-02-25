@@ -19,10 +19,15 @@ Transformer-based Korean Natural Language Processing
 
 ## Model Reference
 
-* KPF-BERT: https://huggingface.co/jinmang2/kpfbert | https://github.com/KPFBERT/kpfbert
-* KLUE-BERT: https://huggingface.co/klue/bert-base | https://github.com/KLUE-benchmark/KLUE
-* KcBERT: https://huggingface.co/beomi/kcbert-base | https://github.com/Beomi/KcBERT
-* KoELECTRA: https://huggingface.co/monologg/koelectra-base-v3-discriminator | https://github.com/monologg/KoELECTRA
+* Encoder: https://huggingface.co/docs/transformers/model_summary#cv-encoder
+    - KPF-BERT: https://huggingface.co/jinmang2/kpfbert | https://github.com/KPFBERT/kpfbert
+    - KLUE-BERT: https://huggingface.co/klue/bert-base | https://github.com/KLUE-benchmark/KLUE
+    - KcBERT: https://huggingface.co/beomi/kcbert-base | https://github.com/Beomi/KcBERT
+    - KoELECTRA: https://huggingface.co/monologg/koelectra-base-v3-discriminator | https://github.com/monologg/KoELECTRA
+* Encoder-Decoder: https://huggingface.co/docs/transformers/model_summary#cv-encoder-decoder
+    - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-base-ko | https://github.com/airc-keti/ke-t5
+    - pko-T5: https://huggingface.co/paust/pko-t5-base | https://github.com/paust-team/pko-t5
+    - KoT5: https://huggingface.co/wisenut-nlp-team/KoT5-base | https://github.com/wisenut-research/KoT5
 
 ## Installation
 
