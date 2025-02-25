@@ -35,42 +35,29 @@ class QAModel(LightningModule):
 
     def run_server(self, server: Flask, *args, **kwargs):
         """
-        Fabric 없이 간단하게 Flask 서버를 실행.
+        Flask 서버 실행
         """
         QAModel.WebAPI.register(route_base='/', app=server, init_argument=self)
         server.run(*args, **kwargs)
 
     def infer_one(self, question: str, context: str) -> Dict[str, Any]:
         """
-        실제 모델로부터 답변을 얻는 메서드
+        모델을 이용한 답변 생성 (score, start, end 추가)
         """
-        # 질문/지문이 비어있을 경우
         if not question.strip():
-            return {
-                "question": question,
-                "context": context,
-                "answer": "(질문이 비어 있습니다.)"
-            }
+            return {"question": question, "context": context, "answer": "(질문이 비어 있습니다.)"}
         if not context.strip():
-            return {
-                "question": question,
-                "context": context,
-                "answer": "(지문이 비어 있습니다.)"
-            }
+            return {"question": question, "context": context, "answer": "(지문이 비어 있습니다.)"}
 
-        # QA 파이프라인 호출
-        result = self.qa_pipeline(
-            {"question": question, "context": context}
-        )
+        result = self.qa_pipeline({"question": question, "context": context})
+
         return {
-            # 템플릿에서 표시할 필드들
             "question": question,
             "context": context,
             "answer": result["answer"],
-            # 필요하다면 score, start, end 등을 추가할 수 있음
-            # "score": round(result["score"], 4),
-            # "start": result["start"],
-            # "end": result["end"]
+            "score": round(result["score"], 4),  # 소수점 4자리까지 반올림
+            "start": result["start"],
+            "end": result["end"]
         }
 
     ###########################################################################
@@ -78,24 +65,16 @@ class QAModel(LightningModule):
     ###########################################################################
     class WebAPI(FlaskView):
         def __init__(self, model: "QAModel"):
-            """
-            init_argument=self => model이 QAModel 인스턴스로 주입됨
-            """
             self.model = model
 
         @route('/')
         def index(self):
-            """
-            메인 페이지: server_page 템플릿 렌더링
-            """
+            """ 메인 페이지 렌더링 """
             return render_template(self.model.server_page)
 
         @route('/api', methods=['POST'])
         def api(self):
-            """
-            AJAX 호출 (JSON) -> 모델 추론 -> 결과 반환
-            request.json = {"question": "...", "context": "..."}
-            """
+            """ AJAX 요청 처리 (질문-지문 입력받아 답변 반환) """
             data = request.json
             question = data.get("question", "")
             context = data.get("context", "")
@@ -111,12 +90,10 @@ main = typer.Typer()
 
 @main.command()
 def serve(
-        # pretrained 기본값: 이전 코드와 동일
         pretrained: str = typer.Option("output/korquad/train=KPF-BERT=dgx-a100/checkpoint-15723",
                                        help="QA 모델 경로 혹은 HuggingFace model ID"),
         server_host: str = typer.Option("0.0.0.0"),
         server_port: int = typer.Option(9000),
-        # 여기서 템플릿 파일명을 serve_qa.html로 변경
         server_page: str = typer.Option("serve_qa.html", help="templates 폴더 내 템플릿 파일명"),
         debug: bool = typer.Option(False),
 ):
@@ -127,7 +104,6 @@ def serve(
     model = QAModel(pretrained=pretrained, server_page=server_page)
 
     # 2) Flask 인스턴스 생성
-    #    같은 디렉토리에 templates 폴더가 있다면 간단히 쓸 수 있음:
     app = Flask(__name__, template_folder=Path("templates").resolve())
 
     # 3) 모델에 정의된 run_server() 호출
