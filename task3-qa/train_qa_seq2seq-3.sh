@@ -1,8 +1,9 @@
-CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa_seq2seq.py \
+CUDA_VISIBLE_DEVICES=4 python task3-qa/train_qa_seq2seq.py \
   --train_file data/korquad/train.jsonl \
   --validation_file data/korquad/validation.jsonl \
-  --output_dir output/korquad/train_qa_seq2seq-by-ket5 \
-  --model_name_or_path KETI-AIR/ke-t5-base-ko \
+  --output_dir output/korquad/train_qa_seq2seq-by-kot5 \
+  --model_name_or_path wisenut-nlp-team/KoT5-base \
+  --trust_remote_code True \
   --do_train \
   --do_eval \
   --num_train_epochs 2 \
