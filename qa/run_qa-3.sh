@@ -1,5 +1,5 @@
 CUDA_VISIBLE_DEVICES=2 python run_qa.py \
-  --model_name_or_path beomi/kcbert-base \
+  --model_name_or_path monologg/koelectra-base-v3-discriminator \
   --train_file data/korquad/train.jsonl \
   --validation_file data/korquad/validation.jsonl \
   --do_train \
@@ -9,5 +9,5 @@ CUDA_VISIBLE_DEVICES=2 python run_qa.py \
   --doc_stride 128 \
   --num_train_epochs 3 \
   --learning_rate 3e-5 \
-  --output_dir output/korquad/train=KcBERT=$(hostname) \
+  --output_dir output/korquad/train=KoELECTRA=$(hostname) \
   --overwrite_output_dir
