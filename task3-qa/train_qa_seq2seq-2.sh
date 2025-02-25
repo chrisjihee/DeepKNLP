@@ -3,6 +3,7 @@ CUDA_VISIBLE_DEVICES=3 python task3-qa/train_qa_seq2seq.py \
   --validation_file data/korquad/validation.jsonl \
   --output_dir output/korquad/train_qa_seq2seq-by-pkot5 \
   --model_name_or_path paust/pko-t5-base \
+  --predict_with_generate \
   --do_train \
   --do_eval \
   --num_train_epochs 2 \

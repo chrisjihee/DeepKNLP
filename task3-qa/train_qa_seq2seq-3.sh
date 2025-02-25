@@ -3,7 +3,7 @@ CUDA_VISIBLE_DEVICES=2 python task3-qa/train_qa_seq2seq.py \
   --validation_file data/korquad/validation.jsonl \
   --output_dir output/korquad/train_qa_seq2seq-by-kot5 \
   --model_name_or_path wisenut-nlp-team/KoT5-base \
-  --trust_remote_code True \
+  --predict_with_generate \
   --do_train \
   --do_eval \
   --num_train_epochs 2 \
