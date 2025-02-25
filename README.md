@@ -27,13 +27,8 @@ Transformer-based Korean Natural Language Processing
     - Finetuned by KorQuAD: https://huggingface.co/models?pipeline_tag=question-answering&sort=downloads&search=korquad
 * Encoder-Decoder: https://huggingface.co/docs/transformers/model_summary#cv-encoder-decoder
     - KoT5: https://huggingface.co/wisenut-nlp-team/KoT5-base | https://github.com/wisenut-research/KoT5
-    - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-base | https://github.com/airc-keti/ke-t5
-    - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-base-ko | https://github.com/airc-keti/ke-t5
     - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-large | https://github.com/airc-keti/ke-t5
-    - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-large-ko | https://github.com/airc-keti/ke-t5
-    - pko-T5: https://huggingface.co/paust/pko-t5-base | https://github.com/paust-team/pko-t5
     - pko-T5: https://huggingface.co/paust/pko-t5-large | https://github.com/paust-team/pko-t5
-    - pko-T5: https://huggingface.co/paust/pko-flan-t5-large | https://github.com/paust-team/pko-t5
     - Finetuned by KorQuAD: https://huggingface.co/models?pipeline_tag=text2text-generation&sort=downloads&search=korquad
 * Decoder: https://huggingface.co/docs/transformers/model_summary#nlp-decoder
     - KoGPT2(125M): https://huggingface.co/skt/kogpt2-base-v2 | https://github.com/SKT-AI/KoGPT2
