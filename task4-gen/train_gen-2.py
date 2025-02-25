@@ -17,8 +17,8 @@ if __name__ == "__main__":
     # TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5" or "EleutherAI/polyglot-ko-1.3b"
     args = GenerationTrainArguments(
         pretrained_model_name="skt/ko-gpt-trinity-1.2B-v0.5",
-        downstream_corpus_name="nsmc",
         downstream_model_dir="output/nsmc-gen/train_gen-by-kogpt-trinity",
+        downstream_corpus_name="nsmc",
         max_seq_length=32,
         batch_size=32 if torch.cuda.is_available() else 4,
         learning_rate=5e-5,
