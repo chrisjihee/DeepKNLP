@@ -1,6 +1,6 @@
-CUDA_VISIBLE_DEVICES=0 python task3-qa/train_qa.py \
-  --train_file data/korquad/train.json \
-  --validation_file data/korquad/validation.json \
+CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa.py \
+  --train_file data/korquad/train.jsonl \
+  --validation_file data/korquad/validation.jsonl \
   --model_name_or_path klue/bert-base \
   --do_train \
   --do_eval \

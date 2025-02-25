@@ -48,7 +48,6 @@ from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import check_min_version, send_example_telemetry
 from transformers.utils.versions import require_version
 
-
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
 check_min_version("4.50.0.dev0")
 
@@ -207,22 +206,22 @@ class DataTrainingArguments:
 
     def __post_init__(self):
         if (
-            self.dataset_name is None
-            and self.train_file is None
-            and self.validation_file is None
-            and self.test_file is None
+                self.dataset_name is None
+                and self.train_file is None
+                and self.validation_file is None
+                and self.test_file is None
         ):
             raise ValueError("Need either a dataset name or a training/validation file/test_file.")
         else:
             if self.train_file is not None:
                 extension = self.train_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`train_file` should be a csv or a json file."
+                assert extension in ["csv", "json", "jsonl"], "`train_file` should be a csv or a json(l) file."  # chrisjihee: include jsonl
             if self.validation_file is not None:
                 extension = self.validation_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`validation_file` should be a csv or a json file."
+                assert extension in ["csv", "json", "jsonl"], "`validation_file` should be a csv or a json(l) file."  # chrisjihee: include jsonl
             if self.test_file is not None:
                 extension = self.test_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`test_file` should be a csv or a json file."
+                assert extension in ["csv", "json", "jsonl"], "`test_file` should be a csv or a json(l) file."  # chrisjihee: include jsonl
 
 
 def main():
@@ -305,23 +304,24 @@ def main():
         )
     else:
         data_files = {}
+        extension = None
         if data_args.train_file is not None:
             data_files["train"] = data_args.train_file
             extension = data_args.train_file.split(".")[-1]
-
         if data_args.validation_file is not None:
             data_files["validation"] = data_args.validation_file
             extension = data_args.validation_file.split(".")[-1]
         if data_args.test_file is not None:
             data_files["test"] = data_args.test_file
             extension = data_args.test_file.split(".")[-1]
-        raw_datasets = load_dataset(
-            extension,
-            data_files=data_files,
-            field="data",
-            cache_dir=model_args.cache_dir,
-            token=model_args.token,
-        )
+        if extension:
+            raw_datasets = load_dataset(
+                extension.replace("jsonl", "json"),  # chrisjihee: replace jsonl with json
+                data_files=data_files,
+                field=None if extension == "jsonl" else "data",  # chrisjihee: field=None for jsonl
+                cache_dir=model_args.cache_dir,
+                token=model_args.token,
+            )
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.
 
