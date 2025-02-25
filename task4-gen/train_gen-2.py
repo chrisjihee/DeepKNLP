@@ -14,7 +14,6 @@ from transformers import PreTrainedTokenizerFast
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 if __name__ == "__main__":
-    # TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5" or "EleutherAI/polyglot-ko-1.3b"
     args = GenerationTrainArguments(
         pretrained_model_name="skt/ko-gpt-trinity-1.2B-v0.5",
         downstream_model_dir="output/nsmc-gen/train_gen-by-kogpt-trinity",

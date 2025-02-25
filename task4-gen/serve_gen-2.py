@@ -8,7 +8,7 @@ from transformers import GPT2Config, GPT2LMHeadModel
 from transformers import PreTrainedTokenizerFast
 
 if __name__ == "__main__":
-    # TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5" or "EleutherAI/polyglot-ko-1.3b"
+    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
     args = GenerationDeployArguments(
         pretrained_model_name="skt/ko-gpt-trinity-1.2B-v0.5",
         downstream_model_dir="output/nsmc-gen/train_gen-by-kogpt-trinity",
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     model = GPT2LMHeadModel(pretrained_model_config)
     fine_tuned_model_ckpt = torch.load(
         args.downstream_model_checkpoint_fpath,
-        map_location=torch.device("cpu"),
+        map_location=device,
     )
     model.load_state_dict({k.replace("model.", ""): v for k, v in fine_tuned_model_ckpt['state_dict'].items()})
     model.eval()
