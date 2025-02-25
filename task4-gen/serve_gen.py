@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import torch
 
 from ratsnlp.nlpbook.generation import GenerationDeployArguments
@@ -68,5 +70,5 @@ def inference_fn(
     }
 
 
-app = get_web_service_app(inference_fn)
+app = get_web_service_app(inference_fn, template_folder=Path("templates").resolve(), server_page="serve_gen.html")
 app.run(host="0.0.0.0", port=9164)
