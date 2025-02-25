@@ -87,18 +87,38 @@ Transformer-based Korean Natural Language Processing
     ln -s ~/.cache/huggingface ./.cache_hf
     ```
 
-## Target Task
+## Target Tasks
 
 * Text Classification: https://ratsgo.github.io/nlpbook/docs/doc_cls
-    - `python task1-cls.py --help`
-    - `python task1-cls.py train --help`
-    - `python task1-cls.py test --help`
-    - `python task1-cls.py serve --help`
-* Pair Classification: https://ratsgo.github.io/nlpbook/docs/pair_cls
+    - `python task1-cls/run_cls.py --help`
+    - `python task1-cls/run_cls.py train`
+    - `python task1-cls/run_cls.py test`
+    - `python task1-cls/run_cls.py serve`
 * Sequence Labelling: https://ratsgo.github.io/nlpbook/docs/ner
-    - `python task2-ner.py --help`
-    - `python task2-ner.py train --help`
-    - `python task2-ner.py test --help`
-    - `python task2-ner.py serve --help`
+    - `python task2-ner/run_ner.py --help`
+    - `python task2-ner/run_ner.py train`
+    - `python task2-ner/run_ner.py test`
+    - `python task2-ner/run_ner.py serve`
 * Question Answering: https://ratsgo.github.io/nlpbook/docs/qa
+    - `bash task3-qa/train_qa-1.sh`
+    - `bash task3-qa/train_qa-2.sh`
+    - `bash task3-qa/train_qa-3.sh`
+    - `bash task3-qa/train_qa_seq2seq-1.sh`
+    - `bash task3-qa/train_qa_seq2seq-2.sh`
+    - `bash task3-qa/train_qa_seq2seq-3.sh`
+    - `bash task3-qa/eval_qa-1.sh`
+    - `bash task3-qa/eval_qa-2.sh`
+    - `bash task3-qa/eval_qa-3.sh`
+    - `bash task3-qa/eval_qa_seq2seq-1.sh`
+    - `bash task3-qa/eval_qa_seq2seq-2.sh`
+    - `bash task3-qa/eval_qa_seq2seq-3.sh`
 * Text Generation: https://ratsgo.github.io/nlpbook/docs/generation
+    - `python task4-gen/infer_gen-1.py`
+    - `python task4-gen/infer_gen-2.py`
+    - `python task4-gen/infer_gen-3.py`
+    - `python task4-gen/train_gen-1.py`
+    - `python task4-gen/train_gen-2.py`
+    - `python task4-gen/train_gen-3.py`
+    - `python task4-gen/serve_gen-1.py`
+    - `python task4-gen/serve_gen-2.py`
+    - `python task4-gen/serve_gen-3.py`
