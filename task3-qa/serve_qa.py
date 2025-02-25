@@ -7,7 +7,6 @@ import typer
 from flask import Flask, request, jsonify, render_template
 from flask_classful import FlaskView, route
 from lightning import LightningModule
-
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering, pipeline
 
 
@@ -17,7 +16,7 @@ from transformers import AutoTokenizer, AutoModelForQuestionAnswering, pipeline
 class QAModel(LightningModule):
     def __init__(self, pretrained: str, server_page: str):
         """
-        :param pretrained: QA 모델이 저장된 경로 또는 HF Hub ID.
+        :param pretrained: QA 모델 경로 또는 HF Hub ID.
         :param server_page: templates 폴더 아래 사용할 HTML 템플릿 파일명.
         """
         super().__init__()
@@ -37,7 +36,6 @@ class QAModel(LightningModule):
     def run_server(self, server: Flask, *args, **kwargs):
         """
         Fabric 없이 간단하게 Flask 서버를 실행.
-        (위 코드처럼 Fabric을 쓰고 싶다면 setup()으로 감싸도 무방)
         """
         QAModel.WebAPI.register(route_base='/', app=server, init_argument=self)
         server.run(*args, **kwargs)
@@ -46,20 +44,33 @@ class QAModel(LightningModule):
         """
         실제 모델로부터 답변을 얻는 메서드
         """
+        # 질문/지문이 비어있을 경우
         if not question.strip():
-            return {"answer": "(질문이 비어 있습니다.)"}
-
+            return {
+                "question": question,
+                "context": context,
+                "answer": "(질문이 비어 있습니다.)"
+            }
         if not context.strip():
-            return {"answer": "(지문이 비어 있습니다.)"}
+            return {
+                "question": question,
+                "context": context,
+                "answer": "(지문이 비어 있습니다.)"
+            }
 
+        # QA 파이프라인 호출
         result = self.qa_pipeline(
             {"question": question, "context": context}
         )
         return {
+            # 템플릿에서 표시할 필드들
+            "question": question,
+            "context": context,
             "answer": result["answer"],
-            "score": round(result["score"], 4),
-            "start": result["start"],
-            "end": result["end"]
+            # 필요하다면 score, start, end 등을 추가할 수 있음
+            # "score": round(result["score"], 4),
+            # "start": result["start"],
+            # "end": result["end"]
         }
 
     ###########################################################################
@@ -83,7 +94,7 @@ class QAModel(LightningModule):
         def api(self):
             """
             AJAX 호출 (JSON) -> 모델 추론 -> 결과 반환
-            request.json = {"question":"...", "context":"..."}
+            request.json = {"question": "...", "context": "..."}
             """
             data = request.json
             question = data.get("question", "")
@@ -100,11 +111,13 @@ main = typer.Typer()
 
 @main.command()
 def serve(
+        # pretrained 기본값: 이전 코드와 동일
         pretrained: str = typer.Option("output/korquad/train=KPF-BERT=dgx-a100/checkpoint-15723",
                                        help="QA 모델 경로 혹은 HuggingFace model ID"),
         server_host: str = typer.Option("0.0.0.0"),
         server_port: int = typer.Option(9000),
-        server_page: str = typer.Option("qa_demo.html", help="templates 폴더 내 템플릿 파일명"),
+        # 여기서 템플릿 파일명을 serve_qa.html로 변경
+        server_page: str = typer.Option("serve_qa.html", help="templates 폴더 내 템플릿 파일명"),
         debug: bool = typer.Option(False),
 ):
     logging.basicConfig(level=logging.INFO)
@@ -114,6 +127,7 @@ def serve(
     model = QAModel(pretrained=pretrained, server_page=server_page)
 
     # 2) Flask 인스턴스 생성
+    #    같은 디렉토리에 templates 폴더가 있다면 간단히 쓸 수 있음:
     app = Flask(__name__, template_folder=Path("templates").resolve())
 
     # 3) 모델에 정의된 run_server() 호출
