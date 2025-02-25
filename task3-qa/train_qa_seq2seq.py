@@ -254,13 +254,13 @@ class DataTrainingArguments:
         else:
             if self.train_file is not None:
                 extension = self.train_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`train_file` should be a csv or a json file."
+                assert extension in ["csv", "json", "jsonl"], "`train_file` should be a csv or a json(l) file."  # chrisjihee: include jsonl
             if self.validation_file is not None:
                 extension = self.validation_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`validation_file` should be a csv or a json file."
+                assert extension in ["csv", "json", "jsonl"], "`validation_file` should be a csv or a json(l) file."  # chrisjihee: include jsonl
             if self.test_file is not None:
                 extension = self.test_file.split(".")[-1]
-                assert extension in ["csv", "json"], "`test_file` should be a csv or a json file."
+                assert extension in ["csv", "json", "jsonl"], "`validation_file` should be a csv or a json(l) file."  # chrisjihee: include jsonl
         if self.val_max_answer_length is None:
             self.val_max_answer_length = self.max_answer_length
 
@@ -350,6 +350,7 @@ def main():
         )
     else:
         data_files = {}
+        extension = None
         if data_args.train_file is not None:
             data_files["train"] = data_args.train_file
             extension = data_args.train_file.split(".")[-1]
@@ -359,13 +360,14 @@ def main():
         if data_args.test_file is not None:
             data_files["test"] = data_args.test_file
             extension = data_args.test_file.split(".")[-1]
-        raw_datasets = load_dataset(
-            extension,
-            data_files=data_files,
-            field="data",
-            cache_dir=model_args.cache_dir,
-            token=model_args.token,
-        )
+        if extension:
+            raw_datasets = load_dataset(
+                extension.replace("jsonl", "json"),  # chrisjihee: replace jsonl with json
+                data_files=data_files,
+                field=None if extension == "jsonl" else "data",  # chrisjihee: field=None for jsonl
+                cache_dir=model_args.cache_dir,
+                token=model_args.token,
+            )
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.
 
