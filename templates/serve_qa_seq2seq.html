@@ -1,0 +1,64 @@
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body style="margin: 30px;">
+<div class="card border-dark mb-3" style="min-width: 30rem; max-width: 50rem;">
+    <div class="card-header">ratsgo's nlpbook</div>
+    <div class="card-body text-dark">
+        <h5 class="card-title">질의/응답 (Question Answering)</h5>
+        <p class="card-text">지문(context)과 질문(question)이 주어졌을 때 질문에 적절한 답을 지문에서 찾습니다.</p>
+
+        <div class="mb-3">
+            <span class="input-group-text">context</span>
+            <textarea class="form-control" id="context" rows="10" style="resize: vertical;" placeholder="지문을 입력하세요">대한민국은 동아시아의 한반도 군사 분계선 남부에 위치한 나라이다. 약칭으로 한국(한국 한자: 韓國)과 남한(한국 한자: 南韓)으로 부르며 현정체제는 대한민국 제6공화국이다. 대한민국의 국기는 대한민국 국기법에 따라 태극기이며, 국가는 관습상 애국가, 국화는 관습상 무궁화이다. 공용어는 한국어와 한국 수어이다. 수도는 서울특별시이다. 인구는 2024년 2월 기준으로 5,130만명이고, 이 중 절반이 넘는(50.74%) 2,603만명이 수도권에 산다.</textarea>
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">question</span>
+            <input type="text" class="form-control" id="question" placeholder="질문을 입력하세요" value="대한민국의 공용어 2가지는?"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="api_call();">답 찾기</button>
+        </div>
+
+        <hr>
+
+        <p class="card-text">
+        <dl class="row">
+            <dt class="col-sm-3">context</dt>
+            <dd class="col-sm-9" id="processed-context"></dd>
+            <dt class="col-sm-3">question</dt>
+            <dd class="col-sm-9" id="processed-question"></dd>
+            <dt class="col-sm-3">answer</dt>
+            <dd class="col-sm-9" id="answer"></dd>
+            <dt class="col-sm-3">score</dt>
+            <dd class="col-sm-9" id="score"></dd>
+        </dl>
+        </p>
+    </div>
+</div>
+</body>
+
+<script>
+    function api_call() {
+        var q = $("#question").val();
+        var c = $("#context").val();
+        var data = {question: q, context: c};
+
+        $.ajax({
+            url: "/api",
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (data) {
+                $('#processed-context').html(data.context);
+                $('#processed-question').html(data.question);
+                $('#answer').html(data.answer);
+                $('#score').html(data.score);
+            },
+            error: function () {
+                alert("에러 발생! 다시 시도해주세요.");
+            }
+        });
+    }
+</script>

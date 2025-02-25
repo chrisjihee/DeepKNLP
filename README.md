@@ -24,6 +24,7 @@ Transformer-based Korean Natural Language Processing
     - KLUE-BERT: https://huggingface.co/klue/bert-base | https://github.com/KLUE-benchmark/KLUE
     - KcBERT: https://huggingface.co/beomi/kcbert-base | https://github.com/Beomi/KcBERT
     - KoELECTRA: https://huggingface.co/monologg/koelectra-base-v3-discriminator | https://github.com/monologg/KoELECTRA
+    - Finetuned by KorQuAD: https://huggingface.co/models?pipeline_tag=question-answering&sort=downloads&search=korquad
 * Encoder-Decoder: https://huggingface.co/docs/transformers/model_summary#cv-encoder-decoder
     - KoT5: https://huggingface.co/wisenut-nlp-team/KoT5-base | https://github.com/wisenut-research/KoT5
     - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-base | https://github.com/airc-keti/ke-t5
@@ -33,6 +34,7 @@ Transformer-based Korean Natural Language Processing
     - pko-T5: https://huggingface.co/paust/pko-t5-base | https://github.com/paust-team/pko-t5
     - pko-T5: https://huggingface.co/paust/pko-t5-large | https://github.com/paust-team/pko-t5
     - pko-T5: https://huggingface.co/paust/pko-flan-t5-large | https://github.com/paust-team/pko-t5
+    - Finetuned by KorQuAD: https://huggingface.co/models?pipeline_tag=text2text-generation&sort=downloads&search=korquad
 
 ## Installation
 

@@ -113,7 +113,9 @@ main = typer.Typer()
 
 @main.command()
 def serve(
-        pretrained: str = typer.Option("output/korquad/train_qa-*/checkpoint-*", help="Local pretrained model path or Hugging Face Hub ID"),
+        # TODO: "output/korquad/train_qa-*/checkpoint-*" or "monologg/koelectra-base-v3-finetuned-korquad"
+        pretrained: str = typer.Option("output/korquad/train_qa-*/checkpoint-*",
+                                       help="Local pretrained model path or Hugging Face Hub ID"),
         server_host: str = typer.Option("0.0.0.0"),
         server_port: int = typer.Option(9164),
         server_page: str = typer.Option("serve_qa.html", help="HTML template file inside the templates folder"),
