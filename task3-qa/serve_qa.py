@@ -7,7 +7,11 @@ import typer
 from flask import Flask, request, jsonify, render_template
 from flask_classful import FlaskView, route
 from lightning import LightningModule
+
+from chrisbase.io import dirs, paths
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering, pipeline
+
+logger = logging.getLogger(__name__)
 
 
 ###############################################################################
@@ -20,12 +24,12 @@ class QAModel(LightningModule):
         :param server_page: The HTML template file name inside the "templates" folder.
         """
         super().__init__()
-        self.pretrained = pretrained
         self.server_page = server_page
 
         # 1) Load model (from_pretrained)
-        self.tokenizer = AutoTokenizer.from_pretrained(self.pretrained)
-        self.model = AutoModelForQuestionAnswering.from_pretrained(self.pretrained)
+        logger.info(f"Loading model from {pretrained}")
+        self.tokenizer = AutoTokenizer.from_pretrained(pretrained)
+        self.model = AutoModelForQuestionAnswering.from_pretrained(pretrained)
 
         # 2) Initialize pipeline (for question-answering task)
         self.qa_pipeline = pipeline(
@@ -91,15 +95,17 @@ main = typer.Typer()
 
 @main.command()
 def serve(
-        pretrained: str = typer.Option("output/korquad/train=KPF-BERT=dgx-a100/checkpoint-15723",
-                                       help="Path to the QA model or Hugging Face model ID"),
+        pretrained: str = typer.Option("output/korquad/**/checkpoint-*", help="Local pretrained model path or Hugging Face Hub ID"),
         server_host: str = typer.Option("0.0.0.0"),
-        server_port: int = typer.Option(9000),
+        server_port: int = typer.Option(9164),
         server_page: str = typer.Option("serve_qa.html", help="HTML template file inside the templates folder"),
         debug: bool = typer.Option(False),
 ):
     logging.basicConfig(level=logging.INFO)
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    checkpoint_paths = paths(pretrained)
+    if checkpoint_paths and len(checkpoint_paths) > 0:
+        pretrained = str(sorted(checkpoint_paths, key=os.path.getmtime)[-1])
 
     # 1) Load model
     model = QAModel(pretrained=pretrained, server_page=server_page)
