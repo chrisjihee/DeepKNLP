@@ -1,0 +1,442 @@
+(DeepKNLP-25) [dlt@dl026 DeepKNLP-25]$ bash task3-qa/train_qa_seq2seq-1_2.sh
+02/25/2025 23:16:05 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: False, 16-bits training: False
+02/25/2025 23:16:05 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+average_tokens_across_devices=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=IntervalStrategy.EPOCH,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=None,
+hub_strategy=HubStrategy.EVERY_SAVE,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_for_metrics=[],
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=3e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=output/korquad/train_qa_seq2seq-by-ket5-large/runs/Feb25_23-16-04_dl026,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=IntervalStrategy.STEPS,
+lr_scheduler_kwargs={},
+lr_scheduler_type=SchedulerType.LINEAR,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=OptimizerNames.ADAMW_TORCH,
+optim_args=None,
+optim_target_modules=None,
+output_dir=output/korquad/train_qa_seq2seq-by-ket5-large,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=12,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['tensorboard'],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=output/korquad/train_qa_seq2seq-by-ket5-large,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=SaveStrategy.EPOCH,
+save_total_limit=2,
+seed=42,
+skip_memory_metrics=True,
+sortish_sampler=False,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tp_size=0,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+Using custom data configuration default-06abf35d5b3a79eb
+02/25/2025 23:16:05 - INFO - datasets.builder - Using custom data configuration default-06abf35d5b3a79eb
+Loading Dataset Infos from /home/dlt/miniforge3/envs/DeepKNLP-25/lib/python3.12/site-packages/datasets/packaged_modules/json
+02/25/2025 23:16:05 - INFO - datasets.info - Loading Dataset Infos from /home/dlt/miniforge3/envs/DeepKNLP-25/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+02/25/2025 23:16:05 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+02/25/2025 23:16:05 - INFO - datasets.info - Loading Dataset info from /home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+Found cached dataset json (/home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+02/25/2025 23:16:05 - INFO - datasets.builder - Found cached dataset json (/home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+Loading Dataset info from /home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+02/25/2025 23:16:05 - INFO - datasets.info - Loading Dataset info from /home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 601/601 [00:00<00:00, 6.46MB/s]
+[INFO|configuration_utils.py:699] 2025-02-25 23:16:06,239 >> loading configuration file config.json from cache at /home/dlt/.cache/huggingface/hub/models--KETI-AIR--ke-t5-large/snapshots/eb6ec738f166d02e22de57f39daea5cbef73f225/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 23:16:06,241 >> Model config T5Config {
+  "_name_or_path": "KETI-AIR/ke-t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "classifier_dropout": 0.0,
+  "d_ff": 2816,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "gelu_new",
+  "dropout_rate": 0.0,
+  "eos_token_id": 1,
+  "feed_forward_proj": "gated-gelu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": true,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "transformers_version": "4.50.0.dev0",
+  "use_cache": true,
+  "vocab_size": 64128
+}
+
+tokenizer_config.json: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1.97k/1.97k [00:00<00:00, 21.3MB/s]
+[INFO|configuration_utils.py:699] 2025-02-25 23:16:06,657 >> loading configuration file config.json from cache at /home/dlt/.cache/huggingface/hub/models--KETI-AIR--ke-t5-large/snapshots/eb6ec738f166d02e22de57f39daea5cbef73f225/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 23:16:06,657 >> Model config T5Config {
+  "_name_or_path": "KETI-AIR/ke-t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "classifier_dropout": 0.0,
+  "d_ff": 2816,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "gelu_new",
+  "dropout_rate": 0.0,
+  "eos_token_id": 1,
+  "feed_forward_proj": "gated-gelu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": true,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "transformers_version": "4.50.0.dev0",
+  "use_cache": true,
+  "vocab_size": 64128
+}
+
+spiece.model: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1.47M/1.47M [00:00<00:00, 24.9MB/s]
+special_tokens_map.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1.79k/1.79k [00:00<00:00, 23.9MB/s]
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 23:16:08,501 >> loading file spiece.model from cache at /home/dlt/.cache/huggingface/hub/models--KETI-AIR--ke-t5-large/snapshots/eb6ec738f166d02e22de57f39daea5cbef73f225/spiece.model
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 23:16:08,501 >> loading file tokenizer.json from cache at None
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 23:16:08,501 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 23:16:08,501 >> loading file special_tokens_map.json from cache at /home/dlt/.cache/huggingface/hub/models--KETI-AIR--ke-t5-large/snapshots/eb6ec738f166d02e22de57f39daea5cbef73f225/special_tokens_map.json
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 23:16:08,501 >> loading file tokenizer_config.json from cache at /home/dlt/.cache/huggingface/hub/models--KETI-AIR--ke-t5-large/snapshots/eb6ec738f166d02e22de57f39daea5cbef73f225/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 23:16:08,501 >> loading file chat_template.jinja from cache at None
+[INFO|configuration_utils.py:699] 2025-02-25 23:16:08,501 >> loading configuration file config.json from cache at /home/dlt/.cache/huggingface/hub/models--KETI-AIR--ke-t5-large/snapshots/eb6ec738f166d02e22de57f39daea5cbef73f225/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 23:16:08,502 >> Model config T5Config {
+  "_name_or_path": "KETI-AIR/ke-t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "classifier_dropout": 0.0,
+  "d_ff": 2816,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "gelu_new",
+  "dropout_rate": 0.0,
+  "eos_token_id": 1,
+  "feed_forward_proj": "gated-gelu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": true,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "transformers_version": "4.50.0.dev0",
+  "use_cache": true,
+  "vocab_size": 64128
+}
+
+[WARNING|logging.py:329] 2025-02-25 23:16:08,560 >> You are using the default legacy behaviour of the <class 'transformers.models.t5.tokenization_t5.T5Tokenizer'>. This is expected, and simply means that the `legacy` (previous) behavior will be used so nothing changes for you. If you want to use the new behaviour, set `legacy=False`. This should only be set if you understand what it means, and thoroughly read the reason why this was added as explained in https://github.com/huggingface/transformers/pull/24565
+[INFO|configuration_utils.py:699] 2025-02-25 23:16:08,720 >> loading configuration file config.json from cache at /home/dlt/.cache/huggingface/hub/models--KETI-AIR--ke-t5-large/snapshots/eb6ec738f166d02e22de57f39daea5cbef73f225/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 23:16:08,721 >> Model config T5Config {
+  "_name_or_path": "KETI-AIR/ke-t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "classifier_dropout": 0.0,
+  "d_ff": 2816,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "gelu_new",
+  "dropout_rate": 0.0,
+  "eos_token_id": 1,
+  "feed_forward_proj": "gated-gelu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": true,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "transformers_version": "4.50.0.dev0",
+  "use_cache": true,
+  "vocab_size": 64128
+}
+
+model.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3.13G/3.13G [01:46<00:00, 29.3MB/s]
+[INFO|modeling_utils.py:4024] 2025-02-25 23:17:56,359 >> loading weights file model.safetensors from cache at /home/dlt/.cache/huggingface/hub/models--KETI-AIR--ke-t5-large/snapshots/eb6ec738f166d02e22de57f39daea5cbef73f225/model.safetensors
+[INFO|configuration_utils.py:1140] 2025-02-25 23:17:56,409 >> Generate config GenerationConfig {
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0
+}
+
+[INFO|modeling_utils.py:5017] 2025-02-25 23:17:56,822 >> All model checkpoint weights were used when initializing T5ForConditionalGeneration.
+
+[INFO|modeling_utils.py:5025] 2025-02-25 23:17:56,822 >> All the weights of T5ForConditionalGeneration were initialized from the model checkpoint at KETI-AIR/ke-t5-large.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use T5ForConditionalGeneration for predictions without further training.
+[INFO|modeling_utils.py:4412] 2025-02-25 23:17:57,064 >> Generation config file not found, using a generation config created from the model config.
+Running tokenizer on train dataset:   0%|                                                                                                                                                                                                                                      | 0/60407 [00:00<?, ? examples/s]Caching processed dataset at /home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-a6b995637ef0f452.arrow
+02/25/2025 23:17:57 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-a6b995637ef0f452.arrow
+Running tokenizer on train dataset: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 60407/60407 [00:17<00:00, 3474.78 examples/s]
+Running tokenizer on validation dataset:   0%|                                                                                                                                                                                                                                  | 0/5774 [00:00<?, ? examples/s]Caching processed dataset at /home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-509a3f6c48a9c7c7.arrow
+02/25/2025 23:18:14 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/dlt/.cache/huggingface/datasets/json/default-06abf35d5b3a79eb/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-509a3f6c48a9c7c7.arrow
+Running tokenizer on validation dataset: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5774/5774 [00:02<00:00, 1958.91 examples/s]
+[INFO|trainer.py:2407] 2025-02-25 23:18:19,524 >> ***** Running training *****
+[INFO|trainer.py:2408] 2025-02-25 23:18:19,524 >>   Num examples = 60,407
+[INFO|trainer.py:2409] 2025-02-25 23:18:19,524 >>   Num Epochs = 3
+[INFO|trainer.py:2410] 2025-02-25 23:18:19,524 >>   Instantaneous batch size per device = 12
+[INFO|trainer.py:2413] 2025-02-25 23:18:19,525 >>   Total train batch size (w. parallel, distributed & accumulation) = 12
+[INFO|trainer.py:2414] 2025-02-25 23:18:19,525 >>   Gradient Accumulation steps = 1
+[INFO|trainer.py:2415] 2025-02-25 23:18:19,525 >>   Total optimization steps = 15,102
+[INFO|trainer.py:2416] 2025-02-25 23:18:19,526 >>   Number of trainable parameters = 783,019,008
+  0%|                                                                                                                                                                                                                                                                                 | 0/15102 [00:00<?, ?it/s][WARNING|logging.py:329] 2025-02-25 23:18:19,995 >> Passing a tuple of `past_key_values` is deprecated and will be removed in Transformers v4.48.0. You should pass an instance of `EncoderDecoderCache` instead, e.g. `past_key_values=EncoderDecoderCache.from_legacy_cache(past_key_values)`.
+{'loss': 8.0769, 'grad_norm': 6.707172393798828, 'learning_rate': 2.9006754072308305e-05, 'epoch': 0.1}
+{'loss': 5.5545, 'grad_norm': 7.888652324676514, 'learning_rate': 2.801350814461661e-05, 'epoch': 0.2}
+{'loss': 4.3462, 'grad_norm': 7.107843399047852, 'learning_rate': 2.7020262216924913e-05, 'epoch': 0.3}
+{'loss': 3.6194, 'grad_norm': 8.33543586730957, 'learning_rate': 2.6027016289233214e-05, 'epoch': 0.4}
+{'loss': 1.9087, 'grad_norm': 18.279521942138672, 'learning_rate': 2.5033770361541518e-05, 'epoch': 0.5}
+{'loss': 1.2336, 'grad_norm': 6.368602275848389, 'learning_rate': 2.4040524433849822e-05, 'epoch': 0.6}
+{'loss': 0.9798, 'grad_norm': 12.77685832977295, 'learning_rate': 2.3047278506158126e-05, 'epoch': 0.7}
+{'loss': 0.799, 'grad_norm': 21.73023223876953, 'learning_rate': 2.2054032578466427e-05, 'epoch': 0.79}
+{'loss': 0.7215, 'grad_norm': 12.56322956085205, 'learning_rate': 2.1060786650774734e-05, 'epoch': 0.89}
+{'loss': 0.6556, 'grad_norm': 7.616090297698975, 'learning_rate': 2.0067540723083035e-05, 'epoch': 0.99}
+ 33%|██████████████████████████████████████████████████████████████████████████████████████▋                                                                                                                                                                             | 5034/15102 [58:54<1:55:59,  1.45it/s][INFO|trainer.py:930] 2025-02-26 00:17:13,539 >> The following columns in the evaluation set don't have a corresponding argument in `T5ForConditionalGeneration.forward` and have been ignored: example_id, offset_mapping. If example_id, offset_mapping are not expected by `T5ForConditionalGeneration.forward`,  you can safely ignore this message.
+[INFO|trainer.py:4264] 2025-02-26 00:17:13,541 >>
+***** Running Evaluation *****
+[INFO|trainer.py:4266] 2025-02-26 00:17:13,541 >>   Num examples = 5945
+[INFO|trainer.py:4269] 2025-02-26 00:17:13,541 >>   Batch size = 8
+
+02/26/2025 00:22:29 - INFO - __main__ - Saved evaluation predictions to output/korquad/train_qa_seq2seq-by-ket5-large/eval_predictions.json██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋| 743/744 [05:09<00:00,  2.59it/s]
+{'eval_exact_match': 68.42743332178732, 'eval_f1': 74.94831910574892, 'eval_loss': 1.20956552028656, 'eval_runtime': 310.0787, 'eval_samples_per_second': 19.173, 'eval_steps_per_second': 2.399, 'epoch': 1.0}
+ 33%|██████████████████████████████████████████████████████████████████████████████████████                                                                                                                                                                            | 5034/15102 [1:04:10<1:55:59,  1.45it/s]
+[INFO|trainer.py:3948] 2025-02-26 00:22:30,132 >> Saving model checkpoint to output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-5034
+[INFO|configuration_utils.py:423] 2025-02-26 00:22:30,133 >> Configuration saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-5034/config.json
+[INFO|configuration_utils.py:909] 2025-02-26 00:22:30,133 >> Configuration saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-5034/generation_config.json
+[INFO|modeling_utils.py:3077] 2025-02-26 00:22:31,935 >> Model weights saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-5034/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-26 00:22:31,936 >> tokenizer config file saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-5034/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-26 00:22:31,936 >> Special tokens file saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-5034/special_tokens_map.json
+[INFO|tokenization_t5_fast.py:176] 2025-02-26 00:22:31,937 >> Copy vocab file to output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-5034/spiece.model
+{'loss': 0.4612, 'grad_norm': 8.423049926757812, 'learning_rate': 1.907429479539134e-05, 'epoch': 1.09}
+{'loss': 0.4065, 'grad_norm': 5.282279014587402, 'learning_rate': 1.8081048867699643e-05, 'epoch': 1.19}
+{'loss': 0.4169, 'grad_norm': 5.516610622406006, 'learning_rate': 1.7087802940007947e-05, 'epoch': 1.29}
+{'loss': 0.423, 'grad_norm': 15.885541915893555, 'learning_rate': 1.609455701231625e-05, 'epoch': 1.39}
+{'loss': 0.3759, 'grad_norm': 1.3427573442459106, 'learning_rate': 1.5101311084624554e-05, 'epoch': 1.49}
+{'loss': 0.3613, 'grad_norm': 4.947952747344971, 'learning_rate': 1.4108065156932856e-05, 'epoch': 1.59}
+{'loss': 0.3509, 'grad_norm': 9.366722106933594, 'learning_rate': 1.3114819229241162e-05, 'epoch': 1.69}
+{'loss': 0.3404, 'grad_norm': 4.484172344207764, 'learning_rate': 1.2121573301549464e-05, 'epoch': 1.79}
+{'loss': 0.3351, 'grad_norm': 17.97947883605957, 'learning_rate': 1.1128327373857768e-05, 'epoch': 1.89}
+{'loss': 0.3011, 'grad_norm': 4.259282112121582, 'learning_rate': 1.013508144616607e-05, 'epoch': 1.99}
+ 67%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                      | 10068/15102 [2:03:09<57:50,  1.45it/s][INFO|trainer.py:930] 2025-02-26 01:21:29,281 >> The following columns in the evaluation set don't have a corresponding argument in `T5ForConditionalGeneration.forward` and have been ignored: example_id, offset_mapping. If example_id, offset_mapping are not expected by `T5ForConditionalGeneration.forward`,  you can safely ignore this message.
+[INFO|trainer.py:4264] 2025-02-26 01:21:29,282 >>
+***** Running Evaluation *****
+[INFO|trainer.py:4266] 2025-02-26 01:21:29,282 >>   Num examples = 5945
+[INFO|trainer.py:4269] 2025-02-26 01:21:29,282 >>   Batch size = 8
+
+02/26/2025 01:26:44 - INFO - __main__ - Saved evaluation predictions to output/korquad/train_qa_seq2seq-by-ket5-large/eval_predictions.json██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋| 743/744 [05:08<00:00,  2.65it/s]
+{'eval_exact_match': 76.58468998960859, 'eval_f1': 82.52612472390798, 'eval_loss': 1.0322272777557373, 'eval_runtime': 308.8659, 'eval_samples_per_second': 19.248, 'eval_steps_per_second': 2.409, 'epoch': 2.0}
+ 67%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                      | 10068/15102 [2:08:24<57:50,  1.45it/s]
+[INFO|trainer.py:3948] 2025-02-26 01:26:44,483 >> Saving model checkpoint to output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-10068
+[INFO|configuration_utils.py:423] 2025-02-26 01:26:44,484 >> Configuration saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-10068/config.json
+[INFO|configuration_utils.py:909] 2025-02-26 01:26:44,484 >> Configuration saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-10068/generation_config.json
+[INFO|modeling_utils.py:3077] 2025-02-26 01:26:46,205 >> Model weights saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-10068/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-26 01:26:46,207 >> tokenizer config file saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-10068/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-26 01:26:46,207 >> Special tokens file saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-10068/special_tokens_map.json
+[INFO|tokenization_t5_fast.py:176] 2025-02-26 01:26:46,208 >> Copy vocab file to output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-10068/spiece.model
+{'loss': 0.1905, 'grad_norm': 26.20193862915039, 'learning_rate': 9.141835518474375e-06, 'epoch': 2.09}
+{'loss': 0.1596, 'grad_norm': 2.0595734119415283, 'learning_rate': 8.148589590782679e-06, 'epoch': 2.19}
+{'loss': 0.1544, 'grad_norm': 2.852592945098877, 'learning_rate': 7.155343663090981e-06, 'epoch': 2.28}
+{'loss': 0.1719, 'grad_norm': 1.85149347782135, 'learning_rate': 6.162097735399284e-06, 'epoch': 2.38}
+{'loss': 0.164, 'grad_norm': 40.049156188964844, 'learning_rate': 5.168851807707589e-06, 'epoch': 2.48}
+{'loss': 0.1604, 'grad_norm': 0.35901838541030884, 'learning_rate': 4.1756058800158925e-06, 'epoch': 2.58}
+{'loss': 0.1614, 'grad_norm': 6.662590503692627, 'learning_rate': 3.1823599523241957e-06, 'epoch': 2.68}
+{'loss': 0.1562, 'grad_norm': 9.591965675354004, 'learning_rate': 2.189114024632499e-06, 'epoch': 2.78}
+{'loss': 0.1564, 'grad_norm': 7.1155548095703125, 'learning_rate': 1.1958680969408024e-06, 'epoch': 2.88}
+{'loss': 0.1365, 'grad_norm': 5.265330791473389, 'learning_rate': 2.026221692491061e-07, 'epoch': 2.98}
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 15102/15102 [3:07:26<00:00,  1.45it/s][INFO|trainer.py:930] 2025-02-26 02:25:46,140 >> The following columns in the evaluation set don't have a corresponding argument in `T5ForConditionalGeneration.forward` and have been ignored: example_id, offset_mapping. If example_id, offset_mapping are not expected by `T5ForConditionalGeneration.forward`,  you can safely ignore this message.
+[INFO|trainer.py:4264] 2025-02-26 02:25:46,142 >>
+***** Running Evaluation *****
+[INFO|trainer.py:4266] 2025-02-26 02:25:46,142 >>   Num examples = 5945
+[INFO|trainer.py:4269] 2025-02-26 02:25:46,142 >>   Batch size = 8
+
+02/26/2025 02:31:01 - INFO - __main__ - Saved evaluation predictions to output/korquad/train_qa_seq2seq-by-ket5-large/eval_predictions.json██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋| 743/744 [05:08<00:00,  2.65it/s]
+{'eval_exact_match': 78.12608243851749, 'eval_f1': 83.72307444700947, 'eval_loss': 1.0683364868164062, 'eval_runtime': 309.2697, 'eval_samples_per_second': 19.223, 'eval_steps_per_second': 2.406, 'epoch': 3.0}
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 15102/15102 [3:12:42<00:00,  1.45it/s]
+[INFO|trainer.py:3948] 2025-02-26 02:31:01,725 >> Saving model checkpoint to output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-15102
+[INFO|configuration_utils.py:423] 2025-02-26 02:31:01,725 >> Configuration saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-15102/config.json
+[INFO|configuration_utils.py:909] 2025-02-26 02:31:01,726 >> Configuration saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-15102/generation_config.json
+[INFO|modeling_utils.py:3077] 2025-02-26 02:31:03,414 >> Model weights saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-15102/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-26 02:31:03,415 >> tokenizer config file saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-15102/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-26 02:31:03,416 >> Special tokens file saved in output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-15102/special_tokens_map.json
+[INFO|tokenization_t5_fast.py:176] 2025-02-26 02:31:03,416 >> Copy vocab file to output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-15102/spiece.model
+[INFO|trainer.py:4040] 2025-02-26 02:31:07,509 >> Deleting older checkpoint [output/korquad/train_qa_seq2seq-by-ket5-large/checkpoint-5034] due to args.save_total_limit
+[INFO|trainer.py:2663] 2025-02-26 02:31:08,250 >>
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+{'train_runtime': 11568.7242, 'train_samples_per_second': 15.665, 'train_steps_per_second': 1.305, 'train_loss': 1.102772825996602, 'epoch': 3.0}
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 15102/15102 [3:12:48<00:00,  1.31it/s]
+[INFO|trainer.py:3948] 2025-02-26 02:31:08,251 >> Saving model checkpoint to output/korquad/train_qa_seq2seq-by-ket5-large
+[INFO|configuration_utils.py:423] 2025-02-26 02:31:08,252 >> Configuration saved in output/korquad/train_qa_seq2seq-by-ket5-large/config.json
+[INFO|configuration_utils.py:909] 2025-02-26 02:31:08,252 >> Configuration saved in output/korquad/train_qa_seq2seq-by-ket5-large/generation_config.json
+[INFO|modeling_utils.py:3077] 2025-02-26 02:31:09,828 >> Model weights saved in output/korquad/train_qa_seq2seq-by-ket5-large/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-26 02:31:09,829 >> tokenizer config file saved in output/korquad/train_qa_seq2seq-by-ket5-large/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-26 02:31:09,829 >> Special tokens file saved in output/korquad/train_qa_seq2seq-by-ket5-large/special_tokens_map.json
+[INFO|tokenization_t5_fast.py:176] 2025-02-26 02:31:09,830 >> Copy vocab file to output/korquad/train_qa_seq2seq-by-ket5-large/spiece.model
+***** train metrics *****
+  epoch                    =         3.0
+  total_flos               = 371930264GF
+  train_loss               =      1.1028
+  train_runtime            =  3:12:48.72
+  train_samples            =       60407
+  train_samples_per_second =      15.665
+  train_steps_per_second   =       1.305
+02/26/2025 02:31:09 - INFO - __main__ - *** Evaluate ***
+[INFO|trainer.py:930] 2025-02-26 02:31:09,838 >> The following columns in the evaluation set don't have a corresponding argument in `T5ForConditionalGeneration.forward` and have been ignored: example_id, offset_mapping. If example_id, offset_mapping are not expected by `T5ForConditionalGeneration.forward`,  you can safely ignore this message.
+[INFO|trainer.py:4264] 2025-02-26 02:31:09,840 >>
+***** Running Evaluation *****
+[INFO|trainer.py:4266] 2025-02-26 02:31:09,840 >>   Num examples = 5945
+[INFO|trainer.py:4269] 2025-02-26 02:31:09,840 >>   Batch size = 8
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋| 743/744 [05:17<00:00,  2.64it/s]02/26/2025 02:36:34 - INFO - __main__ - Saved evaluation predictions to output/korquad/train_qa_seq2seq-by-ket5-large/eval_predictions.json
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 744/744 [05:24<00:00,  2.29it/s]
+***** eval metrics *****
+  epoch                   =        3.0
+  eval_exact_match        =    78.1261
+  eval_f1                 =    83.7225
+  eval_loss               =     1.0683
+  eval_runtime            = 0:05:18.39
+  eval_samples            =       5945
+  eval_samples_per_second =     18.672
+  eval_steps_per_second   =      2.337
+(DeepKNLP-25) [dlt@dl026 DeepKNLP-25]$
+(DeepKNLP-25) [dlt@dl026 DeepKNLP-25]$ python task3-qa/evaluate-KorQuAD-v1.py \
+       data/korquad/KorQuAD_v1.0_dev.json \
+       output/korquad/train_qa_seq2seq-by-ket5-large/eval_predictions.json
+{"exact_match": 78.195358503637, "f1": 88.64622370393245}
