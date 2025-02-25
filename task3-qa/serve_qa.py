@@ -45,7 +45,7 @@ class QAModel(LightningModule):
 
     def infer_one(self, question: str, context: str) -> Dict[str, Any]:
         """
-        Generate an answer using the model (direct forward method, no pipeline).
+        Generate an answer using the BERT model
         """
         if not question.strip():
             return {"question": question, "context": context, "answer": "(The question is empty.)"}
@@ -113,7 +113,7 @@ main = typer.Typer()
 
 @main.command()
 def serve(
-        pretrained: str = typer.Option("output/korquad/**/checkpoint-*", help="Local pretrained model path or Hugging Face Hub ID"),
+        pretrained: str = typer.Option("output/korquad/train_qa-*/checkpoint-*", help="Local pretrained model path or Hugging Face Hub ID"),
         server_host: str = typer.Option("0.0.0.0"),
         server_port: int = typer.Option(9164),
         server_page: str = typer.Option("serve_qa.html", help="HTML template file inside the templates folder"),
