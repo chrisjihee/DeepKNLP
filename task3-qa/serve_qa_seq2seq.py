@@ -4,14 +4,12 @@ from pathlib import Path
 from typing import Dict, Any
 
 import torch
-import torch.nn.functional as F
 import typer
 from flask import Flask, request, jsonify, render_template
 from flask_classful import FlaskView, route
-from lightning import LightningModule
 
 from chrisbase.io import paths
-from transformers import AutoTokenizer, AutoModelForQuestionAnswering
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 logger = logging.getLogger(__name__)
 
@@ -19,21 +17,22 @@ logger = logging.getLogger(__name__)
 ###############################################################################
 # 1. Question-Answering Model Definition
 ###############################################################################
-class QAModel(LightningModule):
-    def __init__(self, pretrained: str, server_page: str, normalized: bool = True):
+class QAModel:
+    def __init__(self, pretrained: str, server_page: str, num_beams: int = 5, max_length: int = 50):
         """
-        :param pretrained: Path to the QA model or Hugging Face Hub ID.
+        :param pretrained: Path to the T5 model or Hugging Face Hub ID.
         :param server_page: The HTML template file name inside the "templates" folder.
-        :param normalized: Whether to use softmax normalization for score calculation.
+        :param num_beams: Beam search width for text generation.
+        :param max_length: Maximum length of the generated answer.
         """
-        super().__init__()
         self.server_page = server_page
-        self.normalized = normalized
+        self.num_beams = num_beams
+        self.max_length = max_length
 
-        # 1) Load model (from_pretrained)
+        # 1) Load T5 Model
         logger.info(f"Loading model from {pretrained}")
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained)
-        self.model = AutoModelForQuestionAnswering.from_pretrained(pretrained)
+        self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
         self.model.eval()  # Set to evaluation mode
 
     def run_server(self, server: Flask, *args, **kwargs):
@@ -45,42 +44,31 @@ class QAModel(LightningModule):
 
     def infer_one(self, question: str, context: str) -> Dict[str, Any]:
         """
-        Generate an answer using the model (direct forward method, no pipeline).
+        Generate an answer using the T5 model.
         """
         if not question.strip():
             return {"question": question, "context": context, "answer": "(The question is empty.)"}
         if not context.strip():
             return {"question": question, "context": context, "answer": "(The context is empty.)"}
 
-        inputs = self.tokenizer.encode_plus(
-            question, context, return_tensors="pt", truncation=True, padding=True
-        )
+        # Prepare input text in T5 format
+        input_text = f"question: {question} context: {context}"
+        inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
+
         with torch.no_grad():
-            outputs = self.model(**inputs)
+            output_ids = self.model.generate(
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
+                max_length=self.max_length,
+                num_beams=self.num_beams
+            )
 
-        start_logits = outputs.start_logits
-        end_logits = outputs.end_logits
-
-        start_index = torch.argmax(start_logits)
-        end_index = torch.argmax(end_logits)
-
-        predict_answer_tokens = inputs["input_ids"][0, start_index: end_index + 1]
-        answer = self.tokenizer.decode(predict_answer_tokens)
-
-        if self.normalized:
-            start_probs = F.softmax(start_logits, dim=-1)
-            end_probs = F.softmax(end_logits, dim=-1)
-            score = (torch.max(start_probs) * torch.max(end_probs)).item()
-        else:
-            score = float(torch.max(start_logits) + torch.max(end_logits))
+        answer = self.tokenizer.decode(output_ids[0], skip_special_tokens=True)
 
         return {
             "question": question,
             "context": context,
             "answer": answer,
-            "score": round(score, 4),
-            "start": int(start_index),
-            "end": int(end_index)
         }
 
     ###########################################################################
@@ -113,11 +101,12 @@ main = typer.Typer()
 
 @main.command()
 def serve(
-        pretrained: str = typer.Option("output/korquad/**/checkpoint-*", help="Local pretrained model path or Hugging Face Hub ID"),
+        pretrained: str = typer.Option("output/korquad/train_qa_seq2seq-*/checkpoint-*", help="Local pretrained model path or Hugging Face Hub ID"),
         server_host: str = typer.Option("0.0.0.0"),
         server_port: int = typer.Option(9164),
         server_page: str = typer.Option("serve_qa.html", help="HTML template file inside the templates folder"),
-        normalized: bool = typer.Option(True, help="Use softmax normalization for score calculation"),
+        num_beams: int = typer.Option(5, help="Beam search width for text generation"),
+        max_length: int = typer.Option(50, help="Maximum answer length"),
         debug: bool = typer.Option(False),
 ):
     logging.basicConfig(level=logging.INFO)
@@ -126,8 +115,8 @@ def serve(
     if checkpoint_paths and len(checkpoint_paths) > 0:
         pretrained = str(sorted(checkpoint_paths, key=os.path.getmtime)[-1])
 
-    # 1) Load model
-    model = QAModel(pretrained=pretrained, server_page=server_page, normalized=normalized)
+    # 1) Load T5 Model
+    model = QAModel(pretrained=pretrained, server_page=server_page, num_beams=num_beams, max_length=max_length)
 
     # 2) Create Flask instance
     app = Flask(__name__, template_folder=Path("templates").resolve())
