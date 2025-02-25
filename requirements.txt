@@ -21,4 +21,4 @@ Flask
 Flask-Classful
 
 # Custom
-chrisbase==0.5.7
+chrisbase==0.5.8
