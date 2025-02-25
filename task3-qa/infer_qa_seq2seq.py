@@ -1,12 +1,24 @@
-import torch
-from transformers import AutoModelForQuestionAnswering, AutoTokenizer
+import logging
+import os
 
-# Path to the folder where the model is stored (checkpoint path)
-model_dir = "output/korquad/train_qa-by-kpfbert/checkpoint-15723"
+import torch
+
+from chrisbase.io import paths
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+
+logger = logging.getLogger(__name__)
+
+# Local pretrained model path or Hugging Face Hub ID
+# TODO: "output/korquad/train_qa_seq2seq-*/checkpoint-*", or "paust/pko-t5-base-finetuned-korquad"
+pretrained = "output/korquad/train_qa_seq2seq-*/checkpoint-*"
+checkpoint_paths = paths(pretrained)
+if checkpoint_paths and len(checkpoint_paths) > 0:
+    pretrained = str(sorted(checkpoint_paths, key=os.path.getmtime)[-1])
 
 # 1. Load Tokenizer and Model
-tokenizer = AutoTokenizer.from_pretrained(model_dir)
-model = AutoModelForQuestionAnswering.from_pretrained(model_dir)
+logger.info(f"Loading model from {pretrained}")
+tokenizer = AutoTokenizer.from_pretrained(pretrained)
+model = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
 model.eval()  # Set the model to evaluation mode
 
 # 2. Example question/context
@@ -32,22 +44,34 @@ questions = [
 ]
 
 
-# 3. Inference (Directly calling the model's forward method)
-def answer_question(question, context):
-    inputs = tokenizer.encode_plus(
-        question, context, return_tensors="pt", truncation=True, padding=True
-    )
+# 3. Inference (Using `generate` method)
+def answer_question(question, context, max_length=50, num_beams=5):
+    """
+    Generate an answer using the T5 model.
+
+    :param question: The input question.
+    :param context: The input context (passage).
+    :param max_length: Maximum length of the generated answer.
+    :param num_beams: Number of beams for beam search.
+    :return: Generated answer.
+    """
+    # Format the input for T5 (question-context pair)
+    input_text = f"question: {question} context: {context}"
+
+    # Tokenize input
+    inputs = tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
+
+    # Generate the answer
     with torch.no_grad():
-        outputs = model(**inputs)
+        output_ids = model.generate(
+            input_ids=inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
+            max_length=max_length,
+            num_beams=num_beams
+        )
 
-    start_logits = outputs.start_logits
-    end_logits = outputs.end_logits
-
-    start_index = torch.argmax(start_logits)
-    end_index = torch.argmax(end_logits)
-
-    predict_answer_tokens = inputs["input_ids"][0, start_index: end_index + 1]
-    answer = tokenizer.decode(predict_answer_tokens)
+    # Decode the generated answer
+    answer = tokenizer.decode(output_ids[0], skip_special_tokens=True)
 
     return answer
 

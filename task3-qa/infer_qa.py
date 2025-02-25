@@ -1,12 +1,24 @@
+import logging
+import os
+
 import torch
+
+from chrisbase.io import paths
 from transformers import AutoModelForQuestionAnswering, AutoTokenizer
 
-# Path to the folder where the model is stored (checkpoint path)
-model_dir = "output/korquad/train_qa-by-kpfbert/checkpoint-15723"
+logger = logging.getLogger(__name__)
+
+# Local pretrained model path or Hugging Face Hub ID
+# TODO: "output/korquad/train_qa-*/checkpoint-*" or "monologg/koelectra-base-v3-finetuned-korquad"
+pretrained = "output/korquad/train_qa-*/checkpoint-*"
+checkpoint_paths = paths(pretrained)
+if checkpoint_paths and len(checkpoint_paths) > 0:
+    pretrained = str(sorted(checkpoint_paths, key=os.path.getmtime)[-1])
 
 # 1. Load Tokenizer and Model
-tokenizer = AutoTokenizer.from_pretrained(model_dir)
-model = AutoModelForQuestionAnswering.from_pretrained(model_dir)
+logger.info(f"Loading model from {pretrained}")
+tokenizer = AutoTokenizer.from_pretrained(pretrained)
+model = AutoModelForQuestionAnswering.from_pretrained(pretrained)
 model.eval()  # Set the model to evaluation mode
 
 # 2. Example question/context
