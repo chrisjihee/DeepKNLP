@@ -1,0 +1,17 @@
+CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa_seq2seq.py \
+  --train_file data/korquad/train.jsonl \
+  --validation_file data/korquad/validation.jsonl \
+  --output_dir output/korquad/train_qa_seq2seq-by-kpfbert \
+  --model_name_or_path jinmang2/kpfbert \
+  --do_train \
+  --do_eval \
+  --num_train_epochs 2 \
+  --save_total_limit 3 \
+  --save_steps 1000 \
+  --metric_for_best_model loss \
+  --load_best_model_at_end True \
+  --doc_stride 128 \
+  --max_seq_length 512 \
+  --per_device_train_batch_size 12 \
+  --learning_rate 3e-5 \
+  --overwrite_output_dir

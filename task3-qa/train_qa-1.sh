@@ -7,7 +7,7 @@ CUDA_VISIBLE_DEVICES=7 python task3-qa/train_qa.py \
   --per_device_train_batch_size 12 \
   --max_seq_length 512 \
   --doc_stride 128 \
-  --num_train_epochs 3 \
+  --num_train_epochs 2 \
   --learning_rate 3e-5 \
-  --output_dir output/korquad/train=KPF-BERT=$(hostname) \
+  --output_dir output/korquad/train_qa-by-kpfbert \
   --overwrite_output_dir
