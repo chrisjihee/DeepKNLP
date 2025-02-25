@@ -54,8 +54,7 @@ Transformer-based Korean Natural Language Processing
     conda activate DeepKNLP-25  # MUST be activated
     conda install cuda-libraries=11.8 cuda-libraries-dev=11.8 cuda-cudart=11.8 cuda-cudart-dev=11.8 \
                   cuda-nvrtc=11.8 cuda-nvrtc-dev=11.8 cuda-driver-dev=11.8 \
-                  cuda-nvcc=11.8 cuda-cccl=11.8 cuda-runtime=11.8 cuda-version=11.8 \
-                  libcusparse=11 libcusparse-dev=11 libcublas=11 libcublas-dev=11 \
+                  cuda-nvcc=11.8 cuda-cccl=11.8 cuda-runtime=11.8 \
                   -c nvidia -c pytorch -y
     pip list; echo ==========; conda --version; echo ==========; conda list
     ```
@@ -66,11 +65,7 @@ Transformer-based Korean Natural Language Processing
     rm -rf ratsnlp;      git clone https://github.com/chrisjihee/ratsnlp.git;      pip install -U -e ratsnlp
     pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|prog|pydantic"
     ```
-5. Unzip some archived data
-    ```bash
-    cd data; tar zxf united.tar.gz; cd ..;
-    ```
-6. Login to Hugging Face and link the cache
+5. Login to Hugging Face and link the cache
     ```bash
     huggingface-cli whoami
     huggingface-cli login
