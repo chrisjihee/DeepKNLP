@@ -67,12 +67,7 @@ Transformer-based Korean Natural Language Processing
 4. Install the required packages
     ```bash
     pip install -r requirements.txt
-    #export CUDA_HOME=""; DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
     rm -rf transformers; git clone https://github.com/chrisjihee/transformers.git; pip install -U -e transformers
-    rm -rf chrisbase;    git clone https://github.com/chrisjihee/chrisbase.git;    pip install -U -e chrisbase
-    rm -rf chrisdata;    git clone https://github.com/chrisjihee/chrisdata.git;    pip install -U -e chrisdata
-    rm -rf chrislab;     git clone https://github.com/chrisjihee/chrislab.git;     pip install -U -e chrislab
-    rm -rf progiter;     git clone https://github.com/chrisjihee/progiter.git;     pip install -U -e progiter
     rm -rf ratsnlp;      git clone https://github.com/chrisjihee/ratsnlp.git;      pip install -U -e ratsnlp
     pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|prog|pydantic"
     ```
