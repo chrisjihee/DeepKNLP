@@ -113,12 +113,12 @@ Transformer-based Korean Natural Language Processing
     - `bash task3-qa/eval_qa_seq2seq-2.sh`
     - `bash task3-qa/eval_qa_seq2seq-3.sh`
 * Text Generation: https://ratsgo.github.io/nlpbook/docs/generation
-    - `python task4-gen/infer_gen-1.py`
-    - `python task4-gen/infer_gen-2.py`
-    - `python task4-gen/infer_gen-3.py`
-    - `python task4-gen/train_gen-1.py`
-    - `python task4-gen/train_gen-2.py`
-    - `python task4-gen/train_gen-3.py`
-    - `python task4-gen/serve_gen-1.py`
-    - `python task4-gen/serve_gen-2.py`
-    - `python task4-gen/serve_gen-3.py`
+    - `CUDA_VISIBLE_DEVICES=0 python task4-gen/infer_gen-1.py`
+    - `CUDA_VISIBLE_DEVICES=1 python task4-gen/infer_gen-2.py`
+    - `CUDA_VISIBLE_DEVICES=2 python task4-gen/infer_gen-3.py`
+    - `CUDA_VISIBLE_DEVICES=0 python task4-gen/train_gen-1.py`
+    - `CUDA_VISIBLE_DEVICES=1 python task4-gen/train_gen-2.py`
+    - `CUDA_VISIBLE_DEVICES=2 python task4-gen/train_gen-3.py`
+    - `CUDA_VISIBLE_DEVICES=0 python task4-gen/serve_gen-1.py`
+    - `CUDA_VISIBLE_DEVICES=1 python task4-gen/serve_gen-2.py`
+    - `CUDA_VISIBLE_DEVICES=2 python task4-gen/serve_gen-3.py`
