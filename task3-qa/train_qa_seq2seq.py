@@ -650,7 +650,7 @@ def main():
         # chrisjihee: save eval_predictions.json
         output_path = os.path.join(training_args.output_dir, "eval_predictions.json")
         with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(predictions, f, ensure_ascii=False, indent=4)
+            json.dump(predictions, f, indent=4, ensure_ascii=False)
         logger.info(f"Saved evaluation predictions to {output_path}")
 
         # Format the result to the format the metric expects.
