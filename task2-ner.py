@@ -110,7 +110,11 @@ class NERModel(LightningModule):
     def val_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
         val_dataset = NERDataset("valid", data=self.data, tokenizer=self.lm_tokenizer)
-        # [Complete CODE HERE!]
+        val_dataloader = DataLoader(val_dataset, sampler=SequentialSampler(val_dataset),
+                                    num_workers=self.args.hardware.cpu_workers,
+                                    batch_size=self.args.hardware.infer_batch,
+                                    collate_fn=self.data.encoded_examples_to_batch,
+                                    drop_last=False)
         self.fabric.print(f"Created val_dataset providing {len(val_dataset)} examples")
         self.fabric.print(f"Created val_dataloader providing {len(val_dataloader)} batches")
         self._infer_dataset = val_dataset
@@ -119,7 +123,11 @@ class NERModel(LightningModule):
     def test_dataloader(self):
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
         test_dataset = NERDataset("test", data=self.data, tokenizer=self.lm_tokenizer)
-        # [Complete CODE HERE!]
+        test_dataloader = DataLoader(test_dataset, sampler=SequentialSampler(test_dataset),
+                                     num_workers=self.args.hardware.cpu_workers,
+                                     batch_size=self.args.hardware.infer_batch,
+                                     collate_fn=self.data.encoded_examples_to_batch,
+                                     drop_last=False)
         self.fabric.print(f"Created test_dataset providing {len(test_dataset)} examples")
         self.fabric.print(f"Created test_dataloader providing {len(test_dataloader)} batches")
         self._infer_dataset = test_dataset
@@ -128,7 +136,8 @@ class NERModel(LightningModule):
     def training_step(self, inputs, batch_idx):
         inputs.pop("example_ids")
         outputs: TokenClassifierOutput = self.lang_model(**inputs)
-        # [Complete CODE HERE!]
+        labels: torch.Tensor = inputs["labels"]
+        preds: torch.Tensor = outputs.logits.argmax(dim=-1)
         acc: torch.Tensor = accuracy(preds=preds, labels=labels, ignore_index=0)
         return {
             "loss": outputs.loss,
@@ -139,7 +148,7 @@ class NERModel(LightningModule):
     def validation_step(self, inputs, batch_idx):
         example_ids: List[int] = inputs.pop("example_ids").tolist()
         outputs: TokenClassifierOutput = self.lang_model(**inputs)
-        # [Complete CODE HERE!]
+        preds: torch.Tensor = outputs.logits.argmax(dim=-1)
 
         dict_of_token_pred_ids: Dict[int, List[int]] = {}
         dict_of_char_label_ids: Dict[int, List[int]] = {}
@@ -216,7 +225,10 @@ class NERModel(LightningModule):
             return_tensors="pt",
         )
         outputs: TokenClassifierOutput = self.lang_model(**inputs)
-        # [Complete CODE HERE!]
+        all_probs: Tensor = outputs.logits[0].softmax(dim=1)
+        top_probs, top_preds = torch.topk(all_probs, dim=1, k=1)
+        tokens = self.lm_tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
+        top_labels = [self.id_to_label(pred[0].item()) for pred in top_preds]
         result = []
         for token, label, top_prob in zip(tokens, top_labels, top_probs):
             if token in self.lm_tokenizer.all_special_tokens:
@@ -271,7 +283,8 @@ def train_loop(
             model.args.prog.global_step += 1
             model.args.prog.global_epoch = model.args.prog.global_step / num_batch
             optimizer.zero_grad()
-            # [Complete CODE HERE!]
+            outputs = model.training_step(batch, i)
+            fabric.backward(outputs["loss"])
             optimizer.step()
             progress.update()
             fabric.barrier()
@@ -310,7 +323,9 @@ def val_loop(
     progress = mute_tqdm_cls(bar_size=10, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="checking")
     for i, batch in enumerate(dataloader, start=1):
         outputs = model.validation_step(batch, i)
-        # [Complete CODE HERE!]
+        preds.extend(outputs["preds"])
+        labels.extend(outputs["labels"])
+        losses.append(outputs["loss"])
         progress.update()
         if i < num_batch and i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
@@ -352,7 +367,9 @@ def test_loop(
     progress = mute_tqdm_cls(bar_size=10, desc_size=8)(range(num_batch), unit=f"x{dataloader.batch_size}b", desc="testing")
     for i, batch in enumerate(dataloader, start=1):
         outputs = model.test_step(batch, i)
-        # [Complete CODE HERE!]
+        preds.extend(outputs["preds"])
+        labels.extend(outputs["labels"])
+        losses.append(outputs["loss"])
         progress.update()
         if i < num_batch and i % print_interval < 1:
             fabric.print(f"(Ep {model.args.prog.global_epoch:4.2f}) {progress}")
