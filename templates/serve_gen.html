@@ -13,25 +13,25 @@
             <div class="row g-2">
                 <div class="col-md">
                     <div class="form-floating">
-                        <input class="form-control" id="minlength" value="10">
+                        <input class="form-control" id="minlength" placeholder="30">
                         <label for="minlength">최소 길이(10)</label>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input class="form-control" id="maxlength" value="50">
+                        <input class="form-control" id="maxlength" placeholder="30">
                         <label for="maxlength">최대 길이(30)</label>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input class="form-control" id="top-p" value="1.0">
+                        <input class="form-control" id="top-p" placeholder="1.0">
                         <label for="top-p">top-p(1.0)</label>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input class="form-control" id="top-k" value="1">
+                        <input class="form-control" id="top-k" placeholder="1">
                         <label for="top-k">top-k(1)</label>
                     </div>
                 </div>
@@ -41,26 +41,26 @@
             <div class="row g-2">
                 <div class="col-md">
                     <div class="form-floating">
-                        <input class="form-control" id="repetition_penalty" value="1.0">
+                        <input class="form-control" id="repetition_penalty" placeholder="1.0">
                         <label for="repetition_penalty">repetition penalty(1.0)</label>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input class="form-control" id="no_repeat_ngram_size" value="0">
+                        <input class="form-control" id="no_repeat_ngram_size" placeholder="1.0">
                         <label for="no_repeat_ngram_size">no repeat ngram(0)</label>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input class="form-control" id="temperature" value="1.0">
+                        <input class="form-control" id="temperature" placeholder="1.0">
                         <label for="temperature">temperature(1.0)</label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" aria-describedby="basic-addon3" id="prompt" onkeypress="if(event.keyCode==13) {api_call(); return false;}" name="input" placeholder="프롬프트를 입력하세요" value="긍정 아 정말"/>
+            <input type="text" class="form-control" aria-describedby="basic-addon3" id="prompt" onkeypress="if(event.keyCode==13) {api_call(); return false;}" name="input" placeholder="프롬프트를 입력하세요"/>
             <div id="run" class="spinner-border text-secondary m-2" role="status" style="visibility: hidden; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-left-radius: 50%; border-bottom-right-radius: 50%;">
                 <span class="visually-hidden">computing...</span>
             </div>
