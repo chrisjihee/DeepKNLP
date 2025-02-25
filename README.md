@@ -39,7 +39,6 @@ Transformer-based Korean Natural Language Processing
     - KoGPT2(125M): https://huggingface.co/skt/kogpt2-base-v2 | https://github.com/SKT-AI/KoGPT2
     - Ko-GPT-Trinity-1.2B: https://huggingface.co/skt/ko-gpt-trinity-1.2B-v0.5
     - Polyglot-Ko-1.3B: https://huggingface.co/EleutherAI/polyglot-ko-1.3b | https://github.com/EleutherAI/polyglot
-    - EAGLE-1.3B: https://huggingface.co/etri-lirs/egpt-1.3b-preview
 
 ## Installation
 

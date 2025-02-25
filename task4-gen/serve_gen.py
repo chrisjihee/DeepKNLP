@@ -7,7 +7,7 @@ from ratsnlp.nlpbook.generation import get_web_service_app
 from transformers import GPT2Config, GPT2LMHeadModel
 from transformers import PreTrainedTokenizerFast
 
-#TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5"
+#TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5" or "EleutherAI/polyglot-ko-1.3b"
 args = GenerationDeployArguments(
     pretrained_model_name="skt/kogpt2-base-v2",
     downstream_model_dir="output/nsmc-gen/train_gen-by-kogpt2",

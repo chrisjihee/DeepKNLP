@@ -4,7 +4,7 @@ import torch
 from transformers import GPT2LMHeadModel
 from transformers import PreTrainedTokenizerFast
 
-#TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5"
+#TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5" or "EleutherAI/polyglot-ko-1.3b"
 pretrained = "skt/kogpt2-base-v2"
 
 model = GPT2LMHeadModel.from_pretrained(pretrained)

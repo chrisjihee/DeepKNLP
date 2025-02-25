@@ -13,11 +13,11 @@ from transformers import PreTrainedTokenizerFast
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-#TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5"
+#TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5" or "EleutherAI/polyglot-ko-1.3b"
 args = GenerationTrainArguments(
-    pretrained_model_name="skt/ko-gpt-trinity-1.2B-v0.5",
+    pretrained_model_name="EleutherAI/polyglot-ko-1.3b",
     downstream_corpus_name="nsmc",
-    downstream_model_dir="output/nsmc-gen/train_gen-by-kogpt2",
+    downstream_model_dir="output/nsmc-gen/train_gen-by-polyglot-ko-1.3b",
     max_seq_length=32,
     batch_size=32 if torch.cuda.is_available() else 4,
     learning_rate=5e-5,
