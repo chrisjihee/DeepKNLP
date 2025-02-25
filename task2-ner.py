@@ -402,7 +402,7 @@ def train(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
@@ -435,7 +435,7 @@ def train(
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_F1c"),
         num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
-        num_epochs: int = typer.Option(default=2),  # TODO: -> 2, 3
+        num_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         check_rate_on_training: float = typer.Option(default=1 / 5),  # TODO: -> 1/5, 1/10
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}"),
 ):
@@ -585,7 +585,7 @@ def test(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         num_check: int = typer.Option(default=3),  # TODO: -> 2
         # model
@@ -708,7 +708,7 @@ def serve(
         argument_file: str = typer.Option(default="arguments.json"),
         # data
         data_home: str = typer.Option(default="data"),
-        data_name: str = typer.Option(default="klue-ner-mini"),  # TODO: -> kmou-ner, klue-ner
+        data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
         # model
         pretrained: str = typer.Option(default="klue/roberta-base"),

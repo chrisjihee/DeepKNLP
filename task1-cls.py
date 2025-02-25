@@ -347,7 +347,7 @@ def train(
         random_seed: int = typer.Option(default=7),
         saving_mode: str = typer.Option(default="max val_acc"),
         num_saving: int = typer.Option(default=1),  # TODO: -> 2, 3
-        num_epochs: int = typer.Option(default=2),  # TODO: -> 2, 3
+        num_epochs: int = typer.Option(default=1),  # TODO: -> 2, 3
         check_rate_on_training: float = typer.Option(default=1 / 5),  # TODO: -> 1/5, 1/10
         name_format_on_saving: str = typer.Option(default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}"),
 ):
