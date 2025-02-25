@@ -1,2 +1,2 @@
-ssh -p 122 ai_academy_2502@129.254.23.12 -X
-ssh -p 122 chrisjihee@129.254.23.12 -X
+ssh -p 122 ai_academy_2502@129.254.23.12 -CX -Y
+ssh -p 122 chrisjihee@129.254.23.12 -CX -Y
