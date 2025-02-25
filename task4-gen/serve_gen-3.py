@@ -8,7 +8,7 @@ from transformers import GPT2Config, GPT2LMHeadModel
 from transformers import PreTrainedTokenizerFast
 
 if __name__ == "__main__":
-    device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     args = GenerationDeployArguments(
         pretrained_model_name="EleutherAI/polyglot-ko-1.3b",
         downstream_model_dir="output/nsmc-gen/train_gen-by-polyglot-ko-1.3b",
