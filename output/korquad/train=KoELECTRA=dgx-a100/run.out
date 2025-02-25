@@ -1,0 +1,534 @@
+(DeepKNLP-25) chrisjihee@dgx-a100:~/proj/DeepKNLP-25$ bash run_qa-4.sh
+02/25/2025 00:54:21 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: False, 16-bits training: False
+02/25/2025 00:54:21 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+average_tokens_across_devices=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=IntervalStrategy.NO,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=None,
+hub_strategy=HubStrategy.EVERY_SAVE,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_for_metrics=[],
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=3e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=output/korquad/train=KoELECTRA=dgx-a100/runs/Feb25_00-54-18_dgx-a100,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=IntervalStrategy.STEPS,
+lr_scheduler_kwargs={},
+lr_scheduler_type=SchedulerType.LINEAR,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=OptimizerNames.ADAMW_TORCH,
+optim_args=None,
+optim_target_modules=None,
+output_dir=output/korquad/train=KoELECTRA=dgx-a100,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=12,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['tensorboard'],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=output/korquad/train=KoELECTRA=dgx-a100,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=SaveStrategy.STEPS,
+save_total_limit=None,
+seed=42,
+skip_memory_metrics=True,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tp_size=0,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+Using custom data configuration default-7abc7dea5ce1ad49
+02/25/2025 00:54:21 - INFO - datasets.builder - Using custom data configuration default-7abc7dea5ce1ad49
+Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP-25/lib/python3.12/site-packages/datasets/packaged_modules/json
+02/25/2025 00:54:21 - INFO - datasets.info - Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP-25/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+02/25/2025 00:54:21 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+02/25/2025 00:54:21 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+02/25/2025 00:54:21 - INFO - datasets.builder - Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+02/25/2025 00:54:21 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+[INFO|configuration_utils.py:699] 2025-02-25 00:54:22,009 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--monologg--koelectra-base-v3-discriminator/snapshots/68b30cd259f34a4b5aa8786392612ba2a2617fcc/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 00:54:22,012 >> Model config ElectraConfig {
+  "_name_or_path": "monologg/koelectra-base-v3-discriminator",
+  "architectures": [
+    "ElectraForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "embedding_size": 768,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "electra",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "summary_activation": "gelu",
+  "summary_last_dropout": 0.1,
+  "summary_type": "first",
+  "summary_use_proj": true,
+  "transformers_version": "4.50.0.dev0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 35000
+}
+
+[INFO|configuration_utils.py:699] 2025-02-25 00:54:22,213 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--monologg--koelectra-base-v3-discriminator/snapshots/68b30cd259f34a4b5aa8786392612ba2a2617fcc/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 00:54:22,214 >> Model config ElectraConfig {
+  "_name_or_path": "monologg/koelectra-base-v3-discriminator",
+  "architectures": [
+    "ElectraForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "embedding_size": 768,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "electra",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "summary_activation": "gelu",
+  "summary_last_dropout": 0.1,
+  "summary_type": "first",
+  "summary_use_proj": true,
+  "transformers_version": "4.50.0.dev0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 35000
+}
+
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:22,215 >> loading file vocab.txt from cache at /raid/chrisjihee/.cache/huggingface/hub/models--monologg--koelectra-base-v3-discriminator/snapshots/68b30cd259f34a4b5aa8786392612ba2a2617fcc/vocab.txt
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:22,215 >> loading file tokenizer.json from cache at None
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:22,215 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:22,215 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:22,215 >> loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--monologg--koelectra-base-v3-discriminator/snapshots/68b30cd259f34a4b5aa8786392612ba2a2617fcc/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:22,215 >> loading file chat_template.jinja from cache at None
+[INFO|configuration_utils.py:699] 2025-02-25 00:54:22,215 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--monologg--koelectra-base-v3-discriminator/snapshots/68b30cd259f34a4b5aa8786392612ba2a2617fcc/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 00:54:22,216 >> Model config ElectraConfig {
+  "_name_or_path": "monologg/koelectra-base-v3-discriminator",
+  "architectures": [
+    "ElectraForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "embedding_size": 768,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "electra",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "summary_activation": "gelu",
+  "summary_last_dropout": 0.1,
+  "summary_type": "first",
+  "summary_use_proj": true,
+  "transformers_version": "4.50.0.dev0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 35000
+}
+
+[INFO|configuration_utils.py:699] 2025-02-25 00:54:22,250 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--monologg--koelectra-base-v3-discriminator/snapshots/68b30cd259f34a4b5aa8786392612ba2a2617fcc/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 00:54:22,251 >> Model config ElectraConfig {
+  "_name_or_path": "monologg/koelectra-base-v3-discriminator",
+  "architectures": [
+    "ElectraForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "embedding_size": 768,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "electra",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "summary_activation": "gelu",
+  "summary_last_dropout": 0.1,
+  "summary_type": "first",
+  "summary_use_proj": true,
+  "transformers_version": "4.50.0.dev0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 35000
+}
+
+[INFO|modeling_utils.py:4024] 2025-02-25 00:54:22,542 >> loading weights file pytorch_model.bin from cache at /raid/chrisjihee/.cache/huggingface/hub/models--monologg--koelectra-base-v3-discriminator/snapshots/68b30cd259f34a4b5aa8786392612ba2a2617fcc/pytorch_model.bin
+[INFO|modeling_utils.py:5007] 2025-02-25 00:54:22,747 >> Some weights of the model checkpoint at monologg/koelectra-base-v3-discriminator were not used when initializing ElectraForQuestionAnswering: ['discriminator_predictions.dense.bias', 'discriminator_predictions.dense.weight', 'discriminator_predictions.dense_prediction.bias', 'discriminator_predictions.dense_prediction.weight']
+- This IS expected if you are initializing ElectraForQuestionAnswering from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing ElectraForQuestionAnswering from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+[WARNING|modeling_utils.py:5019] 2025-02-25 00:54:22,748 >> Some weights of ElectraForQuestionAnswering were not initialized from the model checkpoint at monologg/koelectra-base-v3-discriminator and are newly initialized: ['qa_outputs.bias', 'qa_outputs.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Running tokenizer on train dataset:   0%|                                                                                                                                                                                                                                            | 0/60407 [00:00<?, ? examples/s][INFO|safetensors_conversion.py:61] 2025-02-25 00:54:22,903 >> Attempting to create safetensors variant
+Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-bd9e1ceecc9f6c2b.arrow
+02/25/2025 00:54:23 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-bd9e1ceecc9f6c2b.arrow
+Running tokenizer on train dataset:   3%|███████▍                                                                                                                                                                                                                       | 2000/60407 [00:00<00:27, 2107.26 examples/s][INFO|safetensors_conversion.py:74] 2025-02-25 00:54:23,853 >> Safetensors PR exists
+Running tokenizer on train dataset: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 60407/60407 [00:27<00:00, 2165.18 examples/s]
+Running tokenizer on validation dataset:   0%|                                                                                                                                                                                                                                        | 0/5774 [00:00<?, ? examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-8b508bfb40af6def.arrow
+02/25/2025 00:54:50 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-8b508bfb40af6def.arrow
+Running tokenizer on validation dataset: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5774/5774 [00:03<00:00, 1537.02 examples/s]
+[2025-02-25 00:54:56,632] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[INFO|trainer.py:2407] 2025-02-25 00:54:57,771 >> ***** Running training *****
+[INFO|trainer.py:2408] 2025-02-25 00:54:57,771 >>   Num examples = 63,000
+[INFO|trainer.py:2409] 2025-02-25 00:54:57,771 >>   Num Epochs = 3
+[INFO|trainer.py:2410] 2025-02-25 00:54:57,771 >>   Instantaneous batch size per device = 12
+[INFO|trainer.py:2413] 2025-02-25 00:54:57,771 >>   Total train batch size (w. parallel, distributed & accumulation) = 12
+[INFO|trainer.py:2414] 2025-02-25 00:54:57,771 >>   Gradient Accumulation steps = 1
+[INFO|trainer.py:2415] 2025-02-25 00:54:57,771 >>   Total optimization steps = 15,750
+[INFO|trainer.py:2416] 2025-02-25 00:54:57,771 >>   Number of trainable parameters = 112,332,290
+{'loss': 1.5934, 'grad_norm': 16.928340911865234, 'learning_rate': 2.904761904761905e-05, 'epoch': 0.1}
+  3%|████████▍                                                                                                                                                                                                                                                                  | 500/15750 [02:21<1:11:24,  3.56it/s][INFO|trainer.py:3948] 2025-02-25 00:57:19,539 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-500
+[INFO|configuration_utils.py:423] 2025-02-25 00:57:19,542 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 00:57:20,150 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 00:57:20,151 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 00:57:20,152 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-500/special_tokens_map.json
+{'loss': 0.698, 'grad_norm': 5.113260269165039, 'learning_rate': 2.8095238095238096e-05, 'epoch': 0.19}
+  6%|████████████████▉                                                                                                                                                                                                                                                         | 1000/15750 [04:42<1:08:06,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 00:59:40,120 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1000
+[INFO|configuration_utils.py:423] 2025-02-25 00:59:40,122 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 00:59:40,658 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 00:59:40,659 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 00:59:40,659 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1000/special_tokens_map.json
+{'loss': 0.6081, 'grad_norm': 6.964240550994873, 'learning_rate': 2.7142857142857144e-05, 'epoch': 0.29}
+ 10%|█████████████████████████▎                                                                                                                                                                                                                                                | 1500/15750 [07:02<1:05:55,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:02:00,593 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1500
+[INFO|configuration_utils.py:423] 2025-02-25 01:02:00,596 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:02:01,163 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:02:01,165 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:02:01,165 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-1500/special_tokens_map.json
+{'loss': 0.6073, 'grad_norm': 8.546445846557617, 'learning_rate': 2.6190476190476192e-05, 'epoch': 0.38}
+ 13%|█████████████████████████████████▊                                                                                                                                                                                                                                        | 2000/15750 [09:23<1:03:41,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:04:21,086 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2000
+[INFO|configuration_utils.py:423] 2025-02-25 01:04:21,089 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:04:21,633 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:04:21,634 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:04:21,634 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2000/special_tokens_map.json
+{'loss': 0.5591, 'grad_norm': 13.74704360961914, 'learning_rate': 2.523809523809524e-05, 'epoch': 0.48}
+ 16%|██████████████████████████████████████████▏                                                                                                                                                                                                                               | 2500/15750 [11:43<1:01:14,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:06:41,518 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2500
+[INFO|configuration_utils.py:423] 2025-02-25 01:06:41,521 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:06:42,071 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:06:42,072 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:06:42,072 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-2500/special_tokens_map.json
+{'loss': 0.5116, 'grad_norm': 8.692997932434082, 'learning_rate': 2.4285714285714288e-05, 'epoch': 0.57}
+ 19%|███████████████████████████████████████████████████                                                                                                                                                                                                                         | 3000/15750 [14:04<58:51,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:09:01,917 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3000
+[INFO|configuration_utils.py:423] 2025-02-25 01:09:01,919 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:09:02,470 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:09:02,471 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:09:02,471 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3000/special_tokens_map.json
+{'loss': 0.5377, 'grad_norm': 5.081087589263916, 'learning_rate': 2.3333333333333336e-05, 'epoch': 0.67}
+ 22%|███████████████████████████████████████████████████████████▌                                                                                                                                                                                                                | 3500/15750 [16:24<56:32,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:11:22,005 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3500
+[INFO|configuration_utils.py:423] 2025-02-25 01:11:22,008 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:11:22,505 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:11:22,506 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:11:22,506 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-3500/special_tokens_map.json
+{'loss': 0.4992, 'grad_norm': 12.6707763671875, 'learning_rate': 2.238095238095238e-05, 'epoch': 0.76}
+ 25%|████████████████████████████████████████████████████████████████████                                                                                                                                                                                                        | 4000/15750 [18:44<54:13,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:13:42,300 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4000
+[INFO|configuration_utils.py:423] 2025-02-25 01:13:42,303 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:13:42,776 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:13:42,777 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:13:42,777 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4000/special_tokens_map.json
+{'loss': 0.5165, 'grad_norm': 16.601215362548828, 'learning_rate': 2.1428571428571428e-05, 'epoch': 0.86}
+ 29%|████████████████████████████████████████████████████████████████████████████▌                                                                                                                                                                                               | 4500/15750 [21:04<52:01,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:16:02,425 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4500
+[INFO|configuration_utils.py:423] 2025-02-25 01:16:02,428 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:16:02,955 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:16:02,956 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:16:02,956 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-4500/special_tokens_map.json
+{'loss': 0.5154, 'grad_norm': 20.52541160583496, 'learning_rate': 2.0476190476190476e-05, 'epoch': 0.95}
+ 32%|█████████████████████████████████████████████████████████████████████████████████████                                                                                                                                                                                       | 5000/15750 [23:24<49:40,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:18:22,673 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5000
+[INFO|configuration_utils.py:423] 2025-02-25 01:18:22,676 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:18:23,190 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:18:23,191 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:18:23,191 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5000/special_tokens_map.json
+{'loss': 0.4108, 'grad_norm': 1.2059396505355835, 'learning_rate': 1.9523809523809524e-05, 'epoch': 1.05}
+ 35%|█████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                                                                                                              | 5500/15750 [25:45<47:22,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:20:42,779 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5500
+[INFO|configuration_utils.py:423] 2025-02-25 01:20:42,781 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:20:43,318 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:20:43,319 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:20:43,319 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-5500/special_tokens_map.json
+{'loss': 0.3203, 'grad_norm': 8.2048978805542, 'learning_rate': 1.8571428571428572e-05, 'epoch': 1.14}
+ 38%|██████████████████████████████████████████████████████████████████████████████████████████████████████                                                                                                                                                                      | 6000/15750 [28:04<45:02,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:23:02,759 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6000
+[INFO|configuration_utils.py:423] 2025-02-25 01:23:02,762 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:23:03,279 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:23:03,280 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:23:03,280 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6000/special_tokens_map.json
+{'loss': 0.3161, 'grad_norm': 18.95767593383789, 'learning_rate': 1.761904761904762e-05, 'epoch': 1.24}
+ 41%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                                                                                             | 6500/15750 [30:25<42:51,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:25:22,812 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6500
+[INFO|configuration_utils.py:423] 2025-02-25 01:25:22,815 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:25:23,328 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:25:23,329 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:25:23,329 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-6500/special_tokens_map.json
+{'loss': 0.3038, 'grad_norm': 2.3943872451782227, 'learning_rate': 1.6666666666666667e-05, 'epoch': 1.33}
+ 44%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                                                                                                                     | 7000/15750 [32:45<40:23,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:27:42,822 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7000
+[INFO|configuration_utils.py:423] 2025-02-25 01:27:42,824 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:27:43,322 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:27:43,323 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:27:43,323 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7000/special_tokens_map.json
+{'loss': 0.3135, 'grad_norm': 30.85391616821289, 'learning_rate': 1.5714285714285715e-05, 'epoch': 1.43}
+ 48%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                                                                            | 7500/15750 [35:05<38:12,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:30:03,012 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7500
+[INFO|configuration_utils.py:423] 2025-02-25 01:30:03,014 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:30:03,481 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:30:03,482 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:30:03,483 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-7500/special_tokens_map.json
+{'loss': 0.3437, 'grad_norm': 5.931504726409912, 'learning_rate': 1.4761904761904761e-05, 'epoch': 1.52}
+ 51%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                                                                                   | 8000/15750 [37:25<35:46,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:32:23,209 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8000
+[INFO|configuration_utils.py:423] 2025-02-25 01:32:23,212 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:32:23,722 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:32:23,723 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:32:23,723 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8000/special_tokens_map.json
+{'loss': 0.3416, 'grad_norm': 0.9969931840896606, 'learning_rate': 1.380952380952381e-05, 'epoch': 1.62}
+ 54%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                                                           | 8500/15750 [39:45<33:26,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:34:43,467 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8500
+[INFO|configuration_utils.py:423] 2025-02-25 01:34:43,470 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:34:43,975 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:34:43,976 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:34:43,976 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-8500/special_tokens_map.json
+{'loss': 0.3241, 'grad_norm': 0.46052148938179016, 'learning_rate': 1.2857142857142857e-05, 'epoch': 1.71}
+ 57%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                                                                  | 9000/15750 [42:05<31:09,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:37:03,586 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9000
+[INFO|configuration_utils.py:423] 2025-02-25 01:37:03,589 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:37:04,083 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:37:04,084 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:37:04,084 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9000/special_tokens_map.json
+{'loss': 0.3387, 'grad_norm': 6.10134744644165, 'learning_rate': 1.1904761904761905e-05, 'epoch': 1.81}
+ 60%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                                          | 9500/15750 [44:25<28:55,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:39:23,630 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9500
+[INFO|configuration_utils.py:423] 2025-02-25 01:39:23,632 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:39:24,172 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:39:24,173 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:39:24,173 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-9500/special_tokens_map.json
+{'loss': 0.3526, 'grad_norm': 3.6715922355651855, 'learning_rate': 1.0952380952380951e-05, 'epoch': 1.9}
+ 63%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                                 | 10000/15750 [46:45<26:35,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:41:43,717 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10000
+[INFO|configuration_utils.py:423] 2025-02-25 01:41:43,719 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:41:44,234 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:41:44,235 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:41:44,235 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10000/special_tokens_map.json
+{'loss': 0.3088, 'grad_norm': 14.191877365112305, 'learning_rate': 9.999999999999999e-06, 'epoch': 2.0}
+ 67%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                                                         | 10500/15750 [49:06<24:19,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:44:03,984 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10500
+[INFO|configuration_utils.py:423] 2025-02-25 01:44:03,986 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:44:04,496 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:44:04,497 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:44:04,498 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-10500/special_tokens_map.json
+{'loss': 0.2088, 'grad_norm': 2.396475076675415, 'learning_rate': 9.047619047619047e-06, 'epoch': 2.1}
+ 70%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                                                | 11000/15750 [51:26<21:55,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:46:24,164 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11000
+[INFO|configuration_utils.py:423] 2025-02-25 01:46:24,167 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:46:24,678 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:46:24,679 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:46:24,679 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11000/special_tokens_map.json
+{'loss': 0.2165, 'grad_norm': 1.2004942893981934, 'learning_rate': 8.095238095238095e-06, 'epoch': 2.19}
+ 73%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                                        | 11500/15750 [53:46<19:36,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:48:44,141 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11500
+[INFO|configuration_utils.py:423] 2025-02-25 01:48:44,143 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:48:44,649 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:48:44,650 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:48:44,650 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-11500/special_tokens_map.json
+{'loss': 0.2167, 'grad_norm': 1.455310344696045, 'learning_rate': 7.142857142857143e-06, 'epoch': 2.29}
+ 76%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                               | 12000/15750 [56:06<17:18,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:51:04,109 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12000
+[INFO|configuration_utils.py:423] 2025-02-25 01:51:04,111 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:51:04,622 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:51:04,623 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:51:04,623 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12000/special_tokens_map.json
+{'loss': 0.2226, 'grad_norm': 10.165125846862793, 'learning_rate': 6.190476190476191e-06, 'epoch': 2.38}
+ 79%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                       | 12500/15750 [58:26<14:59,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:53:24,035 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12500
+[INFO|configuration_utils.py:423] 2025-02-25 01:53:24,037 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:53:24,547 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:53:24,548 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:53:24,548 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-12500/special_tokens_map.json
+{'loss': 0.2123, 'grad_norm': 21.585182189941406, 'learning_rate': 5.238095238095238e-06, 'epoch': 2.48}
+ 83%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                              | 13000/15750 [1:00:46<12:44,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 01:55:44,335 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13000
+[INFO|configuration_utils.py:423] 2025-02-25 01:55:44,337 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:55:44,845 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:55:44,846 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:55:44,846 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13000/special_tokens_map.json
+{'loss': 0.219, 'grad_norm': 0.9865269660949707, 'learning_rate': 4.2857142857142855e-06, 'epoch': 2.57}
+ 86%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                     | 13500/15750 [1:03:06<10:23,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 01:58:04,626 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13500
+[INFO|configuration_utils.py:423] 2025-02-25 01:58:04,628 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:58:05,123 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:58:05,124 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:58:05,124 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-13500/special_tokens_map.json
+{'loss': 0.2248, 'grad_norm': 8.921783447265625, 'learning_rate': 3.3333333333333333e-06, 'epoch': 2.67}
+ 89%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                             | 14000/15750 [1:05:27<08:05,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 02:00:24,847 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14000
+[INFO|configuration_utils.py:423] 2025-02-25 02:00:24,849 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 02:00:25,312 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 02:00:25,313 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 02:00:25,313 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14000/special_tokens_map.json
+{'loss': 0.2251, 'grad_norm': 1.1364145278930664, 'learning_rate': 2.3809523809523808e-06, 'epoch': 2.76}
+ 92%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                     | 14500/15750 [1:07:47<05:47,  3.60it/s][INFO|trainer.py:3948] 2025-02-25 02:02:45,150 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14500
+[INFO|configuration_utils.py:423] 2025-02-25 02:02:45,152 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 02:02:45,658 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 02:02:45,659 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 02:02:45,660 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-14500/special_tokens_map.json
+{'loss': 0.2031, 'grad_norm': 7.837459564208984, 'learning_rate': 1.4285714285714286e-06, 'epoch': 2.86}
+ 95%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍            | 15000/15750 [1:10:07<03:27,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 02:05:05,282 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15000
+[INFO|configuration_utils.py:423] 2025-02-25 02:05:05,285 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 02:05:05,741 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 02:05:05,742 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 02:05:05,742 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15000/special_tokens_map.json
+{'loss': 0.2392, 'grad_norm': 35.97415542602539, 'learning_rate': 4.761904761904762e-07, 'epoch': 2.95}
+ 98%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊    | 15500/15750 [1:12:27<01:09,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 02:07:25,543 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15500
+[INFO|configuration_utils.py:423] 2025-02-25 02:07:25,546 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 02:07:26,007 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 02:07:26,008 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 02:07:26,008 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15500/special_tokens_map.json
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 15750/15750 [1:13:38<00:00,  3.61it/s][INFO|trainer.py:3948] 2025-02-25 02:08:36,272 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15750
+[INFO|configuration_utils.py:423] 2025-02-25 02:08:36,274 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15750/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 02:08:36,786 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15750/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 02:08:36,787 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15750/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 02:08:36,787 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/checkpoint-15750/special_tokens_map.json
+[INFO|trainer.py:2663] 2025-02-25 02:08:37,728 >>
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+{'train_runtime': 4419.9567, 'train_samples_per_second': 42.761, 'train_steps_per_second': 3.563, 'train_loss': 0.4004944252135262, 'epoch': 3.0}
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 15750/15750 [1:13:39<00:00,  3.56it/s]
+[INFO|trainer.py:3948] 2025-02-25 02:08:37,730 >> Saving model checkpoint to output/korquad/train=KoELECTRA=dgx-a100
+[INFO|configuration_utils.py:423] 2025-02-25 02:08:37,732 >> Configuration saved in output/korquad/train=KoELECTRA=dgx-a100/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 02:08:38,241 >> Model weights saved in output/korquad/train=KoELECTRA=dgx-a100/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 02:08:38,242 >> tokenizer config file saved in output/korquad/train=KoELECTRA=dgx-a100/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 02:08:38,242 >> Special tokens file saved in output/korquad/train=KoELECTRA=dgx-a100/special_tokens_map.json
+***** train metrics *****
+  epoch                    =        3.0
+  total_flos               = 45993446GF
+  train_loss               =     0.4005
+  train_runtime            = 1:13:39.95
+  train_samples            =      63000
+  train_samples_per_second =     42.761
+  train_steps_per_second   =      3.563
+02/25/2025 02:08:38 - INFO - __main__ - *** Evaluate ***
+[INFO|trainer.py:930] 2025-02-25 02:08:38,252 >> The following columns in the evaluation set don't have a corresponding argument in `ElectraForQuestionAnswering.forward` and have been ignored: offset_mapping, example_id. If offset_mapping, example_id are not expected by `ElectraForQuestionAnswering.forward`,  you can safely ignore this message.
+[INFO|trainer.py:4264] 2025-02-25 02:08:38,255 >>
+***** Running Evaluation *****
+[INFO|trainer.py:4266] 2025-02-25 02:08:38,255 >>   Num examples = 6178
+[INFO|trainer.py:4269] 2025-02-25 02:08:38,255 >>   Batch size = 8
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋| 772/773 [00:49<00:00, 15.65it/s]02/25/2025 02:09:37 - INFO - utils_qa - Post-processing 5774 example predictions split into 6178 features.
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5774/5774 [00:20<00:00, 280.38it/s]
+02/25/2025 02:09:58 - INFO - utils_qa - Saving predictions to output/korquad/train=KoELECTRA=dgx-a100/eval_predictions.json.████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ | 5754/5774 [00:20<00:00, 274.71it/s]
+02/25/2025 02:09:58 - INFO - utils_qa - Saving nbest_preds to output/korquad/train=KoELECTRA=dgx-a100/eval_nbest_predictions.json.
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 773/773 [01:21<00:00,  9.50it/s]
+***** eval metrics *****
+  epoch                   =        3.0
+  eval_exact_match        =     85.452
+  eval_f1                 =    90.5923
+  eval_runtime            = 0:00:49.92
+  eval_samples            =       6178
+  eval_samples_per_second =    123.743
+  eval_steps_per_second   =     15.483
+[INFO|modelcard.py:449] 2025-02-25 02:09:59,941 >> Dropping the following result as it does not have all the necessary fields:
+{'task': {'name': 'Question Answering', 'type': 'question-answering'}}
+(DeepKNLP-25) chrisjihee@dgx-a100:~/proj/DeepKNLP-25$
+

@@ -1,0 +1,486 @@
+(DeepKNLP-25) chrisjihee@dgx-a100:~/proj/DeepKNLP-25$ bash run_qa-2.sh
+02/25/2025 00:54:08 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: False, 16-bits training: False
+02/25/2025 00:54:08 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+average_tokens_across_devices=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=IntervalStrategy.NO,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=None,
+hub_strategy=HubStrategy.EVERY_SAVE,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_for_metrics=[],
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=3e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=output/korquad/train=KLUE-BERT=dgx-a100/runs/Feb25_00-54-05_dgx-a100,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=IntervalStrategy.STEPS,
+lr_scheduler_kwargs={},
+lr_scheduler_type=SchedulerType.LINEAR,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=OptimizerNames.ADAMW_TORCH,
+optim_args=None,
+optim_target_modules=None,
+output_dir=output/korquad/train=KLUE-BERT=dgx-a100,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=12,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['tensorboard'],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=output/korquad/train=KLUE-BERT=dgx-a100,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=SaveStrategy.STEPS,
+save_total_limit=None,
+seed=42,
+skip_memory_metrics=True,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tp_size=0,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+Using custom data configuration default-7abc7dea5ce1ad49
+02/25/2025 00:54:09 - INFO - datasets.builder - Using custom data configuration default-7abc7dea5ce1ad49
+Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP-25/lib/python3.12/site-packages/datasets/packaged_modules/json
+02/25/2025 00:54:09 - INFO - datasets.info - Loading Dataset Infos from /raid/chrisjihee/miniforge3/envs/DeepKNLP-25/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+02/25/2025 00:54:09 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+02/25/2025 00:54:09 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+02/25/2025 00:54:09 - INFO - datasets.builder - Found cached dataset json (/raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092)
+Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+02/25/2025 00:54:09 - INFO - datasets.info - Loading Dataset info from /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092
+[INFO|configuration_utils.py:699] 2025-02-25 00:54:09,763 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--klue--bert-base/snapshots/77c8b3d707df785034b4e50f2da5d37be5f0f546/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 00:54:09,765 >> Model config BertConfig {
+  "_name_or_path": "klue/bert-base",
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "bert",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.50.0.dev0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|configuration_utils.py:699] 2025-02-25 00:54:09,959 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--klue--bert-base/snapshots/77c8b3d707df785034b4e50f2da5d37be5f0f546/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 00:54:09,959 >> Model config BertConfig {
+  "_name_or_path": "klue/bert-base",
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "bert",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.50.0.dev0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:09,960 >> loading file vocab.txt from cache at /raid/chrisjihee/.cache/huggingface/hub/models--klue--bert-base/snapshots/77c8b3d707df785034b4e50f2da5d37be5f0f546/vocab.txt
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:09,960 >> loading file tokenizer.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--klue--bert-base/snapshots/77c8b3d707df785034b4e50f2da5d37be5f0f546/tokenizer.json
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:09,960 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:09,960 >> loading file special_tokens_map.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--klue--bert-base/snapshots/77c8b3d707df785034b4e50f2da5d37be5f0f546/special_tokens_map.json
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:09,960 >> loading file tokenizer_config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--klue--bert-base/snapshots/77c8b3d707df785034b4e50f2da5d37be5f0f546/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2050] 2025-02-25 00:54:09,960 >> loading file chat_template.jinja from cache at None
+[INFO|configuration_utils.py:699] 2025-02-25 00:54:09,960 >> loading configuration file config.json from cache at /raid/chrisjihee/.cache/huggingface/hub/models--klue--bert-base/snapshots/77c8b3d707df785034b4e50f2da5d37be5f0f546/config.json
+[INFO|configuration_utils.py:771] 2025-02-25 00:54:09,960 >> Model config BertConfig {
+  "_name_or_path": "klue/bert-base",
+  "architectures": [
+    "BertForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_dropout": null,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "bert",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 0,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.50.0.dev0",
+  "type_vocab_size": 2,
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|modeling_utils.py:4024] 2025-02-25 00:54:10,010 >> loading weights file model.safetensors from cache at /raid/chrisjihee/.cache/huggingface/hub/models--klue--bert-base/snapshots/77c8b3d707df785034b4e50f2da5d37be5f0f546/model.safetensors
+[INFO|modeling_utils.py:5007] 2025-02-25 00:54:10,044 >> Some weights of the model checkpoint at klue/bert-base were not used when initializing BertForQuestionAnswering: ['bert.pooler.dense.bias', 'bert.pooler.dense.weight', 'cls.predictions.bias', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.dense.weight', 'cls.seq_relationship.bias', 'cls.seq_relationship.weight']
+- This IS expected if you are initializing BertForQuestionAnswering from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForQuestionAnswering from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+[WARNING|modeling_utils.py:5019] 2025-02-25 00:54:10,045 >> Some weights of BertForQuestionAnswering were not initialized from the model checkpoint at klue/bert-base and are newly initialized: ['qa_outputs.bias', 'qa_outputs.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+Running tokenizer on train dataset:   0%|                                                                                                                                                                                                                                            | 0/60407 [00:00<?, ? examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b9226a80e547ca64.arrow
+02/25/2025 00:54:10 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-b9226a80e547ca64.arrow
+Running tokenizer on train dataset: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 60407/60407 [00:28<00:00, 2143.77 examples/s]
+Running tokenizer on validation dataset:   0%|                                                                                                                                                                                                                                        | 0/5774 [00:00<?, ? examples/s]Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-3b4daf010b6e3ce0.arrow
+02/25/2025 00:54:38 - INFO - datasets.arrow_dataset - Caching processed dataset at /raid/chrisjihee/.cache/huggingface/datasets/json/default-7abc7dea5ce1ad49/0.0.0/f4e89e8750d5d5ffbef2c078bf0ddfedef29dc2faff52a6255cf513c05eb1092/cache-3b4daf010b6e3ce0.arrow
+Running tokenizer on validation dataset: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5774/5774 [00:03<00:00, 1552.20 examples/s]
+[2025-02-25 00:54:45,061] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[INFO|trainer.py:2407] 2025-02-25 00:54:46,266 >> ***** Running training *****
+[INFO|trainer.py:2408] 2025-02-25 00:54:46,266 >>   Num examples = 62,909
+[INFO|trainer.py:2409] 2025-02-25 00:54:46,266 >>   Num Epochs = 3
+[INFO|trainer.py:2410] 2025-02-25 00:54:46,266 >>   Instantaneous batch size per device = 12
+[INFO|trainer.py:2413] 2025-02-25 00:54:46,266 >>   Total train batch size (w. parallel, distributed & accumulation) = 12
+[INFO|trainer.py:2414] 2025-02-25 00:54:46,266 >>   Gradient Accumulation steps = 1
+[INFO|trainer.py:2415] 2025-02-25 00:54:46,266 >>   Total optimization steps = 15,729
+[INFO|trainer.py:2416] 2025-02-25 00:54:46,267 >>   Number of trainable parameters = 110,028,290
+{'loss': 1.1007, 'grad_norm': 16.093202590942383, 'learning_rate': 2.9046347510967007e-05, 'epoch': 0.1}
+  3%|████████▍                                                                                                                                                                                                                                                                  | 500/15729 [02:02<1:00:56,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 00:56:48,891 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-500
+[INFO|configuration_utils.py:423] 2025-02-25 00:56:48,894 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 00:56:49,413 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 00:56:49,414 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 00:56:49,414 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-500/special_tokens_map.json
+{'loss': 0.5886, 'grad_norm': 21.152393341064453, 'learning_rate': 2.809269502193401e-05, 'epoch': 0.19}
+  6%|█████████████████                                                                                                                                                                                                                                                           | 1000/15729 [04:04<59:15,  4.14it/s][INFO|trainer.py:3948] 2025-02-25 00:58:50,484 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1000
+[INFO|configuration_utils.py:423] 2025-02-25 00:58:50,487 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 00:58:51,035 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 00:58:51,036 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 00:58:51,036 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1000/special_tokens_map.json
+{'loss': 0.5598, 'grad_norm': 22.303953170776367, 'learning_rate': 2.713904253290101e-05, 'epoch': 0.29}
+ 10%|█████████████████████████▌                                                                                                                                                                                                                                                  | 1500/15729 [06:05<57:05,  4.15it/s][INFO|trainer.py:3948] 2025-02-25 01:00:52,144 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1500
+[INFO|configuration_utils.py:423] 2025-02-25 01:00:52,146 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:00:52,653 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:00:52,654 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:00:52,655 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-1500/special_tokens_map.json
+{'loss': 0.5381, 'grad_norm': 3.703871011734009, 'learning_rate': 2.6185390043868014e-05, 'epoch': 0.38}
+ 13%|██████████████████████████████████                                                                                                                                                                                                                                          | 2000/15729 [08:07<55:04,  4.15it/s][INFO|trainer.py:3948] 2025-02-25 01:02:53,935 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2000
+[INFO|configuration_utils.py:423] 2025-02-25 01:02:53,937 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:02:54,445 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:02:54,446 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:02:54,447 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2000/special_tokens_map.json
+{'loss': 0.4728, 'grad_norm': 11.649538040161133, 'learning_rate': 2.523173755483502e-05, 'epoch': 0.48}
+ 16%|██████████████████████████████████████████▌                                                                                                                                                                                                                                 | 2500/15729 [10:09<52:58,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:04:55,532 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2500
+[INFO|configuration_utils.py:423] 2025-02-25 01:04:55,535 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:04:56,050 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:04:56,051 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:04:56,051 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-2500/special_tokens_map.json
+{'loss': 0.5021, 'grad_norm': 7.981411933898926, 'learning_rate': 2.4278085065802025e-05, 'epoch': 0.57}
+ 19%|███████████████████████████████████████████████████                                                                                                                                                                                                                         | 3000/15729 [12:10<51:00,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:06:57,087 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3000
+[INFO|configuration_utils.py:423] 2025-02-25 01:06:57,090 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:06:57,598 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:06:57,599 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:06:57,599 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3000/special_tokens_map.json
+{'loss': 0.4872, 'grad_norm': 5.10360050201416, 'learning_rate': 2.3324432576769024e-05, 'epoch': 0.67}
+ 22%|███████████████████████████████████████████████████████████▋                                                                                                                                                                                                                | 3500/15729 [14:12<49:08,  4.15it/s][INFO|trainer.py:3948] 2025-02-25 01:08:58,670 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3500
+[INFO|configuration_utils.py:423] 2025-02-25 01:08:58,673 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:08:59,173 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:08:59,174 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:08:59,174 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-3500/special_tokens_map.json
+{'loss': 0.4664, 'grad_norm': 15.522331237792969, 'learning_rate': 2.237078008773603e-05, 'epoch': 0.76}
+ 25%|████████████████████████████████████████████████████████████████████▏                                                                                                                                                                                                       | 4000/15729 [16:13<46:53,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:11:00,209 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4000
+[INFO|configuration_utils.py:423] 2025-02-25 01:11:00,211 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:11:00,726 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:11:00,727 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:11:00,727 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4000/special_tokens_map.json
+{'loss': 0.4666, 'grad_norm': 17.057092666625977, 'learning_rate': 2.1417127598703032e-05, 'epoch': 0.86}
+ 29%|████████████████████████████████████████████████████████████████████████████▋                                                                                                                                                                                               | 4500/15729 [18:15<44:54,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:13:01,647 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4500
+[INFO|configuration_utils.py:423] 2025-02-25 01:13:01,649 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:13:02,154 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:13:02,155 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:13:02,155 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-4500/special_tokens_map.json
+{'loss': 0.4421, 'grad_norm': 9.062067985534668, 'learning_rate': 2.0463475109670038e-05, 'epoch': 0.95}
+ 32%|█████████████████████████████████████████████████████████████████████████████████████▏                                                                                                                                                                                      | 5000/15729 [20:17<42:57,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:15:03,293 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5000
+[INFO|configuration_utils.py:423] 2025-02-25 01:15:03,295 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:15:03,805 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:15:03,807 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:15:03,807 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5000/special_tokens_map.json
+{'loss': 0.3505, 'grad_norm': 15.286108016967773, 'learning_rate': 1.950982262063704e-05, 'epoch': 1.05}
+ 35%|█████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                                                                                                              | 5500/15729 [22:18<40:54,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:17:04,742 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5500
+[INFO|configuration_utils.py:423] 2025-02-25 01:17:04,744 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:17:05,307 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:17:05,308 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:17:05,308 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-5500/special_tokens_map.json
+{'loss': 0.2681, 'grad_norm': 5.386254787445068, 'learning_rate': 1.8556170131604043e-05, 'epoch': 1.14}
+ 38%|██████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                                                                                                                     | 6000/15729 [24:20<39:16,  4.13it/s][INFO|trainer.py:3948] 2025-02-25 01:19:06,488 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6000
+[INFO|configuration_utils.py:423] 2025-02-25 01:19:06,490 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:19:06,978 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:19:06,979 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:19:06,979 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6000/special_tokens_map.json
+{'loss': 0.2691, 'grad_norm': 14.213890075683594, 'learning_rate': 1.7602517642571048e-05, 'epoch': 1.24}
+ 41%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                                                                                             | 6500/15729 [26:21<37:11,  4.14it/s][INFO|trainer.py:3948] 2025-02-25 01:21:08,118 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6500
+[INFO|configuration_utils.py:423] 2025-02-25 01:21:08,120 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:21:08,618 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:21:08,619 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:21:08,619 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-6500/special_tokens_map.json
+{'loss': 0.2616, 'grad_norm': 3.9357597827911377, 'learning_rate': 1.664886515353805e-05, 'epoch': 1.34}
+ 45%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                                                                                                    | 7000/15729 [28:23<34:54,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:23:09,711 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7000
+[INFO|configuration_utils.py:423] 2025-02-25 01:23:09,714 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:23:10,204 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:23:10,205 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:23:10,205 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7000/special_tokens_map.json
+{'loss': 0.2473, 'grad_norm': 3.8956377506256104, 'learning_rate': 1.5695212664505053e-05, 'epoch': 1.43}
+ 48%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                                                                            | 7500/15729 [30:24<32:56,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:25:11,143 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7500
+[INFO|configuration_utils.py:423] 2025-02-25 01:25:11,146 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:25:11,639 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:25:11,640 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:25:11,640 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-7500/special_tokens_map.json
+{'loss': 0.2639, 'grad_norm': 17.800960540771484, 'learning_rate': 1.4741560175472059e-05, 'epoch': 1.53}
+ 51%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                                                                                   | 8000/15729 [32:26<30:56,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:27:12,731 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8000
+[INFO|configuration_utils.py:423] 2025-02-25 01:27:12,733 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:27:13,310 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:27:13,311 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:27:13,311 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8000/special_tokens_map.json
+{'loss': 0.2425, 'grad_norm': 12.13709831237793, 'learning_rate': 1.3787907686439061e-05, 'epoch': 1.62}
+ 54%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                                                           | 8500/15729 [34:28<29:00,  4.15it/s][INFO|trainer.py:3948] 2025-02-25 01:29:14,525 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8500
+[INFO|configuration_utils.py:423] 2025-02-25 01:29:14,527 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:29:15,061 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:29:15,062 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:29:15,063 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-8500/special_tokens_map.json
+{'loss': 0.2587, 'grad_norm': 4.775413990020752, 'learning_rate': 1.2834255197406067e-05, 'epoch': 1.72}
+ 57%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                                                                  | 9000/15729 [36:29<26:56,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:31:16,228 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9000
+[INFO|configuration_utils.py:423] 2025-02-25 01:31:16,231 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:31:16,792 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:31:16,794 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:31:16,794 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9000/special_tokens_map.json
+{'loss': 0.2531, 'grad_norm': 18.61200523376465, 'learning_rate': 1.188060270837307e-05, 'epoch': 1.81}
+ 60%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                                          | 9500/15729 [38:31<24:54,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:33:17,829 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9500
+[INFO|configuration_utils.py:423] 2025-02-25 01:33:17,831 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:33:18,353 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:33:18,354 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:33:18,354 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-9500/special_tokens_map.json
+{'loss': 0.2673, 'grad_norm': 0.45425501465797424, 'learning_rate': 1.0926950219340073e-05, 'epoch': 1.91}
+ 64%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                                 | 10000/15729 [40:33<22:56,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:35:19,441 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10000
+[INFO|configuration_utils.py:423] 2025-02-25 01:35:19,443 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:35:19,977 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:35:19,978 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:35:19,978 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10000/special_tokens_map.json
+{'loss': 0.2501, 'grad_norm': 2.5136070251464844, 'learning_rate': 9.973297730307076e-06, 'epoch': 2.0}
+ 67%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                                        | 10500/15729 [42:34<20:55,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:37:20,874 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10500
+[INFO|configuration_utils.py:423] 2025-02-25 01:37:20,876 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:37:21,431 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:37:21,432 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:37:21,432 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-10500/special_tokens_map.json
+{'loss': 0.1356, 'grad_norm': 4.846286773681641, 'learning_rate': 9.01964524127408e-06, 'epoch': 2.1}
+ 70%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                | 11000/15729 [44:36<18:57,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:39:22,701 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11000
+[INFO|configuration_utils.py:423] 2025-02-25 01:39:22,704 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:39:23,245 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:39:23,246 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:39:23,246 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11000/special_tokens_map.json
+{'loss': 0.1525, 'grad_norm': 14.356297492980957, 'learning_rate': 8.065992752241084e-06, 'epoch': 2.19}
+ 73%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                       | 11500/15729 [46:38<17:01,  4.14it/s][INFO|trainer.py:3948] 2025-02-25 01:41:24,354 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11500
+[INFO|configuration_utils.py:423] 2025-02-25 01:41:24,357 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:41:24,852 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:41:24,853 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:41:24,853 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-11500/special_tokens_map.json
+{'loss': 0.1454, 'grad_norm': 8.228224754333496, 'learning_rate': 7.112340263208088e-06, 'epoch': 2.29}
+ 76%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                               | 12000/15729 [48:39<14:56,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:43:25,885 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12000
+[INFO|configuration_utils.py:423] 2025-02-25 01:43:25,887 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:43:26,372 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:43:26,373 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:43:26,373 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12000/special_tokens_map.json
+{'loss': 0.1503, 'grad_norm': 56.6102409362793, 'learning_rate': 6.158687774175091e-06, 'epoch': 2.38}
+ 79%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                      | 12500/15729 [50:41<12:55,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:45:27,399 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12500
+[INFO|configuration_utils.py:423] 2025-02-25 01:45:27,401 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:45:27,879 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:45:27,880 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:45:27,880 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-12500/special_tokens_map.json
+{'loss': 0.1352, 'grad_norm': 0.659122109413147, 'learning_rate': 5.205035285142095e-06, 'epoch': 2.48}
+ 83%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                              | 13000/15729 [52:42<10:54,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:47:28,907 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13000
+[INFO|configuration_utils.py:423] 2025-02-25 01:47:28,909 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:47:29,405 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:47:29,406 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:47:29,406 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13000/special_tokens_map.json
+{'loss': 0.1395, 'grad_norm': 5.5950093269348145, 'learning_rate': 4.251382796109098e-06, 'epoch': 2.57}
+ 86%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                     | 13500/15729 [54:44<08:55,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:49:30,369 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13500
+[INFO|configuration_utils.py:423] 2025-02-25 01:49:30,371 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:49:30,922 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:49:30,923 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:49:30,924 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-13500/special_tokens_map.json
+{'loss': 0.1419, 'grad_norm': 31.17425537109375, 'learning_rate': 3.297730307076102e-06, 'epoch': 2.67}
+ 89%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                             | 14000/15729 [56:45<06:56,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:51:31,982 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14000
+[INFO|configuration_utils.py:423] 2025-02-25 01:51:31,984 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:51:32,482 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:51:32,483 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:51:32,483 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14000/special_tokens_map.json
+{'loss': 0.1299, 'grad_norm': 11.883106231689453, 'learning_rate': 2.3440778180431054e-06, 'epoch': 2.77}
+ 92%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                    | 14500/15729 [58:47<04:55,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:53:33,677 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14500
+[INFO|configuration_utils.py:423] 2025-02-25 01:53:33,679 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:53:34,156 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:53:34,157 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:53:34,157 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-14500/special_tokens_map.json
+{'loss': 0.1278, 'grad_norm': 4.946344375610352, 'learning_rate': 1.3904253290101088e-06, 'epoch': 2.86}
+ 95%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋            | 15000/15729 [1:00:48<02:54,  4.17it/s][INFO|trainer.py:3948] 2025-02-25 01:55:35,072 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15000
+[INFO|configuration_utils.py:423] 2025-02-25 01:55:35,075 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15000/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:55:35,553 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15000/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:55:35,554 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:55:35,554 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15000/special_tokens_map.json
+{'loss': 0.1386, 'grad_norm': 0.10451200604438782, 'learning_rate': 4.3677283997711237e-07, 'epoch': 2.96}
+ 99%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏   | 15500/15729 [1:02:50<00:55,  4.16it/s][INFO|trainer.py:3948] 2025-02-25 01:57:36,690 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15500
+[INFO|configuration_utils.py:423] 2025-02-25 01:57:36,693 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15500/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:57:37,174 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15500/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:57:37,175 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:57:37,175 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15500/special_tokens_map.json
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 15729/15729 [1:03:46<00:00,  3.99it/s][INFO|trainer.py:3948] 2025-02-25 01:58:33,259 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15729
+[INFO|configuration_utils.py:423] 2025-02-25 01:58:33,261 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15729/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:58:33,740 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15729/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:58:33,741 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15729/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:58:33,741 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/checkpoint-15729/special_tokens_map.json
+[INFO|trainer.py:2663] 2025-02-25 01:58:34,641 >>
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+{'train_runtime': 3828.3749, 'train_samples_per_second': 49.297, 'train_steps_per_second': 4.109, 'train_loss': 0.3181862321507189, 'epoch': 3.0}
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 15729/15729 [1:03:48<00:00,  4.11it/s]
+[INFO|trainer.py:3948] 2025-02-25 01:58:34,644 >> Saving model checkpoint to output/korquad/train=KLUE-BERT=dgx-a100
+[INFO|configuration_utils.py:423] 2025-02-25 01:58:34,646 >> Configuration saved in output/korquad/train=KLUE-BERT=dgx-a100/config.json
+[INFO|modeling_utils.py:3077] 2025-02-25 01:58:35,121 >> Model weights saved in output/korquad/train=KLUE-BERT=dgx-a100/model.safetensors
+[INFO|tokenization_utils_base.py:2500] 2025-02-25 01:58:35,122 >> tokenizer config file saved in output/korquad/train=KLUE-BERT=dgx-a100/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2509] 2025-02-25 01:58:35,122 >> Special tokens file saved in output/korquad/train=KLUE-BERT=dgx-a100/special_tokens_map.json
+***** train metrics *****
+  epoch                    =        3.0
+  total_flos               = 45927011GF
+  train_loss               =     0.3182
+  train_runtime            = 1:03:48.37
+  train_samples            =      62909
+  train_samples_per_second =     49.297
+  train_steps_per_second   =      4.109
+02/25/2025 01:58:35 - INFO - __main__ - *** Evaluate ***
+[INFO|trainer.py:930] 2025-02-25 01:58:35,132 >> The following columns in the evaluation set don't have a corresponding argument in `BertForQuestionAnswering.forward` and have been ignored: offset_mapping, example_id. If offset_mapping, example_id are not expected by `BertForQuestionAnswering.forward`,  you can safely ignore this message.
+[INFO|trainer.py:4264] 2025-02-25 01:58:35,148 >>
+***** Running Evaluation *****
+[INFO|trainer.py:4266] 2025-02-25 01:58:35,148 >>   Num examples = 6155
+[INFO|trainer.py:4269] 2025-02-25 01:58:35,148 >>   Batch size = 8
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎| 768/770 [00:43<00:00, 17.69it/s]02/25/2025 01:59:28 - INFO - utils_qa - Post-processing 5774 example predictions split into 6155 features.
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5774/5774 [00:20<00:00, 278.42it/s]
+02/25/2025 01:59:48 - INFO - utils_qa - Saving predictions to output/korquad/train=KLUE-BERT=dgx-a100/eval_predictions.json.███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊ | 5748/5774 [00:20<00:00, 269.53it/s]
+02/25/2025 01:59:48 - INFO - utils_qa - Saving nbest_preds to output/korquad/train=KLUE-BERT=dgx-a100/eval_nbest_predictions.json.
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 770/770 [01:14<00:00, 10.28it/s]
+***** eval metrics *****
+  epoch                   =        3.0
+  eval_exact_match        =    85.3654
+  eval_f1                 =    90.4725
+  eval_runtime            = 0:00:43.50
+  eval_samples            =       6155
+  eval_samples_per_second =     141.47
+  eval_steps_per_second   =     17.698
+[INFO|modelcard.py:449] 2025-02-25 01:59:50,369 >> Dropping the following result as it does not have all the necessary fields:
+{'task': {'name': 'Question Answering', 'type': 'question-answering'}}
+(DeepKNLP-25) chrisjihee@dgx-a100:~/proj/DeepKNLP-25$
+
