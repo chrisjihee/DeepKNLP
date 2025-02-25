@@ -36,9 +36,10 @@ Transformer-based Korean Natural Language Processing
     - pko-T5: https://huggingface.co/paust/pko-flan-t5-large | https://github.com/paust-team/pko-t5
     - Finetuned by KorQuAD: https://huggingface.co/models?pipeline_tag=text2text-generation&sort=downloads&search=korquad
 * Decoder: https://huggingface.co/docs/transformers/model_summary#nlp-decoder
-    - KoGPT2: https://huggingface.co/skt/kogpt2-base-v2 | https://github.com/SKT-AI/KoGPT2
-    - kogpt: https://huggingface.co/kakaobrain/kogpt | https://github.com/kakaobrain/kogpt
-    - Finetuned by KorQuAD: https://huggingface.co/models?pipeline_tag=text2text-generation&sort=downloads&search=korquad
+    - KoGPT2(125M): https://huggingface.co/skt/kogpt2-base-v2 | https://github.com/SKT-AI/KoGPT2
+    - Ko-GPT-Trinity-1.2B: https://huggingface.co/skt/ko-gpt-trinity-1.2B-v0.5
+    - Polyglot-Ko-1.3B: https://huggingface.co/EleutherAI/polyglot-ko-1.3b | https://github.com/EleutherAI/polyglot
+    - EAGLE-1.3B: https://huggingface.co/etri-lirs/egpt-1.3b-preview
 
 ## Installation
 
