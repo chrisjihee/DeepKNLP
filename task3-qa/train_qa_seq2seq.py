@@ -18,6 +18,7 @@ Fine-tuning the library's seq2seq models for question answering using the 🤗 S
 """
 # You can also adapt this script on your own question answering task. Pointers for this are left as comments.
 
+import json
 import logging
 import os
 import sys
@@ -646,6 +647,11 @@ def main():
             # This is the index of the feature associated to the current example.
             feature_index = feature_per_example[example_index]
             predictions[example["id"]] = decoded_preds[feature_index]
+        # chrisjihee: save eval_predictions.json
+        output_path = os.path.join(training_args.output_dir, "eval_predictions.json")
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(predictions, f, ensure_ascii=False, indent=4)
+        logger.info(f"Saved evaluation predictions to {output_path}")
 
         # Format the result to the format the metric expects.
         if data_args.version_2_with_negative:
