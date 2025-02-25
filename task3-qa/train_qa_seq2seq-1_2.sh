@@ -1,12 +1,12 @@
-CUDA_VISIBLE_DEVICES=3 python task3-qa/train_qa_seq2seq.py \
+CUDA_VISIBLE_DEVICES=1 python task3-qa/train_qa_seq2seq.py \
   --train_file data/korquad/train.jsonl \
   --validation_file data/korquad/validation.jsonl \
-  --output_dir output/korquad/train_qa_seq2seq-by-pkot5 \
-  --model_name_or_path paust/pko-t5-base \
+  --output_dir output/korquad/train_qa_seq2seq-by-ket5-large \
+  --model_name_or_path KETI-AIR/ke-t5-large \
   --predict_with_generate \
   --do_train \
   --do_eval \
-  --num_train_epochs 2 \
+  --num_train_epochs 3 \
   --save_total_limit 2 \
   --save_strategy epoch \
   --eval_strategy epoch \

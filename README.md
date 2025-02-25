@@ -26,8 +26,13 @@ Transformer-based Korean Natural Language Processing
     - KoELECTRA: https://huggingface.co/monologg/koelectra-base-v3-discriminator | https://github.com/monologg/KoELECTRA
 * Encoder-Decoder: https://huggingface.co/docs/transformers/model_summary#cv-encoder-decoder
     - KoT5: https://huggingface.co/wisenut-nlp-team/KoT5-base | https://github.com/wisenut-research/KoT5
+    - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-base | https://github.com/airc-keti/ke-t5
     - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-base-ko | https://github.com/airc-keti/ke-t5
+    - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-large | https://github.com/airc-keti/ke-t5
+    - KE-T5: https://huggingface.co/KETI-AIR/ke-t5-large-ko | https://github.com/airc-keti/ke-t5
     - pko-T5: https://huggingface.co/paust/pko-t5-base | https://github.com/paust-team/pko-t5
+    - pko-T5: https://huggingface.co/paust/pko-t5-large | https://github.com/paust-team/pko-t5
+    - pko-T5: https://huggingface.co/paust/pko-flan-t5-large | https://github.com/paust-team/pko-t5
 
 ## Installation
 

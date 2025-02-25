@@ -1,8 +1,8 @@
-CUDA_VISIBLE_DEVICES=4 python task3-qa/train_qa_seq2seq.py \
+CUDA_VISIBLE_DEVICES=2 python task3-qa/train_qa_seq2seq.py \
   --train_file data/korquad/train.jsonl \
   --validation_file data/korquad/validation.jsonl \
-  --output_dir output/korquad/train_qa_seq2seq-by-kot5 \
-  --model_name_or_path wisenut-nlp-team/KoT5-base \
+  --output_dir output/korquad/train_qa_seq2seq-by-pkot5-large \
+  --model_name_or_path paust/pko-t5-large \
   --predict_with_generate \
   --do_train \
   --do_eval \
