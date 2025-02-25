@@ -13,8 +13,9 @@ from transformers import PreTrainedTokenizerFast
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
+#TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5"
 args = GenerationTrainArguments(
-    pretrained_model_name="skt/kogpt2-base-v2",
+    pretrained_model_name="skt/ko-gpt-trinity-1.2B-v0.5",
     downstream_corpus_name="nsmc",
     downstream_model_dir="output/nsmc-gen/train_gen-by-kogpt2",
     max_seq_length=32,

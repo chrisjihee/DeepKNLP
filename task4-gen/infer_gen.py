@@ -4,13 +4,14 @@ import torch
 from transformers import GPT2LMHeadModel
 from transformers import PreTrainedTokenizerFast
 
-model = GPT2LMHeadModel.from_pretrained(
-    "skt/kogpt2-base-v2",
-)
+#TODO: "skt/kogpt2-base-v2" or "skt/ko-gpt-trinity-1.2B-v0.5"
+pretrained = "skt/kogpt2-base-v2"
+
+model = GPT2LMHeadModel.from_pretrained(pretrained)
 model.eval()
 
 tokenizer = PreTrainedTokenizerFast.from_pretrained(
-    "skt/kogpt2-base-v2",
+    pretrained,
     eos_token="</s>",
 )
 
