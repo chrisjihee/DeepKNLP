@@ -69,4 +69,4 @@ def inference_fn(
 
 
 app = get_web_service_app(inference_fn)
-app.run()
+app.run(host="0.0.0.0", port=9164)
