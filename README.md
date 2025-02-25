@@ -50,7 +50,7 @@ Transformer-based Korean Natural Language Processing
 4. Install the required packages
     ```bash
     pip install -r requirements.txt
-    export CUDA_HOME=""; DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
+    #export CUDA_HOME=""; DS_BUILD_FUSED_ADAM=1 pip install --no-cache deepspeed; ds_report
     rm -rf transformers; git clone https://github.com/chrisjihee/transformers.git; pip install -U -e transformers
     rm -rf chrisbase;    git clone https://github.com/chrisjihee/chrisbase.git;    pip install -U -e chrisbase
     rm -rf chrisdata;    git clone https://github.com/chrisjihee/chrisdata.git;    pip install -U -e chrisdata
