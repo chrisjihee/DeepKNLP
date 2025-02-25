@@ -15,3 +15,9 @@ CUDA_VISIBLE_DEVICES=3 python task3-qa/train_qa_seq2seq.py \
   --doc_stride 128 \
   --learning_rate 3e-5 \
   --overwrite_output_dir
+
+python task3-qa/evaluate-KorQuAD-v1.py \
+       data/korquad/KorQuAD_v1.0_dev.json \
+       output/korquad/train_qa_seq2seq-by-pkot5-flan/eval_predictions.json
+
+# {"exact_match": 72.7918254243159, "f1": 80.30808517835682}
