@@ -104,8 +104,7 @@ def evaluate(dataset, predictions):
 
 if __name__ == '__main__':
     expected_version = 'KorQuAD_v1.0'
-    parser = argparse.ArgumentParser(
-        description='Evaluation for KorQuAD ' + expected_version)
+    parser = argparse.ArgumentParser(description='Evaluation for KorQuAD ' + expected_version)
     parser.add_argument('dataset_file', help='Dataset file')
     parser.add_argument('prediction_file', help='Prediction File')
     args = parser.parse_args()
