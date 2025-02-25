@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=5 python task3-qa/train_qa_seq2seq.py \
+CUDA_VISIBLE_DEVICES=3 python task3-qa/train_qa_seq2seq.py \
   --train_file data/korquad/train.jsonl \
   --validation_file data/korquad/validation.jsonl \
   --output_dir output/korquad/train_qa_seq2seq-by-pkot5 \
