@@ -73,4 +73,4 @@ if __name__ == "__main__":
 
 
     app = get_web_service_app(inference_fn, template_folder=Path("templates").resolve(), server_page="serve_gen.html")
-    app.run(host="0.0.0.0", port=9164)
+    app.run(host="0.0.0.0", port=9002)
