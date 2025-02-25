@@ -44,7 +44,8 @@ Transformer-based Korean Natural Language Processing
     ```bash
     conda search conda -c conda-forge | grep " 25."
     conda install -n base -c conda-forge conda=25.1.1 -y
-    conda create -n DeepKNLP-25 python=3.12 -y; conda activate DeepKNLP-25
+    conda create -n DeepKNLP-25 python=3.12 -y 
+    conda activate DeepKNLP-25  # MUST be activated
     conda install cuda-libraries=11.8 cuda-libraries-dev=11.8 cuda-cudart=11.8 cuda-cudart-dev=11.8 \
                   cuda-nvrtc=11.8 cuda-nvrtc-dev=11.8 cuda-driver-dev=11.8 \
                   cuda-nvcc=11.8 cuda-cccl=11.8 cuda-runtime=11.8 cuda-version=11.8 \
