@@ -42,10 +42,20 @@ if __name__ == "__main__":
             temperature=1.0,
     ):
         try:
-            input_ids = "[YOUR CODE HERE]"
+            input_ids = tokenizer.encode(prompt, return_tensors="pt")
             with torch.no_grad():
-                generated_ids = "[YOUR CODE HERE]"
-            generated_sentence = "[YOUR CODE HERE]"
+                generated_ids = model.generate(
+                    input_ids,
+                    do_sample=True,
+                    top_p=float(top_p),
+                    top_k=int(top_k),
+                    min_length=int(min_length),
+                    max_length=int(max_length),
+                    repetition_penalty=float(repetition_penalty),
+                    no_repeat_ngram_size=int(no_repeat_ngram_size),
+                    temperature=float(temperature),
+                )
+            generated_sentence = tokenizer.decode([el.item() for el in generated_ids[0]])
         except:
             generated_sentence = """처리 중 오류가 발생했습니다. <br>
                 변수의 입력 범위를 확인하세요. <br><br> 
