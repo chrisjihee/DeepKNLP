@@ -52,15 +52,14 @@ def answer_question(question, context):
     with torch.no_grad():
         outputs = model(**inputs)
 
-    # Extract the answer from the model's output
-    start_logits = "[YOUR CODE HERE]"
-    end_logits = "[YOUR CODE HERE]"
+    start_logits = outputs.start_logits
+    end_logits = outputs.end_logits
 
-    start_index = "[YOUR CODE HERE]"
-    end_index = "[YOUR CODE HERE]"
+    start_index = torch.argmax(start_logits)
+    end_index = torch.argmax(end_logits)
 
-    predict_answer_tokens = inputs["input_ids"][0, "[YOUR CODE HERE]":"[YOUR CODE HERE]"]
-    answer = "[YOUR CODE HERE]"
+    predict_answer_tokens = inputs["input_ids"][0, start_index: end_index + 1]
+    answer = tokenizer.decode(predict_answer_tokens)
 
     return answer
 
