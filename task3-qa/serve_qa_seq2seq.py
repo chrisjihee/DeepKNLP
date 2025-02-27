@@ -58,15 +58,15 @@ class QAModel:
 
         with torch.no_grad():
             output_ids = self.model.generate(
-                input_ids="[YOUR CODE HERE]",
-                attention_mask="[YOUR CODE HERE]",
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
                 max_length=self.max_length,
                 num_beams=self.num_beams,
                 return_dict_in_generate=True,
                 output_scores=True
             )
 
-        answer = "[YOUR CODE HERE]"
+        answer = self.tokenizer.decode(output_ids.sequences[0], skip_special_tokens=True)
 
         # Compute score based on token probabilities
         token_probs = []
