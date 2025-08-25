@@ -1,67 +1,111 @@
-지금 `task3-qa` 폴더의 핵심 파일들을 빠르게 읽어서 구조와 흐름을 정확히 요약하겠습니다. 잠시만요.
-
-[5 tools called]
-
-방금 `task3-qa`의 핵심 파이썬 파일들을 열어 구조를 파악하고 있습니다. 이어서 서빙/추론 스크립트들도 동시에 확인하겠습니다.
-
-[5 tools called]
-
 ### 목적과 전체 구조
-- **역할**: `task3-qa`는 KorQuAD 등 QA를 위한 end-to-end 워크플로우(학습/평가/추론/서빙)를 제공합니다. Extractive QA(span 예측)와 Seq2Seq QA(생성형)를 모두 지원합니다.
-- **구성**: 학습 스크립트(`train_qa.py`, `train_qa_seq2seq.py`) + Trainer 서브클래스(`trainer_qa.py`, `trainer_seq2seq_qa.py`) + 후처리(`utils_qa.py`) + 추론(`infer_qa*.py`) + 서빙(`serve_qa*.py`) + KorQuAD 전용 평가(`evaluate-KorQuAD-v1.py`) + 쉘 래퍼 스크립트들.
-- 영어 용어는 그대로 사용하겠습니다 [[memory:7168608]].
+- **역할**: `task3-qa`는 KorQuAD 등 한국어 QA를 대상으로 학습(Training), 평가(Evaluation), 추론(Inference), 서빙(Serving)까지 end-to-end 파이프라인을 제공합니다.
+- **두 가지 파이프라인**: 
+  - **Extractive QA**: 문맥에서 답변 span의 시작/끝 위치를 예측.
+  - **Seq2Seq QA**: 질문-문맥을 입력으로 받아 답변 텍스트를 생성.
+- 영어 표현은 그대로 사용하겠습니다 [[memory:7168608]].
 
-### 핵심 파일별 역할
-- **`train_qa.py` (extractive)**: 
-  - HF `AutoModelForQuestionAnswering` + `Trainer`로 미세튜닝.
-  - 데이터 로딩(로컬 `csv/json/jsonl` 또는 Hub), 전처리(overflow/stride), 평가용 후처리(`utils_qa.postprocess_qa_predictions`), metric(`squad`/`squad_v2`).
-  - `QuestionAnsweringTrainer`로 evaluate/predict 시 후처리-지표 연결.
-- **`train_qa_seq2seq.py` (seq2seq)**:
-  - HF `AutoModelForSeq2SeqLM` + `Seq2SeqTrainer`.
-  - 입력을 “question: Q context: C” 포맷으로 구성해 인코딩, 타깃은 `answers.text[0]`로 라벨링.
-  - 평가 후처리에서 `batch_decode`로 텍스트 복원, `eval_predictions.json` 저장.
-  - metric(`squad`/`squad_v2`), generation 설정(max_length/num_beams) 반영.
-- **`trainer_qa.py` / `trainer_seq2seq_qa.py`**:
-  - HF `Trainer`/`Seq2SeqTrainer`를 상속, `evaluate/predict`에서 임시로 metric 비활성화 → 예측 산출 → `post_process_function` 실행 → metric 계산 → 로깅 형식 일원화.
-- **`utils_qa.py`**:
-  - Extractive QA 후처리: start/end logits에서 상위 후보를 offset 매핑으로 원문 substring으로 변환, n-best와 확률 산출, `version_2_with_negative` 지원.
-  - `postprocess_qa_predictions_with_beam_search`: beam search 기반 모델용(예: XLNet 스타일) 변형 로직도 포함.
-- **`serve_qa.py` (extractive Flask)**:
-  - `AutoTokenizer` + `AutoModelForQuestionAnswering` 로드, start/end argmax로 답 스팬 디코딩.
-  - 선택적으로 softmax 기반 score 계산(normalized).
-  - `chrisbase.io.paths`로 `checkpoint-*` 패턴 중 최신 경로 자동 선택, `POST /api`로 질의/문맥 받음.
-- **`serve_qa_seq2seq.py` (seq2seq Flask)**:
-  - `generate`(num_beams, max_length)로 답 생성, `output_scores`로 토큰 확률 곱을 score로 계산.
-- **`infer_qa.py` / `infer_qa_seq2seq.py`**:
-  - 로컬 예시 컨텍스트와 여러 질문에 대해 간단 추론 데모(최신 체크포인트 자동 선택).
-- **`evaluate-KorQuAD-v1.py`**:
-  - KorQuAD v1 공식 형식 평가(EM/F1). 한국어 특수기호/공백 처리 포함한 normalize로 견고한 점수 계산.
-- **쉘 스크립트들**: `train_qa-*.sh`, `eval_qa-*.sh`, seq2seq 버전 등은 위 파이썬 스크립트들에 대한 실행 래퍼.
+### 파일 구성 한눈에 보기
+- **학습**
+  - Extractive: `train_qa.py`
+  - Seq2Seq: `train_qa_seq2seq.py`
+- **Trainer 서브클래스**
+  - Extractive: `trainer_qa.py`
+  - Seq2Seq: `trainer_seq2seq_qa.py`
+- **후처리/유틸**
+  - `utils_qa.py` (Extractive 후처리: n-best, offset 매핑 등)
+- **추론(데모)**
+  - Extractive: `infer_qa.py`
+  - Seq2Seq: `infer_qa_seq2seq.py`
+- **서빙**
+  - Extractive: `serve_qa.py` (Flask)
+  - Seq2Seq: `serve_qa_seq2seq.py` (Flask)
+- **평가**
+  - KorQuAD v1 전용: `evaluate-KorQuAD-v1.py`
+- **쉘 스크립트**
+  - `train_qa-*.sh`, `eval_qa-*.sh`, `*_seq2seq-*.sh` 등 실행 래퍼
 
-### 데이터/전처리/후처리 포인트
-- **데이터 포맷**: 로컬 파일 `csv/json/jsonl` 지원(jsonl 시 `datasets.load_dataset`에서 field=None로 처리).
-- **길이 초과 대응**: 긴 context는 `doc_stride`로 overlap을 두고 여러 feature로 분할, evaluation에서 feature→example 매핑으로 후처리.
-- **후처리(extractive)**: start/end 상위 인덱스 조합을 필터링(길이/맥스컨텍스트/offset 유효성) 후 원문 substring 복구, softmax로 확률화, n-best/최종 예측 저장.
+### 데이터 입출력과 전처리/후처리 공통 포인트
+- **데이터 포맷**: `csv/json/jsonl` 지원. `jsonl`은 `datasets.load_dataset` 호출 시 `field=None`로 취급되도록 처리됨.
+- **길이 처리**: 긴 문맥을 `doc_stride`로 겹치게 분할하고, feature→example 역매핑으로 평가 시 재조립.
+- **메트릭**: `evaluate`의 `squad`/`squad_v2`를 사용해 EM/F1 계산.
+- **Extractive 후처리(`utils_qa.py`)**:
+  - `postprocess_qa_predictions`: start/end logits에서 상위 인덱스 조합을 필터링(유효 offset/길이/max_context) 후 원문 substring 복구, softmax로 확률화, n-best/최종 예측 저장. `version_2_with_negative`와 `null_score_diff_threshold` 지원.
+  - `postprocess_qa_predictions_with_beam_search`: beam search 기반 모델용 변형.
+- **Seq2Seq 후처리(`train_qa_seq2seq.py`)**:
+  - `generate` 결과 토큰을 디코딩해 예측 텍스트로 변환, example 매핑으로 묶어 `eval_predictions.json` 저장.
 
-### 학습/평가 흐름(공통)
-- 공통 인자 파싱(`HfArgumentParser`) → 모델/토크나이저 로드 → 데이터셋 로드/전처리 → Trainer 구성(`post_process_function`, `compute_metrics`) → train/eval/predict → 메트릭과 예측 저장.
-- 기존 체크포인트 존재 시 `get_last_checkpoint`로 재개(resume) 처리.
+### 학습 스크립트
+- **Extractive: `train_qa.py`**
+  - 모델/토크나이저: `AutoModelForQuestionAnswering`, `AutoTokenizer`.
+  - 데이터 전처리: 질문 좌측 공백 제거, `truncation="only_second"`(padding side에 따라 반전), `return_overflowing_tokens/offset_mapping`으로 span 학습/평가 세트 생성.
+  - 후처리+지표: `postprocess_qa_predictions` → `squad`/`squad_v2`로 metric 계산.
+  - Trainer: `QuestionAnsweringTrainer`를 사용해 evaluate/predict 단계에서 후처리→지표를 자동 연결.
+  - 체크포인트 재개: `get_last_checkpoint` 지원.
+- **Seq2Seq: `train_qa_seq2seq.py`**
+  - 모델/토크나이저: `AutoModelForSeq2SeqLM`, `AutoTokenizer`.
+  - 입력 포맷: `"question: {Q} context: {C}"`, 라벨은 `answers.text[0]`(없으면 빈 문자열).
+  - 학습/평가: `Seq2SeqTrainer` 서브클래스 `QuestionAnsweringSeq2SeqTrainer` 사용. `predict_with_generate` 시 `max_length/num_beams` 반영.
+  - 후처리: 배치 디코딩 후 example 매핑으로 dict 구성, `eval_predictions.json` 저장.
 
-### 서빙/추론
-- Flask 기반 UI(`templates` HTML) + REST API(`/api` JSON).
-- Extractive: logits argmax 스팬 디코딩(+ 선택적 softmax score).
-- Seq2Seq: `generate` 결과 디코딩, `output_scores`로 token-level 확률에서 종합 score.
+### Trainer 서브클래스
+- **`trainer_qa.py` (Extractive)**:
+  - `evaluate/predict`에서 임시로 metric 계산을 비활성 → 루프 실행해 로짓 수집 → `post_process_function` 호출 → metric 계산/로깅.
+- **`trainer_seq2seq_qa.py` (Seq2Seq)**:
+  - `Seq2SeqTrainer` 기반. `evaluate/predict`에서도 동일 패턴으로 후처리-지표 계산을 연결. generation 인자(`max_length`, `num_beams`)를 반영.
 
-### 실행 예시(요약)
-- 학습(extractive): 
+### 추론 스크립트(데모)
+- **`infer_qa.py` (Extractive)**
+  - **체크포인트 자동 선택**: `chrisbase.io.paths`로 `"output/korquad/train_qa-*/checkpoint-*"` 패턴 중 최신 경로를 선택.
+  - **로딩**: `AutoTokenizer.from_pretrained`, `AutoModelForQuestionAnswering.from_pretrained`.
+  - **예시 입력**: 한국 관련 단락을 `context`로, 다수의 질문 리스트를 제공.
+  - **추론 로직**:
+    - `tokenizer.encode_plus(question, context, return_tensors="pt", truncation=True, padding=True)`
+    - 모델 forward → `start_logits`, `end_logits` argmax로 span 인덱스 결정 → 해당 구간 `input_ids`를 `tokenizer.decode(...)`로 디코딩해 답 구성.
+  - **출력**: 각 질문에 대한 Answer를 stdout으로 출력.
+- **`infer_qa_seq2seq.py` (Seq2Seq)**
+  - **체크포인트 자동 선택**: `"output/korquad/train_qa_seq2seq-*/checkpoint-*"` 최신 경로 선택.
+  - **로딩**: `AutoTokenizer`, `AutoModelForSeq2SeqLM`.
+  - **예시 입력**: 동일한 `context`와 질문 리스트.
+  - **추론 로직**:
+    - 입력을 `f"question: {question} context: {context}"`로 구성 → 토크나이즈.
+    - `model.generate(..., max_length=50, num_beams=5)` → `tokenizer.decode(..., skip_special_tokens=True)`로 답 생성.
+  - **출력**: 각 질문에 대한 생성 답변을 stdout으로 출력.
+
+### 서빙(Flask)
+- **`serve_qa.py` (Extractive)**
+  - **모델**: `AutoModelForQuestionAnswering`. latest 체크포인트 자동 선택.
+  - **API**:
+    - `GET /`: 템플릿(`serve_qa.html`) 렌더.
+    - `POST /api`: `{question, context}` JSON 입력 → 위 extractive 방식으로 답/score 계산 후 반환.
+  - **점수**: 옵션에 따라 softmax 확률 기반 score 또는 로짓 합 기반 score.
+- **`serve_qa_seq2seq.py` (Seq2Seq)**
+  - **모델**: `AutoModelForSeq2SeqLM`. latest 체크포인트 자동 선택.
+  - **API**:
+    - `GET /`: 템플릿(`serve_qa_seq2seq.html`) 렌더.
+    - `POST /api`: `{question, context}` JSON 입력 → `generate`로 답 생성, token-level 확률(`output_scores=True`)을 곱해 score 산출.
+
+### 평가 스크립트
+- **`evaluate-KorQuAD-v1.py`**
+  - KorQuAD v1 포맷 전용. 한국어 기호/공백 정규화 후 **문자 단위 F1**과 EM 계산.
+  - `dataset.json`과 `predictions.json`을 입력받아 `{exact_match, f1}` 출력.
+
+### 실행 예시
+- **Extractive 학습/평가**
   - `python task3-qa/train_qa.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval`
-- 학습(seq2seq): 
+- **Seq2Seq 학습/평가**
   - `python task3-qa/train_qa_seq2seq.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval --predict_with_generate`
-- 서빙:
+- **추론 데모**
+  - `python task3-qa/infer_qa.py`
+  - `python task3-qa/infer_qa_seq2seq.py`
+- **서빙**
   - `python task3-qa/serve_qa.py serve --pretrained "output/korquad/train_qa-*/checkpoint-*"`
   - `python task3-qa/serve_qa_seq2seq.py serve --pretrained "output/korquad/train_qa_seq2seq-*/checkpoint-*"`
 
-- 핵심 요지
-  - 두 파이프라인(extractive/seq2seq)을 동일한 틀(HF Trainer, datasets, evaluate)로 구성.
-  - 전처리에서 overflow/stride로 feature 생성, 후처리에서 example 단위로 복원해 metric 계산.
-  - 간단한 Flask 서버로 최신 체크포인트를 자동 로드해 즉시 데모 가능.
+### 실전 팁
+- **jsonl 지원**: 로컬 데이터가 jsonl이면 별도 `field` 없이 바로 로드되도록 이미 처리되어 있습니다.
+- **길이/stride 튜닝**: `max_seq_length`, `doc_stride`로 long context 대응 성능과 속도를 trade-off.
+- **Seq2Seq 생성 품질**: `max_length`, `num_beams`로 제어. 학습 시 `predict_with_generate`를 켜면 평가 단계에서 생성 기반 metric을 즉시 산출합니다.
+- **Extractive 안정성**: `n_best_size`, `max_answer_length`, `version_2_with_negative`/`null_score_diff_threshold`로 무답 처리 품질을 조절.
+
+- 요약: 학습(Extractive/Seq2Seq)→전처리/후처리→지표→추론 데모(`infer_qa*.py`)→웹 서빙(`serve_qa*.py`)까지 일관된 HF Trainer/Datasets/Evaluate 스택으로 구성되어 있으며, 최신 체크포인트 자동 선택과 한국어 평가 정규화가 실전에 맞게 제공됩니다.
