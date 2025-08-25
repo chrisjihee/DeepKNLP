@@ -45,17 +45,15 @@ Transformer-based Korean Natural Language Processing
 2. Clone the repository
     ```bash
     rm -rf DeepKNLP*; git clone https://github.com/chrisjihee/DeepKNLP-25.git; cd DeepKNLP*;
+    rm -rf DeepKNLP*; git clone https://git.etri.re.kr/nlp/DeepKNLP-25.git; cd DeepKNLP*;
     ```
 3. Create a new environment
     ```bash
     conda search conda -c conda-forge | grep " 25."
-    conda install -n base -c conda-forge conda=25.1.1 -y
-    conda create -n DeepKNLP-25 python=3.12 -y 
+    conda install -n base -c conda-forge conda=25.7.0 -y
+    conda create -n DeepKNLP-25 python=3.12 -y
+    conda install -n DeepKNLP-25 nvidia/label/cuda-12.8.1::cuda -y
     conda activate DeepKNLP-25  # MUST be activated
-    conda install cuda-libraries=11.8 cuda-libraries-dev=11.8 cuda-cudart=11.8 cuda-cudart-dev=11.8 \
-                  cuda-nvrtc=11.8 cuda-nvrtc-dev=11.8 cuda-driver-dev=11.8 \
-                  cuda-nvcc=11.8 cuda-cccl=11.8 cuda-runtime=11.8 \
-                  -c nvidia -c pytorch -y
     pip list; echo ==========; conda --version; echo ==========; conda list
     ```
 4. Install the required packages
@@ -67,8 +65,8 @@ Transformer-based Korean Natural Language Processing
     ```
 5. Login to Hugging Face and link the cache
     ```bash
-    huggingface-cli whoami
-    huggingface-cli login
+    hf auth whoami
+    hf auth login
     ln -s ~/.cache/huggingface ./.cache_hf
     ```
 
