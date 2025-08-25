@@ -405,7 +405,7 @@ def train(
         data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
         train_file: str = typer.Option(default="train.jsonl"),
         valid_file: str = typer.Option(default="valid.jsonl"),
-        test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
+        test_file: str = typer.Option(default=None),
         num_check: int = typer.Option(default=3),
         # model
         pretrained: str = typer.Option(default="klue/roberta-base"),
@@ -586,7 +586,7 @@ def test(
         # data
         data_home: str = typer.Option(default="data"),
         data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
-        test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
+        test_file: str = typer.Option(default="test.jsonl"),
         num_check: int = typer.Option(default=3),  # TODO: -> 2
         # model
         pretrained: str = typer.Option(default="klue/roberta-base"),
@@ -709,7 +709,7 @@ def serve(
         # data
         data_home: str = typer.Option(default="data"),
         data_name: str = typer.Option(default="klue-ner"),  # TODO: -> kmou-ner, klue-ner
-        test_file: str = typer.Option(default="valid.jsonl"),  # TODO: -> "valid.jsonl"
+        test_file: str = typer.Option(default="test.jsonl"),
         # model
         pretrained: str = typer.Option(default="klue/roberta-base"),
         finetuning: str = typer.Option(default="output"),
