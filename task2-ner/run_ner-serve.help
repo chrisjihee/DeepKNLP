@@ -1,0 +1,25 @@
+                                                                                                                                                                                                        
+ Usage: run_ner.py serve [OPTIONS]                                                                                                                                                                      
+                                                                                                                                                                                                        
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --verbose                            INTEGER  [default: 2]                                                                                                                                           │
+│ --project                            TEXT     [default: DeepKNLP]                                                                                                                                    │
+│ --job-name                           TEXT     [default: None]                                                                                                                                        │
+│ --job-version                        INTEGER  [default: None]                                                                                                                                        │
+│ --debugging        --no-debugging             [default: no-debugging]                                                                                                                                │
+│ --logging-file                       TEXT     [default: logging.out]                                                                                                                                 │
+│ --argument-file                      TEXT     [default: arguments.json]                                                                                                                              │
+│ --data-home                          TEXT     [default: data]                                                                                                                                        │
+│ --data-name                          TEXT     [default: klue-ner]                                                                                                                                    │
+│ --test-file                          TEXT     [default: valid.jsonl]                                                                                                                                 │
+│ --pretrained                         TEXT     [default: klue/roberta-base]                                                                                                                           │
+│ --finetuning                         TEXT     [default: output]                                                                                                                                      │
+│ --model-name                         TEXT     [default: train=*]                                                                                                                                     │
+│ --seq-len                            INTEGER  [default: 128]                                                                                                                                         │
+│ --server-port                        INTEGER  [default: 9164]                                                                                                                                        │
+│ --server-host                        TEXT     [default: 0.0.0.0]                                                                                                                                     │
+│ --server-temp                        TEXT     [default: templates]                                                                                                                                   │
+│ --server-page                        TEXT     [default: serve_ner.html]                                                                                                                              │
+│ --help                                        Show this message and exit.                                                                                                                            │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+

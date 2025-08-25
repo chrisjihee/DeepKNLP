@@ -1,0 +1,48 @@
+                                                                                                                                                                                                        
+ Usage: run_ner.py train [OPTIONS]                                                                                                                                                                      
+                                                                                                                                                                                                        
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --verbose                                     INTEGER  [default: 2]                                                                                                                                  │
+│ --project                                     TEXT     [default: DeepKNLP]                                                                                                                           │
+│ --job-name                                    TEXT     [default: None]                                                                                                                               │
+│ --job-version                                 INTEGER  [default: None]                                                                                                                               │
+│ --debugging                 --no-debugging             [default: no-debugging]                                                                                                                       │
+│ --logging-file                                TEXT     [default: logging.out]                                                                                                                        │
+│ --argument-file                               TEXT     [default: arguments.json]                                                                                                                     │
+│ --data-home                                   TEXT     [default: data]                                                                                                                               │
+│ --data-name                                   TEXT     [default: klue-ner]                                                                                                                           │
+│ --train-file                                  TEXT     [default: train.jsonl]                                                                                                                        │
+│ --valid-file                                  TEXT     [default: valid.jsonl]                                                                                                                        │
+│ --test-file                                   TEXT     [default: valid.jsonl]                                                                                                                        │
+│ --num-check                                   INTEGER  [default: 3]                                                                                                                                  │
+│ --pretrained                                  TEXT     [default: klue/roberta-base]                                                                                                                  │
+│ --finetuning                                  TEXT     [default: output]                                                                                                                             │
+│ --model-name                                  TEXT     [default: None]                                                                                                                               │
+│ --seq-len                                     INTEGER  [default: 128]                                                                                                                                │
+│ --cpu-workers                                 INTEGER  [default: 10]                                                                                                                                 │
+│ --train-batch                                 INTEGER  [default: 50]                                                                                                                                 │
+│ --infer-batch                                 INTEGER  [default: 50]                                                                                                                                 │
+│ --accelerator                                 TEXT     [default: cuda]                                                                                                                               │
+│ --precision                                   TEXT     [default: 16-mixed]                                                                                                                           │
+│ --strategy                                    TEXT     [default: ddp]                                                                                                                                │
+│ --device                                      INTEGER  [default: 0]                                                                                                                                  │
+│ --print-rate-on-training                      FLOAT    [default: 0.05]                                                                                                                               │
+│ --print-rate-on-validate                      FLOAT    [default: 0.5]                                                                                                                                │
+│ --print-rate-on-evaluate                      FLOAT    [default: 0.5]                                                                                                                                │
+│ --print-step-on-training                      INTEGER  [default: -1]                                                                                                                                 │
+│ --print-step-on-validate                      INTEGER  [default: -1]                                                                                                                                 │
+│ --print-step-on-evaluate                      INTEGER  [default: -1]                                                                                                                                 │
+│ --tag-format-on-training                      TEXT     [default: st={step:d}, ep={epoch:.2f}, loss={loss:06.4f}, acc={acc:06.4f}]                                                                    │
+│ --tag-format-on-validate                      TEXT     [default: st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}, val_F1c={val_F1c:05.2f}, val_F1e={val_F1e:05.2f}]  │
+│ --tag-format-on-evaluate                      TEXT     [default: st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1c={test_F1c:05.2f},                     │
+│                                                        test_F1e={test_F1e:05.2f}]                                                                                                                    │
+│ --learning-rate                               FLOAT    [default: 5e-05]                                                                                                                              │
+│ --random-seed                                 INTEGER  [default: 7]                                                                                                                                  │
+│ --saving-mode                                 TEXT     [default: max val_F1c]                                                                                                                        │
+│ --num-saving                                  INTEGER  [default: 1]                                                                                                                                  │
+│ --num-epochs                                  INTEGER  [default: 1]                                                                                                                                  │
+│ --check-rate-on-training                      FLOAT    [default: 0.2]                                                                                                                                │
+│ --name-format-on-saving                       TEXT     [default: ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}]                               │
+│ --help                                                 Show this message and exit.                                                                                                                   │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+

@@ -1,0 +1,32 @@
+                                                                                                                                                                                                        
+ Usage: run_ner.py test [OPTIONS]                                                                                                                                                                       
+                                                                                                                                                                                                        
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --verbose                                     INTEGER  [default: 2]                                                                                                                                  │
+│ --project                                     TEXT     [default: DeepKNLP]                                                                                                                           │
+│ --job-name                                    TEXT     [default: None]                                                                                                                               │
+│ --job-version                                 INTEGER  [default: None]                                                                                                                               │
+│ --debugging                 --no-debugging             [default: no-debugging]                                                                                                                       │
+│ --logging-file                                TEXT     [default: logging.out]                                                                                                                        │
+│ --argument-file                               TEXT     [default: arguments.json]                                                                                                                     │
+│ --data-home                                   TEXT     [default: data]                                                                                                                               │
+│ --data-name                                   TEXT     [default: klue-ner]                                                                                                                           │
+│ --test-file                                   TEXT     [default: valid.jsonl]                                                                                                                        │
+│ --num-check                                   INTEGER  [default: 3]                                                                                                                                  │
+│ --pretrained                                  TEXT     [default: klue/roberta-base]                                                                                                                  │
+│ --finetuning                                  TEXT     [default: output]                                                                                                                             │
+│ --model-name                                  TEXT     [default: train=*]                                                                                                                            │
+│ --seq-len                                     INTEGER  [default: 128]                                                                                                                                │
+│ --cpu-workers                                 INTEGER  [default: 10]                                                                                                                                 │
+│ --infer-batch                                 INTEGER  [default: 10]                                                                                                                                 │
+│ --accelerator                                 TEXT     [default: cuda]                                                                                                                               │
+│ --precision                                   TEXT     [default: None]                                                                                                                               │
+│ --strategy                                    TEXT     [default: auto]                                                                                                                               │
+│ --device                                      INTEGER  [default: 0]                                                                                                                                  │
+│ --print-rate-on-evaluate                      FLOAT    [default: 0.1]                                                                                                                                │
+│ --print-step-on-evaluate                      INTEGER  [default: -1]                                                                                                                                 │
+│ --tag-format-on-evaluate                      TEXT     [default: st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1c={test_F1c:05.2f},                     │
+│                                                        test_F1e={test_F1e:05.2f}]                                                                                                                    │
+│ --help                                                 Show this message and exit.                                                                                                                   │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
