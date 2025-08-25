@@ -1,7 +1,6 @@
 ### 목적과 전체 구조
 - **역할**: `task2-ner/run_ner.py`는 한국어 NER(Task2: Named Entity Recognition)을 위한 학습, 평가, 서빙을 하나의 Typer 기반 CLI로 제공합니다.
 - **구성**: Typer CLI(`train`, `test`, `serve`) → Lightning Fabric으로 분산/정밀도/로깅 제어 → Hugging Face Transformers `AutoModelForTokenClassification` fine-tuning → CSV/TensorBoard 로깅 → Checkpoint 저장/로드 → Flask 웹서빙.
-- 용어는 영어 표현을 그대로 사용하겠습니다 [[memory:7168608]].
 
 ### 주요 의존성
 - **Transformers**: `AutoConfig`, `AutoTokenizer(PreTrainedTokenizerFast)`, `AutoModelForTokenClassification`, `CharSpan`

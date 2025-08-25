@@ -1,7 +1,6 @@
 ### 목적과 전체 구조
 - **역할**: `task1-cls/run_cls.py`는 NSMC 감성분석(Task1-Classification)을 위한 학습/평가/서빙을 한 파일에서 제공하는 CLI 엔트리 포인트입니다.  
 - **구성**: Typer 기반 CLI(`train`, `test`, `serve`) → Lightning Fabric로 분산/혼합정밀 제어 → Hugging Face Transformers로 `AutoModelForSequenceClassification` fine-tuning → CSV/TensorBoard 로깅 → Checkpoint 저장/로드 → Flask 웹서빙.  
-- 용어는 영어 표현을 그대로 사용하겠습니다 [[memory:7168608]].
 
 ---
 
