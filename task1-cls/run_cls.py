@@ -317,7 +317,7 @@ def train(
         data_name: str = typer.Option(default="nsmc"),
         train_file: str = typer.Option(default="ratings_train.txt"),
         valid_file: str = typer.Option(default="ratings_valid.txt"),
-        test_file: str = typer.Option(default="ratings_test.txt"),
+        test_file: str = typer.Option(default=None),
         num_check: int = typer.Option(default=3),
         # model
         pretrained: str = typer.Option(default="beomi/KcELECTRA-base"),
@@ -498,7 +498,7 @@ def test(
         # data
         data_home: str = typer.Option(default="data"),
         data_name: str = typer.Option(default="nsmc"),
-        test_file: str = typer.Option(default="ratings_valid.txt"),
+        test_file: str = typer.Option(default="ratings_test.txt"),
         num_check: int = typer.Option(default=3),
         # model
         pretrained: str = typer.Option(default="beomi/KcELECTRA-base"),
