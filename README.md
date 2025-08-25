@@ -53,11 +53,11 @@ Transformer-based Korean Natural Language Processing
     conda install -n base -c conda-forge conda=25.7.0 -y
     conda create -n DeepKNLP-25 python=3.12 -y
     conda install -n DeepKNLP-25 nvidia/label/cuda-12.8.1::cuda -y
-    conda activate DeepKNLP-25  # MUST be activated
-    pip list; echo ==========; conda --version; echo ==========; conda list
     ```
 4. Install the required packages
     ```bash
+    conda activate DeepKNLP-25  # MUST be activated
+    pip list; echo ==========; conda --version; echo ==========; conda list
     pip install -e . --extra-index-url https://download.pytorch.org/whl/cu128
     rm -rf transformers; git clone https://github.com/chrisjihee/transformers.git; pip install -U -e transformers
     rm -rf ratsnlp;      git clone https://github.com/chrisjihee/ratsnlp.git;      pip install -U -e ratsnlp
