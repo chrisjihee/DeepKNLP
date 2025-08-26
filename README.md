@@ -45,7 +45,6 @@ Transformer-based Korean Natural Language Processing
 2. Clone the repository
     ```bash
     rm -rf DeepKNLP*; git clone https://github.com/chrisjihee/DeepKNLP-25.08.git; cd DeepKNLP*;
-    rm -rf DeepKNLP*; git clone https://git.etri.re.kr/nlp/DeepKNLP-25.git; cd DeepKNLP*;
     ```
 3. Create a new environment
     ```bash
