@@ -648,6 +648,7 @@ def main():
         # chrisjihee: save eval_predictions.json
         output_path = os.path.join(training_args.output_dir, "eval_predictions.json")
         with open(output_path, "w", encoding="utf-8") as f:
+            import json  # chrisjihee: import
             json.dump(predictions, f, indent=4, ensure_ascii=False)
         logger.info(f"Saved evaluation predictions to {output_path}")
 
