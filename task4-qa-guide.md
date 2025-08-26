@@ -1,5 +1,5 @@
 ### 목적과 전체 구조
-- **역할**: `task3-qa`는 KorQuAD 등 한국어 QA를 대상으로 학습(Training), 평가(Evaluation), 추론(Inference), 서빙(Serving)까지 end-to-end 파이프라인을 제공합니다.
+- **역할**: `task4-qa`는 KorQuAD 등 한국어 QA를 대상으로 학습(Training), 평가(Evaluation), 추론(Inference), 서빙(Serving)까지 end-to-end 파이프라인을 제공합니다.
 - **두 가지 파이프라인**: 
   - **Extractive QA**: 문맥에서 답변 span의 시작/끝 위치를 예측.
   - **Seq2Seq QA**: 질문-문맥을 입력으로 받아 답변 텍스트를 생성.
@@ -91,15 +91,15 @@
 
 ### 실행 예시
 - **Extractive 학습/평가**
-  - `python task3-qa/train_qa.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval`
+  - `python task4-qa/train_qa.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval`
 - **Seq2Seq 학습/평가**
-  - `python task3-qa/train_qa_seq2seq.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval --predict_with_generate`
+  - `python task4-qa/train_qa_seq2seq.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval --predict_with_generate`
 - **추론 데모**
-  - `python task3-qa/infer_qa.py`
-  - `python task3-qa/infer_qa_seq2seq.py`
+  - `python task4-qa/infer_qa.py`
+  - `python task4-qa/infer_qa_seq2seq.py`
 - **서빙**
-  - `python task3-qa/serve_qa.py serve --pretrained "output/korquad/train_qa-*/checkpoint-*"`
-  - `python task3-qa/serve_qa_seq2seq.py serve --pretrained "output/korquad/train_qa_seq2seq-*/checkpoint-*"`
+  - `python task4-qa/serve_qa.py serve --pretrained "output/korquad/train_qa-*/checkpoint-*"`
+  - `python task4-qa/serve_qa_seq2seq.py serve --pretrained "output/korquad/train_qa_seq2seq-*/checkpoint-*"`
 
 ### 실전 팁
 - **jsonl 지원**: 로컬 데이터가 jsonl이면 별도 `field` 없이 바로 로드되도록 이미 처리되어 있습니다.

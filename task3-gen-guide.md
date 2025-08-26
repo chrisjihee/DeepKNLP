@@ -47,13 +47,13 @@
 ### 실행 예시
 ```bash
 # 학습 (버전 1: KoGPT2 base)
-python task4-gen/train_gen-1.py
+python task3-gen/train_gen-1.py
 
 # 추론 파라미터 실습 (버전 2: KoGPT Trinity)
-python task4-gen/infer_gen-2.py
+python task3-gen/infer_gen-2.py
 
 # 서빙 (버전 3: Polyglot-ko 1.3b)
-python task4-gen/serve_gen-3.py
+python task3-gen/serve_gen-3.py
 ```
 
 ### 실전 팁
@@ -62,4 +62,4 @@ python task4-gen/serve_gen-3.py
 - **다양성 제어**: `do_sample=True` + `top_k/top_p` + `temperature`로 샘플 다양성 조절.
 - **성능/자원**: -2, -3 모델은 파라미터가 커서 GPU 메모리 요구가 큼. 배치 사이즈/seq 길이 조정 권장.
 
-- 요약: `task4-gen`은 3개 사전학습 언어모델에 대해 동일한 학습 파이프라인과, 다양한 생성 하이퍼 실습용 추론/웹서빙 환경을 제공합니다. 학습은 ratsnlp의 GenerationTask/Trainer를 통해 간결하게 구성되고, 서빙은 체크포인트를 로드한 후 `generate` 파라미터로 품질/다양성을 조절합니다.
+- 요약: `task3-gen`은 3개 사전학습 언어모델에 대해 동일한 학습 파이프라인과, 다양한 생성 하이퍼 실습용 추론/웹서빙 환경을 제공합니다. 학습은 ratsnlp의 GenerationTask/Trainer를 통해 간결하게 구성되고, 서빙은 체크포인트를 로드한 후 `generate` 파라미터로 품질/다양성을 조절합니다.

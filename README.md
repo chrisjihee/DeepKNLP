@@ -92,28 +92,28 @@ Transformer-based Korean Natural Language Processing
     - `python task2-ner/run_ner.py test`
     - `python task2-ner/run_ner.py serve`
 * Sentence Generation: https://ratsgo.github.io/nlpbook/docs/generation
-    - `CUDA_VISIBLE_DEVICES=7 python task4-gen/infer_gen-1.py`
-    - `CUDA_VISIBLE_DEVICES=6 python task4-gen/infer_gen-2.py`
-    - `CUDA_VISIBLE_DEVICES=5 python task4-gen/infer_gen-3.py`
-    - `CUDA_VISIBLE_DEVICES=7 python task4-gen/train_gen-1.py`
-    - `CUDA_VISIBLE_DEVICES=6 python task4-gen/train_gen-2.py`
-    - `CUDA_VISIBLE_DEVICES=5 python task4-gen/train_gen-3.py`
-    - `CUDA_VISIBLE_DEVICES=7 python task4-gen/serve_gen-1.py`
-    - `CUDA_VISIBLE_DEVICES=6 python task4-gen/serve_gen-2.py`
-    - `CUDA_VISIBLE_DEVICES=5 python task4-gen/serve_gen-3.py`
+    - `CUDA_VISIBLE_DEVICES=7 python task3-gen/infer_gen-1.py`
+    - `CUDA_VISIBLE_DEVICES=6 python task3-gen/infer_gen-2.py`
+    - `CUDA_VISIBLE_DEVICES=5 python task3-gen/infer_gen-3.py`
+    - `CUDA_VISIBLE_DEVICES=7 python task3-gen/train_gen-1.py`
+    - `CUDA_VISIBLE_DEVICES=6 python task3-gen/train_gen-2.py`
+    - `CUDA_VISIBLE_DEVICES=5 python task3-gen/train_gen-3.py`
+    - `CUDA_VISIBLE_DEVICES=7 python task3-gen/serve_gen-1.py`
+    - `CUDA_VISIBLE_DEVICES=6 python task3-gen/serve_gen-2.py`
+    - `CUDA_VISIBLE_DEVICES=5 python task3-gen/serve_gen-3.py`
 * Question Answering: https://ratsgo.github.io/nlpbook/docs/qa
-    - `bash task3-qa/train_qa-1.sh`
-    - `bash task3-qa/train_qa-2.sh`
-    - `bash task3-qa/train_qa-3.sh`
-    - `bash task3-qa/eval_qa-1.sh`
-    - `bash task3-qa/eval_qa-2.sh`
-    - `bash task3-qa/eval_qa-3.sh`
-    - `python task3-qa/infer_qa.py`
-    - `python task3-qa/serve_qa.py`
+    - `bash task4-qa/train_qa-1.sh`
+    - `bash task4-qa/train_qa-2.sh`
+    - `bash task4-qa/train_qa-3.sh`
+    - `bash task4-qa/eval_qa-1.sh`
+    - `bash task4-qa/eval_qa-2.sh`
+    - `bash task4-qa/eval_qa-3.sh`
+    - `python task4-qa/infer_qa.py`
+    - `python task4-qa/serve_qa.py`
 * Question Answering (seq2seq):
-    - `bash task3-qa/train_qa_seq2seq-1.sh`
-    - `bash task3-qa/train_qa_seq2seq-2.sh`
-    - `bash task3-qa/eval_qa_seq2seq-1.sh`
-    - `bash task3-qa/eval_qa_seq2seq-2.sh`
-    - `python task3-qa/infer_qa_seq2seq.py`
-    - `python task3-qa/serve_qa_seq2seq.py`
+    - `bash task4-qa/train_qa_seq2seq-1.sh`
+    - `bash task4-qa/train_qa_seq2seq-2.sh`
+    - `bash task4-qa/eval_qa_seq2seq-1.sh`
+    - `bash task4-qa/eval_qa_seq2seq-2.sh`
+    - `python task4-qa/infer_qa_seq2seq.py`
+    - `python task4-qa/serve_qa_seq2seq.py`
