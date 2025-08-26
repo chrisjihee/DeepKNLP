@@ -24,8 +24,5 @@ python task3-qa/evaluate-KorQuAD-v1.py \
        data/korquad/KorQuAD_v1.0_dev.json \
        $OUTPUT_DIR/eval_predictions.json
 
-# 2025.02 (large): {"exact_match": 74.78351229650156, "f1": 81.67965558409172}
-
-# pko-t5-base, lr=3e-5: {"exact_match": 70.31520609629374, "f1": 78.15017267878011}
 # pko-t5-base, lr=5e-5: {"exact_match": 71.56217526844475, "f1": 79.15031011581894}
 # pko-t5-large, lr=5e-5: {"exact_match": 74.07343262902667, "f1": 80.87612476775051}
