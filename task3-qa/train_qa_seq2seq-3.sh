@@ -7,7 +7,7 @@ CUDA_VISIBLE_DEVICES=2 python task3-qa/train_qa_seq2seq.py \
   --overwrite_output_dir \
   --do_train \
   --do_eval \
-  --bf16 --tf32 \
+  --bf16 \
   --num_train_epochs 1 \
   --save_total_limit 1 \
   --save_strategy epoch \
