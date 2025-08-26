@@ -7,7 +7,7 @@ CUDA_VISIBLE_DEVICES=1 python task3-qa/train_qa_seq2seq.py \
   --overwrite_output_dir \
   --do_train \
   --do_eval \
-  --bf16 \
+  --fp16 --tf32 \
   --num_train_epochs 1 \
   --save_total_limit 1 \
   --save_strategy epoch \
@@ -17,7 +17,7 @@ CUDA_VISIBLE_DEVICES=1 python task3-qa/train_qa_seq2seq.py \
   --per_device_train_batch_size 12 \
   --gradient_accumulation_steps 1 \
   --max_seq_length 512 \
-  --learning_rate 3e-5 \
+  --learning_rate 5e-5 \
   --predict_with_generate
 
 python task3-qa/evaluate-KorQuAD-v1.py \

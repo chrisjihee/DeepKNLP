@@ -7,14 +7,14 @@ CUDA_VISIBLE_DEVICES=2 python task3-qa/train_qa_seq2seq.py \
   --overwrite_output_dir \
   --do_train \
   --do_eval \
-  --bf16 \
+  --bf16 --tf32 \
   --num_train_epochs 1 \
   --save_total_limit 1 \
   --save_strategy epoch \
   --eval_strategy epoch \
   --logging_strategy steps \
   --logging_steps 10 \
-  --per_device_train_batch_size 12 \
+  --per_device_train_batch_size 16 \
   --gradient_accumulation_steps 1 \
   --max_seq_length 512 \
   --learning_rate 5e-5 \
