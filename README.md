@@ -44,7 +44,7 @@ Transformer-based Korean Natural Language Processing
     ```
 2. Clone the repository
     ```bash
-    rm -rf DeepKNLP*; git clone https://github.com/chrisjihee/DeepKNLP-25.git; cd DeepKNLP*;
+    rm -rf DeepKNLP*; git clone https://github.com/chrisjihee/DeepKNLP-25.08.git; cd DeepKNLP*;
     rm -rf DeepKNLP*; git clone https://git.etri.re.kr/nlp/DeepKNLP-25.git; cd DeepKNLP*;
     ```
 3. Create a new environment
@@ -52,7 +52,10 @@ Transformer-based Korean Natural Language Processing
     conda search conda -c conda-forge | grep " 25."
     conda install -n base -c conda-forge conda=25.7.0 -y
     conda create -n DeepKNLP-25 python=3.12 -y
-    conda install -n DeepKNLP-25 nvidia/label/cuda-12.8.1::cuda -y
+    conda install -n DeepKNLP-25 -c nvidia cuda=12.8 -y
+    ```
+    ```bash
+    conda install -n DeepKNLP-25 nvidia/label/cuda-12.8.1::cuda -y  # from https://anaconda.org/nvidia/cuda
     ```
 4. Install the required packages
     ```bash
