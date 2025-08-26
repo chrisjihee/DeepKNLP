@@ -53,9 +53,6 @@ Transformer-based Korean Natural Language Processing
     conda create -n DeepKNLP-25 python=3.12 -y
     conda install -n DeepKNLP-25 -c nvidia cuda=12.8 -y
     ```
-    ```bash
-    conda install -n DeepKNLP-25 nvidia/label/cuda-12.8.1::cuda -y  # from https://anaconda.org/nvidia/cuda
-    ```
 4. Install the required packages
     ```bash
     conda activate DeepKNLP-25  # MUST be activated
