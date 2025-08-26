@@ -64,7 +64,7 @@ Transformer-based Korean Natural Language Processing
     pip install -e . --extra-index-url https://download.pytorch.org/whl/cu128
     rm -rf transformers; git clone https://github.com/chrisjihee/transformers.git; pip install -U -e transformers
     rm -rf ratsnlp;      git clone https://github.com/chrisjihee/ratsnlp.git;      pip install -U -e ratsnlp
-    pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|prog|pydantic"
+    pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|rats|prog|pydantic"
     ```
 6. Login to Hugging Face and link the cache
     ```bash
