@@ -12,7 +12,8 @@ CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa.py \
   --eval_strategy epoch \
   --logging_strategy steps \
   --logging_steps 10 \
-  --per_device_train_batch_size 50 \
+  --per_device_train_batch_size 32 \
+  --gradient_accumulation_steps 1 \
   --max_seq_length 384 \
   --doc_stride 128 \
   --learning_rate 3e-5 \
@@ -21,17 +22,17 @@ CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa.py \
 # ***** train metrics *****
 #   epoch                    =        1.0
 #   total_flos               =  6269527GF
-#   train_loss               =     0.7614
-#   train_runtime            = 0:02:19.40
+#   train_loss               =     0.7004
+#   train_runtime            = 0:02:23.49
 #   train_samples            =      34351
-#   train_samples_per_second =    246.406
-#   train_steps_per_second   =      4.935
+#   train_samples_per_second =    239.393
+#   train_steps_per_second   =      7.485
 
 # ***** eval metrics *****
 #   epoch                   =        1.0
-#   eval_exact_match        =       83.8
-#   eval_f1                 =    89.1698
-#   eval_runtime            = 0:00:05.76
+#   eval_exact_match        =       84.4
+#   eval_f1                 =    89.7209
+#   eval_runtime            = 0:00:05.88
 #   eval_samples            =       3464
-#   eval_samples_per_second =    601.255
-#   eval_steps_per_second   =     75.157
+#   eval_samples_per_second =    588.265
+#   eval_steps_per_second   =     73.533
