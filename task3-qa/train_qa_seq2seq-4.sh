@@ -1,5 +1,5 @@
 OUTPUT_DIR=output/korquad/train_qa_by-pkot5-at-dev3
-CUDA_VISIBLE_DEVICES=2 python task3-qa/train_qa_seq2seq.py \
+CUDA_VISIBLE_DEVICES=3 python task3-qa/train_qa_seq2seq.py \
   --train_file data/korquad/train-half.jsonl \
   --validation_file data/korquad/validation.jsonl \
   --model_name_or_path paust/pko-t5-base \
