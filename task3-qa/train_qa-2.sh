@@ -5,6 +5,7 @@ CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa.py \
   --model_name_or_path klue/bert-base \
   --do_train \
   --do_eval \
+  --bf16 \
   --num_train_epochs 1 \
   --save_total_limit 1 \
   --save_strategy epoch \
@@ -17,11 +18,20 @@ CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa.py \
   --learning_rate 3e-5 \
   --overwrite_output_dir
 
+# ***** train metrics *****
+#   epoch                    =        1.0
+#   total_flos               =  6269527GF
+#   train_loss               =     0.7614
+#   train_runtime            = 0:02:19.40
+#   train_samples            =      34351
+#   train_samples_per_second =    246.406
+#   train_steps_per_second   =      4.935
+
 # ***** eval metrics *****
 #   epoch                   =        1.0
-#   eval_exact_match        =    83.9333
-#   eval_f1                 =    89.2887
-#   eval_runtime            = 0:00:18.47
+#   eval_exact_match        =       83.8
+#   eval_f1                 =    89.1698
+#   eval_runtime            = 0:00:05.76
 #   eval_samples            =       3464
-#   eval_samples_per_second =    187.537
-#   eval_steps_per_second   =     23.442
+#   eval_samples_per_second =    601.255
+#   eval_steps_per_second   =     75.157
