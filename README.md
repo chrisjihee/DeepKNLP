@@ -72,7 +72,7 @@ Transformer-based Korean Natural Language Processing
     hf auth login
     rm -f .cache_hf; ln -s ~/.cache/huggingface ./.cache_hf
     ```
-7. Logout from Hugging Face (for token reset)
+7. Logout from Hugging Face
     ```bash
     hf auth logout
     rm -f ~/.huggingface/token
