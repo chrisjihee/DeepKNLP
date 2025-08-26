@@ -48,7 +48,7 @@ Transformer-based Korean Natural Language Processing
     ```
 3. Monitor Nvidia GPU
     ```bash
-    watch -d -n 3 "nvidia-smi"
+    watch -d -n 3 nvidia-smi
     ```
 4. Create a new environment
     ```bash
