@@ -116,8 +116,8 @@ main = typer.Typer()
 
 @main.command()
 def serve(
-        # TODO: "output/korquad/train_qa_seq2seq-*/checkpoint-*", or "paust/pko-t5-base-finetuned-korquad"
-        pretrained: str = typer.Option("output/korquad/train_qa_seq2seq-*/checkpoint-*",
+        # TODO: "output/korquad/train_qa_by-pkot5-*/checkpoint-*", or "paust/pko-t5-base-finetuned-korquad"
+        pretrained: str = typer.Option("output/korquad/train_qa_by-pkot5-*/checkpoint-*",
                                        help="Local pretrained model path or Hugging Face Hub ID"),
         server_host: str = typer.Option("0.0.0.0"),
         server_port: int = typer.Option(9164),
