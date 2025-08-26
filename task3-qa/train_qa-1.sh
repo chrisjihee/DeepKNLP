@@ -27,19 +27,19 @@ python task3-qa/evaluate-KorQuAD-v1.py \
 #***** train metrics *****
 #  epoch                    =        1.0
 #  total_flos               =  7575290GF
-#  train_loss               =     0.5903
-#  train_runtime            = 0:03:30.73
+#  train_loss               =     0.5984
+#  train_runtime            = 0:03:31.41
 #  train_samples            =      31129
-#  train_samples_per_second =    147.714
-#  train_steps_per_second   =     12.314
+#  train_samples_per_second =    147.238
+#  train_steps_per_second   =     12.274
 
 #***** eval metrics *****
 #  epoch                   =        1.0
-#  eval_exact_match        =    86.1275
-#  eval_f1                 =    91.3063
-#  eval_runtime            = 0:00:12.39
+#  eval_exact_match        =    86.5258
+#  eval_f1                 =    91.4983
+#  eval_runtime            = 0:00:12.53
 #  eval_samples            =       6152
-#  eval_samples_per_second =    496.474
-#  eval_steps_per_second   =     62.059
+#  eval_samples_per_second =    490.797
+#  eval_steps_per_second   =      61.35
 
-#{"exact_match": 86.26602009005889, "f1": 94.36013888428921}
+#{"exact_match": 86.66435746449602, "f1": 94.49885248885852}
