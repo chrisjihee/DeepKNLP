@@ -19,20 +19,20 @@ CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa.py \
   --learning_rate 3e-5 \
   --doc_stride 128
 
-# ***** train metrics *****
-#   epoch                    =        1.0
-#   total_flos               =  6269527GF
-#   train_loss               =     0.7004
-#   train_runtime            = 0:02:23.49
-#   train_samples            =      34351
-#   train_samples_per_second =    239.393
-#   train_steps_per_second   =      7.485
+#***** train metrics *****
+#  epoch                    =        1.0
+#  total_flos               =  7580401GF
+#  train_loss               =     0.7348
+#  train_runtime            = 0:03:04.52
+#  train_samples            =      31150
+#  train_samples_per_second =    168.814
+#  train_steps_per_second   =      5.278
 
-# ***** eval metrics *****
-#   epoch                   =        1.0
-#   eval_exact_match        =       84.4
-#   eval_f1                 =    89.7209
-#   eval_runtime            = 0:00:05.88
-#   eval_samples            =       3464
-#   eval_samples_per_second =    588.265
-#   eval_steps_per_second   =     73.533
+#***** eval metrics *****
+#  epoch                   =        1.0
+#  eval_exact_match        =     83.876
+#  eval_f1                 =    89.5267
+#  eval_runtime            = 0:00:12.51
+#  eval_samples            =       6155
+#  eval_samples_per_second =    491.995
+#  eval_steps_per_second   =     61.549
