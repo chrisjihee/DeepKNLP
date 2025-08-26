@@ -53,22 +53,22 @@
 
 ## 🚀 GitHub 배포 전략
 
-### Repository 구조 제안:
+### **Repository 구조**:
 ```
-DeepKNLP-25-stepwise/
-├── step1/
-│   ├── step1_basic_structure.py
-│   └── solution.py
-├── step2/
-│   ├── step2_data_processing.py  
-│   └── solution.py
-├── ...
-└── README.md
+task1-cls/
+├── step1_basic_structure.py      # Public (학생용)
+├── step2_data_processing.py      # Public (학생용)  
+├── step3_training_steps.py       # Public (학생용)
+├── step4_training_loops.py       # Public (학생용)
+├── step5_cli_and_serving.py      # Public (학생용)
+├── solutions/ (Private)          # 강사 전용
+└── README_stepwise_learning.md   # 학습 가이드
 ```
 
-### 점진적 공개 방식:
-- **1주차**: step1만 공개
-- **2주차**: step1 solution + step2 공개
-- **순차적**: 이전 단계 해답 공개와 함께 다음 단계 제공
+### **수업 진행 방식**:
+1. **단계별 순차 공개**: 이전 완료 후 다음 단계 접근
+2. **Pull Request 검토**: 학생 코드 리뷰 및 피드백  
+3. **실시간 피드백**: GitHub Issues/Discussions
+4. **최종 프로젝트**: 완전한 NER 시스템 구축
 
 이렇게 구성하면 수강생들이 체계적으로 Deep Learning과 NLP 시스템을 학습할 수 있을 것입니다! 🎓

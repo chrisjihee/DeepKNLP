@@ -202,13 +202,13 @@ python step5_cli_and_serving.py serve
 
 ### Repository 구조:
 ```
-ner-stepwise-learning/
-├── step1_basic_structure.py      # 학생용 (TODO 포함)
-├── step2_data_processing.py      # 학생용 (TODO 포함)
-├── step3_training_steps.py       # 학생용 (TODO 포함)
-├── step4_training_loops.py       # 학생용 (TODO 포함)
-├── step5_cli_and_serving.py      # 학생용 (TODO 포함)
-├── solutions/                    # 강사 전용 (Private Repository)
+task2-ner/
+├── step1_basic_structure.py      # 1단계: 기본 구조와 모델 초기화
+├── step2_data_processing.py      # 2단계: 데이터 파이프라인 구현
+├── step3_training_steps.py       # 3단계: 학습/평가 스텝 구현
+├── step4_training_loops.py       # 4단계: 전체 학습 루프 구현
+├── step5_cli_and_serving.py      # 5단계: CLI와 웹 서비스 구현
+├── solutions/                    # 단계별 해답
 │   ├── step1_solution.py
 │   ├── step2_solution.py
 │   ├── step3_solution.py

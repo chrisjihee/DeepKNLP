@@ -15,17 +15,20 @@
 
 ```
 task1-cls/
-├── step1_basic_structure.py    # 1단계: 기본 구조와 모델 초기화
-├── step2_data_processing.py    # 2단계: 데이터 파이프라인 구현
-├── step3_training_steps.py     # 3단계: 학습/평가 스텝 구현
-├── step4_training_loops.py     # 4단계: 전체 학습 루프 구현
-├── step5_cli_and_serving.py    # 5단계: CLI와 웹 서비스 구현
-├── step1_solution.py           # 1단계 해답
-├── step2_solution.py           # 2단계 해답
-├── step3_solution.py           # 3단계 해답
-├── step4_solution.py           # 4단계 해답
-├── step5_solution.py           # 5단계 해답
-└── README_stepwise_learning.md # 이 가이드
+├── step1_basic_structure.py      # 1단계: 기본 구조와 모델 초기화
+├── step2_data_processing.py      # 2단계: 데이터 파이프라인 구현
+├── step3_training_steps.py       # 3단계: 학습/평가 스텝 구현
+├── step4_training_loops.py       # 4단계: 전체 학습 루프 구현
+├── step5_cli_and_serving.py      # 5단계: CLI와 웹 서비스 구현
+├── solutions/                    # 단계별 해답
+│   ├── step1_solution.py
+│   ├── step2_solution.py
+│   ├── step3_solution.py
+│   ├── step4_solution.py
+│   └── step5_solution.py
+├── data/                         # 예제 데이터
+├── templates/                    # 웹 UI 템플릿
+└── README_stepwise_learning.md   # 이 파일
 ```
 
 ## 🚀 단계별 학습 과정

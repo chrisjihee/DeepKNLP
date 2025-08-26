@@ -55,7 +55,7 @@
 
 ### **Repository 구조**:
 ```
-ner-stepwise-learning/
+task2-ner/
 ├── step1_basic_structure.py      # Public (학생용)
 ├── step2_data_processing.py      # Public (학생용)  
 ├── step3_training_steps.py       # Public (학생용)
