@@ -2,7 +2,7 @@ OUTPUT_DIR=output/korquad/train_qa_by-pkot5-at-dev1
 CUDA_VISIBLE_DEVICES=1 python task3-qa/train_qa_seq2seq.py \
   --train_file data/korquad/train-half.jsonl \
   --validation_file data/korquad/validation.jsonl \
-  --model_name_or_path paust/pko-flan-t5-large \
+  --model_name_or_path paust/pko-t5-large \
   --output_dir $OUTPUT_DIR \
   --overwrite_output_dir \
   --do_train \
@@ -26,5 +26,6 @@ python task3-qa/evaluate-KorQuAD-v1.py \
 
 # 2025.02 (large): {"exact_match": 74.78351229650156, "f1": 81.67965558409172}
 
-# 2025.08.27 (base, lr=3e-5): {"exact_match": 70.31520609629374, "f1": 78.15017267878011}
-# 2025.08.27 (base, lr=5e-5): {"exact_match": 71.56217526844475, "f1": 79.15031011581894}
+# pko-t5-base, lr=3e-5: {"exact_match": 70.31520609629374, "f1": 78.15017267878011}
+# pko-t5-base, lr=5e-5: {"exact_match": 71.56217526844475, "f1": 79.15031011581894}
+# pko-t5-large, lr=5e-5: {"exact_match": 74.07343262902667, "f1": 80.87612476775051}
