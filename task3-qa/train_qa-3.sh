@@ -1,11 +1,12 @@
 CUDA_VISIBLE_DEVICES=5 python task3-qa/train_qa.py \
   --train_file data/korquad/train-half.jsonl \
-  --validation_file data/korquad/validation-half.jsonl \
-  --output_dir output/korquad/train_qa-by-koelectra \
+  --validation_file data/korquad/validation.jsonl \
   --model_name_or_path monologg/koelectra-base-v3-discriminator \
+  --output_dir output/korquad/train_qa-by-koelectra \
+  --overwrite_output_dir \
   --do_train \
   --do_eval \
-  --bf16 \
+  --fp16 \
   --num_train_epochs 1 \
   --save_total_limit 1 \
   --save_strategy epoch \
@@ -14,10 +15,9 @@ CUDA_VISIBLE_DEVICES=5 python task3-qa/train_qa.py \
   --logging_steps 10 \
   --per_device_train_batch_size 32 \
   --gradient_accumulation_steps 1 \
-  --max_seq_length 384 \
-  --doc_stride 128 \
+  --max_seq_length 512 \
   --learning_rate 3e-5 \
-  --overwrite_output_dir
+  --doc_stride 128
 
 # ***** train metrics *****
 #   epoch                    =        1.0
