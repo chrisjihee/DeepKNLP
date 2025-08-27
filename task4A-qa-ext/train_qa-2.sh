@@ -1,5 +1,5 @@
 OUTPUT_DIR=output/korquad/train_qa-by-kluebert
-CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa.py \
+CUDA_VISIBLE_DEVICES=6 python task4A-qa-ext/train_qa.py \
   --train_file data/korquad/train-half.jsonl \
   --validation_file data/korquad/validation.jsonl \
   --model_name_or_path klue/bert-base \
@@ -20,7 +20,7 @@ CUDA_VISIBLE_DEVICES=6 python task3-qa/train_qa.py \
   --learning_rate 3e-5 \
   --doc_stride 128
 
-python task3-qa/evaluate-KorQuAD-v1.py \
+python task4A-qa-ext/evaluate-KorQuAD-v1.py \
        data/korquad/KorQuAD_v1.0_dev.json \
        $OUTPUT_DIR/eval_predictions.json
 

@@ -1,6 +1,6 @@
 OUTPUT_DIR=output/korquad/train_qa_by-pkot5-at-dev0-test
 CHECKPOINT_DIR=output/korquad/train_qa_by-pkot5-at-dev0/checkpoint-2500
-CUDA_VISIBLE_DEVICES=0 python task3-qa/train_qa_seq2seq.py \
+CUDA_VISIBLE_DEVICES=0 python task4B-qa-gen/train_qa_seq2seq.py \
   --train_file data/korquad/train-half.jsonl \
   --validation_file data/korquad/validation.jsonl \
   --output_dir $OUTPUT_DIR \
@@ -13,7 +13,7 @@ CUDA_VISIBLE_DEVICES=0 python task3-qa/train_qa_seq2seq.py \
   --predict_with_generate
 
 OUTPUT_DIR=output/korquad/train_qa_by-pkot5-at-dev0-test
-python task3-qa/evaluate-KorQuAD-v1.py \
+python task4B-qa-gen/evaluate-KorQuAD-v1.py \
        data/korquad/KorQuAD_v1.0_dev.json \
        $OUTPUT_DIR/eval_predictions.json
 

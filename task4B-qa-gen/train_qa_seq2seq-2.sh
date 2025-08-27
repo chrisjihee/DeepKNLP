@@ -1,5 +1,5 @@
 OUTPUT_DIR=output/korquad/train_qa_by-pkot5-at-dev1
-CUDA_VISIBLE_DEVICES=1 python task3-qa/train_qa_seq2seq.py \
+CUDA_VISIBLE_DEVICES=1 python task4B-qa-gen/train_qa_seq2seq.py \
   --train_file data/korquad/train-half.jsonl \
   --validation_file data/korquad/validation.jsonl \
   --model_name_or_path paust/pko-t5-large \
@@ -20,7 +20,7 @@ CUDA_VISIBLE_DEVICES=1 python task3-qa/train_qa_seq2seq.py \
   --learning_rate 5e-5 \
   --predict_with_generate
 
-python task3-qa/evaluate-KorQuAD-v1.py \
+python task4B-qa-gen/evaluate-KorQuAD-v1.py \
        data/korquad/KorQuAD_v1.0_dev.json \
        $OUTPUT_DIR/eval_predictions.json
 

@@ -91,15 +91,15 @@
 
 ### 실행 예시
 - **Extractive 학습/평가**
-  - `python task4-qa/train_qa.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval`
+  - `python task4A-qa-ext/train_qa.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval`
 - **Seq2Seq 학습/평가**
-  - `python task4-qa/train_qa_seq2seq.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval --predict_with_generate`
+  - `python task4B-qa-gen/train_qa_seq2seq.py --train_file data/train.json --validation_file data/valid.json --output_dir output/korquad --do_train --do_eval --predict_with_generate`
 - **추론 데모**
-  - `python task4-qa/infer_qa.py`
-  - `python task4-qa/infer_qa_seq2seq.py`
+  - `python task4A-qa-ext/infer_qa.py`
+  - `python task4B-qa-gen/infer_qa_seq2seq.py`
 - **서빙**
-  - `python task4-qa/serve_qa.py serve --pretrained "output/korquad/train_qa-*/checkpoint-*"`
-  - `python task4-qa/serve_qa_seq2seq.py serve --pretrained "output/korquad/train_qa_seq2seq-*/checkpoint-*"`
+  - `python task4A-qa-ext/serve_qa.py serve --pretrained "output/korquad/train_qa-*/checkpoint-*"`
+  - `python task4B-qa-gen/serve_qa_seq2seq.py serve --pretrained "output/korquad/train_qa_seq2seq-*/checkpoint-*"`
 
 ### 실전 팁
 - **jsonl 지원**: 로컬 데이터가 jsonl이면 별도 `field` 없이 바로 로드되도록 이미 처리되어 있습니다.
