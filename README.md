@@ -52,8 +52,7 @@ Transformer-based Korean Natural Language Processing
     ```
 4. Create a new environment
     ```bash
-    conda search conda -c conda-forge | grep " 25."
-    conda install -n base -c conda-forge conda=25.7.0 -y
+    conda install -n base conda-forge::conda --all -y
     conda create -n DeepKNLP-25 python=3.12 -y
     conda install -n DeepKNLP-25 -c nvidia cuda=12.8 -y
     ```
