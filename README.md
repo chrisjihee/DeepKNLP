@@ -44,7 +44,7 @@ Transformer-based Korean Natural Language Processing
     ```
 2. Clone the repository
     ```bash
-    rm -rf DeepKNLP*; git clone https://github.com/chrisjihee/DeepKNLP-25.08.git; cd DeepKNLP*;
+    rm -rf DeepKNLP*; git clone https://github.com/chrisjihee/DeepKNLP.git; cd DeepKNLP*;
     ```
 3. Monitor Nvidia GPU
     ```bash
@@ -53,12 +53,12 @@ Transformer-based Korean Natural Language Processing
 4. Create a new environment
     ```bash
     conda install -n base conda-forge::conda --all -y
-    conda create -n DeepKNLP-25 python=3.12 -y
-    conda install -n DeepKNLP-25 -c nvidia cuda=12.8 -y
+    conda create -n DeepKNLP python=3.12 -y
+    conda install -n DeepKNLP -c nvidia cuda=12.8 -y
     ```
 5. Install the required packages
     ```bash
-    conda activate DeepKNLP-25  # MUST be activated
+    conda activate DeepKNLP  # MUST be activated
     pip list; echo ==========; conda --version; echo ==========; conda list
     pip install -e . --extra-index-url https://download.pytorch.org/whl/cu128
     rm -rf transformers; git clone https://github.com/chrisjihee/transformers.git; pip install -U -e transformers
