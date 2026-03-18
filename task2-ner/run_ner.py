@@ -172,7 +172,13 @@ class NERModel(LightningModule):
         """
         return {
             "lang_model": self.lang_model.state_dict(),
-            "args_prog": self.args.prog,
+            "args_prog": {
+                "world_size": self.args.prog.world_size,
+                "local_rank": self.args.prog.local_rank,
+                "global_rank": self.args.prog.global_rank,
+                "global_step": self.args.prog.global_step,
+                "global_epoch": self.args.prog.global_epoch,
+            },
         }
 
     def from_checkpoint(self, ckpt_state: Dict[str, Any]):
@@ -183,7 +189,13 @@ class NERModel(LightningModule):
             ckpt_state: 저장된 체크포인트 상태 딕셔너리
         """
         self.lang_model.load_state_dict(ckpt_state["lang_model"])
-        self.args.prog = ckpt_state["args_prog"]
+        prog_state = ckpt_state.get("args_prog", {})
+        if isinstance(prog_state, Mapping):
+            for key, value in prog_state.items():
+                if hasattr(self.args.prog, key):
+                    setattr(self.args.prog, key, value)
+        else:
+            self.args.prog = prog_state
         self.eval()
 
     def load_checkpoint_file(self, checkpoint_file):
@@ -197,7 +209,7 @@ class NERModel(LightningModule):
             checkpoint_file
         ).exists(), f"Model file not found: {checkpoint_file}"
         self.fabric.print(f"Loading model from {checkpoint_file}")
-        self.from_checkpoint(self.fabric.load(checkpoint_file))
+        self.from_checkpoint(self.fabric.load(checkpoint_file, weights_only=False))
 
     def load_last_checkpoint_file(self, checkpoints_glob):
         """
