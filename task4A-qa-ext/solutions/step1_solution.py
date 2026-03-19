@@ -2,35 +2,15 @@
 
 Paste the following blocks into the matching TODO Step 1 locations.
 
-Raw dataset loading block:
+Hugging Face Hub dataset loading branch:
 
-    if data_args.dataset_name is not None:
-        raw_datasets = load_dataset(
-            data_args.dataset_name,
-            data_args.dataset_config_name,
-            cache_dir=model_args.cache_dir,
-            token=model_args.token,
-            trust_remote_code=model_args.trust_remote_code,
-        )
-    else:
-        data_files = {}
-        extension = None
-        if data_args.train_file is not None:
-            data_files["train"] = data_args.train_file
-            extension = data_args.train_file.split(".")[-1]
-        if data_args.validation_file is not None:
-            data_files["validation"] = data_args.validation_file
-            extension = data_args.validation_file.split(".")[-1]
-        if data_args.test_file is not None:
-            data_files["test"] = data_args.test_file
-            extension = data_args.test_file.split(".")[-1]
-        raw_datasets = load_dataset(
-            extension.replace("jsonl", "json"),
-            data_files=data_files,
-            field=None if extension == "jsonl" else "data",
-            cache_dir=model_args.cache_dir,
-            token=model_args.token,
-        )
+    raw_datasets = load_dataset(
+        data_args.dataset_name,
+        data_args.dataset_config_name,
+        cache_dir=model_args.cache_dir,
+        token=model_args.token,
+        trust_remote_code=model_args.trust_remote_code,
+    )
 
 Model/tokenizer loading block:
 

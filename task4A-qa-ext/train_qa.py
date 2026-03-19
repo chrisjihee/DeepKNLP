@@ -305,11 +305,31 @@ def main():
     #
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
-    # load_dataset(...)
-    # For local KorQuAD json/jsonl files, build data_files and convert jsonl -> json when needed.
-    raise NotImplementedError(
-        "TODO Step 1-1: load the raw QA datasets from Hub or local Korean json/jsonl files here."
-    )
+    if data_args.dataset_name is not None:
+        # TODO Step 1-1:
+        # Use load_dataset(...) to load a QA dataset directly from the Hugging Face Hub.
+        raise NotImplementedError(
+            "TODO Step 1-1: load the QA dataset from the Hugging Face Hub here."
+        )
+    else:
+        data_files = {}
+        extension = None
+        if data_args.train_file is not None:
+            data_files["train"] = data_args.train_file
+            extension = data_args.train_file.split(".")[-1]
+        if data_args.validation_file is not None:
+            data_files["validation"] = data_args.validation_file
+            extension = data_args.validation_file.split(".")[-1]
+        if data_args.test_file is not None:
+            data_files["test"] = data_args.test_file
+            extension = data_args.test_file.split(".")[-1]
+        raw_datasets = load_dataset(
+            extension.replace("jsonl", "json"),
+            data_files=data_files,
+            field=None if extension == "jsonl" else "data",
+            cache_dir=model_args.cache_dir,
+            token=model_args.token,
+        )
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.
 

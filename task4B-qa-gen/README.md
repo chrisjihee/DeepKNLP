@@ -20,7 +20,8 @@ KorQuAD 기반 생성형 QA 실습 태스크입니다.
 
 Step 1:
 - 목표: 데이터 로딩, question-context formatting, tokenizer preprocessing 이해
-- 구현 포인트: raw dataset 로딩 블록, pretrained model/tokenizer 로딩 블록
+- 구현 포인트: Hugging Face Hub dataset 로딩 분기, pretrained model/tokenizer 로딩 블록
+- 참고: local json/jsonl fallback 로딩 코드는 제공됩니다.
 - 실행 예시:
 ```bash
 python task4B-qa-gen/train_qa_seq2seq.py --model_name_or_path paust/pko-t5-base --train_file data/korquad/train-half.jsonl --validation_file data/korquad/validation.jsonl --output_dir output/korquad-seq2seq-lab --do_eval --max_eval_samples 4 --predict_with_generate
