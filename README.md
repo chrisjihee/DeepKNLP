@@ -94,24 +94,32 @@ Transformer-based Korean Natural Language Processing
     - `python task2-ner/run_ner.py serve`
 * Sentence Generation: https://ratsgo.github.io/nlpbook/docs/generation
     - `See task3-gen/README.md`
+    - `python task3-gen/run_gen.py --help`
     - `python task3-gen/run_gen.py step1 --model-preset kogpt2`
     - `python task3-gen/run_gen.py step2 --model-preset kogpt2 --epochs 1`
     - `python task3-gen/run_gen.py step3 --model-preset kogpt2 --port 9001`
+    - `task3-gen/infer_gen.ipynb` is an auxiliary inference notebook, not the main train/serve entrypoint
 * Question Answering (Extractive): https://ratsgo.github.io/nlpbook/docs/qa
     - `See task4A-qa-ext/README.md`
+    - `python task4A-qa-ext/train_qa.py --help`
+    - `python task4A-qa-ext/train_qa.py --model_name_or_path klue/bert-base --train_file data/korquad/train-half.jsonl --validation_file data/korquad/validation.jsonl --output_dir output/korquad-lab --do_eval --max_eval_samples 4`
+    - `python task4A-qa-ext/train_qa.py --model_name_or_path klue/bert-base --train_file data/korquad/train-half.jsonl --validation_file data/korquad/validation.jsonl --output_dir output/korquad-lab --do_train --do_eval`
+    - `python task4A-qa-ext/serve_qa.py --pretrained "output/korquad-lab/checkpoint-*"`
+    - `python task4A-qa-ext/infer_qa.py`
     - `bash task4A-qa-ext/train_qa-1.sh`
     - `bash task4A-qa-ext/train_qa-2.sh`
     - `bash task4A-qa-ext/train_qa-3.sh`
     - `bash task4A-qa-ext/eval_qa-1.sh`
     - `bash task4A-qa-ext/eval_qa-2.sh`
     - `bash task4A-qa-ext/eval_qa-3.sh`
-    - `python task4A-qa-ext/infer_qa.py`
-    - `python task4A-qa-ext/serve_qa.py`
 * Question Answering (Generative):
     - `See task4B-qa-gen/README.md`
+    - `python task4B-qa-gen/train_qa_seq2seq.py --help`
+    - `python task4B-qa-gen/train_qa_seq2seq.py --model_name_or_path paust/pko-t5-base --train_file data/korquad/train-half.jsonl --validation_file data/korquad/validation.jsonl --output_dir output/korquad-seq2seq-lab --do_eval --max_eval_samples 4 --predict_with_generate`
+    - `python task4B-qa-gen/train_qa_seq2seq.py --model_name_or_path paust/pko-t5-base --train_file data/korquad/train-half.jsonl --validation_file data/korquad/validation.jsonl --output_dir output/korquad-seq2seq-lab --do_train --do_eval --predict_with_generate`
+    - `python task4B-qa-gen/serve_qa_seq2seq.py --pretrained "output/korquad-seq2seq-lab/checkpoint-*"`
+    - `python task4B-qa-gen/infer_qa_seq2seq.py`
     - `bash task4B-qa-gen/train_qa_seq2seq-1.sh`
     - `bash task4B-qa-gen/train_qa_seq2seq-2.sh`
     - `bash task4B-qa-gen/eval_qa_seq2seq-1.sh`
     - `bash task4B-qa-gen/eval_qa_seq2seq-2.sh`
-    - `python task4B-qa-gen/infer_qa_seq2seq.py`
-    - `python task4B-qa-gen/serve_qa_seq2seq.py`

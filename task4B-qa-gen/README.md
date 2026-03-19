@@ -40,7 +40,7 @@ Step 3:
 - 구현 포인트: `QAModel.__init__`, `QAModel.infer_one`
 - 실행 예시:
 ```bash
-python task4B-qa-gen/serve_qa_seq2seq.py serve --pretrained "output/korquad-seq2seq-lab/checkpoint-*"
+python task4B-qa-gen/serve_qa_seq2seq.py --pretrained "output/korquad-seq2seq-lab/checkpoint-*"
 ```
 
 해답 파일:
