@@ -109,64 +109,24 @@ class NERModel(LightningModule):
         # 설정 저장
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
 
-        # TODO Step 1:
-        # Complete `complete_step1_model_setup` so the corpus, label map, fast tokenizer, and pretrained model are connected.
-        (
-            self.data,
-            self.labels,
-            self._label_to_id,
-            self._id_to_label,
-            self.lm_config,
-            self.lm_tokenizer,
-            self.lang_model,
-        ) = self.complete_step1_model_setup(args)
+        # TODO Step 1-1:
+        # Build the corpus, label maps, fast tokenizer, and pretrained token-classification model here.
+        # self.data = NERCorpus(args)
+        # self.labels = self.data.labels
+        # self._label_to_id = {...}
+        # self._id_to_label = {...}
+        # self.lm_config = AutoConfig.from_pretrained(...)
+        # self.lm_tokenizer = AutoTokenizer.from_pretrained(...)
+        # self.lang_model = AutoModelForTokenClassification.from_pretrained(...)
+        raise NotImplementedError(
+            "TODO Step 1-1: load the NER corpus, label maps, tokenizer, and pretrained model here."
+        )
 
         # 추론 시 사용할 데이터셋 (validation_step에서 토큰-문자 매핑을 위해 필요)
         self._infer_dataset: NERDataset | None = None
 
         # 라벨 수 검증
         assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
-
-    @staticmethod
-    def complete_step1_model_setup(
-        args: TrainerArguments | TesterArguments | ServerArguments,
-    ) -> tuple[
-        NERCorpus,
-        List[str],
-        Dict[str, int],
-        Dict[int, str],
-        PretrainedConfig,
-        PreTrainedTokenizerFast,
-        PreTrainedModel,
-    ]:
-        raise NotImplementedError(
-            "TODO Step 1-1: build and return corpus, label maps, config, tokenizer, and model."
-        )
-
-    def complete_step1_train_dataloader(self) -> DataLoader:
-        raise NotImplementedError(
-            "TODO Step 1-2: build and return the NER training DataLoader."
-        )
-
-    def complete_step2_training_batch(self, inputs):
-        raise NotImplementedError(
-            "TODO Step 2-1: run one token-classification batch and return (outputs, labels, preds, acc)."
-        )
-
-    def complete_step2_validation_batch(self, inputs):
-        raise NotImplementedError(
-            "TODO Step 2-2: convert token predictions into character-level predictions for evaluation."
-        )
-
-    def complete_step3_tokenize_text(self, text: str):
-        raise NotImplementedError(
-            "TODO Step 3-1: tokenize one sentence for NER inference."
-        )
-
-    def complete_step3_format_inference(self, text: str, inputs, outputs: TokenClassifierOutput) -> Dict[str, Any]:
-        raise NotImplementedError(
-            "TODO Step 3-2: format token-level inference results for the web response."
-        )
 
     @staticmethod
     def label_to_char_labels(label, num_char):
@@ -272,11 +232,16 @@ class NERModel(LightningModule):
         Returns:
             DataLoader: NER 학습용 데이터로더 (랜덤 샘플링)
         """
-        # TODO Step 1:
-        # Finish `complete_step1_train_dataloader` so token/character alignment can be inspected before training.
         # 분산 학습 시 로깅 설정
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        return self.complete_step1_train_dataloader()
+
+        # TODO Step 1-2:
+        # Build the NER training dataset/dataloader here so token/character alignment is visible in context.
+        # train_dataset = NERDataset(...)
+        # train_dataloader = DataLoader(...)
+        raise NotImplementedError(
+            "TODO Step 1-2: build the NER training dataset and dataloader in this block."
+        )
 
     def val_dataloader(self):
         """
@@ -353,9 +318,16 @@ class NERModel(LightningModule):
         Returns:
             Dict: loss와 accuracy를 포함한 딕셔너리
         """
-        # TODO Step 2:
-        # Implement `complete_step2_training_batch` and ignore padded labels correctly.
-        outputs, labels, preds, acc = self.complete_step2_training_batch(inputs)
+        # TODO Step 2-1:
+        # Run the forward pass here, ignore padded labels correctly, and compute token accuracy.
+        # inputs.pop("example_ids")
+        # outputs = self.lang_model(**inputs)
+        # labels = inputs["labels"]
+        # preds = outputs.logits.argmax(dim=-1)
+        # acc = accuracy(..., ignore_index=0)
+        raise NotImplementedError(
+            "TODO Step 2-1: implement the token-classification training step here."
+        )
 
         return {
             "loss": outputs.loss,  # 토큰 분류 손실
@@ -379,9 +351,15 @@ class NERModel(LightningModule):
         Returns:
             Dict: loss, 문자 레벨 예측값들, 문자 레벨 라벨들
         """
-        # TODO Step 2:
-        # Implement `complete_step2_validation_batch` to convert token predictions back to character-level predictions.
-        outputs, list_of_char_pred_ids, list_of_char_label_ids = self.complete_step2_validation_batch(inputs)
+        # TODO Step 2-2:
+        # Convert token predictions back to character-level labels inside this block.
+        # example_ids = inputs.pop("example_ids").tolist()
+        # outputs = self.lang_model(**inputs)
+        # preds = outputs.logits.argmax(dim=-1)
+        # ... build character-level gold/pred label lists using token_to_chars(...)
+        raise NotImplementedError(
+            "TODO Step 2-2: implement token-to-character validation logic here."
+        )
         return {
             "loss": outputs.loss,
             "preds": list_of_char_pred_ids,
@@ -413,14 +391,23 @@ class NERModel(LightningModule):
         Returns:
             Dict: 토큰별 개체명 라벨과 확률을 포함한 결과
         """
-        # TODO Step 3:
-        # Reuse `complete_step3_tokenize_text` and `complete_step3_format_inference` for the web API.
-        # 텍스트를 튜플로 감싸서 토크나이즈 (batch dimension)
-        inputs = self.complete_step3_tokenize_text(text)
+        # TODO Step 3-1:
+        # Tokenize one sentence for NER inference using the same max length and padding settings.
+        # inputs = self.lm_tokenizer(...)
+        raise NotImplementedError(
+            "TODO Step 3-1: tokenize the input sentence for NER inference here."
+        )
 
         # 토큰 분류 모델 추론
         outputs: TokenClassifierOutput = self.lang_model(**inputs)
-        return self.complete_step3_format_inference(text, inputs, outputs)
+
+        # TODO Step 3-2:
+        # Convert token predictions into a web-friendly response with token/label/prob entries.
+        # all_probs = outputs.logits[0].softmax(dim=1)
+        # ... build result = [{"token": ..., "label": ..., "prob": ...}, ...]
+        raise NotImplementedError(
+            "TODO Step 3-2: format the NER inference result dictionary here."
+        )
 
     def run_server(self, server: Flask, *args, **kwargs):
         """

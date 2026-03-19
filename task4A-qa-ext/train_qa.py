@@ -232,58 +232,6 @@ class DataTrainingArguments:
                 assert extension in ["csv", "json", "jsonl"], "`test_file` should be a csv or a json(l) file."  # chrisjihee: include jsonl
 
 
-def complete_step1_load_raw_datasets(data_args: DataTrainingArguments, model_args: ModelArguments):
-    raise NotImplementedError(
-        "TODO Step 1-1: load and return the raw QA datasets from Hub or Korean json/jsonl files."
-    )
-
-
-def complete_step1_load_model_bundle(model_args: ModelArguments):
-    raise NotImplementedError(
-        "TODO Step 1-2: load and return (config, tokenizer, model) for question answering."
-    )
-
-
-def complete_step2_build_trainer(
-    model,
-    training_args,
-    train_dataset,
-    eval_dataset,
-    eval_examples,
-    tokenizer,
-    data_collator,
-    post_processing_function,
-    compute_metrics,
-):
-    raise NotImplementedError(
-        "TODO Step 2-1: connect the provided trainer, post-processing, and metrics."
-    )
-
-
-def complete_step2_run_train(trainer, training_args, last_checkpoint, train_dataset, data_args):
-    raise NotImplementedError(
-        "TODO Step 2-2: run training, save the model, and log/save the train metrics."
-    )
-
-
-def complete_step2_run_eval(trainer, training_args, eval_dataset, data_args):
-    raise NotImplementedError(
-        "TODO Step 2-3: run evaluation and log/save the eval metrics."
-    )
-
-
-def complete_step2_run_predict(trainer, training_args, predict_dataset, predict_examples, data_args):
-    raise NotImplementedError(
-        "TODO Step 2-4: run prediction and log/save the prediction metrics."
-    )
-
-
-def complete_step3_build_serve_hint(output_dir: str) -> str:
-    raise NotImplementedError(
-        "TODO Step 3: build the serve_qa.py command hint for the trained checkpoint directory."
-    )
-
-
 def main():
     # TODO Step 1:
     # Read this file as an adapted Hugging Face example and identify the argument, dataset, tokenizer, and model flow.
@@ -357,7 +305,11 @@ def main():
     #
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
-    raw_datasets = complete_step1_load_raw_datasets(data_args, model_args)
+    # load_dataset(...)
+    # For local KorQuAD json/jsonl files, build data_files and convert jsonl -> json when needed.
+    raise NotImplementedError(
+        "TODO Step 1-1: load the raw QA datasets from Hub or local Korean json/jsonl files here."
+    )
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.
 
@@ -366,7 +318,12 @@ def main():
     # Distributed training:
     # The .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
-    config, tokenizer, model = complete_step1_load_model_bundle(model_args)
+    # config = AutoConfig.from_pretrained(...)
+    # tokenizer = AutoTokenizer.from_pretrained(...)
+    # model = AutoModelForQuestionAnswering.from_pretrained(...)
+    raise NotImplementedError(
+        "TODO Step 1-2: load the QA config, tokenizer, and model here."
+    )
 
     # Tokenizer check: this script requires a fast tokenizer.
     if not isinstance(tokenizer, PreTrainedTokenizerFast):
@@ -649,35 +606,46 @@ def main():
     # TODO Step 2:
     # Use the provided support modules to connect post-processing, metrics, and the Trainer.
     # Initialize our Trainer
-    trainer = complete_step2_build_trainer(
-        model,
-        training_args,
-        train_dataset if training_args.do_train else None,
-        eval_dataset if training_args.do_eval else None,
-        eval_examples if training_args.do_eval else None,
-        tokenizer,
-        data_collator,
-        post_processing_function,
-        compute_metrics,
+    # trainer = QuestionAnsweringTrainer(...)
+    raise NotImplementedError(
+        "TODO Step 2-1: connect QuestionAnsweringTrainer, post-processing, and metrics here."
     )
 
     # Training
     if training_args.do_train:
-        complete_step2_run_train(trainer, training_args, last_checkpoint, train_dataset, data_args)
+        # checkpoint = training_args.resume_from_checkpoint or last_checkpoint
+        # train_result = trainer.train(...)
+        # trainer.save_model(); trainer.log_metrics(...); trainer.save_metrics(...); trainer.save_state()
+        raise NotImplementedError(
+            "TODO Step 2-2: run training and save/log the train metrics here."
+        )
 
     # TODO Step 2:
     # Run evaluation after training and inspect how post-processing turns logits into answer strings.
     # Evaluation
     if training_args.do_eval:
-        complete_step2_run_eval(trainer, training_args, eval_dataset, data_args)
+        # metrics = trainer.evaluate()
+        # trainer.log_metrics("eval", metrics); trainer.save_metrics("eval", metrics)
+        raise NotImplementedError(
+            "TODO Step 2-3: run evaluation and save/log the eval metrics here."
+        )
 
     # TODO Step 2:
     # Run prediction on the test split when available.
     # Prediction
     if training_args.do_predict:
-        complete_step2_run_predict(trainer, training_args, predict_dataset, predict_examples, data_args)
+        # results = trainer.predict(predict_dataset, predict_examples)
+        # trainer.log_metrics("predict", metrics); trainer.save_metrics("predict", metrics)
+        raise NotImplementedError(
+            "TODO Step 2-4: run prediction and save/log the prediction metrics here."
+        )
 
-    logger.info(complete_step3_build_serve_hint(training_args.output_dir))
+    # TODO Step 3:
+    # Build the serve_qa.py command string in place so students see where the training output is reused.
+    # serve_hint = f'python task4A-qa-ext/serve_qa.py serve --pretrained "{training_args.output_dir}/checkpoint-*"'
+    raise NotImplementedError(
+        "TODO Step 3: build and log the serve_qa.py command hint here."
+    )
 
     kwargs = {"finetuned_from": model_args.model_name_or_path, "tasks": "question-answering"}
     if data_args.dataset_name is not None:

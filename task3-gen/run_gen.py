@@ -68,57 +68,36 @@ def get_preset(model_preset: str) -> dict[str, Any]:
     return MODEL_PRESETS[model_preset]
 
 
-def complete_step1_build_train_args(
-    model_preset: str,
-    max_seq_length: int,
-    batch_size: int,
-    learning_rate: float,
-    epochs: int,
-    seed: int,
-) -> GenerationTrainArguments:
-    raise NotImplementedError(
-        "TODO Step 1-1: build and return GenerationTrainArguments from the selected preset."
-    )
-
-
-def complete_step1_load_pretrained_components(model_name: str):
-    raise NotImplementedError(
-        "TODO Step 1-2: load and return the tokenizer/model pair for generation."
-    )
-
-
-def complete_step1_prepare_generation_datasets(
-    args: GenerationTrainArguments,
-    tokenizer: PreTrainedTokenizerFast,
-):
-    raise NotImplementedError(
-        "TODO Step 1-3: download NSMC and return the corpus, train dataset, and validation dataset."
-    )
-
-
-# TODO Step 1:
-# Understand how preset selection determines the pretrained model, output directory, and default port.
 def build_train_args(model_preset: str, max_seq_length: int, batch_size: int, learning_rate: float, epochs: int, seed: int):
-    return complete_step1_build_train_args(
-        model_preset,
-        max_seq_length,
-        batch_size,
-        learning_rate,
-        epochs,
-        seed,
+    # TODO Step 1-1:
+    # Build GenerationTrainArguments directly from the selected preset in this function.
+    # preset = get_preset(model_preset)
+    # return GenerationTrainArguments(...)
+    raise NotImplementedError(
+        "TODO Step 1-1: build GenerationTrainArguments from the chosen preset here."
     )
 
 
-# TODO Step 1:
-# Load the tokenizer and language model that match the chosen preset.
 def load_pretrained_components(model_name: str):
-    return complete_step1_load_pretrained_components(model_name)
+    # TODO Step 1-2:
+    # Load the tokenizer and pretrained language model that match the chosen preset.
+    # tokenizer = PreTrainedTokenizerFast.from_pretrained(...)
+    # model = GPT2LMHeadModel.from_pretrained(...)
+    raise NotImplementedError(
+        "TODO Step 1-2: load the pretrained tokenizer and model here."
+    )
 
 
-# TODO Step 1:
-# Load NSMC and prepare train/validation datasets so students can inspect the preprocessing boundary.
 def prepare_generation_datasets(args: GenerationTrainArguments, tokenizer: PreTrainedTokenizerFast):
-    return complete_step1_prepare_generation_datasets(args, tokenizer)
+    # TODO Step 1-3:
+    # Download NSMC and build the train/validation datasets in this function.
+    # Korpora.fetch(...)
+    # corpus = NsmcCorpus()
+    # train_dataset = GenerationDataset(..., mode="train")
+    # val_dataset = GenerationDataset(..., mode="test")
+    raise NotImplementedError(
+        "TODO Step 1-3: prepare the generation corpus and datasets here."
+    )
 
 
 def build_dataloaders(args: GenerationTrainArguments, train_dataset, val_dataset):
@@ -139,35 +118,6 @@ def build_dataloaders(args: GenerationTrainArguments, train_dataset, val_dataset
         num_workers=args.cpu_workers,
     )
     return train_dataloader, val_dataloader
-
-
-def complete_step2_train_loop(
-    args: GenerationTrainArguments,
-    model: GPT2LMHeadModel,
-    train_dataset,
-    val_dataset,
-) -> None:
-    raise NotImplementedError(
-        "TODO Step 2-1: connect datasets, dataloaders, GenerationTask, and trainer.fit(...)."
-    )
-
-
-def complete_step2_generation_cases() -> list[tuple[str, dict[str, Any]]]:
-    raise NotImplementedError(
-        "TODO Step 2-2: return the decoding strategy list used for comparison."
-    )
-
-
-def complete_step3_load_finetuned_components(args: GenerationDeployArguments, device: torch.device):
-    raise NotImplementedError(
-        "TODO Step 3-1: load and return the fine-tuned model/tokenizer pair for serving."
-    )
-
-
-def complete_step3_build_inference_fn(model: GPT2LMHeadModel, tokenizer: PreTrainedTokenizerFast):
-    raise NotImplementedError(
-        "TODO Step 3-2: build and return the Flask inference function."
-    )
 
 
 def decode_generation(model: GPT2LMHeadModel, tokenizer: PreTrainedTokenizerFast, prompt: str, **generate_kwargs):
@@ -228,9 +178,18 @@ def step2(
     # TODO Step 2:
     # Connect datasets, dataloaders, GenerationTask, and the trainer to run fine-tuning.
     if not skip_train:
-        complete_step2_train_loop(args, model, train_dataset, val_dataset)
+        raise NotImplementedError(
+            "TODO Step 2-1: connect dataloaders, GenerationTask, trainer, and trainer.fit(...) here."
+        )
 
-    for name, generate_kwargs in complete_step2_generation_cases():
+    # TODO Step 2-2:
+    # Define the decoding strategy list in place before iterating.
+    # generation_cases = [("greedy", {...}), ...]
+    raise NotImplementedError(
+        "TODO Step 2-2: define the generation strategy list here."
+    )
+
+    for name, generate_kwargs in generation_cases:
         typer.echo(f"[{name}]")
         typer.echo(
             decode_generation(
@@ -258,8 +217,23 @@ def step3(
 
     # TODO Step 3:
     # Load the fine-tuned checkpoint and connect generation to the Flask web service.
-    model, tokenizer = complete_step3_load_finetuned_components(args, device)
-    inference_fn = complete_step3_build_inference_fn(model, tokenizer)
+    # pretrained_model_config = GPT2Config.from_pretrained(...)
+    # model = GPT2LMHeadModel(pretrained_model_config)
+    # fine_tuned_model_ckpt = torch.load(...)
+    # model.load_state_dict(...)
+    # tokenizer = PreTrainedTokenizerFast.from_pretrained(...)
+    raise NotImplementedError(
+        "TODO Step 3-1: load the fine-tuned model checkpoint and tokenizer here."
+    )
+
+    # TODO Step 3:
+    # Build the Flask inference function in place so the service wiring stays visible.
+    # def inference_fn(...):
+    #     result = decode_generation(...)
+    #     return {"result": result}
+    raise NotImplementedError(
+        "TODO Step 3-2: build the Flask inference function here."
+    )
 
     app = get_web_service_app(
         inference_fn,

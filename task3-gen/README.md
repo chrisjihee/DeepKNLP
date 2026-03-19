@@ -11,12 +11,12 @@
 실습 방식:
 - 기존의 `train_gen-*`, `infer_gen-*`, `serve_gen-*`를 하나의 학생용 실행기로 통합했습니다.
 - 파일 안의 `TODO Step 1`, `TODO Step 2`, `TODO Step 3` 표시를 따라가면 됩니다.
-- 실제로 채워야 하는 핵심 블록은 helper 함수 형태로 비워 두었습니다.
+- 실제로 채워야 하는 핵심 블록은 실제 실행 함수 안에 in-place 형태로 비워 두었습니다.
 - 모델 선택은 preset 인자로 처리합니다.
 
 Step 1:
 - 목표: 모델/토크나이저/코퍼스 로딩과 dry-run generation 확인
-- 구현 포인트: `complete_step1_build_train_args`, `complete_step1_load_pretrained_components`, `complete_step1_prepare_generation_datasets`
+- 구현 포인트: `build_train_args`, `load_pretrained_components`, `prepare_generation_datasets`
 - 실행 예시:
 ```bash
 python task3-gen/run_gen.py step1 --model-preset kogpt2
@@ -24,7 +24,7 @@ python task3-gen/run_gen.py step1 --model-preset kogpt2
 
 Step 2:
 - 목표: 학습과 생성 파라미터 실험 수행
-- 구현 포인트: `complete_step2_train_loop`, `complete_step2_generation_cases`
+- 구현 포인트: `step2`
 - 실행 예시:
 ```bash
 python task3-gen/run_gen.py step2 --model-preset kogpt2 --epochs 1
@@ -32,7 +32,7 @@ python task3-gen/run_gen.py step2 --model-preset kogpt2 --epochs 1
 
 Step 3:
 - 목표: 생성 모델을 웹으로 서빙
-- 구현 포인트: `complete_step3_load_finetuned_components`, `complete_step3_build_inference_fn`
+- 구현 포인트: `step3`
 - 실행 예시:
 ```bash
 python task3-gen/run_gen.py step3 --model-preset kogpt2 --port 9001
@@ -44,7 +44,7 @@ python task3-gen/run_gen.py step3 --model-preset kogpt2 --port 9001
 - `polyglot-ko`
 
 해답 파일:
-- 각 `stepX_solution.py`는 전체 정답 파일이 아니라, 해당 단계에서 채워야 할 helper 답안만 담고 있습니다.
+- 각 `stepX_solution.py`는 전체 정답 파일이 아니라, 해당 단계에서 채워야 할 in-place 블록 스니펫만 담고 있습니다.
 - task3-gen/solutions/step1_solution.py
 - task3-gen/solutions/step2_solution.py
 - task3-gen/solutions/step3_solution.py

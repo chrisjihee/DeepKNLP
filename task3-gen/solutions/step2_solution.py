@@ -1,15 +1,17 @@
-"""Step 2 answer blocks for task3-gen/run_gen.py."""
+"""Step 2 in-place answer snippets for task3-gen/run_gen.py.
 
+Paste the following blocks into the matching TODO Step 2 locations.
 
-def complete_step2_train_loop(args, model, train_dataset, val_dataset):
+step2 training block:
+
     train_dataloader, val_dataloader = build_dataloaders(args, train_dataset, val_dataset)
     task = GenerationTask(model, args)
     trainer = nlpbook.get_trainer(args)
     trainer.fit(task, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)
 
+step2 generation strategy block:
 
-def complete_step2_generation_cases():
-    return [
+    generation_cases = [
         (
             "greedy",
             {
@@ -49,3 +51,4 @@ def complete_step2_generation_cases():
             },
         ),
     ]
+"""

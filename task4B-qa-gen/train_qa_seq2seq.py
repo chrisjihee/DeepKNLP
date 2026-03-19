@@ -272,64 +272,6 @@ class DataTrainingArguments:
             self.val_max_answer_length = self.max_answer_length
 
 
-def complete_step1_load_raw_datasets(data_args: DataTrainingArguments, model_args: ModelArguments):
-    raise NotImplementedError(
-        "TODO Step 1-1: load and return the raw seq2seq QA datasets from Hub or Korean json/jsonl files."
-    )
-
-
-def complete_step1_load_model_bundle(model_args: ModelArguments):
-    raise NotImplementedError(
-        "TODO Step 1-2: load and return (config, tokenizer, model) for seq2seq question answering."
-    )
-
-
-def complete_step2_build_trainer(
-    model,
-    training_args,
-    train_dataset,
-    eval_dataset,
-    eval_examples,
-    tokenizer,
-    data_collator,
-    compute_metrics,
-    post_processing_function,
-):
-    raise NotImplementedError(
-        "TODO Step 2-1: connect the seq2seq trainer, generation metrics, and post-processing."
-    )
-
-
-def complete_step2_run_train(trainer, training_args, last_checkpoint, train_dataset, data_args):
-    raise NotImplementedError(
-        "TODO Step 2-2: run fine-tuning, save the model, and log/save the train metrics."
-    )
-
-
-def complete_step2_run_eval(trainer, training_args, eval_dataset, data_args, max_length: int, num_beams: int | None):
-    raise NotImplementedError(
-        "TODO Step 2-3: run generation-based evaluation and log/save the eval metrics."
-    )
-
-
-def complete_step2_run_predict(
-    trainer,
-    training_args,
-    predict_dataset,
-    predict_examples,
-    data_args,
-):
-    raise NotImplementedError(
-        "TODO Step 2-4: run prediction and log/save the prediction metrics."
-    )
-
-
-def complete_step3_build_serve_hint(output_dir: str) -> str:
-    raise NotImplementedError(
-        "TODO Step 3: build the serve_qa_seq2seq.py command hint for the trained checkpoint directory."
-    )
-
-
 question_answering_column_name_mapping = {
     "squad_v2": ("question", "context", "answer"),
 }
@@ -408,7 +350,11 @@ def main():
     #
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
-    raw_datasets = complete_step1_load_raw_datasets(data_args, model_args)
+    # load_dataset(...)
+    # For local KorQuAD json/jsonl files, build data_files and convert jsonl -> json when needed.
+    raise NotImplementedError(
+        "TODO Step 1-1: load the raw seq2seq QA datasets from Hub or local Korean json/jsonl files here."
+    )
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.
 
@@ -417,7 +363,12 @@ def main():
     # Distributed training:
     # The .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
-    config, tokenizer, model = complete_step1_load_model_bundle(model_args)
+    # config = AutoConfig.from_pretrained(...)
+    # tokenizer = AutoTokenizer.from_pretrained(...)
+    # model = AutoModelForSeq2SeqLM.from_pretrained(...)
+    raise NotImplementedError(
+        "TODO Step 1-2: load the seq2seq config, tokenizer, and model here."
+    )
 
     # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
     # on a small vocab and want a smaller embedding size, remove this test.
@@ -685,23 +636,21 @@ def main():
     # TODO Step 2:
     # Use the provided trainer module to connect generation outputs, post-processing, and metrics.
     # Initialize our Trainer
-    trainer = complete_step2_build_trainer(
-        model,
-        training_args,
-        train_dataset if training_args.do_train else None,
-        eval_dataset if training_args.do_eval else None,
-        eval_examples if training_args.do_eval else None,
-        tokenizer,
-        data_collator,
-        compute_metrics if training_args.predict_with_generate else None,
-        post_processing_function,
+    # trainer = QuestionAnsweringSeq2SeqTrainer(...)
+    raise NotImplementedError(
+        "TODO Step 2-1: connect the seq2seq trainer, generation metrics, and post-processing here."
     )
 
     # TODO Step 2:
     # Run fine-tuning with predict_with_generate enabled when you want generation-based evaluation.
     # Training
     if training_args.do_train:
-        complete_step2_run_train(trainer, training_args, last_checkpoint, train_dataset, data_args)
+        # checkpoint = training_args.resume_from_checkpoint or last_checkpoint
+        # train_result = trainer.train(...)
+        # trainer.save_model(); trainer.log_metrics(...); trainer.save_metrics(...); trainer.save_state()
+        raise NotImplementedError(
+            "TODO Step 2-2: run fine-tuning and save/log the train metrics here."
+        )
 
     # TODO Step 2:
     # Run evaluation and inspect the saved eval_predictions.json output.
@@ -714,13 +663,26 @@ def main():
     )
     num_beams = data_args.num_beams if data_args.num_beams is not None else training_args.generation_num_beams
     if training_args.do_eval:
-        complete_step2_run_eval(trainer, training_args, eval_dataset, data_args, max_length, num_beams)
+        # metrics = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval")
+        # trainer.log_metrics("eval", metrics); trainer.save_metrics("eval", metrics)
+        raise NotImplementedError(
+            "TODO Step 2-3: run generation-based evaluation and save/log the eval metrics here."
+        )
 
     # Prediction
     if training_args.do_predict:
-        complete_step2_run_predict(trainer, training_args, predict_dataset, predict_examples, data_args)
+        # results = trainer.predict(predict_dataset, predict_examples)
+        # trainer.log_metrics("predict", metrics); trainer.save_metrics("predict", metrics)
+        raise NotImplementedError(
+            "TODO Step 2-4: run prediction and save/log the prediction metrics here."
+        )
 
-    logger.info(complete_step3_build_serve_hint(training_args.output_dir))
+    # TODO Step 3:
+    # Build the serve_qa_seq2seq.py command string in place so students see where the training output is reused.
+    # serve_hint = f'python task4B-qa-gen/serve_qa_seq2seq.py serve --pretrained "{training_args.output_dir}/checkpoint-*"'
+    raise NotImplementedError(
+        "TODO Step 3: build and log the serve_qa_seq2seq.py command hint here."
+    )
 
     if training_args.push_to_hub:
         kwargs = {"finetuned_from": model_args.model_name_or_path, "tasks": "question-answering"}

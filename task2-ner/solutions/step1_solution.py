@@ -1,31 +1,29 @@
-"""Step 1 answer blocks for task2-ner/run_ner.py.
+"""Step 1 in-place answer snippets for task2-ner/run_ner.py.
 
-Paste these functions into `NERModel`.
-"""
+Paste the following blocks into the matching TODO Step 1 locations.
 
+NERModel.__init__:
 
-def complete_step1_model_setup(args):
-    data = NERCorpus(args)
-    labels = data.labels
-    label_to_id = {label: index for index, label in enumerate(labels)}
-    id_to_label = {index: label for index, label in enumerate(labels)}
-    lm_config = AutoConfig.from_pretrained(
+    self.data: NERCorpus = NERCorpus(args)
+    self.labels: List[str] = self.data.labels
+    self._label_to_id: Dict[str, int] = {label: index for index, label in enumerate(self.labels)}
+    self._id_to_label: Dict[int, str] = {index: label for index, label in enumerate(self.labels)}
+    self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
         args.model.pretrained,
-        num_labels=data.num_labels,
+        num_labels=self.data.num_labels,
     )
-    lm_tokenizer = AutoTokenizer.from_pretrained(
+    self.lm_tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(
         args.model.pretrained,
         use_fast=True,
     )
-    assert isinstance(lm_tokenizer, PreTrainedTokenizerFast)
-    lang_model = AutoModelForTokenClassification.from_pretrained(
+    assert isinstance(self.lm_tokenizer, PreTrainedTokenizerFast)
+    self.lang_model: PreTrainedModel = AutoModelForTokenClassification.from_pretrained(
         args.model.pretrained,
-        config=lm_config,
+        config=self.lm_config,
     )
-    return data, labels, label_to_id, id_to_label, lm_config, lm_tokenizer, lang_model
 
+NERModel.train_dataloader:
 
-def complete_step1_train_dataloader(self):
     train_dataset = NERDataset("train", data=self.data, tokenizer=self.lm_tokenizer)
     train_dataloader = DataLoader(
         train_dataset,
@@ -38,3 +36,4 @@ def complete_step1_train_dataloader(self):
     self.fabric.print(f"Created train_dataset providing {len(train_dataset)} examples")
     self.fabric.print(f"Created train_dataloader providing {len(train_dataloader)} batches")
     return train_dataloader
+"""

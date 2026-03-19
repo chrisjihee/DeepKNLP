@@ -1,11 +1,10 @@
-"""Step 3 answer blocks for task2-ner/run_ner.py.
+"""Step 3 in-place answer snippets for task2-ner/run_ner.py.
 
-Paste these functions into `NERModel` after finishing Step 1 and Step 2.
-"""
+Paste the following blocks into the matching TODO Step 3 locations.
 
+NERModel.infer_one tokenization block:
 
-def complete_step3_tokenize_text(self, text):
-    return self.lm_tokenizer(
+    inputs = self.lm_tokenizer(
         tupled(text),
         max_length=self.args.model.seq_len,
         padding="max_length",
@@ -13,8 +12,8 @@ def complete_step3_tokenize_text(self, text):
         return_tensors="pt",
     )
 
+NERModel.infer_one formatting block:
 
-def complete_step3_format_inference(self, text, inputs, outputs):
     all_probs = outputs.logits[0].softmax(dim=1)
     top_probs, top_preds = torch.topk(all_probs, dim=1, k=1)
     tokens = self.lm_tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
@@ -34,3 +33,4 @@ def complete_step3_format_inference(self, text, inputs, outputs):
         "sentence": text,
         "result": result,
     }
+"""

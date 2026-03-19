@@ -97,45 +97,18 @@ class NSMCModel(LightningModule):
         super().__init__()
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
 
-        # TODO Step 1:
-        # Complete `complete_step1_model_setup` so the corpus, config, tokenizer, and pretrained model are connected.
-        self.data, self.lm_config, self.lm_tokenizer, self.lang_model = self.complete_step1_model_setup(args)
+        # TODO Step 1-1:
+        # Connect the corpus, config, tokenizer, and pretrained classifier in this block.
+        # self.data = NsmcCorpus(args)
+        # self.lm_config = AutoConfig.from_pretrained(...)
+        # self.lm_tokenizer = AutoTokenizer.from_pretrained(...)
+        # self.lang_model = AutoModelForSequenceClassification.from_pretrained(...)
+        raise NotImplementedError(
+            "TODO Step 1-1: load the NSMC corpus, config, tokenizer, and pretrained classifier here."
+        )
 
         # 라벨 수 검증 (이진 분류: 2개)
         assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
-
-    @staticmethod
-    def complete_step1_model_setup(
-        args: TrainerArguments | TesterArguments | ServerArguments,
-    ) -> tuple[NsmcCorpus, PretrainedConfig, PreTrainedTokenizer, PreTrainedModel]:
-        raise NotImplementedError(
-            "TODO Step 1-1: build and return (data, lm_config, lm_tokenizer, lang_model)."
-        )
-
-    def complete_step1_train_dataloader(self) -> DataLoader:
-        raise NotImplementedError(
-            "TODO Step 1-2: build and return the training DataLoader."
-        )
-
-    def complete_step2_training_batch(self, inputs):
-        raise NotImplementedError(
-            "TODO Step 2-1: run one training batch and return (outputs, labels, preds, acc)."
-        )
-
-    def complete_step2_eval_batch(self, inputs):
-        raise NotImplementedError(
-            "TODO Step 2-2: run one evaluation batch and return (outputs, labels, preds)."
-        )
-
-    def complete_step3_tokenize_text(self, text: str):
-        raise NotImplementedError(
-            "TODO Step 3-1: tokenize one input sentence for inference."
-        )
-
-    def complete_step3_format_inference(self, text: str, prob: torch.Tensor) -> Dict[str, str]:
-        raise NotImplementedError(
-            "TODO Step 3-2: format the prediction probabilities for the web response."
-        )
 
     def to_checkpoint(self) -> Dict[str, Any]:
         """
@@ -212,11 +185,16 @@ class NSMCModel(LightningModule):
         Returns:
             DataLoader: 학습용 데이터로더 (랜덤 샘플링)
         """
-        # TODO Step 1:
-        # Finish `complete_step1_train_dataloader` so preprocessing can be checked before real training.
         # 분산 학습 시 로깅 설정 (rank 0에서만 info 레벨)
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-        return self.complete_step1_train_dataloader()
+
+        # TODO Step 1-2:
+        # Build the training dataset/dataloader here so students trace preprocessing in context.
+        # train_dataset = ClassificationDataset(...)
+        # train_dataloader = DataLoader(...)
+        raise NotImplementedError(
+            "TODO Step 1-2: build the training dataset and dataloader in this block."
+        )
 
     def val_dataloader(self):
         """
@@ -291,9 +269,15 @@ class NSMCModel(LightningModule):
         Returns:
             Dict: loss와 accuracy를 포함한 딕셔너리
         """
-        # TODO Step 2:
-        # Implement `complete_step2_training_batch` for the one-batch forward pass, loss usage, and accuracy calculation.
-        outputs, labels, preds, acc = self.complete_step2_training_batch(inputs)
+        # TODO Step 2-1:
+        # Run the forward pass here and compute labels/preds/accuracy in place.
+        # outputs = self.lang_model(**inputs)
+        # labels = inputs["labels"]
+        # preds = outputs.logits.argmax(dim=-1)
+        # acc = accuracy(preds=preds, labels=labels)
+        raise NotImplementedError(
+            "TODO Step 2-1: implement the training forward pass and accuracy calculation here."
+        )
         return {
             "loss": outputs.loss,  # 손실값
             "acc": acc,  # 정확도
@@ -311,7 +295,14 @@ class NSMCModel(LightningModule):
         Returns:
             Dict: loss, 예측값들, 라벨들을 포함한 딕셔너리
         """
-        outputs, labels, preds = self.complete_step2_eval_batch(inputs)
+        # TODO Step 2-2:
+        # Reuse the model forward pass here and convert labels/preds to python lists for aggregation.
+        # outputs = self.lang_model(**inputs)
+        # labels = inputs["labels"].tolist()
+        # preds = outputs.logits.argmax(dim=-1).tolist()
+        raise NotImplementedError(
+            "TODO Step 2-2: implement the validation/test batch logic here."
+        )
         return {
             "loss": outputs.loss,
             "preds": preds,  # 전체 검증을 위해 예측값들 수집
@@ -343,15 +334,25 @@ class NSMCModel(LightningModule):
         Returns:
             Dict: 예측 결과와 확률들을 포함한 딕셔너리
         """
-        # TODO Step 3:
-        # Reuse `complete_step3_tokenize_text` and `complete_step3_format_inference` to build single-sentence inference.
-        # 텍스트 토크나이즈
-        inputs = self.complete_step3_tokenize_text(text)
+        # TODO Step 3-1:
+        # Tokenize one sentence in place using the same seq_len/padding/truncation settings as training.
+        # inputs = self.lm_tokenizer(...)
+        raise NotImplementedError(
+            "TODO Step 3-1: tokenize the input sentence for inference here."
+        )
 
         # 모델 추론
         outputs: SequenceClassifierOutput = self.lang_model(**inputs)
         prob = outputs.logits.softmax(dim=1)  # 확률로 변환
-        return self.complete_step3_format_inference(text, prob)
+
+        # TODO Step 3-2:
+        # Format the predicted label and confidence strings for the Flask response.
+        # pred = ...
+        # positive_prob = ...
+        # negative_prob = ...
+        raise NotImplementedError(
+            "TODO Step 3-2: format the inference result dictionary here."
+        )
 
     def run_server(self, server: Flask, *args, **kwargs):
         """

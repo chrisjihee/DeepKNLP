@@ -1,40 +1,39 @@
-"""Step 1 answer blocks for task4B-qa-gen/train_qa_seq2seq.py."""
+"""Step 1 in-place answer snippets for task4B-qa-gen/train_qa_seq2seq.py.
 
-from datasets import load_dataset
-from transformers import AutoConfig, AutoModelForSeq2SeqLM, AutoTokenizer
+Paste the following blocks into the matching TODO Step 1 locations.
 
+Raw dataset loading block:
 
-def complete_step1_load_raw_datasets(data_args, model_args):
     if data_args.dataset_name is not None:
-        return load_dataset(
+        raw_datasets = load_dataset(
             data_args.dataset_name,
             data_args.dataset_config_name,
             cache_dir=model_args.cache_dir,
             token=model_args.token,
             trust_remote_code=model_args.trust_remote_code,
         )
+    else:
+        data_files = {}
+        extension = None
+        if data_args.train_file is not None:
+            data_files["train"] = data_args.train_file
+            extension = data_args.train_file.split(".")[-1]
+        if data_args.validation_file is not None:
+            data_files["validation"] = data_args.validation_file
+            extension = data_args.validation_file.split(".")[-1]
+        if data_args.test_file is not None:
+            data_files["test"] = data_args.test_file
+            extension = data_args.test_file.split(".")[-1]
+        raw_datasets = load_dataset(
+            extension.replace("jsonl", "json"),
+            data_files=data_files,
+            field=None if extension == "jsonl" else "data",
+            cache_dir=model_args.cache_dir,
+            token=model_args.token,
+        )
 
-    data_files = {}
-    extension = None
-    if data_args.train_file is not None:
-        data_files["train"] = data_args.train_file
-        extension = data_args.train_file.split(".")[-1]
-    if data_args.validation_file is not None:
-        data_files["validation"] = data_args.validation_file
-        extension = data_args.validation_file.split(".")[-1]
-    if data_args.test_file is not None:
-        data_files["test"] = data_args.test_file
-        extension = data_args.test_file.split(".")[-1]
-    return load_dataset(
-        extension.replace("jsonl", "json"),
-        data_files=data_files,
-        field=None if extension == "jsonl" else "data",
-        cache_dir=model_args.cache_dir,
-        token=model_args.token,
-    )
+Model/tokenizer loading block:
 
-
-def complete_step1_load_model_bundle(model_args):
     config = AutoConfig.from_pretrained(
         model_args.config_name if model_args.config_name else model_args.model_name_or_path,
         cache_dir=model_args.cache_dir,
@@ -59,4 +58,4 @@ def complete_step1_load_model_bundle(model_args):
         token=model_args.token,
         trust_remote_code=model_args.trust_remote_code,
     )
-    return config, tokenizer, model
+"""

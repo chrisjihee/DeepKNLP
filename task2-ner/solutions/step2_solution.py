@@ -1,21 +1,19 @@
-"""Step 2 answer blocks for task2-ner/run_ner.py.
+"""Step 2 in-place answer snippets for task2-ner/run_ner.py.
 
-Paste these functions into `NERModel` after finishing Step 1.
-"""
+Paste the following blocks into the matching TODO Step 2 locations.
 
+NERModel.training_step:
 
-def complete_step2_training_batch(self, inputs):
     inputs.pop("example_ids")
-    outputs = self.lang_model(**inputs)
-    labels = inputs["labels"]
-    preds = outputs.logits.argmax(dim=-1)
-    acc = accuracy(preds=preds, labels=labels, ignore_index=0)
-    return outputs, labels, preds, acc
+    outputs: TokenClassifierOutput = self.lang_model(**inputs)
+    labels: Tensor = inputs["labels"]
+    preds: Tensor = outputs.logits.argmax(dim=-1)
+    acc: Tensor = accuracy(preds=preds, labels=labels, ignore_index=0)
 
+NERModel.validation_step:
 
-def complete_step2_validation_batch(self, inputs):
     example_ids = inputs.pop("example_ids").tolist()
-    outputs = self.lang_model(**inputs)
+    outputs: TokenClassifierOutput = self.lang_model(**inputs)
     preds = outputs.logits.argmax(dim=-1)
 
     dict_of_char_label_ids = {}
@@ -45,5 +43,4 @@ def complete_step2_validation_batch(self, inputs):
         char_pred_ids = dict_of_char_pred_ids[encoded_example.idx]
         list_of_char_pred_ids.extend(char_pred_ids)
         list_of_char_label_ids.extend(char_label_ids)
-
-    return outputs, list_of_char_pred_ids, list_of_char_label_ids
+"""

@@ -1,7 +1,9 @@
-"""Step 1 answer blocks for task3-gen/run_gen.py."""
+"""Step 1 in-place answer snippets for task3-gen/run_gen.py.
 
+Paste the following blocks into the matching TODO Step 1 locations.
 
-def complete_step1_build_train_args(model_preset, max_seq_length, batch_size, learning_rate, epochs, seed):
+build_train_args:
+
     preset = get_preset(model_preset)
     return GenerationTrainArguments(
         pretrained_model_name=preset["model_name"],
@@ -15,15 +17,15 @@ def complete_step1_build_train_args(model_preset, max_seq_length, batch_size, le
         seed=seed,
     )
 
+load_pretrained_components:
 
-def complete_step1_load_pretrained_components(model_name):
     tokenizer = PreTrainedTokenizerFast.from_pretrained(model_name, eos_token="</s>")
     model = GPT2LMHeadModel.from_pretrained(model_name)
     model.eval()
     return tokenizer, model
 
+prepare_generation_datasets:
 
-def complete_step1_prepare_generation_datasets(args, tokenizer):
     nlpbook.set_seed(args)
     Korpora.fetch(
         corpus_name=args.downstream_corpus_name,
@@ -34,3 +36,4 @@ def complete_step1_prepare_generation_datasets(args, tokenizer):
     train_dataset = GenerationDataset(args=args, corpus=corpus, tokenizer=tokenizer, mode="train")
     val_dataset = GenerationDataset(args=args, corpus=corpus, tokenizer=tokenizer, mode="test")
     return corpus, train_dataset, val_dataset
+"""

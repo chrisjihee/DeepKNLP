@@ -1,8 +1,10 @@
-"""Step 3 answer block for task4A-qa-ext/train_qa.py."""
+"""Step 3 in-place answer snippet for task4A-qa-ext/train_qa.py.
 
+Paste the following block into the matching TODO Step 3 location.
 
-def complete_step3_build_serve_hint(output_dir):
-    return (
+    serve_hint = (
         "Step 3 serve command: "
-        f'python task4A-qa-ext/serve_qa.py serve --pretrained "{output_dir}/checkpoint-*"'
+        f'python task4A-qa-ext/serve_qa.py serve --pretrained "{training_args.output_dir}/checkpoint-*"'
     )
+    logger.info(serve_hint)
+"""
