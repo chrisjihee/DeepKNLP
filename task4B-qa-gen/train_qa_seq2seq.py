@@ -14,6 +14,14 @@
 # limitations under the License.
 """
 Fine-tuning the library's seq2seq models for question answering using the 🤗 Seq2SeqTrainer.
+
+Lab structure:
+- Step 1: understand the HF example flow, data loading, question-context formatting, and preprocessing
+- Step 2: connect Seq2SeqTrainer, generation-based evaluation, and train/eval/predict execution
+- Step 3: use the trained checkpoint with serve_qa_seq2seq.py for web serving
+
+Students mainly work in this file.
+Support modules such as trainer_seq2seq_qa.py are intentionally provided and imported.
 """
 # You can also adapt this script on your own question answering task. Pointers for this are left as comments.
 
@@ -270,6 +278,8 @@ question_answering_column_name_mapping = {
 
 
 def main():
+    # TODO Step 1:
+    # Read this file as an adapted Hugging Face example and identify the argument, dataset, tokenizer, and model flow.
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
@@ -329,6 +339,8 @@ def main():
     # Set seed before initializing model.
     set_seed(training_args.seed)
 
+    # TODO Step 1:
+    # Complete the dataset loading and preprocessing path, including question-context formatting for Korean QA.
     # Get the datasets: you can either provide your own CSV/JSON/TXT training and evaluation files (see below)
     # or just provide the name of one of the public datasets available on the hub at https://huggingface.co/datasets/
     # (the dataset will be downloaded automatically from the datasets Hub).
@@ -663,6 +675,8 @@ def main():
         references = [{"id": ex["id"], "answers": ex[answer_column]} for ex in examples]
         return EvalPrediction(predictions=formatted_predictions, label_ids=references)
 
+    # TODO Step 2:
+    # Use the provided trainer module to connect generation outputs, post-processing, and metrics.
     # Initialize our Trainer
     trainer = QuestionAnsweringSeq2SeqTrainer(
         model=model,
@@ -676,6 +690,8 @@ def main():
         post_process_function=post_processing_function,
     )
 
+    # TODO Step 2:
+    # Run fine-tuning with predict_with_generate enabled when you want generation-based evaluation.
     # Training
     if training_args.do_train:
         checkpoint = None
@@ -696,6 +712,8 @@ def main():
         trainer.save_metrics("train", metrics)
         trainer.save_state()
 
+    # TODO Step 2:
+    # Run evaluation and inspect the saved eval_predictions.json output.
     # Evaluation
     results = {}
     max_length = (

@@ -81,26 +81,24 @@ Transformer-based Korean Natural Language Processing
 ## Target Tasks
 
 * Sentence Classification: https://ratsgo.github.io/nlpbook/docs/doc_cls
+    - `See task1-cls/README.md`
     - `python task1-cls/run_cls.py --help`
     - `python task1-cls/run_cls.py train`
     - `python task1-cls/run_cls.py test`
     - `python task1-cls/run_cls.py serve`
 * Sequence Labelling: https://ratsgo.github.io/nlpbook/docs/ner
+    - `See task2-ner/README.md`
     - `python task2-ner/run_ner.py --help`
     - `python task2-ner/run_ner.py train`
     - `python task2-ner/run_ner.py test`
     - `python task2-ner/run_ner.py serve`
 * Sentence Generation: https://ratsgo.github.io/nlpbook/docs/generation
-    - `CUDA_VISIBLE_DEVICES=7 python task3-gen/infer_gen-1.py`
-    - `CUDA_VISIBLE_DEVICES=6 python task3-gen/infer_gen-2.py`
-    - `CUDA_VISIBLE_DEVICES=5 python task3-gen/infer_gen-3.py`
-    - `CUDA_VISIBLE_DEVICES=7 python task3-gen/train_gen-1.py`
-    - `CUDA_VISIBLE_DEVICES=6 python task3-gen/train_gen-2.py`
-    - `CUDA_VISIBLE_DEVICES=5 python task3-gen/train_gen-3.py`
-    - `CUDA_VISIBLE_DEVICES=7 python task3-gen/serve_gen-1.py`
-    - `CUDA_VISIBLE_DEVICES=6 python task3-gen/serve_gen-2.py`
-    - `CUDA_VISIBLE_DEVICES=5 python task3-gen/serve_gen-3.py`
+    - `See task3-gen/README.md`
+    - `python task3-gen/run_gen.py step1 --model-preset kogpt2`
+    - `python task3-gen/run_gen.py step2 --model-preset kogpt2 --epochs 1`
+    - `python task3-gen/run_gen.py step3 --model-preset kogpt2 --port 9001`
 * Question Answering (Extractive): https://ratsgo.github.io/nlpbook/docs/qa
+    - `See task4A-qa-ext/README.md`
     - `bash task4A-qa-ext/train_qa-1.sh`
     - `bash task4A-qa-ext/train_qa-2.sh`
     - `bash task4A-qa-ext/train_qa-3.sh`
@@ -110,6 +108,7 @@ Transformer-based Korean Natural Language Processing
     - `python task4A-qa-ext/infer_qa.py`
     - `python task4A-qa-ext/serve_qa.py`
 * Question Answering (Generative):
+    - `See task4B-qa-gen/README.md`
     - `bash task4B-qa-gen/train_qa_seq2seq-1.sh`
     - `bash task4B-qa-gen/train_qa_seq2seq-2.sh`
     - `bash task4B-qa-gen/eval_qa_seq2seq-1.sh`

@@ -1,3 +1,22 @@
+"""Sequence Labelling lab entrypoint.
+
+Students work in this single file cumulatively.
+
+Step 1:
+- complete model/tokenizer/data loading and preprocessing wiring
+- verify that `python task2-ner/run_ner.py train` reaches the pre-training boundary
+
+Step 2:
+- complete token classification training, validation, testing, and inference flow
+- verify that training and evaluation commands work end-to-end
+
+Step 3:
+- complete serving and verify the Flask demo works
+
+Reference:
+- https://ratsgo.github.io/nlpbook/docs/ner
+"""
+
 # === 기본 라이브러리 ===
 import logging  # 로깅 시스템
 import os  # 운영체제 인터페이스
@@ -89,6 +108,9 @@ class NERModel(LightningModule):
         super().__init__()
         # 설정 저장
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
+
+        # TODO Step 1:
+        # Understand how the NER corpus, label map, fast tokenizer, and pretrained model are connected.
 
         # NER 데이터 코퍼스 초기화
         self.data: NERCorpus = NERCorpus(args)
@@ -238,6 +260,8 @@ class NERModel(LightningModule):
         Returns:
             DataLoader: NER 학습용 데이터로더 (랜덤 샘플링)
         """
+        # TODO Step 1:
+        # Finish the dataset and dataloader wiring so token/character alignment can be inspected before training.
         # 분산 학습 시 로깅 설정
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
 
@@ -337,6 +361,8 @@ class NERModel(LightningModule):
         Returns:
             Dict: loss와 accuracy를 포함한 딕셔너리
         """
+        # TODO Step 2:
+        # Implement the one-batch token classification logic and ignore padded labels correctly.
         # example_ids는 학습에 불필요하므로 제거
         inputs.pop("example_ids")
 
@@ -372,6 +398,8 @@ class NERModel(LightningModule):
         Returns:
             Dict: loss, 문자 레벨 예측값들, 문자 레벨 라벨들
         """
+        # TODO Step 2:
+        # Convert token predictions back to character-level predictions for evaluation.
         # 예제 ID 추출 (토큰-문자 매핑을 위해 필요)
         example_ids: List[int] = inputs.pop("example_ids").tolist()
 
@@ -501,6 +529,8 @@ class NERModel(LightningModule):
         Returns:
             Dict: 토큰별 개체명 라벨과 확률을 포함한 결과
         """
+        # TODO Step 3:
+        # Reuse the trained tokenizer/model pair to build token-level inference for the web API.
         # 텍스트를 튜플로 감싸서 토크나이즈 (batch dimension)
         inputs = self.lm_tokenizer(
             tupled(text),

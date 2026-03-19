@@ -14,6 +14,14 @@
 # limitations under the License.
 """
 Fine-tuning the library models for question answering using a slightly adapted version of the 🤗 Trainer.
+
+Lab structure:
+- Step 1: understand the HF example flow, data loading, tokenizer setup, and preprocessing
+- Step 2: connect Trainer, post-processing, metrics, and train/eval/predict execution
+- Step 3: use the trained checkpoint with serve_qa.py for web serving
+
+Students mainly work in this file.
+Support modules such as trainer_qa.py and utils_qa.py are intentionally provided and imported.
 """
 # You can also adapt this script on your own question answering task. Pointers for this are left as comments.
 
@@ -225,6 +233,8 @@ class DataTrainingArguments:
 
 
 def main():
+    # TODO Step 1:
+    # Read this file as an adapted Hugging Face example and identify the argument, dataset, tokenizer, and model flow.
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
@@ -284,6 +294,8 @@ def main():
     # Set seed before initializing model.
     set_seed(training_args.seed)
 
+    # TODO Step 1:
+    # Complete the dataset loading and preprocessing path, including the Korean jsonl-based KorQuAD files.
     # Get the datasets: you can either provide your own CSV/JSON/TXT training and evaluation files (see below)
     # or just provide the name of one of the public datasets available on the hub at https://huggingface.co/datasets/
     # (the dataset will be downloaded automatically from the datasets Hub).
@@ -633,6 +645,8 @@ def main():
     def compute_metrics(p: EvalPrediction):
         return metric.compute(predictions=p.predictions, references=p.label_ids)
 
+    # TODO Step 2:
+    # Use the provided support modules to connect post-processing, metrics, and the Trainer.
     # Initialize our Trainer
     trainer = QuestionAnsweringTrainer(
         model=model,
@@ -666,6 +680,8 @@ def main():
         trainer.save_metrics("train", metrics)
         trainer.save_state()
 
+    # TODO Step 2:
+    # Run evaluation after training and inspect how post-processing turns logits into answer strings.
     # Evaluation
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
@@ -677,6 +693,8 @@ def main():
         trainer.log_metrics("eval", metrics)
         trainer.save_metrics("eval", metrics)
 
+    # TODO Step 2:
+    # Run prediction on the test split when available.
     # Prediction
     if training_args.do_predict:
         logger.info("*** Predict ***")

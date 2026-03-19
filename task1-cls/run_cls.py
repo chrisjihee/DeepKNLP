@@ -1,3 +1,22 @@
+"""Sentence Classification lab entrypoint.
+
+Students work in this single file cumulatively.
+
+Step 1:
+- complete model/tokenizer/data loading and preprocessing wiring
+- verify that `python task1-cls/run_cls.py train` reaches the pre-training boundary
+
+Step 2:
+- complete training, validation, testing, and inference flow
+- verify that training and evaluation commands work end-to-end
+
+Step 3:
+- complete serving and verify the Flask demo works
+
+Reference:
+- https://ratsgo.github.io/nlpbook/docs/doc_cls
+"""
+
 # 기본 라이브러리 imports
 import logging  # 로깅 시스템
 import os  # 운영체제 인터페이스
@@ -77,6 +96,9 @@ class NSMCModel(LightningModule):
         """
         super().__init__()
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
+
+        # TODO Step 1:
+        # Understand how the corpus, config, tokenizer, and pretrained model are connected.
         self.data: NsmcCorpus = NsmcCorpus(args)  # NSMC 데이터셋 로드
 
         # 라벨 수 검증 (이진 분류: 2개)
@@ -176,6 +198,8 @@ class NSMCModel(LightningModule):
         Returns:
             DataLoader: 학습용 데이터로더 (랜덤 샘플링)
         """
+        # TODO Step 1:
+        # Finish the training dataset and dataloader wiring so preprocessing can be checked before real training.
         # 분산 학습 시 로깅 설정 (rank 0에서만 info 레벨)
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
 
@@ -275,6 +299,8 @@ class NSMCModel(LightningModule):
         Returns:
             Dict: loss와 accuracy를 포함한 딕셔너리
         """
+        # TODO Step 2:
+        # Implement the one-batch forward pass, loss usage, and accuracy calculation.
         outputs: SequenceClassifierOutput = self.lang_model(**inputs)  # 모델 forward
         labels: torch.Tensor = inputs["labels"]  # 정답 라벨
         preds: torch.Tensor = outputs.logits.argmax(dim=-1)  # 예측 결과 (argmax)
@@ -332,6 +358,8 @@ class NSMCModel(LightningModule):
         Returns:
             Dict: 예측 결과와 확률들을 포함한 딕셔너리
         """
+        # TODO Step 3:
+        # Reuse the trained tokenizer/model pair to build single-sentence inference for the web API.
         # 텍스트 토크나이즈
         inputs = self.lm_tokenizer(
             tupled(text),  # 단일 텍스트를 튜플로 변환
