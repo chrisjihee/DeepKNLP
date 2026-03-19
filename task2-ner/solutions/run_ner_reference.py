@@ -9,7 +9,7 @@ from typing import List, Tuple, Dict, Mapping, Any  # 타입 힌트
 import torch  # PyTorch 메인 모듈
 import typer  # CLI 프레임워크
 from chrisbase.data import AppTyper, JobTimer, ProjectEnv  # 프로젝트 유틸리티
-from chrisbase.io import LoggingFormat, make_dir, files, hr  # 입출력 유틸리티
+from chrisbase.io import LoggingFormat, make_dir, files  # 입출력 유틸리티
 from chrisbase.util import mute_tqdm_cls, tupled  # 진행률 표시 및 유틸리티
 from flask import Flask, request, jsonify, render_template  # 웹 프레임워크
 from flask_classful import FlaskView, route  # Flask 클래스 기반 뷰
@@ -30,7 +30,6 @@ from transformers import (
     AutoTokenizer,
     AutoConfig,
     AutoModelForTokenClassification,
-    CharSpan,
 )
 from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizerFast
 from transformers.modeling_outputs import TokenClassifierOutput  # 토큰 분류 모델 출력
@@ -53,13 +52,11 @@ from DeepKNLP.arguments import (
 from DeepKNLP.helper import CheckpointSaver, epsilon, fabric_barrier  # 헬퍼 함수들
 from DeepKNLP.metrics import (
     accuracy,
-    NER_Char_MacroF1,
     NER_Entity_MacroF1,
 )  # NER 전용 평가 메트릭
 from DeepKNLP.ner import (
     NERCorpus,
     NERDataset,
-    NEREncodedExample,
 )  # NER 데이터 처리 클래스들
 
 # 로거 및 CLI 앱 초기화
@@ -74,8 +71,8 @@ class NERModel(LightningModule):
     주요 기능:
     - BERT 계열 모델을 활용한 토큰 단위 개체명 인식
     - BIO/BILOU 태깅 스킴 지원
-    - 토큰 레벨 예측을 문자 레벨로 변환하여 정확한 평가
-    - 다양한 NER 메트릭 (정확도, 문자 단위 F1, 개체 단위 F1) 지원
+    - 토큰 단위 라벨 예측과 기본 NER 평가 흐름 학습
+    - 다양한 NER 메트릭 (토큰 정확도, 개체 단위 F1) 지원
     - 웹 서비스를 통한 실시간 개체명 인식
     """
 
@@ -104,9 +101,6 @@ class NERModel(LightningModule):
             i: label for i, label in enumerate(self.labels)
         }  # ID → 라벨 매핑
 
-        # 추론 시 사용할 데이터셋 (validation_step에서 토큰-문자 매핑을 위해 필요)
-        self._infer_dataset: NERDataset | None = None
-
         # 라벨 수 검증
         assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
 
@@ -133,27 +127,6 @@ class NERModel(LightningModule):
                 config=self.lm_config,
             )
         )
-
-    @staticmethod
-    def label_to_char_labels(label, num_char):
-        """
-        토큰 레벨 라벨을 문자 레벨 라벨 시퀀스로 변환
-
-        NER에서 하나의 토큰이 여러 문자를 포함할 때, BIO 태깅 규칙에 따라
-        첫 번째 문자는 원래 라벨, 나머지 문자들은 I- 라벨로 변환
-
-        Args:
-            label: 토큰 레벨 라벨 (예: "B-PER", "O")
-            num_char: 해당 토큰이 포함하는 문자 수
-
-        Yields:
-            str: 각 문자에 대한 라벨 (예: "B-PER", "I-PER", "I-PER")
-        """
-        for i in range(num_char):
-            if i > 0 and ("-" in label):  # 두 번째 문자부터 && 개체 라벨인 경우
-                yield "I-" + label.split("-", maxsplit=1)[-1]  # I- 접두사로 변경
-            else:
-                yield label  # 첫 번째 문자는 원래 라벨 또는 O 라벨
 
     def label_to_id(self, x):
         """라벨 문자열을 ID로 변환"""
@@ -289,8 +262,6 @@ class NERModel(LightningModule):
             f"Created val_dataloader providing {len(val_dataloader)} batches"
         )
 
-        # validation_step에서 토큰-문자 매핑을 위해 데이터셋 저장
-        self._infer_dataset = val_dataset
         return val_dataloader
 
     def test_dataloader(self):
@@ -322,8 +293,6 @@ class NERModel(LightningModule):
             f"Created test_dataloader providing {len(test_dataloader)} batches"
         )
 
-        # test_step에서 토큰-문자 매핑을 위해 데이터셋 저장
-        self._infer_dataset = test_dataset
         return test_dataloader
 
     def training_step(self, inputs, batch_idx):
@@ -358,122 +327,29 @@ class NERModel(LightningModule):
     @torch.no_grad()
     def validation_step(self, inputs, batch_idx):
         """
-        검증 단계에서 한 배치 처리 - NER 특화 복잡한 토큰-문자 매핑 수행
+        검증 단계에서 한 배치 처리
 
-        NER의 핵심: 토큰 레벨 예측을 문자 레벨로 변환하여 정확한 평가
-        - 토큰 경계와 문자 경계가 다름 (서브워드 토크나이제이션)
-        - BIO 태깅 규칙에 따른 라벨 변환
-        - 문자 단위 정확한 평가를 위한 오프셋 매핑
+        Step 2에서는 문자 단위 정렬 대신 토큰 단위 예측만 모아
+        토큰 정확도와 개체 F1 흐름을 이해하는 데 집중합니다.
 
         Args:
             inputs: 토크나이즈된 입력 데이터
             batch_idx: 배치 인덱스
 
         Returns:
-            Dict: loss, 문자 레벨 예측값들, 문자 레벨 라벨들
+            Dict: loss, 토큰 레벨 예측값들, 토큰 레벨 라벨들
         """
-        # 예제 ID 추출 (토큰-문자 매핑을 위해 필요)
-        example_ids: List[int] = inputs.pop("example_ids").tolist()
-
-        # 토큰 분류 모델 순전파
+        inputs.pop("example_ids")
         outputs: TokenClassifierOutput = self.lang_model(**inputs)
+        labels: torch.Tensor = inputs["labels"]
         preds: torch.Tensor = outputs.logits.argmax(dim=-1)
-
-        dict_of_token_pred_ids: Dict[int, List[int]] = {}
-        dict_of_char_label_ids: Dict[int, List[int]] = {}
-        dict_of_char_pred_ids: Dict[int, List[int]] = {}
-        for token_pred_ids, example_id in zip(preds.tolist(), example_ids):
-            token_pred_tags: List[str] = [self.id_to_label(x) for x in token_pred_ids]
-            encoded_example: NEREncodedExample = self._infer_dataset[example_id]
-            offset_to_label: Dict[int, str] = (
-                encoded_example.raw.get_offset_label_dict()
-            )
-            all_char_pair_tags: List[Tuple[str | None, str | None]] = [
-                (None, None)
-            ] * len(encoded_example.raw.character_list)
-            for token_id in range(self.args.model.seq_len):
-                token_span: CharSpan = encoded_example.encoded.token_to_chars(token_id)
-                if token_span:
-                    char_pred_tags = NERModel.label_to_char_labels(
-                        token_pred_tags[token_id], token_span.end - token_span.start
-                    )
-                    for offset, char_pred_tag in zip(
-                        range(token_span.start, token_span.end), char_pred_tags
-                    ):
-                        all_char_pair_tags[offset] = (
-                            offset_to_label[offset],
-                            char_pred_tag,
-                        )
-            valid_char_pair_tags = [(a, b) for a, b in all_char_pair_tags if a and b]
-            valid_char_label_ids = [
-                self.label_to_id(a) for a, b in valid_char_pair_tags
-            ]
-            valid_char_pred_ids = [self.label_to_id(b) for a, b in valid_char_pair_tags]
-            dict_of_token_pred_ids[example_id] = token_pred_ids
-            dict_of_char_label_ids[example_id] = valid_char_label_ids
-            dict_of_char_pred_ids[example_id] = valid_char_pred_ids
-
-        if self.args.env.debugging:
-            logger.debug(hr())
-        list_of_char_pred_ids: List[int] = []
-        list_of_char_label_ids: List[int] = []
-        for encoded_example in [self._infer_dataset[i] for i in example_ids]:
-            char_label_ids = dict_of_char_label_ids[encoded_example.idx]
-            char_pred_ids = dict_of_char_pred_ids[encoded_example.idx]
-            assert len(char_pred_ids) == len(char_label_ids)
-            list_of_char_pred_ids.extend(char_pred_ids)
-            list_of_char_label_ids.extend(char_label_ids)
-            if self.args.env.debugging:
-                token_pred_ids = dict_of_token_pred_ids[encoded_example.idx]
-                logger.debug(
-                    f"  - encoded_example.idx                = {encoded_example.idx}"
-                )
-                logger.debug(
-                    f"  - encoded_example.raw.entity_list    = ({len(encoded_example.raw.entity_list)}) {encoded_example.raw.entity_list}"
-                )
-                logger.debug(
-                    f"  - encoded_example.raw.origin         = ({len(encoded_example.raw.origin)}) {encoded_example.raw.origin}"
-                )
-                logger.debug(
-                    f"  - encoded_example.raw.character_list = ({len(encoded_example.raw.character_list)}) {' | '.join(f'{x}/{y}' for x, y in encoded_example.raw.character_list)}"
-                )
-                logger.debug(
-                    f"  - encoded_example.encoded.tokens()   = ({len(encoded_example.encoded.tokens())}) {' '.join(encoded_example.encoded.tokens())}"
-                )
-
-                def id_label(x):
-                    return f"{self.id_to_label(x):5s}"
-
-                logger.debug(
-                    f"  - encoded_example.label_ids          = ({len(encoded_example.label_ids)}) {' '.join(map(str, map(id_label, encoded_example.label_ids)))}"
-                )
-                logger.debug(
-                    f"  - encoded_example.token_pred_ids     = ({len(token_pred_ids)}) {' '.join(map(str, map(id_label, token_pred_ids)))}"
-                )
-                logger.debug(
-                    f"  - encoded_example.char_label_ids     = ({len(char_label_ids)}) {' '.join(map(str, map(id_label, char_label_ids)))}"
-                )
-                logger.debug(
-                    f"  - encoded_example.char_pred_ids      = ({len(char_pred_ids)}) {' '.join(map(str, map(id_label, char_pred_ids)))}"
-                )
-                logger.debug(hr("-"))
-        assert len(list_of_char_pred_ids) == len(list_of_char_label_ids)
-
-        if self.args.env.debugging:
-
-            def id_str(x):
-                return f"{x:02d}"
-
-            logger.debug(
-                f"  - list_of_char_label_ids = ({len(list_of_char_label_ids)}) {' '.join(map(str, map(id_str, list_of_char_label_ids)))}"
-            )
-            logger.debug(
-                f"  - list_of_char_pred_ids  = ({len(list_of_char_pred_ids)}) {' '.join(map(str, map(id_str, list_of_char_pred_ids)))}"
-            )
+        valid_mask = labels != 0
+        list_of_token_pred_ids = preds[valid_mask].tolist()
+        list_of_token_label_ids = labels[valid_mask].tolist()
         return {
             "loss": outputs.loss,
-            "preds": list_of_char_pred_ids,
-            "labels": list_of_char_label_ids,
+            "preds": list_of_token_pred_ids,
+            "labels": list_of_token_label_ids,
         }
 
     @torch.no_grad()
@@ -674,7 +550,6 @@ def val_loop(
 
     NER 특화 메트릭:
     - val_acc: 토큰 레벨 정확도
-    - val_F1c: 문자 레벨 Macro F1 (Character-level)
     - val_F1e: 개체 레벨 Macro F1 (Entity-level)
 
     Args:
@@ -719,10 +594,7 @@ def val_loop(
             4,
         ),
         "val_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
-        "val_acc": accuracy(all_preds, all_labels, ignore_index=0).item(),
-        "val_F1c": NER_Char_MacroF1.all_in_one(
-            all_preds, all_labels, label_info=model.labels
-        ),
+        "val_acc": accuracy(all_preds, all_labels).item(),
         "val_F1e": NER_Entity_MacroF1.all_in_one(
             all_preds, all_labels, label_info=model.labels
         ),
@@ -750,7 +622,6 @@ def test_loop(
 
     NER 특화 메트릭:
     - test_acc: 토큰 레벨 정확도
-    - test_F1c: 문자 레벨 Macro F1 (Character-level)
     - test_F1e: 개체 레벨 Macro F1 (Entity-level)
 
     Args:
@@ -797,10 +668,7 @@ def test_loop(
             4,
         ),
         "test_loss": fabric.all_gather(torch.stack(losses)).mean().item(),
-        "test_acc": accuracy(all_preds, all_labels, ignore_index=0).item(),
-        "test_F1c": NER_Char_MacroF1.all_in_one(
-            all_preds, all_labels, label_info=model.labels
-        ),
+        "test_acc": accuracy(all_preds, all_labels).item(),
         "test_F1e": NER_Entity_MacroF1.all_in_one(
             all_preds, all_labels, label_info=model.labels
         ),
@@ -882,18 +750,18 @@ def train(
         help="학습 로그 형식",
     ),
     tag_format_on_validate: str = typer.Option(
-        default="st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}, val_F1c={val_F1c:05.2f}, val_F1e={val_F1e:05.2f}",
-        help="검증 로그 형식 (NER F1 포함)",
+        default="st={step:d}, ep={epoch:.2f}, val_loss={val_loss:06.4f}, val_acc={val_acc:06.4f}, val_F1e={val_F1e:05.2f}",
+        help="검증 로그 형식 (token acc + entity F1)",
     ),
     tag_format_on_evaluate: str = typer.Option(
-        default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1c={test_F1c:05.2f}, test_F1e={test_F1e:05.2f}",
-        help="평가 로그 형식 (NER F1 포함)",
+        default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1e={test_F1e:05.2f}",
+        help="평가 로그 형식 (token acc + entity F1)",
     ),
     # learning - 학습 설정
     learning_rate: float = typer.Option(default=5e-5, help="학습률"),
     random_seed: int = typer.Option(default=7, help="랜덤 시드"),
     saving_mode: str = typer.Option(
-        default="max val_F1c", help="모델 저장 기준 (NER은 F1c 기준)"
+        default="max val_F1e", help="모델 저장 기준 (NER은 entity F1 기준)"
     ),
     num_saving: int = typer.Option(default=1, help="저장할 모델 개수"),
     num_epochs: int = typer.Option(default=1, help="학습 에포크 수"),
@@ -901,8 +769,8 @@ def train(
         default=1 / 5, help="학습 중 검증 주기 (비율)"
     ),
     name_format_on_saving: str = typer.Option(
-        default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}, F1c={val_F1c:05.2f}, F1e={val_F1e:05.2f}",
-        help="저장 파일명 형식 (NER F1 포함)",
+        default="ep={epoch:.1f}, loss={val_loss:06.4f}, acc={val_acc:06.4f}, F1e={val_F1e:05.2f}",
+        help="저장 파일명 형식 (token acc + entity F1)",
     ),
 ):
     """
@@ -911,9 +779,9 @@ def train(
     주요 기능:
     - BERT 계열 모델을 NER 데이터셋으로 fine-tuning
     - BIO/BILOU 태깅 스킴 지원
-    - 다양한 NER 메트릭 (토큰/문자/개체 레벨) 평가
+    - 다양한 NER 메트릭 (토큰 정확도, 개체 레벨 F1) 평가
     - 분산 학습 및 혼합 정밀도 지원
-    - 자동 체크포인트 저장 (문자 레벨 F1 기준)
+    - 자동 체크포인트 저장 (개체 레벨 F1 기준)
     """
     torch.set_float32_matmul_precision("high")
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -1121,7 +989,7 @@ def test(
     ),  # TODO: -> 1/2, 1/3, 1/5, 1/10, 1/50, 1/100
     print_step_on_evaluate: int = typer.Option(default=-1),
     tag_format_on_evaluate: str = typer.Option(
-        default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1c={test_F1c:05.2f}, test_F1e={test_F1e:05.2f}"
+        default="st={step:d}, ep={epoch:.2f}, test_loss={test_loss:06.4f}, test_acc={test_acc:06.4f}, test_F1e={test_F1e:05.2f}"
     ),
 ):
     torch.set_float32_matmul_precision("high")

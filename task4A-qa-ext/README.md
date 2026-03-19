@@ -7,7 +7,8 @@ KorQuAD 기반 추출형 QA 실습 태스크입니다.
 - https://github.com/huggingface/transformers/tree/main/examples/pytorch/question-answering
 
 학생 구현 대상:
-- task4A-qa-ext/train_qa.py
+- Step 1-2: task4A-qa-ext/train_qa.py
+- Step 3: task4A-qa-ext/serve_qa.py
 
 지원 모듈:
 - task4A-qa-ext/trainer_qa.py
@@ -30,7 +31,7 @@ python task4A-qa-ext/train_qa.py --model_name_or_path klue/bert-base --train_fil
 Step 2:
 - 목표: Trainer, post-processing, metric 계산을 연결해서 train/eval/predict 수행
 - 지원 모듈: `trainer_qa.py`, `utils_qa.py`
-- 구현 포인트: Trainer 초기화 블록, train/eval/predict 실행 블록
+- 구현 포인트: Trainer 초기화 블록
 - 실행 예시:
 ```bash
 python task4A-qa-ext/train_qa.py --model_name_or_path klue/bert-base --train_file data/korquad/train-half.jsonl --validation_file data/korquad/validation.jsonl --output_dir output/korquad-lab --do_train --do_eval
@@ -38,7 +39,7 @@ python task4A-qa-ext/train_qa.py --model_name_or_path klue/bert-base --train_fil
 
 Step 3:
 - 목표: 학습된 체크포인트를 불러 웹 서빙 수행
-- 구현 포인트: serve command 힌트 블록을 채운 뒤 `serve_qa.py`를 사용합니다.
+- 구현 포인트: `QAModel.__init__`, `QAModel.infer_one`
 - 실행 예시:
 ```bash
 python task4A-qa-ext/serve_qa.py serve --pretrained "output/korquad-lab/checkpoint-*"

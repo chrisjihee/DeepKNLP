@@ -15,7 +15,7 @@
 - CLI 옵션은 일부러 많이 남겨 두었습니다. 모델/데이터/하드웨어 옵션의 폭을 보는 것도 학습 목표입니다.
 
 Step 1:
-- 목표: 라벨 맵, fast tokenizer, 데이터 전처리, token-char alignment 이해
+- 목표: 라벨 맵, fast tokenizer, 데이터 전처리 이해
 - 구현 포인트: `NERModel.__init__`, `NERModel.train_dataloader`
 - 실행 예시:
 ```bash
@@ -24,14 +24,14 @@ python task2-ner/run_ner.py train --data_home data --data_name klue-ner --pretra
 - 기대 결과: 데이터셋/데이터로더/모델 로딩이 성공하고 학습 직전까지 실행됩니다.
 
 Step 2:
-- 목표: 학습, 문자 단위 평가, 테스트, 추론 흐름 완성
+- 목표: 학습, 토큰 기반 평가, 테스트, 추론 흐름 완성
 - 구현 포인트: `NERModel.training_step`, `NERModel.validation_step`
 - 실행 예시:
 ```bash
 python task2-ner/run_ner.py train --data_home data --data_name klue-ner --pretrained klue/roberta-base --num_epochs 1
 python task2-ner/run_ner.py test --data_home data --data_name klue-ner --pretrained klue/roberta-base
 ```
-- 기대 결과: 체크포인트 저장과 `F1c`, `F1e` 평가 로그를 확인할 수 있습니다.
+- 기대 결과: 체크포인트 저장과 token accuracy, `F1e` 평가 로그를 확인할 수 있습니다.
 
 Step 3:
 - 목표: 웹 서빙 완성

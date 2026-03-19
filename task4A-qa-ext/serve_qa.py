@@ -1,3 +1,9 @@
+"""Extractive QA serving lab entrypoint.
+
+Step 3 focuses on how a fine-tuned checkpoint is turned into an actual inference service.
+Students complete the model loading and single-example QA inference blocks in this file.
+"""
+
 import logging
 import os
 from pathlib import Path
@@ -30,11 +36,15 @@ class QAModel(LightningModule):
         self.server_page = server_page
         self.normalized = normalized
 
-        # 1) Load model (from_pretrained)
-        logger.info(f"Loading model from {pretrained}")
-        self.tokenizer = AutoTokenizer.from_pretrained(pretrained)
-        self.model = AutoModelForQuestionAnswering.from_pretrained(pretrained)
-        self.model.eval()  # Set to evaluation mode
+        # TODO Step 3-1:
+        # Load the tokenizer and the fine-tuned extractive QA model from the checkpoint path.
+        # logger.info(f"Loading model from {pretrained}")
+        # self.tokenizer = AutoTokenizer.from_pretrained(pretrained)
+        # self.model = AutoModelForQuestionAnswering.from_pretrained(pretrained)
+        # self.model.eval()
+        raise NotImplementedError(
+            "TODO Step 3-1: load the tokenizer and extractive QA checkpoint here."
+        )
 
     def run_server(self, server: Flask, *args, **kwargs):
         """
@@ -52,27 +62,20 @@ class QAModel(LightningModule):
         if not context.strip():
             return {"question": question, "context": context, "answer": "(The context is empty.)"}
 
-        inputs = self.tokenizer.encode_plus(
-            question, context, return_tensors="pt", truncation=True, padding=True
+        # TODO Step 3-2:
+        # Build the single-example extractive QA inference flow in place.
+        # inputs = self.tokenizer.encode_plus(...)
+        # outputs = self.model(**inputs)
+        # start_logits = outputs.start_logits
+        # end_logits = outputs.end_logits
+        # start_index = torch.argmax(start_logits)
+        # end_index = torch.argmax(end_logits)
+        # predict_answer_tokens = inputs["input_ids"][0, start_index : end_index + 1]
+        # answer = self.tokenizer.decode(predict_answer_tokens)
+        # score = ...
+        raise NotImplementedError(
+            "TODO Step 3-2: implement extractive QA inference and answer scoring here."
         )
-        with torch.no_grad():
-            outputs = self.model(**inputs)
-
-        start_logits = outputs.start_logits
-        end_logits = outputs.end_logits
-
-        start_index = torch.argmax(start_logits)
-        end_index = torch.argmax(end_logits)
-
-        predict_answer_tokens = inputs["input_ids"][0, start_index: end_index + 1]
-        answer = self.tokenizer.decode(predict_answer_tokens)
-
-        if self.normalized:
-            start_probs = F.softmax(start_logits, dim=-1)
-            end_probs = F.softmax(end_logits, dim=-1)
-            score = (torch.max(start_probs) * torch.max(end_probs)).item()
-        else:
-            score = float(torch.max(start_logits) + torch.max(end_logits))
 
         return {
             "question": question,
@@ -113,7 +116,6 @@ main = typer.Typer()
 
 @main.command()
 def serve(
-        # TODO: "output/korquad/train_qa-*/checkpoint-*" or "monologg/koelectra-base-v3-finetuned-korquad"
         pretrained: str = typer.Option("output/korquad/train_qa-*/checkpoint-*",
                                        help="Local pretrained model path or Hugging Face Hub ID"),
         server_host: str = typer.Option("0.0.0.0"),

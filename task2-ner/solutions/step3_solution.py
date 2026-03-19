@@ -1,8 +1,8 @@
-"""Step 3 in-place answer snippets for task2-ner/run_ner.py.
+"""Step 3 in-place answer snippet for task2-ner/run_ner.py.
 
-Paste the following blocks into the matching TODO Step 3 locations.
+Paste the following block into the matching TODO Step 3 location.
 
-NERModel.infer_one tokenization block:
+NERModel.infer_one:
 
     inputs = self.lm_tokenizer(
         tupled(text),
@@ -11,9 +11,7 @@ NERModel.infer_one tokenization block:
         truncation=True,
         return_tensors="pt",
     )
-
-NERModel.infer_one formatting block:
-
+    outputs: TokenClassifierOutput = self.lang_model(**inputs)
     all_probs = outputs.logits[0].softmax(dim=1)
     top_probs, top_preds = torch.topk(all_probs, dim=1, k=1)
     tokens = self.lm_tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])

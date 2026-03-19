@@ -613,39 +613,44 @@ def main():
 
     # Training
     if training_args.do_train:
-        # checkpoint = training_args.resume_from_checkpoint or last_checkpoint
-        # train_result = trainer.train(...)
-        # trainer.save_model(); trainer.log_metrics(...); trainer.save_metrics(...); trainer.save_state()
-        raise NotImplementedError(
-            "TODO Step 2-2: run training and save/log the train metrics here."
-        )
+        checkpoint = None
+        if training_args.resume_from_checkpoint is not None:
+            checkpoint = training_args.resume_from_checkpoint
+        elif last_checkpoint is not None:
+            checkpoint = last_checkpoint
+        train_result = trainer.train(resume_from_checkpoint=checkpoint)
+        trainer.save_model()
+        metrics = train_result.metrics
+        max_train_samples = data_args.max_train_samples if data_args.max_train_samples is not None else len(train_dataset)
+        metrics["train_samples"] = min(max_train_samples, len(train_dataset))
+        trainer.log_metrics("train", metrics)
+        trainer.save_metrics("train", metrics)
+        trainer.save_state()
 
     # TODO Step 2:
     # Run evaluation after training and inspect how post-processing turns logits into answer strings.
     # Evaluation
     if training_args.do_eval:
-        # metrics = trainer.evaluate()
-        # trainer.log_metrics("eval", metrics); trainer.save_metrics("eval", metrics)
-        raise NotImplementedError(
-            "TODO Step 2-3: run evaluation and save/log the eval metrics here."
-        )
+        logger.info("*** Evaluate ***")
+        metrics = trainer.evaluate()
+        max_eval_samples = data_args.max_eval_samples if data_args.max_eval_samples is not None else len(eval_dataset)
+        metrics["eval_samples"] = min(max_eval_samples, len(eval_dataset))
+        trainer.log_metrics("eval", metrics)
+        trainer.save_metrics("eval", metrics)
 
     # TODO Step 2:
     # Run prediction on the test split when available.
     # Prediction
     if training_args.do_predict:
-        # results = trainer.predict(predict_dataset, predict_examples)
-        # trainer.log_metrics("predict", metrics); trainer.save_metrics("predict", metrics)
-        raise NotImplementedError(
-            "TODO Step 2-4: run prediction and save/log the prediction metrics here."
-        )
+        logger.info("*** Predict ***")
+        results = trainer.predict(predict_dataset, predict_examples)
+        metrics = results.metrics
+        max_predict_samples = data_args.max_predict_samples if data_args.max_predict_samples is not None else len(predict_dataset)
+        metrics["predict_samples"] = min(max_predict_samples, len(predict_dataset))
+        trainer.log_metrics("predict", metrics)
+        trainer.save_metrics("predict", metrics)
 
-    # TODO Step 3:
-    # Build the serve_qa.py command string in place so students see where the training output is reused.
-    # serve_hint = f'python task4A-qa-ext/serve_qa.py serve --pretrained "{training_args.output_dir}/checkpoint-*"'
-    raise NotImplementedError(
-        "TODO Step 3: build and log the serve_qa.py command hint here."
-    )
+    logger.info("Step 3 serving is implemented in task4A-qa-ext/serve_qa.py.")
 
     kwargs = {"finetuned_from": model_args.model_name_or_path, "tasks": "question-answering"}
     if data_args.dataset_name is not None:

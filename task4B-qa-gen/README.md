@@ -6,7 +6,8 @@ KorQuAD 기반 생성형 QA 실습 태스크입니다.
 - https://github.com/huggingface/transformers/tree/main/examples/pytorch/question-answering
 
 학생 구현 대상:
-- task4B-qa-gen/train_qa_seq2seq.py
+- Step 1-2: task4B-qa-gen/train_qa_seq2seq.py
+- Step 3: task4B-qa-gen/serve_qa_seq2seq.py
 
 지원 모듈:
 - task4B-qa-gen/trainer_seq2seq_qa.py
@@ -27,7 +28,7 @@ python task4B-qa-gen/train_qa_seq2seq.py --model_name_or_path paust/pko-t5-base 
 
 Step 2:
 - 목표: Seq2SeqTrainer 기반 train/eval/predict 수행
-- 구현 포인트: Trainer 초기화 블록, train/eval/predict 실행 블록
+- 구현 포인트: Trainer 초기화 블록
 - 실행 예시:
 ```bash
 python task4B-qa-gen/train_qa_seq2seq.py --model_name_or_path paust/pko-t5-base --train_file data/korquad/train-half.jsonl --validation_file data/korquad/validation.jsonl --output_dir output/korquad-seq2seq-lab --do_train --do_eval --predict_with_generate
@@ -35,7 +36,7 @@ python task4B-qa-gen/train_qa_seq2seq.py --model_name_or_path paust/pko-t5-base 
 
 Step 3:
 - 목표: 학습된 체크포인트를 불러 웹 서빙 수행
-- 구현 포인트: serve command 힌트 블록을 채운 뒤 `serve_qa_seq2seq.py`를 사용합니다.
+- 구현 포인트: `QAModel.__init__`, `QAModel.infer_one`
 - 실행 예시:
 ```bash
 python task4B-qa-gen/serve_qa_seq2seq.py serve --pretrained "output/korquad-seq2seq-lab/checkpoint-*"

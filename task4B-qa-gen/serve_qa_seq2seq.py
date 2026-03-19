@@ -1,3 +1,9 @@
+"""Generative QA serving lab entrypoint.
+
+Step 3 focuses on how a fine-tuned seq2seq checkpoint is turned into an actual inference service.
+Students complete the model loading and single-example answer generation blocks in this file.
+"""
+
 import logging
 import os
 from pathlib import Path
@@ -30,11 +36,15 @@ class QAModel:
         self.num_beams = num_beams
         self.max_length = max_length
 
-        # 1) Load T5 Model
-        logger.info(f"Loading model from {pretrained}")
-        self.tokenizer = AutoTokenizer.from_pretrained(pretrained)
-        self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
-        self.model.eval()  # Set the model to evaluation mode
+        # TODO Step 3-1:
+        # Load the tokenizer and the fine-tuned seq2seq QA model from the checkpoint path.
+        # logger.info(f"Loading model from {pretrained}")
+        # self.tokenizer = AutoTokenizer.from_pretrained(pretrained)
+        # self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained)
+        # self.model.eval()
+        raise NotImplementedError(
+            "TODO Step 3-1: load the tokenizer and seq2seq QA checkpoint here."
+        )
 
     def run_server(self, server: Flask, *args, **kwargs):
         """
@@ -52,32 +62,17 @@ class QAModel:
         if not context.strip():
             return {"question": question, "context": context, "answer": "(The context is empty.)"}
 
-        # Prepare input text in T5 format
-        input_text = f"question: {question} context: {context}"
-        inputs = self.tokenizer(input_text, return_tensors="pt", truncation=True, padding=True)
-
-        with torch.no_grad():
-            output_ids = self.model.generate(
-                input_ids=inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-                max_length=self.max_length,
-                num_beams=self.num_beams,
-                return_dict_in_generate=True,
-                output_scores=True
-            )
-
-        answer = self.tokenizer.decode(output_ids.sequences[0], skip_special_tokens=True)
-
-        # Compute score based on token probabilities
-        token_probs = []
-        for i, token_id in enumerate(output_ids.sequences[0]):
-            if i == 0:  # Ignore the first token (T5 uses a start token in the decoder)
-                continue
-            token_prob = F.softmax(output_ids.scores[i - 1], dim=-1)[0, token_id].item()  # Convert to probability
-            token_probs.append(token_prob)
-
-        # Compute the overall score as the product of all token probabilities
-        score = torch.prod(torch.tensor(token_probs)).item()
+        # TODO Step 3-2:
+        # Build the single-example generative QA inference flow in place.
+        # input_text = f"question: {question} context: {context}"
+        # inputs = self.tokenizer(...)
+        # output_ids = self.model.generate(..., return_dict_in_generate=True, output_scores=True)
+        # answer = self.tokenizer.decode(...)
+        # token_probs = ...
+        # score = ...
+        raise NotImplementedError(
+            "TODO Step 3-2: implement seq2seq QA generation and answer scoring here."
+        )
 
         return {
             "question": question,
@@ -116,7 +111,6 @@ main = typer.Typer()
 
 @main.command()
 def serve(
-        # TODO: "output/korquad/train_qa_by-pkot5-*/checkpoint-*", or "paust/pko-t5-base-finetuned-korquad"
         pretrained: str = typer.Option("output/korquad/train_qa_by-pkot5-*/checkpoint-*",
                                        help="Local pretrained model path or Hugging Face Hub ID"),
         server_host: str = typer.Option("0.0.0.0"),

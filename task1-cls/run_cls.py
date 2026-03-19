@@ -334,24 +334,11 @@ class NSMCModel(LightningModule):
         Returns:
             Dict: 예측 결과와 확률들을 포함한 딕셔너리
         """
-        # TODO Step 3-1:
-        # Tokenize one sentence in place using the same seq_len/padding/truncation settings as training.
-        # inputs = self.lm_tokenizer(...)
+        # TODO Step 3:
+        # Complete the full single-sentence inference flow in one place:
+        # tokenize -> run the model -> convert logits to probabilities -> build the web response dictionary.
         raise NotImplementedError(
-            "TODO Step 3-1: tokenize the input sentence for inference here."
-        )
-
-        # 모델 추론
-        outputs: SequenceClassifierOutput = self.lang_model(**inputs)
-        prob = outputs.logits.softmax(dim=1)  # 확률로 변환
-
-        # TODO Step 3-2:
-        # Format the predicted label and confidence strings for the Flask response.
-        # pred = ...
-        # positive_prob = ...
-        # negative_prob = ...
-        raise NotImplementedError(
-            "TODO Step 3-2: format the inference result dictionary here."
+            "TODO Step 3: implement the full single-sentence inference flow here."
         )
 
     def run_server(self, server: Flask, *args, **kwargs):
