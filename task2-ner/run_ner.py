@@ -110,21 +110,16 @@ class NERModel(LightningModule):
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
 
         # TODO Step 1:
-        # Understand how the NER corpus, label map, fast tokenizer, and pretrained model are connected.
-
-        # NER 데이터 코퍼스 초기화
-        self.data: NERCorpus = NERCorpus(args)
-
-        # 라벨 정보 및 매핑 딕셔너리 초기화
-        self.labels: List[str] = (
-            self.data.labels
-        )  # ['O', 'B-PER', 'I-PER', 'B-LOC', ...]
-        self._label_to_id: Dict[str, int] = {
-            label: i for i, label in enumerate(self.labels)
-        }  # 라벨 → ID 매핑
-        self._id_to_label: Dict[int, str] = {
-            i: label for i, label in enumerate(self.labels)
-        }  # ID → 라벨 매핑
+        # Complete `complete_step1_model_setup` so the corpus, label map, fast tokenizer, and pretrained model are connected.
+        (
+            self.data,
+            self.labels,
+            self._label_to_id,
+            self._id_to_label,
+            self.lm_config,
+            self.lm_tokenizer,
+            self.lang_model,
+        ) = self.complete_step1_model_setup(args)
 
         # 추론 시 사용할 데이터셋 (validation_step에서 토큰-문자 매핑을 위해 필요)
         self._infer_dataset: NERDataset | None = None
@@ -132,28 +127,45 @@ class NERModel(LightningModule):
         # 라벨 수 검증
         assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
 
-        # 토큰 분류용 사전학습 모델 설정 로드
-        self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
-            args.model.pretrained,
-            num_labels=self.data.num_labels,  # NER 라벨 수만큼 출력 차원 설정
+    @staticmethod
+    def complete_step1_model_setup(
+        args: TrainerArguments | TesterArguments | ServerArguments,
+    ) -> tuple[
+        NERCorpus,
+        List[str],
+        Dict[str, int],
+        Dict[int, str],
+        PretrainedConfig,
+        PreTrainedTokenizerFast,
+        PreTrainedModel,
+    ]:
+        raise NotImplementedError(
+            "TODO Step 1-1: build and return corpus, label maps, config, tokenizer, and model."
         )
 
-        # Fast 토크나이저 로드 (문자 오프셋 정보 필요)
-        self.lm_tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(
-            args.model.pretrained,
-            use_fast=True,  # 문자 단위 매핑을 위해 Fast 토크나이저 필수
+    def complete_step1_train_dataloader(self) -> DataLoader:
+        raise NotImplementedError(
+            "TODO Step 1-2: build and return the NER training DataLoader."
         )
-        # Fast 토크나이저 검증 (token_to_chars 메소드 필요)
-        assert isinstance(
-            self.lm_tokenizer, PreTrainedTokenizerFast
-        ), f"Our code support only PreTrainedTokenizerFast, not {type(self.lm_tokenizer)}"
 
-        # 토큰 분류용 사전학습 모델 로드
-        self.lang_model: PreTrainedModel = (
-            AutoModelForTokenClassification.from_pretrained(
-                args.model.pretrained,
-                config=self.lm_config,
-            )
+    def complete_step2_training_batch(self, inputs):
+        raise NotImplementedError(
+            "TODO Step 2-1: run one token-classification batch and return (outputs, labels, preds, acc)."
+        )
+
+    def complete_step2_validation_batch(self, inputs):
+        raise NotImplementedError(
+            "TODO Step 2-2: convert token predictions into character-level predictions for evaluation."
+        )
+
+    def complete_step3_tokenize_text(self, text: str):
+        raise NotImplementedError(
+            "TODO Step 3-1: tokenize one sentence for NER inference."
+        )
+
+    def complete_step3_format_inference(self, text: str, inputs, outputs: TokenClassifierOutput) -> Dict[str, Any]:
+        raise NotImplementedError(
+            "TODO Step 3-2: format token-level inference results for the web response."
         )
 
     @staticmethod
@@ -261,30 +273,10 @@ class NERModel(LightningModule):
             DataLoader: NER 학습용 데이터로더 (랜덤 샘플링)
         """
         # TODO Step 1:
-        # Finish the dataset and dataloader wiring so token/character alignment can be inspected before training.
+        # Finish `complete_step1_train_dataloader` so token/character alignment can be inspected before training.
         # 분산 학습 시 로깅 설정
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-
-        # NER 학습 데이터셋 생성
-        train_dataset = NERDataset("train", data=self.data, tokenizer=self.lm_tokenizer)
-
-        # 학습용 데이터로더 생성 (랜덤 셔플, NER 전용 collate 함수)
-        train_dataloader = DataLoader(
-            train_dataset,
-            sampler=RandomSampler(train_dataset, replacement=False),
-            num_workers=self.args.hardware.cpu_workers,
-            batch_size=self.args.hardware.train_batch,
-            collate_fn=self.data.encoded_examples_to_batch,  # NER 전용 배치 생성
-            drop_last=False,
-        )
-
-        self.fabric.print(
-            f"Created train_dataset providing {len(train_dataset)} examples"
-        )
-        self.fabric.print(
-            f"Created train_dataloader providing {len(train_dataloader)} batches"
-        )
-        return train_dataloader
+        return self.complete_step1_train_dataloader()
 
     def val_dataloader(self):
         """
@@ -362,19 +354,8 @@ class NERModel(LightningModule):
             Dict: loss와 accuracy를 포함한 딕셔너리
         """
         # TODO Step 2:
-        # Implement the one-batch token classification logic and ignore padded labels correctly.
-        # example_ids는 학습에 불필요하므로 제거
-        inputs.pop("example_ids")
-
-        # 토큰 분류 모델 순전파
-        outputs: TokenClassifierOutput = self.lang_model(**inputs)
-
-        # 라벨과 예측값 추출
-        labels: torch.Tensor = inputs["labels"]
-        preds: torch.Tensor = outputs.logits.argmax(dim=-1)
-
-        # 정확도 계산 (패딩 토큰 ignore_index=0 제외)
-        acc: torch.Tensor = accuracy(preds=preds, labels=labels, ignore_index=0)
+        # Implement `complete_step2_training_batch` and ignore padded labels correctly.
+        outputs, labels, preds, acc = self.complete_step2_training_batch(inputs)
 
         return {
             "loss": outputs.loss,  # 토큰 분류 손실
@@ -399,105 +380,8 @@ class NERModel(LightningModule):
             Dict: loss, 문자 레벨 예측값들, 문자 레벨 라벨들
         """
         # TODO Step 2:
-        # Convert token predictions back to character-level predictions for evaluation.
-        # 예제 ID 추출 (토큰-문자 매핑을 위해 필요)
-        example_ids: List[int] = inputs.pop("example_ids").tolist()
-
-        # 토큰 분류 모델 순전파
-        outputs: TokenClassifierOutput = self.lang_model(**inputs)
-        preds: torch.Tensor = outputs.logits.argmax(dim=-1)
-
-        dict_of_token_pred_ids: Dict[int, List[int]] = {}
-        dict_of_char_label_ids: Dict[int, List[int]] = {}
-        dict_of_char_pred_ids: Dict[int, List[int]] = {}
-        for token_pred_ids, example_id in zip(preds.tolist(), example_ids):
-            token_pred_tags: List[str] = [self.id_to_label(x) for x in token_pred_ids]
-            encoded_example: NEREncodedExample = self._infer_dataset[example_id]
-            offset_to_label: Dict[int, str] = (
-                encoded_example.raw.get_offset_label_dict()
-            )
-            all_char_pair_tags: List[Tuple[str | None, str | None]] = [
-                (None, None)
-            ] * len(encoded_example.raw.character_list)
-            for token_id in range(self.args.model.seq_len):
-                token_span: CharSpan = encoded_example.encoded.token_to_chars(token_id)
-                if token_span:
-                    char_pred_tags = NERModel.label_to_char_labels(
-                        token_pred_tags[token_id], token_span.end - token_span.start
-                    )
-                    for offset, char_pred_tag in zip(
-                        range(token_span.start, token_span.end), char_pred_tags
-                    ):
-                        all_char_pair_tags[offset] = (
-                            offset_to_label[offset],
-                            char_pred_tag,
-                        )
-            valid_char_pair_tags = [(a, b) for a, b in all_char_pair_tags if a and b]
-            valid_char_label_ids = [
-                self.label_to_id(a) for a, b in valid_char_pair_tags
-            ]
-            valid_char_pred_ids = [self.label_to_id(b) for a, b in valid_char_pair_tags]
-            dict_of_token_pred_ids[example_id] = token_pred_ids
-            dict_of_char_label_ids[example_id] = valid_char_label_ids
-            dict_of_char_pred_ids[example_id] = valid_char_pred_ids
-
-        if self.args.env.debugging:
-            logger.debug(hr())
-        list_of_char_pred_ids: List[int] = []
-        list_of_char_label_ids: List[int] = []
-        for encoded_example in [self._infer_dataset[i] for i in example_ids]:
-            char_label_ids = dict_of_char_label_ids[encoded_example.idx]
-            char_pred_ids = dict_of_char_pred_ids[encoded_example.idx]
-            assert len(char_pred_ids) == len(char_label_ids)
-            list_of_char_pred_ids.extend(char_pred_ids)
-            list_of_char_label_ids.extend(char_label_ids)
-            if self.args.env.debugging:
-                token_pred_ids = dict_of_token_pred_ids[encoded_example.idx]
-                logger.debug(
-                    f"  - encoded_example.idx                = {encoded_example.idx}"
-                )
-                logger.debug(
-                    f"  - encoded_example.raw.entity_list    = ({len(encoded_example.raw.entity_list)}) {encoded_example.raw.entity_list}"
-                )
-                logger.debug(
-                    f"  - encoded_example.raw.origin         = ({len(encoded_example.raw.origin)}) {encoded_example.raw.origin}"
-                )
-                logger.debug(
-                    f"  - encoded_example.raw.character_list = ({len(encoded_example.raw.character_list)}) {' | '.join(f'{x}/{y}' for x, y in encoded_example.raw.character_list)}"
-                )
-                logger.debug(
-                    f"  - encoded_example.encoded.tokens()   = ({len(encoded_example.encoded.tokens())}) {' '.join(encoded_example.encoded.tokens())}"
-                )
-
-                def id_label(x):
-                    return f"{self.id_to_label(x):5s}"
-
-                logger.debug(
-                    f"  - encoded_example.label_ids          = ({len(encoded_example.label_ids)}) {' '.join(map(str, map(id_label, encoded_example.label_ids)))}"
-                )
-                logger.debug(
-                    f"  - encoded_example.token_pred_ids     = ({len(token_pred_ids)}) {' '.join(map(str, map(id_label, token_pred_ids)))}"
-                )
-                logger.debug(
-                    f"  - encoded_example.char_label_ids     = ({len(char_label_ids)}) {' '.join(map(str, map(id_label, char_label_ids)))}"
-                )
-                logger.debug(
-                    f"  - encoded_example.char_pred_ids      = ({len(char_pred_ids)}) {' '.join(map(str, map(id_label, char_pred_ids)))}"
-                )
-                logger.debug(hr("-"))
-        assert len(list_of_char_pred_ids) == len(list_of_char_label_ids)
-
-        if self.args.env.debugging:
-
-            def id_str(x):
-                return f"{x:02d}"
-
-            logger.debug(
-                f"  - list_of_char_label_ids = ({len(list_of_char_label_ids)}) {' '.join(map(str, map(id_str, list_of_char_label_ids)))}"
-            )
-            logger.debug(
-                f"  - list_of_char_pred_ids  = ({len(list_of_char_pred_ids)}) {' '.join(map(str, map(id_str, list_of_char_pred_ids)))}"
-            )
+        # Implement `complete_step2_validation_batch` to convert token predictions back to character-level predictions.
+        outputs, list_of_char_pred_ids, list_of_char_label_ids = self.complete_step2_validation_batch(inputs)
         return {
             "loss": outputs.loss,
             "preds": list_of_char_pred_ids,
@@ -530,44 +414,13 @@ class NERModel(LightningModule):
             Dict: 토큰별 개체명 라벨과 확률을 포함한 결과
         """
         # TODO Step 3:
-        # Reuse the trained tokenizer/model pair to build token-level inference for the web API.
+        # Reuse `complete_step3_tokenize_text` and `complete_step3_format_inference` for the web API.
         # 텍스트를 튜플로 감싸서 토크나이즈 (batch dimension)
-        inputs = self.lm_tokenizer(
-            tupled(text),
-            max_length=self.args.model.seq_len,
-            padding="max_length",
-            truncation=True,
-            return_tensors="pt",
-        )
+        inputs = self.complete_step3_tokenize_text(text)
 
         # 토큰 분류 모델 추론
         outputs: TokenClassifierOutput = self.lang_model(**inputs)
-
-        # 각 토큰에 대한 라벨 확률 계산
-        all_probs: Tensor = outputs.logits[0].softmax(dim=1)
-        top_probs, top_preds = torch.topk(all_probs, dim=1, k=1)
-
-        # 토큰과 라벨 정보 추출
-        tokens = self.lm_tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
-        top_labels = [self.id_to_label(pred[0].item()) for pred in top_preds]
-
-        # 특수 토큰 제외하고 결과 구성
-        result = []
-        for token, label, top_prob in zip(tokens, top_labels, top_probs):
-            if token in self.lm_tokenizer.all_special_tokens:
-                continue  # [CLS], [SEP], [PAD] 등 제외
-            result.append(
-                {
-                    "token": token,
-                    "label": label,
-                    "prob": f"{round(top_prob[0].item(), 4):.4f}",
-                }
-            )
-
-        return {
-            "sentence": text,
-            "result": result,
-        }
+        return self.complete_step3_format_inference(text, inputs, outputs)
 
     def run_server(self, server: Flask, *args, **kwargs):
         """

@@ -98,29 +98,43 @@ class NSMCModel(LightningModule):
         self.args: TrainerArguments | TesterArguments | ServerArguments = args
 
         # TODO Step 1:
-        # Understand how the corpus, config, tokenizer, and pretrained model are connected.
-        self.data: NsmcCorpus = NsmcCorpus(args)  # NSMC 데이터셋 로드
+        # Complete `complete_step1_model_setup` so the corpus, config, tokenizer, and pretrained model are connected.
+        self.data, self.lm_config, self.lm_tokenizer, self.lang_model = self.complete_step1_model_setup(args)
 
         # 라벨 수 검증 (이진 분류: 2개)
         assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
 
-        # 사전학습 모델 설정 로드 (라벨 수 설정 포함)
-        self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
-            args.model.pretrained, num_labels=self.data.num_labels
+    @staticmethod
+    def complete_step1_model_setup(
+        args: TrainerArguments | TesterArguments | ServerArguments,
+    ) -> tuple[NsmcCorpus, PretrainedConfig, PreTrainedTokenizer, PreTrainedModel]:
+        raise NotImplementedError(
+            "TODO Step 1-1: build and return (data, lm_config, lm_tokenizer, lang_model)."
         )
 
-        # 토크나이저 로드 (빠른 토크나이저 사용)
-        self.lm_tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(
-            args.model.pretrained,
-            use_fast=True,
+    def complete_step1_train_dataloader(self) -> DataLoader:
+        raise NotImplementedError(
+            "TODO Step 1-2: build and return the training DataLoader."
         )
 
-        # 분류용 사전학습 모델 로드
-        self.lang_model: PreTrainedModel = (
-            AutoModelForSequenceClassification.from_pretrained(
-                args.model.pretrained,
-                config=self.lm_config,
-            )
+    def complete_step2_training_batch(self, inputs):
+        raise NotImplementedError(
+            "TODO Step 2-1: run one training batch and return (outputs, labels, preds, acc)."
+        )
+
+    def complete_step2_eval_batch(self, inputs):
+        raise NotImplementedError(
+            "TODO Step 2-2: run one evaluation batch and return (outputs, labels, preds)."
+        )
+
+    def complete_step3_tokenize_text(self, text: str):
+        raise NotImplementedError(
+            "TODO Step 3-1: tokenize one input sentence for inference."
+        )
+
+    def complete_step3_format_inference(self, text: str, prob: torch.Tensor) -> Dict[str, str]:
+        raise NotImplementedError(
+            "TODO Step 3-2: format the prediction probabilities for the web response."
         )
 
     def to_checkpoint(self) -> Dict[str, Any]:
@@ -199,32 +213,10 @@ class NSMCModel(LightningModule):
             DataLoader: 학습용 데이터로더 (랜덤 샘플링)
         """
         # TODO Step 1:
-        # Finish the training dataset and dataloader wiring so preprocessing can be checked before real training.
+        # Finish `complete_step1_train_dataloader` so preprocessing can be checked before real training.
         # 분산 학습 시 로깅 설정 (rank 0에서만 info 레벨)
         self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-
-        # 학습 데이터셋 생성
-        train_dataset = ClassificationDataset(
-            "train", data=self.data, tokenizer=self.lm_tokenizer
-        )
-
-        # 학습용 데이터로더 생성 (랜덤 셔플)
-        train_dataloader = DataLoader(
-            train_dataset,
-            sampler=RandomSampler(train_dataset, replacement=False),
-            num_workers=self.args.hardware.cpu_workers,
-            batch_size=self.args.hardware.train_batch,
-            collate_fn=data_collator,
-            drop_last=False,
-        )
-
-        self.fabric.print(
-            f"Created train_dataset providing {len(train_dataset)} examples"
-        )
-        self.fabric.print(
-            f"Created train_dataloader providing {len(train_dataloader)} batches"
-        )
-        return train_dataloader
+        return self.complete_step1_train_dataloader()
 
     def val_dataloader(self):
         """
@@ -300,11 +292,8 @@ class NSMCModel(LightningModule):
             Dict: loss와 accuracy를 포함한 딕셔너리
         """
         # TODO Step 2:
-        # Implement the one-batch forward pass, loss usage, and accuracy calculation.
-        outputs: SequenceClassifierOutput = self.lang_model(**inputs)  # 모델 forward
-        labels: torch.Tensor = inputs["labels"]  # 정답 라벨
-        preds: torch.Tensor = outputs.logits.argmax(dim=-1)  # 예측 결과 (argmax)
-        acc: torch.Tensor = accuracy(preds=preds, labels=labels)  # 정확도 계산
+        # Implement `complete_step2_training_batch` for the one-batch forward pass, loss usage, and accuracy calculation.
+        outputs, labels, preds, acc = self.complete_step2_training_batch(inputs)
         return {
             "loss": outputs.loss,  # 손실값
             "acc": acc,  # 정확도
@@ -322,11 +311,7 @@ class NSMCModel(LightningModule):
         Returns:
             Dict: loss, 예측값들, 라벨들을 포함한 딕셔너리
         """
-        outputs: SequenceClassifierOutput = self.lang_model(**inputs)
-        labels: List[int] = inputs["labels"].tolist()  # 라벨을 리스트로 변환
-        preds: List[int] = outputs.logits.argmax(
-            dim=-1
-        ).tolist()  # 예측을 리스트로 변환
+        outputs, labels, preds = self.complete_step2_eval_batch(inputs)
         return {
             "loss": outputs.loss,
             "preds": preds,  # 전체 검증을 위해 예측값들 수집
@@ -359,34 +344,14 @@ class NSMCModel(LightningModule):
             Dict: 예측 결과와 확률들을 포함한 딕셔너리
         """
         # TODO Step 3:
-        # Reuse the trained tokenizer/model pair to build single-sentence inference for the web API.
+        # Reuse `complete_step3_tokenize_text` and `complete_step3_format_inference` to build single-sentence inference.
         # 텍스트 토크나이즈
-        inputs = self.lm_tokenizer(
-            tupled(text),  # 단일 텍스트를 튜플로 변환
-            max_length=self.args.model.seq_len,
-            padding="max_length",
-            truncation=True,
-            return_tensors="pt",
-        )
+        inputs = self.complete_step3_tokenize_text(text)
 
         # 모델 추론
         outputs: SequenceClassifierOutput = self.lang_model(**inputs)
         prob = outputs.logits.softmax(dim=1)  # 확률로 변환
-
-        # 예측 결과 해석
-        pred = "긍정 (positive)" if torch.argmax(prob) == 1 else "부정 (negative)"
-        positive_prob = round(prob[0][1].item(), 4)  # 긍정 확률
-        negative_prob = round(prob[0][0].item(), 4)  # 부정 확률
-
-        # 웹 UI용 결과 포맷
-        return {
-            "sentence": text,
-            "prediction": pred,
-            "positive_data": f"긍정 {positive_prob * 100:.1f}%",
-            "negative_data": f"부정 {negative_prob * 100:.1f}%",
-            "positive_width": f"{positive_prob * 100:.2f}%",  # 바 차트용
-            "negative_width": f"{negative_prob * 100:.2f}%",  # 바 차트용
-        }
+        return self.complete_step3_format_inference(text, prob)
 
     def run_server(self, server: Flask, *args, **kwargs):
         """

@@ -272,6 +272,64 @@ class DataTrainingArguments:
             self.val_max_answer_length = self.max_answer_length
 
 
+def complete_step1_load_raw_datasets(data_args: DataTrainingArguments, model_args: ModelArguments):
+    raise NotImplementedError(
+        "TODO Step 1-1: load and return the raw seq2seq QA datasets from Hub or Korean json/jsonl files."
+    )
+
+
+def complete_step1_load_model_bundle(model_args: ModelArguments):
+    raise NotImplementedError(
+        "TODO Step 1-2: load and return (config, tokenizer, model) for seq2seq question answering."
+    )
+
+
+def complete_step2_build_trainer(
+    model,
+    training_args,
+    train_dataset,
+    eval_dataset,
+    eval_examples,
+    tokenizer,
+    data_collator,
+    compute_metrics,
+    post_processing_function,
+):
+    raise NotImplementedError(
+        "TODO Step 2-1: connect the seq2seq trainer, generation metrics, and post-processing."
+    )
+
+
+def complete_step2_run_train(trainer, training_args, last_checkpoint, train_dataset, data_args):
+    raise NotImplementedError(
+        "TODO Step 2-2: run fine-tuning, save the model, and log/save the train metrics."
+    )
+
+
+def complete_step2_run_eval(trainer, training_args, eval_dataset, data_args, max_length: int, num_beams: int | None):
+    raise NotImplementedError(
+        "TODO Step 2-3: run generation-based evaluation and log/save the eval metrics."
+    )
+
+
+def complete_step2_run_predict(
+    trainer,
+    training_args,
+    predict_dataset,
+    predict_examples,
+    data_args,
+):
+    raise NotImplementedError(
+        "TODO Step 2-4: run prediction and log/save the prediction metrics."
+    )
+
+
+def complete_step3_build_serve_hint(output_dir: str) -> str:
+    raise NotImplementedError(
+        "TODO Step 3: build the serve_qa_seq2seq.py command hint for the trained checkpoint directory."
+    )
+
+
 question_answering_column_name_mapping = {
     "squad_v2": ("question", "context", "answer"),
 }
@@ -350,35 +408,7 @@ def main():
     #
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
-    if data_args.dataset_name is not None:
-        # Downloading and loading a dataset from the hub.
-        raw_datasets = load_dataset(
-            data_args.dataset_name,
-            data_args.dataset_config_name,
-            cache_dir=model_args.cache_dir,
-            token=model_args.token,
-            trust_remote_code=model_args.trust_remote_code,
-        )
-    else:
-        data_files = {}
-        extension = None  # chrisjihee: initilize extension
-        if data_args.train_file is not None:
-            data_files["train"] = data_args.train_file
-            extension = data_args.train_file.split(".")[-1]
-        if data_args.validation_file is not None:
-            data_files["validation"] = data_args.validation_file
-            extension = data_args.validation_file.split(".")[-1]
-        if data_args.test_file is not None:
-            data_files["test"] = data_args.test_file
-            extension = data_args.test_file.split(".")[-1]
-        if extension:
-            raw_datasets = load_dataset(
-                extension.replace("jsonl", "json"),  # chrisjihee: replace jsonl with json
-                data_files=data_files,
-                field=None if extension == "jsonl" else "data",  # chrisjihee: field=None for jsonl
-                cache_dir=model_args.cache_dir,
-                token=model_args.token,
-            )
+    raw_datasets = complete_step1_load_raw_datasets(data_args, model_args)
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.
 
@@ -387,30 +417,7 @@ def main():
     # Distributed training:
     # The .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
-    config = AutoConfig.from_pretrained(
-        model_args.config_name if model_args.config_name else model_args.model_name_or_path,
-        cache_dir=model_args.cache_dir,
-        revision=model_args.model_revision,
-        token=model_args.token,
-        trust_remote_code=model_args.trust_remote_code,
-    )
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_args.tokenizer_name if model_args.tokenizer_name else model_args.model_name_or_path,
-        cache_dir=model_args.cache_dir,
-        use_fast=model_args.use_fast_tokenizer,
-        revision=model_args.model_revision,
-        token=model_args.token,
-        trust_remote_code=model_args.trust_remote_code,
-    )
-    model = AutoModelForSeq2SeqLM.from_pretrained(
-        model_args.model_name_or_path,
-        from_tf=bool(".ckpt" in model_args.model_name_or_path),
-        config=config,
-        cache_dir=model_args.cache_dir,
-        revision=model_args.model_revision,
-        token=model_args.token,
-        trust_remote_code=model_args.trust_remote_code,
-    )
+    config, tokenizer, model = complete_step1_load_model_bundle(model_args)
 
     # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
     # on a small vocab and want a smaller embedding size, remove this test.
@@ -678,39 +685,23 @@ def main():
     # TODO Step 2:
     # Use the provided trainer module to connect generation outputs, post-processing, and metrics.
     # Initialize our Trainer
-    trainer = QuestionAnsweringSeq2SeqTrainer(
-        model=model,
-        args=training_args,
-        train_dataset=train_dataset if training_args.do_train else None,
-        eval_dataset=eval_dataset if training_args.do_eval else None,
-        eval_examples=eval_examples if training_args.do_eval else None,
-        processing_class=tokenizer,
-        data_collator=data_collator,
-        compute_metrics=compute_metrics if training_args.predict_with_generate else None,
-        post_process_function=post_processing_function,
+    trainer = complete_step2_build_trainer(
+        model,
+        training_args,
+        train_dataset if training_args.do_train else None,
+        eval_dataset if training_args.do_eval else None,
+        eval_examples if training_args.do_eval else None,
+        tokenizer,
+        data_collator,
+        compute_metrics if training_args.predict_with_generate else None,
+        post_processing_function,
     )
 
     # TODO Step 2:
     # Run fine-tuning with predict_with_generate enabled when you want generation-based evaluation.
     # Training
     if training_args.do_train:
-        checkpoint = None
-        if training_args.resume_from_checkpoint is not None:
-            checkpoint = training_args.resume_from_checkpoint
-        elif last_checkpoint is not None:
-            checkpoint = last_checkpoint
-        train_result = trainer.train(resume_from_checkpoint=checkpoint)
-        trainer.save_model()  # Saves the tokenizer too for easy upload
-
-        metrics = train_result.metrics
-        max_train_samples = (
-            data_args.max_train_samples if data_args.max_train_samples is not None else len(train_dataset)
-        )
-        metrics["train_samples"] = min(max_train_samples, len(train_dataset))
-
-        trainer.log_metrics("train", metrics)
-        trainer.save_metrics("train", metrics)
-        trainer.save_state()
+        complete_step2_run_train(trainer, training_args, last_checkpoint, train_dataset, data_args)
 
     # TODO Step 2:
     # Run evaluation and inspect the saved eval_predictions.json output.
@@ -723,28 +714,13 @@ def main():
     )
     num_beams = data_args.num_beams if data_args.num_beams is not None else training_args.generation_num_beams
     if training_args.do_eval:
-        logger.info("*** Evaluate ***")
-        metrics = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval")
-
-        max_eval_samples = data_args.max_eval_samples if data_args.max_eval_samples is not None else len(eval_dataset)
-        metrics["eval_samples"] = min(max_eval_samples, len(eval_dataset))
-
-        trainer.log_metrics("eval", metrics)
-        trainer.save_metrics("eval", metrics)
+        complete_step2_run_eval(trainer, training_args, eval_dataset, data_args, max_length, num_beams)
 
     # Prediction
     if training_args.do_predict:
-        logger.info("*** Predict ***")
-        results = trainer.predict(predict_dataset, predict_examples)
-        metrics = results.metrics
+        complete_step2_run_predict(trainer, training_args, predict_dataset, predict_examples, data_args)
 
-        max_predict_samples = (
-            data_args.max_predict_samples if data_args.max_predict_samples is not None else len(predict_dataset)
-        )
-        metrics["predict_samples"] = min(max_predict_samples, len(predict_dataset))
-
-        trainer.log_metrics("predict", metrics)
-        trainer.save_metrics("predict", metrics)
+    logger.info(complete_step3_build_serve_hint(training_args.output_dir))
 
     if training_args.push_to_hub:
         kwargs = {"finetuned_from": model_args.model_name_or_path, "tasks": "question-answering"}

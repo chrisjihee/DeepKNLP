@@ -1,206 +1,43 @@
-# 기본 라이브러리 imports
-import logging  # 로깅 시스템
-import os  # 운영체제 인터페이스
-from pathlib import Path  # 경로 조작
-from time import sleep  # 대기 함수
-from typing import List, Dict, Mapping, Any  # 타입 힌트
+"""Step 1 answer blocks for task1-cls/run_cls.py.
 
-# PyTorch 관련 imports
-import torch  # PyTorch 핵심 라이브러리
-import typer  # CLI 명령어 인터페이스 생성
-from chrisbase.data import AppTyper, JobTimer, ProjectEnv  # 프로젝트 환경 설정
-from chrisbase.io import LoggingFormat, make_dir, files  # I/O 유틸리티
-from chrisbase.util import mute_tqdm_cls, tupled  # 유틸리티 함수들
-from flask import Flask, request, jsonify, render_template  # 웹 서버 프레임워크
-from flask_classful import FlaskView, route  # Flask 클래스 기반 뷰
-
-# Lightning 관련 imports (분산 학습 및 로깅)
-from lightning import LightningModule  # PyTorch Lightning 모듈 베이스
-from lightning.fabric import Fabric  # 경량화된 분산 학습 프레임워크
-from lightning.fabric.loggers import CSVLogger, TensorBoardLogger  # 로깅 시스템
-from lightning.pytorch.utilities.types import OptimizerLRScheduler  # 옵티마이저 타입
-
-# PyTorch 컴포넌트
-from torch.optim import AdamW  # AdamW 옵티마이저
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler  # 데이터 로더
-
-# Transformers 라이브러리 (사전학습 모델)
-from transformers import AutoTokenizer, AutoConfig, AutoModelForSequenceClassification
-from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizer
-from transformers.modeling_outputs import SequenceClassifierOutput
-
-# 프로젝트 내부 모듈
-from DeepKNLP.arguments import (
-    DataFiles,
-    DataOption,
-    ModelOption,
-    ServerOption,
-    HardwareOption,
-    PrintingOption,
-    LearningOption,
-)
-from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
-from DeepKNLP.cls import (
-    ClassificationDataset,
-    NsmcCorpus,
-)  # 분류 데이터셋과 NSMC 코퍼스
-from DeepKNLP.helper import (
-    CheckpointSaver,
-    epsilon,
-    data_collator,
-    fabric_barrier,
-)  # 헬퍼 함수들
-from DeepKNLP.metrics import accuracy  # 정확도 메트릭
-
-# 로거 및 CLI 앱 초기화
-logger = logging.getLogger(__name__)
-main = AppTyper()
+Paste these functions into `NSMCModel`.
+"""
 
 
-class NSMCModel(LightningModule):
-    """
-    NSMC(네이버 영화 리뷰) 감성분석을 위한 LightningModule 클래스
+def complete_step1_model_setup(args):
+    data = NsmcCorpus(args)
+    lm_config = AutoConfig.from_pretrained(
+        args.model.pretrained,
+        num_labels=data.num_labels,
+    )
+    lm_tokenizer = AutoTokenizer.from_pretrained(
+        args.model.pretrained,
+        use_fast=True,
+    )
+    lang_model = AutoModelForSequenceClassification.from_pretrained(
+        args.model.pretrained,
+        config=lm_config,
+    )
+    return data, lm_config, lm_tokenizer, lang_model
 
-    주요 기능:
-    - BERT 계열 사전학습 모델을 활용한 이진 분류
-    - 체크포인트 저장/로드 기능
-    - 학습/검증/테스트 데이터로더 제공
-    - 단일 텍스트 추론 및 웹 서비스 API
-    """
 
-    def __init__(self, args: TrainerArguments | TesterArguments | ServerArguments):
-        """
-        NSMCModel 초기화
-
-        Args:
-            args: 학습/테스트/서빙을 위한 설정 인수들
-        """
-        super().__init__()
-        self.args: TrainerArguments | TesterArguments | ServerArguments = args
-        self.data: NsmcCorpus = NsmcCorpus(args)  # NSMC 데이터셋 로드
-
-        # 라벨 수 검증 (이진 분류: 2개)
-        assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
-
-        # 사전학습 모델 설정 로드 (라벨 수 설정 포함)
-        self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
-            args.model.pretrained, num_labels=self.data.num_labels
-        )
-
-        # 토크나이저 로드 (빠른 토크나이저 사용)
-        self.lm_tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(
-            args.model.pretrained,
-            use_fast=True,
-        )
-
-        # 분류용 사전학습 모델 로드
-        self.lang_model: PreTrainedModel = (
-            AutoModelForSequenceClassification.from_pretrained(
-                args.model.pretrained,
-                config=self.lm_config,
-            )
-        )
-
-    def to_checkpoint(self) -> Dict[str, Any]:
-        """
-        체크포인트 저장을 위한 상태 딕셔너리 생성
-
-        Returns:
-            Dict: 모델 상태와 진행 정보를 포함한 딕셔너리
-        """
-        return {
-            "lang_model": self.lang_model.state_dict(),  # 모델 가중치
-            "args_prog": {
-                "world_size": self.args.prog.world_size,
-                "local_rank": self.args.prog.local_rank,
-                "global_rank": self.args.prog.global_rank,
-                "global_step": self.args.prog.global_step,
-                "global_epoch": self.args.prog.global_epoch,
-            },  # 안전한 기본형만 저장
-        }
-
-    def from_checkpoint(self, ckpt_state: Dict[str, Any]):
-        """
-        체크포인트에서 모델 상태 복원
-
-        Args:
-            ckpt_state: 저장된 체크포인트 상태 딕셔너리
-        """
-        self.lang_model.load_state_dict(ckpt_state["lang_model"])  # 모델 가중치 로드
-        prog_state = ckpt_state.get("args_prog", {})
-        if isinstance(prog_state, Mapping):
-            for key, value in prog_state.items():
-                if hasattr(self.args.prog, key):
-                    setattr(self.args.prog, key, value)
-        else:
-            self.args.prog = prog_state
-        self.eval()  # 평가 모드로 설정
-
-    def load_checkpoint_file(self, checkpoint_file):
-        """
-        체크포인트 파일에서 모델 로드
-
-        Args:
-            checkpoint_file: 체크포인트 파일 경로
-        """
-        assert Path(
-            checkpoint_file
-        ).exists(), f"Model file not found: {checkpoint_file}"
-        self.fabric.print(f"Loading model from {checkpoint_file}")
-        self.from_checkpoint(self.fabric.load(checkpoint_file, weights_only=False))
-
-    def load_last_checkpoint_file(self, checkpoints_glob):
-        """
-        glob 패턴으로 찾은 체크포인트 중 가장 최근 파일 로드
-
-        Args:
-            checkpoints_glob: 체크포인트 파일 찾기 패턴 (예: "output/**/*.ckpt")
-        """
-        checkpoint_files = files(checkpoints_glob)
-        assert checkpoint_files, f"No model file found: {checkpoints_glob}"
-        self.load_checkpoint_file(checkpoint_files[-1])  # 가장 최근 파일 선택
-
-    def configure_optimizers(self):
-        """
-        AdamW 옵티마이저 설정
-
-        Returns:
-            AdamW: 설정된 학습률을 가진 AdamW 옵티마이저
-        """
-        return AdamW(self.lang_model.parameters(), lr=self.args.learning.learning_rate)
-
-    def train_dataloader(self):
-        """
-        학습용 데이터로더 생성
-
-        Returns:
-            DataLoader: 학습용 데이터로더 (랜덤 샘플링)
-        """
-        # 분산 학습 시 로깅 설정 (rank 0에서만 info 레벨)
-        self.fabric.print = logger.info if self.fabric.local_rank == 0 else logger.debug
-
-        # 학습 데이터셋 생성
-        train_dataset = ClassificationDataset(
-            "train", data=self.data, tokenizer=self.lm_tokenizer
-        )
-
-        # 학습용 데이터로더 생성 (랜덤 셔플)
-        train_dataloader = DataLoader(
-            train_dataset,
-            sampler=RandomSampler(train_dataset, replacement=False),
-            num_workers=self.args.hardware.cpu_workers,
-            batch_size=self.args.hardware.train_batch,
-            collate_fn=data_collator,
-            drop_last=False,
-        )
-
-        self.fabric.print(
-            f"Created train_dataset providing {len(train_dataset)} examples"
-        )
-        self.fabric.print(
-            f"Created train_dataloader providing {len(train_dataloader)} batches"
-        )
-        return train_dataloader
+def complete_step1_train_dataloader(self):
+    train_dataset = ClassificationDataset(
+        "train",
+        data=self.data,
+        tokenizer=self.lm_tokenizer,
+    )
+    train_dataloader = DataLoader(
+        train_dataset,
+        sampler=RandomSampler(train_dataset, replacement=False),
+        num_workers=self.args.hardware.cpu_workers,
+        batch_size=self.args.hardware.train_batch,
+        collate_fn=data_collator,
+        drop_last=False,
+    )
+    self.fabric.print(f"Created train_dataset providing {len(train_dataset)} examples")
+    self.fabric.print(f"Created train_dataloader providing {len(train_dataloader)} batches")
+    return train_dataloader
 
     def val_dataloader(self):
         """

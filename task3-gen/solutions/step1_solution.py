@@ -1,201 +1,36 @@
-# https://colab.research.google.com/github/ratsgo/nlpbook/blob/master/examples/sentence_generation/deploy_colab1.ipynb
-import torch
+"""Step 1 answer blocks for task3-gen/run_gen.py."""
 
-from transformers import GPT2LMHeadModel
-from transformers import PreTrainedTokenizerFast
 
-if __name__ == "__main__":
-    pretrained = "skt/kogpt2-base-v2"
-
-    model = GPT2LMHeadModel.from_pretrained(pretrained)
-    model.eval()
-
-    tokenizer = PreTrainedTokenizerFast.from_pretrained(
-        pretrained,
-        eos_token="</s>",
+def complete_step1_build_train_args(model_preset, max_seq_length, batch_size, learning_rate, epochs, seed):
+    preset = get_preset(model_preset)
+    return GenerationTrainArguments(
+        pretrained_model_name=preset["model_name"],
+        downstream_model_dir=preset["output_dir"],
+        downstream_corpus_name="nsmc",
+        max_seq_length=max_seq_length,
+        batch_size=batch_size,
+        learning_rate=learning_rate,
+        epochs=epochs,
+        tpu_cores=0 if torch.cuda.is_available() else 8,
+        seed=seed,
     )
 
-    input_sentence = "안녕하세요" or "대한민국의 수도는"
-    input_ids = tokenizer.encode(input_sentence, return_tensors="pt")
 
-    print(f"[1] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=False,
-            min_length=10,
-            max_length=50,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
+def complete_step1_load_pretrained_components(model_name):
+    tokenizer = PreTrainedTokenizerFast.from_pretrained(model_name, eos_token="</s>")
+    model = GPT2LMHeadModel.from_pretrained(model_name)
+    model.eval()
+    return tokenizer, model
 
-    print(f"[2] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=False,
-            min_length=10,
-            max_length=50,
-            num_beams=3,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
 
-    print(f"[3] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=False,
-            min_length=10,
-            max_length=50,
-            num_beams=1,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[4] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=False,
-            min_length=10,
-            max_length=50,
-            no_repeat_ngram_size=3,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[5] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=False,
-            min_length=10,
-            max_length=50,
-            repetition_penalty=1.0,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[6] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=False,
-            min_length=10,
-            max_length=50,
-            repetition_penalty=1.1,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[7] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=False,
-            min_length=10,
-            max_length=50,
-            repetition_penalty=1.2,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[8] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=False,
-            min_length=10,
-            max_length=50,
-            repetition_penalty=1.5,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[9] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=10,
-            max_length=50,
-            top_k=50,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[10] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=10,
-            max_length=50,
-            top_k=1,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[11] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=10,
-            max_length=50,
-            top_k=50,
-            temperature=0.01,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[12] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=10,
-            max_length=50,
-            top_k=50,
-            temperature=1.0,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[13] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=10,
-            max_length=50,
-            top_k=50,
-            temperature=100000000.0,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[14] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=10,
-            max_length=50,
-            top_p=0.92,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[15] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=10,
-            max_length=50,
-            top_p=0.01,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
-
-    print(f"[16] " + "-" * 80)
-    with torch.no_grad():
-        generated_ids = model.generate(
-            input_ids,
-            do_sample=True,
-            min_length=10,
-            max_length=50,
-            repetition_penalty=1.5,
-            no_repeat_ngram_size=3,
-            temperature=0.9,
-            top_k=50,
-            top_p=0.92,
-        )
-        print(tokenizer.decode([el.item() for el in generated_ids[0]]))
+def complete_step1_prepare_generation_datasets(args, tokenizer):
+    nlpbook.set_seed(args)
+    Korpora.fetch(
+        corpus_name=args.downstream_corpus_name,
+        root_dir=args.downstream_corpus_root_dir,
+        force_download=args.force_download,
+    )
+    corpus = NsmcCorpus()
+    train_dataset = GenerationDataset(args=args, corpus=corpus, tokenizer=tokenizer, mode="train")
+    val_dataset = GenerationDataset(args=args, corpus=corpus, tokenizer=tokenizer, mode="test")
+    return corpus, train_dataset, val_dataset

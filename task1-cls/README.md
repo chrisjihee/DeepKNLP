@@ -11,11 +11,12 @@ NSMC 감성분석 실습 태스크입니다.
 실습 방식:
 - 이 태스크는 하나의 파일에서 Step 1, Step 2, Step 3를 누적해서 완성합니다.
 - 파일 안의 `TODO Step 1`, `TODO Step 2`, `TODO Step 3` 표시를 따라가면 됩니다.
+- 실제로 채워야 하는 핵심 블록은 helper 함수 형태로 비워 두었습니다.
 - CLI 옵션은 일부러 많이 남겨 두었습니다. 전체 학습 설정의 폭을 체감하는 것도 목표입니다.
 
 Step 1:
 - 목표: 모델/토크나이저/데이터 로딩과 전처리 흐름 이해
-- 구현 포인트: `NSMCModel.__init__`, dataloader 구성
+- 구현 포인트: `complete_step1_model_setup`, `complete_step1_train_dataloader`
 - 실행 예시:
 ```bash
 python task1-cls/run_cls.py train --data_home data --data_name nsmc --pretrained beomi/KcELECTRA-base --num_epochs 0
@@ -24,7 +25,7 @@ python task1-cls/run_cls.py train --data_home data --data_name nsmc --pretrained
 
 Step 2:
 - 목표: 학습, 검증, 테스트, 추론 흐름 완성
-- 구현 포인트: `training_step`, `validation_step`, `test_step`, 학습 루프
+- 구현 포인트: `complete_step2_training_batch`, `complete_step2_eval_batch`
 - 실행 예시:
 ```bash
 python task1-cls/run_cls.py train --data_home data --data_name nsmc --pretrained beomi/KcELECTRA-base --num_epochs 1
@@ -34,7 +35,7 @@ python task1-cls/run_cls.py test --data_home data --data_name nsmc --pretrained 
 
 Step 3:
 - 목표: 웹 서빙 완성
-- 구현 포인트: `infer_one`, `WebAPI`, `serve`
+- 구현 포인트: `complete_step3_tokenize_text`, `complete_step3_format_inference`
 - 실행 예시:
 ```bash
 python task1-cls/run_cls.py serve --data_home data --data_name nsmc --pretrained beomi/KcELECTRA-base --server_page serve_cls.html
@@ -42,6 +43,7 @@ python task1-cls/run_cls.py serve --data_home data --data_name nsmc --pretrained
 - 기대 결과: 브라우저에서 감성분석 데모를 사용할 수 있습니다.
 
 해답 파일:
+- 각 `stepX_solution.py`는 전체 정답 파일이 아니라, 해당 단계에서 채워야 할 helper 답안만 담고 있습니다.
 - task1-cls/solutions/step1_solution.py
 - task1-cls/solutions/step2_solution.py
 - task1-cls/solutions/step3_solution.py

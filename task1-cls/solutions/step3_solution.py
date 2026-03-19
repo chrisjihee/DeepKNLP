@@ -1,105 +1,31 @@
-# 기본 라이브러리 imports
-import logging  # 로깅 시스템
-import os  # 운영체제 인터페이스
-from pathlib import Path  # 경로 조작
-from time import sleep  # 대기 함수
-from typing import List, Dict, Mapping, Any  # 타입 힌트
+"""Step 3 answer blocks for task1-cls/run_cls.py.
 
-# PyTorch 관련 imports
-import torch  # PyTorch 핵심 라이브러리
-import typer  # CLI 명령어 인터페이스 생성
-from chrisbase.data import AppTyper, JobTimer, ProjectEnv  # 프로젝트 환경 설정
-from chrisbase.io import LoggingFormat, make_dir, files  # I/O 유틸리티
-from chrisbase.util import mute_tqdm_cls, tupled  # 유틸리티 함수들
-from flask import Flask, request, jsonify, render_template  # 웹 서버 프레임워크
-from flask_classful import FlaskView, route  # Flask 클래스 기반 뷰
-
-# Lightning 관련 imports (분산 학습 및 로깅)
-from lightning import LightningModule  # PyTorch Lightning 모듈 베이스
-from lightning.fabric import Fabric  # 경량화된 분산 학습 프레임워크
-from lightning.fabric.loggers import CSVLogger, TensorBoardLogger  # 로깅 시스템
-from lightning.pytorch.utilities.types import OptimizerLRScheduler  # 옵티마이저 타입
-
-# PyTorch 컴포넌트
-from torch.optim import AdamW  # AdamW 옵티마이저
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler  # 데이터 로더
-
-# Transformers 라이브러리 (사전학습 모델)
-from transformers import AutoTokenizer, AutoConfig, AutoModelForSequenceClassification
-from transformers import PretrainedConfig, PreTrainedModel, PreTrainedTokenizer
-from transformers.modeling_outputs import SequenceClassifierOutput
-
-# 프로젝트 내부 모듈
-from DeepKNLP.arguments import (
-    DataFiles,
-    DataOption,
-    ModelOption,
-    ServerOption,
-    HardwareOption,
-    PrintingOption,
-    LearningOption,
-)
-from DeepKNLP.arguments import TrainerArguments, TesterArguments, ServerArguments
-from DeepKNLP.cls import (
-    ClassificationDataset,
-    NsmcCorpus,
-)  # 분류 데이터셋과 NSMC 코퍼스
-from DeepKNLP.helper import (
-    CheckpointSaver,
-    epsilon,
-    data_collator,
-    fabric_barrier,
-)  # 헬퍼 함수들
-from DeepKNLP.metrics import accuracy  # 정확도 메트릭
-
-# 로거 및 CLI 앱 초기화
-logger = logging.getLogger(__name__)
-main = AppTyper()
+Paste these functions into `NSMCModel` after finishing Step 1 and Step 2.
+"""
 
 
-class NSMCModel(LightningModule):
-    """
-    NSMC(네이버 영화 리뷰) 감성분석을 위한 LightningModule 클래스
+def complete_step3_tokenize_text(self, text):
+    return self.lm_tokenizer(
+        tupled(text),
+        max_length=self.args.model.seq_len,
+        padding="max_length",
+        truncation=True,
+        return_tensors="pt",
+    )
 
-    주요 기능:
-    - BERT 계열 사전학습 모델을 활용한 이진 분류
-    - 체크포인트 저장/로드 기능
-    - 학습/검증/테스트 데이터로더 제공
-    - 단일 텍스트 추론 및 웹 서비스 API
-    """
 
-    def __init__(self, args: TrainerArguments | TesterArguments | ServerArguments):
-        """
-        NSMCModel 초기화
-
-        Args:
-            args: 학습/테스트/서빙을 위한 설정 인수들
-        """
-        super().__init__()
-        self.args: TrainerArguments | TesterArguments | ServerArguments = args
-        self.data: NsmcCorpus = NsmcCorpus(args)  # NSMC 데이터셋 로드
-
-        # 라벨 수 검증 (이진 분류: 2개)
-        assert self.data.num_labels > 0, f"Invalid num_labels: {self.data.num_labels}"
-
-        # 사전학습 모델 설정 로드 (라벨 수 설정 포함)
-        self.lm_config: PretrainedConfig = AutoConfig.from_pretrained(
-            args.model.pretrained, num_labels=self.data.num_labels
-        )
-
-        # 토크나이저 로드 (빠른 토크나이저 사용)
-        self.lm_tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(
-            args.model.pretrained,
-            use_fast=True,
-        )
-
-        # 분류용 사전학습 모델 로드
-        self.lang_model: PreTrainedModel = (
-            AutoModelForSequenceClassification.from_pretrained(
-                args.model.pretrained,
-                config=self.lm_config,
-            )
-        )
+def complete_step3_format_inference(self, text, prob):
+    pred = "긍정 (positive)" if torch.argmax(prob) == 1 else "부정 (negative)"
+    positive_prob = round(prob[0][1].item(), 4)
+    negative_prob = round(prob[0][0].item(), 4)
+    return {
+        "sentence": text,
+        "prediction": pred,
+        "positive_data": f"긍정 {positive_prob * 100:.1f}%",
+        "negative_data": f"부정 {negative_prob * 100:.1f}%",
+        "positive_width": f"{positive_prob * 100:.2f}%",
+        "negative_width": f"{negative_prob * 100:.2f}%",
+    }
 
     def to_checkpoint(self) -> Dict[str, Any]:
         """
