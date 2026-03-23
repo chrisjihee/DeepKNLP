@@ -37,27 +37,23 @@ Transformer-based Korean Natural Language Processing
 
 ## Installation
 
-1. Install uv(Universal Virtualenv)
+1. Install uv and python
     ```bash
     curl -LsSf https://astral.sh/uv/install.sh | sh
+    $HOME/.local/bin/uv python install 3.12
+    $HOME/.local/bin/uv python update-shell
     ```
 2. Clone the repository
     ```bash
-    rm -rf DeepKNLP-26.03
     git clone https://github.com/chrisjihee/DeepKNLP-26.03.git
     cd DeepKNLP-26.03
     ```
-3. Monitor Nvidia GPU
+3. Create a new environment and activate it (MUST be activated)
     ```bash
-    watch -d -n 3 nvidia-smi
-    ```
-4. Create a new environment and activate it (MUST be activated)
-    ```bash
-    uv python install 3.12
-    uv venv DeepKNLP-env --python 3.12 --python-preference only-managed
+    uv venv DeepKNLP-env --python 3.12 --python-preference only-managed --clear
     source DeepKNLP-env/bin/activate
     ```
-5. Install the required packages
+4. Install the required packages
     ```bash
     echo ==========; which python; python --version; echo ==========; uv pip list; echo ==========; uv --version;
     uv pip install -e . --extra-index-url https://download.pytorch.org/whl/cu128
@@ -65,40 +61,55 @@ Transformer-based Korean Natural Language Processing
     rm -rf ratsnlp;      git clone https://github.com/chrisjihee/ratsnlp.git;      uv pip install -U -e ratsnlp
     uv pip list | grep -E "torch|lightn|trans|accel|speed|flash|numpy|piece|chris|rats|prog|pydantic|tensor"
     ```
-6. Login to Hugging Face and link the cache
+* Login to Hugging Face and link the cache
     ```bash
     hf auth whoami
     hf auth login
     rm -f .cache_hf; ln -s ~/.cache/huggingface ./.cache_hf
     ```
-7. Logout from Hugging Face
+* Logout from Hugging Face
     ```bash
     hf auth logout
     rm -f ~/.huggingface/token
     rm -f ~/.cache/huggingface/token
+    ```
+* Monitor Nvidia GPU
+    ```bash
+    watch -d -n 3 nvidia-smi
     ```
 
 ## Target Tasks
 
 * Sentence Classification: https://ratsgo.github.io/nlpbook/docs/doc_cls
     - `See task1-cls/README.md`
-    - `python task1-cls/run_cls.py --help`
     - `python task1-cls/run_cls.py train`
     - `python task1-cls/run_cls.py test`
     - `python task1-cls/run_cls.py serve`
+    - `python task1-cls/run_cls.py --help`
+    - `python task1-cls/solutions/run_cls_reference.py train`
+    - `python task1-cls/solutions/run_cls_reference.py test`
+    - `python task1-cls/solutions/run_cls_reference.py serve`
+    - `python task1-cls/solutions/run_cls_reference.py --help`
 * Sequence Labelling: https://ratsgo.github.io/nlpbook/docs/ner
     - `See task2-ner/README.md`
-    - `python task2-ner/run_ner.py --help`
     - `python task2-ner/run_ner.py train`
     - `python task2-ner/run_ner.py test`
     - `python task2-ner/run_ner.py serve`
+    - `python task2-ner/run_ner.py --help`
+    - `python task2-ner/solutions/run_ner_reference.py train`
+    - `python task2-ner/solutions/run_ner_reference.py test`
+    - `python task2-ner/solutions/run_ner_reference.py serve`
+    - `python task2-ner/solutions/run_ner_reference.py --help`
 * Sentence Generation: https://ratsgo.github.io/nlpbook/docs/generation
     - `See task3-gen/README.md`
-    - `python task3-gen/run_gen.py --help`
+    - `task3-gen/infer_gen.ipynb` is an auxiliary inference notebook, not the main train/serve entrypoint
     - `python task3-gen/run_gen.py step1 --model-preset kogpt2`
     - `python task3-gen/run_gen.py step2 --model-preset kogpt2 --epochs 1`
     - `python task3-gen/run_gen.py step3 --model-preset kogpt2 --port 9001`
-    - `task3-gen/infer_gen.ipynb` is an auxiliary inference notebook, not the main train/serve entrypoint
+    - `python task3-gen/run_gen.py --help`
+    - `python task3-gen/solutions/train_gen_reference.py`
+    - `python task3-gen/solutions/infer_gen_reference.py`
+    - `python task3-gen/solutions/serve_gen_reference.py`
 * Question Answering (Extractive): https://ratsgo.github.io/nlpbook/docs/qa
     - `See task4A-qa-ext/README.md`
     - `python task4A-qa-ext/train_qa.py --help`
