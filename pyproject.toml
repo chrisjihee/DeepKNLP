@@ -41,6 +41,7 @@ dependencies = [
     "importlib-metadata",
     "Flask",
     "Flask-Classful",
+    "flask-cors",
     "chrisbase==0.5.8",
 ]
 
