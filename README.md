@@ -42,18 +42,22 @@ Transformer-based Korean Natural Language Processing
     curl -LsSf https://astral.sh/uv/install.sh | sh
     $HOME/.local/bin/uv python install 3.12
     $HOME/.local/bin/uv python update-shell
+    exit
     ```
 2. Clone the repository
     ```bash
     git clone https://github.com/chrisjihee/DeepKNLP-26.03.git
     cd DeepKNLP-26.03
     ```
-3. Create a new environment and activate it (MUST be activated)
+3. Create a new environment (DANGER: This will clear the existing environment if it exists)
     ```bash
     uv venv DeepKNLP-env --python 3.12 --python-preference only-managed --clear
+    ```
+4. Activate the environment
+    ```bash
     source DeepKNLP-env/bin/activate
     ```
-4. Install the required packages
+5. Install the required packages
     ```bash
     echo ==========; which python; python --version; echo ==========; uv pip list; echo ==========; uv --version;
     uv pip install -e . --extra-index-url https://download.pytorch.org/whl/cu128
