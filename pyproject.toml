@@ -44,11 +44,6 @@ dependencies = [
     "chrisbase==0.5.8",
 ]
 
-# PyTorch CUDA 버전별 설치 안내:
-# pip install -e .[cuda118] --extra-index-url https://download.pytorch.org/whl/cu118
-# pip install -e .[cuda121] --extra-index-url https://download.pytorch.org/whl/cu121
-# pip install -e .[cpu] --extra-index-url https://download.pytorch.org/whl/cpu
-
 [project.optional-dependencies]
 dev = [
     "pytest>=6.0",
@@ -57,9 +52,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/chrisjihee/DeepKNLP-25"
-Repository = "https://github.com/chrisjihee/DeepKNLP-25"
-Issues = "https://github.com/chrisjihee/DeepKNLP-25/issues"
+Homepage = "https://github.com/chrisjihee/DeepKNLP"
+Repository = "https://github.com/chrisjihee/DeepKNLP"
+Issues = "https://github.com/chrisjihee/DeepKNLP/issues"
 
 [tool.setuptools]
 packages = ["DeepKNLP"]
