@@ -43,7 +43,9 @@ Transformer-based Korean Natural Language Processing
     ```
 2. Clone the repository
     ```bash
-    rm -rf DeepKNLP*; git clone https://github.com/chrisjihee/DeepKNLP-26.03.git; cd DeepKNLP*;
+    rm -rf DeepKNLP-26.03
+    git clone https://github.com/chrisjihee/DeepKNLP-26.03.git
+    cd DeepKNLP-26.03
     ```
 3. Monitor Nvidia GPU
     ```bash
