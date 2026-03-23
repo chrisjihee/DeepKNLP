@@ -1,1 +1,0 @@
-ssh -p 122 chrisjihee@10.254.23.12
